@@ -1,0 +1,88 @@
+package com.ia.core.security.view.role.page;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
+import com.ia.core.security.service.model.log.operation.LogOperationDTO;
+import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.model.role.RoleDTO;
+import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
+import com.ia.core.security.view.privilege.PrivilegeService;
+import com.ia.core.security.view.role.RoleService;
+import com.ia.core.security.view.role.form.RoleFormViewModel;
+import com.ia.core.security.view.user.UserService;
+import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.view.components.form.viewModel.IFormViewModel;
+import com.vaadin.flow.spring.annotation.UIScope;
+
+/**
+ * View Model para {@link RoleDTO}
+ *
+ * @author Israel Araújo
+ */
+@UIScope
+@Component
+public class RolePageViewModel
+  extends EntityPageViewModel<RoleDTO> {
+
+  /**
+   * serviço de privilege
+   */
+  private PrivilegeService privilegeService;
+  /**
+   * serviço de usuário
+   */
+  private UserService userService;
+
+  /**
+   * @param roleService         seviço de {@link RoleDTO}
+   * @param userService         serviço de {@link UserDTO}
+   * @param privilegeService    serviço de {@link PrivilegeDTO}
+   * @param logOperationService serviço de {@link LogOperationDTO}
+   */
+  public RolePageViewModel(RoleService roleService, UserService userService,
+                           PrivilegeService privilegeService,
+                           LogOperationService logOperationService) {
+    super(roleService, logOperationService);
+    this.privilegeService = privilegeService;
+    this.userService = userService;
+  }
+
+  @Override
+  public RoleDTO cloneObject(RoleDTO object) {
+    return object.cloneObject();
+  }
+
+  @Override
+  public IFormViewModel<RoleDTO> createFormViewModel(boolean readOnly) {
+    return new RoleFormViewModel(readOnly, userService, privilegeService);
+  }
+
+  @Override
+  public RoleDTO createNewObject() {
+    return RoleDTO.builder().build();
+  }
+
+  @Override
+  protected SearchRequestDTO createSearchRequest() {
+    return RoleDTO.getSearchRequest();
+  }
+
+  @Override
+  public UUID getId(RoleDTO object) {
+    return object.getId();
+  }
+
+  @Override
+  public RoleService getService() {
+    return (RoleService) super.getService();
+  }
+
+  @Override
+  public Class<RoleDTO> getType() {
+    return RoleDTO.class;
+  }
+}
