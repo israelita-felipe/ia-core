@@ -170,6 +170,7 @@ public abstract class PageViewModel<T extends Serializable>
   public IFormEditorViewModel<T> copy(T object) {
     var editorViewModel = createEditorViewModel();
     editorViewModel.setModel(copyObject(object));
+    setSelected(editorViewModel.getModel());
     editorViewModel.setReadOnly(false);
     return editorViewModel;
   }
