@@ -423,6 +423,7 @@ public abstract class PageView<T extends Serializable>
     confirm(() -> {
       try {
         getViewModel().delete(item);
+        getViewModel().setSelected(null);
         showSucessMessage($("Excluir"));
       } catch (Exception e) {
         handleError(e);

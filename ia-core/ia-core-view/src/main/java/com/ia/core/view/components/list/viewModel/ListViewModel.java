@@ -19,6 +19,15 @@ public abstract class ListViewModel<T extends Serializable>
   /** Suporte a mudança de propriedade */
   @Getter
   private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+  @Getter
+  private ListViewModelConfig<T> config;
+
+  /**
+   * 
+   */
+  public ListViewModel(ListViewModelConfig<T> config) {
+    this.config = config;
+  }
 
   /**
    * @param readOnly atualiza {@link #readOnly}.

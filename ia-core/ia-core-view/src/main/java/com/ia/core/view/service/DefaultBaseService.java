@@ -22,7 +22,7 @@ public abstract class DefaultBaseService<D extends Serializable>
   /**
    * @param client {@link BaseClient} de comunicação
    */
-  public DefaultBaseService(BaseClient<D> client) {
+  public DefaultBaseService(DefaultBaseServiceConfig<D> client) {
     super(client);
   }
 

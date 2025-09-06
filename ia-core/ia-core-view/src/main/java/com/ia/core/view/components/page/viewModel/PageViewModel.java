@@ -9,9 +9,11 @@ import com.ia.core.view.components.editor.formEditor.viewModel.FormEditorViewMod
 import com.ia.core.view.components.editor.formEditor.viewModel.IFormEditorViewModel;
 import com.ia.core.view.components.filter.viewModel.ISearchRequestViewModel;
 import com.ia.core.view.components.filter.viewModel.SearchRequestViewModel;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
+import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
 import com.ia.core.view.exception.ValidationException;
 import com.ia.core.view.service.DefaultBaseService;
 
@@ -26,8 +28,7 @@ import lombok.Setter;
  */
 public abstract class PageViewModel<T extends Serializable>
   implements IPageViewModel<T> {
-  /** Serviço */
-  private final DefaultBaseService<T> service;
+
   /** ViewModel para a lista */
   @Getter
   private IListViewModel<T> listViewModel;
@@ -47,14 +48,18 @@ public abstract class PageViewModel<T extends Serializable>
   @Setter
   private T selected;
 
+  @Getter
+  private PageViewModelConfig<T> config;
+
   /**
    * Construtor padrão
    *
    * @param service {@link DefaultBaseService} da página
    */
-  public PageViewModel(DefaultBaseService<T> service) {
-    this.service = service;
-    this.listViewModel = createListViewModel();
+  public PageViewModel(PageViewModelConfig<T> config) {
+    this.config = config;
+    this.listViewModel = createListViewModel(config
+        .createListViewModelConfig(readOnly));
     this.searchRequestViewModel = createSearchRequestViewModel();
   }
 
@@ -93,7 +98,7 @@ public abstract class PageViewModel<T extends Serializable>
   public IFormEditorViewModel<T> create() {
     var editorViewModel = createEditorViewModel();
     T newObject = createNewObject();
-    setSelected(newObject);
+    // setSelected(newObject);
     editorViewModel.setModel(newObject);
     editorViewModel.setReadOnly(false);
     return editorViewModel;
@@ -110,7 +115,8 @@ public abstract class PageViewModel<T extends Serializable>
 
       @Override
       protected IViewModel<T> createContentViewModel() {
-        return createFormViewModel(readOnly);
+        return createFormViewModel(getConfig()
+            .createFormViewModelConfig(readOnly));
       }
 
     };
@@ -124,13 +130,13 @@ public abstract class PageViewModel<T extends Serializable>
    * @param readOnly Indicativo de somente leitura
    * @return {@link IFormViewModel}
    */
-  public abstract IFormViewModel<T> createFormViewModel(boolean readOnly);
+  public abstract IFormViewModel<T> createFormViewModel(FormViewModelConfig<T> config);
 
   /**
    * @return {@link ListViewModel}
    */
-  protected ListViewModel<T> createListViewModel() {
-    return new ListViewModel<T>() {
+  protected ListViewModel<T> createListViewModel(ListViewModelConfig<T> config) {
+    return new ListViewModel<T>(config) {
 
       @Override
       public Class<T> getType() {
@@ -188,7 +194,7 @@ public abstract class PageViewModel<T extends Serializable>
    */
   @Override
   public DefaultBaseService<T> getService() {
-    return service;
+    return getConfig().getService();
   }
 
   @Override

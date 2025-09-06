@@ -32,10 +32,10 @@ public abstract class DefaultCollectionBaseService<D extends Serializable>
   ListBaseService<D>, SaveBaseService<D> {
 
   /**
-   * @param client {@link DefaultCollectionBaseClient}
+   * @param config {@link DefaultCollectionBaseClient}
    */
-  public DefaultCollectionBaseService(DefaultCollectionBaseClient<D> client) {
-    super(client);
+  public DefaultCollectionBaseService(DefaultCollectionServiceConfig<D> config) {
+    super(config);
   }
 
   /**
@@ -62,9 +62,10 @@ public abstract class DefaultCollectionBaseService<D extends Serializable>
     changeIndexListener.accept(list.get(index), newIndex);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public DefaultCollectionBaseClient<D> getClient() {
-    return (DefaultCollectionBaseClient<D>) super.getClient();
+    return (DefaultCollectionBaseClient<D>) getConfig().getClient();
   }
 
   /**
@@ -115,8 +116,20 @@ public abstract class DefaultCollectionBaseService<D extends Serializable>
     if (old == null) {
       throw new ValidationException("Old object is null");
     }
-    getClient().getData().remove(old);
-    getClient().getData().add(updated);
+    Collection<D> data = getClient().getData();
+    data.add(updated);
+
+    ArrayList<D> list = new ArrayList<>(data);
+    int index = list.indexOf(old);
+    if (index > -1) {
+      Collections.swap(list, index, list.size() - 1);
+      list.remove(old);
+      data.clear();
+      data.addAll(list);
+    } else {
+      data.remove(updated);
+    }
     return updated;
   }
+
 }

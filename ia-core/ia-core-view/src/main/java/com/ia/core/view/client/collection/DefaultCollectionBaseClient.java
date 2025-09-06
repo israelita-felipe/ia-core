@@ -100,7 +100,9 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    */
   @Override
   default D save(D Serializable) {
-    getData().add(Serializable);
+    if (find(getId(Serializable)) == null) {
+      getData().add(Serializable);
+    }
     return Serializable;
   }
 

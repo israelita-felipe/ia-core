@@ -4,11 +4,10 @@ import java.util.UUID;
 
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.view.template.form.TemplateFormViewModel;
-import com.ia.core.security.view.log.operation.LogOperationService;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.ia.core.view.service.DefaultBaseService;
 
 /**
  * @author Israel Araújo
@@ -19,9 +18,8 @@ public class TemplatePageViewModel
   /**
    * @param service
    */
-  public TemplatePageViewModel(DefaultBaseService<TemplateDTO> service,
-                               LogOperationService logOperationService) {
-    super(service, logOperationService);
+  public TemplatePageViewModel(TemplatePageViewModelConfig config) {
+    super(config);
   }
 
   @Override
@@ -50,7 +48,7 @@ public class TemplatePageViewModel
   }
 
   @Override
-  public IFormViewModel<TemplateDTO> createFormViewModel(boolean readOnly) {
-    return new TemplateFormViewModel(readOnly);
+  public IFormViewModel<TemplateDTO> createFormViewModel(FormViewModelConfig<TemplateDTO> config) {
+    return new TemplateFormViewModel(config);
   }
 }

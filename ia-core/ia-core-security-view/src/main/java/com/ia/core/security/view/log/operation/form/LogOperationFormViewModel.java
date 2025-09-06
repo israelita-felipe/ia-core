@@ -7,6 +7,7 @@ import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.service.model.log.operation.LogOperationDetails;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 
 import lombok.Getter;
 
@@ -22,9 +23,10 @@ public class LogOperationFormViewModel
   /**
    * @param readOnly
    */
-  public LogOperationFormViewModel(boolean readOnly) {
-    super(readOnly);
-    this.logOperationDetailsViewModel = createLogOperationDetailsViewModel(readOnly);
+  public LogOperationFormViewModel(FormViewModelConfig<LogOperationDTO> config) {
+    super(config);
+    this.logOperationDetailsViewModel = createLogOperationDetailsViewModel(config
+        .isReadOnly());
   }
 
   /**
@@ -32,7 +34,7 @@ public class LogOperationFormViewModel
    * @return
    */
   private LogOperationDetailsFormViewModel createLogOperationDetailsViewModel(boolean readOnly) {
-    return new LogOperationDetailsFormViewModel(readOnly);
+    return new LogOperationDetailsFormViewModel(new FormViewModelConfig<>(readOnly));
   }
 
   /**

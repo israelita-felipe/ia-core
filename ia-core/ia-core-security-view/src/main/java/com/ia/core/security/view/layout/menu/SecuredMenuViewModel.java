@@ -8,6 +8,7 @@ import com.ia.core.security.view.user.UserService.UserPasswordChangeSuportDTO;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.formEditor.viewModel.FormEditorViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
 
 /**
@@ -53,7 +54,7 @@ public class SecuredMenuViewModel
 
       @Override
       protected IViewModel<UserPasswordChangeSuportDTO> createContentViewModel() {
-        FormViewModel<UserPasswordChangeSuportDTO> formViewModel = new FormViewModel<>(false) {
+        FormViewModel<UserPasswordChangeSuportDTO> formViewModel = new FormViewModel<>(new FormViewModelConfig<>(false)) {
         };
         formViewModel
             .setModel(UserPasswordChangeSuportDTO.builder().build());

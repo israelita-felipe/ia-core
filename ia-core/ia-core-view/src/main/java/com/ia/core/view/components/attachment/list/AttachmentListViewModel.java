@@ -18,15 +18,12 @@ import com.ia.core.view.service.AttachmentService;
  */
 public abstract class AttachmentListViewModel<T extends AttachmentDTO<?>>
   extends ListViewModel<T> {
-  /** {@link Supplier} para o serviço de anexos */
-  private Supplier<AttachmentService<T>> service;
 
   /**
-   * @param service {@link Supplier} de serviço
+   * @param config {@link Supplier} de serviço
    */
-  public AttachmentListViewModel(Supplier<AttachmentService<T>> service) {
-    super();
-    this.service = service;
+  public AttachmentListViewModel(AttachmentListViewModelConfig<T> config) {
+    super(config);
   }
 
   /**
@@ -47,11 +44,16 @@ public abstract class AttachmentListViewModel<T extends AttachmentDTO<?>>
     }
   }
 
+  @Override
+  public AttachmentListViewModelConfig<T> getConfig() {
+    return (AttachmentListViewModelConfig<T>) super.getConfig();
+  }
+
   /**
    * @return {@link AttachmentService}
    */
   public AttachmentService<T> getService() {
-    return service.get();
+    return getConfig().getService();
   }
 
 }

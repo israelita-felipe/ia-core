@@ -88,15 +88,12 @@ public class UserFormView
   @Override
   public void createLayout() {
     super.createLayout();
-    bind("userCode",
-         createUserCodeField($(UserTranslator.CODIGO),
-                             $(UserTranslator.HELP.CODIGO)));
-    bind("userName",
-         createUserNameField($(UserTranslator.NOME),
-                             $(UserTranslator.HELP.NOME)));
-    bind("enabled",
-         createEnabledField($(UserTranslator.HABILITADO),
-                            $(UserTranslator.HELP.HABILITADO)));
+    bind("userCode", createUserCodeField($(UserTranslator.CODIGO),
+                                         $(UserTranslator.HELP.CODIGO)));
+    bind("userName", createUserNameField($(UserTranslator.NOME),
+                                         $(UserTranslator.HELP.NOME)));
+    bind("enabled", createEnabledField($(UserTranslator.HABILITADO),
+                                       $(UserTranslator.HELP.HABILITADO)));
     bind("accountNotExpired",
          createAccountNotExpiredField($(UserTranslator.CONTA_NAO_EXPIRADA),
                                       $(UserTranslator.HELP.CONTA_NAO_EXPIRADA)));
@@ -114,10 +111,11 @@ public class UserFormView
                                      .split(Operation.SEPARATOR);
                                  return String.format("%s - %s", $(p[0]),
                                                       $(p[1]));
-                               }, getViewModel().getPrivileService()));
+                               }, getViewModel().getConfig()
+                                   .getPrivileService()));
     bind("roles",
          createRolesField($(RoleTranslator.ROLE), role -> $(role.getName()),
-                          getViewModel().getUserRoleService()));
+                          getViewModel().getConfig().getUserRoleService()));
   }
 
   /**

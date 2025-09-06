@@ -65,8 +65,9 @@ public class JakartaValidator<T extends Serializable>
     // para cada violação adiciona a mensagem de exceção
     Set<ConstraintViolation<Serializable>> validations = validator
         .validate(object);
-    validations.forEach(violation -> exception
-        .add(getTranslator().getTranslation(violation.getMessage())));
+    validations.forEach(violation -> exception.add(getTranslator()
+        .getTranslation(violation.getPropertyPath().toString()) + ": "
+        + getTranslator().getTranslation(violation.getMessage())));
   }
 
 }

@@ -17,8 +17,8 @@ public abstract class AttachmentFormViewModel<T extends AttachmentDTO<?>>
   /**
    * @param readOnly Indicativo de somente leitura
    */
-  public AttachmentFormViewModel(boolean readOnly) {
-    super(readOnly);
+  public AttachmentFormViewModel(AttachmentFormViewModelConfig<T> config) {
+    super(config);
   }
 
   /**

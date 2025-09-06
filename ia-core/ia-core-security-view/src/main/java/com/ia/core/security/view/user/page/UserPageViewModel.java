@@ -8,6 +8,7 @@ import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.security.view.log.operation.LogOperationService;
 import com.ia.core.security.view.log.operation.list.AuditOperationListViewModel;
+import com.ia.core.security.view.log.operation.list.AuditOperationListViewModelConfig;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
 import com.ia.core.security.view.privilege.PrivilegeService;
@@ -15,6 +16,7 @@ import com.ia.core.security.view.role.RoleService;
 import com.ia.core.security.view.user.UserService;
 import com.ia.core.security.view.user.form.UserFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
 
@@ -25,12 +27,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 @Component
 public class UserPageViewModel
   extends EntityPageViewModel<UserDTO> {
-  /** {@link PrivilegeService} */
-  private final PrivilegeService privilegeService;
-  /** {@link RoleService} */
-  private final RoleService roleService;
-  /** {@link AuthenticationDetails} */
-  private final AuthenticationDetails authentication;
+
   /** View Model de listagem de adição */
   private AuditOperationListViewModel auditOperationListViewModel;
 
@@ -41,16 +38,9 @@ public class UserPageViewModel
    * @param roleService         {@link RoleService}
    * @param logOperationService {@link LogOperationService}
    */
-  public UserPageViewModel(AuthenticationDetails authentication,
-                           UserService service,
-                           PrivilegeService privilegeService,
-                           RoleService roleService,
-                           LogOperationService logOperationService) {
-    super(service, logOperationService);
-    this.authentication = authentication;
-    this.privilegeService = privilegeService;
-    this.roleService = roleService;
-    this.auditOperationListViewModel = createAuditOperationListViewModel(logOperationService);
+  public UserPageViewModel(UserPageViewModelConfig config) {
+    super(config);
+    this.auditOperationListViewModel = createAuditOperationListViewModel();
   }
 
   /**
@@ -59,8 +49,10 @@ public class UserPageViewModel
    * @param logOperationService {@link LogOperationService}
    * @return {@link AuditOperationListViewModel} criado
    */
-  protected AuditOperationListViewModel createAuditOperationListViewModel(LogOperationService logOperationService) {
-    return new AuditOperationListViewModel(logOperationService);
+  protected AuditOperationListViewModel createAuditOperationListViewModel() {
+    return new AuditOperationListViewModel(new AuditOperationListViewModelConfig(isReadOnly(),
+                                                                                 getConfig()
+                                                                                     .getLogOperationService()));
   }
 
   @Override
@@ -69,8 +61,8 @@ public class UserPageViewModel
   }
 
   @Override
-  public IFormViewModel<UserDTO> createFormViewModel(boolean readOnly) {
-    return new UserFormViewModel(readOnly, privilegeService, roleService);
+  public IFormViewModel<UserDTO> createFormViewModel(FormViewModelConfig<UserDTO> config) {
+    return new UserFormViewModel(config.cast());
   }
 
   @Override
@@ -102,7 +94,8 @@ public class UserPageViewModel
    * @param user {@link UserDTO} que será resetado.
    */
   public void resetPassword(UserDTO user) {
-    getService().resetPassword(user, authentication.getAuthenticatedUser());
+    getService().resetPassword(user, getConfig().getAuthentication()
+        .getAuthenticatedUser());
   }
 
   @Override
@@ -111,6 +104,11 @@ public class UserPageViewModel
     if (this.auditOperationListViewModel != null) {
       this.auditOperationListViewModel.setReadOnly(readOnly);
     }
+  }
+
+  @Override
+  public UserPageViewModelConfig getConfig() {
+    return (UserPageViewModelConfig) super.getConfig();
   }
 
   /**

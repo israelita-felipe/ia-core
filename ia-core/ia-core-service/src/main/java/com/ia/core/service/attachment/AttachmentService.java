@@ -47,7 +47,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @param translator          {@link Translator}
    * @param validators          lista de validadores
    */
-  public AttachmentService(AttachementServiceConfig<T, D> config) {
+  public AttachmentService(AttachmentServiceConfig<T, D> config) {
     super(config);
   }
 

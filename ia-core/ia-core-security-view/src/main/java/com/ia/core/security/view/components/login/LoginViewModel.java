@@ -16,18 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class LoginViewModel
   extends FormViewModel<AuthenticationRequest> {
 
-  private AuthenticationDetails details;
-
   /**
    * @param readOnly
    */
-  public LoginViewModel(AuthenticationDetails details) {
-    super(false);
-    this.details = details;
+  public LoginViewModel(LoginViewModelConfig config) {
+    super(config);
+  }
+
+  @Override
+  public LoginViewModelConfig getConfig() {
+    return super.getConfig().cast();
   }
 
   public void login(Consumer<UserDTO> onSucess, Runnable onFail) {
     try {
+      AuthenticationDetails details = getConfig().getDetails();
       details.autenticate(getModel());
       UserDTO user = details.getAuthenticatedUser();
       if (user != null) {

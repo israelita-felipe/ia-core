@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
-import com.ia.core.security.view.log.operation.LogOperationService;
 import com.ia.core.security.view.log.operation.form.LogOperationFormViewModel;
 import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
@@ -12,6 +11,7 @@ import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.dto.sort.SortDirectionDTO;
 import com.ia.core.service.dto.sort.SortRequestDTO;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
 
 import lombok.Getter;
@@ -23,8 +23,6 @@ public class AuditOperationListViewModel
   extends ListViewModel<LogOperationDTO> {
   @Getter
   private LogOperationFormViewModel logOperationFormViewModel;
-  @Getter
-  private LogOperationService logOperationService;
 
   @Getter
   private SearchRequestDTO auditSearchRequest;
@@ -33,11 +31,15 @@ public class AuditOperationListViewModel
   /**
    *
    */
-  public AuditOperationListViewModel(LogOperationService logOperationService) {
-    super();
+  public AuditOperationListViewModel(AuditOperationListViewModelConfig config) {
+    super(config);
     this.logOperationFormViewModel = createLogOperationFormViewModel();
-    this.logOperationService = logOperationService;
     this.auditSearchRequest = createAuditSearchRequest();
+  }
+
+  @Override
+  public AuditOperationListViewModelConfig getConfig() {
+    return (AuditOperationListViewModelConfig) super.getConfig();
   }
 
   /**
@@ -45,7 +47,7 @@ public class AuditOperationListViewModel
    * @return
    */
   protected LogOperationFormViewModel createLogOperationFormViewModel() {
-    return new LogOperationFormViewModel(true);
+    return new LogOperationFormViewModel(new FormViewModelConfig<>(true));
   }
 
   /**

@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import com.ia.core.security.view.log.operation.LogOperationService;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
+import com.ia.core.security.view.log.operation.list.LogOperationListViewModelConfig;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.view.components.page.viewModel.PageViewModel;
-import com.ia.core.view.service.DefaultBaseService;
 
 import lombok.Getter;
 
@@ -29,10 +29,14 @@ public abstract class EntityPageViewModel<T extends AbstractBaseEntityDTO<? exte
    * @param service             serviço da entidade
    * @param logOperationService serviço de log de operação
    */
-  public EntityPageViewModel(DefaultBaseService<T> service,
-                             LogOperationService logOperationService) {
-    super(service);
-    this.logOperationListViewModel = createLogOperationListViewModel(logOperationService);
+  public EntityPageViewModel(EntityPageViewModelConfig<T> config) {
+    super(config);
+    this.logOperationListViewModel = createLogOperationListViewModel();
+  }
+
+  @Override
+  public EntityPageViewModelConfig<T> getConfig() {
+    return (EntityPageViewModelConfig<T>) super.getConfig();
   }
 
   /**
@@ -41,8 +45,10 @@ public abstract class EntityPageViewModel<T extends AbstractBaseEntityDTO<? exte
    * @param logOperationService {@link LogOperationService}
    * @return {@link LogOperationListViewModel} criado
    */
-  protected LogOperationListViewModel createLogOperationListViewModel(LogOperationService logOperationService) {
-    return new LogOperationListViewModel(logOperationService);
+  protected LogOperationListViewModel createLogOperationListViewModel() {
+    return new LogOperationListViewModel(new LogOperationListViewModelConfig(isReadOnly(),
+                                                                             getConfig()
+                                                                                 .getLogOperationService()));
   }
 
   @Override

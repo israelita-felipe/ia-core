@@ -25,12 +25,15 @@ public abstract class FormViewModel<T extends Serializable>
   /** Suporte a mudança de propriedade */
   @Getter
   private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+  @Getter
+  private FormViewModelConfig<T> config;
 
   /**
    * @param readOnly Indicativo de somente leitura
    */
-  public FormViewModel(boolean readOnly) {
-    this.readOnly = readOnly;
+  public FormViewModel(FormViewModelConfig<T> config) {
+    this.readOnly = config.isReadOnly();
+    this.config = config;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package com.ia.core.model.util;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -26,5 +28,9 @@ public class FormatUtils {
   public static String formatDateTime(String pattern,
                                       LocalDateTime dateTime) {
     return dateTime.format(DateTimeFormatter.ofPattern(pattern));
+  }
+
+  public static String formatCurrency(BigDecimal value) {
+    return NumberFormat.getCurrencyInstance().format(value);
   }
 }

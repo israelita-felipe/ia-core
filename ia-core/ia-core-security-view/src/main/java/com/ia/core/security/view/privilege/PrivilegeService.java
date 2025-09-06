@@ -2,7 +2,6 @@ package com.ia.core.security.view.privilege;
 
 import org.springframework.stereotype.Service;
 
-import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.view.service.DefaultSecuredViewBaseService;
@@ -10,7 +9,6 @@ import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.view.client.BaseClient;
 
 /**
  * Serviço para {@link PrivilegeDTO}
@@ -25,9 +23,8 @@ public class PrivilegeService
    * @param client               cliente de comunicação
    * @param authorizationManager gerente de autorização
    */
-  public PrivilegeService(BaseClient<PrivilegeDTO> client,
-                          CoreSecurityAuthorizationManager authorizationManager) {
-    super(client, authorizationManager);
+  public PrivilegeService(PrivilegeServiceConfig config) {
+    super(config);
   }
 
   /**

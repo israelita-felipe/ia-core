@@ -51,9 +51,8 @@ public class ComandoSistemaFormView
          createFinalidade($(ComandoSistemaTranslator.FINALIDADE),
                           $(ComandoSistemaTranslator.HELP.FINALIDADE),
                           FinalidadeComandoEnum::name));
-    bind("titulo",
-         createTitulo($(ComandoSistemaTranslator.TITULO),
-                      $(ComandoSistemaTranslator.HELP.TITULO)));
+    bind("titulo", createTitulo($(ComandoSistemaTranslator.TITULO),
+                                $(ComandoSistemaTranslator.HELP.TITULO)));
     bind("comando",
          createComando($(ComandoSistemaTranslator.COMANDO),
                        $(ComandoSistemaTranslator.HELP.COMANDO)));
@@ -62,7 +61,9 @@ public class ComandoSistemaFormView
                         $(TemplateTranslator.HELP.TEMPLATE),
                         DataProviderFactory
                             .createBaseDataProviderFromService(getViewModel()
-                                .getTemplateService(), TemplateDTO.propertyFilters()),
+                                .getConfig().getTemplateService(),
+                                                               TemplateDTO
+                                                                   .propertyFilters()),
                         TemplateDTO::getTitulo));
   }
 

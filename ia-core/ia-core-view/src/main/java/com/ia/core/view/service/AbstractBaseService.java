@@ -24,7 +24,7 @@ public abstract class AbstractBaseService<D extends Serializable>
   /**
    * Serviço do controlador.
    */
-  protected final BaseClient<D> client;
+  protected final AbstractBaseServiceConfig<D> config;
 
   /**
    * Inicialização do serviço
@@ -32,7 +32,12 @@ public abstract class AbstractBaseService<D extends Serializable>
   @PostConstruct
   public void initBaseService() {
     log.info("{} inicializado com client {}", this.getClass(),
-             client.getClass());
+             config.getClient().getClass());
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public <C extends BaseClient<D>> C getClient() {
+    return (C) getConfig().getClient();
+  }
 }

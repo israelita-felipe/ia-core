@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.log.operation.LogOperationService;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
-import com.ia.core.security.view.privilege.PrivilegeService;
 import com.ia.core.security.view.privilege.form.PrivilegeFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
 
@@ -27,9 +27,8 @@ public class PrivilegePageViewModel
    * @param service             serviço para {@link PrivilegeDTO}
    * @param logOperationService {@link LogOperationService}
    */
-  public PrivilegePageViewModel(PrivilegeService service,
-                                LogOperationService logOperationService) {
-    super(service, logOperationService);
+  public PrivilegePageViewModel(PrivilegePageViewModelConfig config) {
+    super(config);
   }
 
   @Override
@@ -58,7 +57,7 @@ public class PrivilegePageViewModel
   }
 
   @Override
-  public IFormViewModel<PrivilegeDTO> createFormViewModel(boolean readOnly) {
-    return new PrivilegeFormViewModel(readOnly);
+  public IFormViewModel<PrivilegeDTO> createFormViewModel(FormViewModelConfig<PrivilegeDTO> config) {
+    return new PrivilegeFormViewModel(config);
   }
 }

@@ -9,6 +9,13 @@ import com.ia.core.view.components.list.viewModel.ListViewModel;
 public class OperationItemDetailsListViewModel
   extends ListViewModel<OperationItemDetails> {
 
+  /**
+   * @param config
+   */
+  public OperationItemDetailsListViewModel(OperationItemDetailsListViewModelConfig config) {
+    super(config);
+  }
+
   @Override
   public Class<OperationItemDetails> getType() {
     return OperationItemDetails.class;

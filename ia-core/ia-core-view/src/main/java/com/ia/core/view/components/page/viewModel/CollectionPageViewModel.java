@@ -21,8 +21,8 @@ public abstract class CollectionPageViewModel<T extends Serializable>
    *
    * @param service {@link DefaultCollectionBaseService} da página
    */
-  public CollectionPageViewModel(DefaultCollectionBaseService<T> service) {
-    super(service);
+  public CollectionPageViewModel(CollectionPageViewModelConfig<T> config) {
+    super(config);
   }
 
   @Override

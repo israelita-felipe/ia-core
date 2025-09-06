@@ -21,7 +21,7 @@ public class AttachmentService<T extends AttachmentDTO<?>>
   /**
    * @param client {@link BaseClient}
    */
-  public AttachmentService(BaseClient<T> client) {
+  public AttachmentService(DefaultBaseServiceConfig<T> client) {
     super(client);
   }
 
@@ -50,8 +50,9 @@ public class AttachmentService<T extends AttachmentDTO<?>>
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public AttachmentClient<T> getClient() {
-    return (AttachmentClient<T>) super.getClient();
+    return (AttachmentClient<T>) getConfig().getClient();
   }
 }

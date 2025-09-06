@@ -3,7 +3,6 @@ package com.ia.core.security.view.log.operation;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
-import com.ia.core.view.client.BaseClient;
 import com.ia.core.view.service.DefaultBaseService;
 
 /**
@@ -16,10 +15,10 @@ public class LogOperationService
   extends DefaultBaseService<LogOperationDTO> {
 
   /**
-   * @param client cliente do serviço
+   * @param config cliente do serviço
    */
-  public LogOperationService(BaseClient<LogOperationDTO> client) {
-    super(client);
+  public LogOperationService(LogOperationServiceConfig config) {
+    super(config);
   }
 
 }

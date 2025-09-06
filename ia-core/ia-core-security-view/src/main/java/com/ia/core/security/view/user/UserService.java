@@ -12,7 +12,6 @@ import com.ia.core.security.service.model.user.UserPasswordResetDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.security.view.service.DefaultSecuredViewBaseService;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.view.client.BaseClient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,22 +27,14 @@ public class UserService
   extends DefaultSecuredViewBaseService<UserDTO> {
 
   /**
-   * Codificador de senha do usuário
-   */
-  private final UserPasswordEncoder passwordEncoder;
-
-  /**
    * Construtor padrão
    *
    * @param client               cliente para o usuário
    * @param authorizationManager {@link CoreSecurityAuthorizationManager}
    * @param passwordEncoder      {@link UserPasswordEncoder}
    */
-  public UserService(BaseClient<UserDTO> client,
-                     CoreSecurityAuthorizationManager authorizationManager,
-                     UserPasswordEncoder passwordEncoder) {
-    super(client, authorizationManager);
-    this.passwordEncoder = passwordEncoder;
+  public UserService(UserServiceConfig config) {
+    super(config);
   }
 
   /**
@@ -61,15 +52,20 @@ public class UserService
     change.setUserCode(user.getUserCode());
     change.setOldPassword(UserPasswordEncoder
         .encrypt(change.getOldPassword(), user.getUserCode()));
-    change.setNewPassword(UserPasswordEncoder
-        .encrypt(passwordEncoder.encode(change.getNewPassword()),
-                 user.getUserCode()));
+    change.setNewPassword(UserPasswordEncoder.encrypt(getConfig()
+        .getPasswordEncoder().encode(change.getNewPassword()),
+                                                      user.getUserCode()));
     getClient().changePassword(change);
   }
 
   @Override
+  public UserServiceConfig getConfig() {
+    return (UserServiceConfig) super.getConfig();
+  }
+
+  @Override
   public UserClient getClient() {
-    return (UserClient) super.getClient();
+    return getConfig().getClient();
   }
 
   @Override

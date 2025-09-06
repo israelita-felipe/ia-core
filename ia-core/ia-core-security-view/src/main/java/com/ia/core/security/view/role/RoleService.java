@@ -6,14 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.model.filter.SearchRequest;
-import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.security.view.service.DefaultSecuredViewBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.view.client.BaseClient;
 import com.ia.core.view.service.ListBaseService;
 
 /**
@@ -29,9 +27,8 @@ public class RoleService
    * @param client               cliente de comunicação
    * @param authorizationManager gestor de autorizações
    */
-  public RoleService(BaseClient<RoleDTO> client,
-                     CoreSecurityAuthorizationManager authorizationManager) {
-    super(client, authorizationManager);
+  public RoleService(RoleServiceConfig config) {
+    super(config);
   }
 
   /**

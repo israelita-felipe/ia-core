@@ -75,6 +75,7 @@ public class ChatDialog
                                           $(ChatRequestTranslator.HELP.REQUEST),
                                           DataProviderFactory
                                               .createBaseDataProviderFromService(getViewModel()
+                                                  .getConfig()
                                                   .getComandoSistemaService(), ComandoSistemaDTO.propertyFilters()),
                                           ComandoSistemaDTO::getTitulo))
           .withConverter(createComandoSistemaDTOToUUIDConverter())

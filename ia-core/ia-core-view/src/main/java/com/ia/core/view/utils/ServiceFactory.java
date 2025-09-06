@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
 import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.service.collection.DefaultCollectionServiceConfig;
 
 /**
  * Classe que implementa os padrão factory para os serviços
@@ -52,8 +53,19 @@ public class ServiceFactory {
    */
   public static <T extends Serializable> DefaultCollectionBaseService<T> createServiceFromCollection(Supplier<Collection<T>> data,
                                                                                                      Function<T, UUID> idSupplier) {
-    return new DefaultCollectionBaseService<T>(createCollectionBaseClient(data,
-                                                                          idSupplier)) {
+    return new DefaultCollectionBaseService<T>(createCollectionServiceConfig(data, idSupplier)) {
     };
+  }
+
+  /**
+   * @param <T>
+   * @param data
+   * @param idSupplier
+   * @return
+   */
+  protected static <T extends Serializable> DefaultCollectionServiceConfig<T> createCollectionServiceConfig(Supplier<Collection<T>> data,
+                                                                                                            Function<T, UUID> idSupplier) {
+    return new DefaultCollectionServiceConfig<>(createCollectionBaseClient(data,
+                                                                                                               idSupplier));
   }
 }

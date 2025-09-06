@@ -41,7 +41,7 @@ public class RoleFormView
   public void createLayout() {
     super.createLayout();
     bind("name", createNameField($(RoleTranslator.ROLE),
-                                       $(RoleTranslator.HELP.ROLE)));
+                                 $(RoleTranslator.HELP.ROLE)));
     add(this.tabSheet = createTabSheet(), 6);
     bind("privileges",
          createPrivilegesField($(PrivilegeTranslator.PRIVILEGE),
@@ -50,10 +50,11 @@ public class RoleFormView
                                      .split(Operation.SEPARATOR);
                                  return String.format("%s - %s", $(p[0]),
                                                       $(p[1]));
-                               }, getViewModel().getPrivilegeService()));
+                               }, getViewModel().getConfig()
+                                   .getPrivilegeService()));
     bind("users",
          createUsersField($(UserTranslator.USER), UserDTO::toString,
-                          getViewModel().getUserService()));
+                          getViewModel().getConfig().getUserService()));
   }
 
   /**

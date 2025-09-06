@@ -1,7 +1,6 @@
 package com.ia.core.llm.view.template;
 
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.view.client.BaseClient;
 import com.ia.core.view.service.DefaultBaseService;
 
 /**
@@ -11,10 +10,10 @@ public class TemplateService
   extends DefaultBaseService<TemplateDTO> {
 
   /**
-   * @param client
+   * @param config
    */
-  public TemplateService(BaseClient<TemplateDTO> client) {
-    super(client);
+  public TemplateService(TemplateServiceConfig config) {
+    super(config);
   }
 
 }
