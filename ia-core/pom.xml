@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.5.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<packaging>pom</packaging>
@@ -19,8 +19,8 @@
 		<java.version>21</java.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
-		<vaadin.version>24.3.2</vaadin.version>
-		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<vaadin.version>24.3.20</vaadin.version>
+		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
