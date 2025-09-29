@@ -11,11 +11,15 @@ import com.ia.core.security.service.authentication.AuthenticationService;
 import com.ia.core.security.service.exception.InvalidPasswordException;
 import com.ia.core.security.service.exception.UserNotFountException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Israel Araújo
  */
+@Tag(name = "Autenticação",
+     description = "Endpoints para autenticação de usuários")
 public interface AuthenticationBaseController {
 
   /**
@@ -23,6 +27,7 @@ public interface AuthenticationBaseController {
    */
   public static final String AUTHENTICATE_PATH = "/authenticate";
 
+  @Operation(summary = "Autentica um usuário e retorna um token JWT")
   @PostMapping(AUTHENTICATE_PATH)
   default ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest body,
                                                               HttpServletRequest request)

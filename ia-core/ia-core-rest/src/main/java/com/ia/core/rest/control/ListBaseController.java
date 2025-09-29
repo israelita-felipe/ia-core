@@ -12,6 +12,7 @@ import com.ia.core.service.ListBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -32,6 +33,7 @@ public interface ListBaseController<T extends BaseEntity, D extends DTO<T>>
    * @return {@link Page} do tipo {@link DTO} salvo.
    * @see ListBaseService#findAll(SearchRequestDTO)
    */
+  @Operation(summary = "Lista os objetos que atendem aos critérios de busca")
   @PostMapping("/all")
   default ResponseEntity<Page<D>> findAll(@RequestBody SearchRequestDTO request,
                                           HttpServletRequest httpRequest) {

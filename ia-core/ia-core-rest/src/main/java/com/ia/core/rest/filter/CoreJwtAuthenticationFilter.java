@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class CoreJwtAuthenticationFilter
   extends OncePerRequestAuthenticationFilter {
 
-  private static final String BEARER_HEADER = "bearer ";
+  private static final String BEARER_HEADER = "Bearer ";
 
   private static final String AUTHORIZATION_HEADER = "Authorization";
 

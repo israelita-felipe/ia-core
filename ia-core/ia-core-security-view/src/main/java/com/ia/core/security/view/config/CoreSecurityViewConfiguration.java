@@ -4,11 +4,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
+import org.springframework.security.web.SecurityFilterChain;
 
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
@@ -26,50 +29,118 @@ import com.ia.core.security.view.login.CustomAccessDeniedError;
 import com.ia.core.security.view.privilege.PrivilegeService;
 import com.vaadin.flow.router.RouteAccessDeniedError;
 import com.vaadin.flow.spring.security.NavigationAccessControlConfigurer;
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategy;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Configuração de segurança para views do Vaadin integrada com Spring Security.
+ *
+ * @author Israel Araújo
+ */
 @RequiredArgsConstructor
 @Slf4j
-public class CoreSecurityViewConfiguration
-  extends VaadinWebSecurity {
+@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
+public abstract class CoreSecurityViewConfiguration {
   /**
    * Path de login
    */
   public static final String LOGIN_PATH = "/login";
 
+  /** {@link CoreSecurityViewAuthorizationManager} */
+  private final CoreSecurityViewAuthorizationManager authorizationManager;
+  /** {@link NavigationAccessControlConfigurer} */
+  private final NavigationAccessControlConfigurer navigationAccessControlConfigurer;
+  /** {@link FunctionalityManager} */
+  private final FunctionalityManager functionalityManager;
+  /** {@link AuthenticationService} */
+  private final AuthenticationService authenticationService;
+  /** {@link RouteAccessDeniedError} */
+  private final RouteAccessDeniedError accessDeniedError;
+  /** {@link PasswordEncoder} */
+  private final PasswordEncoder passwordEncoder;
+
+  /**
+   * * Configura a página de acesso negado
+   *
+   * @return {@link RouteAccessDeniedError}
+   */
   @Bean
   static RouteAccessDeniedError accessDeniedError() {
     return new CustomAccessDeniedError();
   }
 
+  /**
+   * * Configura o serviço de autenticação
+   *
+   * @param client {@link AuthenticationBaseClient}
+   * @return {@link AuthenticationService}
+   */
   @Bean
   static AuthenticationService authenticationService(AuthenticationBaseClient client) {
     return new DefaultAuthenticationService(client);
   }
 
+  /**
+   * * Configura o gerenciador de funcionalidades
+   *
+   * @param service            {@link PrivilegeService}
+   * @param hasFunctionalities Lista de funcionalidades {@link HasFunctionality}
+   * @return {@link FunctionalityManager}
+   */
   @Bean
   static FunctionalityManager functionalityManager(PrivilegeService service,
                                                    List<HasFunctionality> hasFunctionalities) {
     return new DefaultFunctionalityManager(service, hasFunctionalities);
   }
 
+  /**
+   * Configura o gerenciador de autorização de visualizações
+   *
+   * @param authorizationManager {@link CoreSecurityViewAuthorizationManager}
+   * @return {@link NavigationAccessControlConfigurer}
+   */
   @Bean
   static NavigationAccessControlConfigurer navigationAccessControlConfigurer(CoreSecurityViewAuthorizationManager authorizationManager) {
     log.info("CONFIGURA navigationAccessControlConfigurer");
     return new NavigationAccessControlConfigurer()
-        .withRoutePathAccessChecker()
         .withDecisionResolver(new ViewAcessDecisionResolver(authorizationManager));
   }
 
+  /**
+   * Configura o codificador de senhas
+   *
+   * @return {@link UserPasswordEncoder}
+   */
   @Bean
   static UserPasswordEncoder passwordEncoder() {
     log.info("CONFIGURA passwordEncoder");
     return new ViewPasswordEncoder();
   }
 
+  /**
+   * Configura o executor de tarefas assíncronas com contexto de segurança
+   *
+   * @param strategy {@link VaadinAwareSecurityContextHolderStrategy}
+   * @return {@link DelegatingSecurityContextAsyncTaskExecutor}
+   */
+  @Bean
+  static DelegatingSecurityContextAsyncTaskExecutor securityContextAsyncTaskExecutor(VaadinAwareSecurityContextHolderStrategy strategy) {
+    var delegate = new ThreadPoolTaskExecutor();
+    // configure the executor
+    delegate.initialize();
+
+    var executor = new DelegatingSecurityContextAsyncTaskExecutor(delegate);
+    executor.setSecurityContextHolderStrategy(strategy);
+    return executor;
+  }
+
+  /**
+   * @return {@link CoreSecurityViewAuthorizationManager}
+   */
   @Bean
   static CoreSecurityViewAuthorizationManager viewAuthorizationManager() {
     return new CoreViewAuthorizationManager() {
@@ -93,79 +164,51 @@ public class CoreSecurityViewConfiguration
     };
   }
 
-  private final CoreSecurityViewAuthorizationManager authorizationManager;
-
-  private final NavigationAccessControlConfigurer navigationAccessControlConfigurer;
-
-  private final FunctionalityManager functionalityManager;
-
-  private final AuthenticationService authenticationService;
-
-  private final RouteAccessDeniedError accessDeniedError;
-
-  private final PasswordEncoder passwordEncoder;
-
   /**
-   * @param authenticationService2
+   * @param customAuthenticationService {@link AuthenticationService}
    */
-  public void configure(AuthenticationService authenticationService2) {
-
-  }
-
-  public void configure(CoreSecurityViewAuthorizationManager authorizationManager) {
+  public void configure(AuthenticationService customAuthenticationService) {
 
   }
 
   /**
-   * @param functionalityManager2
+   * @param customAuthorizationManager {@link CoreSecurityViewAuthorizationManager}
    */
-  public void configure(FunctionalityManager functionalityManager2) {
+  public void configure(CoreSecurityViewAuthorizationManager customAuthorizationManager) {
 
-  }
-
-  @Override
-  protected void configure(HttpSecurity http)
-    throws Exception {
-    log.info("CONFIGURA HTTPSECURITY");
-    http.authorizeHttpRequests(auth -> auth
-        .requestMatchers(new AntPathRequestMatcher(loginPath()))
-        .permitAll())
-    // .authorizeHttpRequests(auth -> auth.requestMatchers("/public/**")
-    // .permitAll())
-    ;
-    super.configure(http);
-    configure(authorizationManager);
-    configure(navigationAccessControlConfigurer);
-    configure(functionalityManager);
-    configure(authenticationService);
-    configure(accessDeniedError);
-    configure(passwordEncoder);
-    setLoginView(http, getLoginClass());
   }
 
   /**
-   * @param navigationAccessControlConfigurer2
+   * @param customFunctionalityManager {@link FunctionalityManager}
    */
-  public void configure(NavigationAccessControlConfigurer navigationAccessControlConfigurer2) {
+  public void configure(FunctionalityManager customFunctionalityManager) {
 
   }
 
   /**
-   * @param passwordEncoder2
+   * @param customNavigationAccessControlConfigurer {@link NavigationAccessControlConfigurer}
    */
-  public void configure(PasswordEncoder passwordEncoder2) {
-
+  public void configure(NavigationAccessControlConfigurer customNavigationAccessControlConfigurer) {
+    customNavigationAccessControlConfigurer.withAnnotatedViewAccessChecker()
+        .withLoginView(getLoginClass());
   }
 
   /**
-   * @param accessDeniedError2
+   * @param customPasswordEncoder {@link PasswordEncoder}
    */
-  public void configure(RouteAccessDeniedError accessDeniedError2) {
+  public void configure(PasswordEncoder customPasswordEncoder) {
 
   }
 
   /**
-   * @return
+   * @param customAccessDeniedError {@link RouteAccessDeniedError}
+   */
+  public void configure(RouteAccessDeniedError customAccessDeniedError) {
+
+  }
+
+  /**
+   * @return Classe de login {@link LoginView}
    */
   protected Class<? extends com.vaadin.flow.component.Component> getLoginClass() {
     log.info("GET LOGIN CLASS");
@@ -173,11 +216,33 @@ public class CoreSecurityViewConfiguration
   }
 
   /**
-   * @return
+   * @return Path de login {@link #LOGIN_PATH}
    */
   protected String loginPath() {
     log.info("GET LOGIN PATH");
     return String.format("%s**", LOGIN_PATH);
+  }
+
+  /**
+   * Configura o filtro de segurança
+   *
+   * @param http {@link HttpSecurity} a ser configurado
+   * @return {@link SecurityFilterChain} configurado
+   * @throws Exception caso ocorra algum erro na configuração
+   */
+  @Bean
+  SecurityFilterChain securityFilterChain(HttpSecurity http)
+    throws Exception {
+
+    return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
+      configurer.loginView(getLoginClass(), loginPath());
+      configure(authorizationManager);
+      configure(navigationAccessControlConfigurer);
+      configure(functionalityManager);
+      configure(authenticationService);
+      configure(accessDeniedError);
+      configure(passwordEncoder);
+    }).build();
   }
 
 }

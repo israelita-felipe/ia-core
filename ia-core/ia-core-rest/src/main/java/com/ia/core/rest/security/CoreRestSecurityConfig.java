@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
 import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
@@ -101,8 +101,8 @@ public abstract class CoreRestSecurityConfig
                                                  UserDetailsService userDetailsService)
     throws Exception {
 
-    http.securityMatcher(new AntPathRequestMatcher("/**"))
-        .csrf(csrf -> csrf.disable())
+    http.securityMatcher(PathPatternRequestMatcher.withDefaults()
+        .matcher("/**")).csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize.anyRequest()
             .authenticated())
         .exceptionHandling(handling -> handling
@@ -131,7 +131,9 @@ public abstract class CoreRestSecurityConfig
   static SecurityFilterChain securityPublicFilterChain(HttpSecurity http,
                                                        @Value(PUBLIC_ENDPOINT_PATTERN) String authorizationPattern)
     throws Exception {
-    http.securityMatcher(authorizationPattern, "/actuator/**")
+    http.securityMatcher(authorizationPattern, "/actuator/**",
+                         "/swagger-ui/**", "/v3/api-docs/**",
+                         "/v3/api-docs.yaml", "/swagger-ui.html")
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests((requests) -> requests.anyRequest()
             .permitAll());

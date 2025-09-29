@@ -19,7 +19,7 @@ public class ViewAcessDecisionResolver
   public AccessCheckResult resolve(List<AccessCheckResult> results,
                                    NavigationContext context) {
     if (context.isErrorHandling()) {
-      return AccessCheckResult.allow();
+      return AccessCheckResult.neutral();
     }
     if (authorizationManager.check(context.getNavigationTarget(),
                                    context.getPrincipal() != null)) {

@@ -13,6 +13,7 @@ import com.ia.core.service.SaveBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -32,6 +33,7 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<T>>
    * @throws ServiceException caso ocorra algum erro de serviço
    * @see SaveBaseService#save(DTO)
    */
+  @Operation(summary = "Salva um objeto (inclusão ou alteração)")
   @PostMapping
   default ResponseEntity<D> save(@RequestBody D dto,
                                  HttpServletRequest request)
@@ -55,6 +57,7 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<T>>
    *         </ul>
    * @throws ServiceException caso ocorra alguma erro de serviço
    */
+  @Operation(summary = "Valida um objeto sem salvá-lo")
   @PostMapping("/validate")
   default ResponseEntity<Collection<String>> validate(@RequestBody D dto,
                                                       HttpServletRequest request)

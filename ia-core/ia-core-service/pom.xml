@@ -27,6 +27,17 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
+		<!-- For Hibernate 6's JCache integration -->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-jcache</artifactId>
+		</dependency>
+		<!-- Ehcache 3 provider (use the 'jakarta' classifier for Hibernate 6) -->
+		<dependency>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
@@ -48,16 +59,21 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 
-						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- See
+						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+						<!-- Classpath elements to supply as annotation
+						processor path. If 
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those
+						classpath elements. 
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation
+						processors. The 
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided
+						dependency processor 
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

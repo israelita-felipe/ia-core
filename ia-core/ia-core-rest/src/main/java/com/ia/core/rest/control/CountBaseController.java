@@ -10,6 +10,7 @@ import com.ia.core.service.CountBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -28,6 +29,7 @@ public interface CountBaseController<T extends BaseEntity, D extends DTO<T>>
    * @return {@link Integer}
    * @see CountBaseService#count(SearchRequestDTO)
    */
+  @Operation(summary = "Conta a quantidade de objetos que atendem aos critérios de busca")
   @PostMapping("/count")
   default ResponseEntity<Integer> count(@RequestBody SearchRequestDTO searchRequest,
                                         HttpServletRequest request) {

@@ -23,7 +23,7 @@ import jakarta.persistence.Cacheable;
 @Target(TYPE)
 @Cacheable()
 @Inherited
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "entityCache")
 public @interface EnableCache {
 
 }

@@ -10,6 +10,7 @@ import com.ia.core.model.BaseEntity;
 import com.ia.core.service.FindBaseService;
 import com.ia.core.service.dto.DTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -28,6 +29,7 @@ public interface FindBaseController<T extends BaseEntity, D extends DTO<T>>
    * @return {@link DTO}
    * @see FindBaseService#find(UUID)
    */
+  @Operation(summary = "Recupera um objeto pelo seu Id")
   @GetMapping("/{id}")
   default ResponseEntity<D> find(@PathVariable("id") UUID id,
                                  HttpServletRequest request) {

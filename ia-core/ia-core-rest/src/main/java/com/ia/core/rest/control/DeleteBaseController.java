@@ -11,6 +11,7 @@ import com.ia.core.service.DeleteBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -30,6 +31,7 @@ public interface DeleteBaseController<T extends BaseEntity, D extends DTO<T>>
    * @throws ServiceException caso ocorra algum erro no serviço
    * @see DeleteBaseService#delete(UUID)
    */
+  @Operation(summary = "Exclui um objeto pelo seu Id")
   @DeleteMapping("/{id}")
   default ResponseEntity<Void> delete(@PathVariable("id") UUID id,
                                       HttpServletRequest request)
