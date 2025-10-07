@@ -1,6 +1,7 @@
 package com.ia.core.view.components.properties;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -42,6 +43,45 @@ public interface HasComboBoxCreator
     ComboBox<E> comboBox = new ComboBox<>(label);
     setHelp(comboBox, help);
     comboBox.setItems(dataProvider);
+    comboBox.setWidthFull();
+    return comboBox;
+  }
+
+  /**
+   * Cria uma {@link ComboBox}
+   *
+   * @param <E>   Tipo de dado da {@link ComboBox}
+   * @param label título da combo
+   * @param help  Texto de ajuda da {@link ComboBox}
+   * @param itens {@link DataProvider}
+   * @return {@link ComboBox}
+   */
+  default <E> ComboBox<E> createComboBox(String label, String help,
+                                         Collection<E> itens) {
+    ComboBox<E> comboBox = new ComboBox<>(label);
+    setHelp(comboBox, help);
+    comboBox.setItems(itens);
+    comboBox.setWidthFull();
+    return comboBox;
+  }
+
+  /**
+   * Cria uma {@link ComboBox}
+   *
+   * @param <E>            Tipo de dado da {@link ComboBox}
+   * @param label          título da combo
+   * @param help           Texto de ajuda da {@link ComboBox}
+   * @param itens          {@link DataProvider}
+   * @param labelGenerator Gerador de label dos dados
+   * @return {@link ComboBox}
+   */
+  default <E> ComboBox<E> createComboBox(String label, String help,
+                                         Collection<E> itens,
+                                         ItemLabelGenerator<E> labelGenerator) {
+    ComboBox<E> comboBox = new ComboBox<>(label);
+    setHelp(comboBox, help);
+    comboBox.setItems(itens);
+    comboBox.setItemLabelGenerator(labelGenerator);
     comboBox.setWidthFull();
     return comboBox;
   }

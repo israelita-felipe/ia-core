@@ -51,7 +51,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     super(config);
   }
 
-  @Transactional(propagation = Propagation.NESTED)
+  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public void delete(UUID id)
     throws ServiceException {
@@ -116,7 +116,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     }
   }
 
-  @Transactional(propagation = Propagation.NESTED)
+  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public D save(D toSave)
     throws ServiceException {

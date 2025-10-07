@@ -32,9 +32,9 @@ public class User
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  private static final String TABLE_NAME = "SEC_USER";
+  public static final String TABLE_NAME = "SEC_USER";
   /** NOME DO SCHEMA */
-  private static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = "SECURITY";
 
   @Column(name = "user_name", length = 500, nullable = false)
   private String userName;

@@ -209,6 +209,35 @@ public class DataProviderFactory {
   }
 
   /**
+   * Cria um {@link ConfigurableFilterDataProvider}
+   *
+   * @param <T>        Tipo de dado.
+   * @param supplier   {@link DefaultBaseService};
+   * @param properties Propriedades a serem usadas no filto
+   * @return {@link DataProvider}
+   */
+  public static <T extends Serializable> DataProvider<T, String> createDataProviderFromSupplier(Supplier<Collection<T>> supplier,
+                                                                                                Set<String> properties) {
+    // callback
+    DataProvider<T, SearchRequestDTO> provider = createDataProviderFromSupplier(supplier);
+
+    // com filtro configurável
+    DataProvider<T, String> filteredProvider = provider
+        .withConfigurableFilter((search, value) -> {
+          SearchRequestDTO request = SearchRequestDTO.builder()
+              .disjunction(false).build();
+          properties.forEach(property -> {
+            request.getFilters()
+                .add(FilterRequestDTO.builder().key(property)
+                    .operator(OperatorDTO.LIKE)
+                    .fieldType(FieldTypeDTO.STRING).value(search).build());
+          });
+          return request;
+        });
+    return filteredProvider;
+  }
+
+  /**
    * Cria um {@link FetchCallback}
    *
    * @param <T>         Tipo de dado

@@ -60,7 +60,6 @@ public class LogOperationService
    */
   static {
     context = new InheritableThreadLocal<>();
-    context.set(new ConcurrentHashMap<>());
   }
 
   /**
@@ -101,8 +100,20 @@ public class LogOperationService
       log.error(e.getLocalizedMessage(), e);
       throw new RuntimeException(e.getLocalizedMessage(), e);
     } finally {
-      context.get().clear();
+      getContext().clear();
     }
+  }
+
+  /**
+   * @return
+   */
+  public static Map<String, Object> getContext() {
+    Map<String, Object> map = context.get();
+    if (map == null) {
+      map = new ConcurrentHashMap<>();
+      context.set(map);
+    }
+    return map;
   }
 
   /**
@@ -129,7 +140,7 @@ public class LogOperationService
       log.error(e.getLocalizedMessage(), e);
       throw new RuntimeException(e.getLocalizedMessage(), e);
     } finally {
-      context.get().clear();
+      getContext().clear();
     }
   }
 
@@ -161,7 +172,7 @@ public class LogOperationService
       log.error(e.getLocalizedMessage(), e);
       throw new RuntimeException(e.getLocalizedMessage(), e);
     } finally {
-      context.get().clear();
+      getContext().clear();
     }
   }
 
@@ -355,7 +366,7 @@ public class LogOperationService
    */
   private static void putObject(String key, Object value) {
     if (value != null && key != null) {
-      context.get().put(key, value);
+      getContext().put(key, value);
     }
   }
 
@@ -379,7 +390,7 @@ public class LogOperationService
    */
   private <D extends DTO<? extends BaseEntity>> void dispatch(final D entity,
                                                               final LogOperationEnum operation) {
-    Map<String, Object> params = context.get();
+    Map<String, Object> params = getContext();
     if (listenerEvaluator.apply(params, entity)) {
       log.info("{} -> {}", operation, entity.getClass());
       Collection<BiConsumer<Map<String, Object>, DTO<? extends BaseEntity>>> operationListener = listeners

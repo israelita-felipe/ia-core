@@ -3,6 +3,7 @@ package com.ia.core.security.service;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.core.model.BaseEntity;
@@ -34,7 +35,7 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<T>
     return getAuthorizationManager().canDelete(this);
   }
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   default void delete(UUID id)
     throws ServiceException {

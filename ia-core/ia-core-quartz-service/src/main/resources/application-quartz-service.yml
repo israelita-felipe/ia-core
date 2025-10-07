@@ -1,0 +1,6 @@
+spring:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always # Use 'embedded' for H2 or 'never' in production
+    overwrite-existing-jobs: true

@@ -27,17 +27,6 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
-		<!-- For Hibernate 6's JCache integration -->
-		<dependency>
-			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-jcache</artifactId>
-		</dependency>
-		<!-- Ehcache 3 provider (use the 'jakarta' classifier for Hibernate 6) -->
-		<dependency>
-			<groupId>org.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<classifier>jakarta</classifier>
-		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>

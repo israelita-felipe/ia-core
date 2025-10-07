@@ -31,9 +31,9 @@ public class Role
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  private static final String TABLE_NAME = "SEC_ROLE";
+  public static final String TABLE_NAME = "SEC_ROLE";
   /** NOME DO SCHEMA */
-  private static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = "SECURITY";
 
   @Column(name = "name", length = 500, nullable = false)
   private String name;

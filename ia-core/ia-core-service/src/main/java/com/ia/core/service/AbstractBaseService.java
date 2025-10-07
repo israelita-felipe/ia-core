@@ -41,8 +41,9 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
    * @param <M> Tipo do Mapper
    * @return {@link BaseMapper}
    */
+  @Override
   public <M extends BaseMapper<T, D>> M getMapper() {
-     return (M) config.getMapper();
+    return (M) config.getMapper();
   }
 
   /**
@@ -51,25 +52,29 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
    * @param <R> Tipo do Repositório.
    * @return {@link BaseEntityRepository}
    */
+  @Override
   public <R extends BaseEntityRepository<T>> R getRepository() {
-    
+
     return (R) config.getRepository();
   }
 
   /**
    * @return {@link SearchRequestMapper}
    */
+  @Override
   public SearchRequestMapper getSearchRequestMapper() {
-    
+
     return config.getSearchRequestMapper();
   }
 
   /**
    * @return {@link Translator} padrão
    */
+  @Override
   public Translator getTranslator() {
     return config.getTranslator();
   }
+
   /**
    * Classe de configuração do serviço base.
    *

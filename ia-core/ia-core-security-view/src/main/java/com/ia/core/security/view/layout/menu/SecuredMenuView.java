@@ -22,6 +22,8 @@ import com.ia.core.view.components.layout.menu.AbstractMenuLayoutView;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -101,9 +103,23 @@ public abstract class SecuredMenuView
   protected void bindUser() {
     UserDTO user = getViewModel().getAuthenticatedUser();
     createUserInformationLayout();
+    crateUserPicture(user);
     createUsernameField(user.toString());
     createChangePasswordButton(() -> showChangePasswordDialog(user));
     createLogoutButton(() -> SecurityUtils.logout(UI.getCurrent()));
+  }
+
+  /**
+   * @param user
+   */
+  private void crateUserPicture(UserDTO user) {
+    Avatar avatar = new Avatar(user.getUserName());
+    FlexLayout layout = new FlexLayout(avatar);
+    layout.setWidthFull();
+    layout.setJustifyContentMode(JustifyContentMode.CENTER);
+    layout.setAlignItems(Alignment.CENTER);
+    avatar.addThemeVariants(AvatarVariant.LUMO_XLARGE);
+    this.userDetailsLayout.add(layout);
   }
 
   /**

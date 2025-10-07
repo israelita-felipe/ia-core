@@ -17,7 +17,7 @@
 	<description>Core para aplicações com vaadin e jpa</description>
 	<properties>
 		<java.version>21</java.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
 		<vaadin.version>24.8.7</vaadin.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
@@ -28,6 +28,8 @@
 		<ckeditor.version>4.1.2-8</ckeditor.version>
 		<owlapi.version>5.5.1</owlapi.version>
 		<openllet.version>2.6.5</openllet.version>
+		<reflections.version>0.10.2</reflections.version>
+		<cron-utils.version>9.2.1</cron-utils.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -58,6 +60,11 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.reflections</groupId>
+    		<artifactId>reflections</artifactId>
+    		<version>${reflections.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -144,5 +151,9 @@
 		<module>ia-core-llm-service</module>
 		<module>ia-core-llm-view</module>
 		<module>ia-core-flyway</module>
+		<module>ia-core-quartz</module>
+		<module>ia-core-quartz-service-model</module>
+		<module>ia-core-quartz-service</module>
+		<module>ia-core-quartz-view</module>
 	</modules>
 </project>

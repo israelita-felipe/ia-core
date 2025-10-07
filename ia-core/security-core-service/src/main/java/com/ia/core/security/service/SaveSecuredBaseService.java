@@ -2,6 +2,7 @@ package com.ia.core.security.service;
 
 import java.util.Set;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.core.model.BaseEntity;
@@ -50,7 +51,7 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
                       .addFunctionality(this, OperationEnum.UPDATE));
   }
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   default D save(D toSave)
     throws ServiceException {

@@ -47,7 +47,7 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<T>>
    * @throws ServiceException exceção lançada ao validar o dto
    * @see ValidationBaseService
    */
-  @Transactional(propagation = Propagation.NESTED)
+  @Transactional(propagation = Propagation.REQUIRED)
   default D save(D toSave)
     throws ServiceException {
     validate(toSave);

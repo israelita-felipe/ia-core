@@ -1,7 +1,12 @@
 package com.ia.core.view.config.feign;
 
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
 import org.springframework.cloud.openfeign.support.SortJacksonModule;
+import org.springframework.http.converter.HttpMessageConverter;
 
 import com.fasterxml.jackson.databind.Module;
 import com.ia.core.service.util.EnumModule;
@@ -21,6 +26,12 @@ import feign.httpclient.ApacheHttpClient;
  */
 
 public class FeignConfig {
+
+  public HttpMessageConverters messageConverters(ObjectProvider<HttpMessageConverter<?>> converters) {
+    return new HttpMessageConverters(converters.orderedStream()
+        .collect(Collectors.toList()));
+  }
+
   /**
    * @return {@link ErrorDecoder}. A implementação padrão é realizada através de
    *         {@link FeignErrorDecoder}

@@ -2,6 +2,7 @@ package com.ia.core.service;
 
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.core.model.BaseEntity;
@@ -37,7 +38,7 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<T>>
    * @throws ServiceException caso ocorra alguma exceção
    */
 
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRED)
   default void delete(UUID id)
     throws ServiceException {
     if (canDelete(id)) {

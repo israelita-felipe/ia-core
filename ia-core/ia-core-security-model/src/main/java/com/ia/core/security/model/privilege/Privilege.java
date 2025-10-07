@@ -23,9 +23,9 @@ public class Privilege
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  private static final String TABLE_NAME = "SEC_PRIVILEGE";
+  public static final String TABLE_NAME = "SEC_PRIVILEGE";
   /** NOME DO SCHEMA */
-  private static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = "SECURITY";
 
   @Column(name = "name", length = 500, nullable = false, unique = true)
   private String name;

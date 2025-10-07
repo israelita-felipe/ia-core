@@ -1,6 +1,7 @@
 package com.ia.core.rest.security;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,10 @@ import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizatio
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.service.user.UserRepository;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
@@ -213,22 +218,26 @@ public abstract class CoreRestSecurityConfig
    * @param logOperationService
    */
   public void configure(LogOperationService logOperationService) {
-    logOperationService
-        .setUserDetails((userCodeLabel, userNameLabel, map) -> {
-          Authentication authentication = getAuthentication();
-          if (authentication == null) {
-            map.put(userCodeLabel, "anonymous");
-            map.put(userNameLabel, "anonymous");
-          } else {
-            String token = authentication.getName();
-            String userName = JwtCoreManager.get()
-                .getUserNameFromJWT(token);
-            String userCode = JwtCoreManager.get()
-                .getUserCodeFromJWT(token);
-            map.put(userCodeLabel, userCode);
-            map.put(userNameLabel, userName);
-          }
-        });
+    logOperationService.setUserDetails(this::configureUserDetails);
+  }
+
+  /**
+   * @return
+   */
+  protected void configureUserDetails(String userCodeLabel,
+                                      String userNameLabel,
+                                      Map<String, Object> map) {
+    Authentication authentication = getAuthentication();
+    if (authentication != null) {
+      String token = authentication.getName();
+      String userName = JwtCoreManager.get().getUserNameFromJWT(token);
+      String userCode = JwtCoreManager.get().getUserCodeFromJWT(token);
+      map.put(userCodeLabel, userCode);
+      map.put(userNameLabel, userName);
+    } else {
+      map.put(userCodeLabel, "anonymous");
+      map.put(userNameLabel, "anonymous");
+    }
   }
 
   /**
@@ -282,4 +291,28 @@ public abstract class CoreRestSecurityConfig
     configure(logOperationService);
   }
 
+  /**
+   * Configuração do OpenAPI com suporte a JWT
+   *
+   * @return Configuração do {@link OpenAPI}
+   */
+  @Bean
+  static OpenAPI customOpenAPI() {
+    final String securitySchemeName = "Token de Autenticação";
+
+    // Define o esquema de segurança (JWT)
+    SecurityScheme securityScheme = new SecurityScheme()
+        .name(securitySchemeName).type(SecurityScheme.Type.HTTP) // Tipo HTTP
+        .scheme("Bearer") // Esquema Bearer
+        .bearerFormat("JWT"); // Formato do token
+
+    // Aplica o esquema de segurança globalmente
+    return new OpenAPI()
+        .info(new Info().title("API de Gestão").version("1.0")
+            .description("Documentação da API com JWT"))
+        .addSecurityItem(new SecurityRequirement()
+            .addList(securitySchemeName))
+        .components(new io.swagger.v3.oas.models.Components()
+            .addSecuritySchemes(securitySchemeName, securityScheme));
+  }
 }
