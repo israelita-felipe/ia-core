@@ -6,7 +6,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -48,7 +50,17 @@ public class SchedulerConfigDTO
 
   @Override
   public SchedulerConfigDTO cloneObject() {
-    return toBuilder().build();
+    return toBuilder().periodicidade(periodicidade.cloneObject())
+        .triggers(new ArrayList<>(triggers.stream()
+            .map(SchedulerConfigTriggerDTO::cloneObject).toList()))
+        .build();
+  }
+
+  @Override
+  public SchedulerConfigDTO copyObject() {
+    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
+        .periodicidade(periodicidade.cloneObject())
+        .triggers(new ArrayList<>()).build();
   }
 
   @JsonIgnore

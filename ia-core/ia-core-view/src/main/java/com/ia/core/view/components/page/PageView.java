@@ -293,7 +293,6 @@ public abstract class PageView<T extends Serializable>
         .enableFunction(this::canCopy).action(this::copy).build();
   }
 
-  @SuppressWarnings("serial")
   @Override
   public IFormEditorView<T> createEditorView(IFormEditorViewModel<T> editorViewModel) {
     FormEditorView<T> editorView = new FormEditorView<>(editorViewModel) {
@@ -507,6 +506,11 @@ public abstract class PageView<T extends Serializable>
    */
   @Override
   public boolean isEditButtonVisible() {
+    return !viewModel.isReadOnly();
+  }
+
+  @Override
+  public boolean isCopyButtonVisible() {
     return !viewModel.isReadOnly();
   }
 

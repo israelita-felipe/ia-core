@@ -18,7 +18,10 @@ public class PeriodicidadeTranslator {
     public static final String MESES = "periodicidade.help.meses";
     public static final String OCORRENCIA_DIARIA = "periodicidade.help.ocorrencia.diaria";
     public static final String OCORRENCIA_SEMANAL = "periodicidade.help.ocorrencia.semanal";
+    public static final String INTERVALO_TEMPO = "periodicidade.help.intervaloTempo";
+    public static final String TEMPO_INTERVALO = "periodicidade.help.tempoIntervalo";
   }
+
   public static final String PERIODICIDADE_CLASS = PeriodicidadeDTO.class
       .getCanonicalName();
   public static final String PERIODICIDADE = "periodicidade";
@@ -32,7 +35,8 @@ public class PeriodicidadeTranslator {
   public static final String DIAS = "periodicidade.dias";
   public static final String MESES = "periodicidade.meses";
   public static final String OCORRENCIA_DIARIA = "periodicidade.ocorrencia.diaria";
-
   public static final String OCORRENCIA_SEMANAL = "periodicidade.ocorrencia.semanal";
+  public static final String INTERVALO_TEMPO = "periodicidade.intervaloTempo";
+  public static final String TEMPO_INTERVALO = "periodicidade.tempoIntervalo";
 
 }

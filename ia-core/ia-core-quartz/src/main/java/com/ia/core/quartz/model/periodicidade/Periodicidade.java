@@ -44,12 +44,22 @@ public class Periodicidade
   public static final String SCHEMA_NAME = QuartzModel.QUARTZ_SCHEMA;
 
   @Default
-  @Column(name = "ativo")
+  @Column(name = "ativo", nullable = false,
+          columnDefinition = "BOOLEAN DEFAULT TRUE")
   private boolean ativo = true;
-  @Column(name = "dia_todo")
-  private boolean diaTodo;
-  @Column(name = "periodico")
-  private boolean periodico;
+  @Default
+  @Column(name = "dia_todo", nullable = false,
+          columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean diaTodo = false;
+  @Default
+  @Column(name = "periodico", nullable = false,
+          columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean periodico = false;
+  @Default
+  @Column(name = "intervalo_tempo", nullable = false,
+          columnDefinition = "BOOLEAN DEFAULT FALSE")
+  private boolean intervaloTempo = false;
+
   @Column(name = "data_inicio")
   private LocalDate dataInicio;
   @Column(name = "hora_inicio")
@@ -58,6 +68,8 @@ public class Periodicidade
   private LocalDate dataFim;
   @Column(name = "hora_fim")
   private LocalTime horaFim;
+  @Column(name = "tempo_intervalo")
+  private LocalTime tempoIntervalo;
 
   @Default
   @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX

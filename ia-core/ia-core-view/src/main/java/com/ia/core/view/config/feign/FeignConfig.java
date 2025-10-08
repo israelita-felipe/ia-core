@@ -61,7 +61,7 @@ public class FeignConfig {
    * @return {@link PageJacksonModule}
    */
 
-  public Module pageJacksonModule() {
+  public PageJacksonModule pageJacksonModule() {
     return new PageJacksonModule();
   }
 
@@ -69,21 +69,21 @@ public class FeignConfig {
    * @return {@link SortJacksonModule}
    */
 
-  public Module sortJacksonModule() {
+  public SortJacksonModule sortJacksonModule() {
     return new SortJacksonModule();
   }
 
   /**
    * @return {@link LocalDateTimeModule}
    */
-  public Module localDateTimeModule() {
+  public LocalDateTimeModule localDateTimeModule() {
     return new LocalDateTimeModule();
   }
 
   /**
    * @return {@link Module} para enumerador
    */
-  public Module enumModule() {
+  public EnumModule enumModule() {
     return new EnumModule();
   }
 }

@@ -1,9 +1,7 @@
 package com.ia.core.quartz.service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +13,14 @@ import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
+import org.quartz.JobListener;
 import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.quartz.TriggerListener;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeFormatter;
 import com.ia.core.security.service.DefaultSecuredBaseService;
@@ -42,7 +42,21 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Serviço para gerenciamento de configurações do agendador Quartz. Responsável
+ * por criar, agendar, atualizar e cancelar jobs dinamicamente.
+ * <p>
+ * Principais funcionalidades:
+ * <ul>
+ * <li>Agendamento automático de jobs ao inicializar a aplicação</li>
+ * <li>Gerenciamento de listeners para jobs e triggers</li>
+ * <li>Operações CRUD com sincronização automática com o scheduler Quartz</li>
+ * <li>Descoberta dinâmica de classes de job disponíveis</li>
+ * </ul>
+ *
  * @author Israel Araújo
+ * @see AbstractJob
+ * @see SchedulerConfig
+ * @see SchedulerConfigDTO
  */
 @Slf4j
 @Service
@@ -50,166 +64,319 @@ public class SchedulerConfigService
   extends DefaultSecuredBaseService<SchedulerConfig, SchedulerConfigDTO> {
 
   /**
-   * @param repository
-   * @param mapper
-   * @param searchRequestMapper
-   * @param translator
-   * @param authorizationManager
-   * @param logOperationService
+   * Construtor do serviço de configuração do scheduler.
+   *
+   * @param config Configuração do serviço contendo dependências necessárias
    */
   public SchedulerConfigService(SchedulerConfigServiceConfig config) {
     super(config);
   }
 
+  /**
+   * Inicializa o serviço após construção do bean. Configura listeners e agenda
+   * jobs ativos.
+   */
   @PostConstruct
   @Override
   public void baseServiceInit() {
     super.baseServiceInit();
-    scheduleJobs();
+    criarListeners();
+    agendarJobs();
   }
 
   /**
-   * Busca todas as classes que estendem AbstractJob no pacote com.ia
+   * Cria e registra os listeners para jobs e triggers no scheduler Quartz.
+   */
+  public void criarListeners() {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      scheduler.getListenerManager().addJobListener(criarJobListener());
+      scheduler.getListenerManager()
+          .addTriggerListener(criarTriggerListener());
+      log.info("Listeners de job e trigger registrados com sucesso");
+    } catch (SchedulerException e) {
+      log.error("Erro ao registrar listeners no scheduler: {}",
+                e.getLocalizedMessage(), e);
+    }
+  }
+
+  /**
+   * Cria uma instância do listener de jobs.
    *
-   * @return um mapa de classes de trabalho disponíveis que estendem
-   *         AbstractJob, juntamente com suas traduções.
+   * @return Instância de JobListener configurada
+   */
+  public JobListener criarJobListener() {
+    return new JobsListener();
+  }
+
+  /**
+   * Cria uma instância do listener de triggers.
+   *
+   * @return Instância de TriggerListener configurada
+   */
+  public TriggerListener criarTriggerListener() {
+    return new TriggersListener();
+  }
+
+  /**
+   * Descobre dinamicamente todas as classes de job disponíveis no pacote
+   * "com.ia".
+   * <p>
+   * Utiliza reflections para encontrar todas as classes que estendem
+   * AbstractJob e retorna um mapa com as classes e suas traduções.
+   *
+   * @return Mapa onde a chave é a classe do job e o valor é sua tradução
    */
   public Map<Class<? extends AbstractJob>, String> getAvaliableJobClasses() {
     Map<Class<? extends AbstractJob>, String> jobClasses = new HashMap<>();
     Reflections reflections = new Reflections("com.ia", Scanners.SubTypes);
+
     reflections.getSubTypesOf(AbstractJob.class).forEach(jobClass -> {
-      jobClasses.put(jobClass,
-                     getTranslator().getTranslation(jobClass.getName()));
+      String translation = getTranslator()
+          .getTranslation(jobClass.getName());
+      jobClasses.put(jobClass, translation);
+      log.debug("Classe de job encontrada: {} -> {}",
+                jobClass.getSimpleName(), translation);
     });
+
+    log.info("Total de classes de job disponíveis: {}", jobClasses.size());
     return jobClasses;
   }
 
+  /**
+   * Busca uma configuração de scheduler pelo ID, incluindo informações dos
+   * triggers.
+   *
+   * @param id ID da configuração
+   * @return DTO da configuração com triggers preenchidos
+   */
   @Override
   public SchedulerConfigDTO find(UUID id) {
     SchedulerConfigDTO schedulerConfigDTO = super.find(id);
-    handleTriggers(schedulerConfigDTO);
+    processarTriggers(schedulerConfigDTO);
     return schedulerConfigDTO;
   }
 
+  /**
+   * Busca todas as configurações de scheduler, incluindo informações dos
+   * triggers.
+   *
+   * @param requestDTO Critérios de busca
+   * @return Página de DTOs com triggers preenchidos
+   */
   @Override
   public Page<SchedulerConfigDTO> findAll(SearchRequestDTO requestDTO) {
     Page<SchedulerConfigDTO> all = super.findAll(requestDTO);
-    all.forEach(this::handleTriggers);
+    all.forEach(this::processarTriggers);
     return all;
   }
 
   /**
-   * @param schedulerConfigDTO
+   * Processa e preenche as informações dos triggers associados a uma
+   * configuração.
+   * <p>
+   * Recupera informações do scheduler Quartz como próximo tempo de execução,
+   * estado do trigger, prioridade, etc.
+   *
+   * @param schedulerConfigDTO DTO da configuração a ser preenchido
    */
-  protected void handleTriggers(SchedulerConfigDTO schedulerConfigDTO) {
+  protected void processarTriggers(SchedulerConfigDTO schedulerConfigDTO) {
     try {
-      Scheduler quartzScheduler = getConfig().getQuartzScheduler();
-      for (Trigger trigger : quartzScheduler
-          .getTriggersOfJob(JobKey.jobKey(getJobName(schedulerConfigDTO),
-                                          getGroup(schedulerConfigDTO)))) {
-        SchedulerConfigTriggerDTO triggerDTO = SchedulerConfigTriggerDTO
-            .builder().build();
-        triggerDTO.setCalendarName(trigger.getCalendarName());
-        triggerDTO.setDescription(trigger.getDescription());
-        Date endTime = trigger.getEndTime();
-        if (endTime != null) {
-          triggerDTO.setEndTime(LocalTime
-              .ofInstant(endTime.toInstant(), getZoneId()));
-        }
-        triggerDTO.setJobData(trigger.getJobDataMap());
-        triggerDTO.setJobGroup(trigger.getJobKey().getGroup());
-        triggerDTO.setJobName(trigger.getJobKey().getName());
-        Integer misfireInstruction = trigger.getMisfireInstruction();
-        if (misfireInstruction != null) {
-          triggerDTO.setMisFireInstr(Long.valueOf(misfireInstruction));
-        }
-        Date nextFireTime = trigger.getNextFireTime();
-        if (nextFireTime != null) {
-          triggerDTO.setNextFireTime(LocalDateTime
-              .ofInstant(nextFireTime.toInstant(), getZoneId()));
-        }
-        Date previousFireTime = trigger.getPreviousFireTime();
-        if (previousFireTime != null) {
-          triggerDTO.setPrevFireTime(LocalDateTime
-              .ofInstant(previousFireTime.toInstant(),
-                         getZoneId()));
-        }
-        Integer priority = trigger.getPriority();
-        if (priority != null) {
-          triggerDTO.setPriority(Long.valueOf(priority));
-        }
-        triggerDTO.setSchedulerName(quartzScheduler.getSchedulerName());
-        Date startTime = trigger.getStartTime();
-        if (startTime != null) {
-          triggerDTO.setStartTime(LocalTime
-              .ofInstant(startTime.toInstant(), getZoneId()));
-        }
-        triggerDTO.setTriggerGroup(trigger.getKey().getGroup());
-        triggerDTO.setTriggerName(trigger.getKey().getName());
-        triggerDTO.setTriggerState(quartzScheduler
-            .getTriggerState(trigger.getKey()).name());
-        triggerDTO.setTriggerType(trigger.getClass().getName());
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(obterNomeJob(schedulerConfigDTO),
+                                    obterGrupo(schedulerConfigDTO));
+
+      List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
+
+      for (Trigger trigger : triggers) {
+        SchedulerConfigTriggerDTO triggerDTO = construirTriggerDTO(scheduler,
+                                                                   trigger);
         schedulerConfigDTO.getTriggers().add(triggerDTO);
       }
+
+      log.debug("Processados {} triggers para o job {}", triggers.size(),
+                jobKey.getName());
     } catch (SchedulerException e) {
-      e.printStackTrace();
+      log.error("Erro ao processar triggers para a configuração {}: {}",
+                schedulerConfigDTO.getId(), e.getLocalizedMessage(), e);
     }
   }
 
   /**
-   * @return
+   * Constrói um DTO de trigger a partir das informações do scheduler Quartz.
+   *
+   * @param scheduler Instância do scheduler Quartz
+   * @param trigger   Trigger do Quartz
+   * @return DTO preenchido com as informações do trigger
+   * @throws SchedulerException Caso ocorra erro no scheduler
    */
-  protected ZoneId getZoneId() {
+  private SchedulerConfigTriggerDTO construirTriggerDTO(Scheduler scheduler,
+                                                        Trigger trigger)
+    throws SchedulerException {
+    SchedulerConfigTriggerDTO triggerDTO = SchedulerConfigTriggerDTO
+        .builder().build();
+
+    triggerDTO.setCalendarName(trigger.getCalendarName());
+    triggerDTO.setDescription(trigger.getDescription());
+    triggerDTO.setJobData(trigger.getJobDataMap());
+    triggerDTO.setJobGroup(trigger.getJobKey().getGroup());
+    triggerDTO.setJobName(trigger.getJobKey().getName());
+    triggerDTO.setSchedulerName(scheduler.getSchedulerName());
+    triggerDTO.setTriggerGroup(trigger.getKey().getGroup());
+    triggerDTO.setTriggerName(trigger.getKey().getName());
+    triggerDTO.setTriggerState(scheduler.getTriggerState(trigger.getKey())
+        .name());
+    triggerDTO.setTriggerType(trigger.getClass().getName());
+
+    // Processar campos de data/hora
+    processarCamposTemporais(triggerDTO, trigger);
+
+    // Processar campos numéricos
+    processarCamposNumericos(triggerDTO, trigger);
+
+    return triggerDTO;
+  }
+
+  /**
+   * Processa e converte campos de data/hora do trigger para o DTO.
+   *
+   * @param triggerDTO {@link SchedulerConfigTriggerDTO}
+   * @param trigger    {@link Trigger}
+   */
+  private void processarCamposTemporais(SchedulerConfigTriggerDTO triggerDTO,
+                                        Trigger trigger) {
+    ZoneId zoneId = obterZoneId();
+
+    if (trigger.getEndTime() != null) {
+      triggerDTO.setEndTime(LocalDateTime
+          .ofInstant(trigger.getEndTime().toInstant(), zoneId));
+    }
+    if (trigger.getNextFireTime() != null) {
+      triggerDTO.setNextFireTime(LocalDateTime
+          .ofInstant(trigger.getNextFireTime().toInstant(), zoneId));
+    }
+    if (trigger.getPreviousFireTime() != null) {
+      triggerDTO.setPrevFireTime(LocalDateTime
+          .ofInstant(trigger.getPreviousFireTime().toInstant(), zoneId));
+    }
+    if (trigger.getStartTime() != null) {
+      triggerDTO.setStartTime(LocalDateTime
+          .ofInstant(trigger.getStartTime().toInstant(), zoneId));
+    }
+  }
+
+  /**
+   * Processa e converte campos numéricos do trigger para o DTO.
+   *
+   * @param triggerDTO {@link SchedulerConfigTriggerDTO}
+   * @param trigger    {@link Trigger}
+   */
+  private void processarCamposNumericos(SchedulerConfigTriggerDTO triggerDTO,
+                                        Trigger trigger) {
+    triggerDTO
+        .setMisFireInstr(Long.valueOf(trigger.getMisfireInstruction()));
+    triggerDTO.setPriority(Long.valueOf(trigger.getPriority()));
+  }
+
+  /**
+   * Obtém o zone ID padrão para conversão de datas.
+   *
+   * @return ZoneId do sistema
+   */
+  protected ZoneId obterZoneId() {
     return ZoneId.systemDefault();
   }
 
   /**
-   * @param schedulerConfigDTO
-   * @return
+   * Obtém o nome do job baseado no ID da configuração.
+   *
+   * @param schedulerConfigDTO DTO da configuração
+   * @return Nome do job
    */
-  protected String getJobName(SchedulerConfigDTO schedulerConfigDTO) {
+  protected String obterNomeJob(SchedulerConfigDTO schedulerConfigDTO) {
     return schedulerConfigDTO.getId().toString();
   }
 
+  /**
+   * Obtém o grupo do job/trigger.
+   *
+   * @param config DTO da configuração
+   * @return Nome do grupo
+   */
+  protected String obterGrupo(SchedulerConfigDTO config) {
+    return getGrupoPadrao();
+  }
+
+  /**
+   * Obtém o grupo padrão para jobs e triggers.
+   *
+   * @return Nome do grupo padrão
+   */
+  protected String getGrupoPadrao() {
+    return SchedulerConfigServiceConfig.DEFAULT_JOB_GROUP;
+  }
+
+  /**
+   * Salva uma configuração de scheduler e sincroniza com o Quartz.
+   * <p>
+   * Se for uma nova configuração ativa, agenda o job. Se for uma configuração
+   * existente, atualiza ou cancela conforme a periodicidade.
+   *
+   * @param toSave DTO com os dados a serem salvos
+   * @return DTO salvo
+   * @throws ServiceException se ocorrer erro durante o agendamento
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public SchedulerConfigDTO save(SchedulerConfigDTO toSave)
     throws ServiceException {
-    boolean isNew = toSave.getId() == null;
-    SchedulerConfigDTO saved = super.save(toSave);
+    boolean isNovo = toSave.getId() == null;
+    SchedulerConfigDTO salvo = super.save(toSave);
     ServiceException serviceException = new ServiceException();
-    if (isNew && saved.getPeriodicidade().isAtivo()) {
-      try {
-        scheduleJob(saved);
-      } catch (SchedulerException | ClassNotFoundException e) {
-        serviceException.add(e);
-      }
-    } else {
-      try {
-        if (saved.getPeriodicidade().isAtivo()) {
-          updateJob(saved);
+
+    try {
+      if (isNovo && salvo.getPeriodicidade().isAtivo()) {
+        agendarJob(salvo);
+        log.info("Novo job agendado com ID: {}", salvo.getId());
+      } else if (!isNovo) {
+        if (salvo.getPeriodicidade().isAtivo()) {
+          atualizarJob(salvo);
+          log.info("Job atualizado com ID: {}", salvo.getId());
         } else {
-          cancelJob(saved);
+          cancelarJob(salvo);
+          log.info("Job cancelado com ID: {}", salvo.getId());
         }
-      } catch (SchedulerException e) {
-        serviceException.add(e);
       }
+    } catch (SchedulerException | ClassNotFoundException e) {
+      serviceException.add(e);
+      log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
+                salvo.getId(), e.getLocalizedMessage());
     }
+
     if (serviceException.hasErros()) {
       throw serviceException;
     }
-    return saved;
+    return salvo;
   }
 
+  /**
+   * Exclui uma configuração de scheduler e cancela o job correspondente se
+   * estiver ativo.
+   *
+   * @param id ID da configuração a ser excluída
+   * @throws ServiceException se ocorrer erro durante o cancelamento
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public void delete(UUID id)
     throws ServiceException {
     SchedulerConfigDTO schedulerConfigDTO = find(id);
     super.delete(id);
+
     if (schedulerConfigDTO != null
         && schedulerConfigDTO.getPeriodicidade().isAtivo()) {
-      cancelJob(schedulerConfigDTO);
+      cancelarJob(schedulerConfigDTO);
+      log.info("Job cancelado durante exclusão da configuração: {}", id);
     }
   }
 
@@ -223,166 +390,237 @@ public class SchedulerConfigService
     return SchedulerConfigTranslator.SCHEDULER_CONFIG;
   }
 
+  /**
+   * Busca todas as configurações filtradas por status ativo/inativo.
+   *
+   * @param active true para ativas, false para inativas
+   * @return Lista de DTOs filtrados
+   */
   public List<SchedulerConfigDTO> findAllActive(boolean active) {
     return getConfig().getRepository().findAllActive(active).stream()
         .map(getMapper()::toDTO).toList();
   }
 
-  public void scheduleJobs() {
+  /**
+   * Agenda todos os jobs ativos ao inicializar a aplicação.
+   */
+  public void agendarJobs() {
     try {
       List<SchedulerConfigDTO> configs = findAllActive(true);
+      log.info("Iniciando agendamento de {} jobs ativos", configs.size());
+
       for (SchedulerConfigDTO config : configs) {
-        scheduleJob(config);
+        agendarJob(config);
       }
+
+      log.info("Agendamento de jobs concluído com sucesso");
     } catch (SchedulerException | ClassNotFoundException e) {
-      log.error("Error scheduling jobs", e);
+      log.error("Erro durante o agendamento automático de jobs: {}",
+                e.getLocalizedMessage(), e);
     }
   }
 
-  private void scheduleJob(SchedulerConfigDTO config)
+  /**
+   * Agenda um job individual no scheduler Quartz.
+   *
+   * @param config Configuração do job a ser agendado
+   * @throws SchedulerException     se ocorrer erro no scheduler
+   * @throws ClassNotFoundException se a classe do job não for encontrada
+   */
+  private void agendarJob(SchedulerConfigDTO config)
     throws SchedulerException, ClassNotFoundException {
+    JobDetail jobDetail = criarDetalhesJob(config);
+    Trigger trigger = criarTrigger(config);
+    TriggerKey triggerKey = trigger.getKey();
 
-    JobDetail jobDetail = createJobDetails(config);
-
-    Trigger trigger = createTrigger(config);
-
-    if (getConfig().getQuartzScheduler().checkExists(trigger.getKey())) {
-      log.warn("Trigger with for job {} already exists. Skipping scheduling.",
+    if (getConfig().getQuartzScheduler().checkExists(triggerKey)) {
+      log.warn("Trigger já existe para o job {}. Ignorando agendamento.",
                config.getId());
     } else {
       getConfig().getQuartzScheduler().scheduleJob(jobDetail, trigger);
-      log.info("Scheduled job with id: {}", config.getId());
+      log.info("Job agendado com ID: {}", config.getId());
     }
   }
 
   /**
-   * @param config
-   * @param cronExpression
-   * @return
+   * Cria os detalhes do job para o scheduler Quartz.
+   *
+   * @param config Configuração do job
+   * @return JobDetail configurado
+   * @throws ClassNotFoundException se a classe do job não for encontrada
    */
-  protected Trigger createTrigger(SchedulerConfigDTO config) {
-    return TriggerBuilder.newTrigger()
-        .withIdentity(getTriggerName(config), getGroup(config))
-        .withSchedule(createScheduleBuilder(config)).build();
-  }
-
-  /**
-   * @param config
-   * @return
-   */
-  protected String getTriggerName(SchedulerConfigDTO config) {
-    return config.getId() + getTriggerSufix();
-  }
-
-  /**
-   * @return
-   */
-  protected String getTriggerSufix() {
-    return SchedulerConfigServiceConfig.TRIGGER_SUFIX;
-  }
-
-  protected ScheduleBuilder<? extends Trigger> createScheduleBuilder(SchedulerConfigDTO config) {
-    return CronScheduleBuilder
-        .cronSchedule(generateCronExpression(config.getPeriodicidade()));
-
-  }
-
-  /**
-   * @return
-   */
-  protected String getGroup(SchedulerConfigDTO config) {
-    return getDefaultGroup();
-  }
-
-  /**
-   * @return
-   */
-  protected String getDefaultGroup() {
-    return SchedulerConfigServiceConfig.DEFAULT_JOB_GROUP;
-  }
-
-  /**
-   * @param config
-   * @return
-   * @throws ClassNotFoundException
-   */
-  protected JobDetail createJobDetails(SchedulerConfigDTO config)
+  @SuppressWarnings("unchecked")
+  protected JobDetail criarDetalhesJob(SchedulerConfigDTO config)
     throws ClassNotFoundException {
     return JobBuilder
         .newJob((Class<? extends Job>) config.getJobClassNameAsClass())
-        .withIdentity(getJobName(config), getGroup(config)).build();
+        .withIdentity(obterNomeJob(config), obterGrupo(config)).build();
   }
 
+  /**
+   * Cria um trigger para o job baseado na periodicidade configurada.
+   *
+   * @param config Configuração do job
+   * @return Trigger configurado
+   */
+  protected Trigger criarTrigger(SchedulerConfigDTO config) {
+    return TriggerBuilder.newTrigger()
+        .withIdentity(obterNomeTrigger(config), obterGrupo(config))
+        .withSchedule(criarAgendador(config)).build();
+  }
+
+  /**
+   * Obtém o nome do trigger baseado no ID da configuração.
+   *
+   * @param config Configuração do job
+   * @return Nome do trigger
+   */
+  protected String obterNomeTrigger(SchedulerConfigDTO config) {
+    return config.getId() + obterSufixoTrigger();
+  }
+
+  /**
+   * Obtém o sufixo padrão para nomes de triggers.
+   *
+   * @return Sufixo do trigger
+   */
+  protected String obterSufixoTrigger() {
+    return SchedulerConfigServiceConfig.TRIGGER_SUFIX;
+  }
+
+  /**
+   * Cria o agendador Cron baseado na periodicidade configurada.
+   *
+   * @param config Configuração do job
+   * @return ScheduleBuilder configurado
+   */
+  protected ScheduleBuilder<? extends Trigger> criarAgendador(SchedulerConfigDTO config) {
+    String cronExpression = gerarExpressaoCron(config.getPeriodicidade());
+    return CronScheduleBuilder.cronSchedule(cronExpression);
+  }
+
+  /**
+   * Atualiza todos os jobs ativos verificando mudanças na periodicidade.
+   */
   public void updateJobs() {
     try {
       List<SchedulerConfigDTO> configs = findAllActive(true);
+      log.info("Verificando atualizações para {} jobs ativos",
+               configs.size());
 
       for (SchedulerConfigDTO config : configs) {
-        String cronExpression = generateCronExpression(config
-            .getPeriodicidade());
-        TriggerKey triggerKey = getTriggerKey(config);
+        TriggerKey triggerKey = obterChaveTrigger(config);
 
         if (getConfig().getQuartzScheduler().checkExists(triggerKey)) {
-          CronTrigger oldTrigger = (CronTrigger) getConfig()
-              .getQuartzScheduler().getTrigger(triggerKey);
-          String oldCronExpression = oldTrigger.getCronExpression();
-
-          if (!oldCronExpression.equals(cronExpression)) {
-            log.info("Updating job with new cron expression: {}",
-                     cronExpression);
-            updateJob(config);
+          if (verificarMudancaPeriodicidade(config, triggerKey)) {
+            atualizarJob(config);
           }
         } else {
-          scheduleJob(config);
+          agendarJob(config);
         }
       }
     } catch (SchedulerException | ClassNotFoundException e) {
-      log.error("Error updating jobs", e);
+      log.error("Erro durante a atualização de jobs: {}",
+                e.getLocalizedMessage(), e);
     }
   }
 
   /**
-   * @param config
-   * @return
+   * Verifica se houve mudança na periodicidade que necessite atualização do
+   * trigger.
+   *
+   * @param config     {@link SchedulerConfigDTO}
+   * @param triggerKey {@link TriggerKey}
+   * @return se houve mudanças na periodicidade
+   * @throws SchedulerException caso ocorra erro de scheduler
    */
-  protected TriggerKey getTriggerKey(SchedulerConfigDTO config) {
-    return TriggerKey.triggerKey(getTriggerName(config), getGroup(config));
-  }
-
-  private void updateJob(SchedulerConfigDTO config)
+  private boolean verificarMudancaPeriodicidade(SchedulerConfigDTO config,
+                                                TriggerKey triggerKey)
     throws SchedulerException {
-    TriggerKey triggerKey = getTriggerKey(config);
-    Trigger newTrigger = TriggerBuilder.newTrigger()
-        .withIdentity(triggerKey)
-        .withSchedule(createScheduleBuilder(config)).build();
-    getConfig().getQuartzScheduler().rescheduleJob(triggerKey, newTrigger);
-    log.info("Rescheduled job with new periodicity: {}",
-             config.getPeriodicidade());
+    String novaExpressaoCron = gerarExpressaoCron(config
+        .getPeriodicidade());
+    CronTrigger triggerAntigo = (CronTrigger) getConfig()
+        .getQuartzScheduler().getTrigger(triggerKey);
+    String expressaoCronAntiga = triggerAntigo.getCronExpression();
+
+    if (!expressaoCronAntiga.equals(novaExpressaoCron)) {
+      log.info("Detectada mudança na periodicidade do job {}. Atualizando...",
+               config.getId());
+      return true;
+    }
+    return false;
   }
 
+  /**
+   * Obtém a chave do trigger para uma configuração.
+   *
+   * @param config Configuração do job
+   * @return Chave do trigger
+   */
+  protected TriggerKey obterChaveTrigger(SchedulerConfigDTO config) {
+    return TriggerKey.triggerKey(obterNomeTrigger(config),
+                                 obterGrupo(config));
+  }
+
+  /**
+   * Atualiza um job individual no scheduler Quartz.
+   *
+   * @param config Configuração atualizada do job
+   * @throws SchedulerException     se ocorrer erro no scheduler
+   * @throws ClassNotFoundException caso a classe do job não seja encontrada
+   */
+  private void atualizarJob(SchedulerConfigDTO config)
+    throws SchedulerException, ClassNotFoundException {
+    TriggerKey triggerKey = obterChaveTrigger(config);
+    Trigger novoTrigger = TriggerBuilder.newTrigger()
+        .withIdentity(triggerKey).withSchedule(criarAgendador(config))
+        .build();
+    if (getConfig().getQuartzScheduler().checkExists(triggerKey)) {
+      getConfig().getQuartzScheduler().rescheduleJob(triggerKey,
+                                                     novoTrigger);
+      log.info("Job reagenado com nova periodicidade: {}", config.getId());
+    } else {
+      agendarJob(config);
+    }
+  }
+
+  /**
+   * Cancela todos os jobs do scheduler Quartz.
+   */
   public void cancelAllJobs() {
     try {
-      getConfig().getQuartzScheduler().clear(); // This will clear all jobs,
-                                                // stopping the
-      // scheduler
-      log.info("All scheduled jobs have been cancelled.");
+      getConfig().getQuartzScheduler().clear();
+      log.info("Todos os jobs agendados foram cancelados");
     } catch (SchedulerException e) {
-      log.error("Error cancelling all jobs", e);
+      log.error("Erro ao cancelar todos os jobs: {}",
+                e.getLocalizedMessage(), e);
     }
   }
 
-  public void cancelJob(SchedulerConfigDTO config) {
+  /**
+   * Cancela um job individual no scheduler Quartz.
+   *
+   * @param config Configuração do job a ser cancelado
+   */
+  public void cancelarJob(SchedulerConfigDTO config) {
     try {
-      getConfig().getQuartzScheduler()
-          .deleteJob(JobKey.jobKey(getJobName(config), getGroup(config)));
-      log.info("{} scheduled job have been cancelled.", config.getId());
+      JobKey jobKey = JobKey.jobKey(obterNomeJob(config),
+                                    obterGrupo(config));
+      getConfig().getQuartzScheduler().deleteJob(jobKey);
+      log.info("Job cancelado: {}", config.getId());
     } catch (SchedulerException e) {
-      log.error("Error cancelling the job {}: {}", config.getId(), e);
+      log.error("Erro ao cancelar o job {}: {}", config.getId(),
+                e.getLocalizedMessage(), e);
     }
   }
 
-  private String generateCronExpression(PeriodicidadeDTO periodicidade) {
+  /**
+   * Gera a expressão Cron baseada na periodicidade configurada.
+   *
+   * @param periodicidade DTO com as configurações de periodicidade
+   * @return Expressão Cron formatada
+   */
+  private String gerarExpressaoCron(PeriodicidadeDTO periodicidade) {
     return PeriodicidadeFormatter.asCronExpression(periodicidade);
   }
-
 }

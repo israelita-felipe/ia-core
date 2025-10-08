@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.data.provider.DataProvider;
 
 import lombok.Getter;
@@ -41,7 +42,33 @@ public abstract class ListView<T extends Serializable>
    * Configura as colunas
    */
   private void configureColumns() {
-    getColumns().forEach(column -> column.setAutoWidth(true));
+    getColumns().forEach(column -> {
+      column.setAutoWidth(isColumnAutoWidth());
+      column.setResizable(isColumnResizeable());
+      column.setWidth(getDefaultColumnWidth());
+    });
+    addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
+  }
+
+  /**
+   * @return <code>false</code> por padrão
+   */
+  public boolean isColumnAutoWidth() {
+    return false;
+  }
+
+  /**
+   * @return "30vw"
+   */
+  public String getDefaultColumnWidth() {
+    return "30vw";
+  }
+
+  /**
+   * @return <code>true</code> por padrão
+   */
+  public boolean isColumnResizeable() {
+    return true;
   }
 
   /**

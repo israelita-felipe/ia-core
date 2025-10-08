@@ -56,12 +56,17 @@ public class PeriodicidadeDTO
 
   @Default
   private boolean ativo = true;
-  private boolean diaTodo;
-  private boolean periodico;
+  @Default
+  private boolean diaTodo = false;
+  @Default
+  private boolean periodico = false;
+  @Default
+  private boolean intervaloTempo = false;
   private LocalDate dataInicio;
   private LocalTime horaInicio;
   private LocalDate dataFim;
   private LocalTime horaFim;
+  private LocalTime tempoIntervalo;
   @Default
   private Set<DayOfWeek> dias = new HashSet<>();
   @Default
@@ -103,6 +108,10 @@ public class PeriodicidadeDTO
     if (result != 0) {
       return result;
     }
+    result = Boolean.valueOf(intervaloTempo).compareTo(p.intervaloTempo);
+    if (result != 0) {
+      return result;
+    }
     result = Objects.compare(dataInicio, p.dataInicio,
                              LocalDate::compareTo);
     if (result != 0) {
@@ -121,6 +130,13 @@ public class PeriodicidadeDTO
     if (result != 0) {
       return result;
     }
+
+    result = Objects.compare(tempoIntervalo, p.tempoIntervalo,
+                             LocalTime::compareTo);
+    if (result != 0) {
+      return result;
+    }
+
     for (DayOfWeek dia : dias.stream().sorted(DayOfWeek::compareTo)
         .collect(Collectors.toList())) {
       for (DayOfWeek diaObject : p.dias.stream()
@@ -167,7 +183,8 @@ public class PeriodicidadeDTO
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
     public static final String DATA_INICIO = "dataInicio";
     public static final String DATA_FIM = "dataFim";
     public static final String HORA_INICIO = "horaInicio";
@@ -175,6 +192,12 @@ public class PeriodicidadeDTO
     public static final String ATIVO = "ativo";
     public static final String DIA_TODO = "diaTodo";
     public static final String PERIODICO = "periodico";
+    public static final String INTERVALO_TEMPO = "intervaloTempo";
+    public static final String TEMPO_INTERVALO = "tempoIntervalo";
+    public static final String DIAS = "dias";
+    public static final String MESES = "meses";
+    public static final String OCORRENCIA_SEMANAL = "ocorrenciaSemanal";
+    public static final String OCORRENCIA_DIARIA = "ocorrenciaDiaria";
   }
 
 }

@@ -15,6 +15,7 @@ public enum OcorrenciaSemanal {
         .orElse(null);
   }
 
+  @jakarta.persistence.Transient
   private final int codigo;
 
   /**

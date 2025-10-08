@@ -75,7 +75,7 @@ public abstract class PageViewModel<T extends Serializable>
 
   @Override
   public boolean canCopy(T object) {
-    return canView(object) && canInsert();
+    return canView(object) && canInsert() && !isReadOnly();
   }
 
   @Override

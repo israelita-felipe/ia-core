@@ -1,6 +1,7 @@
 package com.ia.core.view.components.properties;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.Month;
 import java.util.stream.Stream;
 
@@ -44,6 +45,7 @@ public interface HasDateTimeCreator
                                                    String help) {
     DateTimePicker field = new DateTimePicker(label);
     field.setDatePickerI18n(getDatePickerI18n());
+    field.setStep(Duration.ofSeconds(1));
     setHelp(field, help);
     return field;
   }
@@ -57,6 +59,7 @@ public interface HasDateTimeCreator
    */
   default TimePicker createTimeField(String label, String help) {
     TimePicker field = new TimePicker(label);
+    field.setStep(Duration.ofSeconds(1));
     setHelp(field, help);
     return field;
   }
