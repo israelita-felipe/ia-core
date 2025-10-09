@@ -3,6 +3,7 @@ package com.ia.core.llm.model.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ia.core.llm.model.LLMModel;
 import com.ia.core.model.BaseEntity;
 
 import jakarta.persistence.CascadeType;
@@ -37,9 +38,10 @@ public class Template
   /** Serial UID */
   private static final long serialVersionUID = 5644976387280082125L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "LLM_TEMPLATE";
+  public static final String TABLE_NAME = LLMModel.TABLE_PREFIX
+      + "TEMPLATE";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "LARGE_LANGUAGE_MODEL";
+  public static final String SCHEMA_NAME = LLMModel.SCHEMA;
 
   /**
    * Título do template

@@ -27,10 +27,10 @@ public enum OperationEnum implements Operation {
   };
 
   public static final String CREATE_VALUE = "CREATE";
-
   public static final String DELETE_VALUE = "DELETE";
   public static final String READ_VALUE = "READ";
   public static final String UPDATE_VALUE = "UPDATE";
+
   @Override
   public String toString() {
     return value();

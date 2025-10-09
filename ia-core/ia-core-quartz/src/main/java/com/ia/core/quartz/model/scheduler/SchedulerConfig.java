@@ -30,10 +30,10 @@ public class SchedulerConfig
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = QuartzModel.QUARTZ_TABLE_PREFIX
+  public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
       + "SCHEDULER_CONFIG";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = QuartzModel.QUARTZ_SCHEMA;
+  public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
   @Column(name = "JOB_CLASS_NAME", nullable = false, unique = true)
   private String jobClassName;

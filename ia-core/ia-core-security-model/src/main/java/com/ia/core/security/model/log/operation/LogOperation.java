@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.security.model.SecurityModel;
 import com.ia.core.security.model.functionality.OperationEnum;
 
 import jakarta.persistence.Column;
@@ -31,9 +32,10 @@ public class LogOperation
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "SEC_LOG_OPERATION";
+  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+      + "LOG_OPERATION";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
 
   @Column(name = "user_name", length = 500, nullable = false)
   private String userName;

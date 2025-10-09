@@ -38,10 +38,10 @@ public class Periodicidade
   /** Serial UID */
   private static final long serialVersionUID = 8959576762018688241L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = QuartzModel.QUARTZ_TABLE_PREFIX
+  public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
       + "PERIODICIDADE";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = QuartzModel.QUARTZ_SCHEMA;
+  public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
   @Default
   @Column(name = "ativo", nullable = false,
@@ -72,21 +72,21 @@ public class Periodicidade
   private LocalTime tempoIntervalo;
 
   @Default
-  @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
       + "PERIODICIDADE_DIA", schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = DayOfWeek.class)
   @Column(name = "dia")
   private Set<DayOfWeek> dias = new HashSet<>();
 
   @Default
-  @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
       + "PERIODICIDADE_MES", schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Month.class)
   @Column(name = "mes")
   private Set<Month> meses = new HashSet<>();
 
   @Default
-  @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
       + "PERIODICIDADE_OCORRENCIA_SEMANAL", schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY,
                      targetClass = OcorrenciaSemanal.class)
@@ -94,7 +94,7 @@ public class Periodicidade
   private Set<OcorrenciaSemanal> ocorrenciaSemanal = new HashSet<>();
 
   @Default
-  @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
       + "PERIODICIDADE_OCORRENCIA_DIARIA", schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "dia")

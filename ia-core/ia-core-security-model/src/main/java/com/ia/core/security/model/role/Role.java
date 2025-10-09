@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.security.model.SecurityModel;
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.user.User;
 
@@ -31,15 +32,17 @@ public class Role
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "SEC_ROLE";
+  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+      + "ROLE";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
 
   @Column(name = "name", length = 500, nullable = false)
   private String name;
 
   @ManyToMany
-  @JoinTable(name = "sec_users_roles", schema = SCHEMA_NAME,
+  @JoinTable(name = SecurityModel.TABLE_PREFIX + "users_roles",
+             schema = SCHEMA_NAME,
              joinColumns = @JoinColumn(name = "role_id",
                                        referencedColumnName = "id"),
              inverseJoinColumns = @JoinColumn(name = "user_id",
@@ -49,7 +52,8 @@ public class Role
   private Collection<User> users = new HashSet<>();
 
   @ManyToMany
-  @JoinTable(name = "sec_roles_privileges", schema = SCHEMA_NAME,
+  @JoinTable(name = SecurityModel.TABLE_PREFIX + "roles_privileges",
+             schema = SCHEMA_NAME,
              joinColumns = @JoinColumn(name = "role_id",
                                        referencedColumnName = "id"),
              inverseJoinColumns = @JoinColumn(name = "privilege_id",

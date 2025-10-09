@@ -1,5 +1,6 @@
 package com.ia.core.llm.model.comando;
 
+import com.ia.core.llm.model.LLMModel;
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.model.BaseEntity;
 
@@ -35,9 +36,10 @@ public class ComandoSistema
   /** Serial UID */
   private static final long serialVersionUID = 5644976387280082125L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "LLM_COMANDO_SISTEMA";
+  public static final String TABLE_NAME = LLMModel.TABLE_PREFIX
+      + "COMANDO_SISTEMA";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "LARGE_LANGUAGE_MODEL";
+  public static final String SCHEMA_NAME = LLMModel.SCHEMA;
 
   /**
    * Finalidade do comando

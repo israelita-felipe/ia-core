@@ -26,10 +26,10 @@ public class SchedulerConfigTrigger
   implements Serializable, Comparable<SchedulerConfigTrigger> {
 
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = QuartzModel.QUARTZ_TABLE_PREFIX
+  public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
       + "TRIGGERS";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = QuartzModel.QUARTZ_SCHEMA;
+  public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
   /**
    * Id da classe de entidade.

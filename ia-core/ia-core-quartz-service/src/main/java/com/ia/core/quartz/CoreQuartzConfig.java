@@ -61,8 +61,8 @@ public class CoreQuartzConfig {
     properties.setProperty(PROP_JOBSTORE_DRIVER_DELEGATE_CLASS,
                            "org.quartz.impl.jdbcjobstore.StdJDBCDelegate");
     properties.setProperty(PROP_JOBSTORE_TABLE_PREFIX,
-                           QuartzModel.QUARTZ_SCHEMA + "."
-                               + QuartzModel.QUARTZ_TABLE_PREFIX);
+                           QuartzModel.SCHEMA + "."
+                               + QuartzModel.TABLE_PREFIX);
 
     return properties;
   }

@@ -1,6 +1,7 @@
 package com.ia.core.security.model.privilege;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.security.model.SecurityModel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,9 +24,10 @@ public class Privilege
   extends BaseEntity {
 
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "SEC_PRIVILEGE";
+  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+      + "PRIVILEGE";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "SECURITY";
+  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
 
   @Column(name = "name", length = 500, nullable = false, unique = true)
   private String name;
