@@ -7,23 +7,25 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.user.UserRepository;
+import com.ia.core.service.HasTransaction;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * @author Israel Araújo
  */
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRED)
 public class CoreUserDetailsService
-  implements UserDetailsService {
+  implements UserDetailsService, HasTransaction {
 
+  @Getter
+  private final PlatformTransactionManager transactionManager;
   private final UserRepository repository;
 
   /**
@@ -31,26 +33,30 @@ public class CoreUserDetailsService
    * @return
    */
   protected Collection<SimpleGrantedAuthority> getPrivilegesFromUser(User user) {
-    return user.getRoles().stream()
-        .flatMap(role -> role.getPrivileges().stream())
-        .map(Privilege::getName).map(SimpleGrantedAuthority::new)
-        .collect(Collectors.toUnmodifiableSet());
+    return onTransaction(() -> {
+      return user.getRoles().stream()
+          .flatMap(role -> role.getPrivileges().stream())
+          .map(Privilege::getName).map(SimpleGrantedAuthority::new)
+          .collect(Collectors.toUnmodifiableSet());
+    });
   }
 
   @Override
   public UserDetails loadUserByUsername(String username)
     throws UsernameNotFoundException {
-    User user = repository.findByUserCode(username);
-    if (user == null) {
-      throw new UsernameNotFoundException(username);
-    }
-    UserDetails userDetails = new org.springframework.security.core.userdetails.User(user
-        .getUserCode(), user.getPassword(), user.isEnabled(),
-                                                                                     user.isAccountNotExpired(),
-                                                                                     user.isAccountNotLocked(),
-                                                                                     user.isCredentialsNotExpired(),
-                                                                                     getPrivilegesFromUser(user));
-    return userDetails;
+    return onTransaction(() -> {
+      User user = repository.findByUserCode(username);
+      if (user == null) {
+        throw new UsernameNotFoundException(username);
+      }
+      UserDetails userDetails = new org.springframework.security.core.userdetails.User(user
+          .getUserCode(), user.getPassword(), user.isEnabled(),
+                                                                                       user.isAccountNotExpired(),
+                                                                                       user.isAccountNotLocked(),
+                                                                                       user.isCredentialsNotExpired(),
+                                                                                       getPrivilegesFromUser(user));
+      return userDetails;
+    });
   }
 
 }

@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.log.operation.LogOperationService;
@@ -85,15 +87,16 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
      * @param logOperationService
      * @param validators
      */
-    public DefaultSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
+    public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                           BaseEntityRepository<T> repository,
                                            BaseMapper<T, D> mapper,
                                            SearchRequestMapper searchRequestMapper,
                                            Translator translator,
                                            CoreSecurityAuthorizationManager authorizationManager,
                                            LogOperationService logOperationService,
                                            List<IServiceValidator<D>> validators) {
-      super(repository, mapper, searchRequestMapper, translator,
-            authorizationManager, logOperationService);
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator, authorizationManager, logOperationService);
       this.validators = validators;
     }
   }

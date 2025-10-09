@@ -2,6 +2,7 @@ package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -14,7 +15,8 @@ import com.ia.core.service.translator.Translator;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface BaseService<T extends BaseEntity, D extends DTO<T>> {
+public interface BaseService<T extends BaseEntity, D extends DTO<T>>
+  extends HasTransaction {
 
   /**
    * {@link BaseMapper}
@@ -49,7 +51,7 @@ public interface BaseService<T extends BaseEntity, D extends DTO<T>> {
    * @return {@link DTO}
    */
   default D toDTO(T model) {
-    return getMapper().toDTO(model);
+    return onTransaction(() -> getMapper().toDTO(model));
   }
 
   /**
@@ -60,5 +62,16 @@ public interface BaseService<T extends BaseEntity, D extends DTO<T>> {
    */
   default T toModel(D dto) {
     return getMapper().toModel(dto);
+  }
+
+  /**
+   * @param ex {@link ServiceException}
+   * @throws ServiceException caso haja erros adicionados na exceção
+   */
+  default void checkErrors(ServiceException ex)
+    throws ServiceException {
+    if (ex.hasErros()) {
+      throw ex;
+    }
   }
 }

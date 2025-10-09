@@ -2,9 +2,6 @@ package com.ia.core.security.service;
 
 import java.util.Set;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.functionality.OperationEnum;
@@ -51,15 +48,24 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
                       .addFunctionality(this, OperationEnum.UPDATE));
   }
 
-  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   default D save(D toSave)
     throws ServiceException {
-    getLogOperationService().logBeforeSave(toSave, getRepository(),
-                                           getMapper());
-    D saved = SaveBaseService.super.save(toSave);
-    getLogOperationService().logAfterSave(toSave, saved, getRepository(),
-                                          getMapper());
-    return saved;
+    ServiceException ex = new ServiceException();
+    D savedEntity = onTransaction(() -> {
+      try {
+        getLogOperationService().logBeforeSave(toSave, getRepository(),
+                                               getMapper());
+        D saved = SaveBaseService.super.save(toSave);
+        getLogOperationService().logAfterSave(toSave, saved,
+                                              getRepository(), getMapper());
+        return saved;
+      } catch (Exception e) {
+        ex.add(ex);
+      }
+      return null;
+    });
+    checkErrors(ex);
+    return savedEntity;
   }
 }

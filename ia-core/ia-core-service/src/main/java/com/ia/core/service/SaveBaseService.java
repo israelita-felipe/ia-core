@@ -1,8 +1,5 @@
 package com.ia.core.service;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
@@ -47,19 +44,28 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<T>>
    * @throws ServiceException exceção lançada ao validar o dto
    * @see ValidationBaseService
    */
-  @Transactional(propagation = Propagation.REQUIRED)
   default D save(D toSave)
     throws ServiceException {
-    validate(toSave);
-    T model = toModel(toSave);
-    model = synchronize(model);
-    if (model.getId() != null && !canUpdate(toSave)) {
+    ServiceException ex = new ServiceException();
+    D savedEntity = onTransaction(() -> {
+      try {
+        validate(toSave);
+        T model = toModel(toSave);
+        model = synchronize(model);
+        if (model.getId() != null && !canUpdate(toSave)) {
+          return null;
+        } else if (model.getId() == null && !canCreate(toSave)) {
+          return null;
+        }
+        T saved = getRepository().save(model);
+        return toDTO(saved);
+      } catch (Exception e) {
+        ex.add(e);
+      }
       return null;
-    } else if (model.getId() == null && !canCreate(toSave)) {
-      return null;
-    }
-    T saved = getRepository().save(model);
-    return toDTO(saved);
+    });
+    checkErrors(ex);
+    return savedEntity;
   }
 
   /**

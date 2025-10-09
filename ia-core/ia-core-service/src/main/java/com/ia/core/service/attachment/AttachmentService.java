@@ -5,9 +5,6 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.UUID;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
@@ -51,12 +48,20 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     super(config);
   }
 
-  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public void delete(UUID id)
     throws ServiceException {
-    super.delete(id);
-    getFile(id).delete();
+    ServiceException ex = new ServiceException();
+    onTransaction(() -> {
+      try {
+        super.delete(id);
+        getFile(id).delete();
+      } catch (Exception e) {
+        ex.add(e);
+      }
+      return id;
+    });
+    checkErrors(ex);
   }
 
   /**
@@ -116,26 +121,33 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     }
   }
 
-  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public D save(D toSave)
     throws ServiceException {
-    D saved = super.save(toSave);
-    try {
-      UUID id = saved.getId();
-      FileWriter fw = new FileWriter(getFile(id));
-      fw.write(toSave.getContent());
-      fw.close();
-    } catch (Exception e) {
-      UUID id = saved.getId();
-      if (exists(id)) {
-        delete(saved.getId());
+    ServiceException ex = new ServiceException();
+    D savedEntity = onTransaction(() -> {
+      D saved = null;
+      try {
+        saved = super.save(toSave);
+        UUID id = saved.getId();
+        FileWriter fw = new FileWriter(getFile(id));
+        fw.write(toSave.getContent());
+        fw.close();
+      } catch (Exception e) {
+        UUID id = saved.getId();
+        if (exists(id)) {
+          try {
+            delete(saved.getId());
+          } catch (Exception e2) {
+            ex.add(e2);
+          }
+        }
+        ex.add(e);
       }
-      ServiceException serviceException = new ServiceException();
-      serviceException.add(e);
-      throw serviceException;
-    }
-    return saved;
+      return saved;
+    });
+    checkErrors(ex);
+    return savedEntity;
   }
 
   /**

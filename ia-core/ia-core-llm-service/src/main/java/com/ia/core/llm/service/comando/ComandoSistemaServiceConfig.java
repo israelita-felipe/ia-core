@@ -3,6 +3,7 @@ package com.ia.core.llm.service.comando;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.llm.model.comando.ComandoSistema;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
@@ -26,12 +27,14 @@ public class ComandoSistemaServiceConfig
    * @param searchRequestMapper
    * @param translator
    */
-  public ComandoSistemaServiceConfig(BaseEntityRepository<ComandoSistema> repository,
+  public ComandoSistemaServiceConfig(PlatformTransactionManager transactionManager,
+                                     BaseEntityRepository<ComandoSistema> repository,
                                      BaseMapper<ComandoSistema, ComandoSistemaDTO> mapper,
                                      SearchRequestMapper searchRequestMapper,
                                      Translator translator,
                                      List<IServiceValidator<ComandoSistemaDTO>> validators) {
-    super(repository, mapper, searchRequestMapper, translator, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, validators);
   }
 
 }

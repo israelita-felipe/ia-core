@@ -66,7 +66,7 @@ public class Template
    */
   @Default
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
-             mappedBy = "template", fetch = FetchType.EAGER)
+             mappedBy = "template", fetch = FetchType.LAZY)
   private List<TemplateParameter> parametros = new ArrayList<>();
 
 }

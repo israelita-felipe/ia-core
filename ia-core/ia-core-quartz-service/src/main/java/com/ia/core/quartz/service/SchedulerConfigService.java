@@ -25,8 +25,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
@@ -152,9 +150,11 @@ public class SchedulerConfigService
    */
   @Override
   public SchedulerConfigDTO find(UUID id) {
-    SchedulerConfigDTO schedulerConfigDTO = super.find(id);
-    processarTriggers(schedulerConfigDTO);
-    return schedulerConfigDTO;
+    return onTransaction(() -> {
+      SchedulerConfigDTO schedulerConfigDTO = super.find(id);
+      processarTriggers(schedulerConfigDTO);
+      return schedulerConfigDTO;
+    });
   }
 
   /**
@@ -166,9 +166,11 @@ public class SchedulerConfigService
    */
   @Override
   public Page<SchedulerConfigDTO> findAll(SearchRequestDTO requestDTO) {
-    Page<SchedulerConfigDTO> all = super.findAll(requestDTO);
-    all.forEach(this::processarTriggers);
-    return all;
+    return onTransaction(() -> {
+      Page<SchedulerConfigDTO> all = super.findAll(requestDTO);
+      all.forEach(this::processarTriggers);
+      return all;
+    });
   }
 
   /**
@@ -326,37 +328,37 @@ public class SchedulerConfigService
    * @return DTO salvo
    * @throws ServiceException se ocorrer erro durante o agendamento
    */
-  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public SchedulerConfigDTO save(SchedulerConfigDTO toSave)
     throws ServiceException {
-    boolean isNovo = toSave.getId() == null;
-    SchedulerConfigDTO salvo = super.save(toSave);
-    ServiceException serviceException = new ServiceException();
+    ServiceException ex = new ServiceException();
+    SchedulerConfigDTO savedEntity = onTransaction(() -> {
+      SchedulerConfigDTO salvo = null;
+      try {
+        boolean isNovo = toSave.getId() == null;
+        salvo = super.save(toSave);
 
-    try {
-      if (isNovo && salvo.getPeriodicidade().isAtivo()) {
-        agendarJob(salvo);
-        log.info("Novo job agendado com ID: {}", salvo.getId());
-      } else if (!isNovo) {
-        if (salvo.getPeriodicidade().isAtivo()) {
-          atualizarJob(salvo);
-          log.info("Job atualizado com ID: {}", salvo.getId());
-        } else {
-          cancelarJob(salvo);
-          log.info("Job cancelado com ID: {}", salvo.getId());
+        if (isNovo && salvo.getPeriodicidade().isAtivo()) {
+          agendarJob(salvo);
+          log.info("Novo job agendado com ID: {}", salvo.getId());
+        } else if (!isNovo) {
+          if (salvo.getPeriodicidade().isAtivo()) {
+            atualizarJob(salvo);
+            log.info("Job atualizado com ID: {}", salvo.getId());
+          } else {
+            cancelarJob(salvo);
+            log.info("Job cancelado com ID: {}", salvo.getId());
+          }
         }
+      } catch (Exception e) {
+        ex.add(e);
+        log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
+                  salvo.getId(), e.getLocalizedMessage());
       }
-    } catch (SchedulerException | ClassNotFoundException e) {
-      serviceException.add(e);
-      log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
-                salvo.getId(), e.getLocalizedMessage());
-    }
-
-    if (serviceException.hasErros()) {
-      throw serviceException;
-    }
-    return salvo;
+      return salvo;
+    });
+    checkErrors(ex);
+    return savedEntity;
   }
 
   /**
@@ -366,18 +368,27 @@ public class SchedulerConfigService
    * @param id ID da configuração a ser excluída
    * @throws ServiceException se ocorrer erro durante o cancelamento
    */
-  @Transactional(propagation = Propagation.REQUIRED)
   @Override
   public void delete(UUID id)
     throws ServiceException {
-    SchedulerConfigDTO schedulerConfigDTO = find(id);
-    super.delete(id);
+    ServiceException ex = new ServiceException();
+    onTransaction(() -> {
+      try {
+        SchedulerConfigDTO schedulerConfigDTO = find(id);
+        super.delete(id);
 
-    if (schedulerConfigDTO != null
-        && schedulerConfigDTO.getPeriodicidade().isAtivo()) {
-      cancelarJob(schedulerConfigDTO);
-      log.info("Job cancelado durante exclusão da configuração: {}", id);
-    }
+        if (schedulerConfigDTO != null
+            && schedulerConfigDTO.getPeriodicidade().isAtivo()) {
+          cancelarJob(schedulerConfigDTO);
+          log.info("Job cancelado durante exclusão da configuração: {}",
+                   id);
+        }
+      } catch (Exception e) {
+        ex.add(e);
+      }
+      return id;
+    });
+    checkErrors(ex);
   }
 
   @Override
@@ -397,8 +408,8 @@ public class SchedulerConfigService
    * @return Lista de DTOs filtrados
    */
   public List<SchedulerConfigDTO> findAllActive(boolean active) {
-    return getConfig().getRepository().findAllActive(active).stream()
-        .map(getMapper()::toDTO).toList();
+    return onTransaction(() -> getConfig().getRepository()
+        .findAllActive(active).stream().map(getMapper()::toDTO).toList());
   }
 
   /**

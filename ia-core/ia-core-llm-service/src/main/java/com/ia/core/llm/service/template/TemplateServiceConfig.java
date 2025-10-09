@@ -2,6 +2,8 @@ package com.ia.core.llm.service.template;
 
 import java.util.List;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
@@ -23,12 +25,14 @@ public class TemplateServiceConfig
    * @param searchRequestMapper
    * @param translator
    */
-  public TemplateServiceConfig(BaseEntityRepository<Template> repository,
+  public TemplateServiceConfig(PlatformTransactionManager transactionManager,
+                               BaseEntityRepository<Template> repository,
                                BaseMapper<Template, TemplateDTO> mapper,
                                SearchRequestMapper searchRequestMapper,
                                Translator translator,
                                List<IServiceValidator<TemplateDTO>> validators) {
-    super(repository, mapper, searchRequestMapper, translator, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, validators);
   }
 
 }

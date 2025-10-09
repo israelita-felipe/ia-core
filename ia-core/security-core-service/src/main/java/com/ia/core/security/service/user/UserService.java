@@ -1,7 +1,6 @@
 package com.ia.core.security.service.user;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.DefaultSecuredBaseService;
@@ -51,27 +50,36 @@ public class UserService
    * @param change {@link UserPasswordChangeDTO}
    * @throws ServiceException caso ocorra alguma exceção
    */
-  @Transactional
   public void changePassword(UserPasswordChangeDTO change)
     throws ServiceException {
-    SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
-    searchRequest.getFilters()
-        .add(FilterRequestDTO.builder().key("userCode")
-            .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
-            .value(change.getUserCode()).build());
-    UserDTO user = findAll(searchRequest).get().findFirst()
-        .orElseThrow(() -> new UserNotFountException(change.getUserCode()));
+    ServiceException ex = new ServiceException();
+    onTransaction(() -> {
+      try {
+        SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
+        searchRequest.getFilters()
+            .add(FilterRequestDTO.builder().key("userCode")
+                .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
+                .value(change.getUserCode()).build());
+        UserDTO user = findAll(searchRequest).get().findFirst()
+            .orElseThrow(() -> new UserNotFountException(change
+                .getUserCode()));
 
-    String decryptedOldPassword = UserPasswordEncoder
-        .decrypt(change.getOldPassword(), change.getUserCode());
-    if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
-                                                 user.getPassword())) {
-      user.setPassword(UserPasswordEncoder.decrypt(change.getNewPassword(),
-                                                   change.getUserCode()));
-      save(user);
-    } else {
-      throw new InvalidPasswordException(change.getUserCode());
-    }
+        String decryptedOldPassword = UserPasswordEncoder
+            .decrypt(change.getOldPassword(), change.getUserCode());
+        if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
+                                                     user.getPassword())) {
+          user.setPassword(UserPasswordEncoder
+              .decrypt(change.getNewPassword(), change.getUserCode()));
+          return save(user);
+        } else {
+          throw new InvalidPasswordException(change.getUserCode());
+        }
+      } catch (Exception e) {
+        ex.add(e);
+      }
+      return change;
+    });
+    checkErrors(ex);
   }
 
   @Override
@@ -85,21 +93,30 @@ public class UserService
    * @param reset {@link UserPasswordResetDTO}
    * @throws ServiceException caso ocorra alguma exceção
    */
-  @Transactional
   public void resetPassword(UserPasswordResetDTO reset)
     throws ServiceException {
-    log.info("Reset de password: {}", reset);
-    String newPassword = UserPasswordEncoder
-        .generateDefaultSecureRandomPassword();
-    log.info("New password: {}", newPassword);
-    SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
-    searchRequest.getFilters()
-        .add(FilterRequestDTO.builder().key("userCode")
-            .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
-            .value(reset.getUserCode()).build());
-    UserDTO user = findAll(searchRequest).get().findFirst()
-        .orElseThrow(() -> new UserNotFountException(reset.getUserCode()));
-    user.setPassword(getConfig().getPasswordEncoder().encode(newPassword));
-    save(user);
+    ServiceException ex = new ServiceException();
+    onTransaction(() -> {
+      try {
+        log.info("Reset de password: {}", reset);
+        String newPassword = UserPasswordEncoder
+            .generateDefaultSecureRandomPassword();
+        log.info("New password: {}", newPassword);
+        SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
+        searchRequest.getFilters()
+            .add(FilterRequestDTO.builder().key("userCode")
+                .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
+                .value(reset.getUserCode()).build());
+        UserDTO user = findAll(searchRequest).get().findFirst()
+            .orElseThrow(() -> new UserNotFountException(reset
+                .getUserCode()));
+        user.setPassword(getConfig().getPasswordEncoder()
+            .encode(newPassword));
+        return save(user);
+      } catch (Exception e) {
+        ex.add(e);
+      }
+      return reset;
+    });
   }
 }

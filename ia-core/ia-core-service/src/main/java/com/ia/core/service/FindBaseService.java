@@ -34,10 +34,12 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<T>>
    *         exista.
    */
   default D find(UUID id) {
-    if (canFind(id)) {
-      return toDTO(getRepository().findById(id).orElse(null));
-    }
-    return null;
+    return onTransaction(() -> {
+      if (canFind(id)) {
+        return toDTO(getRepository().findById(id).orElse(null));
+      }
+      return null;
+    });
   }
 
 }

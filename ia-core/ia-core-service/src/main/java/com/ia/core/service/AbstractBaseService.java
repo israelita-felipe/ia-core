@@ -1,5 +1,7 @@
 package com.ia.core.service;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.mapper.BaseMapper;
@@ -75,6 +77,11 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
     return config.getTranslator();
   }
 
+  @Override
+  public PlatformTransactionManager getTransactionManager() {
+    return getConfig().getTransactionManager();
+  }
+
   /**
    * Classe de configuração do serviço base.
    *
@@ -84,6 +91,10 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
   @RequiredArgsConstructor
   @Slf4j
   public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<T>> {
+
+    /** Gestor de transação */
+    @Getter
+    private final PlatformTransactionManager transactionManager;
     /**
      * Repositório
      */

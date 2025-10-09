@@ -3,6 +3,7 @@ package com.ia.core.security.service.privilege;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
@@ -30,15 +31,17 @@ public class PrivilegeServiceConfig
    * @param authorizationManager
    * @param logOperationService
    */
-  public PrivilegeServiceConfig(BaseEntityRepository<Privilege> repository,
+  public PrivilegeServiceConfig(PlatformTransactionManager transactionManager,
+                                BaseEntityRepository<Privilege> repository,
                                 BaseMapper<Privilege, PrivilegeDTO> mapper,
                                 SearchRequestMapper searchRequestMapper,
                                 Translator translator,
                                 CoreSecurityAuthorizationManager authorizationManager,
                                 LogOperationService logOperationService,
                                 List<IServiceValidator<PrivilegeDTO>> validators) {
-    super(repository, mapper, searchRequestMapper, translator,
-          authorizationManager, logOperationService, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, authorizationManager, logOperationService,
+          validators);
   }
 
 }

@@ -1,5 +1,7 @@
 package com.ia.core.security.service;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -28,13 +30,16 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
   @Getter
   private final AbstractSecuredBaseServiceConfig<T, D> config;
 
-  
+  @Override
   public CoreSecurityAuthorizationManager getAuthorizationManager() {
     return config.getAuthorizationManager();
   }
+
+  @Override
   public LogOperationService getLogOperationService() {
     return config.getLogOperationService();
   }
+
   /**
    * @param repository
    * @param mapper
@@ -63,13 +68,15 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
      * @param authorizationManager
      * @param logOperationService
      */
-    public AbstractSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
+    public AbstractSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                            BaseEntityRepository<T> repository,
                                             BaseMapper<T, D> mapper,
                                             SearchRequestMapper searchRequestMapper,
                                             Translator translator,
                                             CoreSecurityAuthorizationManager authorizationManager,
                                             LogOperationService logOperationService) {
-      super(repository, mapper, searchRequestMapper, translator);
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator);
       this.authorizationManager = authorizationManager;
       this.logOperationService = logOperationService;
     }

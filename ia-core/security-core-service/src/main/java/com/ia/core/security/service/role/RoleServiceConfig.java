@@ -3,6 +3,7 @@ package com.ia.core.security.service.role;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
@@ -35,7 +36,8 @@ public class RoleServiceConfig
    * @param authorizationManager
    * @param logOperationService
    */
-  public RoleServiceConfig(BaseEntityRepository<Role> repository,
+  public RoleServiceConfig(PlatformTransactionManager transactionManager,
+                           BaseEntityRepository<Role> repository,
                            BaseMapper<Role, RoleDTO> mapper,
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
@@ -43,8 +45,9 @@ public class RoleServiceConfig
                            LogOperationService logOperationService,
                            List<IServiceValidator<RoleDTO>> validators,
                            UserRoleMapper userRoleMapper) {
-    super(repository, mapper, searchRequestMapper, translator,
-          authorizationManager, logOperationService, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, authorizationManager, logOperationService,
+          validators);
     this.userRoleMapper = userRoleMapper;
   }
 

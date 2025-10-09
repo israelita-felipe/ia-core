@@ -2,6 +2,8 @@ package com.ia.core.service;
 
 import java.util.List;
 
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.mapper.BaseMapper;
@@ -55,18 +57,21 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
     /**
      * Construtor da configuração do serviço base.
      *
+     * @param transactionManager  Gestor de transação
      * @param repository          repositório do serviço
      * @param mapper              mapeador do objeto do serviço
      * @param searchRequestMapper mapeador do objeto de busca
      * @param translator          tradutor
      * @param validators          validadores deste serviço
      */
-    public DefaultBaseServiceConfig(BaseEntityRepository<T> repository,
+    public DefaultBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                    BaseEntityRepository<T> repository,
                                     BaseMapper<T, D> mapper,
                                     SearchRequestMapper searchRequestMapper,
                                     Translator translator,
                                     List<IServiceValidator<D>> validators) {
-      super(repository, mapper, searchRequestMapper, translator);
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator);
       this.validators = validators;
     }
 

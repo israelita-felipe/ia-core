@@ -3,6 +3,7 @@ package com.ia.core.security.service.user;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
@@ -37,7 +38,8 @@ public class UserServiceConfig
    * @param logOperationService
    * @param passwordEncoder
    */
-  public UserServiceConfig(BaseEntityRepository<User> repository,
+  public UserServiceConfig(PlatformTransactionManager transactionManager,
+                           BaseEntityRepository<User> repository,
                            BaseMapper<User, UserDTO> mapper,
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
@@ -45,8 +47,9 @@ public class UserServiceConfig
                            LogOperationService logOperationService,
                            UserPasswordEncoder passwordEncoder,
                            List<IServiceValidator<UserDTO>> validators) {
-    super(repository, mapper, searchRequestMapper, translator,
-          authorizationManager, logOperationService, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, authorizationManager, logOperationService,
+          validators);
     this.passwordEncoder = passwordEncoder;
   }
 

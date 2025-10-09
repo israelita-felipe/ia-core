@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.quartz.Scheduler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
@@ -40,7 +41,8 @@ public class SchedulerConfigServiceConfig
    * @param logOperationService
    * @param passwordEncoder
    */
-  public SchedulerConfigServiceConfig(SchedulerConfigRepository repository,
+  public SchedulerConfigServiceConfig(PlatformTransactionManager transactionManager,
+                                      SchedulerConfigRepository repository,
                                       BaseMapper<SchedulerConfig, SchedulerConfigDTO> mapper,
                                       SearchRequestMapper searchRequestMapper,
                                       Translator translator,
@@ -48,8 +50,9 @@ public class SchedulerConfigServiceConfig
                                       LogOperationService logOperationService,
                                       List<IServiceValidator<SchedulerConfigDTO>> validators,
                                       Scheduler quartzScheduler) {
-    super(repository, mapper, searchRequestMapper, translator,
-          authorizationManager, logOperationService, validators);
+    super(transactionManager, repository, mapper, searchRequestMapper,
+          translator, authorizationManager, logOperationService,
+          validators);
     this.quartzScheduler = quartzScheduler;
   }
 

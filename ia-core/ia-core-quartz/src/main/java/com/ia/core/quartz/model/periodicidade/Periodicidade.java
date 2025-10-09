@@ -74,21 +74,21 @@ public class Periodicidade
   @Default
   @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
       + "PERIODICIDADE_DIA", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = DayOfWeek.class)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = DayOfWeek.class)
   @Column(name = "dia")
   private Set<DayOfWeek> dias = new HashSet<>();
 
   @Default
   @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
       + "PERIODICIDADE_MES", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = Month.class)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Month.class)
   @Column(name = "mes")
   private Set<Month> meses = new HashSet<>();
 
   @Default
   @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
       + "PERIODICIDADE_OCORRENCIA_SEMANAL", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.EAGER,
+  @ElementCollection(fetch = FetchType.LAZY,
                      targetClass = OcorrenciaSemanal.class)
   @Column(name = "semana")
   private Set<OcorrenciaSemanal> ocorrenciaSemanal = new HashSet<>();
@@ -96,7 +96,7 @@ public class Periodicidade
   @Default
   @CollectionTable(name = QuartzModel.QUARTZ_TABLE_PREFIX
       + "PERIODICIDADE_OCORRENCIA_DIARIA", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = Integer.class)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "dia")
   private Set<Integer> ocorrenciaDiaria = new HashSet<>();
 }
