@@ -9,7 +9,7 @@ import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -121,12 +121,12 @@ public class UserFormView
   /**
    * @param label          Título do campo
    * @param labelGenerator {@link ItemLabelGenerator}
-   * @param data           {@link DefaultBaseService}
+   * @param data           {@link DefaultBaseManager}
    * @return {@link CheckboxGroup}
    */
   public CheckboxGroup<PrivilegeDTO> createPrivilegesField(String label,
                                                            ItemLabelGenerator<PrivilegeDTO> labelGenerator,
-                                                           DefaultBaseService<PrivilegeDTO> data) {
+                                                           DefaultBaseManager<PrivilegeDTO> data) {
     CheckboxGroup<PrivilegeDTO> field = new CheckboxGroup<>();
     field
         .setItems(DataProviderFactory
@@ -143,12 +143,12 @@ public class UserFormView
   /**
    * @param label          Título do campo
    * @param labelGenerator {@link ItemLabelGenerator}
-   * @param data           {@link DefaultBaseService}
+   * @param data           {@link DefaultBaseManager}
    * @return {@link CheckboxGroup}
    */
   public CheckboxGroup<UserRoleDTO> createRolesField(String label,
                                                      ItemLabelGenerator<UserRoleDTO> labelGenerator,
-                                                     DefaultBaseService<UserRoleDTO> data) {
+                                                     DefaultBaseManager<UserRoleDTO> data) {
     CheckboxGroup<UserRoleDTO> field = new CheckboxGroup<>();
     field
         .setItems(DataProviderFactory

@@ -4,8 +4,8 @@ import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.view.components.attachment.form.AttachmentFormViewModelConfig;
 import com.ia.core.view.components.attachment.list.AttachmentListViewModelConfig;
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
-import com.ia.core.view.service.AttachmentService;
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.manager.AttachmentManager;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 import lombok.Getter;
 
@@ -16,13 +16,13 @@ public class AttachmentCollectionPageViewModelConfig<T extends AttachmentDTO<?>>
   extends CollectionPageViewModelConfig<T> {
   /** Serviço de persistência de aqruivos */
   @Getter
-  private final AttachmentService<T> attachmentService;
+  private final AttachmentManager<T> attachmentService;
 
   /**
    *
    */
-  public AttachmentCollectionPageViewModelConfig(DefaultCollectionBaseService<T> service,
-                                                 AttachmentService<T> attachmentService) {
+  public AttachmentCollectionPageViewModelConfig(DefaultCollectionBaseManager<T> service,
+                                                 AttachmentManager<T> attachmentService) {
     super(service);
     this.attachmentService = attachmentService;
   }

@@ -47,6 +47,7 @@ public abstract class ListView<T extends Serializable>
       column.setResizable(isColumnResizeable());
       column.setWidth(getDefaultColumnWidth());
     });
+    setMultiSort(true);
     addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
   }
 

@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @param <T> Tipo do modelo.
  * @param <D> Tipo de dado {@link DTO}
  */
-public interface SaveBaseController<T extends BaseEntity, D extends DTO<T>>
+public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
   extends BaseController<T, D> {
 
   /**

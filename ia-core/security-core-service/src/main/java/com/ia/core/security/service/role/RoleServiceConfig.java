@@ -11,7 +11,7 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.user.UserRoleMapper;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -38,7 +38,7 @@ public class RoleServiceConfig
    */
   public RoleServiceConfig(PlatformTransactionManager transactionManager,
                            BaseEntityRepository<Role> repository,
-                           BaseMapper<Role, RoleDTO> mapper,
+                           BaseEntityMapper<Role, RoleDTO> mapper,
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
                            CoreSecurityAuthorizationManager authorizationManager,

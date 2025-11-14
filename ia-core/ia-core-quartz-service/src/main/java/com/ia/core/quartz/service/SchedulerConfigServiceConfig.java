@@ -11,7 +11,7 @@ import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
@@ -43,7 +43,7 @@ public class SchedulerConfigServiceConfig
    */
   public SchedulerConfigServiceConfig(PlatformTransactionManager transactionManager,
                                       SchedulerConfigRepository repository,
-                                      BaseMapper<SchedulerConfig, SchedulerConfigDTO> mapper,
+                                      BaseEntityMapper<SchedulerConfig, SchedulerConfigDTO> mapper,
                                       SearchRequestMapper searchRequestMapper,
                                       Translator translator,
                                       CoreSecurityAuthorizationManager authorizationManager,

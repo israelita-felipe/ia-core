@@ -10,7 +10,7 @@ import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.security.view.privilege.page.PrivilegePageView;
 import com.ia.core.security.view.role.page.RolePageView;
-import com.ia.core.security.view.user.UserService.UserPasswordChangeSuportDTO;
+import com.ia.core.security.view.user.UserManager.UserPasswordChangeSuportDTO;
 import com.ia.core.security.view.user.form.UserPasswordChangeFormView;
 import com.ia.core.security.view.user.page.UserPageView;
 import com.ia.core.security.view.util.SecurityUtils;

@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.chat;
 
 import com.ia.core.llm.service.model.chat.ChatRequestDTO;
-import com.ia.core.llm.view.comando.ComandoSistemaService;
+import com.ia.core.llm.view.comando.ComandoSistemaManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 
 import lombok.Getter;
@@ -13,9 +13,9 @@ public class ChatDialogViewModelConfig
   extends FormViewModelConfig<ChatRequestDTO> {
   /** Serviço de chat */
   @Getter
-  private final ChatService chatService;
+  private final ChatManager chatService;
   @Getter
-  private final ComandoSistemaService comandoSistemaService;
+  private final ComandoSistemaManager comandoSistemaService;
 
   /**
    * @param readOnly
@@ -23,8 +23,8 @@ public class ChatDialogViewModelConfig
    * @param comandoSistemaService
    */
   public ChatDialogViewModelConfig(boolean readOnly,
-                                   ChatService chatService,
-                                   ComandoSistemaService comandoSistemaService) {
+                                   ChatManager chatService,
+                                   ComandoSistemaManager comandoSistemaService) {
     super(readOnly);
     this.chatService = chatService;
     this.comandoSistemaService = comandoSistemaService;

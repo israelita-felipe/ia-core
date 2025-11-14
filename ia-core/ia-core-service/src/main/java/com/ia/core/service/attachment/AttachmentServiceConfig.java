@@ -7,7 +7,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -28,7 +28,7 @@ public class AttachmentServiceConfig<T extends Attachment, D extends AttachmentD
    */
   public AttachmentServiceConfig(PlatformTransactionManager transactionManager,
                                  BaseEntityRepository<T> repository,
-                                 BaseMapper<T, D> mapper,
+                                 BaseEntityMapper<T, D> mapper,
                                  SearchRequestMapper searchRequestMapper,
                                  Translator translator,
                                  List<IServiceValidator<D>> validators) {

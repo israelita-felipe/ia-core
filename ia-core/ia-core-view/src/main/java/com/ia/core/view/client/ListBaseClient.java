@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.view.service.ListBaseService;
+import com.ia.core.view.manager.ListBaseManager;
 
 /**
  * Interface base para clientes do tipo delete.
@@ -24,7 +24,7 @@ public interface ListBaseClient<D extends Serializable>
    *
    * @param request {@link SearchRequest}
    * @return Page do tipo {@link Serializable}.
-   * @see ListBaseService#findAll(SearchRequestDTO)
+   * @see ListBaseManager#findAll(SearchRequestDTO)
    */
   @PostMapping("/all")
   Page<D> findAll(@RequestBody SearchRequestDTO request);

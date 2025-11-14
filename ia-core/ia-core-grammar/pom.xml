@@ -17,23 +17,6 @@
 			<artifactId>antlr4-runtime</artifactId>
 			<version>${antlr.version}</version>
 		</dependency>
-		<!--
-		https://mvnrepository.com/artifact/net.sourceforge.owlapi/owlapi-distribution -->
-		<dependency>
-			<groupId>net.sourceforge.owlapi</groupId>
-			<artifactId>owlapi-distribution</artifactId>
-			<version>${owlapi.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.galigator.openllet</groupId>
-			<artifactId>openllet-owlapi</artifactId>
-			<version>${openllet.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.galigator.openllet</groupId>
-			<artifactId>openllet-explanation</artifactId>
-			<version>${openllet.version}</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

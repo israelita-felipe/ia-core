@@ -1,8 +1,8 @@
 package com.ia.core.security.view.user.form;
 
 import com.ia.core.security.service.model.user.UserDTO;
-import com.ia.core.security.view.privilege.PrivilegeService;
-import com.ia.core.security.view.role.RoleService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
+import com.ia.core.security.view.role.RoleManager;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 
 /**
@@ -15,8 +15,8 @@ public class UserFormViewModel
 
   /**
    * @param readOnly         indicativo de somente leitura
-   * @param privilegeService {@link PrivilegeService}
-   * @param roleService      {@link RoleService}
+   * @param privilegeService {@link PrivilegeManager}
+   * @param roleService      {@link RoleManager}
    */
   public UserFormViewModel(UserFormViewModelConfig config) {
     super(config);

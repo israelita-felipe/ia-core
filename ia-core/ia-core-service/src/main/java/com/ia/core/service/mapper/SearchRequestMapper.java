@@ -7,6 +7,6 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
  * @author Israel Araújo
  */
 public interface SearchRequestMapper
-  extends BaseMapper<SearchRequest, SearchRequestDTO> {
+  extends BaseEntityMapper<SearchRequest, SearchRequestDTO> {
 
 }

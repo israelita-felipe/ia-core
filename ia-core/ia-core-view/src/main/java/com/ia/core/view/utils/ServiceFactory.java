@@ -7,8 +7,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
-import com.ia.core.view.service.collection.DefaultCollectionServiceConfig;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
+import com.ia.core.view.manager.collection.DefaultCollectionManagerConfig;
 
 /**
  * Classe que implementa os padrão factory para os serviços
@@ -43,17 +43,17 @@ public class ServiceFactory {
   }
 
   /**
-   * Cria um {@link DefaultCollectionBaseService} baseado em uma coleção e uma
+   * Cria um {@link DefaultCollectionBaseManager} baseado em uma coleção e uma
    * função que define o identificador do objeto
    *
    * @param <T>        Tipo do objeto a ser manipulado pelo serviço.
    * @param data       Coleção de dados manipulados
    * @param idSupplier {@link Function} de definição do ID do objeto
-   * @return {@link DefaultCollectionBaseService}
+   * @return {@link DefaultCollectionBaseManager}
    */
-  public static <T extends Serializable> DefaultCollectionBaseService<T> createServiceFromCollection(Supplier<Collection<T>> data,
+  public static <T extends Serializable> DefaultCollectionBaseManager<T> createServiceFromCollection(Supplier<Collection<T>> data,
                                                                                                      Function<T, UUID> idSupplier) {
-    return new DefaultCollectionBaseService<T>(createCollectionServiceConfig(data, idSupplier)) {
+    return new DefaultCollectionBaseManager<T>(createCollectionServiceConfig(data, idSupplier)) {
     };
   }
 
@@ -63,9 +63,9 @@ public class ServiceFactory {
    * @param idSupplier
    * @return
    */
-  protected static <T extends Serializable> DefaultCollectionServiceConfig<T> createCollectionServiceConfig(Supplier<Collection<T>> data,
+  protected static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionServiceConfig(Supplier<Collection<T>> data,
                                                                                                             Function<T, UUID> idSupplier) {
-    return new DefaultCollectionServiceConfig<>(createCollectionBaseClient(data,
+    return new DefaultCollectionManagerConfig<>(createCollectionBaseClient(data,
                                                                                                                idSupplier));
   }
 }

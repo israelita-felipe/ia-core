@@ -7,7 +7,7 @@ import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.service.template.TemplateMapper;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Template} para {@link TemplateDTO}
@@ -16,6 +16,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring", uses = { TemplateMapper.class })
 public interface ComandoSistemaMapper
-  extends BaseMapper<ComandoSistema, ComandoSistemaDTO> {
+  extends BaseEntityMapper<ComandoSistema, ComandoSistemaDTO> {
 
 }

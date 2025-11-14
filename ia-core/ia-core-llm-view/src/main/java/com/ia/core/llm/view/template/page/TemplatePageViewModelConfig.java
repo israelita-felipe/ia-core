@@ -3,9 +3,9 @@ package com.ia.core.llm.view.template.page;
 import org.springframework.stereotype.Component;
 
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 /**
@@ -20,8 +20,8 @@ public class TemplatePageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public TemplatePageViewModelConfig(DefaultBaseService<TemplateDTO> service,
-                                     LogOperationService logOperationService) {
+  public TemplatePageViewModelConfig(DefaultBaseManager<TemplateDTO> service,
+                                     LogOperationManager logOperationService) {
     super(service, logOperationService);
   }
 

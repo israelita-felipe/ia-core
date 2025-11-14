@@ -3,7 +3,7 @@ package com.ia.core.security.view.log.operation.page;
 import java.io.Serializable;
 import java.util.UUID;
 
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModelConfig;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
@@ -42,7 +42,7 @@ public abstract class EntityPageViewModel<T extends AbstractBaseEntityDTO<? exte
   /**
    * Cria o viewModel para log de operação
    *
-   * @param logOperationService {@link LogOperationService}
+   * @param logOperationService {@link LogOperationManager}
    * @return {@link LogOperationListViewModel} criado
    */
   protected LogOperationListViewModel createLogOperationListViewModel() {

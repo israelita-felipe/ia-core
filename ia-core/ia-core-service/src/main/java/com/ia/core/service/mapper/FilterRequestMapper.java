@@ -7,6 +7,6 @@ import com.ia.core.service.dto.filter.FilterRequestDTO;
  * @author Israel Araújo
  */
 public interface FilterRequestMapper
-  extends BaseMapper<FilterRequest, FilterRequestDTO> {
+  extends BaseEntityMapper<FilterRequest, FilterRequestDTO> {
 
 }

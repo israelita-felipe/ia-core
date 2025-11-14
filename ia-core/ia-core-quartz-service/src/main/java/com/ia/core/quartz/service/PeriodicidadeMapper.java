@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Periodicidade} para {@link PeriodicidadeDTO}
@@ -13,6 +13,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring")
 public interface PeriodicidadeMapper
-  extends BaseMapper<Periodicidade, PeriodicidadeDTO> {
+  extends BaseEntityMapper<Periodicidade, PeriodicidadeDTO> {
 
 }

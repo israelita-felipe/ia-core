@@ -8,7 +8,7 @@ import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.util.ZipUtil;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
-import com.ia.core.view.service.AttachmentService;
+import com.ia.core.view.manager.AttachmentManager;
 
 /**
  * Implementação padrão de um {@link ListViewModel} para {@link AttachmentDTO}
@@ -50,9 +50,9 @@ public abstract class AttachmentListViewModel<T extends AttachmentDTO<?>>
   }
 
   /**
-   * @return {@link AttachmentService}
+   * @return {@link AttachmentManager}
    */
-  public AttachmentService<T> getService() {
+  public AttachmentManager<T> getService() {
     return getConfig().getService();
   }
 

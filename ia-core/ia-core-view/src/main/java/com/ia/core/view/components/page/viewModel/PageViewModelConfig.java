@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.properties.AutoCastable;
-import com.ia.core.view.service.DefaultBaseService;
 
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ import lombok.Getter;
 public abstract class PageViewModelConfig<D extends Serializable>
   implements AutoCastable {
   @Getter
-  private final DefaultBaseService<D> service;
+  private final DefaultBaseManager<D> service;
   @Getter
   private ListViewModelConfig<D> listViewModelConfig;
   @Getter
@@ -24,7 +24,7 @@ public abstract class PageViewModelConfig<D extends Serializable>
   /**
    *
    */
-  public PageViewModelConfig(DefaultBaseService<D> service) {
+  public PageViewModelConfig(DefaultBaseManager<D> service) {
     this.service = service;
   }
 

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Autor} para {@link PrivilegeDTO}
@@ -13,6 +13,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring")
 public interface PrivilegeMapper
-  extends BaseMapper<Privilege, PrivilegeDTO> {
+  extends BaseEntityMapper<Privilege, PrivilegeDTO> {
 
 }

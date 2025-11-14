@@ -3,8 +3,8 @@ package com.ia.core.security.view.layout.menu;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.security.view.authorization.CoreSecurityViewAuthorizationManager;
-import com.ia.core.security.view.user.UserService;
-import com.ia.core.security.view.user.UserService.UserPasswordChangeSuportDTO;
+import com.ia.core.security.view.user.UserManager;
+import com.ia.core.security.view.user.UserManager.UserPasswordChangeSuportDTO;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.formEditor.viewModel.FormEditorViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
@@ -20,7 +20,7 @@ public class SecuredMenuViewModel
 
   private final AuthenticationDetails authenticationDetails;
   private final CoreSecurityViewAuthorizationManager authorizationManager;
-  private final UserService userService;
+  private final UserManager userService;
 
   /**
    * @param authorizationManager
@@ -29,7 +29,7 @@ public class SecuredMenuViewModel
    */
   public SecuredMenuViewModel(CoreSecurityViewAuthorizationManager authorizationManager,
                               AuthenticationDetails authenticationDetails,
-                              UserService userService) {
+                              UserManager userService) {
     super();
     this.authorizationManager = authorizationManager;
     this.authenticationDetails = authenticationDetails;

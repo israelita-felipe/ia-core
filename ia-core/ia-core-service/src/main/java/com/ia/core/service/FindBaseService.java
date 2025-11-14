@@ -14,7 +14,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface FindBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseService<T, D> {
   /**
    * Verifica se o objeto de id passado como parâmetro pode ser buscado
@@ -34,12 +34,10 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<T>>
    *         exista.
    */
   default D find(UUID id) {
-    return onTransaction(() -> {
-      if (canFind(id)) {
-        return toDTO(getRepository().findById(id).orElse(null));
-      }
-      return null;
-    });
+    if (canFind(id)) {
+      return toDTO(getRepository().findById(id).orElse(null));
+    }
+    return null;
   }
 
 }

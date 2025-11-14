@@ -7,7 +7,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -27,7 +27,7 @@ public class TemplateServiceConfig
    */
   public TemplateServiceConfig(PlatformTransactionManager transactionManager,
                                BaseEntityRepository<Template> repository,
-                               BaseMapper<Template, TemplateDTO> mapper,
+                               BaseEntityMapper<Template, TemplateDTO> mapper,
                                SearchRequestMapper searchRequestMapper,
                                Translator translator,
                                List<IServiceValidator<TemplateDTO>> validators) {

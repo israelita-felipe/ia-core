@@ -17,7 +17,7 @@ import com.ia.core.view.client.DeleteBaseClient;
 import com.ia.core.view.client.FindBaseClient;
 import com.ia.core.view.client.ListBaseClient;
 import com.ia.core.view.client.SaveBaseClient;
-import com.ia.core.view.service.ListBaseService;
+import com.ia.core.view.manager.ListBaseManager;
 
 import jakarta.validation.ValidationException;
 
@@ -76,7 +76,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    *
    * @param request {@link SearchRequest}
    * @return Page do tipo {@link Serializable}.
-   * @see ListBaseService#findAll(SearchRequestDTO)
+   * @see ListBaseManager#findAll(SearchRequestDTO)
    */
 
   @Override

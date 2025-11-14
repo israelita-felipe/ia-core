@@ -11,7 +11,7 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -40,7 +40,7 @@ public class UserServiceConfig
    */
   public UserServiceConfig(PlatformTransactionManager transactionManager,
                            BaseEntityRepository<User> repository,
-                           BaseMapper<User, UserDTO> mapper,
+                           BaseEntityMapper<User, UserDTO> mapper,
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
                            CoreSecurityAuthorizationManager authorizationManager,

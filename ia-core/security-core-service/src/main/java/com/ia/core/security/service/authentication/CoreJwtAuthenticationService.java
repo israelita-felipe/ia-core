@@ -7,7 +7,7 @@ import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.exception.UserNotFountException;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.user.UserRepository;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ public class CoreJwtAuthenticationService
 
   private final UserRepository userRepository;
 
-  private final BaseMapper<User, UserDTO> mapper;
+  private final BaseEntityMapper<User, UserDTO> mapper;
 
   @Override
   public long getExpirationTime() {

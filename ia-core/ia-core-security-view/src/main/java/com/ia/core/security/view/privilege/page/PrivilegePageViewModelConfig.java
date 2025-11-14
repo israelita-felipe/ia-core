@@ -3,9 +3,9 @@ package com.ia.core.security.view.privilege.page;
 import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
-import com.ia.core.security.view.privilege.PrivilegeService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 /**
@@ -20,8 +20,8 @@ public class PrivilegePageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public PrivilegePageViewModelConfig(PrivilegeService service,
-                                      LogOperationService logOperationService) {
+  public PrivilegePageViewModelConfig(PrivilegeManager service,
+                                      LogOperationManager logOperationService) {
     super(service, logOperationService);
   }
 

@@ -3,6 +3,7 @@ package com.ia.core.service.dto;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ia.core.service.dto.properties.HasPropertyChangeSupport;
 
 import jakarta.persistence.Transient;
@@ -29,6 +30,7 @@ public abstract class AbstractDTO<T extends Serializable>
    * Suporte a mudança de propriedades
    */
   @Transient
-  private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+  @JsonIgnore
+  protected transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 }

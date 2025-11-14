@@ -21,7 +21,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseSecuredService<T, D>, DeleteBaseService<T, D> {
 
   /**

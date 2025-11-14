@@ -1,6 +1,6 @@
 package com.ia.core.security.view.user.form;
 
-import com.ia.core.security.view.user.UserService.UserPasswordChangeSuportDTO;
+import com.ia.core.security.view.user.UserManager.UserPasswordChangeSuportDTO;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.textfield.PasswordField;

@@ -4,11 +4,11 @@ import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
-import com.ia.core.security.view.privilege.PrivilegeService;
-import com.ia.core.security.view.role.RoleService;
-import com.ia.core.security.view.user.UserService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
+import com.ia.core.security.view.role.RoleManager;
+import com.ia.core.security.view.user.UserManager;
 import com.ia.core.security.view.user.form.UserFormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -25,19 +25,19 @@ public class UserPageViewModelConfig
   @Getter
   private AuthenticationDetails authentication;
   @Getter
-  private PrivilegeService privilegeService;
+  private PrivilegeManager privilegeService;
   @Getter
-  private RoleService roleService;
+  private RoleManager roleService;
 
   /**
    * @param service
    * @param logOperationService
    */
   public UserPageViewModelConfig(AuthenticationDetails authentication,
-                                 UserService service,
-                                 PrivilegeService privilegeService,
-                                 RoleService roleService,
-                                 LogOperationService logOperationService) {
+                                 UserManager service,
+                                 PrivilegeManager privilegeService,
+                                 RoleManager roleService,
+                                 LogOperationManager logOperationService) {
     super(service, logOperationService);
     this.authentication = authentication;
     this.privilegeService = privilegeService;

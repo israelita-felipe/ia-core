@@ -19,7 +19,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface FindSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface FindSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseSecuredService<T, D>, FindBaseService<T, D> {
 
   @Override

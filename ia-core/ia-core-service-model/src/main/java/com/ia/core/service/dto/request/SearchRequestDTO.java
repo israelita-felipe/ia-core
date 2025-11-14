@@ -138,6 +138,25 @@ public class SearchRequestDTO
   }
 
   /**
+   * Cria os filtros
+   *
+   * @param map       mapa de filtro
+   * @param label     título
+   * @param property  propriedade
+   * @param type      tipo
+   * @param operators operadores
+   */
+  public static void createFilter(Map<FilterProperty, Collection<FilterRequestDTO>> map,
+                                  String label, String property,
+                                  FieldTypeDTO type, Object value) {
+    map.put(FilterProperty.builder().label(label).property(property)
+        .build(), Stream.of(OperatorDTO.EQUAL).map(operator -> {
+          return FilterRequestDTO.builder().key(property).fieldType(type)
+              .operator(operator).value(value).build();
+        }).collect(Collectors.toList()));
+  }
+
+  /**
    * Campos deste DTO
    */
   @SuppressWarnings("javadoc")

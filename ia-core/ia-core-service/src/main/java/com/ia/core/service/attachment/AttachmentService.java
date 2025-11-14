@@ -10,7 +10,7 @@ import com.ia.core.service.DefaultBaseService;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -39,7 +39,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
 
   /**
    * @param repository          {@link BaseEntityRepository}
-   * @param mapper              {@link BaseMapper}
+   * @param mapper              {@link BaseEntityMapper}
    * @param searchRequestMapper {@link SearchRequestMapper}
    * @param translator          {@link Translator}
    * @param validators          lista de validadores

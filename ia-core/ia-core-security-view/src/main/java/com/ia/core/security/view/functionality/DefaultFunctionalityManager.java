@@ -9,7 +9,7 @@ import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
-import com.ia.core.security.view.privilege.PrivilegeService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.ia.core.view.exception.ValidationException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +24,12 @@ public class DefaultFunctionalityManager
   /**
    * Servico de privilégios.
    */
-  private final PrivilegeService privilegeService;
+  private final PrivilegeManager privilegeService;
 
   /**
    * @param hasFunctionalities
    */
-  public DefaultFunctionalityManager(PrivilegeService privilegeService,
+  public DefaultFunctionalityManager(PrivilegeManager privilegeService,
                                      Collection<HasFunctionality> hasFunctionalities) {
     super();
     this.privilegeService = privilegeService;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ia.core.service.dto.DTO;
-import com.ia.core.view.service.SaveBaseService;
+import com.ia.core.view.manager.SaveBaseManager;
 
 import jakarta.validation.Valid;
 
@@ -24,7 +24,7 @@ public interface SaveBaseClient<D extends Serializable>
   /**
    * @param dto O objeto {@link Serializable} a ser salvo.
    * @return Objeto <D> do tipo {@link Serializable} salvo.
-   * @see SaveBaseService#save(Serializable)
+   * @see SaveBaseManager#save(Serializable)
    */
   @PostMapping
   D save(@RequestBody @Valid D dto);

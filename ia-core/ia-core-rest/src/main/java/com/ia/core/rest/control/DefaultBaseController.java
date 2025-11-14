@@ -14,7 +14,7 @@ import com.ia.core.service.dto.DTO;
  * @see CountBaseController
  * @see FindBaseController
  */
-public abstract class DefaultBaseController<T extends BaseEntity, D extends DTO<T>>
+public abstract class DefaultBaseController<T extends BaseEntity, D extends DTO<?>>
   extends AbstractBaseController<T, D>
   implements CountBaseController<T, D>, FindBaseController<T, D>,
   DeleteBaseController<T, D>, ListBaseController<T, D>,

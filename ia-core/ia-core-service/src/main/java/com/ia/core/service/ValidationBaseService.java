@@ -12,7 +12,7 @@ import com.ia.core.service.validators.HasValidation;
  * @param <T> tipo de dado {@link BaseEntity}
  * @param <D> tipo de dado {@link DTO}
  */
-public interface ValidationBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface ValidationBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseService<T, D>, HasValidation<D> {
 
   /**

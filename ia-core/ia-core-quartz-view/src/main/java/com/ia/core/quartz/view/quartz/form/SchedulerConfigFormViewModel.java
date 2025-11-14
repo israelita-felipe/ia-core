@@ -10,7 +10,7 @@ import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollec
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 import com.ia.core.view.utils.ServiceFactory;
 
 import lombok.Getter;
@@ -45,7 +45,7 @@ public class SchedulerConfigFormViewModel
    * @param config
    * @return
    */
-  private DefaultCollectionBaseService<SchedulerConfigTriggerDTO> createSchedulerConfigTriggerService(SchedulerConfigFormViewModelConfig config) {
+  private DefaultCollectionBaseManager<SchedulerConfigTriggerDTO> createSchedulerConfigTriggerService(SchedulerConfigFormViewModelConfig config) {
     return ServiceFactory
         .createServiceFromCollection(this::getTriggers, trigger -> UUID
             .nameUUIDFromBytes(trigger.getTriggerName().getBytes()));

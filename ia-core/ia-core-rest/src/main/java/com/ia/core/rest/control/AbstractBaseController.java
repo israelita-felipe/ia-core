@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Getter
-public abstract class AbstractBaseController<T extends BaseEntity, D extends DTO<T>>
+public abstract class AbstractBaseController<T extends BaseEntity, D extends DTO<?>>
   implements BaseController<T, D> {
 
   /**

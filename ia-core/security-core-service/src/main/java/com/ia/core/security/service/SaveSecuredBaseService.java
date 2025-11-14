@@ -19,7 +19,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseSecuredService<T, D>, SaveBaseService<T, D> {
   /**
    * @param toSave
@@ -61,7 +61,7 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
                                               getRepository(), getMapper());
         return saved;
       } catch (Exception e) {
-        ex.add(ex);
+        ex.add(e);
       }
       return null;
     });

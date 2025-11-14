@@ -21,7 +21,7 @@ import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
 import com.ia.core.service.DefaultBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.BaseEntityDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
 
@@ -47,10 +47,10 @@ public class LogOperationService
   /** Parâmetro - objeto atualizado */
   public static final String UPDATE_ENTITY_UPDATED_OBJECT_PARAMETER = "UPDATE_ENTITY_UPDATED_OBJECT_PARAMETER";
   /** Escutadores das operações */
-  private static final Map<LogOperationEnum, Collection<BiConsumer<Map<String, Object>, DTO<? extends BaseEntity>>>> listeners = new ConcurrentHashMap<>();
+  private static final Map<LogOperationEnum, Collection<BiConsumer<Map<String, Object>, DTO<?>>>> listeners = new ConcurrentHashMap<>();
   /** Avaliadores */
-  private static BiFunction<Map<String, Object>, DTO<? extends BaseEntity>, Boolean> listenerEvaluator = (map,
-                                                                                                          entity) -> true;
+  private static BiFunction<Map<String, Object>, DTO<?>, Boolean> listenerEvaluator = (map,
+                                                                                       entity) -> true;
   /** Escutador da operação que define nome de usuário e código */
   private Runnable operationSetUserDetailsListenerRemover;
   /** Contexto */
@@ -350,8 +350,8 @@ public class LogOperationService
    * @return {@link Runnable} para remoção do escutador.
    */
   public static Runnable addOperationListener(final LogOperationEnum operation,
-                                              final BiConsumer<Map<String, Object>, DTO<? extends BaseEntity>> consumer) {
-    Collection<BiConsumer<Map<String, Object>, DTO<? extends BaseEntity>>> operationListener = listeners
+                                              final BiConsumer<Map<String, Object>, DTO<?>> consumer) {
+    Collection<BiConsumer<Map<String, Object>, DTO<?>>> operationListener = listeners
         .getOrDefault(operation, new CopyOnWriteArraySet<>());
     operationListener.add(consumer);
     listeners.put(operation, operationListener);
@@ -377,7 +377,7 @@ public class LogOperationService
    * @param evaluator {@link BiFunction} com mapa de parâmetros e objeto no
    *                  contexto
    */
-  public static void setEvaluator(BiFunction<Map<String, Object>, DTO<? extends BaseEntity>, Boolean> evaluator) {
+  public static void setEvaluator(BiFunction<Map<String, Object>, DTO<?>, Boolean> evaluator) {
     listenerEvaluator = evaluator;
   }
 
@@ -388,12 +388,12 @@ public class LogOperationService
    * @param entity    objeto da ação
    * @param operation {@link LogOperationEnum} da ação
    */
-  private <D extends DTO<? extends BaseEntity>> void dispatch(final D entity,
-                                                              final LogOperationEnum operation) {
+  private <D extends DTO<?>> void dispatch(final D entity,
+                                           final LogOperationEnum operation) {
     Map<String, Object> params = getContext();
     if (listenerEvaluator.apply(params, entity)) {
       log.info("{} -> {}", operation, entity.getClass());
-      Collection<BiConsumer<Map<String, Object>, DTO<? extends BaseEntity>>> operationListener = listeners
+      Collection<BiConsumer<Map<String, Object>, DTO<?>>> operationListener = listeners
           .getOrDefault(operation, new CopyOnWriteArraySet<>());
       operationListener.forEach(consumer -> {
         consumer.accept(params, entity);
@@ -407,7 +407,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void postPersisted(final D entity) {
+  private <D extends DTO<?>> void postPersisted(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.AFTER_PERSIST);
   }
@@ -418,7 +418,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void postDeleted(final D entity) {
+  private <D extends DTO<?>> void postDeleted(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.AFTER_DELETE);
   }
@@ -429,7 +429,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void postUpdated(final D entity) {
+  private <D extends DTO<?>> void postUpdated(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.AFTER_UPDATE);
   }
@@ -440,7 +440,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void preDelete(final D entity) {
+  private <D extends DTO<?>> void preDelete(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.BEFORE_DELETE);
   }
@@ -451,7 +451,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void prePersist(final D entity) {
+  private <D extends DTO<?>> void prePersist(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.BEFORE_PERSIST);
   }
@@ -462,7 +462,7 @@ public class LogOperationService
    * @param <D>    Tipo do dado
    * @param entity entidade atual
    */
-  private <D extends DTO<? extends BaseEntity>> void preUpdate(final D entity) {
+  private <D extends DTO<?>> void preUpdate(final D entity) {
     dispatch(entity, LogOperationEnum.ANY);
     dispatch(entity, LogOperationEnum.BEFORE_UPDATE);
   }
@@ -474,12 +474,12 @@ public class LogOperationService
    * @param <D>        Tipo do DTO
    * @param toSave     DTO a ser salvo
    * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link BaseMapper}
+   * @param mapper     {@link Mapper}
    * @return {@link DTO} a ser salvo.
    */
-  public <T extends BaseEntity, D extends DTO<T>> D logBeforeSave(final D toSave,
+  public <T extends BaseEntity, D extends DTO<?>> D logBeforeSave(final D toSave,
                                                                   BaseEntityRepository<T> repository,
-                                                                  BaseMapper<T, D> mapper) {
+                                                                  Mapper<T, D> mapper) {
     T model = mapper.toModel(toSave);
     boolean isUpdating = model.getId() != null;
     if (isUpdating) {
@@ -501,13 +501,13 @@ public class LogOperationService
    * @param toSave     DTO a ser salvo
    * @param saved      DTO salvo
    * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link BaseMapper}
+   * @param mapper     {@link Mapper}
    * @return {@link DTO} que foi salvo
    */
-  public <T extends BaseEntity, D extends DTO<T>> D logAfterSave(final D toSave,
+  public <T extends BaseEntity, D extends DTO<?>> D logAfterSave(final D toSave,
                                                                  final D saved,
                                                                  BaseEntityRepository<T> repository,
-                                                                 BaseMapper<T, D> mapper) {
+                                                                 Mapper<T, D> mapper) {
     T model = mapper.toModel(toSave);
     boolean isUpdating = model.getId() != null;
     if (isUpdating) {
@@ -527,12 +527,12 @@ public class LogOperationService
    * @param <D>        Tipo do DTO
    * @param entity     Entidade excluída
    * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link BaseMapper}
+   * @param mapper     {@link Mapper}
    * @return {@link DTO} que foi excluído
    */
-  public <T extends BaseEntity, D extends DTO<T>> D logAfterDelete(final D entity,
+  public <T extends BaseEntity, D extends DTO<?>> D logAfterDelete(final D entity,
                                                                    BaseEntityRepository<T> repository,
-                                                                   BaseMapper<T, D> mapper) {
+                                                                   Mapper<T, D> mapper) {
     postDeleted(entity);
     return entity;
   }
@@ -544,12 +544,12 @@ public class LogOperationService
    * @param <D>        Tipo do DTO
    * @param id         identificador
    * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link BaseMapper}
+   * @param mapper     {@link Mapper}
    * @return {@link DTO} que será excluído
    */
-  public <T extends BaseEntity, D extends DTO<T>> D logBeforeDelete(final UUID id,
+  public <T extends BaseEntity, D extends DTO<?>> D logBeforeDelete(final UUID id,
                                                                     BaseEntityRepository<T> repository,
-                                                                    BaseMapper<T, D> mapper) {
+                                                                    Mapper<T, D> mapper) {
     T model = repository.findById(id).orElse(null);
     D dto = mapper.toDTO(model);
     putDeleteObject(dto);

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Template} para {@link TemplateDTO}
@@ -13,6 +13,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring", uses = { TemplateParameterMapper.class })
 public interface TemplateMapper
-  extends BaseMapper<Template, TemplateDTO> {
+  extends BaseEntityMapper<Template, TemplateDTO> {
 
 }

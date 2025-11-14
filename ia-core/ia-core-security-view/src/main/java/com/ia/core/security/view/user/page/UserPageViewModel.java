@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.list.AuditOperationListViewModel;
 import com.ia.core.security.view.log.operation.list.AuditOperationListViewModelConfig;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
-import com.ia.core.security.view.privilege.PrivilegeService;
-import com.ia.core.security.view.role.RoleService;
-import com.ia.core.security.view.user.UserService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
+import com.ia.core.security.view.role.RoleManager;
+import com.ia.core.security.view.user.UserManager;
 import com.ia.core.security.view.user.form.UserFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
@@ -33,10 +33,10 @@ public class UserPageViewModel
 
   /**
    * @param authentication      {@link AuthenticationDetails}
-   * @param service             {@link UserService}
-   * @param privilegeService    {@link PrivilegeService}
-   * @param roleService         {@link RoleService}
-   * @param logOperationService {@link LogOperationService}
+   * @param service             {@link UserManager}
+   * @param privilegeService    {@link PrivilegeManager}
+   * @param roleService         {@link RoleManager}
+   * @param logOperationService {@link LogOperationManager}
    */
   public UserPageViewModel(UserPageViewModelConfig config) {
     super(config);
@@ -46,7 +46,7 @@ public class UserPageViewModel
   /**
    * Cria o viewModel para log de operação
    *
-   * @param logOperationService {@link LogOperationService}
+   * @param logOperationService {@link LogOperationManager}
    * @return {@link AuditOperationListViewModel} criado
    */
   protected AuditOperationListViewModel createAuditOperationListViewModel() {
@@ -81,8 +81,8 @@ public class UserPageViewModel
   }
 
   @Override
-  public UserService getService() {
-    return (UserService) super.getService();
+  public UserManager getService() {
+    return (UserManager) super.getService();
   }
 
   @Override

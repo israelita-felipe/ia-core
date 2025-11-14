@@ -1,8 +1,6 @@
 package com.ia.core.service.util;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -17,6 +15,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.ia.core.model.util.EnumUtils;
 
 /**
  * Módulo para conversão de enumeração
@@ -25,10 +24,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
  */
 public class EnumModule
   extends com.fasterxml.jackson.databind.Module {
-  /**
-   * Separador
-   */
-  private static final String SEPARATOR = "_#_";
+
   private SimpleSerializers serializers = new SimpleSerializers();
   private SimpleDeserializers deserializers = new SimpleDeserializers();
 
@@ -97,8 +93,7 @@ public class EnumModule
     public void serialize(T value, JsonGenerator gen,
                           SerializerProvider provider)
       throws IOException {
-      gen.writeString(value.getDeclaringClass().getCanonicalName()
-          + SEPARATOR + value.name());
+      gen.writeString(EnumUtils.serialize(value));
     }
 
   }
@@ -121,18 +116,12 @@ public class EnumModule
       super(t);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JacksonException {
       if (p.hasToken(JsonToken.VALUE_STRING)) {
         try {
-          String[] splitted = p.getText().split(SEPARATOR);
-          var enumType = Class.forName(splitted[0]);
-          return (T) Stream.of(enumType.getEnumConstants())
-              .filter(enumItem -> Objects
-                  .equals(splitted[1], ((Enum<?>) enumItem).name()))
-              .findFirst().orElse(null);
+          return EnumUtils.deserialize(p.getText());
         } catch (Exception e) {
           return null;
         }
@@ -141,4 +130,5 @@ public class EnumModule
     }
 
   }
+
 }

@@ -2,7 +2,7 @@ package com.ia.core.view.components.page.viewModel;
 
 import java.io.Serializable;
 
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 /**
  *
@@ -13,7 +13,7 @@ public class CollectionPageViewModelConfig<T extends Serializable>
   /**
    * @param service
    */
-  public CollectionPageViewModelConfig(DefaultCollectionBaseService<T> service) {
+  public CollectionPageViewModelConfig(DefaultCollectionBaseManager<T> service) {
     super(service);
   }
 

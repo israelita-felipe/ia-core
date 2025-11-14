@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Attachment} para {@link AttachmentDTO}
@@ -15,6 +15,6 @@ import com.ia.core.service.mapper.BaseMapper;
  * @param <A> Tipo do {@link DTO} do anexo.
  */
 public interface AttachmentMapper<T extends Attachment, A extends AttachmentDTO<T>>
-  extends BaseMapper<T, A> {
+  extends BaseEntityMapper<T, A> {
 
 }

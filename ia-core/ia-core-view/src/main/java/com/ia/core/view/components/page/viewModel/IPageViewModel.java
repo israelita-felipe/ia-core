@@ -10,11 +10,11 @@ import com.ia.core.view.components.filter.viewModel.ISearchRequestViewModel;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.ia.core.view.exception.ValidationException;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.properties.AutoCastable;
 import com.ia.core.view.properties.HasErrorHandle;
 import com.ia.core.view.properties.HasObjectCoping;
 import com.ia.core.view.properties.HasObjectCreation;
-import com.ia.core.view.service.DefaultBaseService;
 import com.vaadin.flow.component.icon.VaadinIcon;
 
 import lombok.Builder;
@@ -146,9 +146,9 @@ public interface IPageViewModel<T extends Serializable>
   T getSelected();
 
   /**
-   * @return {@link DefaultBaseService} da página
+   * @return {@link DefaultBaseManager} da página
    */
-  DefaultBaseService<T> getService();
+  DefaultBaseManager<T> getService();
 
   /**
    * Salva um novo objeto

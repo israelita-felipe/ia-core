@@ -19,14 +19,14 @@ import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.view.authentication.AuthenticationBaseClient;
-import com.ia.core.security.view.authentication.AuthenticationService;
-import com.ia.core.security.view.authentication.DefaultAuthenticationService;
+import com.ia.core.security.view.authentication.AuthenticationManager;
+import com.ia.core.security.view.authentication.DefaultAuthenticationManager;
 import com.ia.core.security.view.authorization.CoreSecurityViewAuthorizationManager;
 import com.ia.core.security.view.authorization.CoreViewAuthorizationManager;
 import com.ia.core.security.view.components.login.LoginView;
 import com.ia.core.security.view.functionality.DefaultFunctionalityManager;
 import com.ia.core.security.view.login.CustomAccessDeniedError;
-import com.ia.core.security.view.privilege.PrivilegeService;
+import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.vaadin.flow.router.RouteAccessDeniedError;
 import com.vaadin.flow.spring.security.NavigationAccessControlConfigurer;
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategy;
@@ -56,8 +56,8 @@ public abstract class CoreSecurityViewConfiguration {
   private final NavigationAccessControlConfigurer navigationAccessControlConfigurer;
   /** {@link FunctionalityManager} */
   private final FunctionalityManager functionalityManager;
-  /** {@link AuthenticationService} */
-  private final AuthenticationService authenticationService;
+  /** {@link AuthenticationManager} */
+  private final AuthenticationManager authenticationService;
   /** {@link RouteAccessDeniedError} */
   private final RouteAccessDeniedError accessDeniedError;
   /** {@link PasswordEncoder} */
@@ -77,22 +77,22 @@ public abstract class CoreSecurityViewConfiguration {
    * * Configura o serviço de autenticação
    *
    * @param client {@link AuthenticationBaseClient}
-   * @return {@link AuthenticationService}
+   * @return {@link AuthenticationManager}
    */
   @Bean
-  static AuthenticationService authenticationService(AuthenticationBaseClient client) {
-    return new DefaultAuthenticationService(client);
+  static AuthenticationManager authenticationService(AuthenticationBaseClient client) {
+    return new DefaultAuthenticationManager(client);
   }
 
   /**
    * * Configura o gerenciador de funcionalidades
    *
-   * @param service            {@link PrivilegeService}
+   * @param service            {@link PrivilegeManager}
    * @param hasFunctionalities Lista de funcionalidades {@link HasFunctionality}
    * @return {@link FunctionalityManager}
    */
   @Bean
-  static FunctionalityManager functionalityManager(PrivilegeService service,
+  static FunctionalityManager functionalityManager(PrivilegeManager service,
                                                    List<HasFunctionality> hasFunctionalities) {
     return new DefaultFunctionalityManager(service, hasFunctionalities);
   }
@@ -165,9 +165,9 @@ public abstract class CoreSecurityViewConfiguration {
   }
 
   /**
-   * @param customAuthenticationService {@link AuthenticationService}
+   * @param customAuthenticationService {@link AuthenticationManager}
    */
-  public void configure(AuthenticationService customAuthenticationService) {
+  public void configure(AuthenticationManager customAuthenticationService) {
 
   }
 

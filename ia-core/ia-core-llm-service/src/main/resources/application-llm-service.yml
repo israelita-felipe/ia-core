@@ -1,7 +1,16 @@
 spring:
   ai:
+    model:
+      chat: ollama
+      embedding: ollama
     ollama:
+      base-url: http://localhost:11434
       chat:
-        model: llama3.2
+        options:
+          model: llama3.2-vision
       embedding:
-        model: llama3.2
+        model: llama3.2-vision
+  http:
+    client:
+      read-timeout: 600000
+      connect-timeout: 600000

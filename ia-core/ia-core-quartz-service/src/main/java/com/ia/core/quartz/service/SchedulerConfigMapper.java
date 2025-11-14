@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link SchedulerConfig} para {@link SchedulerConfigDTO}
@@ -13,6 +13,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring", uses = { PeriodicidadeMapper.class })
 public interface SchedulerConfigMapper
-  extends BaseMapper<SchedulerConfig, SchedulerConfigDTO> {
+  extends BaseEntityMapper<SchedulerConfig, SchedulerConfigDTO> {
 
 }

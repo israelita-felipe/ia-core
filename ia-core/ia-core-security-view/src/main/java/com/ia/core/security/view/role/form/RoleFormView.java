@@ -9,7 +9,7 @@ import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -76,7 +76,7 @@ public class RoleFormView
    */
   public CheckboxGroup<PrivilegeDTO> createPrivilegesField(String label,
                                                            ItemLabelGenerator<PrivilegeDTO> labelGenerator,
-                                                           DefaultBaseService<PrivilegeDTO> data) {
+                                                           DefaultBaseManager<PrivilegeDTO> data) {
 
     CheckboxGroup<PrivilegeDTO> field = new CheckboxGroup<>();
     field
@@ -99,7 +99,7 @@ public class RoleFormView
    */
   public CheckboxGroup<UserDTO> createUsersField(String label,
                                                  ItemLabelGenerator<UserDTO> labelGenerator,
-                                                 DefaultBaseService<UserDTO> data) {
+                                                 DefaultBaseManager<UserDTO> data) {
 
     CheckboxGroup<UserDTO> field = new CheckboxGroup<>();
     field.setItems(DataProviderFactory

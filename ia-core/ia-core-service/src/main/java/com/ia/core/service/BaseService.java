@@ -3,7 +3,8 @@ package com.ia.core.service;
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -15,16 +16,16 @@ import com.ia.core.service.translator.Translator;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface BaseService<T extends BaseEntity, D extends DTO<T>>
+public interface BaseService<T extends BaseEntity, D extends DTO<?>>
   extends HasTransaction {
 
   /**
-   * {@link BaseMapper}
+   * {@link BaseEntityMapper}
    *
    * @param <M> Tipo do Mapper
-   * @return {@link BaseMapper}
+   * @return {@link BaseEntityMapper}
    */
-  <M extends BaseMapper<T, D>> M getMapper();
+  <M extends Mapper<T, D>> M getMapper();
 
   /**
    * {@link BaseEntityRepository}
@@ -51,7 +52,7 @@ public interface BaseService<T extends BaseEntity, D extends DTO<T>>
    * @return {@link DTO}
    */
   default D toDTO(T model) {
-    return onTransaction(() -> getMapper().toDTO(model));
+    return getMapper().toDTO(model);
   }
 
   /**

@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
-import com.ia.core.security.view.log.operation.LogOperationService;
+import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
 import com.ia.core.security.view.privilege.form.PrivilegeFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -25,7 +25,7 @@ public class PrivilegePageViewModel
 
   /**
    * @param service             serviço para {@link PrivilegeDTO}
-   * @param logOperationService {@link LogOperationService}
+   * @param logOperationService {@link LogOperationManager}
    */
   public PrivilegePageViewModel(PrivilegePageViewModelConfig config) {
     super(config);

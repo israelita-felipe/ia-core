@@ -9,6 +9,7 @@ import com.ia.core.security.model.functionality.OperationEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,10 @@ import lombok.experimental.SuperBuilder;
  * @author Israel Araújo
  */
 @Entity
-@Table(name = LogOperation.TABLE_NAME, schema = LogOperation.SCHEMA_NAME)
+@Table(name = LogOperation.TABLE_NAME, schema = LogOperation.SCHEMA_NAME,
+       indexes = {
+           @Index(name = "idx_log_operation_type_value_id_date_time_operation",
+                  columnList = "type ASC, value_id ASC, date_time_operation DESC") })
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)

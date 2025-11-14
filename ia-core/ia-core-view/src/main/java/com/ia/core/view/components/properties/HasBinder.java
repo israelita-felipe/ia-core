@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import com.ia.core.view.components.converters.StringToBigDecimalConverter;
 import com.ia.core.view.components.converters.StringToIntegerConverter;
 import com.ia.core.view.components.converters.StringToLongConverter;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.ItemLabelGenerator;
@@ -30,11 +30,11 @@ public interface HasBinder<T> {
    * @param <E>        Tipo do dado do {@link ComboBox}
    * @param combo      {@link ComboBox}
    * @param properties Propriedades para filtro
-   * @param service    {@link DefaultBaseService}
+   * @param service    {@link DefaultBaseManager}
    */
   default <E extends Serializable> void bind(ComboBox<E> combo,
                                              Set<String> properties,
-                                             DefaultBaseService<E> service) {
+                                             DefaultBaseManager<E> service) {
     combo.setItems(DataProviderFactory
         .createBaseDataProviderFromService(service, properties));
 
@@ -78,14 +78,14 @@ public interface HasBinder<T> {
    * @param combo          {@link ComboBox}
    * @param labelGenerator {@link ItemLabelGenerator}
    * @param properties     propriedades de filtros
-   * @param service        {@link DefaultBaseService}
+   * @param service        {@link DefaultBaseManager}
    * @return {@link Binding}
    */
   default <E extends Serializable> Binding<?, E> bind(String property,
                                                       ComboBox<E> combo,
                                                       ItemLabelGenerator<E> labelGenerator,
                                                       Set<String> properties,
-                                                      DefaultBaseService<E> service) {
+                                                      DefaultBaseManager<E> service) {
     AtomicReference<Binding<?, E>> thread = new AtomicReference<>();
     this.bind(binder -> {
       thread.set(binder.forField(combo).bind(parseProperty(property)));
@@ -105,13 +105,13 @@ public interface HasBinder<T> {
    * @param property   propriedade do binding
    * @param combo      {@link ComboBox}
    * @param properties propriedade de filtros
-   * @param service    {@link DefaultBaseService}
+   * @param service    {@link DefaultBaseManager}
    * @return {@link Binding}
    */
   default <E extends Serializable> Binding<?, E> bind(String property,
                                                       ComboBox<E> combo,
                                                       Set<String> properties,
-                                                      DefaultBaseService<E> service) {
+                                                      DefaultBaseManager<E> service) {
     AtomicReference<Binding<?, E>> thread = new AtomicReference<>();
     this.bind(binder -> {
       thread.set(binder.forField(combo).bind(parseProperty(property)));

@@ -15,7 +15,7 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
 import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
 import com.ia.core.view.exception.ValidationException;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +54,7 @@ public abstract class PageViewModel<T extends Serializable>
   /**
    * Construtor padrão
    *
-   * @param service {@link DefaultBaseService} da página
+   * @param service {@link DefaultBaseManager} da página
    */
   public PageViewModel(PageViewModelConfig<T> config) {
     this.config = config;
@@ -193,7 +193,7 @@ public abstract class PageViewModel<T extends Serializable>
    * @return {@link #service}
    */
   @Override
-  public DefaultBaseService<T> getService() {
+  public DefaultBaseManager<T> getService() {
     return getConfig().getService();
   }
 

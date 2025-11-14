@@ -2,6 +2,8 @@ package com.ia.core.service;
 
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -11,6 +13,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  * @author Israel Araújo
  */
 public interface HasTransaction {
+
+  Logger log = LoggerFactory.getLogger(HasTransaction.class);
 
   /**
    * @return {@link PlatformTransactionManager}
@@ -29,10 +33,17 @@ public interface HasTransaction {
         .getTransaction(createTransactionDefinition());
     try {
       E result = action.get();
-      getTransactionManager().commit(status);
+      if (status.isNewTransaction() && !status.isReadOnly()) {
+        getTransactionManager().commit(status);
+        log.info("Transação {} comitada", status.getTransactionName());
+      }
       return result;
     } catch (Exception e) {
-      getTransactionManager().rollback(status);
+      e.printStackTrace();
+      if (status.isNewTransaction() && !status.isCompleted()) {
+        getTransactionManager().rollback(status);
+        log.info("Transação {} abortada", status.getTransactionName());
+      }
       throw e;
     }
 
@@ -46,7 +57,7 @@ public interface HasTransaction {
     defaultTransactionDefinition
         .setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
     defaultTransactionDefinition
-        .setIsolationLevel(DefaultTransactionDefinition.ISOLATION_SERIALIZABLE);
+        .setIsolationLevel(DefaultTransactionDefinition.ISOLATION_READ_UNCOMMITTED);
     return defaultTransactionDefinition;
   }
 

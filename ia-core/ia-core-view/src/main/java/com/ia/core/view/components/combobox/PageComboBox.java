@@ -11,7 +11,7 @@ import com.ia.core.view.components.editor.pageEditor.viewModel.IPageEditorViewMo
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel.EditorAction;
 import com.ia.core.view.components.page.IPageView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
-import com.ia.core.view.service.DefaultBaseService;
+import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.button.Button;
@@ -77,18 +77,18 @@ public abstract class PageComboBox<T extends Serializable>
   }
 
   /**
-   * @return {@link DefaultBaseService} para listagem dos itens
+   * @return {@link DefaultBaseManager} para listagem dos itens
    */
-  protected DefaultBaseService<T> getService() {
+  protected DefaultBaseManager<T> getService() {
     return this.viewModel.getContentViewModel().getService();
   }
 
   /**
-   * @param service    {@link DefaultBaseService}
+   * @param service    {@link DefaultBaseManager}
    * @param properties propriedades de filtro
    * @return {@link DataProvider}
    */
-  protected DataProvider<T, String> createDataProvider(DefaultBaseService<T> service,
+  protected DataProvider<T, String> createDataProvider(DefaultBaseManager<T> service,
                                                        Set<String> properties) {
     return DataProviderFactory
         .createBaseDataProviderFromService(service, properties);

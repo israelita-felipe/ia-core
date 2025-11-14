@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.ia.core.model.util.EnumUtils;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -66,7 +68,19 @@ public enum FieldType {
     }
   },
   /** Enumeração */
-  ENUM;
+  ENUM {
+    @Override
+    public Object parse(Object value) {
+      try {
+        if (String.class.isInstance(value)) {
+          return EnumUtils.deserialize((String) value);
+        }
+      } catch (Exception e) {
+        log.error(e.getLocalizedMessage(), e);
+      }
+      return super.parse(value);
+    }
+  };
 
   /**
    * Parseamento de objeto caso necessário

@@ -29,7 +29,7 @@ public class AuthenticationDetails {
 
   private JwtAuthenticationResponseDTO authentication = null;
 
-  private final AuthenticationService service;
+  private final AuthenticationManager service;
 
   public void autenticate(AuthenticationRequest request) {
     service.autenticate(request, this);

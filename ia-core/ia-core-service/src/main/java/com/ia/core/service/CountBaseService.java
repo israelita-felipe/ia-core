@@ -17,7 +17,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface CountBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface CountBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseService<T, D> {
 
   /**

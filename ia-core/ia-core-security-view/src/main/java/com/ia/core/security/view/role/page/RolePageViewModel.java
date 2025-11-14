@@ -9,7 +9,7 @@ import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
-import com.ia.core.security.view.role.RoleService;
+import com.ia.core.security.view.role.RoleManager;
 import com.ia.core.security.view.role.form.RoleFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
@@ -67,8 +67,8 @@ public class RolePageViewModel
   }
 
   @Override
-  public RoleService getService() {
-    return (RoleService) super.getService();
+  public RoleManager getService() {
+    return (RoleManager) super.getService();
   }
 
   @Override

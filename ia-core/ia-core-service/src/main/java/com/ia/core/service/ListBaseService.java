@@ -20,7 +20,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface ListBaseService<T extends BaseEntity, D extends DTO<T>>
+public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseService<T, D> {
 
   /**
@@ -40,25 +40,22 @@ public interface ListBaseService<T extends BaseEntity, D extends DTO<T>>
    * @return {@link Page} de dados do tipo <T>
    */
   default Page<D> findAll(SearchRequestDTO requestDTO) {
-    return onTransaction(() -> {
-      if (canList(requestDTO)) {
-        SearchRequest request = getSearchRequestMapper()
-            .toModel(requestDTO);
-        request.setFilters(request.getFilters().stream()
-            .filter(filter -> filter.getKey() != null
-                && filter.getOperator() != null)
-            .collect(Collectors.toList()));
-        // cria a especificação
-        SearchSpecification<T> specification = new SearchSpecification<>(request);
-        // cria a paginação
-        Pageable pageable = SearchSpecification
-            .getPageable(request.getPage(), request.getSize());
-        // realiza a busca convertendo para o dto.
-        return getRepository().findAll(specification, pageable)
-            .map(this::toDTO);
-      }
-      return Page.empty();
-    });
+    if (canList(requestDTO)) {
+      SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
+      request.setFilters(request.getFilters().stream()
+          .filter(filter -> filter.getKey() != null
+              && filter.getOperator() != null)
+          .collect(Collectors.toList()));
+      // cria a especificação
+      SearchSpecification<T> specification = new SearchSpecification<>(request);
+      // cria a paginação
+      Pageable pageable = SearchSpecification
+          .getPageable(request.getPage(), request.getSize());
+      // realiza a busca convertendo para o dto.
+      return getRepository().findAll(specification, pageable)
+          .map(this::toDTO);
+    }
+    return Page.empty();
   }
 
 }

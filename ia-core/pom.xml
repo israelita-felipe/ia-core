@@ -24,7 +24,7 @@
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
-		<spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
+		<spring-ai.version>1.1.0-M3</spring-ai.version>
 		<ckeditor.version>4.1.2-8</ckeditor.version>
 		<owlapi.version>5.5.1</owlapi.version>
 		<openllet.version>2.6.5</openllet.version>
@@ -62,9 +62,9 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 		<dependency>
-    		<groupId>org.reflections</groupId>
-    		<artifactId>reflections</artifactId>
-    		<version>${reflections.version}</version>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>${reflections.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -88,16 +88,21 @@
 					<configuration>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
-						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- See
+						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+						<!-- Classpath elements to supply as annotation
+						processor path. If 
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those
+						classpath elements. 
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation
+						processors. The 
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided
+						dependency processor 
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>
@@ -122,6 +127,79 @@
 							</compilerArg>
 						</compilerArgs>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>3.3.0</version>
+					<configuration>
+						<configLocation>checkstyle.xml</configLocation>
+						<encoding>UTF-8</encoding>
+						<consoleOutput>true</consoleOutput>
+						<failsOnError>true</failsOnError>
+						<linkXRef>false</linkXRef>
+					</configuration>
+					<executions>
+						<execution>
+							<id>validate</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>3.21.2</version>
+					<configuration>
+						<printFailingErrors>true</printFailingErrors>
+						<failOnViolation>true</failOnViolation>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.github.spotbugs</groupId>
+					<artifactId>spotbugs-maven-plugin</artifactId>
+					<version>4.8.3.0</version>
+					<configuration>
+						<failOnError>true</failOnError>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.11</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

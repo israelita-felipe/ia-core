@@ -11,7 +11,7 @@ import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.DefaultBaseClient;
-import com.ia.core.view.service.ListBaseService;
+import com.ia.core.view.manager.ListBaseManager;
 
 /**
  * Cliente para {@link RoleDTO}
@@ -36,7 +36,7 @@ public interface RoleClient
    *
    * @param request {@link SearchRequest}
    * @return Page do tipo {@link DTO}.
-   * @see ListBaseService#findAll(SearchRequestDTO)
+   * @see ListBaseManager#findAll(SearchRequestDTO)
    */
   @PostMapping("/allUserRoles")
   Page<UserRoleDTO> findAllUserRoles(@RequestBody SearchRequestDTO request);

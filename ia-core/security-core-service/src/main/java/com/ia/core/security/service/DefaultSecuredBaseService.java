@@ -12,7 +12,7 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -33,7 +33,7 @@ import lombok.Getter;
  * @see ListSecuredBaseService
  * @see SaveSecuredBaseService
  */
-public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
+public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends AbstractSecuredBaseService<T, D>
   implements CountSecuredBaseService<T, D>, DeleteSecuredBaseService<T, D>,
   FindSecuredBaseService<T, D>, ListSecuredBaseService<T, D>,
@@ -72,7 +72,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
     return funcionalidades;
   }
 
-  public static class DefaultSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<T>>
+  public static class DefaultSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>
     extends AbstractSecuredBaseServiceConfig<T, D> {
 
     @Getter
@@ -89,7 +89,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
      */
     public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
                                            BaseEntityRepository<T> repository,
-                                           BaseMapper<T, D> mapper,
+                                           Mapper<T, D> mapper,
                                            SearchRequestMapper searchRequestMapper,
                                            Translator translator,
                                            CoreSecurityAuthorizationManager authorizationManager,

@@ -7,7 +7,7 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.service.AbstractBaseService;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  * @param <D> {@link DTO}
  */
 @Slf4j
-public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends DTO<T>>
+public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends AbstractBaseService<T, D>
   implements BaseSecuredService<T, D> {
 
@@ -51,7 +51,7 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
     this.config = config;
   }
 
-  public static class AbstractSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<T>>
+  public static class AbstractSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>
     extends AbstractBaseServiceConfig<T, D> {
 
     @Getter
@@ -70,7 +70,7 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
      */
     public AbstractSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
                                             BaseEntityRepository<T> repository,
-                                            BaseMapper<T, D> mapper,
+                                            Mapper<T, D> mapper,
                                             SearchRequestMapper searchRequestMapper,
                                             Translator translator,
                                             CoreSecurityAuthorizationManager authorizationManager,

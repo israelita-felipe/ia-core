@@ -3,7 +3,7 @@ package com.ia.core.view.components.page.viewModel;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 /**
  * Interface que define um contrato para páginas de coleções em memória
@@ -33,7 +33,7 @@ public interface ICollectionPageViewModel<T extends Serializable>
   void down(T object, BiConsumer<T, Integer> onChangeListener);
 
   @Override
-  DefaultCollectionBaseService<T> getService();
+  DefaultCollectionBaseManager<T> getService();
 
   /**
    * @param object           objeto a ser subido

@@ -18,9 +18,9 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.dto.sort.SortDirectionDTO;
 import com.ia.core.service.dto.sort.SortRequestDTO;
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
-import com.ia.core.view.service.CountBaseService;
-import com.ia.core.view.service.DefaultBaseService;
-import com.ia.core.view.service.ListBaseService;
+import com.ia.core.view.manager.CountBaseManager;
+import com.ia.core.view.manager.DefaultBaseManager;
+import com.ia.core.view.manager.ListBaseManager;
 import com.vaadin.flow.data.provider.CallbackDataProvider.CountCallback;
 import com.vaadin.flow.data.provider.CallbackDataProvider.FetchCallback;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
@@ -77,11 +77,11 @@ public class DataProviderFactory {
    *
    * @param <T>        Tipo de dado.
    * @param <S>        Tipo do serviço
-   * @param service    {@link DefaultBaseService};
+   * @param service    {@link DefaultBaseManager};
    * @param properties propriedades a serem usadas no filto
    * @return {@link DataProvider}
    */
-  public static <T extends Serializable, S extends ListBaseService<T> & CountBaseService<T>> DataProvider<T, String> createBaseDataProviderFromService(S service,
+  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, String> createBaseDataProviderFromService(S service,
                                                                                                                                                        Set<String> properties) {
     return createBaseDataProviderFromCallBacks(createFetchCallbackFromService(service),
                                                createCountCallbackFromService(service),
@@ -98,7 +98,7 @@ public class DataProviderFactory {
    * @param properties    propriedades a serem usadas no filto
    * @return {@link DataProvider}
    */
-  public static <T extends Serializable, S extends ListBaseService<T> & CountBaseService<T>> DataProvider<T, String> createBaseDataProviderFromRequest(Function<SearchRequestDTO, Stream<T>> fetchFunction,
+  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, String> createBaseDataProviderFromRequest(Function<SearchRequestDTO, Stream<T>> fetchFunction,
                                                                                                                                                        Function<SearchRequestDTO, Integer> countFunction,
                                                                                                                                                        Set<String> properties) {
     return createBaseDataProviderFromCallBacks(createFetchCallbackFromRequest(fetchFunction),
@@ -110,10 +110,10 @@ public class DataProviderFactory {
    * Cria um {@link CountCallback}
    *
    * @param <T>          Tipo de dado
-   * @param countService {@link CountBaseService}
+   * @param countService {@link CountBaseManager}
    * @return {@link CountCallback}
    */
-  public static <T extends Serializable> CountCallback<T, SearchRequestDTO> createCountCallbackFromService(CountBaseService<T> countService) {
+  public static <T extends Serializable> CountCallback<T, SearchRequestDTO> createCountCallbackFromService(CountBaseManager<T> countService) {
     return createCountCallbackFromRequest(request -> countService
         .count(request));
   }
@@ -149,7 +149,7 @@ public class DataProviderFactory {
    * Cria um {@link CountCallback}
    *
    * @param <T>           Tipo de dado
-   * @param countSupplier {@link CountBaseService}
+   * @param countSupplier {@link CountBaseManager}
    * @return {@link CountCallback}
    */
   public static <T extends Serializable> CountCallback<T, SearchRequestDTO> createCountCallbackFromSupplier(Supplier<Collection<T>> countSupplier) {
@@ -188,10 +188,10 @@ public class DataProviderFactory {
    *
    * @param <T>     Tipo de dado.
    * @param <S>     Tipo do serviço
-   * @param Service {@link DefaultBaseService};
+   * @param Service {@link DefaultBaseManager};
    * @return {@link ConfigurableFilterDataProvider}
    */
-  public static <T extends Serializable, S extends ListBaseService<T> & CountBaseService<T>> DataProvider<T, SearchRequestDTO> createDataProviderFromService(S Service) {
+  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, SearchRequestDTO> createDataProviderFromService(S Service) {
     return createDataProviderFromCallBacks(createFetchCallbackFromService(Service),
                                            createCountCallbackFromService(Service));
   }
@@ -200,7 +200,7 @@ public class DataProviderFactory {
    * Cria um {@link ConfigurableFilterDataProvider}
    *
    * @param <T>      Tipo de dado.
-   * @param supplier {@link DefaultBaseService};
+   * @param supplier {@link DefaultBaseManager};
    * @return {@link DataProvider}
    */
   public static <T extends Serializable> DataProvider<T, SearchRequestDTO> createDataProviderFromSupplier(Supplier<Collection<T>> supplier) {
@@ -212,7 +212,7 @@ public class DataProviderFactory {
    * Cria um {@link ConfigurableFilterDataProvider}
    *
    * @param <T>        Tipo de dado.
-   * @param supplier   {@link DefaultBaseService};
+   * @param supplier   {@link DefaultBaseManager};
    * @param properties Propriedades a serem usadas no filto
    * @return {@link DataProvider}
    */
@@ -241,10 +241,10 @@ public class DataProviderFactory {
    * Cria um {@link FetchCallback}
    *
    * @param <T>         Tipo de dado
-   * @param listService {@link ListBaseService}
+   * @param listService {@link ListBaseManager}
    * @return {@link FetchCallback}
    */
-  public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromService(ListBaseService<T> listService) {
+  public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromService(ListBaseManager<T> listService) {
     return createFetchCallbackFromRequest(request -> listService
         .findAll(request).stream());
   }
@@ -287,7 +287,7 @@ public class DataProviderFactory {
    * Cria um {@link FetchCallback}
    *
    * @param <T>          Tipo de dado
-   * @param listSupplier {@link CountBaseService}
+   * @param listSupplier {@link CountBaseManager}
    * @return {@link CountCallback}
    */
   public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromSupplier(Supplier<Collection<T>> listSupplier) {

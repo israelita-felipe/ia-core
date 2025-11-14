@@ -4,7 +4,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RequiredArgsConstructor
 @Slf4j
-public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>>
+public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>>
   implements BaseService<T, D> {
   /**
    * Configuração do serviço base.
@@ -38,13 +38,14 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
   }
 
   /**
-   * {@link BaseMapper}
+   * {@link Mapper}
    *
    * @param <M> Tipo do Mapper
-   * @return {@link BaseMapper}
+   * @return {@link Mapper}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public <M extends BaseMapper<T, D>> M getMapper() {
+  public <M extends Mapper<T, D>> M getMapper() {
     return (M) config.getMapper();
   }
 
@@ -54,6 +55,7 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
    * @param <R> Tipo do Repositório.
    * @return {@link BaseEntityRepository}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public <R extends BaseEntityRepository<T>> R getRepository() {
 
@@ -90,7 +92,7 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
    */
   @RequiredArgsConstructor
   @Slf4j
-  public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<T>> {
+  public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<?>> {
 
     /** Gestor de transação */
     @Getter
@@ -104,7 +106,7 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<T>
      * Mapper
      */
     @Getter
-    private final BaseMapper<T, D> mapper;
+    private final Mapper<T, D> mapper;
 
     /**
      * Search request

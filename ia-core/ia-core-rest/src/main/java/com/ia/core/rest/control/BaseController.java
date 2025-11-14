@@ -11,7 +11,7 @@ import com.ia.core.service.dto.DTO;
  * @param <T> Tipo do modelo.
  * @param <D> Tipo de dado {@link DTO}
  */
-public interface BaseController<T extends BaseEntity, D extends DTO<T>> {
+public interface BaseController<T extends BaseEntity, D extends DTO<?>> {
   /**
    * Serviço do controlador {@link BaseController}.
    *

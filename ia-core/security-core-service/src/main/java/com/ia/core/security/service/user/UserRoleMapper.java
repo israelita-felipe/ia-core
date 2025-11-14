@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.security.service.privilege.PrivilegeMapper;
-import com.ia.core.service.mapper.BaseMapper;
+import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
  * {@link Mapper} de {@link Role} para {@link UserRoleDTO}
@@ -14,6 +14,6 @@ import com.ia.core.service.mapper.BaseMapper;
  */
 @Mapper(componentModel = "spring", uses = { PrivilegeMapper.class })
 public interface UserRoleMapper
-  extends BaseMapper<Role, UserRoleDTO> {
+  extends BaseEntityMapper<Role, UserRoleDTO> {
 
 }

@@ -3,7 +3,7 @@ package com.ia.core.view.components.page.viewModel;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
-import com.ia.core.view.service.collection.DefaultCollectionBaseService;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 /**
  * Implementação padrão de um ViewModel de página para itens de coleção em
@@ -19,7 +19,7 @@ public abstract class CollectionPageViewModel<T extends Serializable>
   /**
    * Construtor padrão
    *
-   * @param service {@link DefaultCollectionBaseService} da página
+   * @param service {@link DefaultCollectionBaseManager} da página
    */
   public CollectionPageViewModel(CollectionPageViewModelConfig<T> config) {
     super(config);
@@ -50,8 +50,8 @@ public abstract class CollectionPageViewModel<T extends Serializable>
   }
 
   @Override
-  public DefaultCollectionBaseService<T> getService() {
-    return (DefaultCollectionBaseService<T>) super.getService();
+  public DefaultCollectionBaseManager<T> getService() {
+    return (DefaultCollectionBaseManager<T>) super.getService();
   }
 
   /**
