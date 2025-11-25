@@ -15,7 +15,7 @@ import com.ia.core.view.manager.collection.DefaultCollectionManagerConfig;
  *
  * @author Israel Araújo
  */
-public class ServiceFactory {
+public class ManagerFactory {
 
   /**
    * Cria um {@link DefaultCollectionBaseClient} baseado em uma coleção e uma
@@ -51,9 +51,9 @@ public class ServiceFactory {
    * @param idSupplier {@link Function} de definição do ID do objeto
    * @return {@link DefaultCollectionBaseManager}
    */
-  public static <T extends Serializable> DefaultCollectionBaseManager<T> createServiceFromCollection(Supplier<Collection<T>> data,
+  public static <T extends Serializable> DefaultCollectionBaseManager<T> createManagerFromCollection(Supplier<Collection<T>> data,
                                                                                                      Function<T, UUID> idSupplier) {
-    return new DefaultCollectionBaseManager<T>(createCollectionServiceConfig(data, idSupplier)) {
+    return new DefaultCollectionBaseManager<T>(createCollectionManagerConfig(data, idSupplier)) {
     };
   }
 
@@ -63,7 +63,7 @@ public class ServiceFactory {
    * @param idSupplier
    * @return
    */
-  protected static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionServiceConfig(Supplier<Collection<T>> data,
+  protected static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionManagerConfig(Supplier<Collection<T>> data,
                                                                                                             Function<T, UUID> idSupplier) {
     return new DefaultCollectionManagerConfig<>(createCollectionBaseClient(data,
                                                                                                                idSupplier));

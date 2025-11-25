@@ -120,6 +120,11 @@ public abstract class CollectionPageView<T extends Serializable>
     return !getViewModel().isReadOnly();
   }
 
+  @Override
+  public boolean isPrintButtonVisible() {
+    return false;
+  }
+
   /**
    * Ação de subir um item
    */

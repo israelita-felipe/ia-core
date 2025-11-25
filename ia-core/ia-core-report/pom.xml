@@ -21,5 +21,10 @@
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>${jasper.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${apache.poi.version}</version>
+		</dependency>
 	</dependencies>
 </project>

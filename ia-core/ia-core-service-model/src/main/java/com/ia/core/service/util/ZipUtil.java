@@ -19,7 +19,7 @@ public class ZipUtil {
    * Realiza a descompressão de um arquivo em base64
    *
    * @param base64Dto Conteúdo zipado em gzip e depois base64
-   * @return array de bytes do arquivo descomprimido
+   * @return array de bytes do arquivo descompactado
    * @throws IOException caso ocorra erro de leitura ou escrita
    */
   public static byte[] unzip(String base64Dto)
@@ -35,7 +35,7 @@ public class ZipUtil {
    * em base 64
    *
    * @param base64Dto Conteúdo zipado em gzip e depois base64
-   * @return Arquivo descomprimido e em base64
+   * @return Arquivo descompactado e em base64
    * @throws IOException caso haja erro de leitura ou escrita
    */
   public static String unZipBase64(String base64Dto)

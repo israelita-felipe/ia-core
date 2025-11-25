@@ -39,6 +39,19 @@ public interface HasTabSheetCreator {
   }
 
   /**
+   * Cria uma {@link Tab}
+   *
+   * @param icon  ícone
+   * @param label título da tab
+   * @return {@link Tab}
+   */
+  default Tab createTab(String label) {
+    Tab tab = new Tab();
+    tab.add(new NativeLabel(label));
+    return tab;
+  }
+
+  /**
    * Cria uma {@link Tab} em uma {@link TabSheet}
    *
    * @param tabSheet  {@link TabSheet} onde será criada
@@ -67,6 +80,26 @@ public interface HasTabSheetCreator {
   default Tab createTab(TabSheet tabSheet, Icon icon, String label,
                         Component component) {
     Tab tab = createTab(icon, label);
+    if (ThemableLayout.class.isInstance(component)) {
+      ((ThemableLayout) component).setPadding(false);
+      ((ThemableLayout) component).setMargin(false);
+    }
+    tabSheet.add(tab, component);
+    return tab;
+  }
+
+  /**
+   * Cria uma {@link Tab} em uma {@link TabSheet}
+   *
+   * @param tabSheet  {@link TabSheet} onde será criada
+   * @param icon      ícone
+   * @param label     título
+   * @param component conteúdo da tab
+   * @return {@link Tab}
+   */
+  default Tab createTab(TabSheet tabSheet, String label,
+                        Component component) {
+    Tab tab = createTab(label);
     if (ThemableLayout.class.isInstance(component)) {
       ((ThemableLayout) component).setPadding(false);
       ((ThemableLayout) component).setMargin(false);

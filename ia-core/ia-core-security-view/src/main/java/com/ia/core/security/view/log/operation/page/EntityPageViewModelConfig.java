@@ -16,15 +16,15 @@ public class EntityPageViewModelConfig<T extends AbstractBaseEntityDTO<? extends
   extends PageViewModelConfig<T> {
 
   @Getter
-  private final LogOperationManager logOperationService;
+  private final LogOperationManager logOperationManager;
 
   /**
    * @param service
    */
   public EntityPageViewModelConfig(DefaultBaseManager<T> service,
-                                   LogOperationManager logOperationService) {
+                                   LogOperationManager logOperationManager) {
     super(service);
-    this.logOperationService = logOperationService;
+    this.logOperationManager = logOperationManager;
   }
 
 }

@@ -8,10 +8,11 @@ import com.ia.core.service.util.ZipUtil;
 import com.ia.core.view.components.form.FormView;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.dom.PropertyChangeEvent;
+import com.vaadin.flow.server.streams.InMemoryUploadHandler;
+import com.vaadin.flow.server.streams.UploadHandler;
+import com.vaadin.flow.server.streams.UploadMetadata;
 
 import elemental.json.impl.JreJsonArray;
 
@@ -53,11 +54,18 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
     if (!isReadOnly()) {
       createUploader();
     }
-    bind("filename", createNomeField($(AttachmentTranslator.NOME),
-                                           $(AttachmentTranslator.NOME)));
-    bind("description",
+    bind(AttachmentDTO.CAMPOS.FILE_NAME,
+         createNomeField($(AttachmentTranslator.NOME),
+                         $(AttachmentTranslator.NOME)));
+    bind(AttachmentDTO.CAMPOS.DESCRIPTION,
          createDescricaoField($(AttachmentTranslator.DESCRICAO),
                               $(AttachmentTranslator.HELP.DESCRICAO)));
+  }
+
+  @Override
+  public void refreshFields() {
+    super.refreshFields();
+    this.upload.setVisible(!isReadOnly());
   }
 
   /**
@@ -78,19 +86,25 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    * Cria o campo de upload
    */
   protected void createUploader() {
-    MemoryBuffer receiver = new MemoryBuffer();
+    UploadHandler receiver = createUploadHandler();
     this.upload = createUploadField($(AttachmentTranslator.ATTACHMENT),
                                     $(AttachmentTranslator.HELP.ATTACHMENT),
                                     receiver);
-    this.upload.addSucceededListener(onSuccess -> {
-      onSuccess(onSuccess, receiver);
-    });
     this.upload.getElement().addPropertyChangeListener("files",
                                                        listener -> {
                                                          onFileChangeListener(listener,
                                                                               receiver);
                                                        });
     add(this.upload, 6);
+  }
+
+  /**
+   * @return {@link UploadHandler}
+   */
+  public UploadHandler createUploadHandler() {
+    return new InMemoryUploadHandler((metadata, data) -> {
+      onSuccess(metadata, data);
+    });
   }
 
   @Override
@@ -102,10 +116,10 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    * Evento a ser disparado quando houver mudança no arquivo do uploader
    *
    * @param listener {@link PropertyChangeEvent}
-   * @param receiver {@link MemoryBuffer}
+   * @param receiver {@link UploadHandler}
    */
   protected void onFileChangeListener(PropertyChangeEvent listener,
-                                      MemoryBuffer receiver) {
+                                      UploadHandler receiver) {
     JreJsonArray oldValue = (JreJsonArray) listener.getOldValue();
     JreJsonArray value = (JreJsonArray) listener.getValue();
     if ("[]".equals(value.toJson()) && oldValue != null) {
@@ -117,10 +131,10 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    * Escutador a ser executando quando o arquivo do uploader é resetado
    *
    * @param listener {@link PropertyChangeEvent}
-   * @param receiver {@link MemoryBuffer}
+   * @param receiver {@link UploadHandler}
    */
   protected void onReset(PropertyChangeEvent listener,
-                         MemoryBuffer receiver) {
+                         UploadHandler receiver) {
     AttachmentDTO<?> model = getViewModel().getModel();
     if (model != null) {
       model.setSize(null);
@@ -132,19 +146,18 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
   }
 
   /**
-   * @param onSuccess evento de sucesso
-   * @param receiver  {@link MemoryBuffer}
+   * @param metadata evento de sucesso
+   * @param data     {@link UploadHandler}
    */
-  protected void onSuccess(SucceededEvent onSuccess,
-                           MemoryBuffer receiver) {
+  protected void onSuccess(UploadMetadata metadata, byte[] data) {
     try {
       AttachmentDTO<?> model = getViewModel().getModel();
       if (model != null) {
-        model.setSize(onSuccess.getContentLength());
-        model.setFilename(onSuccess.getFileName());
-        model.setMediaType(onSuccess.getMIMEType());
-        model.setContent(ZipUtil.zipBase64(Base64.getEncoder()
-            .encodeToString(receiver.getInputStream().readAllBytes())));
+        model.setSize(metadata.contentLength());
+        model.setFilename(metadata.fileName());
+        model.setMediaType(metadata.contentType());
+        model.setContent(ZipUtil
+            .zipBase64(Base64.getEncoder().encodeToString(data)));
       }
     } catch (Exception e) {
       handleError(e);

@@ -8,7 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ia.core.report.AbstractJasperReport.ExportType;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
 import com.ia.core.view.components.editor.formEditor.FormEditorView;
@@ -21,17 +23,22 @@ import com.ia.core.view.components.filter.viewModel.ISearchRequestViewModel;
 import com.ia.core.view.components.form.IFormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.IListView;
+import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
+import com.ia.core.view.properties.HasTabSheetCreator;
 import com.ia.core.view.utils.DataProviderFactory;
+import com.ia.core.view.utils.ReportUtils;
 import com.ia.core.view.utils.Size;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 
@@ -45,7 +52,7 @@ import lombok.Getter;
  */
 public abstract class PageView<T extends Serializable>
   extends VerticalLayout
-  implements IPageView<T> {
+  implements IPageView<T>, HasTabSheetCreator {
   /** Serial UID */
   private static final long serialVersionUID = -777141442460268806L;
 
@@ -54,10 +61,12 @@ public abstract class PageView<T extends Serializable>
   private IPageViewModel<T> viewModel;
 
   /** Mapa de botão x ação */
-  private Map<PageAction<T>, Button> pageButtons = new LinkedHashMap<>();
+  private Map<PageAction<T>, Button> pageButtonsMap = new LinkedHashMap<>();
+  /** Papa de grupos da barra de tarefas */
+  private Map<String, HasComponents> tabBarMap = new LinkedHashMap<>();
 
-  /** Barra de botões */
-  private FlexLayout buttonsBar;
+  /** Barra de tarefas */
+  private TabSheet tabBar;
   /** Barra de pesquisa */
   @Getter
   private ISearchRequestView search;
@@ -83,7 +92,7 @@ public abstract class PageView<T extends Serializable>
   @Override
   public void addAction(PageAction<T> action) {
     Button button = createActionButton(action);
-    pageButtons.put(action, button);
+    pageButtonsMap.put(action, button);
   }
 
   @Override
@@ -143,6 +152,13 @@ public abstract class PageView<T extends Serializable>
     return getViewModel().canView(object);
   }
 
+  /**
+   * @return se o objeto pode ser visualizado
+   */
+  protected boolean canPrint() {
+    return getViewModel().canPrint();
+  }
+
   @Override
   public T createAction() {
     try {
@@ -188,10 +204,29 @@ public abstract class PageView<T extends Serializable>
   }
 
   @Override
-  public FlexLayout createButtonsBar() {
-    this.buttonsBar = new FlexLayout();
-    this.pageButtons.values().forEach(buttonsBar::add);
-    return this.buttonsBar;
+  public TabSheet createButtonsBar() {
+    this.tabBar = createTabSheet();
+    this.tabBar.setWidthFull();
+    this.pageButtonsMap.entrySet().forEach(entry -> {
+      String group = entry.getKey().getGroup();
+      Button button = entry.getValue();
+      addButton(group, button);
+    });
+    return this.tabBar;
+  }
+
+  /**
+   * @param group
+   * @param button
+   */
+  public void addButton(String group, Button button) {
+    HasComponents hasComponent = this.tabBarMap.get(group);
+    if (hasComponent == null) {
+      hasComponent = new FlexLayout();
+      this.tabBarMap.put(group, hasComponent);
+      createTab(tabBar, $(group), (Component) hasComponent);
+    }
+    hasComponent.add(button);
   }
 
   /**
@@ -262,6 +297,9 @@ public abstract class PageView<T extends Serializable>
     }
     if (isDeleteButtonVisible()) {
       actions.add(createDeleteAction());
+    }
+    if (isPrintButtonVisible()) {
+      actions.add(createPrintAction());
     }
     if (isFilterButtonVisible()) {
       actions.add(createFilterAction());
@@ -351,7 +389,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createFilterAction() {
     return PageAction.<T> builder().icon(VaadinIcon.FILTER)
-        .enableFunction(object -> true).action(this::showFilter).build();
+        .enableFunction(object -> true)
+        .group(CoreApplicationTranslator.FILTER).action(this::showFilter)
+        .build();
   }
 
   /**
@@ -407,6 +447,15 @@ public abstract class PageView<T extends Serializable>
   public PageAction<T> createViewAction() {
     return PageAction.<T> builder().icon(VaadinIcon.EYE)
         .enableFunction(this::canView).action(this::view).build();
+  }
+
+  /**
+   * @return {@link PageAction} do botão visualizar
+   */
+  public PageAction<T> createPrintAction() {
+    return PageAction.<T> builder().icon(VaadinIcon.PRINT)
+        .group(CoreApplicationTranslator.REPORTS)
+        .enableFunction(object -> canPrint()).action(this::print).build();
   }
 
   /**
@@ -521,6 +570,10 @@ public abstract class PageView<T extends Serializable>
     return true;
   }
 
+  public boolean isPrintButtonVisible() {
+    return true;
+  }
+
   /**
    * @return se o botão de novo/criar deverá ser exibido
    */
@@ -556,7 +609,7 @@ public abstract class PageView<T extends Serializable>
 
   @Override
   public void refreshButtons() {
-    pageButtons.entrySet().forEach(entry -> {
+    pageButtonsMap.entrySet().forEach(entry -> {
       refreshButton(entry.getKey(), entry.getValue());
     });
   }
@@ -593,6 +646,21 @@ public abstract class PageView<T extends Serializable>
   protected void view() {
     T object = getViewModel().getSelected();
     view(object);
+  }
+
+  /**
+   * Visualiza o objeto selecionado
+   */
+  protected void print() {
+    print(listView);
+  }
+
+  @Override
+  public void printAction(IListView<T> item) {
+    Class<T> type = getViewModel().getType();
+    ReportUtils.openObjectArrayReport(getTranslator(), type,
+                                      $(type.getName()), (ListView<?>) item,
+                                      ExportType.PDF);
   }
 
   @Override

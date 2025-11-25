@@ -6,7 +6,6 @@ import java.util.Locale;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.data.provider.DataProvider;
 
 import lombok.Getter;
 
@@ -93,8 +92,4 @@ public abstract class ListView<T extends Serializable>
     getDataProvider().refreshItem(item);
   }
 
-  @Override
-  public void setDataProvider(DataProvider<T, ?> dataProvider) {
-    this.getDataCommunicator().setDataProvider(dataProvider, null, true);
-  }
 }

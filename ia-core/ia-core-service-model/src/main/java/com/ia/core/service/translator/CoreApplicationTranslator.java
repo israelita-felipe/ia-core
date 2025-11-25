@@ -14,6 +14,9 @@ public class CoreApplicationTranslator {
   public static final String INICIO = "inicio";
   public static final String CANCELAR = "cancelar";
   public static final String HOJE = "hoje";
+  public static final String DEFAULT_ACTION = "action";
+  public static final String FILTER = "filter";
+  public static final String REPORTS = "reports";
 
   ///////////////////////////////////////////////////////
   /// MENSAGENS DE ERROR

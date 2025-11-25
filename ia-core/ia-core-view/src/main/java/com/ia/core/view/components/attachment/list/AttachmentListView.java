@@ -10,8 +10,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.server.StreamRegistration;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.DownloadResponse;
+import com.vaadin.flow.server.streams.InputStreamDownloadHandler;
 
 /**
  * Implementação padrão de um {@link ListView} para {@link AttachmentDTO}
@@ -64,13 +66,12 @@ public class AttachmentListView<T extends AttachmentDTO<?>>
   protected void download(T model) {
     UUID id = model.getId();
     id = id == null ? UUID.randomUUID() : id;
-    StreamResource resource = new StreamResource(id.toString(), () -> {
-      return getViewModel().download(model);
+    DownloadHandler resource = new InputStreamDownloadHandler(event -> {
+      return new DownloadResponse(getViewModel().download(model),
+                                  model.getFilename(), model.getMediaType(),
+                                  model.getSize());
+
     });
-    resource
-        .setHeader("Content-Disposition",
-                   "attachment; filename=\"" + model.getFilename() + "\"");
-    resource.setContentType(model.getMediaType());
     StreamRegistration registration = VaadinSession.getCurrent()
         .getResourceRegistry().registerResource(resource);
 

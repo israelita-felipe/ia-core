@@ -3,6 +3,7 @@ package com.ia.core.view.components.page.viewModel;
 import java.io.Serializable;
 import java.util.function.Function;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.formEditor.viewModel.IFormEditorViewModel;
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel;
@@ -37,7 +38,8 @@ public interface IPageViewModel<T extends Serializable>
    */
   @Builder
   @Getter
-  public static class PageAction<T> {
+  public static class PageAction<T>
+    implements HasTranslator {
     /** Ícone */
     private VaadinIcon icon;
     /** Título */
@@ -47,6 +49,9 @@ public interface IPageViewModel<T extends Serializable>
     /** Função de habilitação da ação */
     @Default
     private Function<T, Boolean> enableFunction = cloneObject -> true;
+    /** Grupo da ação */
+    @Default
+    private String group = CoreApplicationTranslator.DEFAULT_ACTION;
   }
 
   /**
@@ -79,6 +84,13 @@ public interface IPageViewModel<T extends Serializable>
    * @return se é possível visualizar o objeto
    */
   boolean canView(T object);
+
+  /**
+   * Se é possível imprimir
+   *
+   * @return se pode ser impresso
+   */
+  boolean canPrint();
 
   /**
    * Clona um objeto

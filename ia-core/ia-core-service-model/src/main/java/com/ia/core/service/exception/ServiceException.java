@@ -33,6 +33,9 @@ public class ServiceException
    * @param ex {@link Exception}
    */
   public void add(Exception ex) {
+    if (!hasErros()) {
+      initCause(ex);
+    }
     this.erros.add(ex);
   }
 

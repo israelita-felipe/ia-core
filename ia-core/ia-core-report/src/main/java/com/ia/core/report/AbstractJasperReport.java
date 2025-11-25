@@ -13,6 +13,9 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 /**
  * @author Israel Araújo
@@ -27,6 +30,15 @@ public abstract class AbstractJasperReport<T> {
         throws JRException {
         return report.exportPDF().toByteArray();
       }
+    },
+    XLS("application/vnd.ms-excel", "xls") {
+
+      @Override
+      public byte[] export(AbstractJasperReport<?> report)
+        throws JRException {
+        return report.exportXLS().toByteArray();
+      }
+
     };
 
     @Getter
@@ -49,9 +61,12 @@ public abstract class AbstractJasperReport<T> {
 
   @Getter
   private final T data;
+  @Getter
+  private String title;
 
-  public AbstractJasperReport(final T data) {
+  public AbstractJasperReport(final T data, final String title) {
     this.data = data;
+    this.title = title;
   }
 
   /**
@@ -66,6 +81,16 @@ public abstract class AbstractJasperReport<T> {
 
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     JasperExportManager.exportReportToPdfStream(print(), out);
+    return out;
+  }
+
+  protected ByteArrayOutputStream exportXLS()
+    throws JRException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    JRXlsExporter exporter = new JRXlsExporter();
+    exporter.setExporterInput(new SimpleExporterInput(print()));
+    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+    exporter.exportReport();
     return out;
   }
 

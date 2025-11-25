@@ -1,5 +1,7 @@
 package com.ia.core.service.attachment;
 
+import static com.ia.core.service.HasTransaction.log;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -107,18 +109,14 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    *
    * @param dto {@link DTO} a ser carregado
    * @return {@link DTO} carregado.
-   * @throws ServiceException caso ocorra algum erro
    */
-  public D load(D dto)
-    throws ServiceException {
+  public D load(D dto) {
     try {
       dto.setContent(Files.readString(getFile(dto.getId()).toPath()));
-      return dto;
     } catch (Exception e) {
-      ServiceException serviceException = new ServiceException();
-      serviceException.add(e);
-      throw serviceException;
+      log.error(e.getLocalizedMessage(), e);
     }
+    return dto;
   }
 
   @Override
@@ -129,13 +127,17 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       D saved = null;
       try {
         saved = super.save(toSave);
-        UUID id = saved.getId();
-        FileWriter fw = new FileWriter(getFile(id));
-        fw.write(toSave.getContent());
-        fw.close();
+        if (toSave.hasContent()) {
+          UUID id = saved.getId();
+          FileWriter fw = new FileWriter(getFile(id));
+          fw.write(toSave.getContent());
+          fw.close();
+        }
       } catch (Exception e) {
         UUID id = saved.getId();
-        if (exists(id)) {
+        // se existir arquivo salvo e for um arquivo novo deleta o arquivo.
+        // Evita deletar quando ocorre erro em atualização.
+        if (exists(id) && toSave.getId() == null) {
           try {
             delete(saved.getId());
           } catch (Exception e2) {
@@ -160,6 +162,9 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
   public String unZip(D dto)
     throws ServiceException {
     try {
+      if (!dto.hasContent()) {
+        return null;
+      }
       return ZipUtil.unZipBase64(dto.getContent());
     } catch (Exception e) {
       ServiceException serviceException = new ServiceException();

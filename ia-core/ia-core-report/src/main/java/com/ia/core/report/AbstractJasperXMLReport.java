@@ -15,8 +15,8 @@ public abstract class AbstractJasperXMLReport
   /**
    * @param data
    */
-  public AbstractJasperXMLReport(String data) {
-    super(data);
+  public AbstractJasperXMLReport(String title, String data) {
+    super(data, title);
   }
 
   @Override

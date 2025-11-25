@@ -14,8 +14,8 @@ public abstract class AbstractJasperCollectionReport<T>
   /**
    * @param data
    */
-  public AbstractJasperCollectionReport(Collection<T> data) {
-    super(data);
+  public AbstractJasperCollectionReport(String title, Collection<T> data) {
+    super(data, title);
   }
 
   @Override

@@ -30,6 +30,7 @@
 		<openllet.version>2.6.5</openllet.version>
 		<reflections.version>0.10.2</reflections.version>
 		<cron-utils.version>9.2.1</cron-utils.version>
+		<apache.poi.version>5.5.0</apache.poi.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -95,6 +95,11 @@ public abstract class PageViewModel<T extends Serializable>
   }
 
   @Override
+  public boolean canPrint() {
+    return true;
+  }
+
+  @Override
   public IFormEditorViewModel<T> create() {
     var editorViewModel = createEditorViewModel();
     T newObject = createNewObject();

@@ -133,7 +133,7 @@ public class DataProviderFactory {
         int size = query.getPageSize();
         SearchRequestDTO request = query.getFilter()
             .orElse(SearchRequestDTO.builder().build());
-        // sorting
+
         request.setPage(page);
         request.setSize(size);
 
@@ -265,14 +265,14 @@ public class DataProviderFactory {
         SearchRequestDTO request = query.getFilter()
             .orElse(SearchRequestDTO.builder().build());
         try {
-          request.getSorts().clear();
+          request.toBuilder().sorts(Collections.emptyList());
         } catch (Exception e) {
           log.info(e.getLocalizedMessage(), e);
         }
         // sorting
         request.setPage(page);
         request.setSize(size);
-        request.getSorts().addAll(toSortRequest(query));
+        request.toBuilder().sorts(toSortRequest(query));
 
         // filtering
         return requestFunction.apply(request);

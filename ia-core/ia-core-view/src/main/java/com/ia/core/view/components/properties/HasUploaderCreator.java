@@ -10,6 +10,7 @@ import com.vaadin.flow.component.upload.UploadI18N.File;
 import com.vaadin.flow.component.upload.UploadI18N.Uploading;
 import com.vaadin.flow.component.upload.UploadI18N.Uploading.RemainingTime;
 import com.vaadin.flow.component.upload.UploadI18N.Uploading.Status;
+import com.vaadin.flow.server.streams.UploadHandler;
 
 /**
  * Criador de {@link Upload}
@@ -75,7 +76,7 @@ public interface HasUploaderCreator
    * @return {@link Upload}
    */
   default Upload createUploadField(String label, String help,
-                                   Receiver receiver) {
+                                   UploadHandler receiver) {
     Upload field = new Upload(receiver);
     field.setI18n(createUploaderI18N());
     setHelp(field, help);

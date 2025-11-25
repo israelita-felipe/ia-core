@@ -48,7 +48,7 @@ public abstract class EntityPageViewModel<T extends AbstractBaseEntityDTO<? exte
   protected LogOperationListViewModel createLogOperationListViewModel() {
     return new LogOperationListViewModel(new LogOperationListViewModelConfig(isReadOnly(),
                                                                              getConfig()
-                                                                                 .getLogOperationService()));
+                                                                                 .getLogOperationManager()));
   }
 
   @Override

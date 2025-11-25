@@ -24,11 +24,13 @@ import com.ia.core.view.properties.HasCreateAction;
 import com.ia.core.view.properties.HasDeleteAction;
 import com.ia.core.view.properties.HasEditAction;
 import com.ia.core.view.properties.HasErrorHandle;
+import com.ia.core.view.properties.HasPrintAction;
 import com.ia.core.view.properties.HasSaveAction;
 import com.ia.core.view.properties.HasViewAction;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 
 /**
  * Interface que define o contrato de uma página
@@ -40,7 +42,8 @@ public interface IPageView<T extends Serializable>
   extends AutoCastable, HasLabel, HasComponents, HasErrorHandle, HasId,
   HasConfirmDialog, HasMessageNotification, HasDataProviderCreator<T>,
   IView<T>, HasViewAction<T>, HasSaveAction<T>, HasCreateAction<T>,
-  HasEditAction<T>, HasDeleteAction<T>, HasCopyAction<T> {
+  HasEditAction<T>, HasDeleteAction<T>, HasCopyAction<T>,
+  HasPrintAction<T> {
 
   /**
    * Adiciona uma ação na página
@@ -61,7 +64,7 @@ public interface IPageView<T extends Serializable>
    *
    * @return {@link FlexLayout}
    */
-  FlexLayout createButtonsBar();
+  TabSheet createButtonsBar();
 
   /**
    * @return {@link Collection} de {@link PageAction} da página

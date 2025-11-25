@@ -52,7 +52,7 @@ public class UserPageViewModel
   protected AuditOperationListViewModel createAuditOperationListViewModel() {
     return new AuditOperationListViewModel(new AuditOperationListViewModelConfig(isReadOnly(),
                                                                                  getConfig()
-                                                                                     .getLogOperationService()));
+                                                                                     .getLogOperationManager()));
   }
 
   @Override
