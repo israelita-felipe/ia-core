@@ -16,6 +16,7 @@ import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.service.exception.ServiceException;
 
 /**
  * @author Israel Araújo
@@ -39,6 +40,21 @@ public class RoleService
   @Override
   public RoleServiceConfig getConfig() {
     return (RoleServiceConfig) super.getConfig();
+  }
+
+  @Override
+  public Role synchronize(Role model)
+    throws ServiceException {
+    Role role = super.synchronize(model);
+    role.getPrivileges().forEach(privilege -> {
+      privilege.setRole(role);
+      privilege.getOperations().forEach(operation -> {
+        operation.getContext().forEach(context -> {
+          context.setPrivilegeOperation(operation);
+        });
+      });
+    });
+    return role;
   }
 
   /**

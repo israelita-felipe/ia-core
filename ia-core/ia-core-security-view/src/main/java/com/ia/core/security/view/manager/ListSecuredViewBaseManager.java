@@ -17,6 +17,6 @@ public interface ListSecuredViewBaseManager<D extends DTO<? extends Serializable
 
   @Override
   default boolean canList(SearchRequestDTO request) {
-    return getAuthorizationManager().canRead(this);
+    return getAuthorizationManager().canRead(this, request);
   }
 }

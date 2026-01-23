@@ -2,7 +2,6 @@ package com.ia.core.view.utils;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -27,7 +26,7 @@ public class ManagerFactory {
    * @return {@link DefaultCollectionBaseClient}
    */
   protected static <T extends Serializable> DefaultCollectionBaseClient<T> createCollectionBaseClient(Supplier<Collection<T>> data,
-                                                                                                      Function<T, UUID> idSupplier) {
+                                                                                                      Function<T, Long> idSupplier) {
     return new DefaultCollectionBaseClient<T>() {
 
       @Override
@@ -36,7 +35,7 @@ public class ManagerFactory {
       }
 
       @Override
-      public UUID getId(T object) {
+      public Long getId(T object) {
         return idSupplier.apply(object);
       }
     };
@@ -52,8 +51,9 @@ public class ManagerFactory {
    * @return {@link DefaultCollectionBaseManager}
    */
   public static <T extends Serializable> DefaultCollectionBaseManager<T> createManagerFromCollection(Supplier<Collection<T>> data,
-                                                                                                     Function<T, UUID> idSupplier) {
-    return new DefaultCollectionBaseManager<T>(createCollectionManagerConfig(data, idSupplier)) {
+                                                                                                     Function<T, Long> idSupplier) {
+    return new DefaultCollectionBaseManager<T>(createCollectionManagerConfig(data,
+                                                                             idSupplier)) {
     };
   }
 
@@ -64,8 +64,8 @@ public class ManagerFactory {
    * @return
    */
   protected static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionManagerConfig(Supplier<Collection<T>> data,
-                                                                                                            Function<T, UUID> idSupplier) {
+                                                                                                            Function<T, Long> idSupplier) {
     return new DefaultCollectionManagerConfig<>(createCollectionBaseClient(data,
-                                                                                                               idSupplier));
+                                                                           idSupplier));
   }
 }

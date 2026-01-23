@@ -86,7 +86,6 @@ public abstract class CoreAuthorizationManager
   @Override
   public void setReadEnabled(boolean readEnabled) {
     CoreAuthorizationManager.readEnabled.set(readEnabled);
-    ;
   }
 
 }

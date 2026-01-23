@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.ia.core.model.HasVersion;
 import com.ia.core.security.model.role.Role;
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -47,7 +46,7 @@ public class RoleDTO
   private Collection<UserDTO> users = new HashSet<>();
 
   @Default
-  private Collection<PrivilegeDTO> privileges = new HashSet<>();
+  private Collection<RolePrivilegeDTO> privileges = new HashSet<>();
 
   @Override
   public RoleDTO cloneObject() {
@@ -55,7 +54,7 @@ public class RoleDTO
         .users(new HashSet<>(getUsers().stream().map(UserDTO::cloneObject)
             .toList()))
         .privileges(new HashSet<>(getPrivileges().stream()
-            .map(PrivilegeDTO::cloneObject).toList()))
+            .map(RolePrivilegeDTO::cloneObject).toList()))
         .build();
   }
 
@@ -65,7 +64,7 @@ public class RoleDTO
         .users(new HashSet<>(getUsers().stream().map(UserDTO::copyObject)
             .toList()))
         .privileges(new HashSet<>(getPrivileges().stream()
-            .map(PrivilegeDTO::copyObject).toList()))
+            .map(RolePrivilegeDTO::copyObject).toList()))
         .build();
   }
 

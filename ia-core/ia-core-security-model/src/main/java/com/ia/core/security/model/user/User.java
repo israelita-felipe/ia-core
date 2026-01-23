@@ -5,14 +5,16 @@ import java.util.HashSet;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.SecurityModel;
-import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.role.Role;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -66,16 +68,9 @@ public class User
   private Collection<Role> roles = new HashSet<>();
 
   @Default
-  @ManyToMany
-  @JoinTable(name = SecurityModel.TABLE_PREFIX + "users_privileges",
-             schema = SCHEMA_NAME,
-             joinColumns = @JoinColumn(name = "user_id",
-                                       referencedColumnName = "id"),
-             inverseJoinColumns = @JoinColumn(name = "privilege_id",
-                                              referencedColumnName = "id"),
-             uniqueConstraints = @UniqueConstraint(columnNames = {
-                 "user_id", "privilege_id" }))
-  private Collection<Privilege> privileges = new HashSet<>();
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+             mappedBy = "user", orphanRemoval = true)
+  private Collection<UserPrivilege> privileges = new HashSet<>();
 
   @Override
   public String toString() {

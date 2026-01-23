@@ -21,7 +21,7 @@ public interface FindBaseManager<D extends Serializable>
    * @param id {@link UUID} do objeto
    * @return <code>true</code> por padrão
    */
-  default boolean canFind(UUID id) {
+  default boolean canFind(Long id) {
     return true;
   }
 
@@ -29,7 +29,7 @@ public interface FindBaseManager<D extends Serializable>
    * @param id Id do objeto.
    * @return {@link DTO}
    */
-  default D find(UUID id) {
+  default D find(Long id) {
     if (canFind(id)) {
       return ((FindBaseClient<D>) getClient()).find(id);
     }

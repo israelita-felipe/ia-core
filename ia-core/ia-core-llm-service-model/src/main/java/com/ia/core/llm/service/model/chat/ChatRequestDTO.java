@@ -1,7 +1,5 @@
 package com.ia.core.llm.service.model.chat;
 
-import java.util.UUID;
-
 import com.ia.core.service.dto.DTO;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class ChatRequestDTO
   implements DTO<String> {
 
-  private UUID comandoSistemaID;
+  private Long comandoSistemaID;
   private String request;
   private String text;
 

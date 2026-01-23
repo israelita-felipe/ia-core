@@ -2,7 +2,6 @@ package com.ia.core.llm.view.chat;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.UUID;
 
 import com.ia.core.llm.service.model.chat.ChatRequestTranslator;
 import com.ia.core.llm.service.model.chat.ChatTranslator;
@@ -74,7 +73,7 @@ public class ChatDialog
           .forField(createFinalidadeField($(ChatRequestTranslator.REQUEST),
                                           $(ChatRequestTranslator.HELP.REQUEST),
                                           DataProviderFactory
-                                              .createBaseDataProviderFromService(getViewModel()
+                                              .createBaseDataProviderFromManager(getViewModel()
                                                   .getConfig()
                                                   .getComandoSistemaService(), ComandoSistemaDTO.propertyFilters()),
                                           ComandoSistemaDTO::getTitulo))
@@ -126,13 +125,13 @@ public class ChatDialog
   /**
    * @return
    */
-  protected Converter<ComandoSistemaDTO, UUID> createComandoSistemaDTOToUUIDConverter() {
-    return new Converter<ComandoSistemaDTO, UUID>() {
+  protected Converter<ComandoSistemaDTO, Long> createComandoSistemaDTOToUUIDConverter() {
+    return new Converter<ComandoSistemaDTO, Long>() {
 
       private static final InheritableThreadLocal<ComandoSistemaDTO> ctx = new InheritableThreadLocal<>();
 
       @Override
-      public Result<UUID> convertToModel(ComandoSistemaDTO value,
+      public Result<Long> convertToModel(ComandoSistemaDTO value,
                                          ValueContext context) {
         ctx.set(value);
         if (value == null) {
@@ -142,7 +141,7 @@ public class ChatDialog
       }
 
       @Override
-      public ComandoSistemaDTO convertToPresentation(UUID value,
+      public ComandoSistemaDTO convertToPresentation(Long value,
                                                      ValueContext context) {
         if (value == null) {
           return null;

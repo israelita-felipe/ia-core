@@ -28,6 +28,26 @@ public abstract class LoginViewModel
     return super.getConfig().cast();
   }
 
+  public boolean isFirstLogin() {
+    return getConfig().getDetails().initializeSecurity();
+  }
+
+  public void createFirstUser(Consumer<UserDTO> onSucess, Runnable onFail) {
+    try {
+      AuthenticationDetails details = getConfig().getDetails();
+      details.createFirstUser(getModel());
+      UserDTO user = details.getAuthenticatedUser();
+      if (user != null) {
+        onSucess.accept(user);
+        log.info("Usuário {} logado", user);
+      }
+    } catch (Exception error) {
+      onFail.run();
+      log.info("Falha ao criar primeiro usuário.\n{}",
+               error.getLocalizedMessage());
+    }
+  }
+
   public void login(Consumer<UserDTO> onSucess, Runnable onFail) {
     try {
       AuthenticationDetails details = getConfig().getDetails();

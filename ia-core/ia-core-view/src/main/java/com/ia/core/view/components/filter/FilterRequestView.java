@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.FilterRequestTranslator;
@@ -24,6 +24,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.Binder.Binding;
+import com.vaadin.flow.data.converter.Converter;
 
 import lombok.Getter;
 
@@ -235,58 +237,12 @@ public class FilterRequestView
     this.operatorsWrapper.setWidthFull();
   }
 
-  @Override
-  public HasValue<?, ?> createValorField(String label, FieldTypeDTO type) {
+  protected HasValue<?, ?> createValorField(FilterProperty key,
+                                            String label, FieldType type) {
     if (this.valueField != null) {
       this.valueWrapper.remove((Component) this.valueField);
     }
-    switch (type) {
-    case STRING:
-      this.valueField = createTextField(label,
-                                        $(FilterRequestTranslator.TEXT_FILTER));
-      break;
-    case DOUBLE:
-      this.valueField = createNumeroTextField(label,
-                                              $(FilterRequestTranslator.DOUBLE_FILTER));
-      break;
-    case INTEGER:
-      this.valueField = createNumeroTextField(label,
-                                              $(FilterRequestTranslator.INTEGER_FILTER));
-      break;
-    case LONG:
-      this.valueField = createNumeroTextField(label,
-                                              $(FilterRequestTranslator.LONG_FILTER));
-      break;
-    case BOOLEAN:
-      this.valueField = createCheckBoxField(label,
-                                            $(FilterRequestTranslator.BOOLEAN_FILTER));
-      break;
-    case CHAR:
-      this.valueField = createTextField(label,
-                                        $(FilterRequestTranslator.CHARACTER_FLTER));
-      break;
-    case DATE:
-      this.valueField = createDateField(label,
-                                        $(FilterRequestTranslator.DATE_FILTER));
-      break;
-    case TIME:
-      this.valueField = createTimeField(label,
-                                        $(FilterRequestTranslator.TIME_FILTER));
-      break;
-    case DATE_TIME:
-      this.valueField = createDateTimePickerField(label,
-                                                  $(FilterRequestTranslator.DATE_TIME_FILTER));
-      break;
-    case ENUM:
-      this.valueField = createEnumComboBox(label,
-                                           $(FilterRequestTranslator.ENUM_FILTER),
-                                           getViewModel().getEnumType(),
-                                           value -> $(value.name()));
-      break;
-    default:
-      this.valueField = null;
-      break;
-    }
+    this.valueField = createValueFieldFromFieldType(key, label, type);
     if (this.valueField != null) {
       this.valueWrapper.setVisible(true);
       Component newValueField = (Component) this.valueField;
@@ -294,6 +250,50 @@ public class FilterRequestView
       this.valueWrapper.add(newValueField);
     }
     return this.valueField;
+  }
+
+  /**
+   * @param key
+   * @param label
+   * @param type
+   */
+  @Override
+  public HasValue<?, ?> createValueFieldFromFieldType(FilterProperty key,
+                                                      String label,
+                                                      FieldType type) {
+    switch (type) {
+    case STRING:
+      return createTextField(label, $(FilterRequestTranslator.TEXT_FILTER));
+    case DOUBLE:
+      return createNumeroTextField(label,
+                                   $(FilterRequestTranslator.DOUBLE_FILTER));
+    case INTEGER:
+      return createNumeroTextField(label,
+                                   $(FilterRequestTranslator.INTEGER_FILTER));
+    case LONG:
+      return createNumeroTextField(label,
+                                   $(FilterRequestTranslator.LONG_FILTER));
+    case BOOLEAN:
+      return createCheckBoxField(label,
+                                 $(FilterRequestTranslator.BOOLEAN_FILTER));
+    case CHAR:
+      return createTextField(label,
+                             $(FilterRequestTranslator.CHARACTER_FLTER));
+    case DATE:
+      return createDateField(label, $(FilterRequestTranslator.DATE_FILTER));
+    case TIME:
+      return createTimeField(label, $(FilterRequestTranslator.TIME_FILTER));
+    case DATE_TIME:
+      return createDateTimePickerField(label,
+                                       $(FilterRequestTranslator.DATE_TIME_FILTER));
+    case ENUM:
+      return createEnumComboBox(label,
+                                $(FilterRequestTranslator.ENUM_FILTER),
+                                getViewModel().getEnumType(),
+                                value -> $(value.name()));
+    default:
+      return null;
+    }
   }
 
   /**
@@ -351,13 +351,32 @@ public class FilterRequestView
       if (itens != null) {
         itens.stream().findAny().map(item -> item.getFieldType())
             .ifPresent(type -> {
-              HasValue<?, ?> valorField = createValorField($(FilterRequestTranslator.VALUE),
+              HasValue<?, ?> valorField = createValorField(key,
+                                                           $(FilterRequestTranslator.VALUE),
                                                            type);
-              bind(FilterRequestDTO.CAMPOS.VALOR, valorField);
+              bindValorField(key, valorField);
               setType(type);
             });
       }
     }
+  }
+
+  /**
+   * @param valorField
+   * @return
+   */
+  public Binding<?, ?> bindValorField(FilterProperty key,
+                                      HasValue<?, ?> valorField) {
+    Converter<?, ?> converter = valorFieldConverter(key);
+    if (converter != null) {
+      return bindWithConverter(FilterRequestDTO.CAMPOS.VALOR, valorField,
+                               converter);
+    }
+    return bind(FilterRequestDTO.CAMPOS.VALOR, valorField);
+  }
+
+  public Converter<?, ?> valorFieldConverter(FilterProperty key) {
+    return null;
   }
 
   @Override
@@ -368,9 +387,9 @@ public class FilterRequestView
   /**
    * Atribui o tipo
    *
-   * @param type {@link FieldTypeDTO}
+   * @param type {@link FieldType}
    */
-  private void setType(FieldTypeDTO type) {
+  private void setType(FieldType type) {
     if (viewModel.getModel() != null) {
       viewModel.getModel().setFieldType(type);
     }

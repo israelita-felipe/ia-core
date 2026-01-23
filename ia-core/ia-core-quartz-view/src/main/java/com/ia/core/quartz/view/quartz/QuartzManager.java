@@ -31,7 +31,7 @@ public class QuartzManager
   @SuppressWarnings("unchecked")
   @Override
   public QuartzClient getClient() {
-    return super.getClient();
+    return (QuartzClient) super.getClient();
   }
 
   public Map<String, String> getAvaliableJobClasses() {

@@ -15,6 +15,9 @@ public interface CoreSecurityViewAuthorizationManager
 
   default boolean check(Class<?> root, boolean authenticated) {
     if (isEnabledAll()) {
+      if (!authenticated && mustBeAuthenticated(root)) {
+        return false;
+      }
       return true;
     }
     if (mustBeAuthenticated(root)) {

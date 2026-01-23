@@ -91,7 +91,7 @@ public abstract class PageComboBox<T extends Serializable>
   protected DataProvider<T, String> createDataProvider(DefaultBaseManager<T> service,
                                                        Set<String> properties) {
     return DataProviderFactory
-        .createBaseDataProviderFromService(service, properties);
+        .createBaseDataProviderFromManager(service, properties);
   }
 
   /**

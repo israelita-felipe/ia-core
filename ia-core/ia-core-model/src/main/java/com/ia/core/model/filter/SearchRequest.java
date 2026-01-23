@@ -40,6 +40,11 @@ public class SearchRequest
    */
   @Builder.Default
   private List<SortRequest> sorts = new ArrayList<>();
+  /**
+   * Contexto
+   */
+  @Builder.Default
+  private List<FilterRequest> context = new ArrayList<>();
 
   /**
    * Página.
@@ -76,4 +81,12 @@ public class SearchRequest
     return this.sorts;
   }
 
+  /**
+   * @return As ordens da requisição: {@link #sorts}.
+   */
+  public List<FilterRequest> getContext() {
+    if (Objects.isNull(this.context))
+      return new ArrayList<>();
+    return this.context;
+  }
 }

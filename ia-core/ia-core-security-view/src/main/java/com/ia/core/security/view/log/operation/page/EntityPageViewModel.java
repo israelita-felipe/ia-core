@@ -1,7 +1,6 @@
 package com.ia.core.security.view.log.operation.page;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
@@ -81,7 +80,7 @@ public abstract class EntityPageViewModel<T extends AbstractBaseEntityDTO<? exte
   }
 
   @Override
-  public UUID getId(T object) {
+  public Long getId(T object) {
     return object.getId();
   }
 }

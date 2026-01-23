@@ -2,11 +2,10 @@ package com.ia.core.security.view.log.operation.list;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.view.log.operation.form.LogOperationFormViewModel;
-import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -57,10 +56,10 @@ public class LogOperationListViewModel
    * @return
    */
   protected SearchRequestDTO createLogSearchRequest() {
-    typeFilter = FilterRequestDTO.builder().fieldType(FieldTypeDTO.STRING)
+    typeFilter = FilterRequestDTO.builder().fieldType(FieldType.STRING)
         .key(LogOperationDTO.CAMPOS.TYPE).operator(OperatorDTO.EQUAL)
         .build();
-    idFilter = FilterRequestDTO.builder().fieldType(FieldTypeDTO.UUID)
+    idFilter = FilterRequestDTO.builder().fieldType(FieldType.LONG)
         .key(LogOperationDTO.CAMPOS.VALUE_ID).operator(OperatorDTO.EQUAL)
         .build();
     List<FilterRequestDTO> filters = Arrays.asList(typeFilter, idFilter);
@@ -80,7 +79,7 @@ public class LogOperationListViewModel
    * @param type
    * @param id
    */
-  public void refreshLog(Class<?> type, UUID id) {
+  public void refreshLog(Class<?> type, Long id) {
     this.typeFilter.setValue(type);
     this.idFilter.setValue(id);
   }

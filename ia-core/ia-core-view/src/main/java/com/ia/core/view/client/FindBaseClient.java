@@ -1,7 +1,6 @@
 package com.ia.core.view.client;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +21,6 @@ public interface FindBaseClient<D extends Serializable>
    * @return {@link DTO}
    */
   @GetMapping("/{id}")
-  D find(@PathVariable("id") UUID id);
+  D find(@PathVariable("id") Long id);
 
 }

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.ia.core.model.util.FormatUtils;
+import com.ia.core.model.util.DateTimeUtils;
 
 /**
  * Módulo para conversão de data de hora
@@ -26,18 +26,15 @@ public class LocalDateTimeModule
   /**
    * Formatador de data e hora
    */
-  private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-      .ofPattern(FormatUtils.DATE_TIME_FULL);
+  private final DateTimeFormatter dateTimeFormatter = DateTimeUtils.DATE_TIME_FORMATTER;
   /**
    * Formatador de data
    */
-  private final DateTimeFormatter dateFormatter = DateTimeFormatter
-      .ofPattern(FormatUtils.DATE);
+  private final DateTimeFormatter dateFormatter = DateTimeUtils.DATE_FORMATTER;
   /**
    * Formatador de tempo
    */
-  private final DateTimeFormatter timeFormatter = DateTimeFormatter
-      .ofPattern(FormatUtils.TIME);
+  private final DateTimeFormatter timeFormatter = DateTimeUtils.TIME_FORMATTER;
 
   @Override
   public String getModuleName() {

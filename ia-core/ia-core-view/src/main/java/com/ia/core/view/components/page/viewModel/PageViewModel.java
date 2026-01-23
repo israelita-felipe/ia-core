@@ -192,7 +192,7 @@ public abstract class PageViewModel<T extends Serializable>
    * @param object Objeto avaliado
    * @return {@link UUID} do objeto
    */
-  public abstract UUID getId(T object);
+  public abstract Long getId(T object);
 
   /**
    * @return {@link #service}

@@ -1,6 +1,5 @@
 package com.ia.core.security.view.privilege.page;
 
-import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.log.operation.page.EntityPageView;
 import com.ia.core.security.view.privilege.form.PrivilegeFormView;
@@ -33,12 +32,6 @@ public class PrivilegePageView
   }
 
   @Override
-  protected boolean canEdit(PrivilegeDTO object) {
-    return super.canEdit(object)
-        && !PrivilegeType.SYSTEM.equals(object.getType());
-  }
-
-  @Override
   public IFormView<PrivilegeDTO> createFormView(IFormViewModel<PrivilegeDTO> formViewModel) {
     return new PrivilegeFormView(formViewModel);
   }
@@ -48,23 +41,4 @@ public class PrivilegePageView
     return new PrivilegeListView(listViewModel);
   }
 
-  @Override
-  public boolean isCopyButtonVisible() {
-    return false;
-  }
-
-  @Override
-  public boolean isDeleteButtonVisible() {
-    return false;
-  }
-
-  @Override
-  public boolean isEditButtonVisible() {
-    return false;
-  }
-
-  @Override
-  public boolean isNewButtonVisible() {
-    return false;
-  }
 }

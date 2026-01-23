@@ -1,7 +1,6 @@
 package com.ia.core.quartz.view.quartz.triggers.page;
 
-import java.util.UUID;
-
+import com.ia.core.model.TSID;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
@@ -55,8 +54,8 @@ public class SchedulerConfigTriggerCollectionPageViewModel
   }
 
   @Override
-  public UUID getId(SchedulerConfigTriggerDTO object) {
-    return UUID.fromString(object.getTriggerName());
+  public Long getId(SchedulerConfigTriggerDTO object) {
+    return TSID.from(object.getTriggerName()).toLong();
   }
 
 }

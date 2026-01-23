@@ -66,4 +66,5 @@ public interface ISearchRequestView
   default IViewModel<SearchRequestDTO> getViewModel() {
     return getBinder().getBean().cast();
   }
+
 }

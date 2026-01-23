@@ -16,7 +16,6 @@ public interface CountSecuredViewBaseManager<D extends DTO<? extends Serializabl
   extends BaseSecuredViewManager<D>, CountBaseManager<D> {
   @Override
   default boolean canCount(SearchRequestDTO request) {
-    return getAuthorizationManager().canRead(this);
+    return getAuthorizationManager().canRead(this, request);
   }
-
 }

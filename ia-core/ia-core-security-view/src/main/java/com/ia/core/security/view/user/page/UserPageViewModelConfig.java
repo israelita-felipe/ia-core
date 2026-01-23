@@ -1,7 +1,10 @@
 package com.ia.core.security.view.user.page;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.ia.core.security.service.model.authorization.HasContext;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.security.view.log.operation.LogOperationManager;
@@ -28,6 +31,8 @@ public class UserPageViewModelConfig
   private PrivilegeManager privilegeService;
   @Getter
   private RoleManager roleService;
+  @Getter
+  private List<HasContext> hasContexts;
 
   /**
    * @param service
@@ -37,16 +42,18 @@ public class UserPageViewModelConfig
                                  UserManager service,
                                  PrivilegeManager privilegeService,
                                  RoleManager roleService,
-                                 LogOperationManager logOperationService) {
+                                 LogOperationManager logOperationService,
+                                 List<HasContext> hasContexts) {
     super(service, logOperationService);
     this.authentication = authentication;
     this.privilegeService = privilegeService;
     this.roleService = roleService;
+    this.hasContexts = hasContexts;
   }
 
   @Override
   protected FormViewModelConfig<UserDTO> createFormViewModelConfig(boolean readOnly) {
     return new UserFormViewModelConfig(readOnly, privilegeService,
-                                       roleService);
+                                       roleService, hasContexts);
   }
 }

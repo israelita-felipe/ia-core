@@ -7,6 +7,7 @@ import com.ia.core.security.model.authentication.JwtManager;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.user.UserPrivilegeDTO;
 import com.ia.core.security.view.login.UserProvider;
 
 /**
@@ -35,9 +36,11 @@ public class JwtUserProvider
    * @param functionalities
    * @return
    */
-  protected Collection<PrivilegeDTO> getPrivileges(Collection<String> functionalities) {
+  protected Collection<UserPrivilegeDTO> getPrivileges(Collection<String> functionalities) {
     return functionalities.stream().map(functionality -> {
-      return PrivilegeDTO.builder().name(functionality).build();
+      return UserPrivilegeDTO.builder()
+          .privilege(PrivilegeDTO.builder().name(functionality).build())
+          .build();
     }).collect(Collectors.toList());
   }
 

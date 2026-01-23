@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -23,7 +23,7 @@ class AxiomaSearchRequest
    */
   public AxiomaSearchRequest() {
     createFilters(filterMap, AxiomaTranslator.EXPRESSAO,
-                  AxiomaDTO.CAMPOS.EXPRESSAO, FieldTypeDTO.STRING,
+                  AxiomaDTO.CAMPOS.EXPRESSAO, FieldType.STRING,
                   OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL,
                   OperatorDTO.LIKE);
   }

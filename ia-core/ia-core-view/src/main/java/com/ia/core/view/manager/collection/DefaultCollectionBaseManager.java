@@ -82,7 +82,7 @@ public abstract class DefaultCollectionBaseManager<D extends Serializable>
    * @return {@link UUID}. Delega a recuperação para
    *         {@link DefaultCollectionBaseClient#getId(Serializable)}
    */
-  public UUID getId(D object) {
+  public Long getId(D object) {
     return getClient().getId(object);
   }
 

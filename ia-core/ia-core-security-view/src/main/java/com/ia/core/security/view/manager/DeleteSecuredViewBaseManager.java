@@ -1,7 +1,6 @@
 package com.ia.core.security.view.manager;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.manager.DeleteBaseManager;
@@ -15,7 +14,7 @@ import com.ia.core.view.manager.DeleteBaseManager;
 public interface DeleteSecuredViewBaseManager<D extends DTO<? extends Serializable>>
   extends BaseSecuredViewManager<D>, DeleteBaseManager<D> {
   @Override
-  default boolean canDelete(UUID id) {
-    return getAuthorizationManager().canDelete(this);
+  default boolean canDelete(Long id) {
+    return getAuthorizationManager().canDelete(this, id);
   }
 }

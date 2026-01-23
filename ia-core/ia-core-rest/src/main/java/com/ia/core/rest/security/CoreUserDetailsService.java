@@ -2,6 +2,7 @@ package com.ia.core.rest.security;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.privilege.Privilege;
+import com.ia.core.security.model.role.RolePrivilege;
 import com.ia.core.security.model.user.User;
+import com.ia.core.security.model.user.UserPrivilege;
 import com.ia.core.security.service.user.UserRepository;
 import com.ia.core.service.HasTransaction;
 
@@ -34,9 +37,16 @@ public class CoreUserDetailsService
    */
   protected Collection<SimpleGrantedAuthority> getPrivilegesFromUser(User user) {
     return onTransaction(() -> {
-      return user.getRoles().stream()
-          .flatMap(role -> role.getPrivileges().stream())
-          .map(Privilege::getName).map(SimpleGrantedAuthority::new)
+      return Stream.concat(
+                           user.getRoles().stream()
+                               .flatMap(role -> role.getPrivileges()
+                                   .stream())
+                               .map(RolePrivilege::getPrivilege)
+                               .map(Privilege::getName),
+                           user.getPrivileges().stream()
+                               .map(UserPrivilege::getPrivilege)
+                               .map(Privilege::getName))
+          .map(SimpleGrantedAuthority::new)
           .collect(Collectors.toUnmodifiableSet());
     });
   }

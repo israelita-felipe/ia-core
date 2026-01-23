@@ -1,12 +1,12 @@
 package com.ia.core.security.view.user.form;
 
-import com.ia.core.security.model.functionality.Operation;
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.view.user.privilege.page.UserPrivilegePageView;
+import com.ia.core.security.view.user.privilege.page.UserPrivilegePageViewModel;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.manager.DefaultBaseManager;
@@ -104,18 +104,12 @@ public class UserFormView
          createCredentialsNotExpiredField($(UserTranslator.CREDENCIAIS_NAO_EXPIRADAS),
                                           $(UserTranslator.HELP.CREDENCIAIS_NAO_EXPIRADAS)));
     add(this.tabSheet = createTabSheet(), 6);
-    bind("privileges",
-         createPrivilegesField($(PrivilegeTranslator.PRIVILEGE),
-                               privilege -> {
-                                 String[] p = privilege.getName()
-                                     .split(Operation.SEPARATOR);
-                                 return String.format("%s - %s", $(p[0]),
-                                                      $(p[1]));
-                               }, getViewModel().getConfig()
-                                   .getPrivileService()));
+    createPrivilegesField($(PrivilegeTranslator.PRIVILEGE),
+                          $(PrivilegeTranslator.HELP.PRIVILEGE),
+                          getViewModel().getUserPrivilegePageViewModel());
     bind("roles",
          createRolesField($(RoleTranslator.ROLE), role -> $(role.getName()),
-                          getViewModel().getConfig().getUserRoleService()));
+                          getViewModel().getConfig().getUserRoleManager()));
   }
 
   /**
@@ -124,18 +118,12 @@ public class UserFormView
    * @param data           {@link DefaultBaseManager}
    * @return {@link CheckboxGroup}
    */
-  public CheckboxGroup<PrivilegeDTO> createPrivilegesField(String label,
-                                                           ItemLabelGenerator<PrivilegeDTO> labelGenerator,
-                                                           DefaultBaseManager<PrivilegeDTO> data) {
-    CheckboxGroup<PrivilegeDTO> field = new CheckboxGroup<>();
-    field
-        .setItems(DataProviderFactory
-            .createBaseDataProviderFromService(data,
-                                               PrivilegeDTO
-                                                   .propertyFilters())
-            .withConfigurableFilter());
-    field.setItemLabelGenerator(labelGenerator);
-    field.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+  public UserPrivilegePageView createPrivilegesField(String label,
+                                                     String help,
+                                                     UserPrivilegePageViewModel pageViewModel) {
+    var field = new UserPrivilegePageView(pageViewModel);
+    field.setLabel(label);
+    setHelp(field, help);
     createTab(tabSheet, VaadinIcon.KEY.create(), label, field);
     return field;
   }
@@ -152,7 +140,7 @@ public class UserFormView
     CheckboxGroup<UserRoleDTO> field = new CheckboxGroup<>();
     field
         .setItems(DataProviderFactory
-            .createBaseDataProviderFromService(data,
+            .createBaseDataProviderFromManager(data,
                                                UserRoleDTO
                                                    .propertyFilters())
             .withConfigurableFilter());

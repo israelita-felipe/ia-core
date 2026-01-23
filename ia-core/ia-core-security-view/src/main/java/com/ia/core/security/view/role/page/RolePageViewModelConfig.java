@@ -1,7 +1,10 @@
 package com.ia.core.security.view.role.page;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.ia.core.security.service.model.authorization.HasContext;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
@@ -31,6 +34,8 @@ public class RolePageViewModelConfig
    */
   @Getter
   private final UserManager userService;
+  @Getter
+  private final List<HasContext> hasContext;
 
   /**
    * @param service
@@ -39,15 +44,17 @@ public class RolePageViewModelConfig
   public RolePageViewModelConfig(RoleManager roleService,
                                  UserManager userService,
                                  PrivilegeManager privilegeService,
+                                 List<HasContext> hasContext,
                                  LogOperationManager logOperationService) {
     super(roleService, logOperationService);
     this.privilegeService = privilegeService;
     this.userService = userService;
+    this.hasContext = hasContext;
   }
 
   @Override
   protected FormViewModelConfig<RoleDTO> createFormViewModelConfig(boolean readOnly) {
     return new RoleFormViewModelConfig(readOnly, userService,
-                                       privilegeService);
+                                       privilegeService, hasContext);
   }
 }

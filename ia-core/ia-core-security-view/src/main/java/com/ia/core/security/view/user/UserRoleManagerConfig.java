@@ -1,7 +1,6 @@
 package com.ia.core.security.view.user;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.user.UserRoleDTO;
@@ -29,7 +28,7 @@ public class UserRoleManagerConfig
       }
 
       @Override
-      public UUID getId(UserRoleDTO object) {
+      public Long getId(UserRoleDTO object) {
         return object.getId();
       }
     });

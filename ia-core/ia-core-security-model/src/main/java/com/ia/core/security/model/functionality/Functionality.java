@@ -1,9 +1,12 @@
 package com.ia.core.security.model.functionality;
 
+import java.util.Set;
+
+import com.ia.core.security.model.privilege.PrivilegeType;
+
 /**
  * @author Israel Araújo
  */
-@FunctionalInterface
 public interface Functionality
   extends Comparable<Functionality> {
   @Override
@@ -21,4 +24,14 @@ public interface Functionality
    * @return O nome da funcionalidade
    */
   String getName();
+
+  /**
+   * @return {@link PrivilegeType}
+   */
+  PrivilegeType getType();
+
+  /**
+   * @return Valores de contexto
+   */
+  Set<String> getValues();
 }

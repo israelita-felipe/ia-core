@@ -21,14 +21,14 @@ public interface DeleteBaseManager<D extends Serializable>
    * @param id {@link UUID} do objeto
    * @return <code>true</code> por padrão
    */
-  default boolean canDelete(UUID id) {
+  default boolean canDelete(Long id) {
     return true;
   }
 
   /**
    * @param id Id do objeto.
    */
-  default void delete(UUID id) {
+  default void delete(Long id) {
     if (canDelete(id)) {
       ((DeleteBaseClient<D>) getClient()).delete(id);
     }

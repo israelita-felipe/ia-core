@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.model.authentication.AuthenticationResponse;
 import com.ia.core.security.model.authentication.JwtManager;
+import com.ia.core.security.service.authorization.JWTPrivilegeContext;
 import com.ia.core.security.service.exception.InvalidPasswordException;
 import com.ia.core.security.service.exception.UserNotFountException;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
@@ -25,7 +26,8 @@ public interface JwtAuthenticationService
                            getExpirationTime(),
                            user.getAllPrivileges().stream()
                                .map(PrivilegeDTO::getName)
-                               .collect(Collectors.toUnmodifiableSet())))
+                               .collect(Collectors.toUnmodifiableSet()),
+                           new JWTPrivilegeContext(user.getAllContexts())))
         .build();
   }
 

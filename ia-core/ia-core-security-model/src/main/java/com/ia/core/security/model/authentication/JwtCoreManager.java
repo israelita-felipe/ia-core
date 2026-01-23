@@ -5,6 +5,9 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -19,6 +22,7 @@ public class JwtCoreManager
   private static final String SECRET = "hvIRaPetw4yPjt65kITgF45T6UJ21ss7ppYhBnff55Tttredc9tty";
   private static final String CLAIM_FUNCTIONALITIES_KEY = "claim.functionalities";
   private static final String CLAIM_USER_NAME_KEY = "claim.userName";
+  private static final String CLAIM_FUNCTIONALITIES_CONTEXT = "claim.functionalities.context";
 
   private static JwtCoreManager INSTANCE = null;
 
@@ -36,18 +40,27 @@ public class JwtCoreManager
   }
 
   @Override
-  public String generateToken(String userCode, String userName,
-                              long expiration,
-                              Collection<String> functionalities) {
+  public <T> String generateToken(String userCode, String userName,
+                                  long expiration,
+                                  Collection<String> functionalities,
+                                  Context<T> context) {
 
     Date currentDate = new Date();
     Date expirationDate = new Date(currentDate.getTime() + expiration);
     String token = Jwts.builder()
         .claim(getClaimFunctionalitiesKey(), functionalities)
+        .claim(getClaimFunctionalitiesContextKey(), context)
         .claim(getClaimUserCodeKey(), userName).subject(userCode)
         .issuedAt(currentDate).expiration(expirationDate)
         .signWith(getKey(getSecret())).compact();
     return token;
+  }
+
+  /**
+   * @return {@link #claimFunctionalitiesContext}
+   */
+  public String getClaimFunctionalitiesContextKey() {
+    return CLAIM_FUNCTIONALITIES_CONTEXT;
   }
 
   /**
@@ -69,6 +82,18 @@ public class JwtCoreManager
     return Jwts.parser().verifyWith(getKey(getSecret())).build()
         .parseSignedClaims(token).getPayload()
         .get(getClaimFunctionalitiesKey(), Collection.class);
+  }
+
+  @Override
+  public <T> T getFunctionalitiesContextFromJWT(String token,
+                                                Class<T> type) {
+    Object context = Jwts.parser().verifyWith(getKey(getSecret())).build()
+        .parseSignedClaims(token).getPayload()
+        .get(getClaimFunctionalitiesContextKey(), Object.class);
+    Gson gson = new Gson();
+    JsonElement jsonElement = gson.toJsonTree(context);
+
+    return gson.fromJson(jsonElement, type);
   }
 
   public SecretKey getKey(String secret) {

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -27,10 +27,10 @@ class PeriodicidadeSearchRequest
       put(FilterProperty.builder().label("Ativo").property("ativo").build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("ativo")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("ativo")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -41,10 +41,10 @@ class PeriodicidadeSearchRequest
           .build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("diaTodo")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("diaTodo")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -55,10 +55,10 @@ class PeriodicidadeSearchRequest
           .build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("periodico")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("periodico")
-                            .fieldType(FieldTypeDTO.BOOLEAN)
+                            .fieldType(FieldType.BOOLEAN)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -69,10 +69,10 @@ class PeriodicidadeSearchRequest
           .property("dataInicio").build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("dataInicio")
-                            .fieldType(FieldTypeDTO.DATE)
+                            .fieldType(FieldType.DATE)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("dataInicio")
-                            .fieldType(FieldTypeDTO.DATE)
+                            .fieldType(FieldType.DATE)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -83,10 +83,10 @@ class PeriodicidadeSearchRequest
           .build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("dataFim")
-                            .fieldType(FieldTypeDTO.DATE)
+                            .fieldType(FieldType.DATE)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("dataFim")
-                            .fieldType(FieldTypeDTO.DATE)
+                            .fieldType(FieldType.DATE)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -97,10 +97,10 @@ class PeriodicidadeSearchRequest
           .property("horaInicio").build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("horaInicio")
-                            .fieldType(FieldTypeDTO.TIME)
+                            .fieldType(FieldType.TIME)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("horaInicio")
-                            .fieldType(FieldTypeDTO.TIME)
+                            .fieldType(FieldType.TIME)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
@@ -111,10 +111,10 @@ class PeriodicidadeSearchRequest
           .build(),
           Arrays.asList(
                         FilterRequestDTO.builder().key("horaFim")
-                            .fieldType(FieldTypeDTO.TIME)
+                            .fieldType(FieldType.TIME)
                             .operator(OperatorDTO.EQUAL).build(),
                         FilterRequestDTO.builder().key("horaFim")
-                            .fieldType(FieldTypeDTO.TIME)
+                            .fieldType(FieldType.TIME)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
   };

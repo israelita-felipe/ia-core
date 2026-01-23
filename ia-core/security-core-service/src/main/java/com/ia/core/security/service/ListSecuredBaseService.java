@@ -1,15 +1,24 @@
 package com.ia.core.security.service;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+
 import com.ia.core.model.BaseEntity;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.ListBaseService;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.filter.FilterRequestDTO;
+import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.util.JsonUtil;
 
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um
@@ -28,12 +37,46 @@ public interface ListSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
    */
   @Override
   default boolean canList(SearchRequestDTO requestDTO) {
-    return getAuthorizationManager().canRead(this);
+    return getAuthorizationManager().canRead(this, requestDTO);
+  }
+
+  @Override
+  default Page<D> findAll(SearchRequestDTO requestDTO) {
+    getAuthorizationManager().getCurrentContextDefinitions().definitions()
+        .getContext().stream()
+        .filter(up -> Objects.equals(up.getPrivilege().getName(),
+                                     getContextName()))
+        .flatMap(po -> po.getPrivilegeOperations().stream())
+        .filter(op -> Objects.equals(op.getOperation(), OperationEnum.READ))
+        .flatMap(op -> op.getContext().stream())
+        .forEach(contextDefinitionValue -> {
+          var key = contextDefinitionValue.getContextKey();
+          Collection<String> values = contextDefinitionValue.getValues();
+          // só adiciona filtro de houver valor
+          if (!values.isEmpty()) {
+            requestDTO.getContext()
+                .add(FilterRequestDTO.builder().key(key)
+                    .operator(OperatorDTO.IN).fieldType(FieldType.OBJECT)
+                    .value(getContextDefinitionValue(key, values)).build());
+          }
+        });
+    return ListBaseService.super.findAll(requestDTO);
+  }
+
+  @Override
+  default Map<String, String> getContextValue(Object object) {
+    Map<String, String> contextMap = BaseSecuredService.super.getContextValue(object);
+    if (SearchRequestDTO.class.isInstance(object)) {
+      ((SearchRequestDTO) object).getContext().forEach(filterContext -> {
+        contextMap.put(filterContext.getKey(),
+                       JsonUtil.toJson(filterContext.getValue()));
+      });
+    }
+    return contextMap;
   }
 
   @Override
   default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
-    return Set.of(functionalityManager
-        .addFunctionality(this, OperationEnum.READ));
+    return Set.of(functionalityManager.addFunctionality(this));
   }
 }

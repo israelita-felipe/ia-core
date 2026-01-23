@@ -3,6 +3,7 @@ package com.ia.core.view.components.dialog.frame;
 import com.ia.core.view.components.dialog.DialogHeaderBar;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.html.IFrame;
 
 /**
@@ -31,6 +32,7 @@ public class FrameDialogViewFactory
    * Exibe o diálogo de confirmação
    *
    * @param title Título da ação
+   * @param src   Conteúdo
    */
   public static void show(String title, String src) {
     get().showFrame(title, src);
@@ -45,17 +47,17 @@ public class FrameDialogViewFactory
   /**
    * Cria um diálog de confirmação e abre o diálogo
    *
-   * @param action  {@link Runnable} da ação
-   * @param title   Título do diálogo
-   * @param message Mensagem do diálogo
+   * @param title Título do diálogo
+   * @param src   Conteúdo do frame
    */
   private void showFrame(String title, String src) {
-
     IFrame iframe = new IFrame(src);
     iframe.getStyle().setBorder("0");
     iframe.setSizeFull();
     Dialog dialog = new Dialog(iframe);
-    DialogHeaderBar.addTo(dialog);
+    dialog.addThemeVariants(DialogVariant.LUMO_NO_PADDING);
+    DialogHeaderBar header = DialogHeaderBar.addTo(dialog);
+    header.setMaximized(true);
     dialog.setHeaderTitle(title);
     dialog.open();
   }

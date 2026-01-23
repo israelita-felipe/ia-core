@@ -2,6 +2,7 @@ package com.ia.core.security.service.user;
 
 import org.springframework.stereotype.Service;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.exception.InvalidPasswordException;
@@ -11,7 +12,6 @@ import com.ia.core.security.service.model.user.UserPasswordChangeDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.service.model.user.UserPasswordResetDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
-import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -44,6 +44,21 @@ public class UserService
     return (UserServiceConfig) super.getConfig();
   }
 
+  @Override
+  public User synchronize(User model)
+    throws ServiceException {
+    User user = super.synchronize(model);
+    user.getPrivileges().forEach(privilege -> {
+      privilege.setUser(user);
+      privilege.getOperations().forEach(operation -> {
+        operation.getContext().forEach(context -> {
+          context.setPrivilegeOperation(operation);
+        });
+      });
+    });
+    return user;
+  }
+
   /**
    * Altera a senha do usuário
    *
@@ -58,7 +73,7 @@ public class UserService
         SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
         searchRequest.getFilters()
             .add(FilterRequestDTO.builder().key("userCode")
-                .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
+                .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
                 .value(change.getUserCode()).build());
         UserDTO user = findAll(searchRequest).get().findFirst()
             .orElseThrow(() -> new UserNotFountException(change
@@ -105,7 +120,7 @@ public class UserService
         SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
         searchRequest.getFilters()
             .add(FilterRequestDTO.builder().key("userCode")
-                .operator(OperatorDTO.EQUAL).fieldType(FieldTypeDTO.STRING)
+                .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
                 .value(reset.getUserCode()).build());
         UserDTO user = findAll(searchRequest).get().findFirst()
             .orElseThrow(() -> new UserNotFountException(reset

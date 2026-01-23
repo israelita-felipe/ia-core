@@ -1,15 +1,16 @@
 package com.ia.core.security.service;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
-import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.service.authorization.CoreAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.DeleteBaseService;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
 
@@ -30,12 +31,22 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
    *         {@link CoreAuthorizationManager#canDelete(com.ia.core.security.service.model.functionality.HasFunctionality)}
    */
   @Override
-  default boolean canDelete(UUID id) {
-    return getAuthorizationManager().canDelete(this);
+  default boolean canDelete(Long id) {
+    return getAuthorizationManager().canDelete(this, id);
   }
 
   @Override
-  default void delete(UUID id)
+  default Map<String, String> getContextValue(Object object) {
+    Map<String, String> contextMap = BaseSecuredService.super.getContextValue(object);
+    if (Long.class.isInstance(object)) {
+      contextMap.put(AbstractBaseEntityDTO.CAMPOS.ID,
+                     Objects.toString(object));
+    }
+    return contextMap;
+  }
+
+  @Override
+  default void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
     onTransaction(() -> {
@@ -55,7 +66,6 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
 
   @Override
   default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
-    return Set.of(functionalityManager
-        .addFunctionality(this, OperationEnum.DELETE));
+    return Set.of(functionalityManager.addFunctionality(this));
   }
 }

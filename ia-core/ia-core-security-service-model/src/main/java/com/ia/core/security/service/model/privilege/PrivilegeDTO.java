@@ -1,5 +1,6 @@
 package com.ia.core.security.service.model.privilege;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -41,7 +42,10 @@ public class PrivilegeDTO
 
   @Default
   @NotNull
-  private PrivilegeType type = PrivilegeType.USER;
+  private PrivilegeType type = PrivilegeType.SYSTEM;
+
+  @Default
+  private Set<String> values = new HashSet<>();
 
   @Override
   public PrivilegeDTO cloneObject() {

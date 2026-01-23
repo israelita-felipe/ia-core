@@ -10,11 +10,14 @@ import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBase
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.user.UserPrivilegeMapper;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
+
+import lombok.Getter;
 
 /**
  *
@@ -22,6 +25,8 @@ import com.ia.core.service.validators.IServiceValidator;
 @Component
 public class PrivilegeServiceConfig
   extends DefaultSecuredBaseServiceConfig<Privilege, PrivilegeDTO> {
+  @Getter
+  private final UserPrivilegeMapper userPrivilegeMapper;
 
   /**
    * @param repository
@@ -38,10 +43,12 @@ public class PrivilegeServiceConfig
                                 Translator translator,
                                 CoreSecurityAuthorizationManager authorizationManager,
                                 LogOperationService logOperationService,
-                                List<IServiceValidator<PrivilegeDTO>> validators) {
+                                List<IServiceValidator<PrivilegeDTO>> validators,
+                                UserPrivilegeMapper userPrivilegeMapper) {
     super(transactionManager, repository, mapper, searchRequestMapper,
           translator, authorizationManager, logOperationService,
           validators);
+    this.userPrivilegeMapper = userPrivilegeMapper;
   }
 
 }

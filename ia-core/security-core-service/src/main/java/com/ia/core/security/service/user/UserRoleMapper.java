@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.model.user.UserRoleDTO;
-import com.ia.core.security.service.privilege.PrivilegeMapper;
+import com.ia.core.security.service.role.RolePrivilegeMapper;
 import com.ia.core.service.mapper.BaseEntityMapper;
 
 /**
@@ -12,7 +12,7 @@ import com.ia.core.service.mapper.BaseEntityMapper;
  *
  * @author Israel Araújo
  */
-@Mapper(componentModel = "spring", uses = { PrivilegeMapper.class })
+@Mapper(componentModel = "spring", uses = { RolePrivilegeMapper.class })
 public interface UserRoleMapper
   extends BaseEntityMapper<Role, UserRoleDTO> {
 

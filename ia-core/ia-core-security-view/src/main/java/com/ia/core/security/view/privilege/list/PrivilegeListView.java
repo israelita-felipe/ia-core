@@ -1,6 +1,5 @@
 package com.ia.core.security.view.privilege.list;
 
-import com.ia.core.security.model.functionality.Operation;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.view.components.list.ListView;
@@ -26,9 +25,7 @@ public class PrivilegeListView
   @Override
   protected void createColumns() {
     super.createColumns();
-    addColumn(privilege -> {
-      String[] p = privilege.getName().split(Operation.SEPARATOR);
-      return String.format("%s - %s", $(p[0]), $(p[1]));
-    }).setHeader($(PrivilegeTranslator.NOME));
+    addColumn("name").setHeader($(PrivilegeTranslator.NOME));
+    addColumn("type").setHeader($(PrivilegeTranslator.TYPE));
   }
 }

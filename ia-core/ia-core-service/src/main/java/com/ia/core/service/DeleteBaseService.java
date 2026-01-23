@@ -24,7 +24,7 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
    * @param id {@link UUID} do objeto a ser excluído
    * @return por padrão retorna <code>true</code>
    */
-  default boolean canDelete(UUID id) {
+  default boolean canDelete(Long id) {
     return true;
   }
 
@@ -35,7 +35,7 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
    * @throws ServiceException caso ocorra alguma exceção
    */
 
-  default void delete(UUID id)
+  default void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
     onTransaction(() -> {

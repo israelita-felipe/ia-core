@@ -2,6 +2,7 @@ package com.ia.core.security.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.transaction.PlatformTransactionManager;
@@ -54,6 +55,20 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
     super(config);
     this.config = config;
     registryValidators(config.getValidators());
+  }
+
+  @Override
+  public Map<String, String> getContextValue(Object object) {
+    Map<String, String> contextValue = super.getContextValue(object);
+    contextValue
+        .putAll(CountSecuredBaseService.super.getContextValue(object));
+    contextValue
+        .putAll(DeleteSecuredBaseService.super.getContextValue(object));
+    contextValue
+        .putAll(FindSecuredBaseService.super.getContextValue(object));
+    contextValue
+        .putAll(ListSecuredBaseService.super.getContextValue(object));
+    return contextValue;
   }
 
   @Override

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -56,7 +55,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    * @param id Id do objeto.
    */
   @Override
-  default void delete(UUID id) {
+  default void delete(Long id) {
     getData().removeIf(object -> Objects.equals(getId(object), id));
   }
 
@@ -65,7 +64,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    * @return {@link Serializable}
    */
   @Override
-  default D find(UUID id) {
+  default D find(Long id) {
     return getData().stream()
         .filter(object -> Objects.equals(getId(object), id)).findAny()
         .orElse(null);

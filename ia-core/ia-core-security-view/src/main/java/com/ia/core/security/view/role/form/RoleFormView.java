@@ -1,12 +1,12 @@
 package com.ia.core.security.view.role.form;
 
-import com.ia.core.security.model.functionality.Operation;
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.view.role.privilege.page.RolePrivilegePageView;
+import com.ia.core.security.view.role.privilege.page.RolePrivilegePageViewModel;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.manager.DefaultBaseManager;
@@ -43,15 +43,9 @@ public class RoleFormView
     bind("name", createNameField($(RoleTranslator.ROLE),
                                  $(RoleTranslator.HELP.ROLE)));
     add(this.tabSheet = createTabSheet(), 6);
-    bind("privileges",
-         createPrivilegesField($(PrivilegeTranslator.PRIVILEGE),
-                               privilege -> {
-                                 String[] p = privilege.getName()
-                                     .split(Operation.SEPARATOR);
-                                 return String.format("%s - %s", $(p[0]),
-                                                      $(p[1]));
-                               }, getViewModel().getConfig()
-                                   .getPrivilegeService()));
+    createPrivilegesField($(PrivilegeTranslator.PRIVILEGE),
+                          $(PrivilegeTranslator.HELP.PRIVILEGE),
+                          getViewModel().getRolePrivilegePageViewModel());
     bind("users",
          createUsersField($(UserTranslator.USER), UserDTO::toString,
                           getViewModel().getConfig().getUserService()));
@@ -70,23 +64,16 @@ public class RoleFormView
 
   /**
    * @param label          Título do campo
-   * @param labelGenerator Gerador de label dos itens
-   * @param data           serviço de dados
+   * @param labelGenerator {@link ItemLabelGenerator}
+   * @param data           {@link DefaultBaseManager}
    * @return {@link CheckboxGroup}
    */
-  public CheckboxGroup<PrivilegeDTO> createPrivilegesField(String label,
-                                                           ItemLabelGenerator<PrivilegeDTO> labelGenerator,
-                                                           DefaultBaseManager<PrivilegeDTO> data) {
-
-    CheckboxGroup<PrivilegeDTO> field = new CheckboxGroup<>();
-    field
-        .setItems(DataProviderFactory
-            .createBaseDataProviderFromService(data,
-                                               PrivilegeDTO
-                                                   .propertyFilters())
-            .withConfigurableFilter());
-    field.setItemLabelGenerator(labelGenerator);
-    field.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+  public RolePrivilegePageView createPrivilegesField(String label,
+                                                     String help,
+                                                     RolePrivilegePageViewModel pageViewModel) {
+    var field = new RolePrivilegePageView(pageViewModel);
+    field.setLabel(label);
+    setHelp(field, help);
     createTab(tabSheet, VaadinIcon.KEY.create(), label, field);
     return field;
   }
@@ -103,7 +90,7 @@ public class RoleFormView
 
     CheckboxGroup<UserDTO> field = new CheckboxGroup<>();
     field.setItems(DataProviderFactory
-        .createBaseDataProviderFromService(data, UserDTO.propertyFilters())
+        .createBaseDataProviderFromManager(data, UserDTO.propertyFilters())
         .withConfigurableFilter());
     field.setItemLabelGenerator(labelGenerator);
     field.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);

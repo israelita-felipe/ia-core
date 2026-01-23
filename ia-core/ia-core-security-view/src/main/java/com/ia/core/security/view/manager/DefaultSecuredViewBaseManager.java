@@ -1,9 +1,14 @@
 package com.ia.core.security.view.manager;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
+import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.view.client.DefaultBaseClient;
 import com.ia.core.view.manager.DefaultBaseManager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +32,38 @@ public abstract class DefaultSecuredViewBaseManager<D extends DTO<? extends Seri
    */
   public DefaultSecuredViewBaseManager(DefaultSecuredViewBaseMangerConfig<D> config) {
     super(config);
+    createContext();
+  }
+
+  /**
+   * Cria os contextos necessários. Por padrão não há ação sendo executada.
+   */
+  @Override
+  public void createContext() {
+    try {
+      if (AbstractBaseEntityDTO.class
+          .isAssignableFrom(extractGenericType())) {
+        addContext(AbstractBaseEntityDTO.CAMPOS.ID);
+        addContextDefinition(AbstractBaseEntityDTO.CAMPOS.ID,
+                             () -> getClient()
+                                 .findAll(new SearchRequestDTO())
+                                 .getContent().stream()
+                                 .map(AbstractBaseEntityDTO.class::cast)
+                                 .map(object -> new ContextDefinition(Objects
+                                     .toString(object.getId()),
+                                                                      Objects
+                                                                          .toString(object)))
+                                 .toList());
+      }
+    } catch (Exception e) {
+      log.error(e.getLocalizedMessage(), e);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public DefaultBaseClient<D> getClient() {
+    return super.getClient();
   }
 
   @Override

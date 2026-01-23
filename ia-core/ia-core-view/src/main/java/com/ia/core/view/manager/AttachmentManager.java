@@ -35,7 +35,7 @@ public class AttachmentManager<T extends AttachmentDTO<?>>
    * @return byte[] do conteúdo do arquivo
    * @throws ServiceException caso ocorra alguma exceção ao recuperar o arquivo
    */
-  public byte[] download(UUID id)
+  public byte[] download(Long id)
     throws ServiceException {
     ServiceException serviceException = new ServiceException();
     try {

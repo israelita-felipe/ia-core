@@ -52,7 +52,7 @@ public class AuditOperationListView
    */
   private void createDataProvider() {
     DataProvider<LogOperationDTO, SearchRequestDTO> dataProvider = DataProviderFactory
-        .createDataProviderFromService(getViewModel().getConfig()
+        .createDataProviderFromManager(getViewModel().getConfig()
             .getLogOperationService());
     ConfigurableFilterDataProvider<LogOperationDTO, Void, SearchRequestDTO> withConfigurableFilter = dataProvider
         .withConfigurableFilter();

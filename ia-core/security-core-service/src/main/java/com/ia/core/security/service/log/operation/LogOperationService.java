@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiConsumer;
@@ -547,7 +546,7 @@ public class LogOperationService
    * @param mapper     {@link Mapper}
    * @return {@link DTO} que será excluído
    */
-  public <T extends BaseEntity, D extends DTO<?>> D logBeforeDelete(final UUID id,
+  public <T extends BaseEntity, D extends DTO<?>> D logBeforeDelete(final Long id,
                                                                     BaseEntityRepository<T> repository,
                                                                     Mapper<T, D> mapper) {
     T model = repository.findById(id).orElse(null);

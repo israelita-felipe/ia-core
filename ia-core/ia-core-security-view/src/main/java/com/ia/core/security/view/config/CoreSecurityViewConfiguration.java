@@ -23,8 +23,9 @@ import com.ia.core.security.view.authentication.AuthenticationManager;
 import com.ia.core.security.view.authentication.DefaultAuthenticationManager;
 import com.ia.core.security.view.authorization.CoreSecurityViewAuthorizationManager;
 import com.ia.core.security.view.authorization.CoreViewAuthorizationManager;
+import com.ia.core.security.view.authorization.ViewPrivilegeContext;
 import com.ia.core.security.view.components.login.LoginView;
-import com.ia.core.security.view.functionality.DefaultFunctionalityManager;
+import com.ia.core.security.view.functionality.DefaultViewFunctionalityManager;
 import com.ia.core.security.view.login.CustomAccessDeniedError;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.vaadin.flow.router.RouteAccessDeniedError;
@@ -94,7 +95,7 @@ public abstract class CoreSecurityViewConfiguration {
   @Bean
   static FunctionalityManager functionalityManager(PrivilegeManager service,
                                                    List<HasFunctionality> hasFunctionalities) {
-    return new DefaultFunctionalityManager(service, hasFunctionalities);
+    return new DefaultViewFunctionalityManager(service, hasFunctionalities);
   }
 
   /**
@@ -159,6 +160,23 @@ public abstract class CoreSecurityViewConfiguration {
           UserDTO user = (UserDTO) principal;
           return user.getAllPrivileges().stream().map(PrivilegeDTO::getName)
               .toList();
+        };
+      }
+
+      @Override
+      public HasContextDefinitions getCurrentContextDefinitions() {
+        return () -> {
+          Authentication authentication = SecurityContextHolder.getContext()
+              .getAuthentication();
+          if (authentication == null) {
+            return new ViewPrivilegeContext(Collections.emptySet());
+          }
+          Object principal = authentication.getPrincipal();
+          if (principal == null || !UserDTO.class.isInstance(principal)) {
+            return new ViewPrivilegeContext(Collections.emptySet());
+          }
+          UserDTO user = (UserDTO) principal;
+          return new ViewPrivilegeContext(user.getAllContexts());
         };
       }
     };

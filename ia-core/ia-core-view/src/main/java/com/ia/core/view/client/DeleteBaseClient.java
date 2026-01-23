@@ -1,7 +1,6 @@
 package com.ia.core.view.client;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +20,6 @@ public interface DeleteBaseClient<D extends Serializable>
    * @param id Id do objeto.
    */
   @DeleteMapping("/{id}")
-  void delete(@PathVariable("id") UUID id);
+  void delete(@PathVariable("id") Long id);
 
 }

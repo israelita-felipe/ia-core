@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -24,7 +24,7 @@ class SchedulerConfigTriggerSearchRequest
   public SchedulerConfigTriggerSearchRequest() {
     createFilters(filterMap, SchedulerConfigTriggerTranslator.TRIGGER_NAME,
                   SchedulerConfigTriggerDTO.CAMPOS.TRIGGER_NAME,
-                  FieldTypeDTO.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE,
+                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE,
                   OperatorDTO.NOT_EQUAL);
   }
 

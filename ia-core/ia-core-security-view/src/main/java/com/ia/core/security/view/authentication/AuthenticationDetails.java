@@ -15,6 +15,7 @@ import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.user.UserPrivilegeDTO;
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinServletRequest;
 
@@ -33,6 +34,14 @@ public class AuthenticationDetails {
 
   public void autenticate(AuthenticationRequest request) {
     service.autenticate(request, this);
+  }
+
+  public void createFirstUser(AuthenticationRequest request) {
+    service.createFistUser(request, this);
+  }
+
+  public boolean initializeSecurity() {
+    return service.initializeSecurity();
   }
 
   /**
@@ -68,7 +77,8 @@ public class AuthenticationDetails {
    * @return
    */
   private List<? extends GrantedAuthority> getAuthorities(UserDTO userDTO) {
-    return userDTO.getPrivileges().stream().map(PrivilegeDTO::getName)
+    return userDTO.getPrivileges().stream()
+        .map(UserPrivilegeDTO::getPrivilege).map(PrivilegeDTO::getName)
         .map(SimpleGrantedAuthority::new).toList();
   }
 

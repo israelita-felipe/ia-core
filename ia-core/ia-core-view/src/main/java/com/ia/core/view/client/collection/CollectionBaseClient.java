@@ -22,5 +22,5 @@ public interface CollectionBaseClient<D extends Serializable> {
    * @param object Objeto a ser avaliado
    * @return {@link UUID}
    */
-  UUID getId(D object);
+  Long getId(D object);
 }

@@ -37,9 +37,9 @@ public class DefaultFunctionalityManager
   public void addFunctionality(Functionality functionality) {
     if (!privilegeRepository.existsByName(functionality.getName())) {
       try {
-        privilegeRepository
-            .save(Privilege.builder().name(functionality.getName())
-                .type(PrivilegeType.SYSTEM).build());
+        privilegeRepository.save(Privilege.builder()
+            .name(functionality.getName()).type(functionality.getType())
+            .values(functionality.getValues()).build());
       } catch (Exception e) {
         log.error(e.getLocalizedMessage(), e);
       }
@@ -49,7 +49,23 @@ public class DefaultFunctionalityManager
   @Override
   public Set<Functionality> getFunctionalities() {
     return this.privilegeRepository.findAll().stream().map(privilege -> {
-      return (Functionality) () -> privilege.getName();
+      return new Functionality() {
+
+        @Override
+        public Set<String> getValues() {
+          return privilege.getValues();
+        }
+
+        @Override
+        public PrivilegeType getType() {
+          return privilege.getType();
+        }
+
+        @Override
+        public String getName() {
+          return privilege.getName();
+        }
+      };
     }).collect(Collectors.toUnmodifiableSet());
   }
 

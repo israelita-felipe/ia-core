@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -28,26 +28,26 @@ class UserSearchRequest
             .build(),
              Arrays.asList(
                            FilterRequestDTO.builder().key("userName")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.LIKE).build(),
                            FilterRequestDTO.builder().key("userName")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.EQUAL).build(),
                            FilterRequestDTO.builder().key("userName")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.NOT_EQUAL).build()));
     filterMap
         .put(FilterProperty.builder().label("Código de Usuário")
             .property("userCode").build(),
              Arrays.asList(
                            FilterRequestDTO.builder().key("userCode")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.LIKE).build(),
                            FilterRequestDTO.builder().key("userCode")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.EQUAL).build(),
                            FilterRequestDTO.builder().key("userCode")
-                               .fieldType(FieldTypeDTO.STRING)
+                               .fieldType(FieldType.STRING)
                                .operator(OperatorDTO.NOT_EQUAL).build()));
   }
 

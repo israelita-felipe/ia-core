@@ -18,6 +18,6 @@ public interface BaseEntityDTO<T extends BaseEntity>
   /**
    * @return {@link UUID} do objeto.
    */
-  UUID getId();
+  Long getId();
 
 }

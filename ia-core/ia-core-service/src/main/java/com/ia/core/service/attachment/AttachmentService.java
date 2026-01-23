@@ -51,7 +51,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
   }
 
   @Override
-  public void delete(UUID id)
+  public void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
     onTransaction(() -> {
@@ -72,7 +72,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @param id {@link UUID} do anexo
    * @return <code>true</code> se o arquivo existir em disco.
    */
-  protected boolean exists(UUID id) {
+  protected boolean exists(Long id) {
     return getFile(id).exists();
   }
 
@@ -80,7 +80,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @param id {@link UUID} do anexo
    * @return {@link File} com o {@link UUID} informado.
    */
-  protected File getFile(UUID id) {
+  protected File getFile(Long id) {
     File dir = new File(getAttachmentDirectory());
     if (!dir.exists()) {
       dir.mkdir();
@@ -128,13 +128,13 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       try {
         saved = super.save(toSave);
         if (toSave.hasContent()) {
-          UUID id = saved.getId();
+          Long id = saved.getId();
           FileWriter fw = new FileWriter(getFile(id));
           fw.write(toSave.getContent());
           fw.close();
         }
       } catch (Exception e) {
-        UUID id = saved.getId();
+        Long id = saved.getId();
         // se existir arquivo salvo e for um arquivo novo deleta o arquivo.
         // Evita deletar quando ocorre erro em atualização.
         if (exists(id) && toSave.getId() == null) {

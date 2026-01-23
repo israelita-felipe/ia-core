@@ -10,8 +10,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.SortRequest;
-import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -64,8 +64,8 @@ public class DataProviderFactory {
           properties.forEach(property -> {
             request.getFilters()
                 .add(FilterRequestDTO.builder().key(property)
-                    .operator(OperatorDTO.LIKE)
-                    .fieldType(FieldTypeDTO.STRING).value(search).build());
+                    .operator(OperatorDTO.LIKE).fieldType(FieldType.STRING)
+                    .value(search).build());
           });
           return request;
         });
@@ -77,14 +77,14 @@ public class DataProviderFactory {
    *
    * @param <T>        Tipo de dado.
    * @param <S>        Tipo do serviço
-   * @param service    {@link DefaultBaseManager};
+   * @param manager    {@link DefaultBaseManager};
    * @param properties propriedades a serem usadas no filto
    * @return {@link DataProvider}
    */
-  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, String> createBaseDataProviderFromService(S service,
+  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, String> createBaseDataProviderFromManager(S manager,
                                                                                                                                                        Set<String> properties) {
-    return createBaseDataProviderFromCallBacks(createFetchCallbackFromService(service),
-                                               createCountCallbackFromService(service),
+    return createBaseDataProviderFromCallBacks(createFetchCallbackFromManager(manager),
+                                               createCountCallbackFromManager(manager),
                                                properties);
   }
 
@@ -110,11 +110,11 @@ public class DataProviderFactory {
    * Cria um {@link CountCallback}
    *
    * @param <T>          Tipo de dado
-   * @param countService {@link CountBaseManager}
+   * @param countManager {@link CountBaseManager}
    * @return {@link CountCallback}
    */
-  public static <T extends Serializable> CountCallback<T, SearchRequestDTO> createCountCallbackFromService(CountBaseManager<T> countService) {
-    return createCountCallbackFromRequest(request -> countService
+  public static <T extends Serializable> CountCallback<T, SearchRequestDTO> createCountCallbackFromManager(CountBaseManager<T> countManager) {
+    return createCountCallbackFromRequest(request -> countManager
         .count(request));
   }
 
@@ -188,12 +188,12 @@ public class DataProviderFactory {
    *
    * @param <T>     Tipo de dado.
    * @param <S>     Tipo do serviço
-   * @param Service {@link DefaultBaseManager};
+   * @param manager {@link DefaultBaseManager};
    * @return {@link ConfigurableFilterDataProvider}
    */
-  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, SearchRequestDTO> createDataProviderFromService(S Service) {
-    return createDataProviderFromCallBacks(createFetchCallbackFromService(Service),
-                                           createCountCallbackFromService(Service));
+  public static <T extends Serializable, S extends ListBaseManager<T> & CountBaseManager<T>> DataProvider<T, SearchRequestDTO> createDataProviderFromManager(S manager) {
+    return createDataProviderFromCallBacks(createFetchCallbackFromManager(manager),
+                                           createCountCallbackFromManager(manager));
   }
 
   /**
@@ -229,8 +229,8 @@ public class DataProviderFactory {
           properties.forEach(property -> {
             request.getFilters()
                 .add(FilterRequestDTO.builder().key(property)
-                    .operator(OperatorDTO.LIKE)
-                    .fieldType(FieldTypeDTO.STRING).value(search).build());
+                    .operator(OperatorDTO.LIKE).fieldType(FieldType.STRING)
+                    .value(search).build());
           });
           return request;
         });
@@ -244,7 +244,7 @@ public class DataProviderFactory {
    * @param listService {@link ListBaseManager}
    * @return {@link FetchCallback}
    */
-  public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromService(ListBaseManager<T> listService) {
+  public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromManager(ListBaseManager<T> listService) {
     return createFetchCallbackFromRequest(request -> listService
         .findAll(request).stream());
   }

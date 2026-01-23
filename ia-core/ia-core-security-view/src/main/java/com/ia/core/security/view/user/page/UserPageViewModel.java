@@ -1,7 +1,5 @@
 package com.ia.core.security.view.user.page;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.user.UserDTO;
@@ -76,7 +74,7 @@ public class UserPageViewModel
   }
 
   @Override
-  public UUID getId(UserDTO object) {
+  public Long getId(UserDTO object) {
     return object.getId();
   }
 

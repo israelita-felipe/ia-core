@@ -31,6 +31,16 @@ public interface HasTranslator
   }
 
   /**
+   * Traduz um enum pelo nome
+   *
+   * @param enm nome
+   * @return tradução do nome do enum
+   */
+  default String $(Enum<?> enm) {
+    return $(enm.name());
+  }
+
+  /**
    * Traduz uma mensagem com parâmetros.
    *
    * @param message    Mensagem a ser traduzida.

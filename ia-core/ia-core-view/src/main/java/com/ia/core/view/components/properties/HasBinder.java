@@ -16,6 +16,7 @@ import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Binder.Binding;
+import com.vaadin.flow.data.converter.Converter;
 
 /**
  * Possui propriedade de realizar bind dos dados
@@ -36,7 +37,7 @@ public interface HasBinder<T> {
                                              Set<String> properties,
                                              DefaultBaseManager<E> service) {
     combo.setItems(DataProviderFactory
-        .createBaseDataProviderFromService(service, properties));
+        .createBaseDataProviderFromManager(service, properties));
 
   }
 
@@ -91,7 +92,7 @@ public interface HasBinder<T> {
       thread.set(binder.forField(combo).bind(parseProperty(property)));
       combo.setItemLabelGenerator(labelGenerator);
       combo.setItems(DataProviderFactory
-          .createBaseDataProviderFromService(service, properties));
+          .createBaseDataProviderFromManager(service, properties));
     });
 
     return thread.get();
@@ -116,7 +117,7 @@ public interface HasBinder<T> {
     this.bind(binder -> {
       thread.set(binder.forField(combo).bind(parseProperty(property)));
       combo.setItems(DataProviderFactory
-          .createBaseDataProviderFromService(service, properties));
+          .createBaseDataProviderFromManager(service, properties));
     });
 
     return thread.get();
@@ -135,6 +136,52 @@ public interface HasBinder<T> {
     AtomicReference<Binding<?, E>> thread = new AtomicReference<>();
     this.bind(binder -> {
       thread.set(binder.forField(field).bind(parseProperty(property)));
+    });
+
+    return thread.get();
+
+  }
+
+  /**
+   * Realiza o binding
+   *
+   * @param <E>      Tipo do dado
+   * @param property propriedade do binding
+   * @param field    {@link HasValue}
+   * @param readOnly indicativo de somente leitura
+   * @return {@link Binding}
+   */
+  default <E> Binding<?, E> bind(String property, HasValue<?, E> field,
+                                 boolean readOnly) {
+    AtomicReference<Binding<?, E>> thread = new AtomicReference<>();
+    this.bind(binder -> {
+      if (readOnly) {
+        thread.set(binder.forField(field)
+            .bindReadOnly(parseProperty(property)));
+      } else {
+        thread.set(binder.forField(field).bind(parseProperty(property)));
+      }
+    });
+
+    return thread.get();
+
+  }
+
+  /**
+   * Realiza o binding
+   *
+   * @param <E>      Tipo do dado
+   * @param property propriedade do binding
+   * @param field    {@link HasValue}
+   * @return {@link Binding}
+   */
+  default Binding<?, ?> bindWithConverter(String property,
+                                          HasValue<?, ?> field,
+                                          Converter<?, ?> converter) {
+    AtomicReference<Binding<?, ?>> thread = new AtomicReference<>();
+    this.bind(binder -> {
+      thread.set(binder.forField(field).withConverter((Converter) converter)
+          .bind(parseProperty(property)));
     });
 
     return thread.get();

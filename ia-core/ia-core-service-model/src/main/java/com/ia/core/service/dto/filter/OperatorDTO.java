@@ -8,11 +8,13 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.ia.core.model.filter.FilterRequest;
+import com.ia.core.model.filter.Operator;
+import com.ia.core.service.dto.DTO;
 
 /**
  * Operadores
  */
-public enum OperatorDTO {
+public enum OperatorDTO implements DTO<Operator> {
   /**
    * Igualdade
    */
@@ -295,4 +297,9 @@ public enum OperatorDTO {
   public abstract <T> java.util.function.Predicate<T> build(FilterRequestDTO request,
                                                             java.util.function.Predicate<T> predicate,
                                                             boolean disjunction);
+
+  @Override
+  public DTO<Operator> cloneObject() {
+    return this;
+  }
 }

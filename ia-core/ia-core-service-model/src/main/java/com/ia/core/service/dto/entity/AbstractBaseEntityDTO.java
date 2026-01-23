@@ -1,6 +1,9 @@
 package com.ia.core.service.dto.entity;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import com.ia.core.model.BaseEntity;
@@ -36,7 +39,7 @@ public abstract class AbstractBaseEntityDTO<T extends BaseEntity>
   /**
    * Id padrão.
    */
-  protected UUID id;
+  protected Long id;
   /**
    * Versão padrão do DTO
    */
@@ -46,7 +49,7 @@ public abstract class AbstractBaseEntityDTO<T extends BaseEntity>
   /**
    * @param id {@link UUID}
    */
-  public void setId(UUID id) {
+  public void setId(Long id) {
     firePropertyChange(CAMPOS.ID, this.id, id);
     this.id = id;
   }
@@ -108,8 +111,24 @@ public abstract class AbstractBaseEntityDTO<T extends BaseEntity>
 
   @SuppressWarnings("javadoc")
   public static class CAMPOS {
-    public static final String ID = "id";
-    public static final String VERSION = "version";
+    private static final Set<String> fields = new HashSet<>();
+    public static final String ID = create("id");
+    public static final String VERSION = create("version");
+
+    public static String create(final String value) {
+      fields.add(value);
+      return value;
+    }
+
+    public static String create(final String context, final String value) {
+      String key = String.format("%s.%s", context, value);
+      fields.add(key);
+      return key;
+    }
+
+    public static Set<String> values() {
+      return Collections.unmodifiableSet(fields);
+    }
   }
 
 }

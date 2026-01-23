@@ -64,7 +64,7 @@ public interface IPageView<T extends Serializable>
    *
    * @return {@link FlexLayout}
    */
-  TabSheet createButtonsBar();
+  TabSheet createToolBar();
 
   /**
    * @return {@link Collection} de {@link PageAction} da página

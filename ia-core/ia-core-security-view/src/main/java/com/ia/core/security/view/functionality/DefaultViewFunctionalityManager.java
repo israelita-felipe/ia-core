@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Israel Araújo
  */
 @Slf4j
-public class DefaultFunctionalityManager
+public class DefaultViewFunctionalityManager
   implements FunctionalityManager {
 
   /**
@@ -29,8 +29,8 @@ public class DefaultFunctionalityManager
   /**
    * @param hasFunctionalities
    */
-  public DefaultFunctionalityManager(PrivilegeManager privilegeService,
-                                     Collection<HasFunctionality> hasFunctionalities) {
+  public DefaultViewFunctionalityManager(PrivilegeManager privilegeService,
+                                         Collection<HasFunctionality> hasFunctionalities) {
     super();
     this.privilegeService = privilegeService;
     registryFunctionalities(hasFunctionalities);
@@ -40,9 +40,9 @@ public class DefaultFunctionalityManager
   public void addFunctionality(Functionality functionality) {
     if (!privilegeService.existsByName(functionality.getName())) {
       try {
-        privilegeService
-            .save(PrivilegeDTO.builder().type(PrivilegeType.SYSTEM)
-                .name(functionality.getName()).build());
+        privilegeService.save(PrivilegeDTO.builder()
+            .type(functionality.getType()).name(functionality.getName())
+            .values(functionality.getValues()).build());
       } catch (ValidationException e) {
         log.error(e.getLocalizedMessage(), e);
       }
@@ -53,7 +53,23 @@ public class DefaultFunctionalityManager
   public Set<Functionality> getFunctionalities() {
     return this.privilegeService.findAll(PrivilegeDTO.getSearchRequest())
         .map(privilege -> {
-          return (Functionality) () -> privilege.getName();
+          return new Functionality() {
+
+            @Override
+            public Set<String> getValues() {
+              return privilege.getValues();
+            }
+
+            @Override
+            public PrivilegeType getType() {
+              return privilege.getType();
+            }
+
+            @Override
+            public String getName() {
+              return privilege.getName();
+            }
+          };
         }).stream().collect(Collectors.toUnmodifiableSet());
   }
 

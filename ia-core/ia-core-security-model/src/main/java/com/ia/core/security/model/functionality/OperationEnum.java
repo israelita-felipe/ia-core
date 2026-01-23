@@ -30,6 +30,7 @@ public enum OperationEnum implements Operation {
   public static final String DELETE_VALUE = "DELETE";
   public static final String READ_VALUE = "READ";
   public static final String UPDATE_VALUE = "UPDATE";
+  public static final String OTHER_VALUE = "OTHER";
 
   @Override
   public String toString() {

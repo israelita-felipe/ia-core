@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.ia.core.model.HasVersion;
 import com.ia.core.security.model.role.Role;
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 
 import jakarta.validation.constraints.NotNull;
@@ -36,18 +36,20 @@ public class UserRoleDTO
   private String name;
 
   @Default
-  private Collection<PrivilegeDTO> privileges = new HashSet<>();
+  private Collection<RolePrivilegeDTO> privileges = new HashSet<>();
 
   @Override
   public UserRoleDTO cloneObject() {
     return toBuilder().privileges(new HashSet<>(getPrivileges().stream()
-        .map(PrivilegeDTO::cloneObject).toList())).build();
+        .map(RolePrivilegeDTO::cloneObject).toList())).build();
   }
 
   @Override
   public UserRoleDTO copyObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION).privileges(new HashSet<>(getPrivileges().stream()
-        .map(PrivilegeDTO::copyObject).toList())).build();
+    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
+        .privileges(new HashSet<>(getPrivileges().stream()
+            .map(RolePrivilegeDTO::copyObject).toList()))
+        .build();
   }
 
   @Override

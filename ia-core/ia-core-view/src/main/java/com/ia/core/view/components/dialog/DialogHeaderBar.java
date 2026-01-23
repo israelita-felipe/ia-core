@@ -60,6 +60,7 @@ public class DialogHeaderBar
     /**
      * @param icon Set the icon
      */
+    @Override
     public void setIcon(VaadinIcon icon) {
       getElement().setAttribute("icon", "vaadin:"
           + icon.name().toLowerCase(Locale.ENGLISH).replace('_', '-'));

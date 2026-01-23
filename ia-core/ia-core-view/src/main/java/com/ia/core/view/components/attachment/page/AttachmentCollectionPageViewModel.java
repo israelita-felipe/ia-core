@@ -1,7 +1,5 @@
 package com.ia.core.view.components.attachment.page;
 
-import java.util.UUID;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.attachment.form.AttachmentFormViewModel;
@@ -64,7 +62,7 @@ public abstract class AttachmentCollectionPageViewModel<T extends AttachmentDTO<
   }
 
   @Override
-  public UUID getId(T object) {
+  public Long getId(T object) {
     return object.getId();
   }
 }

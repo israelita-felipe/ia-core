@@ -5,7 +5,6 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -149,7 +148,7 @@ public class SchedulerConfigService
    * @return DTO da configuração com triggers preenchidos
    */
   @Override
-  public SchedulerConfigDTO find(UUID id) {
+  public SchedulerConfigDTO find(Long id) {
     return onTransaction(() -> {
       SchedulerConfigDTO schedulerConfigDTO = super.find(id);
       processarTriggers(schedulerConfigDTO);
@@ -369,7 +368,7 @@ public class SchedulerConfigService
    * @throws ServiceException se ocorrer erro durante o cancelamento
    */
   @Override
-  public void delete(UUID id)
+  public void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
     onTransaction(() -> {

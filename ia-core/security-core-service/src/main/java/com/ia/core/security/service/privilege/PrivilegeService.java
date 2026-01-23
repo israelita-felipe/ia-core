@@ -1,5 +1,7 @@
 package com.ia.core.security.service.privilege;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ia.core.security.model.privilege.Privilege;
@@ -27,6 +29,16 @@ public class PrivilegeService
   }
 
   /**
+   * Captura todos os privilégios sem checagem de segurança
+   *
+   * @return lista de {@link PrivilegeDTO}
+   */
+  public List<PrivilegeDTO> findAll() {
+    return onTransaction(() -> getRepository().findAll().stream()
+        .map(this::toDTO).toList());
+  }
+
+  /**
    * Verifica se existe o privilégio pelo nome
    *
    * @param name nome do privilégio
@@ -34,6 +46,11 @@ public class PrivilegeService
    */
   public boolean exitsByName(String name) {
     return getRepository().existsByName(name);
+  }
+
+  @Override
+  public PrivilegeServiceConfig getConfig() {
+    return (PrivilegeServiceConfig) super.getConfig();
   }
 
   @Override

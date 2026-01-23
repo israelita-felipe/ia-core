@@ -33,7 +33,7 @@ public interface DeleteBaseController<T extends BaseEntity, D extends DTO<?>>
    */
   @Operation(summary = "Exclui um objeto pelo seu Id")
   @DeleteMapping("/{id}")
-  default ResponseEntity<Void> delete(@PathVariable("id") UUID id,
+  default ResponseEntity<Void> delete(@PathVariable("id") Long id,
                                       HttpServletRequest request)
     throws ServiceException {
     ((DeleteBaseService<?, D>) getService()).delete(id);

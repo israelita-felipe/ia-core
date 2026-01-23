@@ -1,7 +1,5 @@
 package com.ia.core.llm.view.comando.page;
 
-import java.util.UUID;
-
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.llm.view.comando.form.ComandoSistemaFormViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
@@ -49,7 +47,7 @@ public class ComandoSistemaPageViewModel
   }
 
   @Override
-  public UUID getId(ComandoSistemaDTO object) {
+  public Long getId(ComandoSistemaDTO object) {
     return object.getId();
   }
 

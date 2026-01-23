@@ -28,6 +28,16 @@ public class ServiceException
   }
 
   /**
+   * Construtor com erro
+   *
+   * @param error erro a ser adicionado
+   */
+  public ServiceException(String error) {
+    this();
+    add(error);
+  }
+
+  /**
    * Adiciona uma exceção.
    *
    * @param ex {@link Exception}

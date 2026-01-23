@@ -22,7 +22,7 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
    * @param id {@link UUID}
    * @return <code>true</code> por padrão
    */
-  default boolean canFind(UUID id) {
+  default boolean canFind(Long id) {
     return true;
   }
 
@@ -33,7 +33,7 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
    * @return {@link DTO} da entidade <T>, ou <code>null</code> caso a mesma não
    *         exista.
    */
-  default D find(UUID id) {
+  default D find(Long id) {
     if (canFind(id)) {
       return toDTO(getRepository().findById(id).orElse(null));
     }

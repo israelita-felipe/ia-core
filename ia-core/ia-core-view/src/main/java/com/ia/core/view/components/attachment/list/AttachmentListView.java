@@ -1,7 +1,6 @@
 package com.ia.core.view.components.attachment.list;
 
-import java.util.UUID;
-
+import com.ia.core.model.TSID;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.attachment.dto.AttachmentTranslator;
 import com.ia.core.view.components.list.ListView;
@@ -64,8 +63,8 @@ public class AttachmentListView<T extends AttachmentDTO<?>>
    * @param model {@link AttachmentDTO} a ser baixado
    */
   protected void download(T model) {
-    UUID id = model.getId();
-    id = id == null ? UUID.randomUUID() : id;
+    Long id = model.getId();
+    id = id == null ? TSID.fast().toLong() : id;
     DownloadHandler resource = new InputStreamDownloadHandler(event -> {
       return new DownloadResponse(getViewModel().download(model),
                                   model.getFilename(), model.getMediaType(),

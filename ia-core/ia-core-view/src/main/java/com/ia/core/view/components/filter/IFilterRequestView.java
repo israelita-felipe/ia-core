@@ -2,7 +2,7 @@ package com.ia.core.view.components.filter;
 
 import java.util.Collection;
 
-import com.ia.core.service.dto.filter.FieldTypeDTO;
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -65,11 +65,13 @@ public interface IFilterRequestView
    * Cria o campo de falor
    *
    * @param label Título
-   * @param type  {@link FieldTypeDTO} do tipo de dado da propriedade a ser
+   * @param type  {@link FieldType} do tipo de dado da propriedade a ser
    *              filtrada
    * @return {@link HasValue}
    */
-  HasValue<?, ?> createValorField(String label, FieldTypeDTO type);
+  HasValue<?, ?> createValueFieldFromFieldType(FilterProperty key,
+                                               String label,
+                                               FieldType type);
 
   /***
    * Cria o campo de negação do filtro

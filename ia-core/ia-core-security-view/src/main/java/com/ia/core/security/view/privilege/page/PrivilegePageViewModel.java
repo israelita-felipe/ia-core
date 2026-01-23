@@ -1,9 +1,8 @@
 package com.ia.core.security.view.privilege.page;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Component;
 
+import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
@@ -38,7 +37,7 @@ public class PrivilegePageViewModel
 
   @Override
   public PrivilegeDTO createNewObject() {
-    return PrivilegeDTO.builder().build();
+    return PrivilegeDTO.builder().type(PrivilegeType.USER).build();
   }
 
   @Override
@@ -47,7 +46,7 @@ public class PrivilegePageViewModel
   }
 
   @Override
-  public UUID getId(PrivilegeDTO object) {
+  public Long getId(PrivilegeDTO object) {
     return object.getId();
   }
 
@@ -59,5 +58,17 @@ public class PrivilegePageViewModel
   @Override
   public IFormViewModel<PrivilegeDTO> createFormViewModel(FormViewModelConfig<PrivilegeDTO> config) {
     return new PrivilegeFormViewModel(config);
+  }
+
+  @Override
+  public boolean canDelete(PrivilegeDTO object) {
+    return super.canDelete(object)
+        && !PrivilegeType.SYSTEM.equals(object.getType());
+  }
+
+  @Override
+  public boolean canCopy(PrivilegeDTO object) {
+    return super.canCopy(object)
+        && !PrivilegeType.SYSTEM.equals(object.getType());
   }
 }

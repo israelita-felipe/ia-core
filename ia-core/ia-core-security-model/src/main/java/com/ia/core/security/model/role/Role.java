@@ -5,17 +5,20 @@ import java.util.HashSet;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.SecurityModel;
-import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -51,14 +54,8 @@ public class Role
                  "user_id", "role_id" }))
   private Collection<User> users = new HashSet<>();
 
-  @ManyToMany
-  @JoinTable(name = SecurityModel.TABLE_PREFIX + "roles_privileges",
-             schema = SCHEMA_NAME,
-             joinColumns = @JoinColumn(name = "role_id",
-                                       referencedColumnName = "id"),
-             inverseJoinColumns = @JoinColumn(name = "privilege_id",
-                                              referencedColumnName = "id"),
-             uniqueConstraints = @UniqueConstraint(columnNames = {
-                 "role_id", "privilege_id" }))
-  private Collection<Privilege> privileges = new HashSet<>();
+  @Default
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+             mappedBy = "role", orphanRemoval = true)
+  private Collection<RolePrivilege> privileges = new HashSet<>();
 }

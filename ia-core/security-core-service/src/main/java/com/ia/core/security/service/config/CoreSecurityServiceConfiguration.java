@@ -25,9 +25,11 @@ public abstract class CoreSecurityServiceConfiguration {
 
   @Bean
   static AuthenticationService<?> authenticationService(UserRepository userRepository,
+                                                        PrivilegeRepository privilegeRepository,
                                                         BaseEntityMapper<User, UserDTO> mapper) {
     log.info("INICIALIZANDO AUTHENTICATION SERVICE");
-    return new CoreJwtAuthenticationService(userRepository, mapper);
+    return new CoreJwtAuthenticationService(userRepository,
+                                            privilegeRepository, mapper);
   }
 
   @Bean

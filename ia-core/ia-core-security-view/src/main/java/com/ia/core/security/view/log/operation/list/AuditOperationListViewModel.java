@@ -3,9 +3,9 @@ package com.ia.core.security.view.log.operation.list;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.view.log.operation.form.LogOperationFormViewModel;
-import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -56,7 +56,7 @@ public class AuditOperationListViewModel
    * @return
    */
   protected SearchRequestDTO createAuditSearchRequest() {
-    userFilter = FilterRequestDTO.builder().fieldType(FieldTypeDTO.STRING)
+    userFilter = FilterRequestDTO.builder().fieldType(FieldType.STRING)
         .key(LogOperationDTO.CAMPOS.USER_CODE).operator(OperatorDTO.EQUAL)
         .build();
     List<FilterRequestDTO> filters = Arrays.asList(userFilter);

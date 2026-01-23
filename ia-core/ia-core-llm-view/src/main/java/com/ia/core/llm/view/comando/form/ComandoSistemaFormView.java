@@ -60,7 +60,7 @@ public class ComandoSistemaFormView
          createTemplate($(TemplateTranslator.TEMPLATE),
                         $(TemplateTranslator.HELP.TEMPLATE),
                         DataProviderFactory
-                            .createBaseDataProviderFromService(getViewModel()
+                            .createBaseDataProviderFromManager(getViewModel()
                                 .getConfig().getTemplateService(),
                                                                TemplateDTO
                                                                    .propertyFilters()),

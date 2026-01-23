@@ -423,4 +423,16 @@ public class JsonUtil {
       return new JsonPrimitive(formatter.format(src));
     }
   }
+
+  /**
+   * Transforma um JSON em um objetio do tipo fornecido.
+   *
+   * @param <T>  Tipo genérico do retorno
+   * @param json conteúdo json
+   * @param type {@link Type} de conversão
+   * @return objeto a partir do json fornecido
+   */
+  public static <T> T fromJson(String json, Type type) {
+    return JSON.fromJson(json, type);
+  }
 }

@@ -1,7 +1,5 @@
 package com.ia.core.security.view.role.page;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Component;
 
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
@@ -62,7 +60,7 @@ public class RolePageViewModel
   }
 
   @Override
-  public UUID getId(RoleDTO object) {
+  public Long getId(RoleDTO object) {
     return object.getId();
   }
 

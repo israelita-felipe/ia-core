@@ -31,7 +31,7 @@ public interface FindBaseController<T extends BaseEntity, D extends DTO<?>>
    */
   @Operation(summary = "Recupera um objeto pelo seu Id")
   @GetMapping("/{id}")
-  default ResponseEntity<D> find(@PathVariable("id") UUID id,
+  default ResponseEntity<D> find(@PathVariable("id") Long id,
                                  HttpServletRequest request) {
     D response = ((FindBaseService<?, D>) getService()).find(id);
     return ResponseEntity.ok(response);

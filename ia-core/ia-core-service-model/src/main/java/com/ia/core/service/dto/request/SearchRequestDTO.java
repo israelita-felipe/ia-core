@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.dto.filter.FieldTypeDTO;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -47,6 +47,11 @@ public class SearchRequestDTO
    */
   @Builder.Default
   private List<FilterRequestDTO> filters = new ArrayList<>();
+  /**
+   * Contexto.
+   */
+  @Builder.Default
+  private List<FilterRequestDTO> context = new ArrayList<>();
 
   /**
    * Ordens.
@@ -74,7 +79,8 @@ public class SearchRequestDTO
   @Override
   public SearchRequestDTO cloneObject() {
     return toBuilder().filters(new ArrayList<>(getFilters()))
-        .sorts(new ArrayList<>(getSorts())).build();
+        .sorts(new ArrayList<>(getSorts()))
+        .context(new ArrayList<>(getContext())).build();
   }
 
   /**
@@ -95,6 +101,15 @@ public class SearchRequestDTO
   }
 
   /**
+   * @return Os filtros do contexto: {@link #context}.
+   */
+  public List<FilterRequestDTO> getContext() {
+    if (Objects.isNull(this.context))
+      return new ArrayList<>();
+    return this.context;
+  }
+
+  /**
    * @return As ordens da requisição: {@link #sorts}.
    */
   public List<SortRequestDTO> getSorts() {
@@ -112,7 +127,7 @@ public class SearchRequestDTO
     var avaliableFilters = getAvaliableFilters();
     return avaliableFilters.keySet().stream()
         .filter(key -> avaliableFilters.get(key).stream()
-            .anyMatch(value -> Objects.equals(FieldTypeDTO.STRING,
+            .anyMatch(value -> Objects.equals(FieldType.STRING,
                                               value.getFieldType())))
         .map(key -> key.getProperty()).collect(Collectors.toSet());
   }
@@ -128,7 +143,7 @@ public class SearchRequestDTO
    */
   public static void createFilters(Map<FilterProperty, Collection<FilterRequestDTO>> map,
                                    String label, String property,
-                                   FieldTypeDTO type,
+                                   FieldType type,
                                    OperatorDTO... operators) {
     map.put(FilterProperty.builder().label(label).property(property)
         .build(), Stream.of(operators).map(operator -> {
@@ -148,7 +163,7 @@ public class SearchRequestDTO
    */
   public static void createFilter(Map<FilterProperty, Collection<FilterRequestDTO>> map,
                                   String label, String property,
-                                  FieldTypeDTO type, Object value) {
+                                  FieldType type, Object value) {
     map.put(FilterProperty.builder().label(label).property(property)
         .build(), Stream.of(OperatorDTO.EQUAL).map(operator -> {
           return FilterRequestDTO.builder().key(property).fieldType(type)

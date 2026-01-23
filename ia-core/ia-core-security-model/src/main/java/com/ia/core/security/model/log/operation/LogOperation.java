@@ -1,7 +1,6 @@
 package com.ia.core.security.model.log.operation;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.SecurityModel;
@@ -48,7 +47,7 @@ public class LogOperation
   private String userCode;
 
   @Column(name = "value_id")
-  private UUID valueId;
+  private Long valueId;
 
   @Column(name = "type", length = 500)
   private String type;

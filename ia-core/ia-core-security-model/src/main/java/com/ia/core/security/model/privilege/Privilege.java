@@ -1,10 +1,17 @@
 package com.ia.core.security.model.privilege;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.SecurityModel;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -26,6 +33,9 @@ public class Privilege
   /** NOME DA TABELA */
   public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
       + "PRIVILEGE";
+  /** NOME DA TABELA */
+  public static final String PRIVILEGE_CONTEXT_TABLE_NAME = SecurityModel.TABLE_PREFIX
+      + "PRIVILEGE_CONTEXT";
   /** NOME DO SCHEMA */
   public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
 
@@ -33,7 +43,16 @@ public class Privilege
   private String name;
 
   @Default
-  @Column(name = "type")
-  private PrivilegeType type = PrivilegeType.USER;
+  @Column(name = "type", nullable = false)
+  private PrivilegeType type = PrivilegeType.SYSTEM;
+
+  @Default
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(schema = SCHEMA_NAME,
+                   name = PRIVILEGE_CONTEXT_TABLE_NAME,
+                   joinColumns = @JoinColumn(name = "privilege",
+                                             referencedColumnName = "id"))
+  @Column(name = "context")
+  private Set<String> values = new HashSet<>();
 
 }

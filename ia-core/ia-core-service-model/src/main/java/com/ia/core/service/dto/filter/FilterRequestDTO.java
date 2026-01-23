@@ -1,5 +1,6 @@
 package com.ia.core.service.dto.filter;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.FilterRequest;
 import com.ia.core.service.dto.DTO;
 
@@ -49,7 +50,7 @@ public class FilterRequestDTO
   /**
    * Tipo do campo.
    */
-  private FieldTypeDTO fieldType;
+  private FieldType fieldType;
 
   /**
    * Valor a ser comparado.

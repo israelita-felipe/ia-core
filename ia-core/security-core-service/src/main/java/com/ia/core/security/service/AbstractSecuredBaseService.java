@@ -1,5 +1,10 @@
 package com.ia.core.security.service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -7,10 +12,12 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.service.AbstractBaseService;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
+import com.ia.core.service.util.JsonUtil;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +56,42 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
   public AbstractSecuredBaseService(AbstractSecuredBaseServiceConfig<T, D> config) {
     super(config);
     this.config = config;
+    createContext();
+  }
+
+  /**
+   * Cria os contextos. Por padrão adiciona o contexto do ID
+   */
+  @Override
+  public void createContext() {
+    addContext(AbstractBaseEntityDTO.CAMPOS.ID);
+  }
+
+  @Override
+  public Collection<Object> getContextDefinitionValue(String key,
+                                                      Collection<String> values) {
+    if (AbstractBaseEntityDTO.CAMPOS.ID.equals(key)) {
+      return getConfig().getRepository()
+          .findAllById(values.stream().map(Long::valueOf).toList()).stream()
+          .map(BaseEntity::getId).map(String::valueOf)
+          .collect(Collectors.toSet());
+    }
+    return BaseSecuredService.super.getContextDefinitionValue(key, values);
+  }
+
+  @Override
+  public boolean matches(String contextKey, String serviceContextValue,
+                         String userContextValue) {
+    if (AbstractBaseEntityDTO.CAMPOS.ID.equals(contextKey)) {
+      List<String> fromJson = JsonUtil
+          .fromJson(serviceContextValue,
+                    new ParameterizedTypeReference<List<String>>() {
+                    }.getType());
+      return fromJson.stream().collect(Collectors.toSet())
+          .contains(userContextValue);
+    }
+    return BaseSecuredService.super.matches(contextKey, serviceContextValue,
+                                            userContextValue);
   }
 
   public static class AbstractSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>

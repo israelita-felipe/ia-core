@@ -2,6 +2,8 @@ package com.ia.core.view.components.filter;
 
 import java.util.Locale;
 
+import com.ia.core.model.filter.FieldType;
+import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.dto.request.SearchRequestTranslator;
@@ -9,6 +11,7 @@ import com.ia.core.view.components.filter.viewModel.FilterRequestViewModel;
 import com.ia.core.view.components.filter.viewModel.IFilterRequestViewModel;
 import com.ia.core.view.components.filter.viewModel.ISearchRequestViewModel;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Div;
@@ -17,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.converter.Converter;
 
 import lombok.Getter;
 
@@ -173,8 +177,49 @@ public class SearchRequestView
    * @param filter view model do filtro
    * @return {@link IFilterRequestViewModel}
    */
-  protected IFilterRequestView createFilter(IFilterRequestViewModel filter) {
-    return new FilterRequestView(filter);
+  public IFilterRequestView createFilter(IFilterRequestViewModel filter) {
+    return new FilterRequestView(filter) {
+      @Override
+      public HasValue<?, ?> createValueFieldFromFieldType(FilterProperty key,
+                                                          String label,
+                                                          FieldType type) {
+        return SearchRequestView.this
+            .createFilterRequestValorField(super.createValueFieldFromFieldType(key,
+                                                                               label,
+                                                                               type),
+                                           key, label, type);
+      }
+
+      @Override
+      public Converter<?, ?> valorFieldConverter(FilterProperty key) {
+        return SearchRequestView.this
+            .createFilterRequestValorFilterConverter(super.valorFieldConverter(key),
+                                                     key);
+      }
+    };
+  }
+
+  /**
+   * @param valorFieldConverter
+   * @param key
+   * @return
+   */
+  protected Converter<?, ?> createFilterRequestValorFilterConverter(Converter<?, ?> valorFieldConverter,
+                                                                    FilterProperty key) {
+    return valorFieldConverter;
+  }
+
+  /**
+   * @param filterRequestView
+   * @param label
+   * @param type
+   * @return
+   */
+  public HasValue<?, ?> createFilterRequestValorField(HasValue<?, ?> field,
+                                                      FilterProperty key,
+                                                      String label,
+                                                      FieldType type) {
+    return field;
   }
 
   /**

@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -26,6 +25,7 @@ import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
 import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
 import com.ia.core.security.model.authentication.JwtCoreManager;
 import com.ia.core.security.service.authorization.CoreAuthorizationManager;
+import com.ia.core.security.service.authorization.JWTPrivilegeContext;
 import com.ia.core.security.service.config.CoreSecurityServiceConfiguration;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -240,12 +240,35 @@ public abstract class CoreRestSecurityConfig
       @Override
       public HasRoles getCurrentRoles() {
         return () -> {
-          Authentication user = getAuthentication();
-          if (user != null) {
-            return user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).toList();
+          Authentication authentication = SecurityContextHolder.getContext()
+              .getAuthentication();
+          if (authentication == null) {
+            return Collections.emptyList();
           }
-          return Collections.emptyList();
+          Object principal = authentication.getPrincipal();
+          if (principal == null) {
+            return Collections.emptyList();
+          }
+          return JwtCoreManager.get()
+              .getFunctionalitiesFromJWT((String) principal);
+        };
+      }
+
+      @Override
+      public HasContextDefinitions getCurrentContextDefinitions() {
+        return () -> {
+          Authentication authentication = SecurityContextHolder.getContext()
+              .getAuthentication();
+          if (authentication == null) {
+            return new JWTPrivilegeContext(Collections.emptySet());
+          }
+          Object principal = authentication.getPrincipal();
+          if (principal == null) {
+            return new JWTPrivilegeContext(Collections.emptySet());
+          }
+          return JwtCoreManager.get()
+              .getFunctionalitiesContextFromJWT((String) principal,
+                                                JWTPrivilegeContext.class);
         };
       }
     };

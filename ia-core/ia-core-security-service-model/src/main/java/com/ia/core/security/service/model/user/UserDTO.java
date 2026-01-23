@@ -2,7 +2,9 @@ package com.ia.core.security.service.model.user;
 
 import java.beans.Transient;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,7 +12,10 @@ import java.util.stream.Stream;
 
 import com.ia.core.model.HasVersion;
 import com.ia.core.security.model.user.User;
+import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager.HasContextDefinitions.PrivilegeContext;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.model.privilege.PrivilegeOperationDTO;
+import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
@@ -62,7 +67,7 @@ public class UserDTO
   private boolean credentialsNotExpired = true;
 
   @Default
-  private Collection<PrivilegeDTO> privileges = new HashSet<>();
+  private Collection<UserPrivilegeDTO> privileges = new HashSet<>();
 
   @Default
   private Collection<UserRoleDTO> roles = new HashSet<>();
@@ -71,7 +76,7 @@ public class UserDTO
   public UserDTO cloneObject() {
     return toBuilder()
         .privileges(new HashSet<>(getPrivileges().stream()
-            .map(PrivilegeDTO::cloneObject).toList()))
+            .map(UserPrivilegeDTO::cloneObject).toList()))
         .roles(new HashSet<>(getRoles().stream()
             .map(UserRoleDTO::cloneObject).toList()))
         .build();
@@ -81,7 +86,7 @@ public class UserDTO
   public UserDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
         .privileges(new HashSet<>(getPrivileges().stream()
-            .map(PrivilegeDTO::copyObject).toList()))
+            .map(UserPrivilegeDTO::copyObject).toList()))
         .roles(new HashSet<>(getRoles().stream()
             .map(UserRoleDTO::copyObject).toList()))
         .build();
@@ -105,10 +110,37 @@ public class UserDTO
   @Transient
   public Collection<PrivilegeDTO> getAllPrivileges() {
     return Stream
-        .concat(this.privileges.stream(),
+        .concat(this.privileges.stream()
+            .map(UserPrivilegeDTO::getPrivilege),
                 this.roles.stream()
-                    .flatMap(role -> role.getPrivileges().stream()))
+                    .flatMap(role -> role.getPrivileges().stream()
+                        .map(RolePrivilegeDTO::getPrivilege)))
         .collect(Collectors.toSet());
+  }
+
+  @Transient
+  public Collection<PrivilegeContext> getAllContexts() {
+
+    Map<PrivilegeDTO, Collection<PrivilegeOperationDTO>> map = new HashMap<>();
+    this.privileges.stream().forEach(userPrivilege -> {
+      PrivilegeDTO privilege = userPrivilege.getPrivilege();
+      Collection<PrivilegeOperationDTO> values = map
+          .getOrDefault(privilege, new HashSet<>());
+      values.addAll(userPrivilege.getOperations());
+      map.put(privilege, values);
+    });
+    this.roles.stream().flatMap(role -> role.getPrivileges().stream())
+        .forEach(rolePrivilege -> {
+          PrivilegeDTO privilege = rolePrivilege.getPrivilege();
+          Collection<PrivilegeOperationDTO> values = map
+              .getOrDefault(privilege, new HashSet<>());
+          values.addAll(rolePrivilege.getOperations());
+          map.put(privilege, values);
+        });
+    return map.entrySet().stream()
+        .map(entry -> new PrivilegeContext(entry.getKey(),
+                                           entry.getValue()))
+        .toList();
   }
 
   @Override

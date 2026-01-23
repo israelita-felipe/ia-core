@@ -20,20 +20,19 @@ import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 
 /**
- * Classe de {@link Specification}.
+ * Classe de {@link Specification} que delega a construção de Predicates ao
+ * próprio enum {@code Operator}. Esta abordagem respeita a estratégia
+ * encapsulada no enum e mantém coesão: cada operador conhece sua lógica.
  *
- * @author Israel Araújo
- * @param <T> Tipo de dado da {@link Specification}
- * @see Specification
+ * @param <T> Tipo da entidade
  */
 @AllArgsConstructor
 public class SearchSpecification<T>
   implements Specification<T> {
 
-  /**
-   * Serial UID.
-   */
   private static final long serialVersionUID = -9153865343320750644L;
+
+  private final SearchRequest request;
 
   /**
    * Cria a paginação.
@@ -47,29 +46,41 @@ public class SearchSpecification<T>
                           Optional.ofNullable(size).orElse(100));
   }
 
-  /**
-   * Requisição.
-   */
-  private final transient SearchRequest request;
-
   @Override
   public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
                                CriteriaBuilder cb) {
+    // Inicializa predicate com disjunção padrão
     Predicate predicate = cb.equal(cb.literal(Boolean.TRUE),
                                    request.isDisjunction());
 
-    for (FilterRequest filter : this.request.getFilters()) {
-      predicate = filter.getOperator().build(root, cb, filter, predicate,
-                                             request.isDisjunction());
+    // Aplica filtros normais através do enum Operator
+    if (request.getFilters() != null) {
+      for (FilterRequest filter : this.request.getFilters()) {
+        predicate = filter.getOperator().build(root, cb, filter, predicate,
+                                               request.isDisjunction());
+      }
     }
 
+    // Aplica contexto (ex.: segurança) também via operador
+    if (request.getContext() != null) {
+      for (FilterRequest context : this.request.getContext()) {
+        predicate = cb.and(predicate,
+                           context.getOperator()
+                               .build(root, cb, context, cb
+                                   .equal(cb.literal(Boolean.TRUE), true),
+                                      true));
+      }
+    }
+
+    // Ordenação
     List<Order> orders = new ArrayList<>();
-    for (SortRequest sort : this.request.getSorts()) {
-      orders.add(sort.getDirection().build(root, cb, sort));
+    if (this.request.getSorts() != null) {
+      for (SortRequest sort : this.request.getSorts()) {
+        orders.add(sort.getDirection().build(root, cb, sort));
+      }
     }
 
     query.orderBy(orders);
     return predicate;
   }
-
 }

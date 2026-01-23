@@ -1,7 +1,5 @@
 package com.ia.core.llm.view.template.page;
 
-import java.util.UUID;
-
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.view.template.form.TemplateFormViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
@@ -38,7 +36,7 @@ public class TemplatePageViewModel
   }
 
   @Override
-  public UUID getId(TemplateDTO object) {
+  public Long getId(TemplateDTO object) {
     return object.getId();
   }
 

@@ -91,8 +91,13 @@ public class LoginView
 
   private LoginI18n getLoginI18n() {
     LoginI18n loginI18n = LoginI18n.createDefault();
-    loginI18n
-        .setAdditionalInformation($(LoginTranslator.ADDITIONAL_INFORMATION));
+    if (getViewModel().isFirstLogin()) {
+      loginI18n
+          .setAdditionalInformation("Primeiro login! Anote o usuário e senha utilizados, pois estes serão utilizados para login de administração");
+    } else {
+      loginI18n
+          .setAdditionalInformation($(LoginTranslator.ADDITIONAL_INFORMATION));
+    }
     ErrorMessage errorMessage = new ErrorMessage();
     errorMessage.setMessage($(LoginTranslator.ERROR_MESSAGE));
     errorMessage.setPassword($(LoginTranslator.ERROR_WRONG_PASSWORD));
@@ -124,7 +129,11 @@ public class LoginView
     AuthenticationRequest model = viewModel.getModel();
     model.setCodUsuario(loginEvent.getUsername());
     model.setSenha(loginEvent.getPassword());
-    viewModel.login(this::onSuccess, this::onFail);
+    if (viewModel.isFirstLogin()) {
+      viewModel.createFirstUser(this::onSuccess, this::onFail);
+    } else {
+      viewModel.login(this::onSuccess, this::onFail);
+    }
   }
 
   /**

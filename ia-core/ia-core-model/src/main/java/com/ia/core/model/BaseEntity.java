@@ -7,9 +7,9 @@ import java.util.UUID;
 import com.ia.core.model.annotation.EnableCache;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -37,8 +37,7 @@ public abstract class BaseEntity
    * Id da classe de entidade.
    */
   @Id
-  @GeneratedValue
-  private UUID id;
+  private Long id;
 
   /** Versão para lock otimista */
   @Default
@@ -46,6 +45,16 @@ public abstract class BaseEntity
   @Column(name = "version", columnDefinition = "bigint default 1",
           nullable = false)
   private Long version = HasVersion.DEFAULT_VERSION;
+
+  /**
+   * Ao criar gera o ID
+   */
+  @PrePersist
+  public void onCreate() {
+    if (this.id == null) {
+      this.id = TSID.Factory.getTsid4096().toLong();
+    }
+  }
 
   @Override
   public int compareTo(BaseEntity o) {

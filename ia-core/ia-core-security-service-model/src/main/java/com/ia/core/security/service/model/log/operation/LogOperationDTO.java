@@ -2,7 +2,6 @@ package com.ia.core.security.service.model.log.operation;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.log.operation.LogOperation;
@@ -43,7 +42,7 @@ public class LogOperationDTO
   @NotNull
   private String type;
   @NotNull
-  private UUID valueId;
+  private Long valueId;
   private String oldValue;
   private String newValue;
 

@@ -1,5 +1,8 @@
 package com.ia.core.security.view.user.form;
 
+import java.util.List;
+
+import com.ia.core.security.service.model.authorization.HasContext;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.ia.core.security.view.role.RoleManager;
@@ -20,6 +23,8 @@ public class UserFormViewModelConfig
   /** {@link RoleManager} */
   @Getter
   private final RoleManager roleService;
+  @Getter
+  private final List<HasContext> hasContext;
 
   /**
    * @param readOnly
@@ -28,16 +33,18 @@ public class UserFormViewModelConfig
    */
   public UserFormViewModelConfig(boolean readOnly,
                                  PrivilegeManager privileService,
-                                 RoleManager roleService) {
+                                 RoleManager roleService,
+                                 List<HasContext> hasContext) {
     super(readOnly);
     this.privileService = privileService;
     this.roleService = roleService;
+    this.hasContext = hasContext;
   }
 
   /**
    * @return {@link UserRoleManager}
    */
-  public UserRoleManager getUserRoleService() {
+  public UserRoleManager getUserRoleManager() {
     return new UserRoleManager(new UserRoleManagerConfig(roleService));
   }
 }

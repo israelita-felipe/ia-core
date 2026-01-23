@@ -1,7 +1,7 @@
 package com.ia.core.security.view.log.operation.list;
 
-import com.ia.core.security.service.model.log.operation.OperationItemDetails;
 import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
+import com.ia.core.security.service.model.log.operation.OperationItemDetails;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 

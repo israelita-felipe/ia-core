@@ -1,8 +1,8 @@
 package com.ia.core.quartz.view.quartz.form;
 
 import java.util.Collection;
-import java.util.UUID;
 
+import com.ia.core.model.TSID;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormViewModel;
@@ -47,8 +47,8 @@ public class SchedulerConfigFormViewModel
    */
   private DefaultCollectionBaseManager<SchedulerConfigTriggerDTO> createSchedulerConfigTriggerService(SchedulerConfigFormViewModelConfig config) {
     return ManagerFactory
-        .createManagerFromCollection(this::getTriggers, trigger -> UUID
-            .nameUUIDFromBytes(trigger.getTriggerName().getBytes()));
+        .createManagerFromCollection(this::getTriggers, trigger -> TSID
+            .from(trigger.getTriggerName()).toLong());
   }
 
   private Collection<SchedulerConfigTriggerDTO> getTriggers() {

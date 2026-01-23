@@ -8,7 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ia.core.model.filter.FieldType;
 import com.ia.core.report.AbstractJasperReport.ExportType;
+import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.IViewModel;
@@ -32,6 +34,7 @@ import com.ia.core.view.utils.ReportUtils;
 import com.ia.core.view.utils.Size;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -39,6 +42,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 
@@ -61,7 +65,7 @@ public abstract class PageView<T extends Serializable>
   private IPageViewModel<T> viewModel;
 
   /** Mapa de botão x ação */
-  private Map<PageAction<T>, Button> pageButtonsMap = new LinkedHashMap<>();
+  private Map<PageAction<T>, Button> toolBarMap = new LinkedHashMap<>();
   /** Papa de grupos da barra de tarefas */
   private Map<String, HasComponents> tabBarMap = new LinkedHashMap<>();
 
@@ -92,7 +96,7 @@ public abstract class PageView<T extends Serializable>
   @Override
   public void addAction(PageAction<T> action) {
     Button button = createActionButton(action);
-    pageButtonsMap.put(action, button);
+    toolBarMap.put(action, button);
   }
 
   @Override
@@ -204,29 +208,41 @@ public abstract class PageView<T extends Serializable>
   }
 
   @Override
-  public TabSheet createButtonsBar() {
+  public TabSheet createToolBar() {
     this.tabBar = createTabSheet();
     this.tabBar.setWidthFull();
-    this.pageButtonsMap.entrySet().forEach(entry -> {
+    this.toolBarMap.entrySet().forEach(entry -> {
       String group = entry.getKey().getGroup();
       Button button = entry.getValue();
-      addButton(group, button);
+      addPageButton(group, button);
     });
     return this.tabBar;
   }
 
   /**
-   * @param group
-   * @param button
+   * Cria um componente na toolbar
+   *
+   * @param group     grupo onde deve ser criado
+   * @param component componente que deve ser adicionado
    */
-  public void addButton(String group, Button button) {
+  public void addToolBarComponent(String group, Component component) {
     HasComponents hasComponent = this.tabBarMap.get(group);
     if (hasComponent == null) {
       hasComponent = new FlexLayout();
       this.tabBarMap.put(group, hasComponent);
       createTab(tabBar, $(group), (Component) hasComponent);
     }
-    hasComponent.add(button);
+    hasComponent.add(component);
+  }
+
+  /**
+   * Adiciona o botão na barra de tarefas
+   *
+   * @param group  grupo onde deve ser adicionado
+   * @param button {@link Button} criado
+   */
+  public void addPageButton(String group, Button button) {
+    addToolBarComponent(group, button);
   }
 
   /**
@@ -235,13 +251,13 @@ public abstract class PageView<T extends Serializable>
    * @param dataWrapper {@link VerticalLayout} wrapper da aplicação
    */
   public void createButtonsBar(VerticalLayout dataWrapper) {
-    dataWrapper.add(createButtonsBar());
+    dataWrapper.add(createToolBar());
   }
 
   @Override
   public DataProvider<T, ?> createDataProvider() {
     DataProvider<T, SearchRequestDTO> dataProvider = DataProviderFactory
-        .createDataProviderFromService(getViewModel().getService());
+        .createDataProviderFromManager(getViewModel().getService());
     ConfigurableFilterDataProvider<T, Void, SearchRequestDTO> configurableFilter = dataProvider
         .withConfigurableFilter();
     configurableFilter
@@ -381,7 +397,55 @@ public abstract class PageView<T extends Serializable>
           handleError(e);
         }
       }
+
+      @Override
+      public HasValue<?, ?> createFilterRequestValorField(HasValue<?, ?> field,
+                                                          FilterProperty key,
+                                                          String label,
+                                                          FieldType type) {
+        return PageView.this.createFilterRequestValorField(field, key,
+                                                           label, type);
+      }
+
+      @Override
+      protected Converter<?, ?> createFilterRequestValorFilterConverter(Converter<?, ?> valorFieldConverter,
+                                                                        FilterProperty key) {
+        return PageView.this
+            .createFilterRequestValorFilterConverter(super.createFilterRequestValorFilterConverter(valorFieldConverter,
+                                                                                                   key),
+                                                     key);
+      }
     };
+  }
+
+  /**
+   * Cria o conversor para o campo de valor do filtro
+   *
+   * @param filterRequestValorFilterConverter conversor do tipo para o modelo
+   *                                          (GERALMENTE UTILIZADO PARA
+   *                                          CONVERTER ENTIDADES PARA ID)
+   * @param key                               chave do campo
+   * @return {@link Converter}
+   */
+  public Converter<?, ?> createFilterRequestValorFilterConverter(Converter<?, ?> filterRequestValorFilterConverter,
+                                                                 FilterProperty key) {
+    return filterRequestValorFilterConverter;
+  }
+
+  /**
+   * Cria o campo de valor do filtro
+   *
+   * @param field campo criado por padrão
+   * @param key   {@link FilterProperty}
+   * @param label etiqueta do campo
+   * @param type  tipo do campo
+   * @return {@link HasValue} para edição do valor
+   */
+  public HasValue<?, ?> createFilterRequestValorField(HasValue<?, ?> field,
+                                                      FilterProperty key,
+                                                      String label,
+                                                      FieldType type) {
+    return field;
   }
 
   /**
@@ -570,6 +634,11 @@ public abstract class PageView<T extends Serializable>
     return true;
   }
 
+  /**
+   * Se o botão de impressão deve ser exibido
+   *
+   * @return <code>true</code> por padrão.
+   */
   public boolean isPrintButtonVisible() {
     return true;
   }
@@ -609,7 +678,7 @@ public abstract class PageView<T extends Serializable>
 
   @Override
   public void refreshButtons() {
-    pageButtonsMap.entrySet().forEach(entry -> {
+    toolBarMap.entrySet().forEach(entry -> {
       refreshButton(entry.getKey(), entry.getValue());
     });
   }

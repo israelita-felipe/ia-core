@@ -16,12 +16,12 @@ public interface SaveSecuredViewBaseManager<D extends DTO<? extends Serializable
 
   @Override
   default boolean canEdit(D toSave) {
-    return getAuthorizationManager().canUpdate(this);
+    return getAuthorizationManager().canUpdate(this, toSave);
   }
 
   @Override
   default boolean canInsert(D toInsert) {
-    return getAuthorizationManager().canCreate(this);
+    return getAuthorizationManager().canCreate(this, toInsert);
   }
 
 }
