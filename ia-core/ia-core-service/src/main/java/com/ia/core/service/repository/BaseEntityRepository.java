@@ -1,7 +1,5 @@
 package com.ia.core.service.repository;
 
-import java.io.Serializable;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -16,7 +14,7 @@ import com.ia.core.model.BaseEntity;
  * @see BaseEntity
  */
 @NoRepositoryBean
-public interface BaseEntityRepository<T extends Serializable>
+public interface BaseEntityRepository<T extends BaseEntity>
   extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
 
 }

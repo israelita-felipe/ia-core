@@ -7,6 +7,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.user.UserDTO;
@@ -44,12 +45,13 @@ public class UserServiceConfig
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
                            CoreSecurityAuthorizationManager authorizationManager,
+                           SecurityContextService securityContextService,
                            LogOperationService logOperationService,
                            UserPasswordEncoder passwordEncoder,
                            List<IServiceValidator<UserDTO>> validators) {
     super(transactionManager, repository, mapper, searchRequestMapper,
-          translator, authorizationManager, logOperationService,
-          validators);
+          translator, authorizationManager, securityContextService,
+          logOperationService, validators);
     this.passwordEncoder = passwordEncoder;
   }
 

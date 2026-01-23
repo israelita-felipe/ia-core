@@ -108,10 +108,12 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
                                            SearchRequestMapper searchRequestMapper,
                                            Translator translator,
                                            CoreSecurityAuthorizationManager authorizationManager,
+                                           SecurityContextService securityContextService,
                                            LogOperationService logOperationService,
                                            List<IServiceValidator<D>> validators) {
       super(transactionManager, repository, mapper, searchRequestMapper,
-            translator, authorizationManager, logOperationService);
+            translator, authorizationManager, securityContextService,
+            logOperationService);
       this.validators = validators;
     }
   }

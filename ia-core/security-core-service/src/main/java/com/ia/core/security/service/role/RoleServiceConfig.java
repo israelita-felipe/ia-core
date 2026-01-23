@@ -7,6 +7,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.role.RoleDTO;
@@ -42,12 +43,13 @@ public class RoleServiceConfig
                            SearchRequestMapper searchRequestMapper,
                            Translator translator,
                            CoreSecurityAuthorizationManager authorizationManager,
+                           SecurityContextService securityContextService,
                            LogOperationService logOperationService,
                            List<IServiceValidator<RoleDTO>> validators,
                            UserRoleMapper userRoleMapper) {
     super(transactionManager, repository, mapper, searchRequestMapper,
-          translator, authorizationManager, logOperationService,
-          validators);
+          translator, authorizationManager, securityContextService,
+          logOperationService, validators);
     this.userRoleMapper = userRoleMapper;
   }
 

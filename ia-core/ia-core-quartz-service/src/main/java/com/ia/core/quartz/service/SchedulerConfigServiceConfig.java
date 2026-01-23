@@ -9,6 +9,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.service.mapper.BaseEntityMapper;
@@ -47,12 +48,13 @@ public class SchedulerConfigServiceConfig
                                       SearchRequestMapper searchRequestMapper,
                                       Translator translator,
                                       CoreSecurityAuthorizationManager authorizationManager,
+                                      SecurityContextService securityContextService,
                                       LogOperationService logOperationService,
                                       List<IServiceValidator<SchedulerConfigDTO>> validators,
                                       Scheduler quartzScheduler) {
     super(transactionManager, repository, mapper, searchRequestMapper,
-          translator, authorizationManager, logOperationService,
-          validators);
+          translator, authorizationManager, securityContextService,
+          logOperationService, validators);
     this.quartzScheduler = quartzScheduler;
   }
 

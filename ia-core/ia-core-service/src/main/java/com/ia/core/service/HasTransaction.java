@@ -9,16 +9,20 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.ia.core.service.contract.HasTransactionManager;
+
 /**
  * @author Israel Araújo
  */
-public interface HasTransaction {
+public interface HasTransaction
+  extends HasTransactionManager {
 
   Logger log = LoggerFactory.getLogger(HasTransaction.class);
 
   /**
    * @return {@link PlatformTransactionManager}
    */
+  @Override
   PlatformTransactionManager getTransactionManager();
 
   /**
