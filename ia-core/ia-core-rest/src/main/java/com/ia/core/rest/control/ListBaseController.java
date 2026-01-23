@@ -14,6 +14,7 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 /**
  * Interface base para controladores do tipo delete.
@@ -26,19 +27,19 @@ public interface ListBaseController<T extends BaseEntity, D extends DTO<?>>
   extends BaseController<T, D> {
 
   /**
-   * Busca os elementos.
+   * Busca os elementos com paginação conforme critérios de busca.
    *
-   * @param request     {@link SearchRequest}
+   * @param request     {@link SearchRequest} - validado automaticamente via @Valid
    * @param httpRequest {@link HttpServletRequest}
-   * @return {@link Page} do tipo {@link DTO} salvo.
+   * @return {@link Page} com status OK (200) e dados paginados
    * @see ListBaseService#findAll(SearchRequestDTO)
    */
   @Operation(summary = "Lista os objetos que atendem aos critérios de busca")
   @PostMapping("/all")
-  default ResponseEntity<Page<D>> findAll(@RequestBody SearchRequestDTO request,
+  default ResponseEntity<Page<D>> findAll(@Valid @RequestBody SearchRequestDTO request,
                                           HttpServletRequest httpRequest) {
     Page<D> page = ((ListBaseService<?, D>) getService()).findAll(request);
-    return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(page);
+    return ResponseEntity.status(HttpStatus.OK).body(page);
   }
 
 }

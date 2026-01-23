@@ -24,9 +24,12 @@ public interface FindBaseController<T extends BaseEntity, D extends DTO<?>>
   extends BaseController<T, D> {
 
   /**
-   * @param id      Id do objeto.
+   * Recupera um objeto pelo seu ID.
+   *
+   * @param id      ID do objeto a recuperar
    * @param request {@link HttpServletRequest}
-   * @return {@link DTO}
+   * @return {@link DTO} com status OK
+   * @throws javax.persistence.EntityNotFoundException se não encontrado
    * @see FindBaseService#find(UUID)
    */
   @Operation(summary = "Recupera um objeto pelo seu Id")

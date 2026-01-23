@@ -25,9 +25,11 @@ public interface DeleteBaseController<T extends BaseEntity, D extends DTO<?>>
   extends BaseController<T, D> {
 
   /**
-   * @param id      Id do objeto.
+   * Exclui um objeto pelo seu ID.
+   *
+   * @param id      ID do objeto a excluir
    * @param request {@link HttpServletRequest}
-   * @return ResponseEntity de {@link Void}.
+   * @return ResponseEntity de {@link Void} com status NO_CONTENT (204)
    * @throws ServiceException caso ocorra algum erro no serviço
    * @see DeleteBaseService#delete(UUID)
    */

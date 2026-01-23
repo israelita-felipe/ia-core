@@ -27,9 +27,11 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
   extends BaseController<T, D> {
 
   /**
-   * @param dto     O objeto {@link DTO} a ser salvo.
+   * Salva um novo objeto ou atualiza um existente.
+   *
+   * @param dto     O objeto {@link DTO} a ser salvo
    * @param request {@link HttpServletRequest}
-   * @return Objeto <D> do tipo {@link DTO} salvo.
+   * @return Objeto <D> do tipo {@link DTO} salvo com status CREATED (201)
    * @throws ServiceException caso ocorra algum erro de serviço
    * @see SaveBaseService#save(DTO)
    */
@@ -43,18 +45,11 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
   }
 
   /**
-   * Realiza a validação de um objeto.
+   * Realiza a validação de um objeto sem salvá-lo.
    *
-   * @param dto     {@link DTO} a ser validado.
+   * @param dto     {@link DTO} a ser validado
    * @param request {@link HttpServletRequest}
-   * @return Coleção de erros apurados.
-   *         <ul>
-   *         <li>{@link HttpStatus#OK} - {@link Collection} vazia</li>
-   *         <li>{@link HttpStatus#BAD_REQUEST} - {@link Collection} com os
-   *         erros</li>
-   *         <li>{@link HttpStatus#INTERNAL_SERVER_ERROR} - {@link Collection}
-   *         vazia</li>
-   *         </ul>
+   * @return Coleção de erros apurados (vazia se válido)
    * @throws ServiceException caso ocorra alguma erro de serviço
    */
   @Operation(summary = "Valida um objeto sem salvá-lo")
@@ -64,7 +59,6 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
     throws ServiceException {
     ((SaveBaseService<?, D>) getService()).validate(dto);
     return ResponseEntity.ok(Collections.emptyList());
-
   }
 
 }
