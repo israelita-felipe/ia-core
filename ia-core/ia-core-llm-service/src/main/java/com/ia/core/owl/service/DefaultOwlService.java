@@ -20,6 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
 import com.ia.core.owl.service.exception.OWLParserException;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
@@ -80,10 +81,22 @@ public class DefaultOwlService
                                                                                 OWLOntology ontology,
                                                                                 String prefix,
                                                                                 String uri) {
-    return new CoreBidirectionalShortFormProvider(manager,
-                                                  ontology
-                                                      .getImportsClosure(),
-                                                  prefix, uri);
+    return new CoreBidirectionalShortFormProvider(manager, ontology
+        .getImportsClosure(), createPrefixManager(prefix, uri));
+  }
+
+  /**
+   * @param uri
+   * @param prefix
+   * @return
+   */
+  public DefaultPrefixManager createPrefixManager(String prefix,
+                                                  String uri) {
+    DefaultPrefixManager prefixManager = new DefaultPrefixManager(uri
+        + "#");
+    prefixManager.setPrefix(prefix + ":", uri + "#");
+    prefixManager.setDefaultPrefix(prefix + ":");
+    return prefixManager;
   }
 
   public OWLOntologyManager createOntologyManager() {

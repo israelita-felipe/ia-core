@@ -26,23 +26,9 @@ public class CoreBidirectionalShortFormProvider
    */
   public CoreBidirectionalShortFormProvider(OWLOntologyManager man,
                                             Collection<OWLOntology> ontologies,
-                                            String prefix, String uri) {
-    super(man, ontologies,
-          this.prefixManager = createPrefixManager(prefix, uri));
-  }
-
-  /**
-   * @param uri
-   * @param prefix
-   * @return
-   */
-  public static DefaultPrefixManager createPrefixManager(String prefix,
-                                                         String uri) {
-    DefaultPrefixManager prefixManager = new DefaultPrefixManager(uri
-        + "#");
-    prefixManager.setPrefix(prefix + ":", uri + "#");
-    prefixManager.setDefaultPrefix(prefix + ":");
-    return prefixManager;
+                                            DefaultPrefixManager prefixManager) {
+    super(man, ontologies, prefixManager);
+    this.prefixManager = prefixManager;
   }
 
   @Override
