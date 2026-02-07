@@ -31,6 +31,17 @@ ia-core-apps/
 
 ---
 
+## Status das Fases de Refatoração
+
+| Fase | Status | Progresso |
+|------|--------|-----------|
+| **Fase 1: Fundamentos** | ✅ Concluída | 100% |
+| **Fase 2.1: ChatService** | ✅ Concluída | 100% |
+| **Fase 2.2: OWL Services** | ✅ Concluída | 100% |
+| **Fase 3: View** | 🔄 Em Andamento | Parcial |
+
+---
+
 ## Problemas Identificados
 
 ### SOLID Violations
@@ -53,41 +64,38 @@ ia-core-apps/
 
 ## Fases de Refatoração
 
-### Fase 1: Fundamentos e Infraestrutura
+### Fase 1: Fundamentos e Infraestrutura ✅ CONCLUÍDA
 
-#### Passo 1.1: Padronizar Validacao Jakarta em DTOs
+#### Passo 1.1: Padronizar Validacao Jakarta em DTOs ✅
 
-**Prioridade:** Alta  
-**Impacto:** Alto  
-**Risco:** Baixo
+**Status:** Concluído
 
-**Ações:**
-1. Revisar todos os DTOs em `ia-core-llm-service-model/`
-2. Adicionar anotacoes Jakarta Validation (`@NotNull`, `@Size`, `@Pattern`)
-3. Criar arquivo i18n em `ia-core-llm-service-model/src/main/resources/i18n/translations_llm_service_model_pt_BR.properties`
-4. Mapear chaves de traducao em classes `Translator` internas
+**Ações realizadas:**
+1. ✅ Revisar todos os DTOs em `ia-core-llm-service-model/`
+2. ✅ Adicionar anotacoes Jakarta Validation (`@NotNull`, `@Size`, `@Pattern`)
+3. ✅ Criar arquivo i18n em `ia-core-llm-service-model/src/main/resources/i18n/translations_llm_service_model_pt_BR.properties`
+4. ✅ Mapear chaves de traducao em classes `Translator` internas
 
-**Arquivos para modificar:**
-- `ComandoSistemaDTO`
-- `TemplateDTO`
-- `TemplateParameterDTO`
-- `AxiomaDTO`
+**Arquivos modificados:**
+- ✅ `ComandoSistemaDTO`
+- ✅ `TemplateDTO`
+- ✅ `TemplateParameterDTO`
+- ✅ `ChatRequestDTO`
+- ✅ `AxiomaDTO`
+- ✅ `SchedulerConfigDTO`
+- ✅ `PeriodicidadeDTO`
 
-#### Passo 1.2: Corrigir Typos e Nomenclatura
+#### Passo 1.2: Corrigir Typos e Nomenclatura ✅
 
-**Prioridade:** Media  
-**Impacto:** Medio  
-**Risco:** Baixo
+**Status:** Concluído
 
-**Ações:**
-1. Corrigir `llmComminicator` -> `llmCommunicator` em LLMTransformationService
-2. Padronizar nomenclatura de variaveis em `VectorStoreService`
+**Ações realizadas:**
+1. ✅ Corrigir `llmComminicator` -> `llmCommunicator` em LLMTransformationService
+2. ✅ Padronizar nomenclatura de variaveis em `VectorStoreService`
 
-#### Passo 1.3: Padronizar uso de Lombok
+#### Passo 1.3: Padronizar uso de Lombok ⏳
 
-**Prioridade:** Media  
-**Impacto:** Medio  
-**Risco:** Baixo
+**Status:** Pendente
 
 **Ações:**
 1. Usar `@Getter`/`@Setter` em vez de `@Data` onde necessario
@@ -98,46 +106,54 @@ ia-core-apps/
 
 ### Fase 2: Separacao de Responsabilidades (SRP)
 
-#### Passo 2.1: Separar ChatService
+#### Passo 2.1: Separar ChatService ✅ CONCLUÍDA
 
-**Prioridade:** Media  
-**Impacto:** Medio  
-**Risco:** Medio
+**Status:** Concluído
 
-**Novo Design:**
+**Novo Design implementado:**
 ```
 ChatService (orquestracao)
-├── ChatSessionService (gerenciamento de sessao)
-├── VectorStoreOperations (acesso a vector store)
-├── PromptTemplateService (manipulacao de templates)
-└── ChatResponseHandler (tratamento de respostas)
+├── ChatSessionService (gerenciamento de sessao) ✅
+├── VectorStoreOperations (acesso a vector store) ✅
+├── PromptTemplateService (manipulacao de templates) ✅
+└── ChatResponseHandler (tratamento de respostas) - Pendente
 ```
 
-**Ações:**
-1. Criar `VectorStoreOperations` - extrair de ChatService
-2. Criar `PromptTemplateService` - extrair de ChatService
-3. Criar `ChatSessionService` - gerenciar sessoes
-4. Refatorar ChatService para orquestrador
+**Ações realizadas:**
+1. ✅ Criar `VectorStoreOperations` - extrair de ChatService
+   - [`VectorStoreOperations.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/vector/VectorStoreOperations.java)
+   - [`VectorStoreOperationsImpl.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/vector/VectorStoreOperationsImpl.java)
+2. ✅ Criar `PromptTemplateService` - extrair de ChatService
+   - [`PromptTemplateService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/template/PromptTemplateService.java)
+   - [`PromptTemplateServiceImpl.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/template/PromptTemplateServiceImpl.java)
+3. ✅ Criar `ChatSessionService` - gerenciar sessoes
+   - [`ChatSessionService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/chat/ChatSessionService.java)
+   - [`ChatSessionServiceImpl.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/chat/ChatSessionServiceImpl.java)
+4. ✅ Refatorar ChatService para orquestrador
+   - [`ChatService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/llm/service/chat/ChatService.java)
 
-#### Passo 2.2: Separar OWL Services
+#### Passo 2.2: Separar OWL Services ✅ CONCLUÍDA
+
+**Status:** Concluído
 
 **Prioridade:** Media  
 **Impacto:** Medio  
 **Risco:** Medio
 
-**Novo Design:**
-```
-CoreOWLService (orquestracao)
-├── OWLReasoningService (inferencias)
-├── OWLParsingService (parsing)
-└── OWLOntologyManagementService (gerenciamento)
-```
+**Interfaces criadas:**
+- ✅ [`OWLReasoningService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/OWLReasoningService.java) - Raciocínio OWL
+- ✅ [`OWLParsingService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/OWLParsingService.java) - Parsing OWL
+- ✅ [`OWLOntologyManagementService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/OWLOntologyManagementService.java) - Gerenciamento OWL
+- ✅ [`CoreOWLReasoner.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/CoreOWLReasoner.java) - Depreciado, agora estende `OWLReasoningService`
 
-**Ações:**
-1. Criar interface `OWLReasoningService`
-2. Criar interface `OWLParsingService`
-3. Criar interface `OWLOntologyManagementService`
-4. Refatorar CoreOWLService para usar abstracoes
+**Implementação:**
+- ✅ [`DefaultOwlService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/DefaultOwlService.java) implementa `CoreOWLService`, `OWLOntologyManagementService`, `OWLParsingService`
+- ✅ [`OpenlletReasonerService.java`](ia-core/ia-core-llm-service/src/main/java/com/ia/core/owl/service/OpenlletReasonerService.java) implementa `CoreOWLReasoner` (e `OWLReasoningService`)
+
+**Migração concluída:**
+1. ✅ `CoreOWLReasoner` agora estende `OWLReasoningService`
+2. ✅ `DefaultOwlService.getReasoningService()` retorna `OWLReasoningService`
+3. ✅ Compatibilidade mantida via deprecação
 
 ---
 
@@ -212,9 +228,10 @@ CoreOWLService (orquestracao)
 5. Rollback possivel a qualquer momento
 
 **Versionamento:**
-- v1.0: Estado atual
-- v1.1: Validacao Jakarta completa
-- v1.2: Separacao de responsabilidades
+- ~~v1.0: Estado inicial~~
+- v1.1: Validacao Jakarta completa ✅
+- v1.2: Separacao de responsabilidades (ChatService) ✅
+- v1.3: Separacao de responsabilidades (OWL Services) ⏳
 - v2.0: Arquitetura completa
 
 ---
