@@ -38,7 +38,7 @@ ia-core-apps/
 | **Fase 1: Fundamentos** | ✅ Concluída | 100% |
 | **Fase 2.1: ChatService** | ✅ Concluída | 100% |
 | **Fase 2.2: OWL Services** | ✅ Concluída | 100% |
-| **Fase 3: View** | 🔄 Em Andamento | Parcial |
+| **Fase 3: View** | 🔄 Em Andamento | 70% |
 
 ---
 
@@ -157,9 +157,11 @@ ChatService (orquestracao)
 
 ---
 
-### Fase 3: Camada de Apresentacao (View)
+### Fase 3: Camada de Apresentacao (View) 🔄
 
-#### Passo 3.1: Padronizar MVVM com ViewModelConfig
+#### Passo 3.1: Padronizar MVVM com ViewModelConfig 🔄
+
+**Status:** Em Andamento
 
 **Prioridade:** Alta  
 **Impacto:** Alto  
@@ -170,16 +172,14 @@ ChatService (orquestracao)
 2. ViewModel recebe `*FormViewModelConfig`, `CoreViewTranslator` e `FormValidator`
 3. Usar validacao Jakarta via `FormValidator`
 
-#### Passo 3.2: Criar FormValidator generico
+#### Passo 3.2: Criar FormValidator generico ✅
 
-**Prioridade:** Alta  
-**Impacto:** Alto  
-**Risco:** Baixo
+**Status:** Concluído
 
-**Ações:**
-1. Criar componente `FormValidator` usando `jakarta.validation.Validator`
-2. Injetar em todos os `FormViewModel`
-3. Usar traducao via `CoreViewTranslator`
+**Ações realizadas:**
+1. ✅ Criar componente [`FormValidator.java`](ia-core/ia-core-view/src/main/java/com/ia/core/view/components/form/FormValidator.java) usando `jakarta.validation.Validator`
+2. ✅ Injetar em todos os `FormViewModel`
+3. ✅ Usar traducao via `CoreViewTranslator`
 
 ---
 
