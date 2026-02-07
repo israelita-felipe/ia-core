@@ -13,15 +13,17 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = SchedulerConfig.TABLE_NAME,
        schema = SchedulerConfig.SCHEMA_NAME)
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

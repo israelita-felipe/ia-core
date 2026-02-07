@@ -9,6 +9,7 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -41,15 +42,17 @@ public class ComandoSistemaDTO
   /**
    * Título do comando
    */
-  @NotNull
+  @NotNull(message = "{validation.comando.titulo.required}")
+  @Size(min = 3, max = 200, message = "{validation.comando.titulo.size}")
   private String titulo;
 
   /**
    * Comando a ser executado, expresso em linguagem natural
    */
+  @Size(max = 500, message = "{validation.comando.comando.size}")
   private String comando;
 
-  @NotNull
+  @NotNull(message = "{validation.comando.template.required}")
   private TemplateDTO template;
 
   @Override

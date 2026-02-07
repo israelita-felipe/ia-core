@@ -70,7 +70,7 @@ import openllet.owlapi.OpenlletReasonerFactory;
  * @version 1.0
  */
 public class OpenlletReasonerService
-  implements CoreOWLReasoner {
+  implements CoreOWLReasoner, OWLReasoningService {
   /** Tipos de inferências padrão a serem pré-computadas */
   private static final InferenceType[] DEFAULT_INFERENCE_TYPES = {
       InferenceType.CLASS_HIERARCHY,

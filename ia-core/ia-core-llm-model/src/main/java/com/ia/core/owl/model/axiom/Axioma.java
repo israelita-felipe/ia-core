@@ -8,13 +8,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = Axioma.TABLE_NAME, schema = Axioma.SCHEMA_NAME)
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor

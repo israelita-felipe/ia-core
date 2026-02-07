@@ -15,6 +15,7 @@ import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -62,9 +63,13 @@ public class PeriodicidadeDTO
   private boolean periodico = false;
   @Default
   private boolean intervaloTempo = false;
+  @NotNull(message = "{validation.periodicidade.dataInicio.required}")
   private LocalDate dataInicio;
+
   private LocalTime horaInicio;
+
   private LocalDate dataFim;
+
   private LocalTime horaFim;
   private LocalTime tempoIntervalo;
   @Default

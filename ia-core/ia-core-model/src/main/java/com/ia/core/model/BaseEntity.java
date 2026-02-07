@@ -13,8 +13,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -27,7 +28,8 @@ import lombok.experimental.SuperBuilder;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @SuperBuilder(toBuilder = true)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class BaseEntity

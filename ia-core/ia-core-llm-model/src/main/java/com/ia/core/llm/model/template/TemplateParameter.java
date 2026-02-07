@@ -10,7 +10,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -21,7 +23,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = TemplateParameter.TABLE_NAME,
        schema = TemplateParameter.SCHEMA_NAME)
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

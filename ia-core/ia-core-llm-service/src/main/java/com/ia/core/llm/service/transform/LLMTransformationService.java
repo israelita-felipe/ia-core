@@ -37,9 +37,9 @@ public class LLMTransformationService {
    *
    */
   public LLMTransformationService(ChatModel chatModel,
-                                  LLMCommunicator llmComminicator) {
+                                  LLMCommunicator llmCommunicator) {
     this.chatModel = chatModel;
-    this.llmCommunicator = llmComminicator;
+    this.llmCommunicator = llmCommunicator;
   }
 
   public String extractText(byte[]... images)

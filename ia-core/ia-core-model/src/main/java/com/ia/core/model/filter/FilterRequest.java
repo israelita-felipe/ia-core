@@ -6,7 +6,9 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -24,7 +26,8 @@ import lombok.experimental.SuperBuilder;
  * @see FieldType
  * @see SearchRequest
  */
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

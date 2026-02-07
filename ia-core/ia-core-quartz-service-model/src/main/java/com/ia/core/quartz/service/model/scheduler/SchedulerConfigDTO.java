@@ -13,6 +13,7 @@ import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -41,6 +42,7 @@ public class SchedulerConfigDTO
 
   private String jobClassName;
 
+  @NotNull(message = "{validation.scheduler.periodicidade.required}")
   @Default
   private PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
       .build();

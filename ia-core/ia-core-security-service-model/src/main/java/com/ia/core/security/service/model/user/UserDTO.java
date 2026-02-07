@@ -22,14 +22,16 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
  * @author Israel Araújo
  */
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor

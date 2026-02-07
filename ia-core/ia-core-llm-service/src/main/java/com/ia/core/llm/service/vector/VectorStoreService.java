@@ -26,7 +26,13 @@ public class VectorStoreService {
   private final VectorStore vectorStore;
 
   /**
-   * @return
+   * Cria e retorna um {@link QuestionAnswerAdvisor} configurado com o VectorStore.
+   *
+   * <p>Este advisor permite que o modelo de linguagem realize buscas vetoriais
+   * para responder perguntas com base no conteúdo indexado no VectorStore.</p>
+   *
+   * @return Uma instância de QuestionAnswerAdvisor configurada com o VectorStore
+   *         injetado neste serviço.
    */
   public QuestionAnswerAdvisor getQuestionAnswerAdvisor() {
     return new QuestionAnswerAdvisor(vectorStore);

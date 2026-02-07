@@ -36,12 +36,15 @@ import lombok.Getter;
  * @version 1.0.0
  */
 public class DefaultOwlService
-  implements CoreOWLService {
+  implements CoreOWLService, OWLOntologyManagementService, OWLParsingService {
 
   @Getter
   private final CoreOWLReasoner reasonerService;
+  @Getter
   private final OWLDataFactory dataFactory;
+  @Getter
   private final OWLOntologyManager manager;
+  @Getter
   private final OWLOntology ontology;
 
   @Getter
@@ -122,6 +125,11 @@ public class DefaultOwlService
 
   public PrefixManager getPrefixManager() {
     return this.shortFormProvider.getPrefixManager();
+  }
+
+  @Override
+  public OWLReasoningService getReasoningService() {
+    return (OWLReasoningService) this.reasonerService;
   }
 
   /**
@@ -213,11 +221,12 @@ public class DefaultOwlService
   /**
    * Extrai axiomas inferidos que não estavam presentes na ontologia original.
    *
-   * @param ontology ontologia contendo todos os axiomas inferidos
-   * @return lista de novos axiomas inferidos em formato Manchester
+   * @param axioms conjunto de axiomas da ontologia inferida
+   * @return lista de novos axiomas inferidos
    * @throws OWLParserException
    */
-  private List<AxiomaDTO> extractInferredAxioms(Set<OWLAxiom> axioms)
+  @Override
+  public List<AxiomaDTO> extractInferredAxioms(Set<OWLAxiom> axioms)
     throws OWLParserException {
     List<AxiomaDTO> inferredAxioms = new ArrayList<>();
     for (OWLAxiom axiom : axioms) {
@@ -256,7 +265,8 @@ public class DefaultOwlService
    *         tipo não for suportado
    * @throws IllegalArgumentException se o axioma for nulo
    */
-  private AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom)
+  @Override
+  public AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom)
     throws OWLParserException {
     try {
       Objects.requireNonNull(axiom, "Axiom cannot be null");
@@ -292,6 +302,15 @@ public class DefaultOwlService
       throw new IllegalArgumentException("AxiomaDTO inválido: "
           + e.getMessage(), e);
     }
+  }
+
+  @Override
+  public OWLOntology loadOntologyFromAxioms(Set<OWLAxiom> axiomas)
+    throws OWLOntologyCreationException {
+    Objects.requireNonNull(axiomas, "Axiomas cannot be null");
+    OWLOntology newOntology = manager.createOntology();
+    manager.addAxioms(newOntology, axiomas);
+    return newOntology;
   }
 
 }

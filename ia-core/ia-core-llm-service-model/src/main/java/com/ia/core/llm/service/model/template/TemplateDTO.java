@@ -9,6 +9,8 @@ import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -40,6 +42,8 @@ public class TemplateDTO
   /**
    * Conteúdo do template
    */
+  @NotNull(message = "{validation.template.conteudo.required}")
+  @Size(max = 10000, message = "{validation.template.conteudo.size}")
   private String conteudo;
 
   /**

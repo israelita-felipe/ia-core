@@ -19,14 +19,16 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = UserPrivilege.TABLE_NAME, schema = UserPrivilege.SCHEMA_NAME)
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

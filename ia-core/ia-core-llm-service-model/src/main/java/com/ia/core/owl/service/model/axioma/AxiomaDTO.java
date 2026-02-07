@@ -6,6 +6,9 @@ import com.ia.core.owl.model.axiom.Axioma;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -33,8 +36,16 @@ public class AxiomaDTO
   }
 
   private String uri;
+
+  @NotNull(message = "{validation.axioma.prefix.required}")
+  @Size(min = 1, max = 50, message = "{validation.axioma.prefix.size}")
   private String prefix;
+
+  @NotNull(message = "{validation.axioma.uriVersion.required}")
   private String uriVersion;
+
+  @NotNull(message = "{validation.axioma.expressao.required}")
+  @Size(max = 2000, message = "{validation.axioma.expressao.size}")
   private String expressao;
   @Default
   private Boolean consistente = true;

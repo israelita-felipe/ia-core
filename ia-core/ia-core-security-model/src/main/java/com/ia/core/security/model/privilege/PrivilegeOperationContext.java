@@ -16,15 +16,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(schema = PrivilegeOperationContext.SCHEMA_NAME,
        name = PrivilegeOperationContext.TABLE_NAME)
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

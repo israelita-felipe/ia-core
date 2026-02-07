@@ -13,9 +13,10 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -26,7 +27,8 @@ import lombok.experimental.SuperBuilder;
        indexes = {
            @Index(name = "idx_log_operation_type_value_id_date_time_operation",
                   columnList = "type ASC, value_id ASC, date_time_operation DESC") })
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

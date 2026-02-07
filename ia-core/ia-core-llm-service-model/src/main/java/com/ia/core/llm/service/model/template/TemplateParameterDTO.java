@@ -6,6 +6,8 @@ import com.ia.core.llm.model.template.TemplateParameter;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +33,8 @@ public class TemplateParameterDTO
     return getSearchRequest().propertyFilters();
   }
 
+  @NotNull(message = "{validation.template.parameter.nome.required}")
+  @Size(min = 1, max = 100, message = "{validation.template.parameter.nome.size}")
   private String nome;
 
   @Override

@@ -7,7 +7,9 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -15,7 +17,8 @@ import lombok.experimental.SuperBuilder;
  */
 @SuppressWarnings("serial")
 @SuperBuilder
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
