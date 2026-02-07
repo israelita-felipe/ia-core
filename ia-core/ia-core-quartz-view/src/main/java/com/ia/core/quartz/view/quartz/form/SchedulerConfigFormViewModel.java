@@ -8,8 +8,8 @@ import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTrigge
 import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormViewModel;
 import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollectionPageViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
-import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
+import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormViewModelConfig;
+import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollectionPageViewModelConfig;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 import com.ia.core.view.utils.ManagerFactory;
 
@@ -38,7 +38,7 @@ public class SchedulerConfigFormViewModel
    * @param config
    */
   public void createSchedulerConfigTriggerCollecitonPageViewModel(SchedulerConfigFormViewModelConfig config) {
-    schedulerConfigTriggerCollectionPageViewModel = new SchedulerConfigTriggerCollectionPageViewModel(new CollectionPageViewModelConfig<>(createSchedulerConfigTriggerService(config)));
+    schedulerConfigTriggerCollectionPageViewModel = new SchedulerConfigTriggerCollectionPageViewModel(new SchedulerConfigTriggerCollectionPageViewModelConfig(config.getSchedulerService()));
   }
 
   /**
@@ -80,8 +80,7 @@ public class SchedulerConfigFormViewModel
    * @param readOnly
    */
   protected void createPeriodicidadeFormViewModel(SchedulerConfigFormViewModelConfig config) {
-    this.periodicidadeFormViewModel = new PeriodicidadeFormViewModel(new FormViewModelConfig<>(config
-        .isReadOnly()));
+    this.periodicidadeFormViewModel = new PeriodicidadeFormViewModel(new PeriodicidadeFormViewModelConfig(config.isReadOnly(), config.getSchedulerService()));
   }
 
   public Collection<String> getJobClassNames() {

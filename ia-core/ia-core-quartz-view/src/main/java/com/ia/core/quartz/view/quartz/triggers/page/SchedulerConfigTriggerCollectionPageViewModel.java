@@ -7,7 +7,7 @@ import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModel;
-import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
+import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollectionPageViewModelConfig;
 
 /**
  *
@@ -18,7 +18,7 @@ public class SchedulerConfigTriggerCollectionPageViewModel
   /**
    * @param config
    */
-  public SchedulerConfigTriggerCollectionPageViewModel(CollectionPageViewModelConfig<SchedulerConfigTriggerDTO> config) {
+  public SchedulerConfigTriggerCollectionPageViewModel(SchedulerConfigTriggerCollectionPageViewModelConfig config) {
     super(config);
   }
 
