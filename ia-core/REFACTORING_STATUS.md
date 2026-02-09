@@ -88,6 +88,57 @@ public String extractText(byte[]... images)
 
 ---
 
+### ✅ FASE A: ApplicationEventPublisher GENERALIZADO
+
+**Objetivo:** Centralizar publicação de eventos de domínio.
+
+**Entregas:**
+- [`CrudOperationType.java`](ia-core/ia-core-service/src/main/java/com/ia/core/service/event/CrudOperationType.java): Enum com CREATED, UPDATED, DELETED
+- [`BaseServiceEvent.java`](ia-core/ia-core-service/src/main/java/com/ia/core/service/event/BaseServiceEvent.java): Evento base genérico
+- [`SaveBaseService.java`](ia-core/ia-core-service/src/main/java/com/ia/core/service/SaveBaseService.java): Callbacks `beforeSave()` e `afterSave()`
+- [`DeleteBaseService.java`](ia-core/ia-core-service/src/main/java/com/ia/core/service/DeleteBaseService.java): Callbacks `beforeDelete()` e `afterDelete()`
+- [`AbstractBaseService.java`](ia-core/ia-core-service/src/main/java/com/ia/core/service/AbstractBaseService.java): Método `publishEvent()` protegido
+
+---
+
+### ✅ FASE B: Extrair Interfaces de Serviço (DIP)
+
+**Objetivo:** Extrair interfaces para aplicar Dependency Inversion Principle.
+
+**Entregas:**
+- Interfaces segregadas: `CountSecuredBaseService`, `DeleteSecuredBaseService`, `FindSecuredBaseService`, `ListSecuredBaseService`, `SaveSecuredBaseService`
+- [`DefaultSecuredBaseService.java`](ia-core/security-core-service/src/main/java/com/ia/core/security/service/DefaultSecuredBaseService.java): Implementa todas as interfaces
+
+---
+
+### ✅ FASE C: Padronização de Nomenclatura (Typos)
+
+**Objetivo:** Corrigir nomenclatura inconsistente e typos.
+
+**Correções em ia-core-apps:**
+- `llmComminicator` → `llmCommunicator`
+- `autenticate` → `authenticate`
+- `registryAccess` → `registerAccess`
+
+**Correções em Biblia:**
+- [`BibliaSecurityConfiguration.java`](Biblia/biblia-view/src/main/java/com/ia/biblia/view/config/BibliaSecurityConfiguration.java): 39 correções de `registryAccess` → `registerAccess`
+
+---
+
+### ✅ FASE D: Publicação Automática de Eventos
+
+**Objetivo:** Publicar eventos automaticamente após operações CRUD.
+
+**Entregas:**
+- [`DefaultSecuredBaseService.java`](ia-core/security-core-service/src/main/java/com/ia/core/security/service/DefaultSecuredBaseService.java): Override de `afterSave()` e `afterDelete()`
+- Eventos publicados automaticamente: CREATED, UPDATED, DELETED
+- Logs de debug para rastreamento
+
+**Commits:**
+- `5903260` - feat(DefaultSecuredBaseService): implementa publicação automática de eventos de domínio
+
+---
+
 ## Fases em Andamento
 
 ### 🔄 FASE 4: Performance e Otimização

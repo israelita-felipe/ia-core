@@ -429,24 +429,33 @@ biblia/
 
 ## 🎯 Próximos Passos Prioritários
 
-| Prioridade | Fase | Descrição |
-|------------|------|-----------|
-| **1** | FASE A | ApplicationEventPublisher via Config |
-| **2** | FASE B | Extrair interfaces de serviço (DIP) |
-| **3** | FASE C | Padronizar nomenclatura |
-| **4** | FASE D | Corrigir dependências circulares |
-| **5** | FASE E | Documentação técnica |
+| Prioridade | Fase | Status | Descrição |
+|------------|------|--------|-----------|
+| **1** | FASE A | ✅ | ApplicationEventPublisher via Config |
+| **2** | FASE B | ✅ | Extrair interfaces de serviço (DIP) |
+| **3** | FASE C | ✅ | Padronizar nomenclatura |
+| **4** | FASE D | ✅ | Publicação automática de eventos |
+| **5** | FASE E | 🔄 | Documentação técnica |
+| **6** | FASE F | 🔄 | Padronizar Lombok |
+| **7** | FASE G | 🔄 | Separar Services (SRP) |
+| **8** | FASE H | 🔄 | REST service layer |
+| **9** | FASE I | 🔄 | View layer MVVM |
+| **10** | FASE J | 🔄 | Corrigir dependências circulares |
 
 ---
 
 ## 📊 Métricas de Sucesso
 
-- [ ] Cobertura de testes > 80%
-- [ ] Zero warnings de compilação
-- [ ] Tempo de build < 5 minutos
-- [ ] Documentação > 90% classes públicas
-- [ ] Zero dependências circulares
-- [ ] 100% dos Services/Managers com EventPublisher via Config
+| Métrica | Status | Valor |
+|---------|--------|-------|
+| Cobertura de testes | 🔄 | > 60% |
+| Zero warnings de compilação | ✅ | 0 |
+| Tempo de build | 🔄 | < 5 min |
+| Documentação classes públicas | 🔄 | > 70% |
+| Dependências circulares | 🔄 | Em análise |
+| Services com EventPublisher | ✅ | 100% |
+| Interfaces segregadas (ISP) | ✅ | Implementado |
+| Eventos automáticos | ✅ | Implementado |
 
 ---
 
