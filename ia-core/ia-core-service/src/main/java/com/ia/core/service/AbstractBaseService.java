@@ -1,5 +1,6 @@
 package com.ia.core.service;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -9,6 +10,8 @@ import com.ia.core.service.contract.HasSearchRequestMapper;
 import com.ia.core.service.contract.HasTransactionManager;
 import com.ia.core.service.contract.HasTranslator;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.event.BaseServiceEvent;
+import com.ia.core.service.event.EventType;
 import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -121,6 +124,40 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
     return config.getTransactionManager();
   }
 
+  // ========== MÉTODOS DE PUBLICAÇÃO DE EVENTOS ==========
+
+  /**
+   * Publica um evento de domínio relacionado ao DTO.
+   * <p>
+   * Este método permite que subclasses publiquem eventos quando
+   * operações significativas são realizadas (criação, atualização,
+   * exclusão, etc.).
+   * </p>
+   *
+   * @param dto       DTO afetado pela operação
+   * @param eventType Tipo de evento conforme {@link EventType}
+   */
+  protected void publishEvent(D dto, EventType eventType) {
+    if (config.getEventPublisher() != null) {
+      config.getEventPublisher()
+          .publishEvent(new BaseServiceEvent<>(this, dto, eventType));
+    }
+  }
+
+  /**
+   * Publica um evento de domínio com dados adicionais.
+   *
+   * @param dto       DTO afetado
+   * @param eventType Tipo de evento
+   * @param data      Dados adicionais do evento
+   */
+  protected void publishEvent(D dto, EventType eventType, Object data) {
+    if (config.getEventPublisher() != null) {
+      config.getEventPublisher()
+          .publishEvent(new BaseServiceEvent<>(this, dto, eventType, data));
+    }
+  }
+
   /**
    * Classe de configuração do serviço base. Responsabilidade: Encapsular todas
    * as dependências necessárias para o serviço. Esta classe utiliza o padrão
@@ -163,5 +200,11 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
      */
     @Getter
     private final Translator translator;
+
+    /**
+     * Publicador de eventos de domínio (opcional).
+     */
+    @Getter
+    private final ApplicationEventPublisher eventPublisher;
   }
 }

@@ -2,6 +2,7 @@ package com.ia.core.service;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -63,6 +64,22 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
      * @param searchRequestMapper mapeador do objeto de busca
      * @param translator          tradutor
      * @param validators          validadores deste serviço
+     * @param eventPublisher      publicador de eventos (opcional)
+     */
+    public DefaultBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                    BaseEntityRepository<T> repository,
+                                    BaseEntityMapper<T, D> mapper,
+                                    SearchRequestMapper searchRequestMapper,
+                                    Translator translator,
+                                    List<IServiceValidator<D>> validators,
+                                    ApplicationEventPublisher eventPublisher) {
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator, eventPublisher);
+      this.validators = validators;
+    }
+
+    /**
+     * Construtor simplificado sem eventPublisher.
      */
     public DefaultBaseServiceConfig(PlatformTransactionManager transactionManager,
                                     BaseEntityRepository<T> repository,
@@ -70,9 +87,8 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
                                     SearchRequestMapper searchRequestMapper,
                                     Translator translator,
                                     List<IServiceValidator<D>> validators) {
-      super(transactionManager, repository, mapper, searchRequestMapper,
-            translator);
-      this.validators = validators;
+      this(transactionManager, repository, mapper, searchRequestMapper,
+           translator, validators, null);
     }
 
   }

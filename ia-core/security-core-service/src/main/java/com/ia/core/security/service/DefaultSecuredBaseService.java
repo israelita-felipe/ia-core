@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -101,6 +102,26 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
      * @param authorizationManager
      * @param logOperationService
      * @param validators
+     * @param eventPublisher
+     */
+    public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                           BaseEntityRepository<T> repository,
+                                           Mapper<T, D> mapper,
+                                           SearchRequestMapper searchRequestMapper,
+                                           Translator translator,
+                                           CoreSecurityAuthorizationManager authorizationManager,
+                                           SecurityContextService securityContextService,
+                                           LogOperationService logOperationService,
+                                           List<IServiceValidator<D>> validators,
+                                           ApplicationEventPublisher eventPublisher) {
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator, authorizationManager, securityContextService,
+            logOperationService, eventPublisher);
+      this.validators = validators;
+    }
+
+    /**
+     * Construtor simplificado sem eventPublisher.
      */
     public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
                                            BaseEntityRepository<T> repository,
@@ -111,10 +132,9 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
                                            SecurityContextService securityContextService,
                                            LogOperationService logOperationService,
                                            List<IServiceValidator<D>> validators) {
-      super(transactionManager, repository, mapper, searchRequestMapper,
-            translator, authorizationManager, securityContextService,
-            logOperationService);
-      this.validators = validators;
+      this(transactionManager, repository, mapper, searchRequestMapper,
+           translator, authorizationManager, securityContextService,
+           logOperationService, validators, null);
     }
   }
 }

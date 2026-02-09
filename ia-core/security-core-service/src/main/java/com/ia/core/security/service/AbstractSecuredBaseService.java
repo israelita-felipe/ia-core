@@ -3,6 +3,7 @@ package com.ia.core.security.service;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -161,6 +162,26 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
      * @param authorizationManager   Gerenciador de autorização
      * @param securityContextService Serviço de contexto de segurança
      * @param logOperationService    Serviço de log de operações
+     * @param eventPublisher         Publicador de eventos (opcional)
+     */
+    public AbstractSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
+                                            BaseEntityRepository<T> repository,
+                                            Mapper<T, D> mapper,
+                                            SearchRequestMapper searchRequestMapper,
+                                            Translator translator,
+                                            CoreSecurityAuthorizationManager authorizationManager,
+                                            SecurityContextService securityContextService,
+                                            LogOperationService logOperationService,
+                                            ApplicationEventPublisher eventPublisher) {
+      super(transactionManager, repository, mapper, searchRequestMapper,
+            translator, eventPublisher);
+      this.authorizationManager = authorizationManager;
+      this.logOperationService = logOperationService;
+      this.securityContextService = securityContextService;
+    }
+
+    /**
+     * Construtor simplificado sem eventPublisher.
      */
     public AbstractSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
                                             BaseEntityRepository<T> repository,
@@ -170,11 +191,9 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
                                             CoreSecurityAuthorizationManager authorizationManager,
                                             SecurityContextService securityContextService,
                                             LogOperationService logOperationService) {
-      super(transactionManager, repository, mapper, searchRequestMapper,
-            translator);
-      this.authorizationManager = authorizationManager;
-      this.logOperationService = logOperationService;
-      this.securityContextService = securityContextService;
+      this(transactionManager, repository, mapper, searchRequestMapper,
+           translator, authorizationManager, securityContextService,
+           logOperationService, null);
     }
   }
 }
