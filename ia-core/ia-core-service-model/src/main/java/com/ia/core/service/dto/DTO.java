@@ -20,8 +20,10 @@ public interface DTO<T extends Serializable>
   /**
    * @return Cópia deste objeto. Por padrão retorna o mesmo que
    *         {@link #cloneObject()}
+   * @param <R> Tipo covariante do DTO
    */
-  default DTO<T> copyObject() {
-    return cloneObject();
+  @SuppressWarnings("unchecked")
+  default <R extends DTO<T>> R copyObject() {
+    return (R) cloneObject();
   }
 }

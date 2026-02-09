@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.ia.core.service.validators.IServiceValidator;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.validator.AbstractValidator;
@@ -21,28 +19,25 @@ import jakarta.validation.Validator;
  * Componente de validação de formulários para Views Vaadin.
  * <p>
  * Utiliza Jakarta Validation para validar objetos DTO e converte os resultados
- * para formato compatí­vel com Vaadin. Este componente deve ser injetado em
+ * para formato compatível com Vaadin. Este componente deve ser injetado em
  * todos os {@link com.ia.core.view.components.form.viewModel.FormViewModel}.
  * </p>
  *
  * @author Israel Araújo
  */
-@Component
 public class FormValidator {
 
   private final Validator jakartaValidator;
-  private final IServiceValidator serviceValidator;
 
-  public FormValidator(Validator jakartaValidator, IServiceValidator serviceValidator) {
+  public FormValidator(Validator jakartaValidator) {
     this.jakartaValidator = jakartaValidator;
-    this.serviceValidator = serviceValidator;
   }
 
   /**
    * Valida um objeto DTO usando Jakarta Validation.
    *
    * @param object o objeto a ser validado
-   * @param bindingResult o resultado da validação do Spring
+   * @param objectName nome do objeto para o binding result
    * @return conjunto de erros de campo
    */
   public BindingResult validate(Object object, String objectName) {
@@ -102,7 +97,7 @@ public class FormValidator {
           String message = errors.values().stream()
               .findFirst()
               .orElse("Validation failed");
-          return ValidationResult.forError(message);
+          return ValidationResult.error(message);
         }
         return ValidationResult.ok();
       }
@@ -116,14 +111,5 @@ public class FormValidator {
    */
   public Validator getJakartaValidator() {
     return jakartaValidator;
-  }
-
-  /**
-   * Obtém o service validator subjacente.
-   *
-   * @return service validator
-   */
-  public IServiceValidator getServiceValidator() {
-    return serviceValidator;
   }
 }

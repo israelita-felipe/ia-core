@@ -20,6 +20,7 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
@@ -48,10 +49,24 @@ public class UserDTO
     return Set.of("userName", "userCode");
   }
 
-  @NotNull
+  /**
+   * Nome do usuário
+   */
+  @NotNull(message = "{validation.user.userName.required}")
+  @Size(min = 3, max = 200, message = "{validation.user.userName.size}")
   private String userName;
-  @NotNull
+
+  /**
+   * Código do usuário
+   */
+  @NotNull(message = "{validation.user.userCode.required}")
+  @Size(min = 3, max = 50, message = "{validation.user.userCode.size}")
   private String userCode;
+
+  /**
+   * Senha do usuário
+   */
+  @Size(min = 6, max = 100, message = "{validation.user.password.size}")
   private String password;
   @Default
   @NotNull

@@ -25,4 +25,12 @@ public class AxiomaTranslator {
   public static final String IS_CONSISTENTE = "axioma.consistente";
   public static final String IS_INFERIDO = "axioma.inferido";
   public static final String IS_ATIVO = "axioma.ativo";
+
+  public static final class VALIDATION {
+    public static final String PREFIX_REQUIRED = "validation.axioma.prefix.required";
+    public static final String PREFIX_SIZE = "validation.axioma.prefix.size";
+    public static final String URI_VERSION_REQUIRED = "validation.axioma.uriVersion.required";
+    public static final String EXPRESSAO_REQUIRED = "validation.axioma.expressao.required";
+    public static final String EXPRESSAO_SIZE = "validation.axioma.expressao.size";
+  }
 }

@@ -25,4 +25,12 @@ public class UserTranslator {
   public static final String CONTA_NAO_BLOQUEADA = "user.accountNotLocked";
 
   public static final String CREDENCIAIS_NAO_EXPIRADAS = "user.credentialsNotExpired";
+
+  public static final class VALIDATION {
+    public static final String USER_NAME_REQUIRED = "validation.user.userName.required";
+    public static final String USER_NAME_SIZE = "validation.user.userName.size";
+    public static final String USER_CODE_REQUIRED = "validation.user.userCode.required";
+    public static final String USER_CODE_SIZE = "validation.user.userCode.size";
+    public static final String PASSWORD_SIZE = "validation.user.password.size";
+  }
 }

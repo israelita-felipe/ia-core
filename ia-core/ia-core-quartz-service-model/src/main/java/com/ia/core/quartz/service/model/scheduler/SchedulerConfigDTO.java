@@ -14,6 +14,7 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -40,6 +41,11 @@ public class SchedulerConfigDTO
     return getSearchRequest().propertyFilters();
   }
 
+  /**
+   * Nome da classe do Job
+   */
+  @NotNull(message = "{validation.scheduler.jobClassName.required}")
+  @Pattern(regexp = "^[a-zA-Z0-9_.]+$", message = "{validation.scheduler.jobClassName.pattern}")
   private String jobClassName;
 
   @NotNull(message = "{validation.scheduler.periodicidade.required}")

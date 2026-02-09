@@ -12,6 +12,7 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
@@ -40,8 +41,11 @@ public class RoleDTO
     return Set.of("name");
   }
 
-  /** Nome */
-  @NotNull
+  /**
+   * Nome do papel
+   */
+  @NotNull(message = "{validation.role.name.required}")
+  @Size(min = 3, max = 100, message = "{validation.role.name.size}")
   private String name;
 
   @Default

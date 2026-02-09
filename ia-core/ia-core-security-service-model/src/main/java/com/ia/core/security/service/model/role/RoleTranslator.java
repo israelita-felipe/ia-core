@@ -17,4 +17,9 @@ public class RoleTranslator {
   public static final String USERS = "role.users";
 
   public static final String PRIVILEGES = "role.privileges";
+
+  public static final class VALIDATION {
+    public static final String NAME_REQUIRED = "validation.role.name.required";
+    public static final String NAME_SIZE = "validation.role.name.size";
+  }
 }

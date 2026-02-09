@@ -20,4 +20,11 @@ public class TemplateTranslator {
   public static final String EXIGE_CONTEXTO = "template.exite.contexto";
 
   public static final String PARAMETROS = "template.parametros";
+
+  public static final class VALIDATION {
+    public static final String TITULO_REQUIRED = "validation.template.titulo.required";
+    public static final String TITULO_SIZE = "validation.template.titulo.size";
+    public static final String CONTEUDO_REQUIRED = "validation.template.conteudo.required";
+    public static final String CONTEUDO_SIZE = "validation.template.conteudo.size";
+  }
 }

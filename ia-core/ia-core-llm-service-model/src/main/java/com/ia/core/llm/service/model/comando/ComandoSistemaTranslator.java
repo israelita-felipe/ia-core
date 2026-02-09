@@ -18,4 +18,12 @@ public class ComandoSistemaTranslator {
   public static final String COMANDO = "comando.sistema.comando";
 
   public static final String FINALIDADE = "comando.sistema.finalidade";
+
+  public static final class VALIDATION {
+    public static final String TITULO_REQUIRED = "validation.comando.titulo.required";
+    public static final String TITULO_SIZE = "validation.comando.titulo.size";
+    public static final String COMANDO_SIZE = "validation.comando.comando.size";
+    public static final String TEMPLATE_REQUIRED = "validation.comando.template.required";
+    public static final String FINALIDADE_REQUIRED = "validation.comando.finalidade.required";
+  }
 }

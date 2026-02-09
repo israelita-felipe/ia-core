@@ -10,6 +10,7 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
@@ -38,8 +39,11 @@ public class PrivilegeDTO
     return getSearchRequest().propertyFilters();
   }
 
-  /** Nome */
-  @NotNull
+  /**
+   * Nome do privilégio
+   */
+  @NotNull(message = "{validation.privilege.name.required}")
+  @Size(min = 3, max = 100, message = "{validation.privilege.name.size}")
   private String name;
 
   @Default

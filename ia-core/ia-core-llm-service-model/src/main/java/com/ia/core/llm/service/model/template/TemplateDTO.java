@@ -37,6 +37,11 @@ public class TemplateDTO
     return getSearchRequest().propertyFilters();
   }
 
+  /**
+   * Título do template
+   */
+  @NotNull(message = "{validation.template.titulo.required}")
+  @Size(min = 3, max = 200, message = "{validation.template.titulo.size}")
   private String titulo;
 
   /**

@@ -18,4 +18,9 @@ public class ChatRequestTranslator {
   public static final String REQUEST = "chat.request.request";
 
   public static final String TEXT = "chat.request.text";
+
+  public static final class VALIDATION {
+    public static final String REQUEST_REQUIRED = "validation.chat.request.required";
+    public static final String REQUEST_SIZE = "validation.chat.request.size";
+  }
 }

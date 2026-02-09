@@ -11,8 +11,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
@@ -28,6 +31,10 @@ import lombok.experimental.SuperBuilder;
  */
 @Entity
 @Table(name = Template.TABLE_NAME, schema = Template.SCHEMA_NAME)
+@NamedEntityGraph(
+  name = "Template.withParameters",
+  attributeNodes = @NamedAttributeNode("parametros")
+)
 @Getter
 @Setter
 @SuperBuilder

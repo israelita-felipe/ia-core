@@ -10,6 +10,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -27,6 +29,10 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = ComandoSistema.TABLE_NAME,
        schema = ComandoSistema.SCHEMA_NAME)
+@NamedEntityGraph(
+  name = "ComandoSistema.withTemplate",
+  attributeNodes = @NamedAttributeNode("template")
+)
 @Getter
 @Setter
 @SuperBuilder

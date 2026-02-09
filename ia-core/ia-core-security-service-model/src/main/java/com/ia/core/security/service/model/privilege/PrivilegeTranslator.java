@@ -20,4 +20,9 @@ public class PrivilegeTranslator {
   public static final String TYPE = "privilege.type";
   public static final String ROLES = "privilege.roles";
   public static final String VALUES = "privilege.values";
+
+  public static final class VALIDATION {
+    public static final String NAME_REQUIRED = "validation.privilege.name.required";
+    public static final String NAME_SIZE = "validation.privilege.name.size";
+  }
 }

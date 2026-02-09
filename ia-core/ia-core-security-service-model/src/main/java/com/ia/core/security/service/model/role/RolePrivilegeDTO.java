@@ -51,8 +51,8 @@ public class RolePrivilegeDTO
 
   public static class CAMPOS
     extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String PRIVILEGE = create("privilege");
-    public static final String OPERATIONS = create("operations");
+    public static final String PRIVILEGE = "privilege";
+    public static final String OPERATIONS = "operations";
   }
 
   /**

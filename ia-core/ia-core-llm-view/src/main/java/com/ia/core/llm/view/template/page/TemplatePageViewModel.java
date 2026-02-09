@@ -47,6 +47,6 @@ public class TemplatePageViewModel
 
   @Override
   public IFormViewModel<TemplateDTO> createFormViewModel(FormViewModelConfig<TemplateDTO> config) {
-    return new TemplateFormViewModel(config);
+    return new TemplateFormViewModel(config.cast());
   }
 }

@@ -14,4 +14,9 @@ public class TemplateParameterTranslator {
   public static final String TEMPLATE_PARAMETER = "template.parameter";
 
   public static final String NOME = "template.parameter.nome";
+
+  public static final class VALIDATION {
+    public static final String NOME_REQUIRED = "validation.template.parameter.nome.required";
+    public static final String NOME_SIZE = "validation.template.parameter.nome.size";
+  }
 }

@@ -39,4 +39,12 @@ public class PeriodicidadeTranslator {
   public static final String INTERVALO_TEMPO = "periodicidade.intervaloTempo";
   public static final String TEMPO_INTERVALO = "periodicidade.tempoIntervalo";
 
+  public static final class VALIDATION {
+    public static final String DATA_INICIO_REQUIRED = "validation.periodicidade.dataInicio.required";
+    public static final String DATA_FIM_REQUIRED = "validation.periodicidade.dataFim.required";
+    public static final String HORA_INICIO_REQUIRED = "validation.periodicidade.horaInicio.required";
+    public static final String DIAS_REQUIRED = "validation.periodicidade.dias.required";
+    public static final String MESES_REQUIRED = "validation.periodicidade.meses.required";
+    public static final String INTERVALO_REQUIRED = "validation.periodicidade.intervalo.required";
+  }
 }
