@@ -51,7 +51,7 @@ public abstract class LoginViewModel
   public void login(Consumer<UserDTO> onSucess, Runnable onFail) {
     try {
       AuthenticationDetails details = getConfig().getDetails();
-      details.autenticate(getModel());
+      details.authenticate(getModel());
       UserDTO user = details.getAuthenticatedUser();
       if (user != null) {
         onSucess.accept(user);

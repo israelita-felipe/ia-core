@@ -32,12 +32,12 @@ public class AuthenticationDetails {
 
   private final AuthenticationManager service;
 
-  public void autenticate(AuthenticationRequest request) {
-    service.autenticate(request, this);
+  public void authenticate(AuthenticationRequest request) {
+    service.authenticate(request, this);
   }
 
   public void createFirstUser(AuthenticationRequest request) {
-    service.createFistUser(request, this);
+    service.createFirstUser(request, this);
   }
 
   public boolean initializeSecurity() {

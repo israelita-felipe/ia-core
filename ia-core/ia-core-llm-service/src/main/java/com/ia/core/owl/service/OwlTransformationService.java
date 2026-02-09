@@ -67,11 +67,11 @@ public class OwlTransformationService
    */
   public OwlTransformationService(ChatModel chatModel,
                                   CoreOWLService owlService,
-                                  LLMCommunicator llmComminicator) {
+                                  LLMCommunicator llmCommunicator) {
     Objects.requireNonNull(chatModel, "ChatModel cannot be null");
     this.chatModel = chatModel;
     this.owlService = owlService;
-    this.communicationService = llmComminicator;
+    this.communicationService = llmCommunicator;
   }
 
   /**

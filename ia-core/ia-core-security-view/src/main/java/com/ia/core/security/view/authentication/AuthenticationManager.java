@@ -8,11 +8,11 @@ import com.ia.core.security.service.model.authentication.JwtAuthenticationRespon
  */
 public interface AuthenticationManager {
 
-  default JwtAuthenticationResponseDTO autenticate(AuthenticationRequest request) {
+  default JwtAuthenticationResponseDTO authenticate(AuthenticationRequest request) {
     return getAuthenticationClient().authenticate(request);
   }
 
-  default JwtAuthenticationResponseDTO createFistUser(AuthenticationRequest request) {
+  default JwtAuthenticationResponseDTO createFirstUser(AuthenticationRequest request) {
     return getAuthenticationClient().createFirstUser(request);
   }
 
@@ -20,14 +20,14 @@ public interface AuthenticationManager {
     return getAuthenticationClient().initializeSecurity();
   }
 
-  default void autenticate(AuthenticationRequest request,
+  default void authenticate(AuthenticationRequest request,
                            AuthenticationDetails details) {
-    details.setAuthentication(autenticate(request));
+    details.setAuthentication(authenticate(request));
   }
 
-  default void createFistUser(AuthenticationRequest request,
+  default void createFirstUser(AuthenticationRequest request,
                               AuthenticationDetails details) {
-    details.setAuthentication(createFistUser(request));
+    details.setAuthentication(createFirstUser(request));
   }
 
   AuthenticationBaseClient getAuthenticationClient();

@@ -48,14 +48,14 @@ public interface CoreSecurityViewAuthorizationManager
     return getAuthenticationMap().getOrDefault(target, true);
   }
 
-  default void registryAccess(Class<?> target, boolean autenticated,
+  default void registerAccess(Class<?> target, boolean authenticated,
                               String... roles) {
-    Set<String> acessSet = getAccessMap().get(target);
-    if (acessSet == null) {
-      acessSet = new HashSet<>();
-      getAccessMap().put(target, acessSet);
+    Set<String> accessSet = getAccessMap().get(target);
+    if (accessSet == null) {
+      accessSet = new HashSet<>();
+      getAccessMap().put(target, accessSet);
     }
-    Stream.of(roles).forEach(acessSet::add);
-    getAuthenticationMap().put(target, autenticated);
+    Stream.of(roles).forEach(accessSet::add);
+    getAuthenticationMap().put(target, authenticated);
   }
 }
