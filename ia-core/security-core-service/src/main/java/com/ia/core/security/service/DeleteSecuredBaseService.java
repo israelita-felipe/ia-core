@@ -16,7 +16,10 @@ import com.ia.core.service.repository.BaseEntityRepository;
 
 /**
  * Interface que deleta um {@link BaseEntity} por meio de um
- * {@link BaseEntityRepository}
+ * {@link BaseEntityRepository} com suporte a segurança.
+ * <p>
+ * Os callbacks de evento são herdados de {@link DeleteBaseService}.
+ * </p>
  *
  * @author Israel Araújo
  * @param <T> {@link BaseEntity}
@@ -43,25 +46,6 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
                      Objects.toString(object));
     }
     return contextMap;
-  }
-
-  @Override
-  default void delete(Long id)
-    throws ServiceException {
-    ServiceException ex = new ServiceException();
-    onTransaction(() -> {
-      try {
-        D dto = getLogOperationService()
-            .logBeforeDelete(id, getRepository(), getMapper());
-        DeleteBaseService.super.delete(id);
-        getLogOperationService().logAfterDelete(dto, getRepository(),
-                                                getMapper());
-      } catch (Exception e) {
-        ex.add(ex);
-      }
-      return id;
-    });
-    checkErrors(ex);
   }
 
   @Override

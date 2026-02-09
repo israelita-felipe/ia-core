@@ -12,7 +12,10 @@ import com.ia.core.service.repository.BaseEntityRepository;
 
 /**
  * Interface que salva um {@link BaseEntity} por meio de um
- * {@link BaseEntityRepository}
+ * {@link BaseEntityRepository} com suporte a segurança.
+ * <p>
+ * Os callbacks de evento são herdados de {@link SaveBaseService}.
+ * </p>
  *
  * @author Israel Araújo
  * @param <T> {@link BaseEntity}
@@ -20,6 +23,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  */
 public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseSecuredService<T, D>, SaveBaseService<T, D> {
+
   /**
    * @param toSave
    * @return
@@ -41,26 +45,5 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   @Override
   default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
     return Set.of(functionalityManager.addFunctionality(this));
-  }
-
-  @Override
-  default D save(D toSave)
-    throws ServiceException {
-    ServiceException ex = new ServiceException();
-    D savedEntity = onTransaction(() -> {
-      try {
-        getLogOperationService().logBeforeSave(toSave, getRepository(),
-                                               getMapper());
-        D saved = SaveBaseService.super.save(toSave);
-        getLogOperationService().logAfterSave(toSave, saved,
-                                              getRepository(), getMapper());
-        return saved;
-      } catch (Exception e) {
-        ex.add(e);
-      }
-      return null;
-    });
-    checkErrors(ex);
-    return savedEntity;
   }
 }

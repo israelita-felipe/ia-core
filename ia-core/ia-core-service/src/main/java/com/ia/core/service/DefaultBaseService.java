@@ -7,6 +7,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.event.CrudOperationType;
+import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -17,6 +19,10 @@ import lombok.Getter;
 
 /**
  * Classe base de um serviço com todas as funcionalidades de um CRUD.
+ * <p>
+ * Publica automaticamente eventos de domínio nas operações CRUD através dos
+ * métodos {@link #afterSave(D, D, CrudOperationType)} e {@link #afterDelete(Long, D)}.
+ * </p>
  *
  * @author Israel Araújo
  * @param <T> Tipo de dado {@link BaseEntity}
@@ -41,6 +47,41 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   public DefaultBaseService(DefaultBaseServiceConfig<T, D> config) {
     super(config);
     registryValidators(config.getValidators());
+  }
+
+  /**
+   * Callback executado após salvar uma entidade.
+   * <p>
+   * Publica automaticamente eventos de domínio para todas as operações de save.
+   * </p>
+   *
+   * @param original     DTO original da requisição
+   * @param saved       DTO salvo no banco de dados
+   * @param operationType Tipo de operação (CREATED ou UPDATED)
+   * @throws ServiceException em caso de erro na publicação do evento
+   */
+  @Override
+  public void afterSave(D original, D saved, CrudOperationType operationType)
+    throws ServiceException {
+    publishEvent(saved, operationType);
+  }
+
+  /**
+   * Callback executado após deletar uma entidade.
+   * <p>
+   * Publica automaticamente eventos de domínio para todas as operações de delete.
+   * </p>
+   *
+   * @param id  Identificador da entidade deletada
+   * @param dto DTO da entidade deletada
+   * @throws ServiceException em caso de erro na publicação do evento
+   */
+  @Override
+  public void afterDelete(Long id, D dto)
+    throws ServiceException {
+    if (dto != null) {
+      publishEvent(dto, CrudOperationType.DELETED);
+    }
   }
 
   /**
