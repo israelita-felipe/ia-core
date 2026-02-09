@@ -31,13 +31,13 @@ public class SchedulerConfigFormViewModel
   public SchedulerConfigFormViewModel(SchedulerConfigFormViewModelConfig config) {
     super(config);
     createPeriodicidadeFormViewModel(config);
-    createSchedulerConfigTriggerCollecitonPageViewModel(config);
+    createSchedulerConfigTriggerCollectionPageViewModel(config);
   }
 
   /**
    * @param config
    */
-  public void createSchedulerConfigTriggerCollecitonPageViewModel(SchedulerConfigFormViewModelConfig config) {
+  public void createSchedulerConfigTriggerCollectionPageViewModel(SchedulerConfigFormViewModelConfig config) {
     schedulerConfigTriggerCollectionPageViewModel = new SchedulerConfigTriggerCollectionPageViewModel(new SchedulerConfigTriggerCollectionPageViewModelConfig(config.getSchedulerService()));
   }
 
