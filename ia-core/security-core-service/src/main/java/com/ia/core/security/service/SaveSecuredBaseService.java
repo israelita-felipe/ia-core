@@ -46,4 +46,5 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
     return Set.of(functionalityManager.addFunctionality(this));
   }
+  
 }
