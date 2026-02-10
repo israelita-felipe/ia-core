@@ -4,7 +4,8 @@
 Padrões de Exception Handling para API REST
 
 ## Status
-**Proposto** | **Aceito** | **Deprecated** | **Substituído por**
+
+✅ Aceito
 
 ## Contexto
 A aplicação ia-core-apps necessita de uma estratégia padronizada para tratamento de exceções em sua API REST. O tratamento inconsistente de erros leva a:
@@ -35,7 +36,49 @@ Decisões anteriores (ADR-001 a ADR-010) estabeleceram padrões para mapping, fi
 - Positivas: Código mais legível, melhor rastreabilidade
 - Negativas: Maior número de classes de exceção
 
-### Decisão 2: ResponseEntity Padronizada com ErrorResponse DTO
+### Decisão 2: Enum RestErrorCode para Códigos Padronizados
+**Escolhido:** Criar enum `RestErrorCode` para códigos de erro reutilizáveis
+
+**Estrutura do enum:**
+```java
+public enum RestErrorCode {
+  AUTHENTICATION_ERROR("AUTHENTICATION_ERROR", 401, "error.authentication"),
+  ACCESS_DENIED("ACCESS_DENIED", 403, "error.access.denied"),
+  ENTITY_NOT_FOUND("ENTITY_NOT_FOUND", 404, "error.entity.not.found"),
+  VALIDATION_ERROR("VALIDATION_ERROR", 400, "error.validation"),
+  DATA_INTEGRITY_VIOLATION("DATA_INTEGRITY_VIOLATION", 409, "error.data.integrity"),
+  SERVICE_ERROR("SERVICE_ERROR", 400, "error.service"),
+  INTERNAL_ERROR("INTERNAL_ERROR", 500, "error.internal");
+}
+```
+
+**Justificativa:**
+- Reaproveitamento de códigos em handlers
+- Tipo seguro (type-safe)
+- Documentação automática dos códigos suportados
+- Facilita internacionalização
+
+### Decisão 3: Internacionalização de Mensagens de Erro
+**Escolhido:** Usar `CoreApplicationTranslator` para todas as mensagens de erro
+
+**Chaves de tradução:**
+```java
+public static final String ERROR_AUTHENTICATION = "error.authentication";
+public static final String ERROR_ACCESS_DENIED = "error.access.denied";
+public static final String ERROR_ENTITY_NOT_FOUND = "error.entity.not.found";
+public static final String ERROR_VALIDATION = "error.validation";
+public static final String ERROR_DATA_INTEGRITY = "error.data.integrity";
+public static final String ERROR_SERVICE = "error.service";
+public static final String ERROR_INTERNAL = "error.internal";
+```
+
+**Justificativa:**
+- Suporte a múltiplos idiomas
+- Messages centralizadas
+- Facilidade de manutenção
+- Consistência na comunicação de erros
+
+### Decisão 4: ResponseEntity Padronizada com ErrorResponse DTO
 **Escolhido:** Criar DTO ErrorResponse para padronizar respostas de erro
 
 **Estrutura do ErrorResponse:**
@@ -62,7 +105,7 @@ Decisões anteriores (ADR-001 a ADR-010) estabeleceram padrões para mapping, fi
 - Positivas: API consistente, melhor experiência para clientes
 - Negativas: Overhead de serialização adicional
 
-### Decisão 3: Uso de @RestControllerAdvice Centralizado
+### Decisão 5: Uso de @RestControllerAdvice Centralizado
 **Escolhido:** Centralizar tratamento em `CoreRestControllerAdvice`
 
 **Justificativa:**
@@ -71,7 +114,7 @@ Decisões anteriores (ADR-001 a ADR-010) estabeleceram padrões para mapping, fi
 - Mantém controllers limpos de lógica de tratamento de erros
 - Facilita manutenção e evolução
 
-### Decisão 4: Exceções Não Verificadas (Unchecked)
+### Decisão 6: Exceções Não Verificadas (Unchecked)
 **Escolhido:** Todas as exceções de domínio estendem `RuntimeException`
 
 **Justificativa:**
@@ -79,7 +122,7 @@ Decisões anteriores (ADR-001 a ADR-010) estabeleceram padrões para mapping, fi
 - Mais flexível para uso em diferentes camadas
 - Consistente com práticas modernas de Java/Spring
 
-### Decisão 5: Códigos de Erro Automáticos
+### Decisão 7: Códigos de Erro Automáticos
 **Escolhido:** Derivar código de erro do nome da classe
 
 **Exemplo:**
@@ -127,6 +170,26 @@ Throwable
 
 ## Implementação
 
+### Enum RestErrorCode
+
+```java
+@Getter
+@RequiredArgsConstructor
+public enum RestErrorCode {
+  AUTHENTICATION_ERROR("AUTHENTICATION_ERROR", 401, "error.authentication"),
+  ACCESS_DENIED("ACCESS_DENIED", 403, "error.access.denied"),
+  ENTITY_NOT_FOUND("ENTITY_NOT_FOUND", 404, "error.entity.not.found"),
+  VALIDATION_ERROR("VALIDATION_ERROR", 400, "error.validation"),
+  DATA_INTEGRITY_VIOLATION("DATA_INTEGRITY_VIOLATION", 409, "error.data.integrity"),
+  SERVICE_ERROR("SERVICE_ERROR", 400, "error.service"),
+  INTERNAL_ERROR("INTERNAL_ERROR", 500, "error.internal");
+
+  private final String code;
+  private final int httpStatus;
+  private final String translationKey;
+}
+```
+
 ### Exemplo de DomainException
 
 ```java
@@ -151,21 +214,20 @@ public abstract class DomainException extends RuntimeException {
 @RestControllerAdvice
 public class CoreRestControllerAdvice {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
-            ResourceNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(
+            AuthenticationException ex, WebRequest request) {
         String traceId = generateTraceId();
-        log.warn("Recurso não encontrado [{}]: {}", traceId, ex.getMessage());
-
+        
         ErrorResponse error = ErrorResponse.of(
-            HttpStatus.NOT_FOUND.value(),
-            ex.getErrorCode(),
-            ex.getMessage(),
+            HttpStatus.UNAUTHORIZED.value(),
+            RestErrorCode.AUTHENTICATION_ERROR.getCode(),
+            getTranslatedMessage(RestErrorCode.AUTHENTICATION_ERROR),
             getPath(request),
             traceId
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .header("x-trace-id", traceId)
             .body(error);
     }
@@ -193,13 +255,13 @@ throw new BusinessException("DUPLICATE_EMAIL", "Email já cadastrado");
 
 - [RFC 7807 - Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807)
 - [Spring Exception Handling](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-exceptionhandlers)
-- [FASE_S_EXCEPTION_HANDLING.md](../FASE_S_EXCEPTION_HANDLING.md)
 
 ## Histórico de Revisões
 
 | Versão | Data | Autor | Descrição |
 |--------|------|-------|-----------|
 | 1.0 | 2024-01-15 | Israel Araújo | Versão inicial |
+| 2.0 | 2024-03-20 | Israel Araújo | Adicionado RestErrorCode enum e i18n |
 
 ---
 
