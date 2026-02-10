@@ -22,6 +22,25 @@ public class CoreApplicationTranslator {
   /// MENSAGENS DE ERROR
   ///////////////////////////////////////////////////////
 
-  public static final String ERRO_INTEGRIDADE_OBJETO_POSSUI_DEPENDENCIAS = "erro.integridade.objeto.dependencias";
+  public static final String ERRO_INTEGRIDADE_OBJETO_POSSUI_DEPENDENCIAS = "error.integridade.objeto.dependencias";
+
+  ///////////////////////////////////////////////////////
+  /// MENSAGENS DE ERROR - REST API
+  ///////////////////////////////////////////////////////
+
+  public static final String ERROR_AUTHENTICATION = "error.authentication";
+  public static final String ERROR_AUTHENTICATION_MESSAGE = "error.authentication.message";
+  public static final String ERROR_ACCESS_DENIED = "error.access.denied";
+  public static final String ERROR_ACCESS_DENIED_MESSAGE = "error.access.denied.message";
+  public static final String ERROR_ENTITY_NOT_FOUND = "error.entity.not.found";
+  public static final String ERROR_ENTITY_NOT_FOUND_MESSAGE = "error.entity.not.found.message";
+  public static final String ERROR_VALIDATION = "error.validation";
+  public static final String ERROR_VALIDATION_MESSAGE = "error.validation.message";
+  public static final String ERROR_DATA_INTEGRITY = "error.data.integrity";
+  public static final String ERROR_DATA_INTEGRITY_MESSAGE = "error.data.integrity.message";
+  public static final String ERROR_SERVICE = "error.service";
+  public static final String ERROR_SERVICE_MESSAGE = "error.service.message";
+  public static final String ERROR_INTERNAL = "error.internal";
+  public static final String ERROR_INTERNAL_MESSAGE = "error.internal.message";
 
 }

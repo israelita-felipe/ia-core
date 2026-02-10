@@ -38,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
  * padronizado de exceções em todos os controllers REST. Utiliza estrutura
  * {@link ErrorResponse} para comunicação consistente de erros.
  *
+ * Documentação OpenAPI: Todos os handlers incluem anotações @Operation e
+ * @ApiResponse para automatic documentation de códigos de erro.
+ *
  * @author Israel Araújo
  */
 @RestControllerAdvice
@@ -65,6 +68,27 @@ public class CoreRestControllerAdvice
   }
 
   /**
+   * Obtém a mensagem traduzida para o código de erro.
+   *
+   * @param errorCode código de erro
+   * @return mensagem traduzida
+   */
+  private String getTranslatedMessage(RestErrorCode errorCode) {
+    return translator.getTranslation(errorCode.getTranslationKey());
+  }
+
+  /**
+   * Obtém a mensagem traduzida para o código de erro com sufixo _message.
+   *
+   * @param errorCode código de erro
+   * @return mensagem traduzida
+   */
+  private String getTranslatedMessageWithSuffix(RestErrorCode errorCode) {
+    String messageKey = errorCode.getTranslationKey() + ".message";
+    return translator.getTranslation(messageKey);
+  }
+
+  /**
    * Trata exceção de autenticação.
    *
    * @param ex      {@link AuthenticationException}
@@ -73,20 +97,20 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
-                                                                  WebRequest request) {
+                                                                    WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Erro de autenticação [{}]: {}", traceId, ex.getMessage());
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.UNAUTHORIZED.value(),
-        "AUTHENTICATION_ERROR",
-        "Credenciais inválidas ou sessão expirada",
+        RestErrorCode.AUTHENTICATION_ERROR.getCode(),
+        getTranslatedMessageWithSuffix(RestErrorCode.AUTHENTICATION_ERROR),
         getPath(request),
         traceId
     );
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-        .header(HEADER_INTERNAL_ERROR, "Não autorizado")
+        .header(HEADER_INTERNAL_ERROR, getTranslatedMessage(RestErrorCode.AUTHENTICATION_ERROR))
         .header(HEADER_TRACE_ID, traceId)
         .body(error);
   }
@@ -100,20 +124,20 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
-                                                                    WebRequest request) {
+                                                                  WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Acesso negado [{}]: {}", traceId, ex.getMessage());
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.FORBIDDEN.value(),
-        "ACCESS_DENIED",
-        "Acesso negado ao recurso solicitado",
+        RestErrorCode.ACCESS_DENIED.getCode(),
+        getTranslatedMessageWithSuffix(RestErrorCode.ACCESS_DENIED),
         getPath(request),
         traceId
     );
 
     return ResponseEntity.status(HttpStatus.FORBIDDEN)
-        .header(HEADER_INTERNAL_ERROR, "Acesso negado")
+        .header(HEADER_INTERNAL_ERROR, getTranslatedMessage(RestErrorCode.ACCESS_DENIED))
         .header(HEADER_TRACE_ID, traceId)
         .body(error);
   }
@@ -127,13 +151,13 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
-                                                                         WebRequest request) {
+                                                                       WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Recurso não encontrado [{}]: {}", traceId, ex.getMessage());
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.NOT_FOUND.value(),
-        ex.getErrorCode(),
+        RestErrorCode.ENTITY_NOT_FOUND.getCode(),
         ex.getMessage(),
         getPath(request),
         traceId
@@ -153,21 +177,21 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex,
-                                                                       WebRequest request) {
+                                                                    WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Recurso não encontrado [{}]: {}", traceId, ex.getMessage());
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.NOT_FOUND.value(),
-        "ENTITY_NOT_FOUND",
-        ex.getMessage() != null ? ex.getMessage() : "Recurso não encontrado",
+        RestErrorCode.ENTITY_NOT_FOUND.getCode(),
+        ex.getMessage() != null ? ex.getMessage() : getTranslatedMessage(RestErrorCode.ENTITY_NOT_FOUND),
         getPath(request),
         traceId
     );
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .header(HEADER_INTERNAL_ERROR,
-                ex.getMessage() != null ? ex.getMessage() : "Recurso não encontrado")
+            ex.getMessage() != null ? ex.getMessage() : getTranslatedMessage(RestErrorCode.ENTITY_NOT_FOUND))
         .header(HEADER_TRACE_ID, traceId)
         .body(error);
   }
@@ -181,13 +205,13 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex,
-                                                                WebRequest request) {
+                                                              WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Violação de regra de negócio [{}]: {}", traceId, ex.getMessage());
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.BAD_REQUEST.value(),
-        ex.getErrorCode(),
+        RestErrorCode.VALIDATION_ERROR.getCode(),
         ex.getMessage(),
         getPath(request),
         traceId
@@ -207,7 +231,7 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(ValidationException.class)
   public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex,
-                                                                 WebRequest request) {
+                                                               WebRequest request) {
     String traceId = generateTraceId();
     log.warn("Erro de validação [{}]: {}", traceId, ex.getMessage());
 
@@ -221,7 +245,7 @@ public class CoreRestControllerAdvice
 
     ErrorResponse error = ErrorResponse.withDetails(
         HttpStatus.BAD_REQUEST.value(),
-        ex.getErrorCode(),
+        RestErrorCode.VALIDATION_ERROR.getCode(),
         ex.getMessage(),
         getPath(request),
         traceId,
@@ -242,21 +266,22 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<ErrorResponse> handleDataIntegrityException(DataIntegrityViolationException ex,
-                                                                     WebRequest request) {
+                                                                  WebRequest request) {
     String traceId = generateTraceId();
     log.error("Erro de integridade de dados [{}]: {}", traceId, ex.getMessage(), ex);
 
+    String errorMessage = translator.getTranslation(CoreApplicationTranslator.ERROR_DATA_INTEGRITY_MESSAGE);
+
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.CONFLICT.value(),
-        "DATA_INTEGRITY_VIOLATION",
-        translator.getTranslation(CoreApplicationTranslator.ERRO_INTEGRIDADE_OBJETO_POSSUI_DEPENDENCIAS),
+        RestErrorCode.DATA_INTEGRITY_VIOLATION.getCode(),
+        errorMessage,
         getPath(request),
         traceId
     );
 
     return ResponseEntity.status(HttpStatus.CONFLICT)
-        .header(HEADER_SERVICE_ERROR, translator
-            .getTranslation(CoreApplicationTranslator.ERRO_INTEGRIDADE_OBJETO_POSSUI_DEPENDENCIAS))
+        .header(HEADER_SERVICE_ERROR, errorMessage)
         .header(HEADER_TRACE_ID, traceId)
         .body(error);
   }
@@ -270,7 +295,7 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(ServiceException.class)
   public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex,
-                                                              WebRequest request) {
+                                                            WebRequest request) {
     String traceId = generateTraceId();
     log.error("Erro de serviço [{}]: {}", traceId, ex.getMessage(), ex);
 
@@ -278,15 +303,15 @@ public class CoreRestControllerAdvice
 
     List<ErrorResponse.ErrorDetail> details = errors.stream()
         .map(error -> ErrorResponse.ErrorDetail.builder()
-            .withCode("SERVICE_ERROR")
+            .withCode(RestErrorCode.SERVICE_ERROR.getCode())
             .withMessage(error)
             .build())
         .collect(Collectors.toList());
 
     ErrorResponse error = ErrorResponse.withDetails(
         HttpStatus.BAD_REQUEST.value(),
-        "SERVICE_ERROR",
-        "Erro(s) de serviço",
+        RestErrorCode.SERVICE_ERROR.getCode(),
+        getTranslatedMessageWithSuffix(RestErrorCode.SERVICE_ERROR),
         getPath(request),
         traceId,
         details
@@ -321,7 +346,7 @@ public class CoreRestControllerAdvice
           .add(fieldError.getDefaultMessage());
 
       details.add(ErrorResponse.ErrorDetail.builder()
-          .withCode("VALIDATION_ERROR")
+          .withCode(RestErrorCode.VALIDATION_ERROR.getCode())
           .withMessage(fieldError.getDefaultMessage())
           .withField(fieldError.getField())
           .withRejectedValue(fieldError.getRejectedValue())
@@ -330,8 +355,8 @@ public class CoreRestControllerAdvice
 
     ErrorResponse error = ErrorResponse.withFieldErrors(
         HttpStatus.BAD_REQUEST.value(),
-        "VALIDATION_ERROR",
-        "Erro(s) de validação",
+        RestErrorCode.VALIDATION_ERROR.getCode(),
+        getTranslatedMessageWithSuffix(RestErrorCode.VALIDATION_ERROR),
         getPath(request),
         traceId,
         fieldErrors
@@ -351,14 +376,14 @@ public class CoreRestControllerAdvice
    */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGenericException(Exception ex,
-                                                               WebRequest request) {
+                                                             WebRequest request) {
     String traceId = generateTraceId();
     log.error("Erro não tratado [{}]: {}", traceId, ex.getMessage(), ex);
 
     ErrorResponse error = ErrorResponse.of(
         HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        "INTERNAL_ERROR",
-        "Ocorreu um erro interno. Por favor, tente novamente mais tarde.",
+        RestErrorCode.INTERNAL_ERROR.getCode(),
+        getTranslatedMessageWithSuffix(RestErrorCode.INTERNAL_ERROR),
         getPath(request),
         traceId
     );
