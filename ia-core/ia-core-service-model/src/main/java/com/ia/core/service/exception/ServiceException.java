@@ -4,17 +4,21 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
+import com.ia.core.model.exception.DomainException;
+
 /**
- * Classe de retenção de erros.
+ * Classe de retenção de erros de serviço.
+ * Mantida para retrocompatibilidade com código existente.
  *
  * @author Israel Araújo
  */
 public class ServiceException
-  extends Exception {
-  /**
-   * Serial UID.
-   */
+  extends DomainException {
+
   private static final long serialVersionUID = -7117586372811635337L;
+
+  private static final String DEFAULT_ERROR_CODE = "SERVICE_ERROR";
+
   /**
    * Exceções
    */
@@ -24,7 +28,7 @@ public class ServiceException
    * Construtor padrão.
    */
   public ServiceException() {
-
+    super(DEFAULT_ERROR_CODE, "Erro de serviço");
   }
 
   /**
@@ -35,6 +39,27 @@ public class ServiceException
   public ServiceException(String error) {
     this();
     add(error);
+  }
+
+  /**
+   * Construtor com código de erro e mensagem.
+   *
+   * @param errorCode código de erro
+   * @param message   mensagem de erro
+   */
+  public ServiceException(String errorCode, String message) {
+    super(errorCode, message);
+  }
+
+  /**
+   * Construtor com código de erro, mensagem e causa.
+   *
+   * @param errorCode código de erro
+   * @param message   mensagem de erro
+   * @param cause     causa original
+   */
+  public ServiceException(String errorCode, String message, Throwable cause) {
+    super(errorCode, message, cause);
   }
 
   /**
