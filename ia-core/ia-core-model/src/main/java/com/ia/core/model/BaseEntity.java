@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.ia.core.model.annotation.EnableCache;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
@@ -24,7 +22,6 @@ import lombok.experimental.SuperBuilder;
  *
  * @author Israel Araújo
  */
-@EnableCache
 @SuppressWarnings("serial")
 @MappedSuperclass
 @SuperBuilder(toBuilder = true)
