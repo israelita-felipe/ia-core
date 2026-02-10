@@ -1,475 +1,554 @@
-# FASE 6: Testes Unitários
+# Plano de Testes Automatizados - ia-core-apps
 
-## Objetivo
-Implementar testes unitários com cobertura mínima de 70% para garantir qualidade e regressão.
+## 1. Visão Geral
 
----
+Este documento define a estratégia de testes automatizados para o projeto ia-core-apps, garantindo qualidade, manutenibilidade e cobertura adequada do código.
 
-## 6.1 Estratégia de Testes
+### 1.1 Objetivos
+- Garantir qualidade do código através de testes automatizados
+- Facilitar refatorações com segurança
+- Documentar comportamento esperado do sistema
+- Reduzir regressões e bugs em produção
 
-### Pirâmide de Testes
+### 1.2 Pilares da Estratégia de Testes
 
 ```
-        /\
-       /  \
-      /Integration\
-     /--------------\
-    /   Unit Tests  \
-   /________________\
+        ┌─────────────────────────────────────┐
+        │         PIRÂMIDE DE TESTES          │
+        │                                     │
+        │              ┌───┐                   │
+        │             │ E2E│      → Poucos     │
+        │            ┌┴───┴┐                  │
+        │           │INTEGRA│    → Alguns      │
+        │          ┌┴─────┴┐                  │
+        │         │ UNITÁRIOS│   → Muitos      │
+        │        └─────────┘                  │
+        └─────────────────────────────────────┘
 ```
 
-- **Unit Tests**: 70% - Testam classes isoladamente
-- **Integration Tests**: 20% - Testam integração com banco
-- **E2E Tests**: 10% - Testes de ponta a ponta
+## 2. Tipos de Testes
 
----
+### 2.1 Testes Unitários
+**Objetivo**: Testar unidades isoladas de código
+**Localização**: `src/test/java/**/*Test.java`
+**Frameworks**: JUnit 5, Mockito, AssertJ
 
-## 6.2 Dependências
+| Componente | Foco | Tempo Exec. |
+|------------|------|-------------|
+| Services | Lógica de negócio | < 100ms |
+| Mappers | Conversão DTO↔Entity | < 50ms |
+| Validators | Regras de validação | < 50ms |
+| Utilities | Funções utilitárias | < 50ms |
 
-```xml
-<!-- JUnit 5 -->
-<dependency>
-  <groupId>org.junit.jupiter</groupId>
-  <artifactId>junit-jupiter-engine</artifactId>
-  <scope>test</scope>
-</dependency>
+### 2.2 Testes de Integração
+**Objetivo**: Testar interação entre componentes
+**Localização**: `src/test/java/**/*IT.java`
+**Frameworks**: JUnit 5, Spring Test, TestContainers
 
-<!-- Mockito -->
-<dependency>
-  <groupId>org.mockito</groupId>
-  <artifactId>mockito-core</artifactId>
-  <scope>test</scope>
-</dependency>
-<dependency>
-  <groupId>org.mockito</groupId>
-  <artifactId>mockito-junit-jupiter</artifactId>
-  <scope>test</scope>
-</dependency>
+| Componente | Foco | Tempo Exec. |
+|------------|------|-------------|
+| Repositories | CRUD com banco | < 1s |
+| Services | Injeção de dependências | < 2s |
+| Controllers | Endpoints REST | < 2s |
 
-<!-- AssertJ -->
-<dependency>
-  <groupId>org.assertj</groupId>
-  <artifactId>assertj-core</artifactId>
-  <scope>test</scope>
-</dependency>
+### 2.3 Testes End-to-End (E2E)
+**Objetivo**: Testar fluxos completos da aplicação
+**Localização**: `src/test/java/**/*E2ETest.java`
+**Frameworks**: Selenium, TestContainers
 
-<!-- Spring Test -->
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-test</artifactId>
-  <scope>test</scope>
-</dependency>
+## 3. Padrões e Convenções
 
-<!-- JaCoCo -->
-<plugin>
-  <groupId>org.jacoco</groupId>
-  <artifactId>jacoco-maven-plugin</artifactId>
-</plugin>
-```
-
----
-
-## 6.3 Estrutura de Testes
+### 3.1 Estrutura de Pacotes de Teste
 
 ```
 src/test/java/com/ia/core/
-├── {modulo}/
+├── llm/
 │   ├── service/
-│   │   └── {Entidade}ServiceTest.java
-│   ├── repository/
-│   │   └── {Entidade}RepositoryTest.java
-│   ├── rest/
-│   │   └── {Entidade}ControllerTest.java
-│   └── mapper/
-│       └── {Entidade}MapperTest.java
-└── util/
-    └── AssertionUtils.java
+│   │   ├── comando/
+│   │   │   ├── ComandoSistemaServiceTest.java
+│   │   │   └── ComandoSistemaRepositoryIT.java
+│   │   └── template/
+│   │       ├── TemplateServiceTest.java
+│   │       └── TemplateMapperTest.java
+│   └── controller/
+│       ├── ComandoSistemaControllerTest.java
+│       └── TemplateControllerTest.java
+├── quartz/
+│   └── service/
+├── nlp/
+│   └── service/
+└── support/
+    ├── AbstractServiceTest.java
+    ├── AbstractRepositoryIT.java
+    ├── TestDataFactory.java
+    └── TestcontainersConfiguration.java
 ```
 
----
+### 3.2 Convenções de Nomenclatura
 
-## 6.4 Templates de Testes
+| Tipo | Padrão | Exemplo |
+|------|--------|---------|
+| Unit Test | `{Classe}Test.java` | `ComandoSistemaServiceTest.java` |
+| Integration Test | `{Classe}IT.java` | `ComandoSistemaRepositoryIT.java` |
+| E2E Test | `{Funcionalidade}E2ETest.java` | `ChatE2ETest.java` |
+| Test Data Factory | `TestDataFactory.java` | `TestDataFactory.java` |
+| Base Test Class | `Abstract{Tipo}Test.java` | `AbstractServiceTest.java` |
 
-### 6.4.1 Service Test
+### 3.3 Estrutura de um Teste Unitário
 
 ```java
 @ExtendWith(MockitoExtension.class)
-class {Entidade}ServiceTest {
+class ComandoSistemaServiceTest {
 
-  @Mock
-  private {Entidade}Repository repository;
+    @Mock
+    private ComandoSistemaRepository repository;
 
-  @InjectMocks
-  private {Entidade}Service service;
+    @InjectMocks
+    private ComandoSistemaService service;
 
-  @Test
-  @DisplayName("Deve retornar entidade quando encontrada por ID")
-  void deveRetornarEntidadeQuandoEncontrada() {
-    // Given
-    Long id = 1L;
-    {Entidade} entidade = criarEntidade();
-    when(repository.findById(id)).thenReturn(Optional.of(entidade));
+    private TestDataFactory testData;
 
-    // When
-    Optional<{Entidade}> result = service.findById(id);
+    @BeforeEach
+    void setUp() {
+        testData = new TestDataFactory();
+    }
 
-    // Then
-    assertThat(result).isPresent();
-    assertThat(result.get().getId()).isEqualTo(id);
-  }
+    @Test
+    @DisplayName("Deve retornar comando por ID")
+    void deveRetornarComandoPorId() {
+        // Given
+        Long id = 1L;
+        ComandoSistema comando = testData.criarComandoSistema(id);
+        when(repository.findById(id)).thenReturn(Optional.of(comando));
 
-  @Test
-  @DisplayName("Deve retornar vazio quando entidade não encontrada")
-  void deveRetornarVazioQuandoNaoEncontrada() {
-    // Given
-    Long id = 999L;
-    when(repository.findById(id)).thenReturn(Optional.empty());
+        // When
+        ComandoSistema result = service.buscarPorId(id);
 
-    // When
-    Optional<{Entidade}> result = service.findById(id);
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(id);
+        verify(repository).findById(id);
+    }
 
-    // Then
-    assertThat(result).isEmpty();
-  }
+    @Test
+    @DisplayName("Deve lançar exceção quando comando não encontrado")
+    void deveLancarExcecaoQuandoComandoNaoEncontrado() {
+        // Given
+        Long id = 999L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-  @Test
-  @DisplayName("Deve salvar entidade com sucesso")
-  void deveSalvarEntidadeComSucesso() {
-    // Given
-    {Entidade}DTO dto = criarDTO();
-    {Entidade} entidade = criarEntidade();
-    when(repository.save(any({Entidade}.class))).thenReturn(entidade);
-
-    // When
-    {Entidade} result = service.save(dto);
-
-    // Then
-    assertThat(result).isNotNull();
-    verify(repository).save(any({Entidade}.class));
-  }
-
-  @Test
-  @DisplayName("Deve excluir entidade com sucesso")
-  void deveExcluirEntidadeComSucesso() {
-    // Given
-    Long id = 1L;
-    doNothing().when(repository).deleteById(id);
-
-    // When
-    service.delete(id);
-
-    // Then
-    verify(repository).deleteById(id);
-  }
-
-  @Test
-  @DisplayName("Deve lançar exceção quando entidade não encontrada para atualização")
-  void deveLancarExcecaoQuandoEntidadeNaoEncontrada() {
-    // Given
-    Long id = 999L;
-    {Entidade}DTO dto = criarDTO();
-    when(repository.existsById(id)).thenReturn(false);
-
-    // When/Then
-    assertThatThrownBy(() -> service.update(id, dto))
-      .isInstanceOf(EntityNotFoundException.class)
-      .hasMessageContaining("não encontrado");
-  }
-
-  private {Entidade} criarEntidade() {
-    return {Entidade}.builder()
-      .id(1L)
-      .nome("Teste")
-      .build();
-  }
-
-  private {Entidade}DTO criarDTO() {
-    return new {Entidade}DTO(1L, "Teste");
-  }
+        // When & Then
+        assertThatThrownBy(() -> service.buscarPorId(id))
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessageContaining("Comando não encontrado");
+    }
 }
 ```
 
-### 6.4.2 Mapper Test
+### 3.4 Estrutura de um Teste de Integração
 
 ```java
-@ExtendWith(MockitoExtension.class)
-class {Entidade}MapperTest {
+@SpringBootTest
+@ActiveProfiles("test")
+@Testcontainers
+class ComandoSistemaRepositoryIT {
 
-  private {Entidade}Mapper mapper;
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
+        .withDatabaseName("testdb")
+        .withUsername("test")
+        .withPassword("test");
 
-  @BeforeEach
-  void setUp() {
-    mapper = new {Entidade}MapperImpl();
-  }
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
 
-  @Test
-  @DisplayName("Deve converter DTO para entidade")
-  void deveConverterDTOparaEntidade() {
-    // Given
-    {Entidade}DTO dto = new {Entidade}DTO(1L, "Teste");
+    @Autowired
+    private ComandoSistemaRepository repository;
 
-    // When
-    {Entidade} entity = mapper.toEntity(dto);
+    private TestDataFactory testData;
 
-    // Then
-    assertThat(entity.getId()).isEqualTo(dto.id());
-    assertThat(entity.getNome()).isEqualTo(dto.nome());
-  }
+    @BeforeEach
+    void setUp() {
+        repository.deleteAll();
+        testData = new TestDataFactory();
+    }
 
-  @Test
-  @DisplayName("Deve converter entidade para DTO")
-  void deveConverterEntidadeParaDTO() {
-    // Given
-    {Entidade} entity = {Entidade}.builder()
-      .id(1L)
-      .nome("Teste")
-      .build();
+    @Test
+    @DisplayName("Deve persistir comando com todas as informações")
+    void devePersistirComandoComTodasInformacoes() {
+        // Given
+        ComandoSistema comando = testData.criarComandoSistema(1L);
 
-    // When
-    {Entidade}DTO dto = mapper.toDTO(entity);
+        // When
+        ComandoSistema salvo = repository.save(comando);
 
-    // Then
-    assertThat(dto.id()).isEqualTo(entity.getId());
-    assertThat(dto.nome()).isEqualTo(entity.getNome());
-  }
+        // Then
+        assertThat(salvo.getId()).isNotNull();
+        assertThat(salvo.getTitulo()).isEqualTo(comando.getTitulo());
+        assertThat(salvo.getDataCriacao()).isNotNull();
+    }
 
-  @Test
-  @DisplayName("Deve atualizar entidade com DTO")
-  void deveAtualizarEntidadeComDTO() {
-    // Given
-    {Entidade} entity = {Entidade}.builder()
-      .id(1L)
-      .nome("Antigo")
-      .build();
-    {Entidade}DTO dto = new {Entidade}DTO(1L, "Novo");
+    @Test
+    @DisplayName("Deve encontrar comandos por finalidade")
+    void deveEncontrarComandosPorFinalidade() {
+        // Given
+        FinalidadeComandoEnum finalidade = FinalidadeComandoEnum.RESPONSA;
+        testData.criarComandoSistema(1L, finalidade);
+        testData.criarComandoSistema(2L, finalidade);
+        testData.criarComandoSistema(3L, FinalidadeComandoEnum.OUTRA);
 
-    // When
-    mapper.updateEntity(entity, dto);
+        // When
+        List<ComandoSistema> result = repository.findByFinalidade(finalidade);
 
-    // Then
-    assertThat(entity.getNome()).isEqualTo("Novo");
-  }
+        // Then
+        assertThat(result).hasSize(2);
+        assertThat(result).allMatch(c -> c.getFinalidade() == finalidade);
+    }
 }
 ```
 
-### 6.4.3 Repository Test
+## 4. Ferramentas e Dependências
 
-```java
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-class {Entidade}RepositoryTest {
-
-  @Autowired
-  private {Entidade}Repository repository;
-
-  @Test
-  @DisplayName("Deve encontrar entidade por nome")
-  void deveEncontrarEntidadePorNome() {
-    // Given
-    String nome = "Teste";
-    {Entidade} entidade = criarEntidade();
-    repository.save(entidade);
-
-    // When
-    Optional<{Entidade}> result = repository.findByNome(nome);
-
-    // Then
-    assertThat(result).isPresent();
-    assertThat(result.get().getNome()).isEqualTo(nome);
-  }
-
-  @Test
-  @DisplayName("Deve verificar existência por ID")
-  void deveVerificarExistenciaPorID() {
-    // Given
-    {Entidade} entidade = criarEntidade();
-    {Entidade} saved = repository.save(entidade);
-
-    // When
-    boolean exists = repository.existsById(saved.getId());
-
-    // Then
-    assertThat(exists).isTrue();
-  }
-
-  private {Entidade} criarEntidade() {
-    return {Entidade}.builder()
-      .nome("Teste")
-      .build();
-  }
-}
-```
-
----
-
-## 6.5 Configuração JaCoCo
+### 4.1 Dependências Principais
 
 ```xml
-<!-- pom.xml -->
-<plugin>
-  <groupId>org.jacoco</groupId>
-  <artifactId>jacoco-maven-plugin</artifactId>
-  <version>0.8.10</version>
-  <executions>
-    <execution>
-      <goals>
-        <goal>prepare-agent</goal>
-      </goals>
-    </execution>
-    <execution>
-      <id>report</id>
-      <phase>test</phase>
-      <goals>
-        <goal>report</goal>
-      </goals>
-    </execution>
-    <execution>
-      <id>check</id>
-      <phase>verify</phase>
-      <goals>
-        <goal>check</goal>
-      </goals>
-      <configuration>
-        <rules>
-          <rule>
-            <element>PACKAGE</element>
-            <limits>
-              <limit>
-                <counter>LINE</counter>
-                <value>COVEREDRATIO</value>
-                <minimum>0.70</minimum>
-              </limit>
-            </limits>
-          </rule>
-        </rules>
-      </configuration>
-    </execution>
-  </executions>
-</plugin>
+<!-- JUnit 5 (já incluso no spring-boot-starter-test) -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- AssertJ (já incluso no spring-boot-starter-test) -->
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Mockito (já incluso no spring-boot-starter-test) -->
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- TestContainers -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>${testcontainers.version}</version>
+    <scope>test</scope>
+</dependency>
+
+<!-- H2 Database -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- JSON Path para testes de API -->
+<dependency>
+    <groupId>com.jayway.jsonpath</groupId>
+    <artifactId>json-path</artifactId>
+    <scope>test</scope>
+</dependency>
 ```
 
----
+### 4.2 Configuração de Perfis de Teste
 
-## 6.6 Classes de Teste Prioritárias
+#### `src/test/resources/application-test.yml`
+```yaml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  h2:
+    console:
+      enabled: true
 
-| Prioridade | Classe | Cobertura Mínima |
-|------------|--------|------------------|
-| ALTA | `ImageProcessingServiceTest` | 80% |
-| ALTA | `TextExtractionServiceTest` | 80% |
-| ALTA | `TemplateServiceTest` | 75% |
-| ALTA | `ComandoSistemaServiceTest` | 75% |
-| MÉDIA | `TemplateMapperTest` | 70% |
-| MÉDIA | `ComandoSistemaMapperTest` | 70% |
-| MÉDIA | `TemplateRepositoryTest` | 70% |
-| BAIXA | `SchedulerConfigServiceTest` | 60% |
-
----
-
-## 6.7 Execução de Testes
-
-```bash
-# Executar todos os testes
-mvn test
-
-# Executar com relatório de cobertura
-mvn test jacoco:report
-
-# Ver relatório de cobertura
-open target/site/jacoco/index.html
-
-# Executar teste específico
-mvn test -Dtest=TemplateServiceTest
-
-# Executar com Maven Surefire
-mvn surefire:test
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 ```
 
----
+#### `src/test/resources/application-testcontainers.yml`
+```yaml
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15:///testdb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+```
 
-## 6.8 Métricas de Qualidade
+## 5. Métricas de Qualidade
 
-| Métrica | Meta |
-|---------|------|
-| Cobertura de Linha | 70% |
-| Cobertura de Branch | 60% |
-| Complexidade Ciclomática | < 10 por método |
-| Duplicação de Código | < 3% |
-| Tests Passing | 100% |
+### 5.1 Cobertura Mínima por Tipo
 
----
+| Componente | Cobertura Mínima | Cobertura Alvo |
+|------------|-------------------|----------------|
+| Services | 80% | 90% |
+| Repositories | 70% | 85% |
+| Controllers | 60% | 75% |
+| Mappers | 90% | 100% |
+| Utilities | 90% | 100% |
 
-## 6.9 Boas Práticas
+### 5.2 Regras de Qualidade
 
-### Nomeação de Testes
+```yaml
+# jacoco-maven-plugin configuration
+rules:
+  - name: LineCoverage
+    minimum: 0.80
+    message: "Cobertura de linhas deve ser >= 80%"
+  - name: BranchCoverage
+    minimum: 0.70
+    message: "Cobertura de branches deve ser >= 70%"
+  - name: ClassCoverage
+    minimum: 0.90
+    message: "Cobertura de classes deve ser >= 90%"
+  - name: MethodCoverage
+    minimum: 0.95
+    message: "Cobertura de métodos deve ser >= 95%"
+  - name: PublicMethodCoverage
+    minimum: 1.00
+    message: "Métodos públicos devem ter 100% de cobertura"
+```
+
+## 6. Boas Práticas
+
+### 6.1 AAA Pattern (Arrange-Act-Assert)
 
 ```java
-// Padrão: Deve_[ação]_[resultado]
 @Test
-void deveSalvarEntidadeComSucesso()
-
-@Test
-void deveLancarExcecaoQuandoIdInvalido()
-
-// Given-When-Then
-@Test
-void deveRetornarEntidadeQuandoEncontradaPorId()
-```
-
-### Arrange-Act-Assert
-
-```java
-@Test
-void deveProcessarImagemComSucesso() {
-  // Arrange
-  byte[] input = criarImagemTeste();
-  when(imageProcessor.process(any())).thenReturn(resultadoEsperado);
-
-  // Act
-  byte[] result = service.processImage(input);
-
-  // Assert
-  assertThat(result).isEqualTo(resultadoEsperado);
+void deveCalcularValorTotalComDesconto() {
+    // Arrange
+    Pedido pedido = new Pedido();
+    pedido.setValorTotal(BigDecimal.valueOf(100));
+    pedido.setDesconto(BigDecimal.valueOf(10));
+    
+    // Act
+    BigDecimal resultado = servico.calcularValorTotal(pedido);
+    
+    // Then
+    assertThat(resultado).isEqualTo(BigDecimal.valueOf(90));
 }
 ```
 
-### Uso de Test Builders
+### 6.2 Fluent Assertions
 
 ```java
-@Test
-void deveCriarEntidadeComBuilder() {
-  // Given
-  Entidade entity = Entidade.builder()
-    .id(1L)
-    .nome("Teste")
-    .build();
+// ✅ Bom - assertions fluentes
+assertThat(usuario)
+    .isNotNull()
+    .hasName("João")
+    .hasAgeGreaterThan(18)
+    .extracting(User::getEmail)
+    .isNotEmpty();
 
-  // When/Then
-  assertThat(entity.getNome()).isEqualTo("Teste");
+// ❌ Evitar
+assertNotNull(usuario);
+assertEquals("João", usuario.getName());
+assertTrue(usuario.getAge() > 18);
+```
+
+### 6.3 Test Data Builders
+
+```java
+class TestDataFactory {
+    
+    public ComandoSistema criarComandoSistema(Long id) {
+        return ComandoSistema.builder()
+            .id(id)
+            .titulo("Test Command " + id)
+            .comando("Test content")
+            .finalidade(FinalidadeComandoEnum.RESPONSA)
+            .exigeContexto(false)
+            .build();
+    }
+    
+    public ComandoSistema criarComandoSistema(Long id, FinalidadeComandoEnum finalidade) {
+        ComandoSistema comando = criarComandoSistema(id);
+        comando.setFinalidade(finalidade);
+        return comando;
+    }
 }
 ```
 
----
+### 6.4 Testes Determinísticos
 
-## 6.10 Executar Cobertura
-
-```bash
-# Gerar relatório de cobertura
-mvn clean test jacoco:report
-
-# Verificar se atingiu a meta
-mvn jacoco:check
-
-# Relatório em HTML
-open target/site/jacoco/index.html
+```java
+// ✅ Bom - usar Instant.fixed para datas
+@Test
+void deveValidarDataDeCriacao() {
+    Instant fixedInstant = Instant.parse("2024-01-01T00:00:00Z");
+    try (MockedStatic<Instant> mocked = mockStatic(Instant.class)) {
+        mocked.when(Instant::now).thenReturn(fixedInstant);
+        
+        Entity entity = new Entity();
+        entity.criar();
+        
+        assertThat(entity.getDataCriacao()).isEqualTo(fixedInstant);
+    }
+}
 ```
 
----
+### 6.5 Evitar Testes Frágeis
 
-## Próximos Passos
+```java
+// ❌ Evitar - dependência de ordem
+@Test
+void deveSalvarNaOrdemCorreta() {
+    // ...
+}
 
-1. Criar estrutura de diretórios de testes
-2. Implementar testes para `ImageProcessingService`
-3. Implementar testes para `TextExtractionService`
-4. Configurar JaCoCo no pom.xml
-5. Executar e verificar cobertura
-6. Implementar testes para outros serviços prioritários
+// ✅ Bom - independentes
+@Test
+void deveSalvarEntidade() {
+    // ...
+}
+
+@Test
+void deveValidarConstraints() {
+    // ...
+}
+```
+
+## 7. Configuração CI/CD
+
+### 7.1 GitHub Actions Workflow
+
+```yaml
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Run Unit Tests
+        run: mvn test -Dtest.groups=unit
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./target/site/jacoco/jacoco.xml
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Run Integration Tests
+        run: mvn verify -Pintegration-tests
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+```
+
+### 7.2 Maven Configuration
+
+```xml
+<profiles>
+    <profile>
+        <id>unit-tests</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <test.groups>unit</test.groups>
+        </properties>
+    </profile>
+    <profile>
+        <id>integration-tests</id>
+        <properties>
+            <test.groups>integration</test.groups>
+        </properties>
+        <dependencies>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>1.19.3</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </profile>
+</profiles>
+```
+
+## 8. Checklist de Testes
+
+### 8.1 Para Cada Novo Recurso
+- [ ] Testes unitários para lógica de negócio
+- [ ] Testes de integração para acesso a dados
+- [ ] Testes para validações
+- [ ] Testes para tratamento de exceções
+- [ ] Testes paraedge cases
+
+### 8.2 Para Cada Correção de Bug
+- [ ] Criar teste que reproduza o bug
+- [ ] Verificar que o teste falha antes da correção
+- [ ] Aplicar correção
+- [ ] Verificar que o teste passa após correção
+
+## 9. Próximos Passos
+
+1. [ ] Configurar TestContainers para PostgreSQL
+2. [ ] Criar classes base de testes
+3. [ ] Implementar TestDataFactory
+4. [ ] Criar testes para serviços existentes
+5. [ ] Configurar JaCoCo com regras personalizadas
+6. [ ] Configurar SonarQube para análise de qualidade
+7. [ ] Documentar exemplos de testes para cada tipo de componente
+
+## Referências
+
+- [JUnit 5 Documentation](https://junit.org/junit5/docs/current/user-guide/)
+- [Mockito Documentation](https://mockito.org/)
+- [AssertJ Documentation](https://assertj.github.io/doc/)
+- [Spring Boot Testing](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.testing)
+- [TestContainers](https://www.testcontainers.org/)
+- [Arquitetura de Testes - Martin Fowler](https://martinfowler.com/articles/practical-test-pyramid.html)
