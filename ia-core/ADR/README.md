@@ -23,6 +23,8 @@ Este diretório contém os **Architectural Decision Records** do projeto, docume
 | ADR-008 | [Arquitetura MVVM](008-mvvm-architecture-with-viewmodel.md) | ✅ Aceito | Padrão MVVM com ViewModel/Config |
 | ADR-009 | [Paginação com ListBaseController](009-pagination-with-listbasecontroller.md) | ✅ Aceito | Paginação e filtros REST |
 | ADR-010 | [Padrões de Nomenclatura](010-nomenclature-standards.md) | ✅ Aceito | Convenções de nomes |
+| ADR-011 | [Exception Handling Patterns](011-exception-handling-patterns.md) | ✅ Aceito | Tratamento de exceções padronizado |
+| ADR-012 | [Logging e Monitoring Patterns](013-logging-monitoring-patterns.md) | ✅ Aceito | Logging, correlation ID e monitoramento |
 
 ## Formato ADR
 
@@ -88,4 +90,4 @@ Para revisar, crie um novo ADR referenciando o anterior.
 
 ---
 
-**Última Atualização:** 2024-04-01
+**Última Atualização:** 2025-02-10
