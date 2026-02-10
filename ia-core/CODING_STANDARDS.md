@@ -4,19 +4,69 @@ Este documento estabelece os padrões de código para o projeto IA Core.
 
 ## 📑 Índice
 
-1. [Estrutura de Pacotes](#estrutura-de-pacotes)
-2. [Padrões de Entidades](#padrões-de-entidades)
-3. [Padrões de DTOs](#padrões-de-dtos)
-4. [Padrões de Services](#padrões-de-services)
-5. [Padrões de Repositories](#padrões-de-repositories)
-6. [Padrões REST](#padrões-rest)
-7. [Padrões MVVM](#padrões-mvvm)
-8. [Validação](#validação)
-9. [Internacionalização](#internacionalização-i18n)
+1. [Convenção de Nomenclatura](#convenção-de-nomenclatura)
+2. [Estrutura de Pacotes](#estrutura-de-pacotes)
+3. [Padrões de Entidades](#padrões-de-entidades)
+4. [Padrões de DTOs](#padrões-de-dtos)
+5. [Padrões de Services](#padrões-de-services)
+6. [Padrões de Repositories](#padrões-de-repositories)
+7. [Padrões REST](#padrões-rest)
+8. [Padrões MVVM](#padrões-mvvm)
+9. [Validação](#validação)
+10. [Internacionalização](#internacionalização-i18n)
 
 ---
 
-## Estrutura de Pacotes
+## Convenção de Nomenclatura
+
+### Regras Gerais
+
+| Tipo | Padrão | Exemplo |
+|------|--------|---------|
+| **Classes** | PascalCase | EventoService, PessoaDTO |
+| **Métodos** | camelCase | findById, saveEvento |
+| **Constantes** | UPPER_SNAKE_CASE | MAX_SIZE, DEFAULT_VALUE |
+| **Variáveis** | camelCase | eventoDto, listaPessoas |
+| **Pacotes** | lowercase | com.ia.biblia.service.evento |
+
+### Sufixos Obrigatórios por Tipo
+
+| Tipo | Sufixo | Exemplos |
+|------|--------|----------|
+| **Services** | `Service` | EventoService, PessoaService, ChatService |
+| **Repositories** | `Repository` | EventoRepository, PessoaRepository |
+| **DTOs** | `DTO` | EventoDTO, PessoaDTO, ChatRequestDTO |
+| **Controllers** | `Controller` | EventoController, PessoaController |
+| **ViewModels** | `ViewModel` | EventoFormViewModel, PessoaPageViewModel |
+| **Managers** | `Manager` | UserManager, TemplateManager |
+| **Configs** | `Config` | ServiceConfig, ViewModelConfig |
+
+### Nomenclatura de Componentes
+
+```java
+// Services - Sufixo Service obrigatório
+@Service
+public class EventoService { }        // ✅ Correto
+public class EventoBL { }              // ❌ Incorreto - não usar BL
+
+// Repositories - Sufixo Repository obrigatório
+public interface EventoRepository { }   // ✅ Correto
+public interface EventoDAO { }         // ❌ Incorreto - usar Repository
+
+// DTOs - Sufixo DTO obrigatório
+public record EventoDTO(...) { }      // ✅ Correto
+public record EventoData(...) { }     // ❌ Incorreto
+
+// Controllers - Sufixo Controller obrigatório
+@RestController
+public class EventoController { }       // ✅ Correto
+@RestController
+public class EventoRest { }            // ❌ Incorreto
+
+// ViewModels - Sufixo ViewModel obrigatório
+public class EventoFormViewModel { }  // ✅ Correto
+public class EventoFormVM { }          // ❌ Incorreto
+```
 
 ```
 com.ia.core.{modulo}.{camada}.{功能}
