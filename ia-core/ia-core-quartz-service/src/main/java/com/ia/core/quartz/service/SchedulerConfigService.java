@@ -402,13 +402,14 @@ public class SchedulerConfigService
 
   /**
    * Busca todas as configurações filtradas por status ativo/inativo.
+   * Usa EntityGraph para evitar N+1 queries ao carregar periodicidade.
    *
    * @param active true para ativas, false para inativas
    * @return Lista de DTOs filtrados
    */
   public List<SchedulerConfigDTO> findAllActive(boolean active) {
     return onTransaction(() -> getConfig().getRepository()
-        .findAllActive(active).stream().map(getMapper()::toDTO).toList());
+        .findAllActiveWithPeriodicidade(active).stream().map(getMapper()::toDTO).toList());
   }
 
   /**

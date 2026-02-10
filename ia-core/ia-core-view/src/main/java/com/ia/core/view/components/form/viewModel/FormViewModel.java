@@ -1,20 +1,23 @@
 package com.ia.core.view.components.form.viewModel;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+
+import com.ia.core.service.dto.properties.HasPropertyChangeSupport;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Implementação padrão de um view model para formulário
+ * Implementação padrão de um view model para formulário.
  *
  * @author Israel Araújo
  * @param <T> Tipo do dado do formulário
  */
 @Slf4j
 public abstract class FormViewModel<T extends Serializable>
-  implements IFormViewModel<T> {
+  implements IFormViewModel<T>, HasPropertyChangeSupport {
 
   /** Indicativo de somente leitura */
   @Getter
@@ -23,10 +26,13 @@ public abstract class FormViewModel<T extends Serializable>
   @Getter
   private T model;
   /** Suporte a mudança de propriedade */
-  @Getter
   private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
   @Getter
   private FormViewModelConfig<T> config;
+
+  /** Constantes de campos */
+  public static final String CAMPO_MODEL = "model";
+  public static final String CAMPO_READ_ONLY = "readOnly";
 
   /**
    * @param readOnly Indicativo de somente leitura
@@ -37,8 +43,13 @@ public abstract class FormViewModel<T extends Serializable>
   }
 
   @Override
+  public PropertyChangeSupport getPropertyChangeSupport() {
+    return propertyChangeSupport;
+  }
+
+  @Override
   public void setModel(T model) {
-    firePropertyChange(CAMPOS.MODEL, this.model, model);
+    firePropertyChange(CAMPO_MODEL, this.model, model);
     this.model = model;
   }
 
@@ -47,13 +58,7 @@ public abstract class FormViewModel<T extends Serializable>
    */
   @Override
   public void setReadOnly(boolean readOnly) {
-    firePropertyChange(CAMPOS.READ_ONLY, this.readOnly, readOnly);
+    firePropertyChange(CAMPO_READ_ONLY, this.readOnly, readOnly);
     this.readOnly = readOnly;
-  }
-
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS {
-    public static final String MODEL = "model";
-    public static final String READ_ONLY = "readOnly";
   }
 }
