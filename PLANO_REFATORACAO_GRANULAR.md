@@ -46,7 +46,7 @@ Este documento detalha o plano de refatoração para os projetos **ia-core** (fr
 |--------|---------|--------|--------|
 | **ServiceConfig (DIP)** | ✅ Completo | ✅ Implementado | Alinhado |
 | **DefaultSecuredBaseService** | ✅ Base | ✅ Reutilizado | Alinhado |
-| **Domain Events** | ✅ BaseServiceEvent | ⚠️ Próprio | ⚠️ Pendente |
+| **Domain Events** | ✅ BaseServiceEvent | ✅ Padronizado | ✅ Alinhado |
 | **MVVM** | ✅ FormViewModel | ✅ Reutilizado | Alinhado |
 | **REST Controllers** | ✅ DefaultBaseController | ✅ Estendido | Alinhado |
 | **Specification Pattern** | ✅ Implementado | ⚠️ Parcial | ⚠️ Pendente |
