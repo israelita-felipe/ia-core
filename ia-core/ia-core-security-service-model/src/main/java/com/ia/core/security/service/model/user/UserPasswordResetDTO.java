@@ -25,7 +25,7 @@ public class UserPasswordResetDTO
    */
   public static final String DEFAULT_USER_CODE_REQUESTER = "ANONYMOUS";
 
-  @NotNull
+  @NotNull(message = "{validation.user.passwordreset.usercode.required}")
   private String userCode;
 
   @Default

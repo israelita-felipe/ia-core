@@ -47,7 +47,7 @@ public class PrivilegeDTO
   private String name;
 
   @Default
-  @NotNull
+  @NotNull(message = "{validation.privilege.type.required}")
   private PrivilegeType type = PrivilegeType.SYSTEM;
 
   @Default

@@ -37,22 +37,22 @@ public class LogOperationDTO
     return getSearchRequest().propertyFilters();
   }
 
-  @NotNull
+  @NotNull(message = "{validation.logoperation.username.required}")
   private String userName;
-  @NotNull
+  @NotNull(message = "{validation.logoperation.usercode.required}")
   private String userCode;
-  @NotNull
+  @NotNull(message = "{validation.logoperation.type.required}")
   private String type;
-  @NotNull
+  @NotNull(message = "{validation.logoperation.valueid.required}")
   private Long valueId;
   private String oldValue;
   private String newValue;
 
   @Default
-  @NotNull
+  @NotNull(message = "{validation.logoperation.datetime.required}")
   private LocalDateTime dateTimeOperation = LocalDateTime.now();
 
-  @NotNull
+  @NotNull(message = "{validation.logoperation.operation.required}")
   private OperationEnum operation;
 
   @Override

@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 public class RolePrivilegeDTO
   extends AbstractBaseEntityDTO<RolePrivilege> {
 
-  @NotNull
+  @NotNull(message = "{validation.role.privilege.required}")
   private PrivilegeDTO privilege;
 
   @Default

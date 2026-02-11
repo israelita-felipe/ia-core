@@ -20,11 +20,11 @@ public class UserPasswordChangeDTO
   /** Serial UID */
   private static final long serialVersionUID = -19560738760061623L;
 
-  @NotNull
+  @NotNull(message = "{validation.user.passwordchange.usercode.required}")
   private String userCode;
-  @NotNull
+  @NotNull(message = "{validation.user.passwordchange.oldpassword.required}")
   private String oldPassword;
-  @NotNull
+  @NotNull(message = "{validation.user.passwordchange.newpassword.required}")
   private String newPassword;
 
   @Override

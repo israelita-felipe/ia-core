@@ -34,7 +34,7 @@ public class UserRoleDTO
 
   /** Serial UID */
   /** Nome */
-  @NotNull
+  @NotNull(message = "{validation.user.role.name.required}")
   private String name;
 
   @Default
