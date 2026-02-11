@@ -300,7 +300,6 @@ public abstract class CoreRestSecurityConfig
    * protegidos.
    *
    * @param http               configuração de segurança HTTP
-   * @param tokenService serviço de tokens JWT
    * @param userDetailsService serviço de detalhes do usuário
    * @return SecurityFilterChain cadeia de filtros de segurança configurada
    * @throws Exception se a configuração falhar
@@ -308,8 +307,7 @@ public abstract class CoreRestSecurityConfig
   @Bean(name = SECURITY_FILTER_CHAIN_BEAN_NAME)
   @Order(3)
   static SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                 TokenService tokenService,
-								UserDetailsService userDetailsService)
+                                                 UserDetailsService userDetailsService)
     throws Exception {
     http.securityMatcher(PathPatternRequestMatcher.withDefaults()
         .matcher("/**")).csrf(csrf -> csrf.disable())

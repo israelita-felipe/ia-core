@@ -24,10 +24,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = SchedulerConfig.TABLE_NAME,
        schema = SchedulerConfig.SCHEMA_NAME)
-@NamedEntityGraph(
-  name = "SchedulerConfig.withPeriodicidade",
-  attributeNodes = @NamedAttributeNode("periodicidade")
-)
+@NamedEntityGraph(name = "SchedulerConfig.withPeriodicidade",
+                  attributeNodes = @NamedAttributeNode("periodicidade"))
 @Getter
 @Setter
 @SuperBuilder
