@@ -1,9 +1,8 @@
 package com.ia.core.quartz.model.periodicidade;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,9 +12,11 @@ import com.ia.core.quartz.model.QuartzModel;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
@@ -46,59 +47,43 @@ public class Periodicidade
   public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
   @Default
-  @Column(name = "ativo", nullable = false,
-          columnDefinition = "BOOLEAN DEFAULT TRUE")
-  private boolean ativo = true;
-  @Default
-  @Column(name = "dia_todo", nullable = false,
-          columnDefinition = "BOOLEAN DEFAULT FALSE")
-  private boolean diaTodo = false;
-  @Default
-  @Column(name = "periodico", nullable = false,
-          columnDefinition = "BOOLEAN DEFAULT FALSE")
-  private boolean periodico = false;
-  @Default
-  @Column(name = "intervalo_tempo", nullable = false,
-          columnDefinition = "BOOLEAN DEFAULT FALSE")
-  private boolean intervaloTempo = false;
-
-  @Column(name = "data_inicio")
-  private LocalDate dataInicio;
-  @Column(name = "hora_inicio")
-  private LocalTime horaInicio;
-  @Column(name = "data_fim")
-  private LocalDate dataFim;
-  @Column(name = "hora_fim")
-  private LocalTime horaFim;
-  @Column(name = "tempo_intervalo")
-  private LocalTime tempoIntervalo;
+  @Embedded
+  private IntervaloTemporal intervaloBase = new IntervaloTemporal();
 
   @Default
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "PERIODICIDADE_DIA", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.LAZY, targetClass = DayOfWeek.class)
-  @Column(name = "dia")
-  private Set<DayOfWeek> dias = new HashSet<>();
+  @Embedded
+  private Recorrencia regra = new Recorrencia();
 
   @Default
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "PERIODICIDADE_MES", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.LAZY, targetClass = Month.class)
-  @Column(name = "mes")
-  private Set<Month> meses = new HashSet<>();
+  @Column(name = "zone_id")
+  private String zoneId = ZoneId.systemDefault().getId();
 
   @Default
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "PERIODICIDADE_OCORRENCIA_SEMANAL", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.LAZY,
-                     targetClass = OcorrenciaSemanal.class)
-  @Column(name = "semana")
-  private Set<OcorrenciaSemanal> ocorrenciaSemanal = new HashSet<>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_EXDATE",
+                   schema = SCHEMA_NAME)
+  private Set<LocalDateTime> exDates = new HashSet<>();
 
   @Default
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "PERIODICIDADE_OCORRENCIA_DIARIA", schema = SCHEMA_NAME)
-  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
-  @Column(name = "dia")
-  private Set<Integer> ocorrenciaDiaria = new HashSet<>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_RDATE",
+                   schema = SCHEMA_NAME)
+  private Set<LocalDateTime> rDates = new HashSet<>();
+  @Default
+  private Boolean ativo = Boolean.TRUE;
+
+  @Transient
+  public ZoneId getZoneIdValue() {
+    return ZoneId.of(zoneId);
+  }
+
+  @Transient
+  public Duration duration() {
+    return intervaloBase.duration();
+  }
+
+  @Transient
+  public boolean hasRecurrence() {
+    return regra != null;
+  }
 }

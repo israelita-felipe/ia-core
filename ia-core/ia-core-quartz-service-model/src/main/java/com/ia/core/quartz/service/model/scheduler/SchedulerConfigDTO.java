@@ -45,7 +45,8 @@ public class SchedulerConfigDTO
    * Nome da classe do Job
    */
   @NotNull(message = "{validation.scheduler.jobClassName.required}")
-  @Pattern(regexp = "^[a-zA-Z0-9_.]+$", message = "{validation.scheduler.jobClassName.pattern}")
+  @Pattern(regexp = "^[a-zA-Z0-9_.]+$",
+           message = "{validation.scheduler.jobClassName.pattern}")
   private String jobClassName;
 
   @NotNull(message = "{validation.scheduler.periodicidade.required}")

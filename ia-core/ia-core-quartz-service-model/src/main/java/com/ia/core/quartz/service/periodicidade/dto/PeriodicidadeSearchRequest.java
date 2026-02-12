@@ -19,103 +19,101 @@ class PeriodicidadeSearchRequest
   /** Filtros */
   private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>() {
     /** Serial UID */
-    private static final long serialVersionUID = -8351015313648757622L;
+    private static final long serialVersionUID = -8351015313648757624L;
     /**
-     * Ativo
+     * Zone ID
      */
     {
-      put(FilterProperty.builder().label("Ativo").property("ativo").build(),
-          Arrays.asList(
-                        FilterRequestDTO.builder().key("ativo")
-                            .fieldType(FieldType.BOOLEAN)
-                            .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("ativo")
-                            .fieldType(FieldType.BOOLEAN)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
-    }
-    /**
-     * Dia Todo
-     */
-    {
-      put(FilterProperty.builder().label("Dia todo").property("diaTodo")
+      put(FilterProperty.builder().label("Zone ID").property("zoneId")
           .build(),
           Arrays.asList(
-                        FilterRequestDTO.builder().key("diaTodo")
-                            .fieldType(FieldType.BOOLEAN)
+                        FilterRequestDTO.builder().key("zoneId")
+                            .fieldType(FieldType.STRING)
                             .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("diaTodo")
-                            .fieldType(FieldType.BOOLEAN)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
+                        FilterRequestDTO.builder().key("zoneId")
+                            .fieldType(FieldType.STRING)
+                            .operator(OperatorDTO.NOT_EQUAL).build(),
+                        FilterRequestDTO.builder().key("zoneId")
+                            .fieldType(FieldType.STRING)
+                            .operator(OperatorDTO.LIKE).build()));
     }
     /**
-     * Periódico
-     */
-    {
-      put(FilterProperty.builder().label("Periódico").property("periodico")
-          .build(),
-          Arrays.asList(
-                        FilterRequestDTO.builder().key("periodico")
-                            .fieldType(FieldType.BOOLEAN)
-                            .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("periodico")
-                            .fieldType(FieldType.BOOLEAN)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
-    }
-    /**
-     * Data de início
+     * Start Time
      */
     {
       put(FilterProperty.builder().label("Data de início")
-          .property("dataInicio").build(),
+          .property("intervaloBase.startTime").build(),
+          Arrays.asList(FilterRequestDTO.builder()
+              .key("intervaloBase.startTime").fieldType(FieldType.DATE_TIME)
+              .operator(OperatorDTO.EQUAL).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.startTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.NOT_EQUAL).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.startTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.GREATER_THAN).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.startTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.LESS_THAN).build()));
+    }
+    /**
+     * End Time
+     */
+    {
+      put(FilterProperty.builder().label("Data de fim")
+          .property("intervaloBase.endTime").build(),
+          Arrays.asList(FilterRequestDTO.builder()
+              .key("intervaloBase.endTime").fieldType(FieldType.DATE_TIME)
+              .operator(OperatorDTO.EQUAL).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.endTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.NOT_EQUAL).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.endTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.GREATER_THAN).build(),
+                        FilterRequestDTO.builder()
+                            .key("intervaloBase.endTime")
+                            .fieldType(FieldType.DATE_TIME)
+                            .operator(OperatorDTO.LESS_THAN).build()));
+    }
+    /**
+     * Frequency
+     */
+    {
+      put(FilterProperty.builder().label("Frequência")
+          .property("regra.frequency").build(),
           Arrays.asList(
-                        FilterRequestDTO.builder().key("dataInicio")
-                            .fieldType(FieldType.DATE)
+                        FilterRequestDTO.builder().key("regra.frequency")
+                            .fieldType(FieldType.ENUM)
                             .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("dataInicio")
-                            .fieldType(FieldType.DATE)
+                        FilterRequestDTO.builder().key("regra.frequency")
+                            .fieldType(FieldType.ENUM)
                             .operator(OperatorDTO.NOT_EQUAL).build()));
     }
     /**
-     * Data de fim
+     * Interval Value
      */
     {
-      put(FilterProperty.builder().label("Data de fim").property("dataFim")
-          .build(),
-          Arrays.asList(
-                        FilterRequestDTO.builder().key("dataFim")
-                            .fieldType(FieldType.DATE)
-                            .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("dataFim")
-                            .fieldType(FieldType.DATE)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
-    }
-    /**
-     * Hora de início
-     */
-    {
-      put(FilterProperty.builder().label("Hora de início")
-          .property("horaInicio").build(),
-          Arrays.asList(
-                        FilterRequestDTO.builder().key("horaInicio")
-                            .fieldType(FieldType.TIME)
-                            .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("horaInicio")
-                            .fieldType(FieldType.TIME)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
-    }
-    /**
-     * Hora de fim
-     */
-    {
-      put(FilterProperty.builder().label("Hora de fim").property("horaFim")
-          .build(),
-          Arrays.asList(
-                        FilterRequestDTO.builder().key("horaFim")
-                            .fieldType(FieldType.TIME)
-                            .operator(OperatorDTO.EQUAL).build(),
-                        FilterRequestDTO.builder().key("horaFim")
-                            .fieldType(FieldType.TIME)
-                            .operator(OperatorDTO.NOT_EQUAL).build()));
+      put(FilterProperty.builder().label("Intervalo")
+          .property("regra.intervalValue").build(),
+          Arrays
+              .asList(FilterRequestDTO.builder().key("regra.intervalValue")
+                  .fieldType(FieldType.INTEGER).operator(OperatorDTO.EQUAL)
+                  .build(),
+                      FilterRequestDTO.builder().key("regra.intervalValue")
+                          .fieldType(FieldType.INTEGER)
+                          .operator(OperatorDTO.NOT_EQUAL).build(),
+                      FilterRequestDTO.builder().key("regra.intervalValue")
+                          .fieldType(FieldType.INTEGER)
+                          .operator(OperatorDTO.GREATER_THAN).build(),
+                      FilterRequestDTO.builder().key("regra.intervalValue")
+                          .fieldType(FieldType.INTEGER)
+                          .operator(OperatorDTO.LESS_THAN).build()));
     }
   };
 

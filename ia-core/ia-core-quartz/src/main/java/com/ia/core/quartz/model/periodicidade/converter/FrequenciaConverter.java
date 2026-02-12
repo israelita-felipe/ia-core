@@ -1,6 +1,6 @@
 package com.ia.core.quartz.model.periodicidade.converter;
 
-import com.ia.core.quartz.model.periodicidade.OcorrenciaSemanal;
+import com.ia.core.quartz.model.periodicidade.Frequencia;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -9,11 +9,11 @@ import jakarta.persistence.Converter;
  * @author Israel Araújo
  */
 @Converter(autoApply = true)
-public class OcorrenciaSemanalConverter
-  implements AttributeConverter<OcorrenciaSemanal, Integer> {
+public class FrequenciaConverter
+  implements AttributeConverter<Frequencia, Integer> {
 
   @Override
-  public Integer convertToDatabaseColumn(OcorrenciaSemanal attribute) {
+  public Integer convertToDatabaseColumn(Frequencia attribute) {
     if (attribute == null) {
       return null;
     }
@@ -21,11 +21,11 @@ public class OcorrenciaSemanalConverter
   }
 
   @Override
-  public OcorrenciaSemanal convertToEntityAttribute(Integer dbData) {
+  public Frequencia convertToEntityAttribute(Integer dbData) {
     if (dbData == null) {
       return null;
     }
-    return OcorrenciaSemanal.of(dbData);
+    return Frequencia.of(dbData);
   }
 
 }

@@ -6,18 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.JobListener;
-import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 import org.reflections.Reflections;
@@ -30,7 +26,6 @@ import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeFormatter;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
@@ -191,7 +186,10 @@ public class SchedulerConfigService
 
       for (Trigger trigger : triggers) {
         SchedulerConfigTriggerDTO triggerDTO = construirTriggerDTO(scheduler,
-                                                                   trigger);
+                                                                   trigger,
+                                                                   schedulerConfigDTO
+                                                                       .getPeriodicidade()
+                                                                       .getZoneIdValue());
         schedulerConfigDTO.getTriggers().add(triggerDTO);
       }
 
@@ -212,7 +210,8 @@ public class SchedulerConfigService
    * @throws SchedulerException Caso ocorra erro no scheduler
    */
   private SchedulerConfigTriggerDTO construirTriggerDTO(Scheduler scheduler,
-                                                        Trigger trigger)
+                                                        Trigger trigger,
+                                                        ZoneId zoneId)
     throws SchedulerException {
     SchedulerConfigTriggerDTO triggerDTO = SchedulerConfigTriggerDTO
         .builder().build();
@@ -230,7 +229,7 @@ public class SchedulerConfigService
     triggerDTO.setTriggerType(trigger.getClass().getName());
 
     // Processar campos de data/hora
-    processarCamposTemporais(triggerDTO, trigger);
+    processarCamposTemporais(triggerDTO, trigger, zoneId);
 
     // Processar campos numéricos
     processarCamposNumericos(triggerDTO, trigger);
@@ -245,8 +244,7 @@ public class SchedulerConfigService
    * @param trigger    {@link Trigger}
    */
   private void processarCamposTemporais(SchedulerConfigTriggerDTO triggerDTO,
-                                        Trigger trigger) {
-    ZoneId zoneId = obterZoneId();
+                                        Trigger trigger, ZoneId zoneId) {
 
     if (trigger.getEndTime() != null) {
       triggerDTO.setEndTime(LocalDateTime
@@ -277,15 +275,6 @@ public class SchedulerConfigService
     triggerDTO
         .setMisFireInstr(Long.valueOf(trigger.getMisfireInstruction()));
     triggerDTO.setPriority(Long.valueOf(trigger.getPriority()));
-  }
-
-  /**
-   * Obtém o zone ID padrão para conversão de datas.
-   *
-   * @return ZoneId do sistema
-   */
-  protected ZoneId obterZoneId() {
-    return ZoneId.systemDefault();
   }
 
   /**
@@ -337,11 +326,11 @@ public class SchedulerConfigService
         boolean isNovo = toSave.getId() == null;
         salvo = super.save(toSave);
 
-        if (isNovo && salvo.getPeriodicidade().isAtivo()) {
+        if (isNovo && salvo.getPeriodicidade().getAtivo()) {
           agendarJob(salvo);
           log.info("Novo job agendado com ID: {}", salvo.getId());
         } else if (!isNovo) {
-          if (salvo.getPeriodicidade().isAtivo()) {
+          if (salvo.getPeriodicidade().getAtivo()) {
             atualizarJob(salvo);
             log.info("Job atualizado com ID: {}", salvo.getId());
           } else {
@@ -352,7 +341,7 @@ public class SchedulerConfigService
       } catch (Exception e) {
         ex.add(e);
         log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
-                  salvo.getId(), e.getLocalizedMessage());
+                  toSave, e.getLocalizedMessage());
       }
       return salvo;
     });
@@ -377,7 +366,7 @@ public class SchedulerConfigService
         super.delete(id);
 
         if (schedulerConfigDTO != null
-            && schedulerConfigDTO.getPeriodicidade().isAtivo()) {
+            && schedulerConfigDTO.getPeriodicidade().getAtivo()) {
           cancelarJob(schedulerConfigDTO);
           log.info("Job cancelado durante exclusão da configuração: {}",
                    id);
@@ -401,15 +390,16 @@ public class SchedulerConfigService
   }
 
   /**
-   * Busca todas as configurações filtradas por status ativo/inativo.
-   * Usa EntityGraph para evitar N+1 queries ao carregar periodicidade.
+   * Busca todas as configurações filtradas por status ativo/inativo. Usa
+   * EntityGraph para evitar N+1 queries ao carregar periodicidade.
    *
    * @param active true para ativas, false para inativas
    * @return Lista de DTOs filtrados
    */
   public List<SchedulerConfigDTO> findAllActive(boolean active) {
     return onTransaction(() -> getConfig().getRepository()
-        .findAllActiveWithPeriodicidade(active).stream().map(getMapper()::toDTO).toList());
+        .findAllActiveWithPeriodicidade(active).stream()
+        .map(getMapper()::toDTO).toList());
   }
 
   /**
@@ -475,9 +465,10 @@ public class SchedulerConfigService
    * @return Trigger configurado
    */
   protected Trigger criarTrigger(SchedulerConfigDTO config) {
-    return TriggerBuilder.newTrigger()
-        .withIdentity(obterNomeTrigger(config), obterGrupo(config))
-        .withSchedule(criarAgendador(config)).build();
+    PeriodicidadeTrigger trigger = new PeriodicidadeTrigger(config
+        .getPeriodicidade());
+    trigger.setKey(obterChaveTrigger(config));
+    return trigger;
   }
 
   /**
@@ -497,17 +488,6 @@ public class SchedulerConfigService
    */
   protected String obterSufixoTrigger() {
     return SchedulerConfigServiceConfig.TRIGGER_SUFIX;
-  }
-
-  /**
-   * Cria o agendador Cron baseado na periodicidade configurada.
-   *
-   * @param config Configuração do job
-   * @return ScheduleBuilder configurado
-   */
-  protected ScheduleBuilder<? extends Trigger> criarAgendador(SchedulerConfigDTO config) {
-    String cronExpression = gerarExpressaoCron(config.getPeriodicidade());
-    return CronScheduleBuilder.cronSchedule(cronExpression);
   }
 
   /**
@@ -548,13 +528,13 @@ public class SchedulerConfigService
   private boolean verificarMudancaPeriodicidade(SchedulerConfigDTO config,
                                                 TriggerKey triggerKey)
     throws SchedulerException {
-    String novaExpressaoCron = gerarExpressaoCron(config
-        .getPeriodicidade());
-    CronTrigger triggerAntigo = (CronTrigger) getConfig()
+    PeriodicidadeDTO novaExpressaoCron = config.getPeriodicidade();
+    PeriodicidadeTrigger triggerAntigo = (PeriodicidadeTrigger) getConfig()
         .getQuartzScheduler().getTrigger(triggerKey);
-    String expressaoCronAntiga = triggerAntigo.getCronExpression();
+    PeriodicidadeDTO expressaoCronAntiga = triggerAntigo
+        .getPeriodicidade();
 
-    if (!expressaoCronAntiga.equals(novaExpressaoCron)) {
+    if (expressaoCronAntiga.compareTo(novaExpressaoCron) != 0) {
       log.info("Detectada mudança na periodicidade do job {}. Atualizando...",
                config.getId());
       return true;
@@ -582,12 +562,10 @@ public class SchedulerConfigService
    */
   private void atualizarJob(SchedulerConfigDTO config)
     throws SchedulerException, ClassNotFoundException {
-    TriggerKey triggerKey = obterChaveTrigger(config);
-    Trigger novoTrigger = TriggerBuilder.newTrigger()
-        .withIdentity(triggerKey).withSchedule(criarAgendador(config))
-        .build();
-    if (getConfig().getQuartzScheduler().checkExists(triggerKey)) {
-      getConfig().getQuartzScheduler().rescheduleJob(triggerKey,
+    Trigger novoTrigger = criarTrigger(config);
+    if (getConfig().getQuartzScheduler()
+        .checkExists(novoTrigger.getKey())) {
+      getConfig().getQuartzScheduler().rescheduleJob(novoTrigger.getKey(),
                                                      novoTrigger);
       log.info("Job reagenado com nova periodicidade: {}", config.getId());
     } else {
@@ -625,13 +603,4 @@ public class SchedulerConfigService
     }
   }
 
-  /**
-   * Gera a expressão Cron baseada na periodicidade configurada.
-   *
-   * @param periodicidade DTO com as configurações de periodicidade
-   * @return Expressão Cron formatada
-   */
-  private String gerarExpressaoCron(PeriodicidadeDTO periodicidade) {
-    return PeriodicidadeFormatter.asCronExpression(periodicidade);
-  }
 }

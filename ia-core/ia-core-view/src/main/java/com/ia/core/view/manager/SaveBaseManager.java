@@ -49,7 +49,11 @@ public interface SaveBaseManager<D extends Serializable>
         validate(dto);
         return ((SaveBaseClient<D>) getClient()).save(dto);
       } catch (Exception e) {
-        throw new ValidationException(e.getCause().getMessage());
+        Throwable cause = e.getCause();
+        if (cause != null) {
+          throw new ValidationException(cause.getMessage());
+        }
+        throw new ValidationException(e.getMessage());
       }
     }
     return dto;
@@ -70,7 +74,11 @@ public interface SaveBaseManager<D extends Serializable>
         validate(updated);
         return ((SaveBaseClient<D>) getClient()).save(updated);
       } catch (Exception e) {
-        throw new ValidationException(e.getCause().getMessage());
+        Throwable cause = e.getCause();
+        if (cause != null) {
+          throw new ValidationException(cause.getMessage());
+        }
+        throw new ValidationException(e.getMessage());
       }
     }
     return old;
