@@ -2,7 +2,7 @@ package com.ia.core.quartz.model.periodicidade;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -18,11 +18,11 @@ public class IntervaloTemporal
   implements Serializable {
 
   @Column(name = "start_time")
-  private LocalDateTime startTime;
+  private LocalTime startTime;
   @Column(name = "end_time")
-  private LocalDateTime endTime;
+  private LocalTime endTime;
 
-  public IntervaloTemporal(LocalDateTime startTime, LocalDateTime endTime) {
+  public IntervaloTemporal(LocalTime startTime, LocalTime endTime) {
 
     if (endTime.isBefore(startTime))
       throw new IllegalArgumentException();

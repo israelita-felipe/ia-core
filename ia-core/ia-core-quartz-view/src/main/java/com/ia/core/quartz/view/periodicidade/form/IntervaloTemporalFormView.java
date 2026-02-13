@@ -4,7 +4,7 @@ import com.ia.core.quartz.service.periodicidade.dto.IntervaloTemporalDTO;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.timepicker.TimePicker;
 
 /**
  * @author Israel Araújo
@@ -12,8 +12,8 @@ import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 public class IntervaloTemporalFormView
   extends FormView<IntervaloTemporalDTO> {
 
-  private DateTimePicker startTimeField;
-  private DateTimePicker endTimeField;
+  private TimePicker startTimeField;
+  private TimePicker endTimeField;
 
   /**
    * @param viewModel
@@ -22,14 +22,14 @@ public class IntervaloTemporalFormView
     super(viewModel);
   }
 
-  public DateTimePicker createStartTimeField(String label, String help) {
-    startTimeField = createDateTimePickerField(label, help);
+  public TimePicker createStartTimeField(String label, String help) {
+    startTimeField = createTimeField(label, help);
     add(startTimeField, 6);
     return startTimeField;
   }
 
-  public DateTimePicker createEndTimeField(String label, String help) {
-    endTimeField = createDateTimePickerField(label, help);
+  public TimePicker createEndTimeField(String label, String help) {
+    endTimeField = createTimeField(label, help);
     add(endTimeField, 6);
     return endTimeField;
   }

@@ -49,8 +49,8 @@ public class PeriodicidadeTranslator {
     public static final String INTERVALO_BASE = "periodicidade.help.intervaloBase";
     public static final String REGRA = "periodicidade.help.regra";
     public static final String ZONE_ID = "periodicidade.help.zoneId";
-    public static final String EX_DATES = "periodicidade.help.exDates";
-    public static final String R_DATES = "periodicidade.help.rDates";
+    public static final String EXCEPTION_DATES = "periodicidade.help.exceptionDates";
+    public static final String INCLUDE_DATES = "periodicidade.help.includeDates";
   }
 
   public static final String periodicidade_CLASS = PeriodicidadeDTO.class
@@ -67,8 +67,8 @@ public class PeriodicidadeTranslator {
   public static final String INTERVALO_BASE = "periodicidade.intervaloBase";
   public static final String REGRA = "periodicidade.regra";
   public static final String ZONE_ID = "periodicidade.zoneId";
-  public static final String EX_DATES = "periodicidade.exDates";
-  public static final String R_DATES = "periodicidade.rDates";
+  public static final String EXCEPTION_DATES = "periodicidade.exceptionDates";
+  public static final String INCLUDE_DATES = "periodicidade.includeDates";
 
   public static final class VALIDATION {
     public static final String INTERVALO_BASE_REQUIRED = "validation.periodicidade.intervaloBase.required";

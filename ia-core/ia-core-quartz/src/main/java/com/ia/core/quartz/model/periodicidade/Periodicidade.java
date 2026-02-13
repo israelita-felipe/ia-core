@@ -1,7 +1,7 @@
 package com.ia.core.quartz.model.periodicidade;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,16 +59,16 @@ public class Periodicidade
   private String zoneId = ZoneId.systemDefault().getId();
 
   @Default
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_EXDATE",
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_EXCEPTION_DATE",
                    schema = SCHEMA_NAME)
-  private Set<LocalDateTime> exDates = new HashSet<>();
+  private Set<LocalDate> exceptionDates = new HashSet<>();
 
   @Default
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_RDATE",
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_INCLUDE_DATE",
                    schema = SCHEMA_NAME)
-  private Set<LocalDateTime> rDates = new HashSet<>();
+  private Set<LocalDate> includeDates = new HashSet<>();
   @Default
   private Boolean ativo = Boolean.TRUE;
 

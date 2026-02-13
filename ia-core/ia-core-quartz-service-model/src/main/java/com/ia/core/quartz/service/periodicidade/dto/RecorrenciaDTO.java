@@ -1,7 +1,7 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
 import java.util.Objects;
@@ -46,7 +46,7 @@ public class RecorrenciaDTO
 
   private Integer bySetPosition;
 
-  private LocalDateTime untilDate;
+  private LocalDate untilDate;
 
   private Integer countLimit;
 
@@ -69,7 +69,7 @@ public class RecorrenciaDTO
       return result;
     }
     result = Objects.compare(untilDate, other.untilDate,
-                             LocalDateTime::compareTo);
+                             LocalDate::compareTo);
     if (result != 0) {
       return result;
     }

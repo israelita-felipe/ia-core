@@ -2,7 +2,9 @@ package com.ia.core.quartz.service;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -44,9 +46,10 @@ public class PeriodicidadeTrigger
     this.calculator = new OccurrenceCalculator();
     IntervaloTemporalDTO intervaloBase = periodicidade.getIntervaloBase();
     if (intervaloBase != null) {
-      LocalDateTime startTime = intervaloBase.getStartTime();
+      LocalTime startTime = intervaloBase.getStartTime();
       if (startTime != null) {
-        setStartTime(toDate(startTime));
+        setStartTime(toDate(LocalDate.now(periodicidade.getZoneIdValue()),
+                            startTime));
       }
     }
   }
@@ -61,7 +64,8 @@ public class PeriodicidadeTrigger
   @Override
   public Date computeFirstFireTime(org.quartz.Calendar calendar) {
 
-    LocalDateTime after = periodicidade.getIntervaloBase().getStartTime()
+    LocalDateTime after = LocalDate.now(periodicidade.getZoneIdValue())
+        .atTime(periodicidade.getIntervaloBase().getStartTime())
         .minusSeconds(1);
 
     Optional<IntervaloTemporalDTO> next = calculator()
@@ -74,8 +78,12 @@ public class PeriodicidadeTrigger
 
     if (calendar != null && !calendar.isTimeIncluded(nextDate.getTime())) {
 
-      next = calculator().nextOccurrence(periodicidade,
-                                         next.get().getStartTime());
+      LocalDateTime nextCursor = next.get()
+          .getStartTime() == null ? after.plusDays(1)
+                                  : after.toLocalDate()
+                                      .atTime(next.get().getStartTime());
+
+      next = calculator().nextOccurrence(periodicidade, nextCursor);
 
       if (next.isEmpty())
         return null;
@@ -112,8 +120,12 @@ public class PeriodicidadeTrigger
 
     if (calendar != null && !calendar.isTimeIncluded(nextDate.getTime())) {
 
-      next = calculator().nextOccurrence(periodicidade,
-                                         next.get().getStartTime());
+      LocalDateTime nextCursor = next.get()
+          .getStartTime() == null ? after.plusDays(1)
+                                  : after.toLocalDate()
+                                      .atTime(next.get().getStartTime());
+
+      next = calculator().nextOccurrence(periodicidade, nextCursor);
 
       nextDate = next.map(i -> toDate(i.getStartTime())).orElse(null);
     }
@@ -134,7 +146,8 @@ public class PeriodicidadeTrigger
     Optional<IntervaloTemporalDTO> next = calculator()
         .nextOccurrence(periodicidade, now);
 
-    this.nextFireTime = next.map(i -> toDate(i.getStartTime()))
+    LocalDate today = LocalDate.now(periodicidade.getZoneIdValue());
+    this.nextFireTime = next.map(i -> toDate(today, i.getStartTime()))
         .orElse(null);
   }
 
@@ -145,7 +158,8 @@ public class PeriodicidadeTrigger
     if (nextFireTime == null)
       return;
 
-    if (!cal.isTimeIncluded(nextFireTime.getTime())) {
+    while (nextFireTime != null
+        && !cal.isTimeIncluded(nextFireTime.getTime())) {
       triggered(cal);
     }
   }
@@ -161,7 +175,8 @@ public class PeriodicidadeTrigger
     if (periodicidade.getRegra() != null
         && periodicidade.getRegra().getUntilDate() != null) {
 
-      return toDate(periodicidade.getRegra().getUntilDate());
+      return Date.from(periodicidade.getRegra().getUntilDate()
+          .atStartOfDay(periodicidade.getZoneIdValue()).toInstant());
     }
 
     return null;
@@ -201,31 +216,49 @@ public class PeriodicidadeTrigger
       return null;
     }
 
-    LocalDateTime nextStart = next.get().getStartTime();
+    LocalDateTime nextStart = LocalDate.now(periodicidade.getZoneIdValue())
+        .atTime(next.get().getStartTime());
 
     if (getEndTime() != null
         && toInstant(nextStart).isAfter(getEndTime().toInstant())) {
       return null;
     }
 
-    return toDate(nextStart);
+    return toDate(next.get().getStartTime());
   }
 
   /**
-   * Converte {@link LocalDateTime} para {@link Date} usando o fuso horário
-   * padrão do sistema.
+   * Converte {@link LocalTime} para {@link Date} usando o fuso horário padrão
+   * do sistema.
    *
-   * @param localDateTime o objeto LocalDateTime a ser convertido (pode ser
-   *                      {@code null})
+   * @param date a data
+   * @param time o objeto LocalTime a ser convertido (pode ser {@code null})
    * @return o objeto Date correspondente, ou {@code null} se a entrada for
    *         {@code null}
    */
-  public Date toDate(LocalDateTime localDateTime) {
-    if (localDateTime == null) {
+  public Date toDate(LocalDate date, LocalTime time) {
+    if (time == null) {
       return null;
     }
-    return Date.from(localDateTime
+    return Date.from(date.atTime(time)
         .atZone(this.periodicidade.getZoneIdValue()).toInstant());
+  }
+
+  /**
+   * Converte {@link LocalTime} para {@link Date} usando a data atual.
+   *
+   * @param localTime o objeto LocalTime a ser convertido (pode ser
+   *                  {@code null})
+   * @return o objeto Date correspondente, ou {@code null} se a entrada for
+   *         {@code null}
+   */
+  public Date toDate(LocalTime localTime) {
+    if (localTime == null) {
+      return null;
+    }
+    return Date.from(LocalDate.now(this.periodicidade.getZoneIdValue())
+        .atTime(localTime).atZone(this.periodicidade.getZoneIdValue())
+        .toInstant());
   }
 
   /**

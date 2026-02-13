@@ -12,7 +12,7 @@ import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.textfield.TextField;
@@ -28,7 +28,8 @@ public class RecorrenciaFormView
   private CheckboxGroup<DayOfWeek> byDayField;
   private CheckboxGroup<Integer> byMonthDayField;
   private CheckboxGroup<Month> byMonthField;
-  private DateTimePicker untilDateField;
+  private TextField bySetPositionField;
+  private DatePicker untilDateField;
   private TextField countLimitField;
 
   /**
@@ -49,7 +50,7 @@ public class RecorrenciaFormView
 
   public TextField createCountLimitField(String label, String help) {
     countLimitField = createInteiroTextField(label, help);
-    setHelp(intervalValueField, help);
+    setHelp(countLimitField, help);
     add(countLimitField, 6);
     return countLimitField;
   }
@@ -81,8 +82,15 @@ public class RecorrenciaFormView
     return byMonthField;
   }
 
-  public DateTimePicker createUntilDateField(String label, String help) {
-    untilDateField = createDateTimePickerField(label, help);
+  public TextField createBySetPositionField(String label, String help) {
+    bySetPositionField = createInteiroTextField(label, help);
+    setHelp(bySetPositionField, help);
+    add(bySetPositionField, 6);
+    return bySetPositionField;
+  }
+
+  public DatePicker createUntilDateField(String label, String help) {
+    untilDateField = createDateField(label, help);
     add(untilDateField, 3);
     return untilDateField;
   }
@@ -119,6 +127,10 @@ public class RecorrenciaFormView
          createByMonthField($(PeriodicidadeTranslator.RECORRENCIA.BY_MONTH),
                             $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MONTH),
                             mes -> $(mes.name())));
+    add(new Hr(), 6);
+    bindInteger("bySetPosition",
+                createBySetPositionField($(PeriodicidadeTranslator.RECORRENCIA.BY_SET_POSITION),
+                                         $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_SET_POSITION)));
     add(new Hr(), 6);
     add(new NativeLabel("Limites"), 6);
     bind("untilDate",

@@ -1,7 +1,7 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Objects;
@@ -54,7 +54,7 @@ public class PeriodicidadeDTO
   }
 
   @Default
-  @NotNull(message = "{validation.periodicidade2.intervaloBase.required}")
+  @NotNull(message = "{validation.periodicidade.intervaloBase.required}")
   private IntervaloTemporalDTO intervaloBase = new IntervaloTemporalDTO();
 
   @Default
@@ -64,10 +64,10 @@ public class PeriodicidadeDTO
   private String zoneId = ZoneId.systemDefault().getId();
 
   @Default
-  private Set<LocalDateTime> exDates = new HashSet<>();
+  private Set<LocalDate> exceptionDates = new HashSet<>();
 
   @Default
-  private Set<LocalDateTime> rDates = new HashSet<>();
+  private Set<LocalDate> includeDates = new HashSet<>();
 
   @Default
   private Boolean ativo = Boolean.TRUE;
@@ -77,9 +77,7 @@ public class PeriodicidadeDTO
     return toBuilder()
         .intervaloBase(intervaloBase != null ? intervaloBase.cloneObject()
                                              : null)
-        .regra(regra != null ? regra.cloneObject() : null)
-        .exDates(new HashSet<>(exDates)).rDates(new HashSet<>(rDates))
-        .build();
+        .regra(regra != null ? regra.cloneObject() : null).build();
   }
 
   @Override
@@ -87,9 +85,7 @@ public class PeriodicidadeDTO
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
         .intervaloBase(intervaloBase != null ? intervaloBase.copyObject()
                                              : null)
-        .regra(regra != null ? regra.copyObject() : null)
-        .exDates(new HashSet<>(exDates)).rDates(new HashSet<>(rDates))
-        .build();
+        .regra(regra != null ? regra.copyObject() : null).build();
   }
 
   @Override
@@ -109,21 +105,21 @@ public class PeriodicidadeDTO
       return result;
     }
 
-    for (LocalDateTime exDate : exDates.stream()
-        .sorted(LocalDateTime::compareTo).collect(Collectors.toList())) {
-      for (LocalDateTime exDateObj : p.exDates.stream()
-          .sorted(LocalDateTime::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(exDate, exDateObj));
+    for (LocalDate exceptionDate : exceptionDates.stream().sorted(LocalDate::compareTo)
+        .collect(Collectors.toList())) {
+      for (LocalDate exceptionDateObj : p.exceptionDates.stream()
+          .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
+        result = Boolean.TRUE.compareTo(Objects.equals(exceptionDate, exceptionDateObj));
         if (result != 0) {
           return result;
         }
       }
     }
-    for (LocalDateTime rDate : rDates.stream()
-        .sorted(LocalDateTime::compareTo).collect(Collectors.toList())) {
-      for (LocalDateTime rDateObj : p.rDates.stream()
-          .sorted(LocalDateTime::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(rDate, rDateObj));
+    for (LocalDate includeDate : includeDates.stream().sorted(LocalDate::compareTo)
+        .collect(Collectors.toList())) {
+      for (LocalDate includeDateObj : p.includeDates.stream()
+          .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
+        result = Boolean.TRUE.compareTo(Objects.equals(includeDate, includeDateObj));
         if (result != 0) {
           return result;
         }
@@ -151,8 +147,8 @@ public class PeriodicidadeDTO
     public static final String INTERVALO_BASE = "intervaloBase";
     public static final String REGRA = "regra";
     public static final String ZONE_ID = "zoneId";
-    public static final String EX_DATES = "exDates";
-    public static final String R_DATES = "rDates";
+    public static final String EXCEPTION_DATES = "exceptionDates";
+    public static final String INCLUDE_DATES = "includeDates";
   }
 
 }

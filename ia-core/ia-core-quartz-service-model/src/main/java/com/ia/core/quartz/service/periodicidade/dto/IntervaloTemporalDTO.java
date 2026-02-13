@@ -1,7 +1,7 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
@@ -25,17 +25,17 @@ public class IntervaloTemporalDTO
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
-  private LocalDateTime startTime;
-  private LocalDateTime endTime;
+  private LocalTime startTime;
+  private LocalTime endTime;
 
   public int compareTo(IntervaloTemporalDTO other) {
     int result = Objects.compare(startTime, other.startTime,
-                                 LocalDateTime::compareTo);
+                                 LocalTime::compareTo);
     if (result != 0) {
       return result;
     }
     return Objects.compare(endTime, other.endTime,
-                           LocalDateTime::compareTo);
+                           LocalTime::compareTo);
   }
 
   @Override

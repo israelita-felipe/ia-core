@@ -22,6 +22,7 @@ public class PeriodicidadeFormViewModel
     super(config);
     createIntervaloTemporalFormViewModel(config);
     createRecorrenciaFormViewModel(config);
+
   }
 
   @Override
@@ -56,6 +57,7 @@ public class PeriodicidadeFormViewModel
       if (this.recorrenciaFormViewModel != null) {
         this.recorrenciaFormViewModel.setModel(model.getRegra());
       }
+
     }
   }
 
@@ -68,5 +70,7 @@ public class PeriodicidadeFormViewModel
     if (this.recorrenciaFormViewModel != null) {
       this.recorrenciaFormViewModel.setReadOnly(readOnly);
     }
+
   }
+
 }

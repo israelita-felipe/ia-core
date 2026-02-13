@@ -17,9 +17,6 @@ import com.vaadin.flow.component.html.NativeLabel;
 public class PeriodicidadeFormView
   extends FormView<PeriodicidadeDTO> {
 
-  private Checkbox ativoField;
-  private ComboBox<String> zoneIdField;
-
   /**
    * @param viewModel
    */
@@ -48,8 +45,8 @@ public class PeriodicidadeFormView
    * @return
    */
   public IntervaloTemporalFormView createIntervaloTemporalField(String label,
-                                                                String help,
-                                                                IntervaloTemporalFormViewModel intervaloTemporalFormViewModel) {
+                                                               String help,
+                                                               IntervaloTemporalFormViewModel intervaloTemporalFormViewModel) {
     // Criar subformulário de intervalo temporal
     IntervaloTemporalFormView field = new IntervaloTemporalFormView(intervaloTemporalFormViewModel);
     add(new Hr(), 6);
@@ -60,16 +57,42 @@ public class PeriodicidadeFormView
   }
 
   public Checkbox createAtivoField(String label, String help) {
-    ativoField = createCheckBoxField(label, help);
+    Checkbox ativoField = createCheckBoxField(label, help);
     add(ativoField, 6);
     return ativoField;
   }
 
   public ComboBox<String> createZoneIdField(String label, String help) {
-    zoneIdField = createComboBox(label, help);
+    ComboBox<String> zoneIdField = createComboBox(label, help);
     zoneIdField.setItems(ZoneId.getAvailableZoneIds());
     add(zoneIdField, 6);
     return zoneIdField;
+  }
+
+  /**
+   * @param label
+   * @param help
+   * @return
+   */
+  public DateSetView createExceptionDatesField(String label, String help) {
+    DateSetView exceptionDatesField = new DateSetView();
+    exceptionDatesField.setLabel(label);
+    setHelp(exceptionDatesField, help);
+    add(exceptionDatesField, 6);
+    return exceptionDatesField;
+  }
+
+  /**
+   * @param label
+   * @param help
+   * @return
+   */
+  public DateSetView createIncludeDatesField(String label, String help) {
+    DateSetView includeDatesField = new DateSetView();
+    includeDatesField.setLabel(label);
+    setHelp(includeDatesField, help);
+    add(includeDatesField, 6);
+    return includeDatesField;
   }
 
   @Override
@@ -91,6 +114,12 @@ public class PeriodicidadeFormView
                                 $(PeriodicidadeTranslator.HELP.REGRA),
                                 getViewModel()
                                     .getRecorrenciaFormViewModel()));
+    bind(PeriodicidadeDTO.CAMPOS.INCLUDE_DATES,
+         createIncludeDatesField($(PeriodicidadeTranslator.INCLUDE_DATES),
+                                $(PeriodicidadeTranslator.HELP.INCLUDE_DATES)));
+    bind(PeriodicidadeDTO.CAMPOS.EXCEPTION_DATES,
+         createExceptionDatesField($(PeriodicidadeTranslator.EXCEPTION_DATES),
+                                   $(PeriodicidadeTranslator.HELP.EXCEPTION_DATES)));
   }
 
   @Override
