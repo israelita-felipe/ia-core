@@ -27,7 +27,7 @@ import elemental.json.JsonArray;
 @Tag("form-view")
 public abstract class FormView<T extends Serializable>
   extends CustomField<T>
-  implements IFormView<T> {
+  implements IFormView<T>, com.ia.core.view.components.properties.HasDateTimeCreator {
   /** Serial UID */
   private static final long serialVersionUID = -4513191796912403800L;
 

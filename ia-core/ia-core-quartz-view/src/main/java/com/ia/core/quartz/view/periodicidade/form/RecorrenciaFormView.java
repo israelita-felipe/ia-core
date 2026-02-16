@@ -2,18 +2,16 @@ package com.ia.core.quartz.view.periodicidade.form;
 
 import java.time.DayOfWeek;
 import java.time.Month;
-import java.util.stream.IntStream;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.quartz.service.periodicidade.dto.RecorrenciaDTO;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.textfield.TextField;
 
@@ -23,12 +21,21 @@ import com.vaadin.flow.component.textfield.TextField;
 public class RecorrenciaFormView
   extends FormView<RecorrenciaDTO> {
 
+  private FormLayout mainLayout;
+
+  // Campos para visibilidade
   private ComboBox<Frequencia> frequencyField;
   private TextField intervalValueField;
   private CheckboxGroup<DayOfWeek> byDayField;
-  private CheckboxGroup<Integer> byMonthDayField;
+  private IntegerSetView byMonthDayField;
   private CheckboxGroup<Month> byMonthField;
   private TextField bySetPositionField;
+  private ComboBox<DayOfWeek> weekStartDayField;
+  private IntegerSetView byYearDayField;
+  private IntegerSetView byWeekNoField;
+  private IntegerSetView byHourField;
+  private IntegerSetView byMinuteField;
+  private IntegerSetView bySecondField;
   private DatePicker untilDateField;
   private TextField countLimitField;
 
@@ -39,106 +46,259 @@ public class RecorrenciaFormView
     super(viewModel);
   }
 
-  public ComboBox<Frequencia> createFrequencyField(String label,
-                                                   String help) {
-    frequencyField = createComboBox(label, help);
-    frequencyField.setItems(Frequencia.values());
-    frequencyField.setItemLabelGenerator(f -> f.name());
-    add(frequencyField, 6);
-    return frequencyField;
-  }
+  // ========================
+  // Métodos de criação de campos - públicos para uso externo
+  // ========================
 
-  public TextField createCountLimitField(String label, String help) {
-    countLimitField = createInteiroTextField(label, help);
-    setHelp(countLimitField, help);
-    add(countLimitField, 6);
-    return countLimitField;
-  }
-
-  public CheckboxGroup<DayOfWeek> createByDayField(String label,
-                                                   String help,
-                                                   ItemLabelGenerator<DayOfWeek> itemLabelGenerator) {
-    byDayField = createEnumCheckBox(label, help, DayOfWeek.class,
-                                    itemLabelGenerator);
-    add(byDayField, 6);
-    return byDayField;
-  }
-
-  public CheckboxGroup<Integer> createByMonthDayField(String label,
+  protected ComboBox<Frequencia> createFrequencyField(String label,
                                                       String help) {
-    byMonthDayField = new CheckboxGroup<>(label);
-    setHelp(byMonthDayField, help);
-    byMonthDayField
-        .setItems(IntStream.range(1, 32).mapToObj(value -> value).toList());
-    add(byMonthDayField, 6);
-    return byMonthDayField;
+    ComboBox<Frequencia> field = createComboBox(label, help);
+    field.setItems(Frequencia.values());
+    field.setItemLabelGenerator(f -> f.name());
+    return field;
   }
 
-  public CheckboxGroup<Month> createByMonthField(String label, String help,
-                                                 ItemLabelGenerator<Month> itemLabelGenerator) {
-    byMonthField = createEnumCheckBox(label, help, Month.class,
-                                      itemLabelGenerator);
-    add(byMonthField, 6);
-    return byMonthField;
+  protected TextField createIntervalValueField(String label, String help) {
+    return createInteiroTextField(label, help);
   }
 
-  public TextField createBySetPositionField(String label, String help) {
-    bySetPositionField = createInteiroTextField(label, help);
-    setHelp(bySetPositionField, help);
-    add(bySetPositionField, 6);
-    return bySetPositionField;
+  protected CheckboxGroup<DayOfWeek> createByDayField(String label,
+                                                      String help) {
+    return createEnumCheckBox(label, help, DayOfWeek.class,
+                              dia -> $(dia.name()));
   }
 
-  public DatePicker createUntilDateField(String label, String help) {
-    untilDateField = createDateField(label, help);
-    add(untilDateField, 3);
-    return untilDateField;
+  protected IntegerSetView createByMonthDayField(String label,
+                                                 String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(1, 31);
+    return field;
   }
 
-  public TextField createIntervalValueField(String label, String help) {
-    intervalValueField = createInteiroTextField(label, help);
-    add(intervalValueField, 3);
-    return intervalValueField;
+  protected CheckboxGroup<Month> createByMonthField(String label,
+                                                    String help) {
+    return createEnumCheckBox(label, help, Month.class,
+                              mes -> $(mes.name()));
+  }
+
+  protected TextField createBySetPositionField(String label, String help) {
+    return createInteiroTextField(label, help);
+  }
+
+  protected ComboBox<DayOfWeek> createWeekStartDayField(String label,
+                                                        String help) {
+    ComboBox<DayOfWeek> field = createComboBox(label, help);
+    field.setItems(DayOfWeek.values());
+    field.setItemLabelGenerator(dia -> $(dia.name()));
+    field.setValue(DayOfWeek.MONDAY);
+    return field;
+  }
+
+  protected IntegerSetView createByYearDayField(String label, String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(1, 366);
+    return field;
+  }
+
+  protected IntegerSetView createByWeekNoField(String label, String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(1, 53);
+    return field;
+  }
+
+  protected IntegerSetView createByHourField(String label, String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(0, 23);
+    return field;
+  }
+
+  protected IntegerSetView createByMinuteField(String label, String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(0, 59);
+    return field;
+  }
+
+  protected IntegerSetView createBySecondField(String label, String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    field.setRange(0, 59);
+    return field;
+  }
+
+  protected DatePicker createUntilDateField(String label, String help) {
+    return createDateField(label, help);
+  }
+
+  protected TextField createCountLimitField(String label, String help) {
+    return createInteiroTextField(label, help);
+  }
+
+  // ========================
+  // Métodos de criação de campos com layout
+  // ========================
+
+  private void createFrequencyField(FormLayout layout) {
+    frequencyField = createFrequencyField($(PeriodicidadeTranslator.RECORRENCIA.FREQUENCY),
+                                          $(PeriodicidadeTranslator.RECORRENCIA.HELP.FREQUENCY));
+    layout.add(frequencyField, 2);
+    bind(RecorrenciaDTO.CAMPOS.FREQUENCY, frequencyField);
+
+  }
+
+  private void createIntervalValueField(FormLayout layout) {
+    intervalValueField = createIntervalValueField($(PeriodicidadeTranslator.RECORRENCIA.INTERVAL_VALUE),
+                                                  $(PeriodicidadeTranslator.RECORRENCIA.HELP.INTERVAL_VALUE));
+    layout.add(intervalValueField, 2);
+    bindInteger(RecorrenciaDTO.CAMPOS.INTERVAL_VALUE, intervalValueField);
+  }
+
+  private void createByDayField(FormLayout layout) {
+    byDayField = createByDayField($(PeriodicidadeTranslator.RECORRENCIA.BY_DAY),
+                                  $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_DAY));
+    layout.add(byDayField, 6);
+    bind(RecorrenciaDTO.CAMPOS.BY_DAY, byDayField);
+  }
+
+  private void createByMonthDayField(FormLayout layout) {
+    byMonthDayField = createByMonthDayField($(PeriodicidadeTranslator.RECORRENCIA.BY_MONTH_DAY),
+                                            $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MONTH_DAY));
+    layout.add(byMonthDayField, 6);
+    bind(RecorrenciaDTO.CAMPOS.BY_MONTH_DAY, byMonthDayField);
+  }
+
+  private void createByMonthField(FormLayout layout) {
+    byMonthField = createByMonthField($(PeriodicidadeTranslator.RECORRENCIA.BY_MONTH),
+                                      $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MONTH));
+    layout.add(byMonthField, 6);
+    bind(RecorrenciaDTO.CAMPOS.BY_MONTH, byMonthField);
+  }
+
+  private void createBySetPositionField(FormLayout layout) {
+    bySetPositionField = createBySetPositionField($(PeriodicidadeTranslator.RECORRENCIA.BY_SET_POSITION),
+                                                  $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_SET_POSITION));
+    layout.add(bySetPositionField, 2);
+    bindInteger(RecorrenciaDTO.CAMPOS.BY_SET_POSITION, bySetPositionField);
+  }
+
+  private void createWeekStartDayField(FormLayout layout) {
+    weekStartDayField = createWeekStartDayField($(PeriodicidadeTranslator.RECORRENCIA.WEEK_START_DAY),
+                                                $(PeriodicidadeTranslator.RECORRENCIA.HELP.WEEK_START_DAY));
+    layout.add(weekStartDayField, 2);
+    bind(RecorrenciaDTO.CAMPOS.WEEK_START_DAY, weekStartDayField);
+  }
+
+  private void createByYearDayField(FormLayout layout) {
+    byYearDayField = createByYearDayField($(PeriodicidadeTranslator.RECORRENCIA.BY_YEAR_DAY),
+                                          $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_YEAR_DAY));
+    layout.add(byYearDayField, 2);
+    bind(RecorrenciaDTO.CAMPOS.BY_YEAR_DAY, byYearDayField);
+  }
+
+  private void createByWeekNoField(FormLayout layout) {
+    byWeekNoField = createByWeekNoField($(PeriodicidadeTranslator.RECORRENCIA.BY_WEEK_NO),
+                                        $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_WEEK_NO));
+    layout.add(byWeekNoField, 2);
+    bind(RecorrenciaDTO.CAMPOS.BY_WEEK_NO, byWeekNoField);
+  }
+
+  private void createByHourField(FormLayout layout) {
+    byHourField = createByHourField($(PeriodicidadeTranslator.RECORRENCIA.BY_HOUR),
+                                    $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_HOUR));
+    layout.add(byHourField, 2);
+    bind(RecorrenciaDTO.CAMPOS.BY_HOUR, byHourField);
+  }
+
+  private void createByMinuteField(FormLayout layout) {
+    byMinuteField = createByMinuteField($(PeriodicidadeTranslator.RECORRENCIA.BY_MINUTE),
+                                        $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MINUTE));
+    layout.add(byMinuteField, 2);
+    bind(RecorrenciaDTO.CAMPOS.BY_MINUTE, byMinuteField);
+  }
+
+  private void createBySecondField(FormLayout layout) {
+    bySecondField = createBySecondField($(PeriodicidadeTranslator.RECORRENCIA.BY_SECOND),
+                                        $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_SECOND));
+    layout.add(bySecondField, 2);
+    bind(RecorrenciaDTO.CAMPOS.BY_SECOND, bySecondField);
+  }
+
+  private void createUntilDateField(FormLayout layout) {
+    untilDateField = createUntilDateField($(PeriodicidadeTranslator.RECORRENCIA.UNTIL_DATE),
+                                          $(PeriodicidadeTranslator.RECORRENCIA.HELP.UNTIL_DATE));
+    layout.add(untilDateField, 3);
+    bind(RecorrenciaDTO.CAMPOS.UNTIL_DATE, untilDateField);
+  }
+
+  private void createCountLimitField(FormLayout layout) {
+    countLimitField = createCountLimitField($(PeriodicidadeTranslator.RECORRENCIA.COUNT_LIMIT),
+                                            $(PeriodicidadeTranslator.RECORRENCIA.HELP.COUNT_LIMIT));
+    layout.add(countLimitField, 3);
+    bindInteger(RecorrenciaDTO.CAMPOS.COUNT_LIMIT, countLimitField);
   }
 
   @Override
   public void createLayout() {
     super.createLayout();
-    add(new Hr(), 6);
-    add(new NativeLabel("Frequência"), 6);
-    bind("frequency",
-         createFrequencyField($(PeriodicidadeTranslator.RECORRENCIA.FREQUENCY),
-                              $(PeriodicidadeTranslator.RECORRENCIA.HELP.FREQUENCY)));
-    bindInteger("intervalValue",
-                createIntervalValueField($(PeriodicidadeTranslator.RECORRENCIA.INTERVAL_VALUE),
-                                         $(PeriodicidadeTranslator.RECORRENCIA.HELP.INTERVAL_VALUE)));
-    add(new Hr(), 6);
-    bind("byDay",
-         createByDayField($(PeriodicidadeTranslator.RECORRENCIA.BY_DAY),
-                          $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_DAY),
-                          dia -> $(dia.name())));
-    add(new Hr(), 6);
-    bind("byMonthDay",
-         createByMonthDayField($(PeriodicidadeTranslator.RECORRENCIA.BY_MONTH_DAY),
-                               $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MONTH_DAY)));
-    add(new Hr(), 6);
-    add(new NativeLabel("Meses"), 6);
-    bind("byMonth",
-         createByMonthField($(PeriodicidadeTranslator.RECORRENCIA.BY_MONTH),
-                            $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_MONTH),
-                            mes -> $(mes.name())));
-    add(new Hr(), 6);
-    bindInteger("bySetPosition",
-                createBySetPositionField($(PeriodicidadeTranslator.RECORRENCIA.BY_SET_POSITION),
-                                         $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_SET_POSITION)));
-    add(new Hr(), 6);
-    add(new NativeLabel("Limites"), 6);
-    bind("untilDate",
-         createUntilDateField($(PeriodicidadeTranslator.RECORRENCIA.UNTIL_DATE),
-                              $(PeriodicidadeTranslator.RECORRENCIA.HELP.UNTIL_DATE)));
-    bindInteger("countLimit",
-                createCountLimitField($(PeriodicidadeTranslator.RECORRENCIA.COUNT_LIMIT),
-                                      $(PeriodicidadeTranslator.RECORRENCIA.HELP.COUNT_LIMIT)));
+    createMainLayout();
+  }
+
+  private void createMainLayout() {
+    mainLayout = createFormLayout();
+    add(mainLayout, 6);
+
+    // ========================
+    // Criação dos campos em um único layout
+    // ========================
+
+    // Seção: Frequência
+    createFrequencyField(mainLayout);
+    createIntervalValueField(mainLayout);
+    createBySetPositionField(mainLayout);
+
+    // Seção: Diária
+    createByDayField(mainLayout);
+
+    // Seção: Mensal
+    mainLayout
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_MONTHLY)),
+             6);
+    createByMonthDayField(mainLayout);
+    createByMonthField(mainLayout);
+
+    // Seção: Avançado
+    mainLayout
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_ADVANCED)),
+             6);
+    createWeekStartDayField(mainLayout);
+    createByYearDayField(mainLayout);
+    createByWeekNoField(mainLayout);
+
+    // Seção: Horário
+    mainLayout
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_TIME)),
+             6);
+    createByHourField(mainLayout);
+    createByMinuteField(mainLayout);
+    createBySecondField(mainLayout);
+
+    // Seção: Limites
+    mainLayout
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_LIMITS)),
+             6);
+    createUntilDateField(mainLayout);
+    createCountLimitField(mainLayout);
+
   }
 
 }

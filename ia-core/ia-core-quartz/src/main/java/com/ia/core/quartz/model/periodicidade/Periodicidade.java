@@ -1,6 +1,5 @@
 package com.ia.core.quartz.model.periodicidade;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
@@ -54,36 +52,43 @@ public class Periodicidade
   @Embedded
   private Recorrencia regra = new Recorrencia();
 
+  /**
+   * Regra de exclusão de recorrência (EXRULE).
+   * <p>
+   * Equivalente ao parâmetro EXRULE da RFC 5545 (iCalendar).
+   * Define datas específicas a serem excluídas da recorrência principal.
+   * <p>
+   * Diferentemente de exceptionDates (que são datas específicas), a EXRULE
+   * define regras de exclusão baseadas em padrões temporais.
+   * <p>
+   * Exemplo:
+   * <pre>
+   * RRULE: FREQ=WEEKLY;BYDAY=MO,WE,FR
+   * EXRULE: FREQ=MONTHLY;BYMONTHDAY=1
+   * → Toda segunda, quarta e sexta, exceto o primeiro dia de cada mês
+   * </pre>
+   */
+  @Default
+  @Embedded
+  private ExclusaoRecorrencia exclusaoRecorrencia = new ExclusaoRecorrencia();
+
   @Default
   @Column(name = "zone_id")
   private String zoneId = ZoneId.systemDefault().getId();
 
   @Default
   @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_EXCEPTION_DATE",
-                   schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "PERIODICIDADE_EXCEPTION_DATE", schema = SCHEMA_NAME)
   private Set<LocalDate> exceptionDates = new HashSet<>();
 
   @Default
   @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "PERIODICIDADE_INCLUDE_DATE",
-                   schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "PERIODICIDADE_INCLUDE_DATE", schema = SCHEMA_NAME)
   private Set<LocalDate> includeDates = new HashSet<>();
+
   @Default
   private Boolean ativo = Boolean.TRUE;
 
-  @Transient
-  public ZoneId getZoneIdValue() {
-    return ZoneId.of(zoneId);
-  }
-
-  @Transient
-  public Duration duration() {
-    return intervaloBase.duration();
-  }
-
-  @Transient
-  public boolean hasRecurrence() {
-    return regra != null;
-  }
 }

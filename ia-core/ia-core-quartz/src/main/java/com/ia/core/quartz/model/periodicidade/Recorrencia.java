@@ -206,4 +206,104 @@ public class Recorrencia
   @Column(name = "count_limit")
   private Integer countLimit;
 
+  /**
+   * Dia da semana que inicia a contagem da frequência semanal.
+   * <p>
+   * Equivalente ao parâmetro WKST da RFC 5545.
+   * <p>
+   * Define o dia de início da semana quando combinado com
+   * FREQ=SEMANALMENTE;BYDAY. O padrão é segunda-feira (MO).
+   * <p>
+   * Exemplo:
+   *
+   * <pre>
+   * FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR;WKST=MO
+   * → a cada 2 semanas, de segunda a sexta, começando na segunda
+   * </pre>
+   */
+  @Column(name = "week_start_day")
+  private DayOfWeek weekStartDay;
+
+  /**
+   * Conjunto de dias do ano (1-366).
+   * <p>
+   * Equivalente ao parâmetro BYYEARDAY da RFC 5545.
+   * <p>
+   * Define dias específicos dentro do ano:
+   * <ul>
+   * <li>1 → primeiro dia do ano</li>
+   * <li>365 → dia 365 do ano (ou 366 em anos bissextos)</li>
+   * <li>-1 → último dia do ano</li>
+   * </ul>
+   * <p>
+   * Exemplo:
+   *
+   * <pre>
+   * FREQ=YEARLY;BYYEARDAY=1,100,200
+   * → primeiro dia, centésimo e ducentésimo dia do ano
+   * </pre>
+   */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "RECORRENCIA_DIA_ANO", schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
+  @Column(name = "by_year_day")
+  private Set<Integer> byYearDay = new HashSet<>();
+
+  /**
+   * Conjunto de números de semana (1-53).
+   * <p>
+   * Equivalente ao parâmetro BYWEEKNO da RFC 5545.
+   * <p>
+   * Define semanas específicas do ano:
+   * <ul>
+   * <li>1 → primeira semana do ano</li>
+   * <li>-1 → última semana do ano</li>
+   * </ul>
+   * <p>
+   * Atenção: Este parâmetro tem comportamento específico por cultura.
+   * A RFC 5545 define semana 1 como a semana que contém o primeiro
+   * quinta-feira do ano (ou que contém 4 de janeiro).
+   */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "RECORRENCIA_SEMANA_ANO", schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
+  @Column(name = "by_week_no")
+  private Set<Integer> byWeekNo = new HashSet<>();
+
+  /**
+   * Conjunto de horas (0-23) para filtrar ocorrências.
+   * <p>
+   * Equivalente ao parâmetro BYHOUR da RFC 5545.
+   * <p>
+   * Usado em conjunto com BYMINUTE e BYSECOND para definir
+   * horários específicos de ocorrência.
+   */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "RECORRENCIA_HORA", schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
+  @Column(name = "by_hour")
+  private Set<Integer> byHour = new HashSet<>();
+
+  /**
+   * Conjunto de minutos (0-59) para filtrar ocorrências.
+   * <p>
+   * Equivalente ao parâmetro BYMINUTE da RFC 5545.
+   */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "RECORRENCIA_MINUTO", schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
+  @Column(name = "by_minute")
+  private Set<Integer> byMinute = new HashSet<>();
+
+  /**
+   * Conjunto de segundos (0-59) para filtrar ocorrências.
+   * <p>
+   * Equivalente ao parâmetro BYSECOND da RFC 5545.
+   */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX
+      + "RECORRENCIA_SEGUNDO", schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
+  @Column(name = "by_second")
+  private Set<Integer> bySecond = new HashSet<>();
+
 }

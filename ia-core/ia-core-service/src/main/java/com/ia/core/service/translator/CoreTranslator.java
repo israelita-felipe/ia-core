@@ -41,6 +41,7 @@ public class CoreTranslator
    */
   public CoreTranslator(String... prefix) {
     messageSource = new ResourceBundleMessageSource();
+    messageSource.setDefaultEncoding("UTF-8");
     messageSource.addBasenames(prefix);
   }
 

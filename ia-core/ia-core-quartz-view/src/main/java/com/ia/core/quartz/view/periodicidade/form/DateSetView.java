@@ -15,7 +15,8 @@ import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 
 /**
  * Campo customizado para seleção de múltiplas datas. Compatível com Binder.
@@ -28,7 +29,7 @@ public class DateSetView
 
   private static final long serialVersionUID = 1L;
 
-  private final HorizontalLayout container = new HorizontalLayout();
+  private final FlexLayout container = new FlexLayout();
   private final DatePicker datePicker = new DatePicker();
 
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter
@@ -43,8 +44,9 @@ public class DateSetView
   }
 
   private void configureLayout() {
-    container.setSpacing(true);
-    container.setPadding(false);
+    // container.setSpacing(true);
+    // container.setPadding(false);
+    container.setFlexWrap(FlexWrap.WRAP);
     container.setWidthFull();
   }
 

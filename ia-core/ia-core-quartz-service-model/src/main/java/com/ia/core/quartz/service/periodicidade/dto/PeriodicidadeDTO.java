@@ -60,6 +60,14 @@ public class PeriodicidadeDTO
   @Default
   private RecorrenciaDTO regra = new RecorrenciaDTO();
 
+  /**
+   * Regra de exclusão de recorrência (EXRULE).
+   * <p>
+   * Equivalente ao parâmetro EXRULE da RFC 5545 (iCalendar).
+   */
+  @Default
+  private ExclusaoRecorrenciaDTO exclusaoRecorrencia = new ExclusaoRecorrenciaDTO();
+
   @Default
   private String zoneId = ZoneId.systemDefault().getId();
 
@@ -77,7 +85,9 @@ public class PeriodicidadeDTO
     return toBuilder()
         .intervaloBase(intervaloBase != null ? intervaloBase.cloneObject()
                                              : null)
-        .regra(regra != null ? regra.cloneObject() : null).build();
+        .regra(regra != null ? regra.cloneObject() : null)
+        .exclusaoRecorrencia(exclusaoRecorrencia != null
+            ? exclusaoRecorrencia.cloneObject() : null).build();
   }
 
   @Override
@@ -85,7 +95,9 @@ public class PeriodicidadeDTO
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
         .intervaloBase(intervaloBase != null ? intervaloBase.copyObject()
                                              : null)
-        .regra(regra != null ? regra.copyObject() : null).build();
+        .regra(regra != null ? regra.copyObject() : null)
+        .exclusaoRecorrencia(exclusaoRecorrencia != null
+            ? exclusaoRecorrencia.copyObject() : null).build();
   }
 
   @Override
@@ -97,6 +109,11 @@ public class PeriodicidadeDTO
       return result;
     }
     result = Objects.compare(regra, p.regra, RecorrenciaDTO::compareTo);
+    if (result != 0) {
+      return result;
+    }
+    result = Objects.compare(exclusaoRecorrencia, p.exclusaoRecorrencia,
+                            ExclusaoRecorrenciaDTO::compareTo);
     if (result != 0) {
       return result;
     }
@@ -146,6 +163,7 @@ public class PeriodicidadeDTO
     public static final String ATIVO = "ativo";
     public static final String INTERVALO_BASE = "intervaloBase";
     public static final String REGRA = "regra";
+    public static final String EXCLUSAO_RECORRENCIA = "exclusaoRecorrencia";
     public static final String ZONE_ID = "zoneId";
     public static final String EXCEPTION_DATES = "exceptionDates";
     public static final String INCLUDE_DATES = "includeDates";

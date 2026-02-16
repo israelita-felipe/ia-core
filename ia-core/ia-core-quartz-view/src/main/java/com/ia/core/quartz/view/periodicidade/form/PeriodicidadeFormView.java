@@ -8,14 +8,20 @@ import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.NativeLabel;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.tabs.TabSheet;
 
 /**
  * @author Israel Araújo
  */
 public class PeriodicidadeFormView
   extends FormView<PeriodicidadeDTO> {
+
+  private TabSheet mainTabSheet;
+  private FormLayout basicTabLayout;
+  private FormLayout recurrenceTabLayout;
+  private FormLayout exceptionsTabLayout;
 
   /**
    * @param viewModel
@@ -25,101 +31,151 @@ public class PeriodicidadeFormView
   }
 
   /**
-   * @param recorrenciaFormViewModel
+   * @param label
+   * @param help
+   * @param layout
    * @return
    */
-  public RecorrenciaFormView createRecorrenciaField(String label,
-                                                    String help,
-                                                    RecorrenciaFormViewModel recorrenciaFormViewModel) {
-    // Criar subformulário de recorrência
-    RecorrenciaFormView field = new RecorrenciaFormView(recorrenciaFormViewModel);
-    add(new Hr(), 6);
-    add(new NativeLabel(label), 6);
-    setHelp(field, help);
-    add(field, 6);
-    return field;
-  }
-
-  /**
-   * @param intervaloTemporalFormViewModel
-   * @return
-   */
-  public IntervaloTemporalFormView createIntervaloTemporalField(String label,
-                                                               String help,
-                                                               IntervaloTemporalFormViewModel intervaloTemporalFormViewModel) {
-    // Criar subformulário de intervalo temporal
-    IntervaloTemporalFormView field = new IntervaloTemporalFormView(intervaloTemporalFormViewModel);
-    add(new Hr(), 6);
-    add(new NativeLabel(label), 6);
-    setHelp(field, help);
-    add(field, 6);
-    return field;
-  }
-
-  public Checkbox createAtivoField(String label, String help) {
+  public Checkbox createAtivoField(String label, String help,
+                                   FormLayout layout) {
     Checkbox ativoField = createCheckBoxField(label, help);
-    add(ativoField, 6);
+    layout.add(ativoField, 6);
+    bind(PeriodicidadeDTO.CAMPOS.ATIVO, ativoField);
     return ativoField;
   }
 
-  public ComboBox<String> createZoneIdField(String label, String help) {
+  /**
+   * @param label
+   * @param help
+   * @param layout
+   * @return
+   */
+  public ComboBox<String> createZoneIdField(String label, String help,
+                                            FormLayout layout) {
     ComboBox<String> zoneIdField = createComboBox(label, help);
     zoneIdField.setItems(ZoneId.getAvailableZoneIds());
-    add(zoneIdField, 6);
+    layout.add(zoneIdField, 6);
+    bind(PeriodicidadeDTO.CAMPOS.ZONE_ID, zoneIdField);
     return zoneIdField;
   }
 
   /**
    * @param label
    * @param help
+   * @param layout
    * @return
    */
-  public DateSetView createExceptionDatesField(String label, String help) {
-    DateSetView exceptionDatesField = new DateSetView();
-    exceptionDatesField.setLabel(label);
-    setHelp(exceptionDatesField, help);
-    add(exceptionDatesField, 6);
-    return exceptionDatesField;
+  public IntervaloTemporalFormView createIntervaloTemporalField(String label,
+                                                                String help,
+                                                                IntervaloTemporalFormViewModel intervaloTemporalFormViewModel,
+                                                                FormLayout layout) {
+    IntervaloTemporalFormView field = new IntervaloTemporalFormView(intervaloTemporalFormViewModel);
+    setHelp(field, help);
+    layout.add(field, 6);
+    bind("intervaloBase", field);
+    return field;
   }
 
   /**
    * @param label
    * @param help
+   * @param layout
    * @return
    */
-  public DateSetView createIncludeDatesField(String label, String help) {
+  public RecorrenciaFormView createRecorrenciaField(String label,
+                                                    String help,
+                                                    RecorrenciaFormViewModel recorrenciaFormViewModel,
+                                                    FormLayout layout) {
+    RecorrenciaFormView field = new RecorrenciaFormView(recorrenciaFormViewModel);
+    setHelp(field, help);
+    layout.add(field, 6);
+    bind("regra", field);
+    return field;
+  }
+
+  /**
+   * @param label
+   * @param help
+   * @param layout
+   * @return
+   */
+  public DateSetView createIncludeDatesField(String label, String help,
+                                             FormLayout layout) {
     DateSetView includeDatesField = new DateSetView();
     includeDatesField.setLabel(label);
     setHelp(includeDatesField, help);
-    add(includeDatesField, 6);
+    layout.add(includeDatesField, 6);
+    bind(PeriodicidadeDTO.CAMPOS.INCLUDE_DATES, includeDatesField);
     return includeDatesField;
+  }
+
+  /**
+   * @param label
+   * @param help
+   * @param layout
+   * @return
+   */
+  public DateSetView createExceptionDatesField(String label, String help,
+                                               FormLayout layout) {
+    DateSetView exceptionDatesField = new DateSetView();
+    exceptionDatesField.setLabel(label);
+    setHelp(exceptionDatesField, help);
+    layout.add(exceptionDatesField, 6);
+    bind(PeriodicidadeDTO.CAMPOS.EXCEPTION_DATES, exceptionDatesField);
+    return exceptionDatesField;
   }
 
   @Override
   public void createLayout() {
     super.createLayout();
-    bind(PeriodicidadeDTO.CAMPOS.ATIVO,
-         createAtivoField($(PeriodicidadeTranslator.ATIVO),
-                          $(PeriodicidadeTranslator.HELP.ATIVO)));
-    bind(PeriodicidadeDTO.CAMPOS.ZONE_ID,
-         createZoneIdField($(PeriodicidadeTranslator.ZONE_ID),
-                           $(PeriodicidadeTranslator.HELP.ZONE_ID)));
-    bind("intervaloBase",
-         createIntervaloTemporalField($(PeriodicidadeTranslator.INTERVALO_BASE),
-                                      $(PeriodicidadeTranslator.HELP.INTERVALO_BASE),
-                                      getViewModel()
-                                          .getIntervaloTemporalFormViewModel()));
-    bind("regra",
-         createRecorrenciaField($(PeriodicidadeTranslator.REGRA),
-                                $(PeriodicidadeTranslator.HELP.REGRA),
-                                getViewModel()
-                                    .getRecorrenciaFormViewModel()));
-    bind(PeriodicidadeDTO.CAMPOS.INCLUDE_DATES,
-         createIncludeDatesField($(PeriodicidadeTranslator.INCLUDE_DATES),
-                                $(PeriodicidadeTranslator.HELP.INCLUDE_DATES)));
-    bind(PeriodicidadeDTO.CAMPOS.EXCEPTION_DATES,
-         createExceptionDatesField($(PeriodicidadeTranslator.EXCEPTION_DATES),
-                                   $(PeriodicidadeTranslator.HELP.EXCEPTION_DATES)));
+    createMainTabSheet();
+  }
+
+  private void createMainTabSheet() {
+    mainTabSheet = createTabSheet();
+
+    // Aba Básico (junta básico + intervalo)
+    createTab(mainTabSheet, VaadinIcon.COG.create(),
+              $(PeriodicidadeTranslator.TAB_BASIC),
+              basicTabLayout = createFormLayout());
+
+    // Aba Recorrência
+    createTab(mainTabSheet, VaadinIcon.REFRESH.create(),
+              $(PeriodicidadeTranslator.TAB_RECURRENCE),
+              recurrenceTabLayout = createFormLayout());
+
+    // Aba Exceções
+    createTab(mainTabSheet, VaadinIcon.WRENCH.create(),
+              $(PeriodicidadeTranslator.TAB_EXCEPTIONS),
+              exceptionsTabLayout = createFormLayout());
+
+    add(mainTabSheet, 6);
+
+    // Campos da aba Básico (junta ativo, zoneId e intervalo)
+    createAtivoField($(PeriodicidadeTranslator.ATIVO),
+                     $(PeriodicidadeTranslator.HELP.ATIVO), basicTabLayout);
+    createZoneIdField($(PeriodicidadeTranslator.ZONE_ID),
+                      $(PeriodicidadeTranslator.HELP.ZONE_ID),
+                      basicTabLayout);
+    createIntervaloTemporalField($(PeriodicidadeTranslator.INTERVALO_BASE),
+                                 $(PeriodicidadeTranslator.HELP.INTERVALO_BASE),
+                                 getViewModel()
+                                     .getIntervaloTemporalFormViewModel(),
+                                 basicTabLayout);
+
+    // Campos da aba Recorrência
+    createRecorrenciaField($(PeriodicidadeTranslator.REGRA),
+                           $(PeriodicidadeTranslator.HELP.REGRA),
+                           getViewModel().getRecorrenciaFormViewModel(),
+                           recurrenceTabLayout);
+
+    // Campos da aba Exceções
+    createIncludeDatesField($(PeriodicidadeTranslator.INCLUDE_DATES),
+                            $(PeriodicidadeTranslator.HELP.INCLUDE_DATES),
+                            exceptionsTabLayout);
+    createExceptionDatesField($(PeriodicidadeTranslator.EXCEPTION_DATES),
+                              $(PeriodicidadeTranslator.HELP.EXCEPTION_DATES),
+                              exceptionsTabLayout);
   }
 
   @Override
