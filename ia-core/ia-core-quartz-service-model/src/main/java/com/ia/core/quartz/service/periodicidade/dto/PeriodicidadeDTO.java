@@ -146,11 +146,42 @@ public class PeriodicidadeDTO
   }
 
   public Duration duration() {
-    return intervaloBase.duration();
+    if (intervaloBase == null) {
+      return Duration.ZERO;
+    }
+    
+    // Calcula duração usando LocalDate e LocalTime
+    java.time.LocalDateTime start;
+    java.time.LocalDateTime end;
+    
+    if (intervaloBase.getStartDate() != null && intervaloBase.getStartTime() != null) {
+      start = java.time.LocalDateTime.of(intervaloBase.getStartDate(), 
+          intervaloBase.getStartTime());
+    } else {
+      return Duration.ZERO;
+    }
+    
+    if (intervaloBase.getEndDate() != null && intervaloBase.getEndTime() != null) {
+      end = java.time.LocalDateTime.of(intervaloBase.getEndDate(), 
+          intervaloBase.getEndTime());
+    } else if (intervaloBase.getEndTime() != null) {
+      // Mesmo dia, diferente hora
+      end = java.time.LocalDateTime.of(intervaloBase.getStartDate(), 
+          intervaloBase.getEndTime());
+    } else {
+      // Assume duração de 1 hora
+      end = start.plusHours(1);
+    }
+    
+    return Duration.between(start, end);
   }
 
   public boolean hasRecurrence() {
-    return regra != null;
+    if (regra == null) {
+      return false;
+    }
+    // Verifica se a frequência está definida
+    return regra.getFrequency() != null;
   }
 
   public ZoneId getZoneIdValue() {

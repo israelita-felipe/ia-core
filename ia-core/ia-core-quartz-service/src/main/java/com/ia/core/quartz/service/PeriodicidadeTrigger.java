@@ -45,14 +45,18 @@ public class PeriodicidadeTrigger
     
     // Valida se o intervalo base existe
     if (periodicidade.getIntervaloBase() == null 
-        || periodicidade.getIntervaloBase().getStartDateTime() == null) {
+        || periodicidade.getIntervaloBase().getStartDate() == null
+        || periodicidade.getIntervaloBase().getStartTime() == null) {
       throw new IllegalArgumentException(
           "Periodicidade deve ter um intervalo base com data/hora de início");
     }
     
-    setStartTime(Date
-        .from(periodicidade.getIntervaloBase().getStartDateTime()
-            .atZone(periodicidade.getZoneIdValue()).toInstant()));
+    // Combina startDate e startTime para ZonedDateTime
+    ZonedDateTime startDateTime = ZonedDateTime.of(
+        periodicidade.getIntervaloBase().getStartDate(),
+        periodicidade.getIntervaloBase().getStartTime(),
+        periodicidade.getZoneIdValue());
+    setStartTime(Date.from(startDateTime.toInstant()));
   }
 
   private OccurrenceCalculator calculator() {
@@ -69,13 +73,16 @@ public class PeriodicidadeTrigger
     
     // Valida o intervalo base
     if (periodicidade.getIntervaloBase() == null 
-        || periodicidade.getIntervaloBase().getStartDateTime() == null) {
+        || periodicidade.getIntervaloBase().getStartDate() == null
+        || periodicidade.getIntervaloBase().getStartTime() == null) {
       return null;
     }
     
     // Começa 1 segundo antes do início para incluir a primeira ocorrência
-    ZonedDateTime startDateTime = periodicidade.getIntervaloBase()
-        .getStartDateTime().atZone(zone);
+    ZonedDateTime startDateTime = ZonedDateTime.of(
+        periodicidade.getIntervaloBase().getStartDate(),
+        periodicidade.getIntervaloBase().getStartTime(),
+        zone);
     ZonedDateTime after = startDateTime.minusSeconds(1);
 
     Optional<IntervaloTemporalDTO> next = calculator()
@@ -84,20 +91,24 @@ public class PeriodicidadeTrigger
     if (next.isEmpty())
       return null;
 
-    Date nextDate = Date
-        .from(next.get().getStartDateTime().atZone(zone).toInstant());
+    // Combina startDate e startTime para ZonedDateTime
+    ZonedDateTime nextStart = ZonedDateTime.of(
+        next.get().getStartDate(),
+        next.get().getStartTime(),
+        zone);
+    Date nextDate = Date.from(nextStart.toInstant());
 
     if (calendar != null && !calendar.isTimeIncluded(nextDate.getTime())) {
 
       next = calculator()
-          .nextOccurrence(periodicidade,
-                          next.get().getStartDateTime().atZone(zone));
+          .nextOccurrence(periodicidade, nextStart);
 
       if (next.isEmpty())
         return null;
 
-      nextDate = Date
-          .from(next.get().getStartDateTime().atZone(zone).toInstant());
+      ZonedDateTime nextOccurrenceStart = ZonedDateTime.of(
+          next.get().getStartDate(), next.get().getStartTime(), zone);
+      nextDate = Date.from(nextOccurrenceStart.toInstant());
     }
 
     this.nextFireTime = nextDate;
@@ -129,19 +140,24 @@ public class PeriodicidadeTrigger
       return;
     }
 
-    Date nextDate = Date
-        .from(next.get().getStartDateTime().atZone(zone).toInstant());
+    // Combina startDate e startTime para ZonedDateTime
+    ZonedDateTime nextStart = ZonedDateTime.of(
+        next.get().getStartDate(),
+        next.get().getStartTime(),
+        zone);
+    Date nextDate = Date.from(nextStart.toInstant());
 
     if (calendar != null && !calendar.isTimeIncluded(nextDate.getTime())) {
 
       next = calculator()
-          .nextOccurrence(periodicidade,
-                          next.get().getStartDateTime().atZone(zone));
+          .nextOccurrence(periodicidade, nextStart);
 
-      nextDate = next
-          .map(i -> Date
-              .from(i.getStartDateTime().atZone(zone).toInstant()))
-          .orElse(null);
+      ZonedDateTime nextOccurrenceStart = next.isPresent()
+          ? ZonedDateTime.of(next.get().getStartDate(), next.get().getStartTime(), zone)
+          : null;
+      nextDate = nextOccurrenceStart != null
+          ? Date.from(nextOccurrenceStart.toInstant())
+          : null;
     }
 
     this.nextFireTime = nextDate;
@@ -161,9 +177,12 @@ public class PeriodicidadeTrigger
     Optional<IntervaloTemporalDTO> next = calculator()
         .nextOccurrence(periodicidade, now);
 
-    this.nextFireTime = next
-        .map(i -> Date.from(i.getStartDateTime().atZone(zone).toInstant()))
-        .orElse(null);
+    ZonedDateTime nextStart = next.isPresent()
+        ? ZonedDateTime.of(next.get().getStartDate(), next.get().getStartTime(), zone)
+        : null;
+    this.nextFireTime = nextStart != null
+        ? Date.from(nextStart.toInstant())
+        : null;
   }
 
   @Override
@@ -192,10 +211,9 @@ public class PeriodicidadeTrigger
       if (periodicidade.getRegra().getUntilDate() != null) {
         // Usa o horário do intervalo base se disponível
         if (periodicidade.getIntervaloBase() != null 
-            && periodicidade.getIntervaloBase().getStartDateTime() != null) {
+            && periodicidade.getIntervaloBase().getStartTime() != null) {
           return Date.from(periodicidade.getRegra().getUntilDate()
-              .atTime(periodicidade.getIntervaloBase().getStartDateTime()
-                  .toLocalTime())
+              .atTime(periodicidade.getIntervaloBase().getStartTime())
               .atZone(periodicidade.getZoneIdValue()).toInstant());
         }
         return Date.from(periodicidade.getRegra().getUntilDate()
@@ -206,9 +224,10 @@ public class PeriodicidadeTrigger
       if (periodicidade.getRegra().getCountLimit() != null) {
         // Gera ocorrências para encontrar a última
         if (periodicidade.getIntervaloBase() != null) {
-          ZonedDateTime start = periodicidade.getIntervaloBase()
-              .getStartDateTime()
-              .atZone(periodicidade.getZoneIdValue());
+          ZonedDateTime start = ZonedDateTime.of(
+              periodicidade.getIntervaloBase().getStartDate(),
+              periodicidade.getIntervaloBase().getStartTime(),
+              periodicidade.getZoneIdValue());
           
           var occurrences = calculator()
               .generateOccurrences(periodicidade, start, 
@@ -216,8 +235,11 @@ public class PeriodicidadeTrigger
           
           if (!occurrences.isEmpty()) {
             var lastOccurrence = occurrences.get(occurrences.size() - 1);
-            return Date.from(lastOccurrence.getStartDateTime()
-                .atZone(periodicidade.getZoneIdValue()).toInstant());
+            ZonedDateTime lastStart = ZonedDateTime.of(
+                lastOccurrence.getStartDate(),
+                lastOccurrence.getStartTime(),
+                periodicidade.getZoneIdValue());
+            return Date.from(lastStart.toInstant());
           }
         }
       }
@@ -261,7 +283,9 @@ public class PeriodicidadeTrigger
       return null;
     }
 
-    ZonedDateTime nextStart = next.get().getStartDateTime().atZone(zone);
+    ZonedDateTime nextStart = next.isPresent()
+        ? ZonedDateTime.of(next.get().getStartDate(), next.get().getStartTime(), zone)
+        : null;
 
     if (getEndTime() != null
         && nextStart.toInstant().isAfter(getEndTime().toInstant())) {

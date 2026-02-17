@@ -44,4 +44,22 @@ public interface PeriodicidadeRepository
    */
   @Query("SELECT p FROM Periodicidade p WHERE p.regra IS NOT NULL")
   List<Periodicidade> findAllWithRecurrence();
+
+  /**
+   * Busca periodicidades ativas que podem ter ocorrências em um período.
+   * <p>
+   * Considera eventos:
+   * - Que estão ativos
+   * - Que já começaram (startDate <= endDate do período)
+   * - Que não terminaram ou têm recorrência
+   *
+   * @param endDate a data final do período para verificar
+   * @return lista de periodicidades ativas que podem ocorrer no período
+   */
+  @Query("SELECT p FROM Periodicidade p WHERE p.ativo = true "
+      + "AND (p.intervaloBase.endDate IS NULL OR p.intervaloBase.endDate >= :startDate) "
+      + "AND p.intervaloBase.startDate <= :endDate")
+  List<Periodicidade> findAtivasBetweenDates(
+      @Param("startDate") java.time.LocalDate startDate,
+      @Param("endDate") java.time.LocalDate endDate);
 }

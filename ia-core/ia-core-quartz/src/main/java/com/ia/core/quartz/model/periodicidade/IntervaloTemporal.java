@@ -2,7 +2,6 @@ package com.ia.core.quartz.model.periodicidade;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
@@ -96,61 +95,5 @@ public class IntervaloTemporal
     this.startTime = startTime;
     this.endDate = date;
     this.endTime = endTime;
-  }
-
-  // ========================
-  // Métodos de compatibilidade
-  // ========================
-
-  /**
-   * Retorna data/hora de início como LocalDateTime.
-   * Para compatibilidade com código existente.
-   */
-  public LocalDateTime getStartDateTime() {
-    if (startDate == null || startTime == null) {
-      return null;
-    }
-    return LocalDateTime.of(startDate, startTime);
-  }
-
-  /**
-   * Define data/hora de início.
-   * Para compatibilidade com código existente.
-   */
-  public void setStartDateTime(LocalDateTime dateTime) {
-    if (dateTime == null) {
-      this.startDate = null;
-      this.startTime = null;
-    } else {
-      this.startDate = dateTime.toLocalDate();
-      this.startTime = dateTime.toLocalTime();
-    }
-  }
-
-  /**
-   * Retorna data/hora de fim como LocalDateTime.
-   * Para compatibilidade com código existente.
-   */
-  public LocalDateTime getEndDateTime() {
-    LocalDate date = endDate != null ? endDate : startDate;
-    LocalTime time = endTime != null ? endTime : startTime;
-    if (date == null || time == null) {
-      return null;
-    }
-    return LocalDateTime.of(date, time);
-  }
-
-  /**
-   * Define data/hora de fim.
-   * Para compatibilidade com código existente.
-   */
-  public void setEndDateTime(LocalDateTime dateTime) {
-    if (dateTime == null) {
-      this.endDate = null;
-      this.endTime = null;
-    } else {
-      this.endDate = dateTime.toLocalDate();
-      this.endTime = dateTime.toLocalTime();
-    }
   }
 }

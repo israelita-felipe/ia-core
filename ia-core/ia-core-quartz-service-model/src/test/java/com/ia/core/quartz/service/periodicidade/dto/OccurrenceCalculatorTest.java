@@ -67,7 +67,8 @@ class OccurrenceCalculatorTest {
 
       // Then
       assertTrue(result.isPresent());
-      assertNotNull(result.get().getStartDateTime());
+      assertNotNull(result.get().getStartDate());
+      assertNotNull(result.get().getStartTime());
     }
 
     @Test

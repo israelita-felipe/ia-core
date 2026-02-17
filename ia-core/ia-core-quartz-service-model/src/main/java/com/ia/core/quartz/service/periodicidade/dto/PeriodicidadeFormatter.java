@@ -80,8 +80,27 @@ public final class PeriodicidadeFormatter {
 
     if (base != null) {
 
-      sb.append(" às ").append(base.getStartDateTime()).append(" até ")
-          .append(base.getEndDateTime());
+      // Formata data e hora separadamente
+      String startFormatted = base.getStartDate() != null 
+          ? base.getStartDate().toString() : "";
+      if (base.getStartTime() != null) {
+        startFormatted += " " + base.getStartTime();
+      }
+      
+      String endFormatted = "";
+      if (base.getEndDate() != null) {
+        endFormatted = base.getEndDate().toString();
+        if (base.getEndTime() != null) {
+          endFormatted += " " + base.getEndTime();
+        }
+      } else if (base.getEndTime() != null) {
+        endFormatted = base.getStartDate() != null 
+            ? base.getStartDate().toString() + " " + base.getEndTime() 
+            : base.getEndTime().toString();
+      }
+      
+      sb.append(" às ").append(startFormatted).append(" até ")
+          .append(endFormatted);
     }
 
     // =============================
@@ -178,8 +197,27 @@ public final class PeriodicidadeFormatter {
     }
 
     if (base != null) {
-      sb.append(" • ").append(base.getStartDateTime()).append("–")
-          .append(base.getEndDateTime());
+      // Formata data e hora separadamente
+      String startFormatted = base.getStartDate() != null 
+          ? base.getStartDate().toString() : "";
+      if (base.getStartTime() != null) {
+        startFormatted += " " + base.getStartTime();
+      }
+      
+      String endFormatted = "";
+      if (base.getEndDate() != null) {
+        endFormatted = base.getEndDate().toString();
+        if (base.getEndTime() != null) {
+          endFormatted += " " + base.getEndTime();
+        }
+      } else if (base.getEndTime() != null) {
+        endFormatted = base.getStartDate() != null 
+            ? base.getStartDate().toString() + " " + base.getEndTime() 
+            : base.getEndTime().toString();
+      }
+      
+      sb.append(" • ").append(startFormatted).append("–")
+          .append(endFormatted);
     }
 
     if (r.getUntilDate() != null) {

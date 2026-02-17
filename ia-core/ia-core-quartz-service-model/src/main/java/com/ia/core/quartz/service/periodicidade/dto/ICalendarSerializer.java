@@ -1106,9 +1106,12 @@ public final class ICalendarSerializer {
     // Data/hora de início (DTSTART)
     IntervaloTemporalDTO intervalo = periodicidade.getIntervaloBase();
     if (intervalo != null) {
-      if (intervalo.getStartDateTime() != null) {
+      if (intervalo.getStartDate() != null && intervalo.getStartTime() != null) {
+        // Tem data e hora
+        java.time.LocalDateTime startDateTime = java.time.LocalDateTime.of(
+            intervalo.getStartDate(), intervalo.getStartTime());
         sb.append("DTSTART:")
-            .append(formatDateTime(intervalo.getStartDateTime(), false))
+            .append(formatDateTime(startDateTime, false))
             .append("\r\n");
       } else if (intervalo.getStartDate() != null) {
         sb.append("DTSTART;VALUE=DATE:")
@@ -1117,9 +1120,11 @@ public final class ICalendarSerializer {
       }
 
       // Data/hora de fim (DTEND)
-      if (intervalo.getEndDateTime() != null) {
+      if (intervalo.getEndDate() != null && intervalo.getEndTime() != null) {
+        java.time.LocalDateTime endDateTime = java.time.LocalDateTime.of(
+            intervalo.getEndDate(), intervalo.getEndTime());
         sb.append("DTEND:")
-            .append(formatDateTime(intervalo.getEndDateTime(), false))
+            .append(formatDateTime(endDateTime, false))
             .append("\r\n");
       } else if (intervalo.getEndDate() != null) {
         sb.append("DTEND;VALUE=DATE:")
@@ -1130,16 +1135,30 @@ public final class ICalendarSerializer {
 
     // Timezone
     if (periodicidade.getZoneId() != null
-        && !periodicidade.getZoneId().isEmpty()) {
+        && !periodicidade.getZoneId().isEmpty() && intervalo != null) {
+      // Combina startDate e startTime para LocalDateTime
+      java.time.LocalDateTime startDateTime = null;
+      if (intervalo.getStartDate() != null && intervalo.getStartTime() != null) {
+        startDateTime = java.time.LocalDateTime.of(
+            intervalo.getStartDate(), intervalo.getStartTime());
+      }
+      
+      java.time.LocalDateTime endDateTime = null;
+      if (intervalo.getEndDate() != null && intervalo.getEndTime() != null) {
+        endDateTime = java.time.LocalDateTime.of(
+            intervalo.getEndDate(), intervalo.getEndTime());
+      } else if (intervalo.getStartDate() != null && intervalo.getEndTime() != null) {
+        endDateTime = java.time.LocalDateTime.of(
+            intervalo.getStartDate(), intervalo.getEndTime());
+      }
+      
       sb.append("DTSTART;TZID=").append(periodicidade.getZoneId())
           .append(":")
-          .append(formatDateTime(intervalo != null
-              ? intervalo.getStartDateTime() : null, false))
+          .append(formatDateTime(startDateTime, false))
           .append("\r\n");
       sb.append("DTEND;TZID=").append(periodicidade.getZoneId())
           .append(":")
-          .append(formatDateTime(intervalo != null
-              ? intervalo.getEndDateTime() : null, false))
+          .append(formatDateTime(endDateTime, false))
           .append("\r\n");
     }
 

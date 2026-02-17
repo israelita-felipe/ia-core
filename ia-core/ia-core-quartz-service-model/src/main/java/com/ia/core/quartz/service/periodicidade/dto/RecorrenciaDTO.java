@@ -12,11 +12,11 @@ import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.model.periodicidade.Recorrencia;
 import com.ia.core.service.dto.DTO;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +25,8 @@ import lombok.experimental.SuperBuilder;
 /**
  * DTO para regra de recorrência de eventos.
  * <p>
- * Representa uma regra de recorrência conforme especificação RFC 5545 (iCalendar).
- * Suporta os seguintes parâmetros:
+ * Representa uma regra de recorrência conforme especificação RFC 5545
+ * (iCalendar). Suporta os seguintes parâmetros:
  * <ul>
  * <li>FREQ: Frequência base (diária, semanal, mensal, anual)</li>
  * <li>INTERVAL: Intervalo multiplicador</li>
@@ -62,7 +62,8 @@ public class RecorrenciaDTO
   private Frequencia frequency;
 
   @Positive(message = "{validation.periodicidade.regra.intervalValue.positive}")
-  private Integer intervalValue;
+  @Builder.Default
+  private Integer intervalValue = 1;
 
   @Default
   private Set<DayOfWeek> byDay = new HashSet<>();
@@ -77,7 +78,8 @@ public class RecorrenciaDTO
 
   private LocalDate untilDate;
 
-  @Min(value = 1, message = "{validation.periodicidade.regra.countLimit.positive}")
+  @Min(value = 1,
+       message = "{validation.periodicidade.regra.countLimit.positive}")
   private Integer countLimit;
 
   private DayOfWeek weekStartDay;
@@ -205,7 +207,8 @@ public class RecorrenciaDTO
         .collect(Collectors.toList())) {
       for (Integer segundoObj : other.bySecond.stream()
           .sorted(Integer::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(segundo, segundoObj));
+        result = Boolean.TRUE
+            .compareTo(Objects.equals(segundo, segundoObj));
         if (result != 0) {
           return result;
         }
@@ -220,10 +223,9 @@ public class RecorrenciaDTO
         .byMonth(new HashSet<>(byMonth))
         .byMonthDay(new HashSet<>(byMonthDay))
         .byYearDay(new HashSet<>(byYearDay))
-        .byWeekNo(new HashSet<>(byWeekNo))
-        .byHour(new HashSet<>(byHour))
-        .byMinute(new HashSet<>(byMinute))
-        .bySecond(new HashSet<>(bySecond)).build();
+        .byWeekNo(new HashSet<>(byWeekNo)).byHour(new HashSet<>(byHour))
+        .byMinute(new HashSet<>(byMinute)).bySecond(new HashSet<>(bySecond))
+        .build();
   }
 
   /**
