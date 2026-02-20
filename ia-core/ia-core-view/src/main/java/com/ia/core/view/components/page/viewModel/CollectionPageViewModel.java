@@ -92,4 +92,9 @@ public abstract class CollectionPageViewModel<T extends Serializable>
                                                                  index);
     getService().up(object, runOnUp.andThen(onUp));
   }
+
+  @Override
+  public Long getId(T object) {
+    return getService().getId(object);
+  }
 }

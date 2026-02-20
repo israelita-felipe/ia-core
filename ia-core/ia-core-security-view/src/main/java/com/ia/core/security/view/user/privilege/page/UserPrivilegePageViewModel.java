@@ -56,8 +56,4 @@ public class UserPrivilegePageViewModel
     return object.copyObject();
   }
 
-  @Override
-  public Long getId(UserPrivilegeDTO object) {
-    return object.getId();
-  }
 }

@@ -61,8 +61,4 @@ public abstract class AttachmentCollectionPageViewModel<T extends AttachmentDTO<
     return (T) object.cloneObject();
   }
 
-  @Override
-  public Long getId(T object) {
-    return object.getId();
-  }
 }

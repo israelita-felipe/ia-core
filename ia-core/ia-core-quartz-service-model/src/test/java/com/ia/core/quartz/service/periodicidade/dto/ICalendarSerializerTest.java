@@ -1,6 +1,6 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -8,19 +8,21 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import com.ia.core.quartz.service.model.periodicidade.dto.ICalendarSerializer;
+import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 
 /**
  * Testes unitários para ICalendarSerializer.
  * <p>
- * Valida a serialização de objetos Recorrencia e ExclusaoRecorrencia
- * para o formato RRULE/EXRULE conforme RFC 5545.
+ * Valida a serialização de objetos Recorrencia e ExclusaoRecorrencia para o
+ * formato RRULE/EXRULE conforme RFC 5545.
  *
  * @author Israel Araújo
  */
@@ -35,8 +37,7 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar recorrência diária simples")
     void testDailyFrequency() {
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.DAILY)
-          .build();
+          .frequency(Frequencia.DIARIAMENTE).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -52,9 +53,7 @@ class ICalendarSerializerTest {
       days.add(DayOfWeek.FRIDAY);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.WEEKLY)
-          .byDay(days)
-          .build();
+          .frequency(Frequencia.SEMANALMENTE).byDay(days).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -69,9 +68,7 @@ class ICalendarSerializerTest {
       monthDays.add(15);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.MONTHLY)
-          .byMonthDay(monthDays)
-          .build();
+          .frequency(Frequencia.MENSALMENTE).byMonthDay(monthDays).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -86,9 +83,7 @@ class ICalendarSerializerTest {
       months.add(Month.JULY);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.YEARLY)
-          .byMonth(months)
-          .build();
+          .frequency(Frequencia.ANUALMENTE).byMonth(months).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -99,9 +94,7 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar com INTERVAL maior que 1")
     void testInterval() {
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.WEEKLY)
-          .intervalValue(2)
-          .build();
+          .frequency(Frequencia.SEMANALMENTE).intervalValue(2).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -112,9 +105,7 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar com COUNT")
     void testCount() {
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.DAILY)
-          .countLimit(10)
-          .build();
+          .frequency(Frequencia.DIARIAMENTE).countLimit(10).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -127,9 +118,7 @@ class ICalendarSerializerTest {
       LocalDate untilDate = LocalDate.of(2025, 12, 31);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.DAILY)
-          .untilDate(untilDate)
-          .build();
+          .frequency(Frequencia.DIARIAMENTE).untilDate(untilDate).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -140,8 +129,7 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar com WKST")
     void testWeekStartDay() {
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.WEEKLY)
-          .weekStartDay(DayOfWeek.SUNDAY)
+          .frequency(Frequencia.SEMANALMENTE).weekStartDay(DayOfWeek.SUNDAY)
           .build();
 
       String result = ICalendarSerializer.toRRule(recur);
@@ -153,9 +141,8 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar com BYSETPOS")
     void testBySetPosition() {
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.MONTHLY)
-          .byMonthDay(Set.of(1, 8, 15, 22))
-          .bySetPosition(1)
+          .frequency(Frequencia.MENSALMENTE)
+          .byMonthDay(Set.of(1, 8, 15, 22)).bySetPosition(Set.of(1))
           .build();
 
       String result = ICalendarSerializer.toRRule(recur);
@@ -180,9 +167,7 @@ class ICalendarSerializerTest {
       yearDays.add(200);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.YEARLY)
-          .byYearDay(yearDays)
-          .build();
+          .frequency(Frequencia.ANUALMENTE).byYearDay(yearDays).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -197,9 +182,7 @@ class ICalendarSerializerTest {
       weekNos.add(52);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.YEARLY)
-          .byWeekNo(weekNos)
-          .build();
+          .frequency(Frequencia.ANUALMENTE).byWeekNo(weekNos).build();
 
       String result = ICalendarSerializer.toRRule(recur);
 
@@ -219,9 +202,7 @@ class ICalendarSerializerTest {
       minutes.add(30);
 
       RecorrenciaDTO recur = RecorrenciaDTO.builder()
-          .frequency(Frequencia.DAILY)
-          .byHour(hours)
-          .byMinute(minutes)
+          .frequency(Frequencia.DIARIAMENTE).byHour(hours).byMinute(minutes)
           .build();
 
       String result = ICalendarSerializer.toRRule(recur);
@@ -242,7 +223,7 @@ class ICalendarSerializerTest {
       days.add(DayOfWeek.THURSDAY);
 
       Recorrencia recur = new Recorrencia();
-      recur.setFrequency(Frequencia.WEEKLY);
+      recur.setFrequency(Frequencia.SEMANALMENTE);
       recur.setByDay(days);
       recur.setIntervalValue(1);
 
@@ -268,8 +249,7 @@ class ICalendarSerializerTest {
     @DisplayName("Deve serializar exclusão de recorrência diária")
     void testDailyExclusion() {
       ExclusaoRecorrenciaDTO ex = ExclusaoRecorrenciaDTO.builder()
-          .frequency(Frequencia.DAILY)
-          .build();
+          .frequency(Frequencia.DIARIAMENTE).build();
 
       String result = ICalendarSerializer.toExRule(ex);
 
@@ -284,9 +264,7 @@ class ICalendarSerializerTest {
       days.add(DayOfWeek.SUNDAY);
 
       ExclusaoRecorrenciaDTO ex = ExclusaoRecorrenciaDTO.builder()
-          .frequency(Frequencia.WEEKLY)
-          .byDay(days)
-          .build();
+          .frequency(Frequencia.SEMANALMENTE).byDay(days).build();
 
       String result = ICalendarSerializer.toExRule(ex);
 
@@ -296,7 +274,8 @@ class ICalendarSerializerTest {
     @Test
     @DisplayName("Deve retornar string vazia para exclusão nula")
     void testNullExclusion() {
-      String result = ICalendarSerializer.toExRule((ExclusaoRecorrenciaDTO) null);
+      String result = ICalendarSerializer
+          .toExRule((ExclusaoRecorrenciaDTO) null);
 
       assertEquals("", result);
     }

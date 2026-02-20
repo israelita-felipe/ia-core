@@ -56,8 +56,4 @@ public class PrivilegeOperationPageViewModel
     return object.copyObject();
   }
 
-  @Override
-  public Long getId(PrivilegeOperationDTO object) {
-    return object.getId();
-  }
 }

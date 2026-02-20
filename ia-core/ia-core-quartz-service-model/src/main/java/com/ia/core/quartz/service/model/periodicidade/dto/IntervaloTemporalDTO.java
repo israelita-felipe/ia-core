@@ -1,12 +1,13 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Set;
 
 import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -37,13 +38,13 @@ public class IntervaloTemporalDTO
   /**
    * Data de início. Equivalente ao componente de data do DTSTART (RFC 5545).
    */
-  @NotNull(message = "{validation.periodicidade.intervaloBase.startDate.required}")
+  @NotNull(message = "validation.periodicidade.intervaloBase.startDate.required")
   private LocalDate startDate;
 
   /**
    * Hora de início. Equivalente ao componente de hora do DTSTART (RFC 5545).
    */
-  @NotNull(message = "{validation.periodicidade.intervaloBase.startTime.required}")
+  @NotNull(message = "validation.periodicidade.intervaloBase.startTime.required")
   private LocalTime startTime;
 
   /**
@@ -55,6 +56,20 @@ public class IntervaloTemporalDTO
    * Hora de fim. Equivalente ao componente de hora do DTEND (RFC 5545).
    */
   private LocalTime endTime;
+
+  /**
+   * Request de pesquisa
+   */
+  public static SearchRequestDTO getSearchRequest() {
+    return new SearchRequestDTO();
+  }
+
+  /**
+   * Filtros
+   */
+  public static Set<String> propertyFilters() {
+    return getSearchRequest().propertyFilters();
+  }
 
   /**
    * Construtor com data e hora.
@@ -87,22 +102,31 @@ public class IntervaloTemporalDTO
     }
     // Considera o tempo para interseção
     LocalDate thisStartDate = this.startDate;
-    LocalTime thisStartTime = this.startTime != null ? this.startTime : LocalTime.MIN;
-    LocalDate thisEndDate = this.endDate != null ? this.endDate : this.startDate;
-    LocalTime thisEndTime = this.endTime != null ? this.endTime : LocalTime.MAX;
-    
+    LocalTime thisStartTime = this.startTime != null ? this.startTime
+                                                     : LocalTime.MIN;
+    LocalDate thisEndDate = this.endDate != null ? this.endDate
+                                                 : this.startDate;
+    LocalTime thisEndTime = this.endTime != null ? this.endTime
+                                                 : LocalTime.MAX;
+
     LocalDate otherStartDate = other.startDate;
-    LocalTime otherStartTime = other.startTime != null ? other.startTime : LocalTime.MIN;
-    LocalDate otherEndDate = other.endDate != null ? other.endDate : other.startDate;
-    LocalTime otherEndTime = other.endTime != null ? other.endTime : LocalTime.MAX;
+    LocalTime otherStartTime = other.startTime != null ? other.startTime
+                                                       : LocalTime.MIN;
+    LocalDate otherEndDate = other.endDate != null ? other.endDate
+                                                   : other.startDate;
+    LocalTime otherEndTime = other.endTime != null ? other.endTime
+                                                   : LocalTime.MAX;
 
     // Compara datas
-    if (thisEndDate.isBefore(otherStartDate) || otherEndDate.isBefore(thisStartDate)) {
+    if (thisEndDate.isBefore(otherStartDate)
+        || otherEndDate.isBefore(thisStartDate)) {
       return false;
     }
     // Mesmo dia, verifica horário
-    if (thisEndDate.isEqual(otherStartDate) && otherEndDate.isEqual(thisStartDate)) {
-      return thisStartTime.isBefore(otherEndTime) && otherStartTime.isBefore(thisEndTime);
+    if (thisEndDate.isEqual(otherStartDate)
+        && otherEndDate.isEqual(thisStartDate)) {
+      return thisStartTime.isBefore(otherEndTime)
+          && otherStartTime.isBefore(thisEndTime);
     }
     return true;
   }
@@ -118,37 +142,39 @@ public class IntervaloTemporalDTO
    * A comparação é feita na ordem: startDate, startTime, endDate, endTime.
    *
    * @param other o intervalo a ser comparado
-   * @return valor negativo se este intervalo for menor, zero se igual, positivo se maior
+   * @return valor negativo se este intervalo for menor, zero se igual, positivo
+   *         se maior
    */
+  @Override
   public int compareTo(IntervaloTemporalDTO other) {
     if (other == null) {
       return 1;
     }
-    
+
     // Compara startDate
     int result = Objects.compare(startDate, other.startDate,
-        java.time.LocalDate::compareTo);
+                                 java.time.LocalDate::compareTo);
     if (result != 0) {
       return result;
     }
-    
+
     // Compara startTime
     result = Objects.compare(startTime, other.startTime,
-        java.time.LocalTime::compareTo);
+                             java.time.LocalTime::compareTo);
     if (result != 0) {
       return result;
     }
-    
+
     // Compara endDate
     result = Objects.compare(endDate, other.endDate,
-        java.time.LocalDate::compareTo);
+                             java.time.LocalDate::compareTo);
     if (result != 0) {
       return result;
     }
-    
+
     // Compara endTime
     return Objects.compare(endTime, other.endTime,
-        java.time.LocalTime::compareTo);
+                           java.time.LocalTime::compareTo);
   }
 
   /**
@@ -159,6 +185,35 @@ public class IntervaloTemporalDTO
     public static final String START_TIME = "startTime";
     public static final String END_DATE = "endDate";
     public static final String END_TIME = "endTime";
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("Início: ");
+    if (startDate != null) {
+      builder.append(startDate);
+      builder.append("(");
+      builder.append(startDate.getDayOfWeek());
+      builder.append(")");
+    }
+    if (startTime != null) {
+      builder.append(" ");
+      builder.append(startTime);
+    }
+    builder.append(" - ");
+    builder.append("Fim: ");
+    if (endDate != null) {
+      builder.append(endDate);
+      builder.append("(");
+      builder.append(endDate.getDayOfWeek());
+      builder.append(")");
+    }
+    if (endTime != null) {
+      builder.append(" ");
+      builder.append(endTime);
+    }
+    return builder.toString();
   }
 
 }

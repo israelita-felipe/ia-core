@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.recorrencia.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -8,35 +8,62 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.ia.core.quartz.model.periodicidade.ExclusaoRecorrencia;
 import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.quartz.model.periodicidade.Recorrencia;
 import com.ia.core.service.dto.DTO;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * DTO para ExclusaoRecorrencia.
+ * DTO para regra de recorrência de eventos.
  * <p>
- * Equivalente ao parâmetro EXRULE da RFC 5545 (iCalendar).
- * Define datas específicas a serem excluídas de uma recorrência.
+ * Representa uma regra de recorrência conforme especificação RFC 5545
+ * (iCalendar). Suporta os seguintes parâmetros:
+ * <ul>
+ * <li>FREQ: Frequência base (diária, semanal, mensal, anual)</li>
+ * <li>INTERVAL: Intervalo multiplicador</li>
+ * <li>UNTIL: Data limite da recurrência</li>
+ * <li>COUNT: Número máximo de ocorrências</li>
+ * <li>BYMONTH: Filtro por mês</li>
+ * <li>BYMONTHDAY: Filtro por dia do mês</li>
+ * <li>BYDAY: Filtro por dia da semana</li>
+ * <li>BYSETPOS: Posição no conjunto</li>
+ * <li>WKST: Dia de início da semana</li>
+ * <li>BYYEARDAY: Dia do ano</li>
+ * <li>BYWEEKNO: Número da semana</li>
+ * <li>BYHOUR: Hora do dia</li>
+ * <li>BYMINUTE: Minuto da hora</li>
+ * <li>BYSECOND: Segundo do minuto</li>
+ * </ul>
+ *
+ * @author Israel Araújo
+ * @see com.ia.core.quartz.model.periodicidade.Recorrencia
+ * @see Frequencia
  */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExclusaoRecorrenciaDTO
-  implements DTO<ExclusaoRecorrencia> {
+public class RecorrenciaDTO
+  implements DTO<Recorrencia> {
 
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
+  @NotNull(message = "{validation.periodicidade.regra.frequency.required}")
   private Frequencia frequency;
 
-  private Integer intervalValue;
+  @Positive(message = "{validation.periodicidade.regra.intervalValue.positive}")
+  @Builder.Default
+  private Integer intervalValue = 1;
 
   @Default
   private Set<DayOfWeek> byDay = new HashSet<>();
@@ -47,10 +74,13 @@ public class ExclusaoRecorrenciaDTO
   @Default
   private Set<Month> byMonth = new HashSet<>();
 
-  private Integer bySetPosition;
+  @Default
+  private Set<Integer> bySetPosition = new HashSet<>();
 
   private LocalDate untilDate;
 
+  @Min(value = 1,
+       message = "{validation.periodicidade.regra.countLimit.positive}")
   private Integer countLimit;
 
   private DayOfWeek weekStartDay;
@@ -70,7 +100,7 @@ public class ExclusaoRecorrenciaDTO
   @Default
   private Set<Integer> bySecond = new HashSet<>();
 
-  public int compareTo(ExclusaoRecorrenciaDTO other) {
+  public int compareTo(RecorrenciaDTO other) {
     int result = Objects
         .compare(frequency, other.frequency,
                  (f1, f2) -> Integer
@@ -83,8 +113,17 @@ public class ExclusaoRecorrenciaDTO
     if (result != 0) {
       return result;
     }
-    result = Objects.compare(bySetPosition, other.bySetPosition,
-                             Integer::compareTo);
+    for (Integer position : bySetPosition.stream()
+        .sorted(Integer::compareTo).collect(Collectors.toList())) {
+      for (Integer positionObj : other.bySetPosition.stream()
+          .sorted(Integer::compareTo).collect(Collectors.toList())) {
+        result = Boolean.TRUE
+            .compareTo(Objects.equals(position, positionObj));
+        if (result != 0) {
+          return result;
+        }
+      }
+    }
     if (result != 0) {
       return result;
     }
@@ -178,7 +217,8 @@ public class ExclusaoRecorrenciaDTO
         .collect(Collectors.toList())) {
       for (Integer segundoObj : other.bySecond.stream()
           .sorted(Integer::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(segundo, segundoObj));
+        result = Boolean.TRUE
+            .compareTo(Objects.equals(segundo, segundoObj));
         if (result != 0) {
           return result;
         }
@@ -188,15 +228,14 @@ public class ExclusaoRecorrenciaDTO
   }
 
   @Override
-  public ExclusaoRecorrenciaDTO cloneObject() {
+  public RecorrenciaDTO cloneObject() {
     return toBuilder().byDay(new HashSet<>(byDay))
         .byMonth(new HashSet<>(byMonth))
         .byMonthDay(new HashSet<>(byMonthDay))
         .byYearDay(new HashSet<>(byYearDay))
-        .byWeekNo(new HashSet<>(byWeekNo))
-        .byHour(new HashSet<>(byHour))
-        .byMinute(new HashSet<>(byMinute))
-        .bySecond(new HashSet<>(bySecond)).build();
+        .byWeekNo(new HashSet<>(byWeekNo)).byHour(new HashSet<>(byHour))
+        .byMinute(new HashSet<>(byMinute)).bySecond(new HashSet<>(bySecond))
+        .bySetPosition(new HashSet<>(bySetPosition)).build();
   }
 
   /**
@@ -218,4 +257,5 @@ public class ExclusaoRecorrenciaDTO
     public static final String BY_MINUTE = "byMinute";
     public static final String BY_SECOND = "bySecond";
   }
+
 }

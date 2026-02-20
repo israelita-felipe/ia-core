@@ -103,7 +103,7 @@ public abstract class PageViewModel<T extends Serializable>
   public IFormEditorViewModel<T> create() {
     var editorViewModel = createEditorViewModel();
     T newObject = createNewObject();
-    // setSelected(newObject);
+    setSelected(null);
     editorViewModel.setModel(newObject);
     editorViewModel.setReadOnly(false);
     return editorViewModel;
@@ -173,6 +173,7 @@ public abstract class PageViewModel<T extends Serializable>
   public IFormEditorViewModel<T> edit(T object) {
     var editorViewModel = createEditorViewModel();
     editorViewModel.setModel(cloneObject(object));
+    setSelected(editorViewModel.getModel());
     editorViewModel.setReadOnly(false);
     return editorViewModel;
   }
@@ -181,7 +182,7 @@ public abstract class PageViewModel<T extends Serializable>
   public IFormEditorViewModel<T> copy(T object) {
     var editorViewModel = createEditorViewModel();
     editorViewModel.setModel(copyObject(object));
-    setSelected(editorViewModel.getModel());
+    setSelected(null);
     editorViewModel.setReadOnly(false);
     return editorViewModel;
   }

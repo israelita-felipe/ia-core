@@ -2,7 +2,7 @@ package com.ia.core.security.view.privilege.operation.context.form;
 
 import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationContextDTO;
-import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.service.model.privilege.PrivilegeOperationContextTranslator;
 import com.ia.core.security.view.privilege.operation.context.converter.ContextDefinitionConverter;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
@@ -36,11 +36,12 @@ public class PrivilegeOperationContextFormView
   public void createLayout() {
     super.createLayout();
     bind("contextKey",
-         createContextKeyField($(UserTranslator.CODIGO),
-                               $(UserTranslator.HELP.CODIGO), this::$));
+         createContextKeyField($(PrivilegeOperationContextTranslator.CONTEXT_KEY),
+                               $(PrivilegeOperationContextTranslator.HELP.CONTEXT_KEY),
+                               this::$));
     this.bindWithConverter("values",
-                           createValuesField($(UserTranslator.NOME),
-                                             $(UserTranslator.HELP.NOME),
+                           createValuesField($(PrivilegeOperationContextTranslator.VALUES),
+                                             $(PrivilegeOperationContextTranslator.HELP.VALUES),
                                              ContextDefinition::label),
                            new ContextDefinitionConverter());
 

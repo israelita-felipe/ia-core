@@ -1,9 +1,9 @@
 package com.ia.core.security.view.user.privilege.form;
 
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.model.privilege.PrivilegeOperationTranslator;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.user.UserPrivilegeDTO;
-import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.security.view.privilege.operation.page.PrivilegeOperationPageView;
 import com.ia.core.security.view.privilege.operation.page.PrivilegeOperationPageViewModel;
 import com.ia.core.view.components.form.FormView;
@@ -39,8 +39,8 @@ public class UserPrivilegeFormView
                               $(PrivilegeTranslator.HELP.PRIVILEGE),
                               PrivilegeDTO::getName, getViewModel()
                                   .getConfig().getPrivileManager()));
-    createPrivilegeOperationField($(UserTranslator.NOME),
-                                  $(UserTranslator.HELP.NOME),
+    createPrivilegeOperationField($(PrivilegeOperationTranslator.PRIVILEGE_OPERATION),
+                                  $(PrivilegeOperationTranslator.HELP.PRIVILEGE_OPERATION),
                                   getViewModel()
                                       .getPrivilegeOperationPageViewModel());
   }

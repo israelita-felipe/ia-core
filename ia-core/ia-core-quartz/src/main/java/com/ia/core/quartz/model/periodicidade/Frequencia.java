@@ -4,33 +4,23 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Enum representando as frequências de recorrência conforme RFC 5545.
- * Mantém compatibilidade com nomes anteriores em português.
+ * Enum representando as frequências de recorrência conforme RFC 5545. Mantém
+ * compatibilidade com nomes anteriores em português.
  *
  * @author Israel Araújo
  */
 public enum Frequencia {
   // Nomes em português (para compatibilidade)
-  DIARIAMENTE("DAILY", 1),
-  SEMANALMENTE("WEEKLY", 2),
-  MENSALMENTE("MONTHLY", 3),
-  ANUALMENTE("YEARLY", 4),
+  DIARIAMENTE("DAILY", 1), SEMANALMENTE("WEEKLY", 2), MENSALMENTE("MONTHLY",
+      3), ANUALMENTE("YEARLY", 4);
 
-  // Nomes RFC 5545 (recomendados para novos desenvolvimentos)
-  DAILY("DAILY", 1),
-  WEEKLY("WEEKLY", 2),
-  MONTHLY("MONTHLY", 3),
-  YEARLY("YEARLY", 4);
-
-  @jakarta.persistence.Transient
   private final String rfcName;
 
-  @jakarta.persistence.Transient
   private final int codigo;
 
   /**
    * @param rfcName Nome RFC 5545 da frequência
-   * @param codigo   Código numérico para compatibilidade
+   * @param codigo  Código numérico para compatibilidade
    */
   private Frequencia(String rfcName, int codigo) {
     this.rfcName = rfcName;

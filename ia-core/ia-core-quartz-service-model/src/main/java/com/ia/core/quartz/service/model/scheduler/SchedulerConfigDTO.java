@@ -8,8 +8,8 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 

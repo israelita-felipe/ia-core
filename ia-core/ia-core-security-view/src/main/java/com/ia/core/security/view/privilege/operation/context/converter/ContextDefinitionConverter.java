@@ -24,7 +24,7 @@ public class ContextDefinitionConverter
   public Result<Set<String>> convertToModel(Set<ContextDefinition> value,
                                             ValueContext context) {
     if (value == null) {
-      Result.ok(null);
+      return Result.ok(null);
     }
     contextMap.clear();
     value.forEach(cd -> contextMap.put(cd.key(), cd));

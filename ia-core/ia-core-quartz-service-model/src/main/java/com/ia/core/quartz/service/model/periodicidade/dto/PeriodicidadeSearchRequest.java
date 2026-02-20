@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
 import java.util.Arrays;
 import java.util.Collection;

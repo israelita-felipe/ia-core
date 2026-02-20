@@ -44,8 +44,8 @@ public class RoleDTO
   /**
    * Nome do papel
    */
-  @NotNull(message = "{validation.role.name.required}")
-  @Size(min = 3, max = 100, message = "{validation.role.name.size}")
+  @NotNull(message = "validation.role.name.required")
+  @Size(min = 3, max = 100, message = "validation.role.name.size")
   private String name;
 
   @Default

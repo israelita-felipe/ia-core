@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
+import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
@@ -86,8 +88,9 @@ public class PeriodicidadeDTO
         .intervaloBase(intervaloBase != null ? intervaloBase.cloneObject()
                                              : null)
         .regra(regra != null ? regra.cloneObject() : null)
-        .exclusaoRecorrencia(exclusaoRecorrencia != null
-            ? exclusaoRecorrencia.cloneObject() : null).build();
+        .exclusaoRecorrencia(exclusaoRecorrencia != null ? exclusaoRecorrencia
+            .cloneObject() : null)
+        .build();
   }
 
   @Override
@@ -96,8 +99,9 @@ public class PeriodicidadeDTO
         .intervaloBase(intervaloBase != null ? intervaloBase.copyObject()
                                              : null)
         .regra(regra != null ? regra.copyObject() : null)
-        .exclusaoRecorrencia(exclusaoRecorrencia != null
-            ? exclusaoRecorrencia.copyObject() : null).build();
+        .exclusaoRecorrencia(exclusaoRecorrencia != null ? exclusaoRecorrencia
+            .copyObject() : null)
+        .build();
   }
 
   @Override
@@ -113,7 +117,7 @@ public class PeriodicidadeDTO
       return result;
     }
     result = Objects.compare(exclusaoRecorrencia, p.exclusaoRecorrencia,
-                            ExclusaoRecorrenciaDTO::compareTo);
+                             ExclusaoRecorrenciaDTO::compareTo);
     if (result != 0) {
       return result;
     }
@@ -122,21 +126,23 @@ public class PeriodicidadeDTO
       return result;
     }
 
-    for (LocalDate exceptionDate : exceptionDates.stream().sorted(LocalDate::compareTo)
-        .collect(Collectors.toList())) {
+    for (LocalDate exceptionDate : exceptionDates.stream()
+        .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
       for (LocalDate exceptionDateObj : p.exceptionDates.stream()
           .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(exceptionDate, exceptionDateObj));
+        result = Boolean.TRUE
+            .compareTo(Objects.equals(exceptionDate, exceptionDateObj));
         if (result != 0) {
           return result;
         }
       }
     }
-    for (LocalDate includeDate : includeDates.stream().sorted(LocalDate::compareTo)
-        .collect(Collectors.toList())) {
+    for (LocalDate includeDate : includeDates.stream()
+        .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
       for (LocalDate includeDateObj : p.includeDates.stream()
           .sorted(LocalDate::compareTo).collect(Collectors.toList())) {
-        result = Boolean.TRUE.compareTo(Objects.equals(includeDate, includeDateObj));
+        result = Boolean.TRUE
+            .compareTo(Objects.equals(includeDate, includeDateObj));
         if (result != 0) {
           return result;
         }
@@ -149,30 +155,32 @@ public class PeriodicidadeDTO
     if (intervaloBase == null) {
       return Duration.ZERO;
     }
-    
+
     // Calcula duração usando LocalDate e LocalTime
     java.time.LocalDateTime start;
     java.time.LocalDateTime end;
-    
-    if (intervaloBase.getStartDate() != null && intervaloBase.getStartTime() != null) {
-      start = java.time.LocalDateTime.of(intervaloBase.getStartDate(), 
-          intervaloBase.getStartTime());
+
+    if (intervaloBase.getStartDate() != null
+        && intervaloBase.getStartTime() != null) {
+      start = java.time.LocalDateTime.of(intervaloBase.getStartDate(),
+                                         intervaloBase.getStartTime());
     } else {
       return Duration.ZERO;
     }
-    
-    if (intervaloBase.getEndDate() != null && intervaloBase.getEndTime() != null) {
-      end = java.time.LocalDateTime.of(intervaloBase.getEndDate(), 
-          intervaloBase.getEndTime());
+
+    if (intervaloBase.getEndDate() != null
+        && intervaloBase.getEndTime() != null) {
+      end = java.time.LocalDateTime.of(intervaloBase.getEndDate(),
+                                       intervaloBase.getEndTime());
     } else if (intervaloBase.getEndTime() != null) {
       // Mesmo dia, diferente hora
-      end = java.time.LocalDateTime.of(intervaloBase.getStartDate(), 
-          intervaloBase.getEndTime());
+      end = java.time.LocalDateTime.of(intervaloBase.getStartDate(),
+                                       intervaloBase.getEndTime());
     } else {
       // Assume duração de 1 hora
       end = start.plusHours(1);
     }
-    
+
     return Duration.between(start, end);
   }
 

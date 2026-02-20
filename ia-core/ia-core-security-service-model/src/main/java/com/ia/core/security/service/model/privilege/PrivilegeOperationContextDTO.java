@@ -29,12 +29,13 @@ public class PrivilegeOperationContextDTO
 
   @Override
   public PrivilegeOperationContextDTO cloneObject() {
-    return toBuilder().build();
+    return toBuilder().values(new HashSet<>(values)).build();
   }
 
   @Override
   public PrivilegeOperationContextDTO copyObject() {
-    return (PrivilegeOperationContextDTO) super.copyObject();
+    return ((PrivilegeOperationContextDTO) super.copyObject()).toBuilder()
+        .values(new HashSet<>(values)).build();
   }
 
   /**

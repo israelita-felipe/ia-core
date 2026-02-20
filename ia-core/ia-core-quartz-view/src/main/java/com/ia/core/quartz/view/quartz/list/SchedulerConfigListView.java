@@ -1,8 +1,8 @@
 package com.ia.core.quartz.view.quartz.list;
 
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 

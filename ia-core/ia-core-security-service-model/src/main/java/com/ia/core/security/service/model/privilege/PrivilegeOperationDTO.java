@@ -9,6 +9,7 @@ import com.ia.core.security.model.privilege.PrivilegeOperation;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
@@ -24,6 +25,7 @@ import lombok.experimental.SuperBuilder;
 public class PrivilegeOperationDTO
   extends AbstractBaseEntityDTO<PrivilegeOperation> {
 
+  @NotNull
   private OperationEnum operation;
 
   @Default

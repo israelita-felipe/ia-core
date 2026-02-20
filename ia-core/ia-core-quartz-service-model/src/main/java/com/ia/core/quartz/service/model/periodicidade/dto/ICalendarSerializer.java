@@ -1,28 +1,30 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.ia.core.quartz.model.periodicidade.ExclusaoRecorrencia;
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 
 /**
  * Serializador para formato iCalendar (RFC 5545).
  * <p>
  * Responsável por converter objetos {@link Recorrencia} e
- * {@link ExclusaoRecorrencia} para os formatos RRULE e EXRULE,
- * respectivamente, conforme especificação RFC 5545 (iCalendar).
+ * {@link ExclusaoRecorrencia} para os formatos RRULE e EXRULE, respectivamente,
+ * conforme especificação RFC 5545 (iCalendar).
  * <p>
- * Formato de data UTC: YYYYMMDD'T'HHMMSS'Z'
- * Formato de data local: YYYYMMDD'T'HHMMSS
+ * Formato de data UTC: YYYYMMDD'T'HHMMSS'Z' Formato de data local:
+ * YYYYMMDD'T'HHMMSS
  */
 public final class ICalendarSerializer {
 
@@ -76,35 +78,25 @@ public final class ICalendarSerializer {
 
     // BYSECOND
     if (!recur.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND",
-                  recur.getBySecond().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMINUTE
     if (!recur.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE",
-                  recur.getByMinute().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYHOUR
     if (!recur.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR",
-                  recur.getByHour().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYDAY
     if (!recur.getByDay().isEmpty()) {
-      String byDayValue = recur.getByDay().stream()
-          .sorted()
+      String byDayValue = recur.getByDay().stream().sorted()
           .map(ICalendarSerializer::dayToRfc)
           .collect(Collectors.joining(","));
       appendParam(sb, "BYDAY", byDayValue);
@@ -112,36 +104,26 @@ public final class ICalendarSerializer {
 
     // BYMONTHDAY
     if (!recur.getByMonthDay().isEmpty()) {
-      appendParam(sb, "BYMONTHDAY",
-                  recur.getByMonthDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMONTHDAY", recur.getByMonthDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYYEARDAY
     if (!recur.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY",
-                  recur.getByYearDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
     if (!recur.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO",
-                  recur.getByWeekNo().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMONTH
     if (!recur.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
-                  recur.getByMonth().stream()
-                      .sorted()
+                  recur.getByMonth().stream().sorted()
                       .map(ICalendarSerializer::monthToRfc)
                       .collect(Collectors.joining(",")));
     }
@@ -193,35 +175,25 @@ public final class ICalendarSerializer {
 
     // BYSECOND
     if (!recur.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND",
-                  recur.getBySecond().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMINUTE
     if (!recur.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE",
-                  recur.getByMinute().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYHOUR
     if (!recur.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR",
-                  recur.getByHour().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYDAY
     if (!recur.getByDay().isEmpty()) {
-      String byDayValue = recur.getByDay().stream()
-          .sorted()
+      String byDayValue = recur.getByDay().stream().sorted()
           .map(ICalendarSerializer::dayToRfc)
           .collect(Collectors.joining(","));
       appendParam(sb, "BYDAY", byDayValue);
@@ -229,36 +201,26 @@ public final class ICalendarSerializer {
 
     // BYMONTHDAY
     if (!recur.getByMonthDay().isEmpty()) {
-      appendParam(sb, "BYMONTHDAY",
-                  recur.getByMonthDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMONTHDAY", recur.getByMonthDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYYEARDAY
     if (!recur.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY",
-                  recur.getByYearDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
     if (!recur.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO",
-                  recur.getByWeekNo().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMONTH
     if (!recur.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
-                  recur.getByMonth().stream()
-                      .sorted()
+                  recur.getByMonth().stream().sorted()
                       .map(ICalendarSerializer::monthToRfc)
                       .collect(Collectors.joining(",")));
     }
@@ -310,35 +272,25 @@ public final class ICalendarSerializer {
 
     // BYSECOND
     if (!ex.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND",
-                  ex.getBySecond().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMINUTE
     if (!ex.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE",
-                  ex.getByMinute().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYHOUR
     if (!ex.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR",
-                  ex.getByHour().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYDAY
     if (!ex.getByDay().isEmpty()) {
-      String byDayValue = ex.getByDay().stream()
-          .sorted()
+      String byDayValue = ex.getByDay().stream().sorted()
           .map(ICalendarSerializer::dayToRfc)
           .collect(Collectors.joining(","));
       appendParam(sb, "BYDAY", byDayValue);
@@ -346,36 +298,26 @@ public final class ICalendarSerializer {
 
     // BYMONTHDAY
     if (!ex.getByMonthDay().isEmpty()) {
-      appendParam(sb, "BYMONTHDAY",
-                  ex.getByMonthDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMONTHDAY", ex.getByMonthDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYYEARDAY
     if (!ex.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY",
-                  ex.getByYearDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
     if (!ex.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO",
-                  ex.getByWeekNo().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYWEEKNO", ex.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMONTH
     if (!ex.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
-                  ex.getByMonth().stream()
-                      .sorted()
+                  ex.getByMonth().stream().sorted()
                       .map(ICalendarSerializer::monthToRfc)
                       .collect(Collectors.joining(",")));
     }
@@ -427,35 +369,25 @@ public final class ICalendarSerializer {
 
     // BYSECOND
     if (!ex.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND",
-                  ex.getBySecond().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMINUTE
     if (!ex.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE",
-                  ex.getByMinute().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYHOUR
     if (!ex.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR",
-                  ex.getByHour().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYDAY
     if (!ex.getByDay().isEmpty()) {
-      String byDayValue = ex.getByDay().stream()
-          .sorted()
+      String byDayValue = ex.getByDay().stream().sorted()
           .map(ICalendarSerializer::dayToRfc)
           .collect(Collectors.joining(","));
       appendParam(sb, "BYDAY", byDayValue);
@@ -463,36 +395,26 @@ public final class ICalendarSerializer {
 
     // BYMONTHDAY
     if (!ex.getByMonthDay().isEmpty()) {
-      appendParam(sb, "BYMONTHDAY",
-                  ex.getByMonthDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYMONTHDAY", ex.getByMonthDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYYEARDAY
     if (!ex.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY",
-                  ex.getByYearDay().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
     if (!ex.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO",
-                  ex.getByWeekNo().stream()
-                      .sorted()
-                      .map(String::valueOf)
-                      .collect(Collectors.joining(",")));
+      appendParam(sb, "BYWEEKNO", ex.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYMONTH
     if (!ex.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
-                  ex.getByMonth().stream()
-                      .sorted()
+                  ex.getByMonth().stream().sorted()
                       .map(ICalendarSerializer::monthToRfc)
                       .collect(Collectors.joining(",")));
     }
@@ -517,13 +439,13 @@ public final class ICalendarSerializer {
    * @param useUtc   true para formato UTC, false para formato local
    * @return string formatada
    */
-  public static String formatDateTime(LocalDateTime dateTime, boolean useUtc) {
+  public static String formatDateTime(LocalDateTime dateTime,
+                                      boolean useUtc) {
     if (dateTime == null) {
       return "";
     }
-    return useUtc
-        ? dateTime.atZone(java.time.ZoneOffset.UTC).format(UTC_FORMAT)
-        : dateTime.format(LOCAL_FORMAT);
+    return useUtc ? dateTime.atZone(java.time.ZoneOffset.UTC)
+        .format(UTC_FORMAT) : dateTime.format(LOCAL_FORMAT);
   }
 
   /**
@@ -576,13 +498,13 @@ public final class ICalendarSerializer {
       return null;
     }
     return switch (day) {
-      case MONDAY -> "MO";
-      case TUESDAY -> "TU";
-      case WEDNESDAY -> "WE";
-      case THURSDAY -> "TH";
-      case FRIDAY -> "FR";
-      case SATURDAY -> "SA";
-      case SUNDAY -> "SU";
+    case MONDAY -> "MO";
+    case TUESDAY -> "TU";
+    case WEDNESDAY -> "WE";
+    case THURSDAY -> "TH";
+    case FRIDAY -> "FR";
+    case SATURDAY -> "SA";
+    case SUNDAY -> "SU";
     };
   }
 
@@ -610,14 +532,14 @@ public final class ICalendarSerializer {
       return null;
     }
     return switch (rfcDay.toUpperCase()) {
-      case "MO" -> DayOfWeek.MONDAY;
-      case "TU" -> DayOfWeek.TUESDAY;
-      case "WE" -> DayOfWeek.WEDNESDAY;
-      case "TH" -> DayOfWeek.THURSDAY;
-      case "FR" -> DayOfWeek.FRIDAY;
-      case "SA" -> DayOfWeek.SATURDAY;
-      case "SU" -> DayOfWeek.SUNDAY;
-      default -> null;
+    case "MO" -> DayOfWeek.MONDAY;
+    case "TU" -> DayOfWeek.TUESDAY;
+    case "WE" -> DayOfWeek.WEDNESDAY;
+    case "TH" -> DayOfWeek.THURSDAY;
+    case "FR" -> DayOfWeek.FRIDAY;
+    case "SA" -> DayOfWeek.SATURDAY;
+    case "SU" -> DayOfWeek.SUNDAY;
+    default -> null;
     };
   }
 
@@ -641,7 +563,8 @@ public final class ICalendarSerializer {
   /**
    * Deserializa uma string RRULE para {@link RecorrenciaDTO}.
    *
-   * @param rruleText string no formato RRULE (ex: FREQ=WEEKLY;BYDAY=MO;COUNT=10)
+   * @param rruleText string no formato RRULE (ex:
+   *                  FREQ=WEEKLY;BYDAY=MO;COUNT=10)
    * @return RecorrenciaDTO
    */
   public static RecorrenciaDTO fromRRule(String rruleText) {
@@ -664,146 +587,147 @@ public final class ICalendarSerializer {
       String value = keyValue[1].trim();
 
       switch (key) {
-        case "FREQ" -> dto.setFrequency(Frequencia.fromRfcName(value));
+      case "FREQ" -> dto.setFrequency(Frequencia.fromRfcName(value));
 
-        case "INTERVAL" -> {
+      case "INTERVAL" -> {
+        try {
+          dto.setIntervalValue(Integer.parseInt(value));
+        } catch (NumberFormatException e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "UNTIL" -> {
+        try {
+          // Formato: YYYYMMDD'T'HHMMSS'Z' ou YYYYMMDD
+          if (value.contains("T")) {
+            LocalDateTime until = LocalDateTime
+                .parse(value.replace("Z", ""),
+                       DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"));
+            dto.setUntilDate(until.toLocalDate());
+          } else {
+            dto.setUntilDate(LocalDate
+                .parse(value, DateTimeFormatter.ofPattern("yyyyMMdd")));
+          }
+        } catch (Exception e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "COUNT" -> {
+        try {
+          dto.setCountLimit(Integer.parseInt(value));
+        } catch (NumberFormatException e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "BYSECOND" -> {
+        Set<Integer> bySecond = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
           try {
-            dto.setIntervalValue(Integer.parseInt(value));
-          } catch (NumberFormatException e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "UNTIL" -> {
-          try {
-            // Formato: YYYYMMDD'T'HHMMSS'Z' ou YYYYMMDD
-            if (value.contains("T")) {
-              LocalDateTime until = LocalDateTime.parse(
-                  value.replace("Z", ""),
-                  DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"));
-              dto.setUntilDate(until.toLocalDate());
-            } else {
-              dto.setUntilDate(
-                  LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyyMMdd")));
-            }
-          } catch (Exception e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "COUNT" -> {
-          try {
-            dto.setCountLimit(Integer.parseInt(value));
-          } catch (NumberFormatException e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "BYSECOND" -> {
-          Set<Integer> bySecond = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              bySecond.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setBySecond(bySecond);
-        }
-
-        case "BYMINUTE" -> {
-          Set<Integer> byMinute = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byMinute.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByMinute(byMinute);
-        }
-
-        case "BYHOUR" -> {
-          Set<Integer> byHour = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byHour.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByHour(byHour);
-        }
-
-        case "BYDAY" -> {
-          Set<DayOfWeek> byDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            // Remove ordinal (ex: 2MO -> MO)
-            String day = part.trim();
-            if (day.length() > 2) {
-              day = day.substring(day.length() - 2);
-            }
-            DayOfWeek dow = fromRfcDay(day);
-            if (dow != null) {
-              byDay.add(dow);
-            }
-          }
-          dto.setByDay(byDay);
-        }
-
-        case "BYMONTHDAY" -> {
-          Set<Integer> byMonthDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byMonthDay.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByMonthDay(byMonthDay);
-        }
-
-        case "BYYEARDAY" -> {
-          Set<Integer> byYearDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byYearDay.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByYearDay(byYearDay);
-        }
-
-        case "BYWEEKNO" -> {
-          Set<Integer> byWeekNo = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byWeekNo.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByWeekNo(byWeekNo);
-        }
-
-        case "BYMONTH" -> {
-          Set<java.time.Month> byMonth = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            java.time.Month month = fromRfcMonth(part.trim());
-            if (month != null) {
-              byMonth.add(month);
-            }
-          }
-          dto.setByMonth(byMonth);
-        }
-
-        case "BYSETPOS" -> {
-          try {
-            dto.setBySetPosition(Integer.parseInt(value));
+            bySecond.add(Integer.parseInt(part.trim()));
           } catch (NumberFormatException ignored) {
           }
         }
+        dto.setBySecond(bySecond);
+      }
 
-        case "WKST" -> dto.setWeekStartDay(fromRfcDay(value));
-
-        default -> {
-          // Parâmetro desconhecido, ignorar
+      case "BYMINUTE" -> {
+        Set<Integer> byMinute = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byMinute.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
         }
+        dto.setByMinute(byMinute);
+      }
+
+      case "BYHOUR" -> {
+        Set<Integer> byHour = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byHour.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByHour(byHour);
+      }
+
+      case "BYDAY" -> {
+        Set<DayOfWeek> byDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          // Remove ordinal (ex: 2MO -> MO)
+          String day = part.trim();
+          if (day.length() > 2) {
+            day = day.substring(day.length() - 2);
+          }
+          DayOfWeek dow = fromRfcDay(day);
+          if (dow != null) {
+            byDay.add(dow);
+          }
+        }
+        dto.setByDay(byDay);
+      }
+
+      case "BYMONTHDAY" -> {
+        Set<Integer> byMonthDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byMonthDay.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByMonthDay(byMonthDay);
+      }
+
+      case "BYYEARDAY" -> {
+        Set<Integer> byYearDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byYearDay.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByYearDay(byYearDay);
+      }
+
+      case "BYWEEKNO" -> {
+        Set<Integer> byWeekNo = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byWeekNo.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByWeekNo(byWeekNo);
+      }
+
+      case "BYMONTH" -> {
+        Set<java.time.Month> byMonth = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          java.time.Month month = fromRfcMonth(part.trim());
+          if (month != null) {
+            byMonth.add(month);
+          }
+        }
+        dto.setByMonth(byMonth);
+      }
+
+      case "BYSETPOS" -> {
+        try {
+          dto.setBySetPosition(Set.of(value.split(",")).stream()
+              .map(Integer::valueOf).collect(Collectors.toSet()));
+        } catch (NumberFormatException ignored) {
+        }
+      }
+
+      case "WKST" -> dto.setWeekStartDay(fromRfcDay(value));
+
+      default -> {
+        // Parâmetro desconhecido, ignorar
+      }
       }
     }
 
@@ -813,7 +737,8 @@ public final class ICalendarSerializer {
   /**
    * Deserializa uma string EXRULE para {@link ExclusaoRecorrenciaDTO}.
    *
-   * @param exruleText string no formato EXRULE (ex: EXRULE:FREQ=WEEKLY;BYDAY=FR)
+   * @param exruleText string no formato EXRULE (ex:
+   *                   EXRULE:FREQ=WEEKLY;BYDAY=FR)
    * @return ExclusaoRecorrenciaDTO
    */
   public static ExclusaoRecorrenciaDTO fromExRule(String exruleText) {
@@ -841,144 +766,144 @@ public final class ICalendarSerializer {
       String value = keyValue[1].trim();
 
       switch (key) {
-        case "FREQ" -> dto.setFrequency(Frequencia.fromRfcName(value));
+      case "FREQ" -> dto.setFrequency(Frequencia.fromRfcName(value));
 
-        case "INTERVAL" -> {
+      case "INTERVAL" -> {
+        try {
+          dto.setIntervalValue(Integer.parseInt(value));
+        } catch (NumberFormatException e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "UNTIL" -> {
+        try {
+          if (value.contains("T")) {
+            LocalDateTime until = LocalDateTime
+                .parse(value.replace("Z", ""),
+                       DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"));
+            dto.setUntilDate(until.toLocalDate());
+          } else {
+            dto.setUntilDate(LocalDate
+                .parse(value, DateTimeFormatter.ofPattern("yyyyMMdd")));
+          }
+        } catch (Exception e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "COUNT" -> {
+        try {
+          dto.setCountLimit(Integer.parseInt(value));
+        } catch (NumberFormatException e) {
+          // Ignorar valor inválido
+        }
+      }
+
+      case "BYSECOND" -> {
+        Set<Integer> bySecond = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
           try {
-            dto.setIntervalValue(Integer.parseInt(value));
-          } catch (NumberFormatException e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "UNTIL" -> {
-          try {
-            if (value.contains("T")) {
-              LocalDateTime until = LocalDateTime.parse(
-                  value.replace("Z", ""),
-                  DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"));
-              dto.setUntilDate(until.toLocalDate());
-            } else {
-              dto.setUntilDate(
-                  LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyyMMdd")));
-            }
-          } catch (Exception e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "COUNT" -> {
-          try {
-            dto.setCountLimit(Integer.parseInt(value));
-          } catch (NumberFormatException e) {
-            // Ignorar valor inválido
-          }
-        }
-
-        case "BYSECOND" -> {
-          Set<Integer> bySecond = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              bySecond.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setBySecond(bySecond);
-        }
-
-        case "BYMINUTE" -> {
-          Set<Integer> byMinute = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byMinute.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByMinute(byMinute);
-        }
-
-        case "BYHOUR" -> {
-          Set<Integer> byHour = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byHour.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByHour(byHour);
-        }
-
-        case "BYDAY" -> {
-          Set<DayOfWeek> byDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            String day = part.trim();
-            if (day.length() > 2) {
-              day = day.substring(day.length() - 2);
-            }
-            DayOfWeek dow = fromRfcDay(day);
-            if (dow != null) {
-              byDay.add(dow);
-            }
-          }
-          dto.setByDay(byDay);
-        }
-
-        case "BYMONTHDAY" -> {
-          Set<Integer> byMonthDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byMonthDay.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByMonthDay(byMonthDay);
-        }
-
-        case "BYYEARDAY" -> {
-          Set<Integer> byYearDay = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byYearDay.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByYearDay(byYearDay);
-        }
-
-        case "BYWEEKNO" -> {
-          Set<Integer> byWeekNo = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            try {
-              byWeekNo.add(Integer.parseInt(part.trim()));
-            } catch (NumberFormatException ignored) {
-            }
-          }
-          dto.setByWeekNo(byWeekNo);
-        }
-
-        case "BYMONTH" -> {
-          Set<java.time.Month> byMonth = new java.util.HashSet<>();
-          for (String part : value.split(",")) {
-            java.time.Month month = fromRfcMonth(part.trim());
-            if (month != null) {
-              byMonth.add(month);
-            }
-          }
-          dto.setByMonth(byMonth);
-        }
-
-        case "BYSETPOS" -> {
-          try {
-            dto.setBySetPosition(Integer.parseInt(value));
+            bySecond.add(Integer.parseInt(part.trim()));
           } catch (NumberFormatException ignored) {
           }
         }
+        dto.setBySecond(bySecond);
+      }
 
-        case "WKST" -> dto.setWeekStartDay(fromRfcDay(value));
-
-        default -> {
-          // Parâmetro desconhecido, ignorar
+      case "BYMINUTE" -> {
+        Set<Integer> byMinute = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byMinute.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
         }
+        dto.setByMinute(byMinute);
+      }
+
+      case "BYHOUR" -> {
+        Set<Integer> byHour = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byHour.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByHour(byHour);
+      }
+
+      case "BYDAY" -> {
+        Set<DayOfWeek> byDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          String day = part.trim();
+          if (day.length() > 2) {
+            day = day.substring(day.length() - 2);
+          }
+          DayOfWeek dow = fromRfcDay(day);
+          if (dow != null) {
+            byDay.add(dow);
+          }
+        }
+        dto.setByDay(byDay);
+      }
+
+      case "BYMONTHDAY" -> {
+        Set<Integer> byMonthDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byMonthDay.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByMonthDay(byMonthDay);
+      }
+
+      case "BYYEARDAY" -> {
+        Set<Integer> byYearDay = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byYearDay.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByYearDay(byYearDay);
+      }
+
+      case "BYWEEKNO" -> {
+        Set<Integer> byWeekNo = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          try {
+            byWeekNo.add(Integer.parseInt(part.trim()));
+          } catch (NumberFormatException ignored) {
+          }
+        }
+        dto.setByWeekNo(byWeekNo);
+      }
+
+      case "BYMONTH" -> {
+        Set<java.time.Month> byMonth = new java.util.HashSet<>();
+        for (String part : value.split(",")) {
+          java.time.Month month = fromRfcMonth(part.trim());
+          if (month != null) {
+            byMonth.add(month);
+          }
+        }
+        dto.setByMonth(byMonth);
+      }
+
+      case "BYSETPOS" -> {
+        try {
+          dto.setBySetPosition(Integer.parseInt(value));
+        } catch (NumberFormatException ignored) {
+        }
+      }
+
+      case "WKST" -> dto.setWeekStartDay(fromRfcDay(value));
+
+      default -> {
+        // Parâmetro desconhecido, ignorar
+      }
       }
     }
 
@@ -992,7 +917,8 @@ public final class ICalendarSerializer {
    * @param name  nome do parâmetro
    * @param value valor do parâmetro
    */
-  private static void appendParam(StringBuilder sb, String name, String value) {
+  private static void appendParam(StringBuilder sb, String name,
+                                  String value) {
     if (value == null || value.isEmpty()) {
       return;
     }
@@ -1057,15 +983,16 @@ public final class ICalendarSerializer {
   /**
    * Exporta uma periodicidade para um arquivo ICS (iCalendar).
    * <p>
-   * Este método cria um arquivo no formato iCalendar (RFC 5545)
-   * que pode ser importado no Google Calendar, Outlook, Apple Calendar, etc.
+   * Este método cria um arquivo no formato iCalendar (RFC 5545) que pode ser
+   * importado no Google Calendar, Outlook, Apple Calendar, etc.
    *
    * @param periodicidade a periodicidade do evento
-   * @param nomeArquivo o nome do arquivo ICS a ser criado (ex: evento.ics)
+   * @param nomeArquivo   o nome do arquivo ICS a ser criado (ex: evento.ics)
    * @throws IOException se ocorrer erro ao escrever o arquivo
    */
   public static void exportToICSFile(PeriodicidadeDTO periodicidade,
-                                     String nomeArquivo) throws IOException {
+                                     String nomeArquivo)
+    throws IOException {
     String icsContent = toICS(periodicidade);
     try (FileWriter writer = new FileWriter(nomeArquivo)) {
       writer.write(icsContent);
@@ -1106,30 +1033,28 @@ public final class ICalendarSerializer {
     // Data/hora de início (DTSTART)
     IntervaloTemporalDTO intervalo = periodicidade.getIntervaloBase();
     if (intervalo != null) {
-      if (intervalo.getStartDate() != null && intervalo.getStartTime() != null) {
+      if (intervalo.getStartDate() != null
+          && intervalo.getStartTime() != null) {
         // Tem data e hora
-        java.time.LocalDateTime startDateTime = java.time.LocalDateTime.of(
-            intervalo.getStartDate(), intervalo.getStartTime());
-        sb.append("DTSTART:")
-            .append(formatDateTime(startDateTime, false))
+        java.time.LocalDateTime startDateTime = java.time.LocalDateTime
+            .of(intervalo.getStartDate(), intervalo.getStartTime());
+        sb.append("DTSTART:").append(formatDateTime(startDateTime, false))
             .append("\r\n");
       } else if (intervalo.getStartDate() != null) {
         sb.append("DTSTART;VALUE=DATE:")
-            .append(formatDate(intervalo.getStartDate()))
-            .append("\r\n");
+            .append(formatDate(intervalo.getStartDate())).append("\r\n");
       }
 
       // Data/hora de fim (DTEND)
-      if (intervalo.getEndDate() != null && intervalo.getEndTime() != null) {
-        java.time.LocalDateTime endDateTime = java.time.LocalDateTime.of(
-            intervalo.getEndDate(), intervalo.getEndTime());
-        sb.append("DTEND:")
-            .append(formatDateTime(endDateTime, false))
+      if (intervalo.getEndDate() != null
+          && intervalo.getEndTime() != null) {
+        java.time.LocalDateTime endDateTime = java.time.LocalDateTime
+            .of(intervalo.getEndDate(), intervalo.getEndTime());
+        sb.append("DTEND:").append(formatDateTime(endDateTime, false))
             .append("\r\n");
       } else if (intervalo.getEndDate() != null) {
         sb.append("DTEND;VALUE=DATE:")
-            .append(formatDate(intervalo.getEndDate()))
-            .append("\r\n");
+            .append(formatDate(intervalo.getEndDate())).append("\r\n");
       }
     }
 
@@ -1138,28 +1063,28 @@ public final class ICalendarSerializer {
         && !periodicidade.getZoneId().isEmpty() && intervalo != null) {
       // Combina startDate e startTime para LocalDateTime
       java.time.LocalDateTime startDateTime = null;
-      if (intervalo.getStartDate() != null && intervalo.getStartTime() != null) {
-        startDateTime = java.time.LocalDateTime.of(
-            intervalo.getStartDate(), intervalo.getStartTime());
+      if (intervalo.getStartDate() != null
+          && intervalo.getStartTime() != null) {
+        startDateTime = java.time.LocalDateTime
+            .of(intervalo.getStartDate(), intervalo.getStartTime());
       }
-      
+
       java.time.LocalDateTime endDateTime = null;
-      if (intervalo.getEndDate() != null && intervalo.getEndTime() != null) {
-        endDateTime = java.time.LocalDateTime.of(
-            intervalo.getEndDate(), intervalo.getEndTime());
-      } else if (intervalo.getStartDate() != null && intervalo.getEndTime() != null) {
-        endDateTime = java.time.LocalDateTime.of(
-            intervalo.getStartDate(), intervalo.getEndTime());
+      if (intervalo.getEndDate() != null
+          && intervalo.getEndTime() != null) {
+        endDateTime = java.time.LocalDateTime.of(intervalo.getEndDate(),
+                                                 intervalo.getEndTime());
+      } else if (intervalo.getStartDate() != null
+          && intervalo.getEndTime() != null) {
+        endDateTime = java.time.LocalDateTime.of(intervalo.getStartDate(),
+                                                 intervalo.getEndTime());
       }
-      
+
       sb.append("DTSTART;TZID=").append(periodicidade.getZoneId())
-          .append(":")
-          .append(formatDateTime(startDateTime, false))
+          .append(":").append(formatDateTime(startDateTime, false))
           .append("\r\n");
-      sb.append("DTEND;TZID=").append(periodicidade.getZoneId())
-          .append(":")
-          .append(formatDateTime(endDateTime, false))
-          .append("\r\n");
+      sb.append("DTEND;TZID=").append(periodicidade.getZoneId()).append(":")
+          .append(formatDateTime(endDateTime, false)).append("\r\n");
     }
 
     // RRULE (regra de recorrência)

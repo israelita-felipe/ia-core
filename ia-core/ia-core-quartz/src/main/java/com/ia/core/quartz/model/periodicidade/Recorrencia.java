@@ -177,8 +177,11 @@ public class Recorrencia
    * → segunda terça-feira do mês
    * </pre>
    */
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "RECORRENCIA_POSICAO",
+                   schema = SCHEMA_NAME)
+  @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "by_set_position")
-  private Integer bySetPosition;
+  private Set<Integer> bySetPosition = new HashSet<>();
 
   /**
    * Data limite da recorrência.
@@ -243,8 +246,8 @@ public class Recorrencia
    * → primeiro dia, centésimo e ducentésimo dia do ano
    * </pre>
    */
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "RECORRENCIA_DIA_ANO", schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "RECORRENCIA_DIA_ANO",
+                   schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "by_year_day")
   private Set<Integer> byYearDay = new HashSet<>();
@@ -260,9 +263,9 @@ public class Recorrencia
    * <li>-1 → última semana do ano</li>
    * </ul>
    * <p>
-   * Atenção: Este parâmetro tem comportamento específico por cultura.
-   * A RFC 5545 define semana 1 como a semana que contém o primeiro
-   * quinta-feira do ano (ou que contém 4 de janeiro).
+   * Atenção: Este parâmetro tem comportamento específico por cultura. A RFC
+   * 5545 define semana 1 como a semana que contém o primeiro quinta-feira do
+   * ano (ou que contém 4 de janeiro).
    */
   @CollectionTable(name = QuartzModel.TABLE_PREFIX
       + "RECORRENCIA_SEMANA_ANO", schema = SCHEMA_NAME)
@@ -275,11 +278,11 @@ public class Recorrencia
    * <p>
    * Equivalente ao parâmetro BYHOUR da RFC 5545.
    * <p>
-   * Usado em conjunto com BYMINUTE e BYSECOND para definir
-   * horários específicos de ocorrência.
+   * Usado em conjunto com BYMINUTE e BYSECOND para definir horários específicos
+   * de ocorrência.
    */
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "RECORRENCIA_HORA", schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "RECORRENCIA_HORA",
+                   schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "by_hour")
   private Set<Integer> byHour = new HashSet<>();
@@ -289,8 +292,8 @@ public class Recorrencia
    * <p>
    * Equivalente ao parâmetro BYMINUTE da RFC 5545.
    */
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "RECORRENCIA_MINUTO", schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "RECORRENCIA_MINUTO",
+                   schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "by_minute")
   private Set<Integer> byMinute = new HashSet<>();
@@ -300,8 +303,8 @@ public class Recorrencia
    * <p>
    * Equivalente ao parâmetro BYSECOND da RFC 5545.
    */
-  @CollectionTable(name = QuartzModel.TABLE_PREFIX
-      + "RECORRENCIA_SEGUNDO", schema = SCHEMA_NAME)
+  @CollectionTable(name = QuartzModel.TABLE_PREFIX + "RECORRENCIA_SEGUNDO",
+                   schema = SCHEMA_NAME)
   @ElementCollection(fetch = FetchType.LAZY, targetClass = Integer.class)
   @Column(name = "by_second")
   private Set<Integer> bySecond = new HashSet<>();

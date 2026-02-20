@@ -56,8 +56,4 @@ public class RolePrivilegePageViewModel
     return object.copyObject();
   }
 
-  @Override
-  public Long getId(RolePrivilegeDTO object) {
-    return object.getId();
-  }
 }

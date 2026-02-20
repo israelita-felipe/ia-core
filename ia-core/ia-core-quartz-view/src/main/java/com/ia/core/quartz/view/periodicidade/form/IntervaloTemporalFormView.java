@@ -1,7 +1,7 @@
 package com.ia.core.quartz.view.periodicidade.form;
 
-import com.ia.core.quartz.service.periodicidade.dto.IntervaloTemporalDTO;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeTranslator;
+import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.datepicker.DatePicker;

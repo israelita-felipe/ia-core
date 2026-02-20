@@ -25,8 +25,8 @@ public class ManagerFactory {
    * @param idSupplier {@link Function} de definição do ID do objeto
    * @return {@link DefaultCollectionBaseClient}
    */
-  protected static <T extends Serializable> DefaultCollectionBaseClient<T> createCollectionBaseClient(Supplier<Collection<T>> data,
-                                                                                                      Function<T, Long> idSupplier) {
+  public static <T extends Serializable> DefaultCollectionBaseClient<T> createCollectionBaseClient(Supplier<Collection<T>> data,
+                                                                                                   Function<T, Long> idSupplier) {
     return new DefaultCollectionBaseClient<T>() {
 
       @Override
@@ -36,7 +36,14 @@ public class ManagerFactory {
 
       @Override
       public Long getId(T object) {
-        return idSupplier.apply(object);
+        if (object == null) {
+          return null;
+        }
+        Long id = idSupplier.apply(object);
+        if (id == null) {
+          return Long.valueOf(object.hashCode());
+        }
+        return id;
       }
     };
   }
@@ -63,8 +70,8 @@ public class ManagerFactory {
    * @param idSupplier
    * @return
    */
-  protected static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionManagerConfig(Supplier<Collection<T>> data,
-                                                                                                            Function<T, Long> idSupplier) {
+  public static <T extends Serializable> DefaultCollectionManagerConfig<T> createCollectionManagerConfig(Supplier<Collection<T>> data,
+                                                                                                         Function<T, Long> idSupplier) {
     return new DefaultCollectionManagerConfig<>(createCollectionBaseClient(data,
                                                                            idSupplier));
   }

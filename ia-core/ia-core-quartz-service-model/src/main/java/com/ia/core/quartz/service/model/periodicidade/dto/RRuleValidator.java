@@ -1,6 +1,5 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

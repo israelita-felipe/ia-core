@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.periodicidade.form;
 
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 
 import lombok.Getter;

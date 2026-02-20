@@ -4,8 +4,8 @@ import java.time.DayOfWeek;
 import java.time.Month;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeTranslator;
-import com.ia.core.quartz.service.periodicidade.dto.RecorrenciaDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeTranslator;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -29,7 +29,7 @@ public class RecorrenciaFormView
   private CheckboxGroup<DayOfWeek> byDayField;
   private IntegerSetView byMonthDayField;
   private CheckboxGroup<Month> byMonthField;
-  private TextField bySetPositionField;
+  private IntegerSetView bySetPositionField;
   private ComboBox<DayOfWeek> weekStartDayField;
   private IntegerSetView byYearDayField;
   private IntegerSetView byWeekNoField;
@@ -83,8 +83,12 @@ public class RecorrenciaFormView
                               mes -> $(mes.name()));
   }
 
-  protected TextField createBySetPositionField(String label, String help) {
-    return createInteiroTextField(label, help);
+  protected IntegerSetView createBySetPositionField(String label,
+                                                    String help) {
+    IntegerSetView field = new IntegerSetView();
+    field.setLabel(label);
+    setHelp(field, help);
+    return field;
   }
 
   protected ComboBox<DayOfWeek> createWeekStartDayField(String label,
@@ -188,7 +192,7 @@ public class RecorrenciaFormView
     bySetPositionField = createBySetPositionField($(PeriodicidadeTranslator.RECORRENCIA.BY_SET_POSITION),
                                                   $(PeriodicidadeTranslator.RECORRENCIA.HELP.BY_SET_POSITION));
     layout.add(bySetPositionField, 2);
-    bindInteger(RecorrenciaDTO.CAMPOS.BY_SET_POSITION, bySetPositionField);
+    bind(RecorrenciaDTO.CAMPOS.BY_SET_POSITION, bySetPositionField);
   }
 
   private void createWeekStartDayField(FormLayout layout) {

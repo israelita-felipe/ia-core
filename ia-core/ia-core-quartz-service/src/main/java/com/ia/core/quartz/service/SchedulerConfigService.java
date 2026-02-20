@@ -22,10 +22,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
@@ -365,8 +365,7 @@ public class SchedulerConfigService
         SchedulerConfigDTO schedulerConfigDTO = find(id);
         super.delete(id);
 
-        if (schedulerConfigDTO != null
-            && schedulerConfigDTO.getPeriodicidade().getAtivo()) {
+        if (schedulerConfigDTO != null) {
           cancelarJob(schedulerConfigDTO);
           log.info("Job cancelado durante exclusão da configuração: {}",
                    id);
@@ -531,8 +530,7 @@ public class SchedulerConfigService
     PeriodicidadeDTO novaExpressaoCron = config.getPeriodicidade();
     PeriodicidadeTrigger triggerAntigo = (PeriodicidadeTrigger) getConfig()
         .getQuartzScheduler().getTrigger(triggerKey);
-    PeriodicidadeDTO expressaoCronAntiga = triggerAntigo
-        .getPeriodicidade();
+    PeriodicidadeDTO expressaoCronAntiga = triggerAntigo.getPeriodicidade();
 
     if (expressaoCronAntiga.compareTo(novaExpressaoCron) != 0) {
       log.info("Detectada mudança na periodicidade do job {}. Atualizando...",

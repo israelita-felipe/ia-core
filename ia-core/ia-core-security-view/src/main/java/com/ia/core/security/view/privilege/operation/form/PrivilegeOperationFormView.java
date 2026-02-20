@@ -2,7 +2,7 @@ package com.ia.core.security.view.privilege.operation.form;
 
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationDTO;
-import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.service.model.privilege.PrivilegeOperationTranslator;
 import com.ia.core.security.view.privilege.operation.context.page.PrivilegeOperationContextPageView;
 import com.ia.core.security.view.privilege.operation.context.page.PrivilegeOperationContextPageViewModel;
 import com.ia.core.view.components.form.FormView;
@@ -36,9 +36,11 @@ public class PrivilegeOperationFormView
   public void createLayout() {
     super.createLayout();
     bind("operation",
-         createOperationField($(UserTranslator.CODIGO),
-                              $(UserTranslator.HELP.CODIGO), this::$));
-    createValuesField($(UserTranslator.NOME), $(UserTranslator.HELP.NOME),
+         createOperationField($(PrivilegeOperationTranslator.OPERATION),
+                              $(PrivilegeOperationTranslator.HELP.OPERATION),
+                              this::$));
+    createContextField($(PrivilegeOperationTranslator.CONTEXT),
+                      $(PrivilegeOperationTranslator.HELP.CONTEXT),
                       getViewModel()
                           .getPrivilegeOperationContextPageViewModel());
 
@@ -49,12 +51,12 @@ public class PrivilegeOperationFormView
    * @param labelGenerator {@link ItemLabelGenerator}
    * @return {@link CheckboxGroup}
    */
-  public PrivilegeOperationContextPageView createValuesField(String label,
+  public PrivilegeOperationContextPageView createContextField(String label,
                                                              String help,
                                                              PrivilegeOperationContextPageViewModel pageViewModel) {
-    PrivilegeOperationContextPageView privilegeOperationContextFormView = new PrivilegeOperationContextPageView(pageViewModel);
-    add(privilegeOperationContextFormView, 6);
-    return privilegeOperationContextFormView;
+    PrivilegeOperationContextPageView privilegeOperationContextPageView = new PrivilegeOperationContextPageView(pageViewModel);
+    add(privilegeOperationContextPageView, 6);
+    return privilegeOperationContextPageView;
   }
 
   /**

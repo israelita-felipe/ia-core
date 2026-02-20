@@ -1,11 +1,12 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -18,23 +19,27 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.OccurrenceCalculator;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 
 /**
  * Testes unitários para OccurrenceCalculator.
  * <p>
- * Valida o cálculo de ocorrências de eventos periódicos
- * conforme as regras de recorrência RFC 5545.
+ * Valida o cálculo de ocorrências de eventos periódicos conforme as regras de
+ * recorrência RFC 5545.
  *
  * @author Israel Araújo
  */
 @DisplayName("OccurrenceCalculator")
-class OccurrenceCalculatorTest {
+class DefaultOccurrenceCalculatorTest {
 
   private OccurrenceCalculator calculator;
 
   @BeforeEach
   void setUp() {
-    calculator = new OccurrenceCalculator();
+    calculator = OccurrenceCalculator.libRecurCalculator();
   }
 
   @Nested
@@ -46,19 +51,13 @@ class OccurrenceCalculatorTest {
     void testNextDailyOccurrence() {
       // Given: Periodicidade diária a partir de hoje
       IntervaloTemporalDTO intervalo = IntervaloTemporalDTO.builder()
-          .startDate(LocalDate.now())
-          .startTime(LocalTime.of(10, 0))
-          .endDate(LocalDate.now())
-          .endTime(LocalTime.of(11, 0))
-          .build();
+          .startDate(LocalDate.now()).startTime(LocalTime.of(10, 0))
+          .endDate(LocalDate.now()).endTime(LocalTime.of(11, 0)).build();
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
-          .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.DAILY)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .intervaloBase(intervalo).regra(RecorrenciaDTO.builder()
+              .frequency(Frequencia.DIARIAMENTE).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
@@ -76,23 +75,17 @@ class OccurrenceCalculatorTest {
     void testNextWeeklyOccurrence() {
       // Given: Periodicidade toda segunda-feira
       IntervaloTemporalDTO intervalo = IntervaloTemporalDTO.builder()
-          .startDate(LocalDate.now())
-          .startTime(LocalTime.of(9, 0))
-          .endDate(LocalDate.now())
-          .endTime(LocalTime.of(10, 0))
-          .build();
+          .startDate(LocalDate.now()).startTime(LocalTime.of(9, 0))
+          .endDate(LocalDate.now()).endTime(LocalTime.of(10, 0)).build();
 
       Set<DayOfWeek> byDay = new HashSet<>();
       byDay.add(DayOfWeek.MONDAY);
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
           .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.WEEKLY)
-              .byDay(byDay)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .regra(RecorrenciaDTO.builder().frequency(Frequencia.SEMANALMENTE)
+              .byDay(byDay).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
@@ -111,14 +104,11 @@ class OccurrenceCalculatorTest {
           .startDate(LocalDate.now().minusDays(1))
           .startTime(LocalTime.of(10, 0))
           .endDate(LocalDate.now().minusDays(1))
-          .endTime(LocalTime.of(11, 0))
-          .build();
+          .endTime(LocalTime.of(11, 0)).build();
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
-          .intervaloBase(intervalo)
-          .regra(null)
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .intervaloBase(intervalo).regra(null)
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
@@ -134,20 +124,14 @@ class OccurrenceCalculatorTest {
     void testIntervalGreaterThanOne() {
       // Given: A cada 2 semanas
       IntervaloTemporalDTO intervalo = IntervaloTemporalDTO.builder()
-          .startDate(LocalDate.now())
-          .startTime(LocalTime.of(14, 0))
-          .endDate(LocalDate.now())
-          .endTime(LocalTime.of(15, 0))
-          .build();
+          .startDate(LocalDate.now()).startTime(LocalTime.of(14, 0))
+          .endDate(LocalDate.now()).endTime(LocalTime.of(15, 0)).build();
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
           .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.WEEKLY)
-              .intervalValue(2)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .regra(RecorrenciaDTO.builder().frequency(Frequencia.SEMANALMENTE)
+              .intervalValue(2).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
@@ -168,26 +152,20 @@ class OccurrenceCalculatorTest {
     void testGenerateDailyOccurrences() {
       // Given
       IntervaloTemporalDTO intervalo = IntervaloTemporalDTO.builder()
-          .startDate(LocalDate.now())
-          .startTime(LocalTime.of(8, 0))
-          .endDate(LocalDate.now())
-          .endTime(LocalTime.of(9, 0))
-          .build();
+          .startDate(LocalDate.now()).startTime(LocalTime.of(8, 0))
+          .endDate(LocalDate.now()).endTime(LocalTime.of(9, 0)).build();
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
           .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.DAILY)
-              .countLimit(5)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .regra(RecorrenciaDTO.builder().frequency(Frequencia.DIARIAMENTE)
+              .countLimit(5).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
       // When
-      List<IntervaloTemporalDTO> results = calculator.generateOccurrences(
-          periodicidade, from, 5);
+      List<IntervaloTemporalDTO> results = calculator
+          .generateOccurrences(periodicidade, from, 5);
 
       // Then
       assertFalse(results.isEmpty());
@@ -202,8 +180,7 @@ class OccurrenceCalculatorTest {
           .startDate(LocalDate.now().withDayOfMonth(1))
           .startTime(LocalTime.of(10, 0))
           .endDate(LocalDate.now().withDayOfMonth(1))
-          .endTime(LocalTime.of(11, 0))
-          .build();
+          .endTime(LocalTime.of(11, 0)).build();
 
       Set<Integer> monthDays = new HashSet<>();
       monthDays.add(1);
@@ -211,19 +188,15 @@ class OccurrenceCalculatorTest {
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
           .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.MONTHLY)
-              .byMonthDay(monthDays)
-              .countLimit(4)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .regra(RecorrenciaDTO.builder().frequency(Frequencia.MENSALMENTE)
+              .byMonthDay(monthDays).countLimit(4).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
       // When
-      List<IntervaloTemporalDTO> results = calculator.generateOccurrences(
-          periodicidade, from, 4);
+      List<IntervaloTemporalDTO> results = calculator
+          .generateOccurrences(periodicidade, from, 4);
 
       // Then
       assertFalse(results.isEmpty());
@@ -234,26 +207,20 @@ class OccurrenceCalculatorTest {
     void testRespectsCountLimit() {
       // Given
       IntervaloTemporalDTO intervalo = IntervaloTemporalDTO.builder()
-          .startDate(LocalDate.now())
-          .startTime(LocalTime.of(12, 0))
-          .endDate(LocalDate.now())
-          .endTime(LocalTime.of(13, 0))
-          .build();
+          .startDate(LocalDate.now()).startTime(LocalTime.of(12, 0))
+          .endDate(LocalDate.now()).endTime(LocalTime.of(13, 0)).build();
 
       PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
           .intervaloBase(intervalo)
-          .regra(RecorrenciaDTO.builder()
-              .frequency(Frequencia.DAILY)
-              .countLimit(3)
-              .build())
-          .zoneId(ZoneId.systemDefault().getId())
-          .build();
+          .regra(RecorrenciaDTO.builder().frequency(Frequencia.DIARIAMENTE)
+              .countLimit(3).build())
+          .zoneId(ZoneId.systemDefault().getId()).build();
 
       ZonedDateTime from = ZonedDateTime.now();
 
       // When
-      List<IntervaloTemporalDTO> results = calculator.generateOccurrences(
-          periodicidade, from, 10);
+      List<IntervaloTemporalDTO> results = calculator
+          .generateOccurrences(periodicidade, from, 10);
 
       // Then - deve respeitar o menor limite (3 do countLimit ou 10 do método)
       assertTrue(results.size() <= 3);

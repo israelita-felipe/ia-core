@@ -1,7 +1,8 @@
-package com.ia.core.quartz.service.periodicidade.dto;
+package com.ia.core.quartz.service.model.periodicidade.dto;
 
 import java.time.DayOfWeek;
 import java.time.Month;
+import java.util.Set;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.service.translator.Translator;
@@ -28,13 +29,13 @@ public final class PeriodicidadeFormatter {
 
     switch (r.getFrequency()) {
 
-    case DIARIAMENTE, DAILY -> sb.append("Todos os dias");
+    case DIARIAMENTE -> sb.append("Todos os dias");
 
-    case SEMANALMENTE, WEEKLY -> sb.append("Toda semana");
+    case SEMANALMENTE -> sb.append("Toda semana");
 
-    case MENSALMENTE, MONTHLY -> sb.append("Todo mês");
+    case MENSALMENTE -> sb.append("Todo mês");
 
-    case ANUALMENTE, YEARLY -> sb.append("Todo ano");
+    case ANUALMENTE -> sb.append("Todo ano");
     }
 
     // =============================
@@ -81,12 +82,12 @@ public final class PeriodicidadeFormatter {
     if (base != null) {
 
       // Formata data e hora separadamente
-      String startFormatted = base.getStartDate() != null 
-          ? base.getStartDate().toString() : "";
+      String startFormatted = base.getStartDate() != null ? base
+          .getStartDate().toString() : "";
       if (base.getStartTime() != null) {
         startFormatted += " " + base.getStartTime();
       }
-      
+
       String endFormatted = "";
       if (base.getEndDate() != null) {
         endFormatted = base.getEndDate().toString();
@@ -94,11 +95,14 @@ public final class PeriodicidadeFormatter {
           endFormatted += " " + base.getEndTime();
         }
       } else if (base.getEndTime() != null) {
-        endFormatted = base.getStartDate() != null 
-            ? base.getStartDate().toString() + " " + base.getEndTime() 
-            : base.getEndTime().toString();
+        endFormatted = base.getStartDate() != null
+                                                   ? base.getStartDate()
+                                                       .toString() + " "
+                                                       + base.getEndTime()
+                                                   : base.getEndTime()
+                                                       .toString();
       }
-      
+
       sb.append(" às ").append(startFormatted).append(" até ")
           .append(endFormatted);
     }
@@ -125,11 +129,19 @@ public final class PeriodicidadeFormatter {
 
   private static String unidadeFrequencia(Frequencia f) {
     return switch (f) {
-    case DIARIAMENTE, DAILY -> "dias";
-    case SEMANALMENTE, WEEKLY -> "semanas";
-    case MENSALMENTE, MONTHLY -> "meses";
-    case ANUALMENTE, YEARLY -> "anos";
+    case DIARIAMENTE -> "dias";
+    case SEMANALMENTE -> "semanas";
+    case MENSALMENTE -> "meses";
+    case ANUALMENTE -> "anos";
     };
+  }
+
+  private static String ordem(Set<Integer> pos) {
+    String result = "";
+    for (Integer i : pos) {
+      result += ", " + ordem(i);
+    }
+    return result;
   }
 
   private static String ordem(int pos) {
@@ -198,12 +210,12 @@ public final class PeriodicidadeFormatter {
 
     if (base != null) {
       // Formata data e hora separadamente
-      String startFormatted = base.getStartDate() != null 
-          ? base.getStartDate().toString() : "";
+      String startFormatted = base.getStartDate() != null ? base
+          .getStartDate().toString() : "";
       if (base.getStartTime() != null) {
         startFormatted += " " + base.getStartTime();
       }
-      
+
       String endFormatted = "";
       if (base.getEndDate() != null) {
         endFormatted = base.getEndDate().toString();
@@ -211,11 +223,14 @@ public final class PeriodicidadeFormatter {
           endFormatted += " " + base.getEndTime();
         }
       } else if (base.getEndTime() != null) {
-        endFormatted = base.getStartDate() != null 
-            ? base.getStartDate().toString() + " " + base.getEndTime() 
-            : base.getEndTime().toString();
+        endFormatted = base.getStartDate() != null
+                                                   ? base.getStartDate()
+                                                       .toString() + " "
+                                                       + base.getEndTime()
+                                                   : base.getEndTime()
+                                                       .toString();
       }
-      
+
       sb.append(" • ").append(startFormatted).append("–")
           .append(endFormatted);
     }
@@ -235,15 +250,16 @@ public final class PeriodicidadeFormatter {
   /**
    * Formata a periodicidade em versão completa com todos os campos.
    * <p>
-   * Inclui todos os parâmetros RFC 5545 suportados:
-   * FREQ, INTERVAL, UNTIL, COUNT, BYMONTH, BYMONTHDAY, BYDAY,
-   * BYSETPOS, WKST, BYYEARDAY, BYWEEKNO, BYHOUR, BYMINUTE, BYSECOND
+   * Inclui todos os parâmetros RFC 5545 suportados: FREQ, INTERVAL, UNTIL,
+   * COUNT, BYMONTH, BYMONTHDAY, BYDAY, BYSETPOS, WKST, BYYEARDAY, BYWEEKNO,
+   * BYHOUR, BYMINUTE, BYSECOND
    *
-   * @param p Periodicidade a formatar
+   * @param p          Periodicidade a formatar
    * @param translator Translator para internacionalização (opcional)
    * @return String com todos os campos da periodicidade
    */
-  public static String formatFull(PeriodicidadeDTO p, Translator translator) {
+  public static String formatFull(PeriodicidadeDTO p,
+                                  Translator translator) {
 
     if (p == null) {
       return "";
@@ -300,8 +316,8 @@ public final class PeriodicidadeFormatter {
     // BYMONTHDAY
     if (!r.getByMonthDay().isEmpty()) {
       sb.append("Dias do mes: ");
-      sb.append(r.getByMonthDay().stream().sorted()
-          .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+      sb.append(r.getByMonthDay().stream().sorted().map(String::valueOf)
+          .reduce((a, b) -> a + ", " + b).orElse(""));
       sb.append("\n");
     }
 
@@ -319,24 +335,23 @@ public final class PeriodicidadeFormatter {
 
     // WKST
     if (r.getWeekStartDay() != null) {
-      sb.append("Inicio semana: ")
-          .append(diaSemanaPT(r.getWeekStartDay()));
+      sb.append("Inicio semana: ").append(diaSemanaPT(r.getWeekStartDay()));
       sb.append("\n");
     }
 
     // BYYEARDAY
     if (!r.getByYearDay().isEmpty()) {
       sb.append("Dias do ano: ");
-      sb.append(r.getByYearDay().stream().sorted()
-          .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+      sb.append(r.getByYearDay().stream().sorted().map(String::valueOf)
+          .reduce((a, b) -> a + ", " + b).orElse(""));
       sb.append("\n");
     }
 
     // BYWEEKNO
     if (!r.getByWeekNo().isEmpty()) {
       sb.append("Semanas: ");
-      sb.append(r.getByWeekNo().stream().sorted()
-          .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+      sb.append(r.getByWeekNo().stream().sorted().map(String::valueOf)
+          .reduce((a, b) -> a + ", " + b).orElse(""));
       sb.append("\n");
     }
 
@@ -346,18 +361,18 @@ public final class PeriodicidadeFormatter {
       sb.append("Horario: ");
       if (!r.getByHour().isEmpty()) {
         sb.append("Horas: ")
-            .append(r.getByHour().stream().sorted()
-                .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+            .append(r.getByHour().stream().sorted().map(String::valueOf)
+                .reduce((a, b) -> a + ", " + b).orElse(""));
       }
       if (!r.getByMinute().isEmpty()) {
         sb.append(" Minutos: ")
-            .append(r.getByMinute().stream().sorted()
-                .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+            .append(r.getByMinute().stream().sorted().map(String::valueOf)
+                .reduce((a, b) -> a + ", " + b).orElse(""));
       }
       if (!r.getBySecond().isEmpty()) {
         sb.append(" Segundos: ")
-            .append(r.getBySecond().stream().sorted()
-                .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+            .append(r.getBySecond().stream().sorted().map(String::valueOf)
+                .reduce((a, b) -> a + ", " + b).orElse(""));
       }
       sb.append("\n");
     }
@@ -374,10 +389,12 @@ public final class PeriodicidadeFormatter {
     // EXRULE (Exclusao)
     if (exclusao != null && exclusao.getFrequency() != null) {
       sb.append("\nExcecoes (EXRULE):\n");
-      sb.append("Frequencia: ").append(nomeFrequencia(exclusao.getFrequency()));
+      sb.append("Frequencia: ")
+          .append(nomeFrequencia(exclusao.getFrequency()));
       if (exclusao.getIntervalValue() != null
           && exclusao.getIntervalValue() > 1) {
-        sb.append(" (a cada ").append(exclusao.getIntervalValue()).append(")");
+        sb.append(" (a cada ").append(exclusao.getIntervalValue())
+            .append(")");
       }
       sb.append("\n");
 
@@ -398,16 +415,16 @@ public final class PeriodicidadeFormatter {
     // Exception Dates
     if (p.getExceptionDates() != null && !p.getExceptionDates().isEmpty()) {
       sb.append("\nDatas excluidas (EXDATE):\n");
-      sb.append(p.getExceptionDates().stream().sorted()
-          .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+      sb.append(p.getExceptionDates().stream().sorted().map(String::valueOf)
+          .reduce((a, b) -> a + ", " + b).orElse(""));
       sb.append("\n");
     }
 
     // Include Dates
     if (p.getIncludeDates() != null && !p.getIncludeDates().isEmpty()) {
       sb.append("\nDatas incluidas (RDATE):\n");
-      sb.append(p.getIncludeDates().stream().sorted()
-          .map(String::valueOf).reduce((a, b) -> a + ", " + b).orElse(""));
+      sb.append(p.getIncludeDates().stream().sorted().map(String::valueOf)
+          .reduce((a, b) -> a + ", " + b).orElse(""));
       sb.append("\n");
     }
 
@@ -416,10 +433,10 @@ public final class PeriodicidadeFormatter {
 
   private static String nomeFrequencia(Frequencia f) {
     return switch (f) {
-    case DIARIAMENTE, DAILY -> "Diario";
-    case SEMANALMENTE, WEEKLY -> "Semanal";
-    case MENSALMENTE, MONTHLY -> "Mensal";
-    case ANUALMENTE, YEARLY -> "Anual";
+    case DIARIAMENTE -> "Diario";
+    case SEMANALMENTE -> "Semanal";
+    case MENSALMENTE -> "Mensal";
+    case ANUALMENTE -> "Anual";
     };
   }
 }

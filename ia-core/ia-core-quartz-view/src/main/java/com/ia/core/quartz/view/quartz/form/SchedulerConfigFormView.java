@@ -1,9 +1,9 @@
 package com.ia.core.quartz.view.quartz.form;
 
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerTranslator;
-import com.ia.core.quartz.service.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormView;
 import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollectionPageView;
 import com.ia.core.view.components.form.FormView;

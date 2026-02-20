@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,19 +22,19 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
  * @author Israel Araújo
  */
-@Getter
-@Setter
+@Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class UserDTO
   extends AbstractBaseEntityDTO<User> {
   /** Serial UID */
@@ -52,21 +51,21 @@ public class UserDTO
   /**
    * Nome do usuário
    */
-  @NotNull(message = "{validation.user.userName.required}")
-  @Size(min = 3, max = 200, message = "{validation.user.userName.size}")
+  @NotNull(message = "validation.user.userName.required")
+  @Size(min = 3, max = 200, message = "validation.user.userName.size")
   private String userName;
 
   /**
    * Código do usuário
    */
-  @NotNull(message = "{validation.user.userCode.required}")
-  @Size(min = 3, max = 50, message = "{validation.user.userCode.size}")
+  @NotNull(message = "validation.user.userCode.required")
+  @Size(min = 3, max = 50, message = "validation.user.userCode.size")
   private String userCode;
 
   /**
    * Senha do usuário
    */
-  @Size(min = 6, max = 100, message = "{validation.user.password.size}")
+  @Size(min = 6, max = 100, message = "validation.user.password.size")
   private String password;
   @Default
   @NotNull
@@ -109,21 +108,6 @@ public class UserDTO
         .build();
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (id == null) {
-      return this == obj;
-    }
-    if (!(getClass().isInstance(obj))) {
-      return false;
-    }
-    UserDTO other = (UserDTO) obj;
-    return Objects.equals(id, other.id);
-  }
-
   @Transient
   public Collection<PrivilegeDTO> getAllPrivileges() {
     return Stream
@@ -158,14 +142,6 @@ public class UserDTO
         .map(entry -> new PrivilegeContext(entry.getKey(),
                                            entry.getValue()))
         .toList();
-  }
-
-  @Override
-  public int hashCode() {
-    if (id != null) {
-      return Objects.hash(id);
-    }
-    return super.hashCode();
   }
 
   @Override

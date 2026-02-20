@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>
-		    <artifactId>ia-core-quartz-model</artifactId>
+			<artifactId>ia-core-quartz-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -26,6 +26,21 @@
 			<groupId>com.cronutils</groupId>
 			<artifactId>cron-utils</artifactId>
 			<version>${cron-utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dmfs</groupId>
+			<artifactId>lib-recur</artifactId>
+			<version>0.17.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dmfs</groupId>
+			<artifactId>rfc5545-datetime</artifactId>
+			<version>0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dmfs</groupId>
+			<artifactId>jems2</artifactId>
+			<version>2.11.1</version>
 		</dependency>
 	</dependencies>
 	<build>

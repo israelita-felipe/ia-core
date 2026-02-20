@@ -45,8 +45,8 @@ public interface HasHelp
     if (help != null) {
       help.getElement().setAttribute("slot", "helper");
       getElement().appendChild(help.getElement());
+      help.setVisible(isHelpVisible());
     }
-    help.setVisible(isHelpVisible());
   }
 
   /**
