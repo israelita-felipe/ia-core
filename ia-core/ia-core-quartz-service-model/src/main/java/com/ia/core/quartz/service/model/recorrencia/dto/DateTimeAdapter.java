@@ -1,9 +1,12 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import org.dmfs.rfc5545.DateTime;
@@ -36,8 +39,10 @@ public class DateTimeAdapter {
   public static ZonedDateTime fromUtcDateTime(DateTime dt,
                                               ZoneId targetZone) {
     long millis = dt.getTimestamp();
-    return ZonedDateTime.ofInstant(java.time.Instant.ofEpochMilli(millis),
-                                   targetZone);
+    Instant instant = Instant.ofEpochMilli(millis);
+    LocalDateTime localDateTime = instant.atZone(ZoneOffset.UTC)
+        .toLocalDateTime();
+    return ZonedDateTime.of(localDateTime, targetZone);
   }
 
   public static IntervaloTemporalDTO toIntervaloTemporalDTO(DateTime startUtc,
