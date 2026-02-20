@@ -16,10 +16,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
 
 /**
  * Interface que deleta um {@link BaseEntity} por meio de um
- * {@link BaseEntityRepository} com suporte a segurança.
- * <p>
- * Os callbacks de evento são herdados de {@link DeleteBaseService}.
- * </p>
+ * {@link BaseEntityRepository}
  *
  * @author Israel Araújo
  * @param <T> {@link BaseEntity}
@@ -31,7 +28,7 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
   /**
    * @param id identificador do objeto
    * @return <code>true</code> se for possível deletar. Delega para
-   *         {@link CoreAuthorizationManager#canDelete(com.ia.core.security.service.model.functionality.HasFunctionality)}
+   *         {@link CoreAuthorizationManager#canDelete(com.ia.core.security.service.model.functionality.HasFunctionality, Object)}
    */
   @Override
   default boolean canDelete(Long id) {
@@ -46,6 +43,25 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
                      Objects.toString(object));
     }
     return contextMap;
+  }
+
+  @Override
+  default void delete(Long id)
+    throws ServiceException {
+    ServiceException ex = new ServiceException();
+    onTransaction(() -> {
+      try {
+        D dto = getLogOperationService()
+            .logBeforeDelete(id, getRepository(), getMapper());
+        DeleteBaseService.super.delete(id);
+        getLogOperationService().logAfterDelete(dto, getRepository(),
+                                                getMapper());
+      } catch (Exception e) {
+        ex.add(ex);
+      }
+      return id;
+    });
+    checkErrors(ex);
   }
 
   @Override
