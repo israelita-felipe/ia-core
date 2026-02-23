@@ -1,7 +1,6 @@
 package com.ia.core.service.validators;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.ia.core.service.exception.ServiceException;
@@ -30,9 +29,7 @@ public interface HasValidation<T extends Serializable> {
   /**
    * @return lista de validadores
    */
-  default List<IServiceValidator<T>> getValidators() {
-    return new LinkedList<>();
-  }
+  List<IServiceValidator<T>> getValidators();
 
   /**
    * @param validators lista de validadores

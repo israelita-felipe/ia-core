@@ -21,7 +21,8 @@ import lombok.Getter;
  * Classe base de um serviço com todas as funcionalidades de um CRUD.
  * <p>
  * Publica automaticamente eventos de domínio nas operações CRUD através dos
- * métodos {@link #afterSave(D, D, CrudOperationType)} e {@link #afterDelete(Long, D)}.
+ * métodos {@link #afterSave(D, D, CrudOperationType)} e
+ * {@link #afterDelete(Long, D)}.
  * </p>
  *
  * @author Israel Araújo
@@ -49,19 +50,30 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
     registryValidators(config.getValidators());
   }
 
+  @Override
+  public List<IServiceValidator<D>> getValidators() {
+    return getConfig().getValidators();
+  }
+
+  @Override
+  public DefaultBaseServiceConfig<T, D> getConfig() {
+    return (DefaultBaseServiceConfig<T, D>) super.getConfig();
+  }
+
   /**
    * Callback executado após salvar uma entidade.
    * <p>
    * Publica automaticamente eventos de domínio para todas as operações de save.
    * </p>
    *
-   * @param original     DTO original da requisição
-   * @param saved       DTO salvo no banco de dados
+   * @param original      DTO original da requisição
+   * @param saved         DTO salvo no banco de dados
    * @param operationType Tipo de operação (CREATED ou UPDATED)
    * @throws ServiceException em caso de erro na publicação do evento
    */
   @Override
-  public void afterSave(D original, D saved, CrudOperationType operationType)
+  public void afterSave(D original, D saved,
+                        CrudOperationType operationType)
     throws ServiceException {
     publishEvent(saved, operationType);
   }
@@ -69,7 +81,8 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   /**
    * Callback executado após deletar uma entidade.
    * <p>
-   * Publica automaticamente eventos de domínio para todas as operações de delete.
+   * Publica automaticamente eventos de domínio para todas as operações de
+   * delete.
    * </p>
    *
    * @param id  Identificador da entidade deletada

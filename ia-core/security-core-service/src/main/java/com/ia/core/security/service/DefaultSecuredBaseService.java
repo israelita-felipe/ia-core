@@ -16,7 +16,6 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.event.BaseServiceEvent;
 import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.Mapper;
@@ -26,7 +25,6 @@ import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Classe base de um serviço com todas as funcionalidades de um CRUD.
@@ -47,7 +45,8 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
   FindSecuredBaseService<T, D>, ListSecuredBaseService<T, D>,
   SaveSecuredBaseService<T, D> {
 
-  private static final Logger log = LoggerFactory.getLogger(DefaultSecuredBaseService.class);
+  private static final Logger log = LoggerFactory
+      .getLogger(DefaultSecuredBaseService.class);
 
   @Getter
   private final DefaultSecuredBaseServiceConfig<T, D> config;
@@ -67,31 +66,37 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
   }
 
   // ========== IMPLEMENTAÇÃO DE PUBLICAÇÃO AUTOMÁTICA DE EVENTOS ==========
+  @Override
+  public List<IServiceValidator<D>> getValidators() {
+    return getConfig().getValidators();
+  }
 
   /**
-   * Publica evento automaticamente após salvar.
-   * Este método é chamado pelo callback do SaveBaseService após cada operação de save.
+   * Publica evento automaticamente após salvar. Este método é chamado pelo
+   * callback do SaveBaseService após cada operação de save.
    */
   @Override
-  public void afterSave(D original, D saved, CrudOperationType operationType)
+  public void afterSave(D original, D saved,
+                        CrudOperationType operationType)
     throws ServiceException {
     if (saved != null && config.getEventPublisher() != null) {
       publishEvent(saved, operationType);
       log.debug("Evento de {} publicado para {}", operationType,
-          saved.getClass().getSimpleName());
+                saved.getClass().getSimpleName());
     }
   }
 
   /**
-   * Publica evento automaticamente após deletar.
-   * Este método é chamado pelo callback do DeleteBaseService após cada operação de delete.
+   * Publica evento automaticamente após deletar. Este método é chamado pelo
+   * callback do DeleteBaseService após cada operação de delete.
    */
   @Override
-  public void afterDelete(Long id, D dto) throws ServiceException {
+  public void afterDelete(Long id, D dto)
+    throws ServiceException {
     if (dto != null && config.getEventPublisher() != null) {
       publishEvent(dto, CrudOperationType.DELETED);
       log.debug("Evento de DELETED publicado para {} com id {}",
-          dto.getClass().getSimpleName(), id);
+                dto.getClass().getSimpleName(), id);
     }
   }
 

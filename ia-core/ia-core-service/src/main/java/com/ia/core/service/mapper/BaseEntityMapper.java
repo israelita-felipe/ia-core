@@ -13,5 +13,6 @@ import com.ia.core.service.dto.DTO;
  * @param <T> Tipo que extende {@link BaseEntity}
  * @param <D> Tipo que extende {@link DTO}
  */
-public interface BaseEntityMapper<T extends Serializable, D extends DTO<T>> extends Mapper<T, D> {
+public interface BaseEntityMapper<T extends Serializable, D extends DTO<T>>
+  extends Mapper<T, D> {
 }
