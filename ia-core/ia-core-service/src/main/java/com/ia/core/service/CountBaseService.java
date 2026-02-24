@@ -37,18 +37,21 @@ public interface CountBaseService<T extends BaseEntity, D extends DTO<?>>
    * @return {@link Integer}
    */
   default int count(SearchRequestDTO requestDTO) {
-    if (canCount(requestDTO)) {
-      SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
-      request.setFilters(request.getFilters().stream()
-          .filter(filter -> filter.getKey() != null
-              && filter.getOperator() != null)
-          .collect(Collectors.toList()));
-      // cria a especificação
-      SearchSpecification<T> specification = new SearchSpecification<>(request);
-      // realiza o count
-      return (int) getRepository().count(specification);
-    }
-    return 0;
+    return onTransaction(true, () -> {
+      if (canCount(requestDTO)) {
+        SearchRequest request = getSearchRequestMapper()
+            .toModel(requestDTO);
+        request.setFilters(request.getFilters().stream()
+            .filter(filter -> filter.getKey() != null
+                && filter.getOperator() != null)
+            .collect(Collectors.toList()));
+        // cria a especificação
+        SearchSpecification<T> specification = new SearchSpecification<>(request);
+        // realiza o count
+        return (int) getRepository().count(specification);
+      }
+      return 0;
+    });
   }
 
 }

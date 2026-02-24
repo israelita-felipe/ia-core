@@ -32,9 +32,9 @@ public interface HasTransaction
    * @param action {@link Supplier} do objeto
    * @return Objeto
    */
-  default <E> E onTransaction(Supplier<E> action) {
+  default <E> E onTransaction(boolean readOnly, Supplier<E> action) {
     TransactionStatus status = getTransactionManager()
-        .getTransaction(createTransactionDefinition());
+        .getTransaction(createTransactionDefinition(readOnly));
     try {
       E result = action.get();
       if (status.isNewTransaction() && !status.isReadOnly()) {
@@ -53,15 +53,20 @@ public interface HasTransaction
 
   }
 
+  default <E> E onTransaction(Supplier<E> action) {
+    return onTransaction(false, action);
+  }
+
   /**
    * @return {@link TransactionDefinition}
    */
-  default TransactionDefinition createTransactionDefinition() {
+  default TransactionDefinition createTransactionDefinition(boolean readOnly) {
     DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
     defaultTransactionDefinition
         .setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
     defaultTransactionDefinition
         .setIsolationLevel(DefaultTransactionDefinition.ISOLATION_READ_UNCOMMITTED);
+    defaultTransactionDefinition.setReadOnly(readOnly);
     return defaultTransactionDefinition;
   }
 

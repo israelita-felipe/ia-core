@@ -40,7 +40,7 @@ public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
    * @return {@link Page} de dados do tipo <T>
    */
   default Page<D> findAll(SearchRequestDTO requestDTO) {
-    return onTransaction(() -> {
+    return onTransaction(true, () -> {
       if (canList(requestDTO)) {
         SearchRequest request = getSearchRequestMapper()
             .toModel(requestDTO);
