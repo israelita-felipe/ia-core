@@ -34,7 +34,7 @@ public interface HasTransaction
    */
   default <E> E onTransaction(boolean readOnly, Supplier<E> action) {
     TransactionStatus status = getTransactionManager()
-        .getTransaction(createTransactionDefinition(readOnly));
+        .getTransaction(createTransactionDefinition(false));
     try {
       E result = action.get();
       if (status.isNewTransaction() && !status.isReadOnly()) {
@@ -49,6 +49,8 @@ public interface HasTransaction
         log.info("Transação {} abortada", status.getTransactionName());
       }
       throw e;
+    } finally {
+      log.info(status.toString());
     }
 
   }
