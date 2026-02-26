@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
+import com.ia.core.view.components.properties.HasColorPickerCreator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Tag;
@@ -27,7 +28,7 @@ import elemental.json.JsonArray;
 @Tag("form-view")
 public abstract class FormView<T extends Serializable>
   extends CustomField<T>
-  implements IFormView<T>, com.ia.core.view.components.properties.HasDateTimeCreator {
+  implements IFormView<T>, com.ia.core.view.components.properties.HasDateTimeCreator, HasColorPickerCreator {
   /** Serial UID */
   private static final long serialVersionUID = -4513191796912403800L;
 
