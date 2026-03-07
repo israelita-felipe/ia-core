@@ -15,6 +15,7 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
+import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import com.vaadin.flow.data.binder.Binder;
 
 import elemental.json.JsonArray;
@@ -28,7 +29,9 @@ import elemental.json.JsonArray;
 @Tag("form-view")
 public abstract class FormView<T extends Serializable>
   extends CustomField<T>
-  implements IFormView<T>, com.ia.core.view.components.properties.HasDateTimeCreator, HasColorPickerCreator {
+  implements IFormView<T>,
+  com.ia.core.view.components.properties.HasDateTimeCreator,
+  HasColorPickerCreator, ThemableLayout {
   /** Serial UID */
   private static final long serialVersionUID = -4513191796912403800L;
 
@@ -226,4 +229,5 @@ public abstract class FormView<T extends Serializable>
   public String getModelPrefix() {
     return getViewModel().getModelPrefix();
   }
+
 }
