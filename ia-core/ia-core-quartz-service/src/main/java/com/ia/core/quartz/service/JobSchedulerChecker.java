@@ -9,6 +9,15 @@ import org.quartz.PersistJobDataAfterExecution;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Job de verificação do scheduler.
+ * <p>
+ * Job de exemplo que verifica e loga a execução do scheduler.
+ * Utiliza as anotações @DisallowConcurrentExecution e @PersistJobDataAfterExecution
+ * para controle de concorrência e persistência de dados.
+ *
+ * @author Israel Araújo
+ */
 @Slf4j
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution

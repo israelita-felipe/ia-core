@@ -25,9 +25,11 @@ public abstract class CoreErrorHandler
   }
 
   /**
-   * @param ui
-   * @param exception
-   * @throws Throwable
+   * Método abstrato para tratamento de erros customizado.
+   *
+   * @param ui        Componente UI onde ocorreu o erro
+   * @param exception Exceção thrown
+   * @throws Throwable erro tratado
    */
   public abstract void handleError(UI ui, Throwable exception)
     throws Throwable;

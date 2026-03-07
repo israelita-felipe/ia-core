@@ -11,18 +11,31 @@ import com.ia.core.model.util.EnumUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Enum que representa o tipo de campo para filtros. Cada tipo de campo sabe
- * como fazer parsing de valores (conversão de String para o tipo correto).
- * Utiliza Strategy Pattern para permitir diferentes estratégias de conversão
- * por tipo.
+ * Enum que representa o tipo de campo para filtros de busca.
+ *
+ * <p>Cada tipo de campo sabe como fazer parsing (conversão) de valores
+ * vindos como String para o tipo Java correspondente. Utiliza o padrão
+ * Strategy para permitir diferentes estratégias de conversão por tipo.
+ *
+ * <p><b>Por quê usar FieldType?</b></p>
+ * <ul>
+ *   <li>Abstrai a conversão de tipos para filtros de busca</li>
+ *   <li>Padroniza o parsing de datas, números, enums, etc.</li>
+ *   <li>Facilita a integração com APIs REST que recebem Strings</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @see FilterRequest
+ * @see Operator
+ * @since 1.0.0
  */
 @Slf4j
 public enum FieldType {
   /**
-   * Tipo {@link Boolean}. Parse: "true" ou "false" -> Boolean.
+   * Tipo {@link Boolean}.
+   *
+   * <p>Parse aceito: "true", "false" (case-insensitive).
+   * Qualquer outro valor resulta em {@code false}.
    */
   BOOLEAN {
     @Override
@@ -34,7 +47,9 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link Character}. Parse: primeira letra da string.
+   * Tipo {@link Character}.
+   *
+   * <p>Parse: primeira letra da string. String vazia resulta em {@code null}.
    */
   CHAR {
     @Override
@@ -47,7 +62,9 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link LocalDate}. Parse: string no formato DATE_FORMATTER.
+   * Tipo {@link LocalDate}.
+   *
+   * <p>Parse: string no formato {@code dd/MM/yyyy} usando {@link DateTimeUtils#DATE_FORMATTER}.
    */
   DATE {
     @Override
@@ -65,7 +82,9 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link LocalTime}. Parse: string no formato TIME_FORMATTER.
+   * Tipo {@link LocalTime}.
+   *
+   * <p>Parse: string no formato {@code HH:mm:ss} usando {@link DateTimeUtils#TIME_FORMATTER}.
    */
   TIME {
     @Override
@@ -83,7 +102,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link LocalDateTime}. Parse: string no formato DATE_TIME_FORMATTER.
+   * Tipo {@link LocalDateTime}.
+   *
+   * <p>Parse: string no formato {@code dd/MM/yyyy HH:mm:ss}
+   * usando {@link DateTimeUtils#DATE_TIME_FORMATTER}.
    */
   DATE_TIME {
     @Override
@@ -101,7 +123,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link String}. Parse: toString() do valor.
+   * Tipo {@link String}.
+   *
+   * <p>Parse: retorna o {@code toString()} do valor. Valores nulos
+   * resultam em string vazia.
    */
   STRING {
     @Override
@@ -110,7 +135,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link Long}. Parse: Long.parseLong(value.toString()).
+   * Tipo {@link Long}.
+   *
+   * <p>Parse: {@code Long.parseLong(value.toString())}.
+   * Valores inválidos resultam em {@code 0L}.
    */
   LONG {
     @Override
@@ -128,7 +156,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link Integer}. Parse: Integer.parseInt(value.toString()).
+   * Tipo {@link Integer}.
+   *
+   * <p>Parse: {@code Integer.parseInt(value.toString())}.
+   * Valores inválidos resultam em {@code 0}.
    */
   INTEGER {
     @Override
@@ -146,7 +177,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo {@link Double}. Parse: Double.parseDouble(value.toString()).
+   * Tipo {@link Double}.
+   *
+   * <p>Parse: {@code Double.parseDouble(value.toString())}.
+   * Valores inválidos resultam em {@code 0.0}.
    */
   DOUBLE {
     @Override
@@ -164,7 +198,10 @@ public enum FieldType {
     }
   },
   /**
-   * Tipo Enum. Parse: deserializa enum usando EnumUtils.
+   * Tipo Enum.
+   *
+   * <p>Parse: deserializa enum usando {@link EnumUtils#deserialize(String)}.
+   * Requer que o valor seja o nome da constante do enum.
    */
   ENUM {
     @Override
@@ -181,15 +218,21 @@ public enum FieldType {
     }
   },
   /**
-   * Objeto genérico
+   * Objeto genérico.
+   *
+   * <p>Não faz qualquer conversão, retorna o valor como está.
+   * Útil para filtros que precisam passar objetos diretamente.
    */
   OBJECT;
 
   /**
    * Faz parsing do valor para o tipo de campo correspondente.
    *
-   * @param value Valor a ser parseado (pode ser de qualquer tipo)
-   * @return Valor convertido para o tipo correspondente, ou null se falhar
+   * <p>Método base que retorna o valor sem conversão.
+   * Cada constante override este método para implementar sua própria lógica de parsing.
+   *
+   * @param value Valor a ser parseado (pode ser de qualquer tipo, incluindo {@code null})
+   * @return Valor convertido para o tipo correspondente, ou o valor original se nenhuma conversão for aplicável
    */
   public Object parse(Object value) {
     return value;

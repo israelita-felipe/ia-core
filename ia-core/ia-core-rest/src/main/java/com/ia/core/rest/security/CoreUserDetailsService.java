@@ -21,7 +21,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Service de detalhes de usuário para autenticação JWT.
+ * <p>
+ * Implementa UserDetailsService do Spring Security para carregar
+ * informações do usuário durante a autenticação.
+ *
  * @author Israel Araújo
+ * @see UserDetailsService
  */
 @RequiredArgsConstructor
 public class CoreUserDetailsService
@@ -32,8 +38,12 @@ public class CoreUserDetailsService
   private final UserRepository repository;
 
   /**
-   * @param user
-   * @return
+   * Extrai privilégios de um usuário.
+   * <p>
+   * Combina privilégios de roles e privilégios diretos do usuário.
+   *
+   * @param user Usuário
+   * @return Coleção de autoridades
    */
   protected Collection<SimpleGrantedAuthority> getPrivilegesFromUser(User user) {
     return onTransaction(() -> {

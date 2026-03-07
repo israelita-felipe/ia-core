@@ -9,14 +9,29 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 /**
- * Operador a ser realizado no filtro.
+ * Enum que representa os operadores de comparação para filtros de busca.
+ *
+ * <p>Cada valor define como um valor será comparado com o campo no banco de dados
+ * ao construir consultas dinâmicas com JPA Criteria API.
+ *
+ * <p><b>Por quê usar Operator?</b></p>
+ * <ul>
+ *   <li>Abstrai a complexidade do JPA Criteria API</li>
+ *   <li>Padroniza os operadores de comparação em toda a aplicação</li>
+ *   <li>Suporta negação de operadores</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @see FilterRequest
+ * @see FieldType
+ * @since 1.0.0
  */
 public enum Operator {
 
   /**
-   * Igual
+   * Operador de igualdade. Compara se o valor do campo é igual ao valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code =} em SQL.
    */
   EQUAL {
     @Override
@@ -38,7 +53,9 @@ public enum Operator {
 
   },
   /**
-   * Diferente
+   * Operador de diferença. Compara se o valor do campo é diferente do valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code <>} ou {@code !=} em SQL.
    */
   NOT_EQUAL {
     @Override
@@ -60,7 +77,10 @@ public enum Operator {
   },
 
   /**
-   * Like/Semelhante
+   * Operador de similaridade. Compara se o valor do campo contém o valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code LIKE} em SQL, com wildcards automáticos.
+   * A comparação é case-insensitive.
    */
   LIKE {
     @Override
@@ -88,7 +108,10 @@ public enum Operator {
 
   },
   /**
-   * Em lista
+   * Operador de pertinência à lista. Compara se o valor do campo está contido
+   * na lista de valores fornecida.
+   *
+   * <p>Equivalente ao operador {@code IN} em SQL.
    */
   IN {
     @Override
@@ -110,7 +133,10 @@ public enum Operator {
 
   },
   /**
-   * Maior que
+   * Operador de maior que. Compara se o valor do campo é maior que o valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code >} em SQL.
+   * Funciona apenas com tipos {@link Comparable}.
    */
   GREATER_THAN {
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -137,7 +163,10 @@ public enum Operator {
 
   },
   /**
-   * Menor que
+   * Operador de menor que. Compara se o valor do campo é menor que o valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code <} em SQL.
+   * Funciona apenas com tipos {@link Comparable}.
    */
   LESS_THAN {
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -161,7 +190,11 @@ public enum Operator {
     }
   },
   /**
-   * Maior ou igual
+   * Operador de maior ou igual. Compara se o valor do campo é maior ou igual
+   * ao valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code >=} em SQL.
+   * Funciona apenas com tipos {@link Comparable}.
    */
   GREATER_THAN_OR_EQUAL_TO {
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -185,7 +218,11 @@ public enum Operator {
     }
   },
   /**
-   * Menor ou igual
+   * Operador de menor ou igual. Compara se o valor do campo é menor ou igual
+   * ao valor fornecido.
+   *
+   * <p>Equivalente ao operador {@code <=} em SQL.
+   * Funciona apenas com tipos {@link Comparable}.
    */
   LESS_THAN_OR_EQUAL_TO {
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -211,15 +248,18 @@ public enum Operator {
   };
 
   /**
-   * Realiza o build.
+   * Constrói o predicado JPA para este operador.
    *
-   * @param <T>         Tipo de dado.
-   * @param root        {@link Root}
-   * @param cb          {@link CriteriaBuilder}a
-   * @param request     {@link FilterRequest}
-   * @param predicate   {@link Predicate}
-   * @param disjunction indicativo de disjunção ou conjunção
-   * @return O {@link Predicate} final.
+   * <p>Método abstrato que deve ser implementado por cada operador para
+   * criar o {@link Predicate} apropriado no JPA Criteria API.
+   *
+   * @param <T>         Tipo da entidade
+   * @param root        Raiz da consulta (from clause)
+   * @param cb          Construtor de critérios do JPA
+   * @param request     Requisição de filtro com os parâmetros
+   * @param predicate   Predicado anterior para composição
+   * @param disjunction Se {@code true}, usa disjunção (OR), senão conjunção (AND)
+   * @return O {@link Predicate} resultante da aplicação do operador
    */
   public abstract <T> Predicate build(Root<T> root, CriteriaBuilder cb,
                                       FilterRequest request,
@@ -227,12 +267,16 @@ public enum Operator {
                                       boolean disjunction);
 
   /**
-   * Captura um {@link Path} em relação a propriedades compostas
+   * Obtém o {@link Path} para um atributo, suportando caminhos compostos.
    *
-   * @param <T>           Tido do objeto
-   * @param root          {@link Root}
-   * @param attributeName nome do atributo, simples ou composto
-   * @return {@link Path} final (folha) do objeto.
+   * <p>Permite navegar por atributos aninhados usando notação de ponto.
+   * Exemplo: "endereco.cidade.nome" retorna o path para o atributo nome
+   * dentro de cidade dentro de endereco.
+   *
+   * @param <T>           Tipo da entidade raiz
+   * @param root          Raiz da consulta
+   * @param attributeName Nome do atributo (pode ser composto, ex: "endereco.cidade")
+   * @return O {@link Path} para o atributo final
    */
   public <T> Path<T> getPath(Root<T> root, String attributeName) {
     Path<T> path = root;

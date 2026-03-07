@@ -13,7 +13,21 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 /**
+ * Classe base abstrata para entidades de anexos/arquivos.
+ *
+ * <p>Fornece campos comuns para manipulação de arquivos, incluindo
+ * descrição, nome do arquivo, tamanho e tipo MIME.
+ *
+ * <p><b>Por quê usar Attachment?</b></p>
+ * <ul>
+ *   <li>Padroniza o modelo de dados para arquivos</li>
+ *   <li>Evita duplicação de campos em múltiplas entidades de arquivo</li>
+ *   <li>Integra com o ciclo de vida do {@link BaseEntity}</li>
+ * </ul>
+ *
  * @author Israel Araújo
+ * @see BaseEntity
+ * @since 1.0.0
  */
 @SuppressWarnings("serial")
 @SuperBuilder
@@ -26,25 +40,33 @@ import lombok.experimental.SuperBuilder;
 public class Attachment
   extends BaseEntity {
   /**
-   * Descrição
+   * Descrição do arquivo.
+   *
+   * <p>Pode ser usada para fornecer contexto adicional sobre o arquivo.
    */
   @Column(name = "description", length = 500)
   private String description;
 
   /**
-   * Nome do arquivo.
+   * Nome original do arquivo.
+   *
+   * <p>Deve ser preenchido com o nome do arquivo conforme enviado pelo usuário.
    */
   @Column(name = "filename", nullable = false)
   private String filename;
 
   /**
-   * Tamanho do arquivo em <i>bytes</i>.
+   * Tamanho do arquivo em bytes.
+   *
+   * <p>Usado para validação de limites de upload e exibição.
    */
   @Column(name = "size", nullable = false)
   private Long size;
 
   /**
-   * É o MIME Type do arquivo
+   * Tipo MIME (Multipurpose Internet Mail Extensions) do arquivo.
+   *
+   * <p>Exemplos: "image/png", "application/pdf", "text/plain"
    */
   @Column(name = "media_type", nullable = false)
   private String mediaType;
