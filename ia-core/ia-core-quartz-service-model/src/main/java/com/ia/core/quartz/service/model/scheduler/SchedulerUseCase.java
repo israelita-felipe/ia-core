@@ -20,39 +20,6 @@ public interface SchedulerUseCase extends CrudUseCase<SchedulerConfigDTO> {
   void iniciarJobs();
 
   /**
-   * Para todos os jobs.
-   */
-  void pararJobs();
-
-  /**
-   * Pausa um job específico.
-   *
-   * @param jobId ID do job
-   */
-  void pausarJob(Long jobId);
-
-  /**
-   * Resume um job específico.
-   *
-   * @param jobId ID do job
-   */
-  void resumirJob(Long jobId);
-
-  /**
-   * Executa um job imediatamente.
-   *
-   * @param jobId ID do job
-   */
-  void executarJob(Long jobId);
-
-  /**
-   * Cancela um job.
-   *
-   * @param jobId ID do job
-   */
-  void cancelarJob(Long jobId);
-
-  /**
    * Busca jobs ativos.
    *
    * @return lista de jobs ativos

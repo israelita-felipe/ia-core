@@ -34,7 +34,7 @@ import com.ia.core.owl.service.model.axioma.AxiomaDTO;
  * @version 1.0
  */
 public class OwlTransformationService
-  implements CoreOWLTransformationService {
+  implements CoreOWLTransformationService, OwlTransformationUseCase {
 
   /**
    * Parametro de descrição no template

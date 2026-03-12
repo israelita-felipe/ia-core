@@ -1,7 +1,5 @@
 package com.ia.core.llm.service.model.comando;
 
-import java.util.List;
-
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**
@@ -14,32 +12,4 @@ import com.ia.core.service.usecase.CrudUseCase;
  */
 public interface ComandoSistemaUseCase extends CrudUseCase<ComandoSistemaDTO> {
 
-  /**
-   * Ativa um comando de sistema.
-   *
-   * @param comandoId ID do comando
-   */
-  void ativar(Long comandoId);
-
-  /**
-   * Inativa um comando de sistema.
-   *
-   * @param comandoId ID do comando
-   */
-  void inativar(Long comandoId);
-
-  /**
-   * Busca comandos por finalidade.
-   *
-   * @param finalidade finalidade do comando
-   * @return lista de comandos
-   */
-  List<ComandoSistemaDTO> findByFinalidade(String finalidade);
-
-  /**
-   * Busca comandos ativos.
-   *
-   * @return lista de comandos ativos
-   */
-  List<ComandoSistemaDTO> findAtivos();
 }

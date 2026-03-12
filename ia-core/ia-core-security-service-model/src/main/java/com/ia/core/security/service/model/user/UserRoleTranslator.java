@@ -1,7 +1,5 @@
 package com.ia.core.security.service.model.user;
 
-import com.ia.core.security.service.model.role.RoleTranslator;
-
 /**
  * Translator para UserRole.
  * 

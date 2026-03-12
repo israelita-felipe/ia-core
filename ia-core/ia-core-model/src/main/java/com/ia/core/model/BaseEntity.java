@@ -2,7 +2,6 @@ package com.ia.core.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;

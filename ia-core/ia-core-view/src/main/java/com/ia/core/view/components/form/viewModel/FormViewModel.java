@@ -1,6 +1,5 @@
 package com.ia.core.view.components.form.viewModel;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 

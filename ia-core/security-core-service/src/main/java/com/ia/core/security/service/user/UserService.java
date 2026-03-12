@@ -12,6 +12,7 @@ import com.ia.core.security.service.model.user.UserPasswordChangeDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.service.model.user.UserPasswordResetDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.service.model.user.UserUseCase;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -25,7 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class UserService
-  extends DefaultSecuredBaseService<User, UserDTO> {
+  extends DefaultSecuredBaseService<User, UserDTO>
+  implements UserUseCase {
 
   /**
    * @param repository

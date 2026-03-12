@@ -2,7 +2,6 @@ package com.ia.core.view.components.form.viewModel;
 
 import java.io.Serializable;
 
-import com.ia.core.view.components.form.FormValidator;
 import com.ia.core.view.properties.AutoCastable;
 
 import lombok.Getter;

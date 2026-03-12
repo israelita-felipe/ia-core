@@ -1,6 +1,5 @@
 package com.ia.core.security.service.authorization;
 
-import com.ia.core.model.BaseEntity;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 
 /**

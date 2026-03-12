@@ -2,6 +2,7 @@ package com.ia.core.llm.service.comando;
 
 import com.ia.core.llm.model.comando.ComandoSistema;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
+import com.ia.core.llm.service.model.comando.ComandoSistemaUseCase;
 import com.ia.core.service.DefaultBaseService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ComandoSistemaService
-  extends DefaultBaseService<ComandoSistema, ComandoSistemaDTO> {
+  extends DefaultBaseService<ComandoSistema, ComandoSistemaDTO>
+  implements ComandoSistemaUseCase {
 
   /**
    * @param repository

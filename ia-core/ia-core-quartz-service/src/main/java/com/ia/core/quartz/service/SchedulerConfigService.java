@@ -25,6 +25,7 @@ import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
+import com.ia.core.quartz.service.model.scheduler.SchedulerUseCase;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -53,7 +54,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class SchedulerConfigService
-  extends DefaultSecuredBaseService<SchedulerConfig, SchedulerConfigDTO> {
+  extends DefaultSecuredBaseService<SchedulerConfig, SchedulerConfigDTO>
+  implements SchedulerUseCase {
 
   /**
    * Construtor do serviço de configuração do scheduler.
@@ -386,6 +388,37 @@ public class SchedulerConfigService
   @Override
   public String getFunctionalityTypeName() {
     return SchedulerConfigTranslator.SCHEDULER_CONFIG;
+  }
+
+  // Métodos do UseCase - delegam para métodos existentes
+
+  /**
+   * Inicia todos os jobs ativos.
+   * Delegado para {@link #agendarJobs()}.
+   */
+  @Override
+  public void iniciarJobs() {
+    agendarJobs();
+  }
+
+  /**
+   * Busca jobs ativos.
+   * Delegado para {@link #findAllActive(boolean)}.
+   *
+   * @return lista de jobs ativos
+   */
+  @Override
+  public List<SchedulerConfigDTO> findAtivos() {
+    return findAllActive(true);
+  }
+
+  /**
+   * Verifica atualizações nos jobs.
+   * Delegado para {@link #updateJobs()}.
+   */
+  @Override
+  public void verificarAtualizacoes() {
+    updateJobs();
   }
 
   /**

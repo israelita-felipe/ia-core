@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
-import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
 

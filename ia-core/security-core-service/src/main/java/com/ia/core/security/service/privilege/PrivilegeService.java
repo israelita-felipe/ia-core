@@ -8,13 +8,15 @@ import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
+import com.ia.core.security.service.model.privilege.PrivilegeUseCase;
 
 /**
  * @author Israel Araújo
  */
 @Service
 public class PrivilegeService
-  extends DefaultSecuredBaseService<Privilege, PrivilegeDTO> {
+  extends DefaultSecuredBaseService<Privilege, PrivilegeDTO>
+  implements PrivilegeUseCase {
 
   /**
    * @param repository

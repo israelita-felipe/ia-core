@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
+import com.ia.core.security.service.model.role.RoleUseCase;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.DTO;
@@ -21,7 +22,8 @@ import com.ia.core.view.manager.ListBaseManager;
  */
 @Service
 public class RoleManager
-  extends DefaultSecuredViewBaseManager<RoleDTO> {
+  extends DefaultSecuredViewBaseManager<RoleDTO>
+  implements RoleUseCase {
 
   /**
    * @param client               cliente de comunicação

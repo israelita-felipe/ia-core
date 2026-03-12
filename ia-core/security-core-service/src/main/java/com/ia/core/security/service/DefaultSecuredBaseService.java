@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
@@ -16,12 +17,14 @@ import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
+import com.ia.core.service.usecase.CrudUseCase;
 import com.ia.core.service.validators.IServiceValidator;
 
 import lombok.Getter;
@@ -43,7 +46,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
   extends AbstractSecuredBaseService<T, D>
   implements CountSecuredBaseService<T, D>, DeleteSecuredBaseService<T, D>,
   FindSecuredBaseService<T, D>, ListSecuredBaseService<T, D>,
-  SaveSecuredBaseService<T, D> {
+  SaveSecuredBaseService<T, D>, CrudUseCase<D> {
 
   private static final Logger log = LoggerFactory
       .getLogger(DefaultSecuredBaseService.class);
@@ -128,6 +131,33 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
     funcionalidades
         .addAll(SaveSecuredBaseService.super.registryFunctionalities(functionalityManager));
     return funcionalidades;
+  }
+
+  @Override
+  public void delete(Long id)
+    throws ServiceException {
+    DeleteSecuredBaseService.super.delete(id);
+  }
+
+  @Override
+  public D save(D toSave)
+    throws ServiceException {
+    return SaveSecuredBaseService.super.save(toSave);
+  }
+
+  @Override
+  public int count(SearchRequestDTO requestDTO) {
+    return CountSecuredBaseService.super.count(requestDTO);
+  }
+
+  @Override
+  public D find(Long id) {
+    return FindSecuredBaseService.super.find(id);
+  }
+
+  @Override
+  public Page<D> findAll(SearchRequestDTO requestDTO) {
+    return ListSecuredBaseService.super.findAll(requestDTO);
   }
 
   public static class DefaultSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>

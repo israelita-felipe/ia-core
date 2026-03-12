@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
+import com.ia.core.security.service.model.privilege.PrivilegeUseCase;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -17,7 +18,8 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
  */
 @Service
 public class PrivilegeManager
-  extends DefaultSecuredViewBaseManager<PrivilegeDTO> {
+  extends DefaultSecuredViewBaseManager<PrivilegeDTO>
+  implements PrivilegeUseCase {
 
   /**
    * @param client               cliente de comunicação

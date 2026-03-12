@@ -1,7 +1,5 @@
 package com.ia.core.security.service.model.role;
 
-import com.ia.core.security.service.model.privilege.PrivilegeOperationTranslator;
-
 /**
  * Translator para RolePrivilege.
  * 

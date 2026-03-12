@@ -13,6 +13,7 @@ import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
+import com.ia.core.security.service.model.role.RoleUseCase;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -23,7 +24,8 @@ import com.ia.core.service.exception.ServiceException;
  */
 @Service
 public class RoleService
-  extends DefaultSecuredBaseService<Role, RoleDTO> {
+  extends DefaultSecuredBaseService<Role, RoleDTO>
+  implements RoleUseCase {
 
   /**
    * @param repository

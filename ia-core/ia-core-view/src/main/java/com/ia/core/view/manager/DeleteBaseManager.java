@@ -3,6 +3,7 @@ package com.ia.core.view.manager;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.ia.core.model.exception.ValidationException;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.client.DeleteBaseClient;
 
@@ -28,7 +29,8 @@ public interface DeleteBaseManager<D extends Serializable>
   /**
    * @param id Id do objeto.
    */
-  default void delete(Long id) {
+  default void delete(Long id)
+    throws ValidationException {
     if (canDelete(id)) {
       ((DeleteBaseClient<D>) getClient()).delete(id);
     }

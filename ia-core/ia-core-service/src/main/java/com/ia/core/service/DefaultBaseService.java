@@ -3,16 +3,19 @@ package com.ia.core.service;
 import java.util.List;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
+import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
+import com.ia.core.service.usecase.CrudUseCase;
 import com.ia.core.service.validators.IServiceValidator;
 
 import lombok.Getter;
@@ -38,7 +41,8 @@ import lombok.Getter;
 public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   extends AbstractBaseService<T, D>
   implements CountBaseService<T, D>, DeleteBaseService<T, D>,
-  FindBaseService<T, D>, ListBaseService<T, D>, SaveBaseService<T, D> {
+  FindBaseService<T, D>, ListBaseService<T, D>, SaveBaseService<T, D>,
+  CrudUseCase<D> {
 
   /**
    * * Construtor do serviço base.
@@ -95,6 +99,33 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
     if (dto != null) {
       publishEvent(dto, CrudOperationType.DELETED);
     }
+  }
+
+  @Override
+  public int count(SearchRequestDTO requestDTO) {
+    return CountBaseService.super.count(requestDTO);
+  }
+
+  @Override
+  public D save(D toSave)
+    throws ServiceException {
+    return SaveBaseService.super.save(toSave);
+  }
+
+  @Override
+  public void delete(Long id)
+    throws ServiceException {
+    DeleteBaseService.super.delete(id);
+  }
+
+  @Override
+  public Page<D> findAll(SearchRequestDTO requestDTO) {
+    return ListBaseService.super.findAll(requestDTO);
+  }
+
+  @Override
+  public D find(Long id) {
+    return FindBaseService.super.find(id);
   }
 
   /**

@@ -10,6 +10,7 @@ import com.ia.core.security.service.model.user.UserPasswordChangeDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.service.model.user.UserPasswordResetDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.service.model.user.UserUseCase;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.DTO;
 
@@ -24,7 +25,8 @@ import lombok.experimental.SuperBuilder;
  */
 @Service
 public class UserManager
-  extends DefaultSecuredViewBaseManager<UserDTO> {
+  extends DefaultSecuredViewBaseManager<UserDTO>
+  implements UserUseCase {
 
   /**
    * Construtor padrão

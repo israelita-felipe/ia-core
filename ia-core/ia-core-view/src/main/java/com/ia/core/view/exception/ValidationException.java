@@ -4,13 +4,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
+import com.ia.core.service.exception.ServiceException;
+
 /**
  * Exception de validação.
  *
  * @author Israel Araújo
  */
 public class ValidationException
-  extends Exception {
+  extends ServiceException {
   /**
    * Serial UID.
    */
@@ -41,6 +43,7 @@ public class ValidationException
    *
    * @param ex {@link Exception}
    */
+  @Override
   public void add(Exception ex) {
     this.erros.add(ex);
   }
@@ -50,6 +53,7 @@ public class ValidationException
    *
    * @param error {@link String}
    */
+  @Override
   public void add(String error) {
     this.erros.add(new Exception(error));
   }
@@ -57,6 +61,7 @@ public class ValidationException
   /**
    * @return Stream de erros.
    */
+  @Override
   public Stream<String> getErrors() {
     return this.erros.parallelStream().map(Exception::getMessage);
   }
@@ -64,6 +69,7 @@ public class ValidationException
   /**
    * @return <code>true</code> caso haja erros.
    */
+  @Override
   public boolean hasErros() {
     return !erros.isEmpty();
   }

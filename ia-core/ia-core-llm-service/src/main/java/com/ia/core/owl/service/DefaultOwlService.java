@@ -36,7 +36,8 @@ import lombok.Getter;
  * @version 1.0.0
  */
 public class DefaultOwlService
-  implements CoreOWLService, OWLOntologyManagementService, OWLParsingService {
+  implements CoreOWLService, OWLOntologyManagementService, OWLParsingService,
+  DefaultOWLUseCase {
 
   @Getter
   private final CoreOWLReasoner reasonerService;

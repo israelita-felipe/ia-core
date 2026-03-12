@@ -1,8 +1,5 @@
 package com.ia.core.security.service.model.user;
 
-import com.ia.core.security.service.model.privilege.PrivilegeOperationTranslator;
-import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
-
 /**
  * Translator para UserPrivilege.
  * 
