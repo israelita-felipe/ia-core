@@ -38,7 +38,7 @@ public class SchedulerConfigFormViewModel
    * @param config
    */
   public void createSchedulerConfigTriggerCollectionPageViewModel(SchedulerConfigFormViewModelConfig config) {
-    schedulerConfigTriggerCollectionPageViewModel = new SchedulerConfigTriggerCollectionPageViewModel(new SchedulerConfigTriggerCollectionPageViewModelConfig(config.getSchedulerService()));
+    schedulerConfigTriggerCollectionPageViewModel = new SchedulerConfigTriggerCollectionPageViewModel(new SchedulerConfigTriggerCollectionPageViewModelConfig(createSchedulerConfigTriggerService(config)));
   }
 
   /**
@@ -80,7 +80,8 @@ public class SchedulerConfigFormViewModel
    * @param readOnly
    */
   protected void createPeriodicidadeFormViewModel(SchedulerConfigFormViewModelConfig config) {
-    this.periodicidadeFormViewModel = new PeriodicidadeFormViewModel(new PeriodicidadeFormViewModelConfig(config.isReadOnly(), config.getSchedulerService()));
+    this.periodicidadeFormViewModel = new PeriodicidadeFormViewModel(new PeriodicidadeFormViewModelConfig(config
+        .isReadOnly(), config.getSchedulerService()));
   }
 
   public Collection<String> getJobClassNames() {

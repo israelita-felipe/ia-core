@@ -69,7 +69,9 @@ public class SchedulerConfigDTO
   public SchedulerConfigDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
         .periodicidade(periodicidade.cloneObject())
-        .triggers(new ArrayList<>()).build();
+        .triggers(new ArrayList<>(triggers.stream()
+            .map(SchedulerConfigTriggerDTO::copyObject).toList()))
+        .build();
   }
 
   @JsonIgnore
