@@ -5,13 +5,20 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.model.projection.EntityProjection;
 
 /**
  * Repositório base da camada de serviço.
+ * <p>
+ * Fornece métodos utilitários para operações básicas de persistência.
+ * Para projeções específicas, utilize métodos customizados com @Query
+ * diretamente nos repositories específicos.
+ * </p>
  *
  * @author Israel Araújo
  * @param <T> Tipo de dado que extende de {@link BaseEntity}.
  * @see BaseEntity
+ * @see EntityProjection
  */
 @NoRepositoryBean
 public interface BaseEntityRepository<T extends BaseEntity>
