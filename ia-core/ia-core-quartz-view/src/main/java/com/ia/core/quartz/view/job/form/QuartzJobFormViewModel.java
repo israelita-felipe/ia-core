@@ -11,12 +11,12 @@ import lombok.Getter;
 
 /**
  * ViewModel para o formulário de Jobs do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
 public class QuartzJobFormViewModel
   extends FormViewModel<QuartzJobDTO> {
-  
+
   @Getter
   private List<QuartzJobTriggerDTO> triggers;
 
@@ -34,11 +34,13 @@ public class QuartzJobFormViewModel
       loadTriggers(model);
     }
   }
-  
+
   private void loadTriggers(QuartzJobDTO model) {
     QuartzJobManager manager = getConfig().getQuartzJobManager();
-    if (manager != null && model.getJobName() != null && model.getJobGroup() != null) {
-      this.triggers = manager.findTriggersOfJob(model.getJobName(), model.getJobGroup());
+    if (manager != null && model.getJobName() != null
+        && model.getJobGroup() != null) {
+      this.triggers = manager.findTriggersOfJob(model.getJobName(),
+                                                model.getJobGroup());
     }
   }
 

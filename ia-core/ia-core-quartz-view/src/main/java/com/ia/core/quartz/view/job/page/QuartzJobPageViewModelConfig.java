@@ -12,7 +12,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 /**
  * Configuração do ViewModel para a página de Jobs do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
 @UIScope
@@ -23,8 +23,8 @@ public class QuartzJobPageViewModelConfig
   private final QuartzJobManager quartzJobManager;
 
   /**
-   * @param service            Serviço base
-   * @param quartzJobManager   Manager de Jobs do Quartz
+   * @param service          Serviço base
+   * @param quartzJobManager Manager de Jobs do Quartz
    */
   public QuartzJobPageViewModelConfig(DefaultBaseManager<QuartzJobDTO> service,
                                       QuartzJobManager quartzJobManager) {

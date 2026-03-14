@@ -698,10 +698,17 @@ public abstract class PageView<T extends Serializable>
     } catch (Exception e) {
       handleError(e);
     } finally {
-      this.listView.deselectAll();
-      this.listView.refreshAll();
-      refreshButtons();
+      refreshAll();
     }
+  }
+
+  /**
+   * realiza um refresh nos itens da página e nos botões
+   */
+  public void refreshAll() {
+    this.listView.deselectAll();
+    this.listView.refreshAll();
+    refreshButtons();
   }
 
   @Override

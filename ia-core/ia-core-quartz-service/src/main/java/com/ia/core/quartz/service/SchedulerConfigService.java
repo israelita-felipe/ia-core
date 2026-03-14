@@ -2,13 +2,16 @@ package com.ia.core.quartz.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
@@ -16,12 +19,17 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.service.model.job.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.QuartzJobInstanceDTO;
+import com.ia.core.quartz.service.model.job.QuartzJobTriggerDTO;
+import com.ia.core.quartz.service.model.job.QuartzJobUseCase;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
@@ -55,7 +63,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SchedulerConfigService
   extends DefaultSecuredBaseService<SchedulerConfig, SchedulerConfigDTO>
-  implements SchedulerUseCase {
+  implements SchedulerUseCase, QuartzJobUseCase {
 
   /**
    * Construtor do serviço de configuração do scheduler.
@@ -393,8 +401,7 @@ public class SchedulerConfigService
   // Métodos do UseCase - delegam para métodos existentes
 
   /**
-   * Inicia todos os jobs ativos.
-   * Delegado para {@link #agendarJobs()}.
+   * Inicia todos os jobs ativos. Delegado para {@link #agendarJobs()}.
    */
   @Override
   public void iniciarJobs() {
@@ -402,8 +409,7 @@ public class SchedulerConfigService
   }
 
   /**
-   * Busca jobs ativos.
-   * Delegado para {@link #findAllActive(boolean)}.
+   * Busca jobs ativos. Delegado para {@link #findAllActive(boolean)}.
    *
    * @return lista de jobs ativos
    */
@@ -413,8 +419,7 @@ public class SchedulerConfigService
   }
 
   /**
-   * Verifica atualizações nos jobs.
-   * Delegado para {@link #updateJobs()}.
+   * Verifica atualizações nos jobs. Delegado para {@link #updateJobs()}.
    */
   @Override
   public void verificarAtualizacoes() {
@@ -632,6 +637,343 @@ public class SchedulerConfigService
       log.error("Erro ao cancelar o job {}: {}", config.getId(),
                 e.getLocalizedMessage(), e);
     }
+  }
+
+  // ========================================================================
+  // Métodos da interface QuartzJobUseCase
+  // ========================================================================
+
+  @Override
+  public List<QuartzJobDTO> findAllJobs() {
+    List<QuartzJobDTO> jobs = new ArrayList<>();
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      List<String> jobGroups = scheduler.getJobGroupNames();
+
+      for (String group : jobGroups) {
+        Set<JobKey> jobKeys = scheduler
+            .getJobKeys(GroupMatcher.jobGroupEquals(group));
+
+        for (JobKey jobKey : jobKeys) {
+          try {
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+            if (jobDetail != null) {
+              QuartzJobDTO dto = buildJobDTO(jobDetail, scheduler);
+              jobs.add(dto);
+            }
+          } catch (SchedulerException e) {
+            log.error("Erro ao buscar detalhes do job {}: {}", jobKey,
+                      e.getMessage());
+          }
+        }
+      }
+      log.info("Encontrados {} jobs no scheduler", jobs.size());
+    } catch (SchedulerException e) {
+      log.error("Erro ao listar jobs: {}", e.getMessage(), e);
+    }
+    return jobs;
+  }
+
+  @Override
+  public QuartzJobDTO findJob(String jobName, String jobGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+      JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+
+      if (jobDetail != null) {
+        return buildJobDTO(jobDetail, scheduler);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao buscar job {}/{}: {}", jobName, jobGroup,
+                e.getMessage(), e);
+    }
+    return null;
+  }
+
+  @Override
+  public boolean pauseJob(String jobName, String jobGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+
+      if (scheduler.checkExists(jobKey)) {
+        scheduler.pauseJob(jobKey);
+        log.info("Job pausado: {}/{}", jobName, jobGroup);
+        return true;
+      } else {
+        log.warn("Job nao encontrado para pausar: {}/{}", jobName,
+                 jobGroup);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao pausar job {}/{}: {}", jobName, jobGroup,
+                e.getMessage(), e);
+    }
+    return false;
+  }
+
+  @Override
+  public boolean resumeJob(String jobName, String jobGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+
+      if (scheduler.checkExists(jobKey)) {
+        scheduler.resumeJob(jobKey);
+        log.info("Job resumido: {}/{}", jobName, jobGroup);
+        return true;
+      } else {
+        log.warn("Job nao encontrado para resumir: {}/{}", jobName,
+                 jobGroup);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao resumir job {}/{}: {}", jobName, jobGroup,
+                e.getMessage(), e);
+    }
+    return false;
+  }
+
+  @Override
+  public boolean deleteJob(String jobName, String jobGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+
+      if (scheduler.checkExists(jobKey)) {
+        boolean deleted = scheduler.deleteJob(jobKey);
+        if (deleted) {
+          log.info("Job removido: {}/{}", jobName, jobGroup);
+        }
+        return deleted;
+      } else {
+        log.warn("Job nao encontrado para remover: {}/{}", jobName,
+                 jobGroup);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao remover job {}/{}: {}", jobName, jobGroup,
+                e.getMessage(), e);
+    }
+    return false;
+  }
+
+  @Override
+  public boolean triggerJob(String jobName, String jobGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+
+      if (scheduler.checkExists(jobKey)) {
+        scheduler.triggerJob(jobKey);
+        log.info("Job disparado: {}/{}", jobName, jobGroup);
+        return true;
+      } else {
+        log.warn("Job nao encontrado para disparar: {}/{}", jobName,
+                 jobGroup);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao disparar job {}/{}: {}", jobName, jobGroup,
+                e.getMessage(), e);
+    }
+    return false;
+  }
+
+  @Override
+  public List<QuartzJobTriggerDTO> findTriggersOfJob(String jobName,
+                                                     String jobGroup) {
+    List<QuartzJobTriggerDTO> triggers = new ArrayList<>();
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+      List<? extends Trigger> triggerList = scheduler
+          .getTriggersOfJob(jobKey);
+
+      ZoneId zoneId = ZoneId.systemDefault();
+
+      for (Trigger trigger : triggerList) {
+        QuartzJobTriggerDTO dto = buildTriggerDTO(trigger, scheduler,
+                                                  zoneId);
+        triggers.add(dto);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao buscar triggers do job {}/{}: {}", jobName,
+                jobGroup, e.getMessage(), e);
+    }
+    return triggers;
+  }
+
+  @Override
+  public List<QuartzJobInstanceDTO> findCurrentlyExecutingJobs() {
+    List<QuartzJobInstanceDTO> instances = new ArrayList<>();
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      List<JobExecutionContext> executingJobs = scheduler
+          .getCurrentlyExecutingJobs();
+
+      ZoneId zoneId = ZoneId.systemDefault();
+
+      for (JobExecutionContext context : executingJobs) {
+        QuartzJobInstanceDTO dto = buildInstanceDTO(context, zoneId);
+        instances.add(dto);
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao buscar jobs em execucao: {}", e.getMessage(), e);
+    }
+    return instances;
+  }
+
+  @Override
+  public boolean pauseTrigger(String triggerName, String triggerGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      TriggerKey triggerKey = TriggerKey.triggerKey(triggerName,
+                                                    triggerGroup);
+
+      if (scheduler.checkExists(triggerKey)) {
+        scheduler.pauseTrigger(triggerKey);
+        log.info("Trigger pausado: {}/{}", triggerName, triggerGroup);
+        return true;
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao pausar trigger {}/{}: {}", triggerName,
+                triggerGroup, e.getMessage(), e);
+    }
+    return false;
+  }
+
+  @Override
+  public boolean resumeTrigger(String triggerName, String triggerGroup) {
+    try {
+      Scheduler scheduler = getConfig().getQuartzScheduler();
+      TriggerKey triggerKey = TriggerKey.triggerKey(triggerName,
+                                                    triggerGroup);
+
+      if (scheduler.checkExists(triggerKey)) {
+        scheduler.resumeTrigger(triggerKey);
+        log.info("Trigger resumido: {}/{}", triggerName, triggerGroup);
+        return true;
+      }
+    } catch (SchedulerException e) {
+      log.error("Erro ao resumir trigger {}/{}: {}", triggerName,
+                triggerGroup, e.getMessage(), e);
+    }
+    return false;
+  }
+
+  /**
+   * Constrói um DTO de job a partir do JobDetail do Quartz.
+   *
+   * @param jobDetail Detalhes do job
+   * @param scheduler Scheduler para buscar informacoes de estado
+   * @return DTO preenchido
+   */
+  private QuartzJobDTO buildJobDTO(JobDetail jobDetail,
+                                   Scheduler scheduler) {
+    QuartzJobTriggerDTO last = findTriggersOfJob(jobDetail.getKey()
+        .getName(), jobDetail.getKey().getGroup()).getLast();
+    QuartzJobDTO dto = QuartzJobDTO.builder()
+        .jobState(last != null ? last.getTriggerState() : null)
+        .jobName(jobDetail.getKey().getName())
+        .jobGroup(jobDetail.getKey().getGroup())
+        .description(jobDetail.getDescription())
+        .jobClassName(jobDetail.getJobClass().getName())
+        .durable(jobDetail.isDurable())
+        .requestsRecovery(jobDetail.requestsRecovery())
+        .jobData(jobDetail.getJobDataMap()).build();
+
+    try {
+      List<? extends Trigger> triggers = scheduler
+          .getTriggersOfJob(jobDetail.getKey());
+      if (!triggers.isEmpty()) {
+        Trigger trigger = triggers.get(0);
+        dto.setNextExecutionTime(trigger.getNextFireTime() != null ? trigger
+            .getNextFireTime().toInstant().atZone(ZoneId.systemDefault())
+            .toLocalDateTime() : null);
+      }
+    } catch (SchedulerException e) {
+      log.debug("Erro ao buscar triggers para job {}: {}",
+                jobDetail.getKey(), e.getMessage());
+    }
+
+    return dto;
+  }
+
+  /**
+   * Constrói um DTO de trigger a partir do Trigger do Quartz.
+   *
+   * @param trigger   Trigger do Quartz
+   * @param scheduler Scheduler para buscar informacoes de estado
+   * @param zoneId    ZoneId para conversao de datas
+   * @return DTO preenchido
+   */
+  private QuartzJobTriggerDTO buildTriggerDTO(Trigger trigger,
+                                              Scheduler scheduler,
+                                              ZoneId zoneId) {
+    QuartzJobTriggerDTO dto = QuartzJobTriggerDTO.builder()
+        .triggerName(trigger.getKey().getName())
+        .triggerGroup(trigger.getKey().getGroup())
+        .jobName(trigger.getJobKey().getName())
+        .jobGroup(trigger.getJobKey().getGroup())
+        .description(trigger.getDescription())
+        .triggerType(trigger.getClass().getName())
+        .calendarName(trigger.getCalendarName())
+        .priority(trigger.getPriority())
+        .misFireInstr((long) trigger.getMisfireInstruction())
+        .jobData(trigger.getJobDataMap()).build();
+
+    if (trigger.getNextFireTime() != null) {
+      dto.setNextFireTime(trigger.getNextFireTime().toInstant()
+          .atZone(zoneId).toLocalDateTime());
+    }
+    if (trigger.getPreviousFireTime() != null) {
+      dto.setPrevFireTime(trigger.getPreviousFireTime().toInstant()
+          .atZone(zoneId).toLocalDateTime());
+    }
+    if (trigger.getStartTime() != null) {
+      dto.setStartTime(trigger.getStartTime().toInstant().atZone(zoneId)
+          .toLocalDateTime());
+    }
+    if (trigger.getEndTime() != null) {
+      dto.setEndTime(trigger.getEndTime().toInstant().atZone(zoneId)
+          .toLocalDateTime());
+    }
+    if (trigger.getFinalFireTime() != null) {
+      dto.setFinalFireTime(trigger.getFinalFireTime().toInstant()
+          .atZone(zoneId).toLocalDateTime());
+    }
+
+    try {
+      dto.setTriggerState(scheduler.getTriggerState(trigger.getKey())
+          .name());
+    } catch (SchedulerException e) {
+      log.debug("Erro ao buscar estado do trigger {}: {}", trigger.getKey(),
+                e.getMessage());
+    }
+
+    return dto;
+  }
+
+  /**
+   * Constrói um DTO de instância de execucao a partir do contexto de execucao.
+   *
+   * @param context Contexto de execucao do job
+   * @param zoneId  ZoneId para conversao de datas
+   * @return DTO preenchido
+   */
+  private QuartzJobInstanceDTO buildInstanceDTO(JobExecutionContext context,
+                                                ZoneId zoneId) {
+    return QuartzJobInstanceDTO.builder()
+        .instanceId(context.getFireInstanceId())
+        .jobName(context.getJobDetail().getKey().getName())
+        .jobGroup(context.getJobDetail().getKey().getGroup())
+        .triggerName(context.getTrigger().getKey().getName())
+        .triggerGroup(context.getTrigger().getKey().getGroup())
+        .fireTime(context.getFireTime().toInstant().atZone(zoneId)
+            .toLocalDateTime())
+        .scheduledFireTime(context.getScheduledFireTime() != null ? context
+            .getScheduledFireTime().toInstant().atZone(zoneId)
+            .toLocalDateTime() : null)
+        .jobDataMap(context.getJobDetail().getJobDataMap())
+        .recovered(context.isRecovering()).build();
   }
 
 }

@@ -9,6 +9,8 @@ import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 
 /**
+ * Manager unificado para operações do Quartz (SchedulerConfig e Jobs).
+ *
  * @author Israel Araújo
  */
 @Service
@@ -37,4 +39,5 @@ public class QuartzManager
   public Map<String, String> getAvaliableJobClasses() {
     return getClient().getAvaliableJobClasses();
   }
+
 }

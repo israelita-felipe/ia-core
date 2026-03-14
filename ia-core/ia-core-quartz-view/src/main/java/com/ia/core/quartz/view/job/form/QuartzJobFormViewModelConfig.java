@@ -8,20 +8,21 @@ import lombok.Getter;
 
 /**
  * Configuração do ViewModel para o formulário de Jobs do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
 public class QuartzJobFormViewModelConfig
   extends FormViewModelConfig<QuartzJobDTO> {
-  
+
   @Getter
   private final QuartzJobManager quartzJobManager;
 
   /**
-   * @param readOnly    Indicativo de somente leitura
+   * @param readOnly         Indicativo de somente leitura
    * @param quartzJobManager Manager de Jobs do Quartz
    */
-  public QuartzJobFormViewModelConfig(boolean readOnly, QuartzJobManager quartzJobManager) {
+  public QuartzJobFormViewModelConfig(boolean readOnly,
+                                      QuartzJobManager quartzJobManager) {
     super(readOnly);
     this.quartzJobManager = quartzJobManager;
   }

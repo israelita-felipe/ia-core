@@ -71,7 +71,8 @@ public interface QuartzJobUseCase {
    * @param jobGroup Grupo do job
    * @return lista de triggers
    */
-  List<QuartzJobTriggerDTO> findTriggersOfJob(String jobName, String jobGroup);
+  List<QuartzJobTriggerDTO> findTriggersOfJob(String jobName,
+                                              String jobGroup);
 
   /**
    * Lista os jobs em execução.

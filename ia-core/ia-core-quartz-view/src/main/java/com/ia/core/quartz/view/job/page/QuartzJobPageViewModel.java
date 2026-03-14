@@ -1,18 +1,15 @@
 package com.ia.core.quartz.view.job.page;
 
-import java.io.Serializable;
-
 import com.ia.core.quartz.service.model.job.QuartzJobDTO;
 import com.ia.core.quartz.view.job.form.QuartzJobFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.PageViewModel;
-import com.ia.core.view.components.page.viewModel.PageViewModelConfig;
 
 /**
  * ViewModel para a página de Jobs do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
 public class QuartzJobPageViewModel
@@ -62,5 +59,10 @@ public class QuartzJobPageViewModel
   @Override
   public QuartzJobDTO copyObject(QuartzJobDTO object) {
     return object != null ? object.copyObject() : null;
+  }
+
+  @Override
+  public QuartzJobPageViewModelConfig getConfig() {
+    return super.getConfig().cast();
   }
 }
