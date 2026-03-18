@@ -1,0 +1,247 @@
+package com.ia.core.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.Serializable;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.dto.DTO;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.Mapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
+
+/**
+ * Testes para {@link AbstractBaseService}.
+ *
+ * @author Israel Araújo
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("AbstractBaseService")
+class AbstractBaseServiceTest {
+
+    @Mock
+    private BaseEntityMapper<TestEntity, TestDTO> mapper;
+
+    @Mock
+    private BaseEntityRepository<TestEntity> repository;
+
+    @Mock
+    private SearchRequestMapper searchRequestMapper;
+
+    @Mock
+    private Translator translator;
+
+    @Mock
+    private PlatformTransactionManager transactionManager;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
+    private TestAbstractBaseService service;
+
+    @BeforeEach
+    void setUp() {
+        AbstractBaseService.AbstractBaseServiceConfig<TestEntity, TestDTO> config = 
+            new AbstractBaseService.AbstractBaseServiceConfig<>(transactionManager, repository, mapper, searchRequestMapper, translator, eventPublisher);
+        service = new TestAbstractBaseService(config);
+    }
+
+    @Nested
+    @DisplayName("Construtor")
+    class TestesConstrutor {
+
+        @Test
+        @DisplayName("Deve criar serviço com configuração")
+        void deveCriarServicoComConfiguracao() {
+            // Quando
+            AbstractBaseService.AbstractBaseServiceConfig<TestEntity, TestDTO> result = service.getConfig();
+
+            // Então
+            assertThat(result).isNotNull();
+        }
+    }
+
+    @Nested
+    @DisplayName("getMapper")
+    class TestesGetMapper {
+
+        @Test
+        @DisplayName("Deve retornar o mapper")
+        void deveRetornarOMapper() {
+            // Quando
+            Mapper<TestEntity, TestDTO> result = service.getMapper();
+
+            // Então
+            assertThat(result).isEqualTo(mapper);
+        }
+    }
+
+    @Nested
+    @DisplayName("getRepository")
+    class TestesGetRepository {
+
+        @Test
+        @DisplayName("Deve retornar o repositório")
+        void deveRetornarORepositorio() {
+            // Quando
+            BaseEntityRepository<TestEntity> result = service.getRepository();
+
+            // Então
+            assertThat(result).isEqualTo(repository);
+        }
+    }
+
+    @Nested
+    @DisplayName("getSearchRequestMapper")
+    class TestesGetSearchRequestMapper {
+
+        @Test
+        @DisplayName("Deve retornar o search request mapper")
+        void deveRetornarOSearchRequestMapper() {
+            // Quando
+            SearchRequestMapper result = service.getSearchRequestMapper();
+
+            // Então
+            assertThat(result).isEqualTo(searchRequestMapper);
+        }
+    }
+
+    @Nested
+    @DisplayName("getTranslator")
+    class TestesGetTranslator {
+
+        @Test
+        @DisplayName("Deve retornar o tradutor")
+        void deveRetornarOTradutor() {
+            // Quando
+            Translator result = service.getTranslator();
+
+            // Então
+            assertThat(result).isEqualTo(translator);
+        }
+    }
+
+    @Nested
+    @DisplayName("getTransactionManager")
+    class TestesGetTransactionManager {
+
+        @Test
+        @DisplayName("Deve retornar o gerenciador de transações")
+        void deveRetornarOGerenciadorDeTransacoes() {
+            // Quando
+            PlatformTransactionManager result = service.getTransactionManager();
+
+            // Então
+            assertThat(result).isEqualTo(transactionManager);
+        }
+    }
+
+    @Nested
+    @DisplayName("toDTO")
+    class TestesToDTO {
+
+        @Test
+        @DisplayName("Deve mapear entidade para DTO")
+        void deveMapearEntidadeParaDTO() {
+            // Dado
+            TestEntity entity = new TestEntity();
+            entity.setId(1L);
+            TestDTO dto = new TestDTO();
+            dto.setId(1L);
+            when(mapper.toDTO(entity)).thenReturn(dto);
+
+            // Quando
+            TestDTO result = service.toDTO(entity);
+
+            // Então
+            assertThat(result).isEqualTo(dto);
+            verify(mapper).toDTO(entity);
+        }
+
+        @Test
+        @DisplayName("Deve retornar null quando entidade for null")
+        void deveRetornarNullQuandoEntidadeForNull() {
+            // Quando
+            TestDTO result = service.toDTO(null);
+
+            // Então
+            assertThat(result).isNull();
+        }
+    }
+
+    @Nested
+    @DisplayName("toModel")
+    class TestesToModel {
+
+        @Test
+        @DisplayName("Deve mapear DTO para entidade")
+        void deveMapearDTOParaEntidade() {
+            // Dado
+            TestDTO dto = new TestDTO();
+            dto.setId(1L);
+            TestEntity entity = new TestEntity();
+            entity.setId(1L);
+            when(mapper.toModel(dto)).thenReturn(entity);
+
+            // Quando
+            TestEntity result = service.toModel(dto);
+
+            // Então
+            assertThat(result).isEqualTo(entity);
+            verify(mapper).toModel(dto);
+        }
+
+        @Test
+        @DisplayName("Deve retornar null quando DTO for null")
+        void deveRetornarNullQuandoDTOForNull() {
+            // Quando
+            TestEntity result = service.toModel(null);
+
+            // Então
+            assertThat(result).isNull();
+        }
+    }
+
+    // Implementação de teste
+    static class TestAbstractBaseService extends AbstractBaseService<TestEntity, TestDTO> {
+        TestAbstractBaseService(AbstractBaseService.AbstractBaseServiceConfig<TestEntity, TestDTO> config) {
+            super(config);
+        }
+    }
+
+    // Entidades de teste
+    static class TestEntity extends BaseEntity {
+        private static final long serialVersionUID = 1L;
+    }
+
+    static class TestDTO implements DTO<TestEntity> {
+        private Long id;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        @Override
+        public DTO<TestEntity> cloneObject() {
+            return this;
+        }
+    }
+}

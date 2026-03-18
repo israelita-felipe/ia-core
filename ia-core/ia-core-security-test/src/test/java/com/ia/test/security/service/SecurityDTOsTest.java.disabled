@@ -1,0 +1,226 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.role.RoleDTO;
+import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+
+/**
+ * Testes unitários para DTOs de Segurança.
+ * Valida inicialização, getters e setters de objetos DTO.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Security DTOs")
+class SecurityDTOsTest {
+
+  @Nested
+  @DisplayName("UserDTO")
+  class UserDTOTests {
+
+    private UserDTO userDTO;
+
+    @BeforeEach
+    void setUp() {
+      userDTO = new UserDTO();
+    }
+
+    @Test
+    @DisplayName("Deve criar UserDTO com sucesso")
+    void shouldCreateUserDTOSuccessfully() {
+      // Então
+      assertThat(userDTO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir userName")
+    void shouldAllowSettingUserName() {
+      // Quando
+      userDTO.setUserName("testuser");
+
+      // Então
+      assertThat(userDTO.getUserName()).isEqualTo("testuser");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir userCode")
+    void shouldAllowSettingUserCode() {
+      // Quando
+      userDTO.setUserCode("USR001");
+
+      // Então
+      assertThat(userDTO.getUserCode()).isEqualTo("USR001");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir password")
+    void shouldAllowSettingPassword() {
+      // Quando
+      userDTO.setPassword("encoded_password");
+
+      // Então
+      assertThat(userDTO.getPassword()).isEqualTo("encoded_password");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir enabled")
+    void shouldAllowSettingEnabled() {
+      // Quando
+      userDTO.setEnabled(true);
+
+      // Então
+      assertThat(userDTO.isEnabled()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir accountNotExpired")
+    void shouldAllowSettingAccountNotExpired() {
+      // Quando
+      userDTO.setAccountNotExpired(true);
+
+      // Então
+      assertThat(userDTO.isAccountNotExpired()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir accountNotLocked")
+    void shouldAllowSettingAccountNotLocked() {
+      // Quando
+      userDTO.setAccountNotLocked(true);
+
+      // Então
+      assertThat(userDTO.isAccountNotLocked()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir credentialsNotExpired")
+    void shouldAllowSettingCredentialsNotExpired() {
+      // Quando
+      userDTO.setCredentialsNotExpired(true);
+
+      // Então
+      assertThat(userDTO.isCredentialsNotExpired()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir ID")
+    void shouldAllowSettingId() {
+      // Quando
+      userDTO.setId(1L);
+
+      // Então
+      assertThat(userDTO.getId()).isEqualTo(1L);
+    }
+  }
+
+  @Nested
+  @DisplayName("RoleDTO")
+  class RoleDTOTests {
+
+    private RoleDTO roleDTO;
+
+    @BeforeEach
+    void setUp() {
+      roleDTO = new RoleDTO();
+    }
+
+    @Test
+    @DisplayName("Deve criar RoleDTO com sucesso")
+    void shouldCreateRoleDTOSuccessfully() {
+      // Então
+      assertThat(roleDTO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir name")
+    void shouldAllowSettingName() {
+      // Quando
+      roleDTO.setName("ROLE_ADMIN");
+
+      // Então
+      assertThat(roleDTO.getName()).isEqualTo("ROLE_ADMIN");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir ID")
+    void shouldAllowSettingId() {
+      // Quando
+      roleDTO.setId(1L);
+
+      // Então
+      assertThat(roleDTO.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de privilégios")
+    void shouldHavePrivilegesCollection() {
+      // Então
+      assertThat(roleDTO.getRolePrivileges()).isNotNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("PrivilegeDTO")
+  class PrivilegeDTOTests {
+
+    private PrivilegeDTO privilegeDTO;
+
+    @BeforeEach
+    void setUp() {
+      privilegeDTO = new PrivilegeDTO();
+    }
+
+    @Test
+    @DisplayName("Deve criar PrivilegeDTO com sucesso")
+    void shouldCreatePrivilegeDTOSuccessfully() {
+      // Então
+      assertThat(privilegeDTO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir tipo")
+    void shouldAllowSettingType() {
+      // Quando
+      privilegeDTO.setTipo("EXECUTE");
+
+      // Então
+      assertThat(privilegeDTO.getTipo()).isEqualTo("EXECUTE");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir funcionalidade")
+    void shouldAllowSettingFunctionality() {
+      // Quando
+      privilegeDTO.setFuncionalidade("USER_MANAGEMENT");
+
+      // Então
+      assertThat(privilegeDTO.getFuncionalidade()).isEqualTo("USER_MANAGEMENT");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir operação")
+    void shouldAllowSettingOperation() {
+      // Quando
+      privilegeDTO.setOperacao("CREATE");
+
+      // Então
+      assertThat(privilegeDTO.getOperacao()).isEqualTo("CREATE");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir ID")
+    void shouldAllowSettingId() {
+      // Quando
+      privilegeDTO.setId(1L);
+
+      // Então
+      assertThat(privilegeDTO.getId()).isEqualTo(1L);
+    }
+  }
+}

@@ -1,0 +1,215 @@
+package com.ia.test.quartz;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.model.scheduler.SchedulerConfigTrigger;
+
+/**
+ * Testes unitários para configuração de Scheduler Quartz.
+ * Valida modelos de agendamento e triggers.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Quartz Scheduler Configuration")
+class QuartzSchedulerConfigTest {
+
+  @Nested
+  @DisplayName("SchedulerConfig")
+  class SchedulerConfigTests {
+
+    private SchedulerConfig config;
+
+    @BeforeEach
+    void setUp() {
+      config = SchedulerConfig.builder().build();
+    }
+
+    @Test
+    @DisplayName("Deve criar SchedulerConfig com sucesso")
+    void shouldCreateSchedulerConfigSuccessfully() {
+      // Então
+      assertThat(config).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir jobName")
+    void shouldAllowSettingJobName() {
+      // Quando
+      config.setJobName("TestJob");
+
+      // Então
+      assertThat(config.getJobName()).isEqualTo("TestJob");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir jobClass")
+    void shouldAllowSettingJobClass() {
+      // Quando
+      config.setJobClass("com.example.jobs.TestJob");
+
+      // Então
+      assertThat(config.getJobClass()).isEqualTo("com.example.jobs.TestJob");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir cronExpression")
+    void shouldAllowSettingCronExpression() {
+      // Quando
+      config.setCronExpression("0 0 12 * * ?");
+
+      // Então
+      assertThat(config.getCronExpression()).isEqualTo("0 0 12 * * ?");
+    }
+
+    @Test
+    @DisplayName("Deve permitir ativar/desativar job")
+    void shouldAllowEnablingDisablingJob() {
+      // Quando
+      config.setAtivo(true);
+
+      // Então
+      assertThat(config.isAtivo()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de triggers")
+    void shouldHaveTriggersCollection() {
+      // Então
+      assertThat(config.getTriggers()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir descricao")
+    void shouldAllowSettingDescription() {
+      // Quando
+      config.setDescricao("Descrição do job");
+
+      // Então
+      assertThat(config.getDescricao()).isEqualTo("Descrição do job");
+    }
+  }
+
+  @Nested
+  @DisplayName("SchedulerConfigTrigger")
+  class SchedulerConfigTriggerTests {
+
+    private SchedulerConfigTrigger trigger;
+
+    @BeforeEach
+    void setUp() {
+      trigger = SchedulerConfigTrigger.builder().build();
+    }
+
+    @Test
+    @DisplayName("Deve criar SchedulerConfigTrigger com sucesso")
+    void shouldCreateSchedulerConfigTriggerSuccessfully() {
+      // Então
+      assertThat(trigger).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir triggerName")
+    void shouldAllowSettingTriggerName() {
+      // Quando
+      trigger.setTriggerName("TestTrigger");
+
+      // Então
+      assertThat(trigger.getTriggerName()).isEqualTo("TestTrigger");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir cronExpression")
+    void shouldAllowSettingCronExpression() {
+      // Quando
+      trigger.setCronExpression("0 */5 * * * ?");
+
+      // Então
+      assertThat(trigger.getCronExpression()).isEqualTo("0 */5 * * * ?");
+    }
+
+    @Test
+    @DisplayName("Deve permitir ativar/desativar trigger")
+    void shouldAllowEnablingDisablingTrigger() {
+      // Quando
+      trigger.setAtivo(true);
+
+      // Então
+      assertThat(trigger.isAtivo()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir prioridade")
+    void shouldAllowSettingPriority() {
+      // Quando
+      trigger.setPriority(5);
+
+      // Então
+      assertThat(trigger.getPriority()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir tipo de trigger")
+    void shouldAllowSettingTriggerType() {
+      // Quando
+      trigger.setTipoTrigger("CRON");
+
+      // Então
+      assertThat(trigger.getTipoTrigger()).isEqualTo("CRON");
+    }
+  }
+
+  @Nested
+  @DisplayName("Cron Expression Validation")
+  class CronExpressionValidationTests {
+
+    @Test
+    @DisplayName("Deve reconhecer expressão CRON válida - Daily")
+    void shouldRecognizeValidCronExpressionDaily() {
+      // Dado
+      String cronDaily = "0 0 12 * * ?";
+
+      // Então
+      assertThat(cronDaily).isNotNull();
+      assertThat(cronDaily).matches("^(\\S+ ){5}\\S+$"); // Formato básico CRON
+    }
+
+    @Test
+    @DisplayName("Deve reconhecer expressão CRON válida - Every 5 minutes")
+    void shouldRecognizeValidCronExpressionEvery5Minutes() {
+      // Dado
+      String cron5min = "0 */5 * * * ?";
+
+      // Então
+      assertThat(cron5min).isNotNull();
+      assertThat(cron5min).matches("^(\\S+ ){5}\\S+$");
+    }
+
+    @Test
+    @DisplayName("Deve reconhecer expressão CRON válida - Weekly")
+    void shouldRecognizeValidCronExpressionWeekly() {
+      // Dado
+      String cronWeekly = "0 0 0 ? * MON";
+
+      // Então
+      assertThat(cronWeekly).isNotNull();
+      assertThat(cronWeekly).matches("^(\\S+ ){5}\\S+$");
+    }
+
+    @Test
+    @DisplayName("Deve reconhecer expressão CRON válida - Monthly")
+    void shouldRecognizeValidCronExpressionMonthly() {
+      // Dado
+      String cronMonthly = "0 0 0 1 * ?";
+
+      // Então
+      assertThat(cronMonthly).isNotNull();
+      assertThat(cronMonthly).matches("^(\\S+ ){5}\\S+$");
+    }
+  }
+}

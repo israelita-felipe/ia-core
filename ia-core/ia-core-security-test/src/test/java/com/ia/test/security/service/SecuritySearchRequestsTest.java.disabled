@@ -1,0 +1,211 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.security.service.model.user.UserSearchRequest;
+import com.ia.core.security.service.model.role.RoleSearchRequest;
+import com.ia.core.security.service.model.privilege.PrivilegeSearchRequest;
+
+/**
+ * Testes unitários para Search Requests de Segurança.
+ * Valida filtros e critérios de busca.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Security Search Requests")
+class SecuritySearchRequestsTest {
+
+  @Nested
+  @DisplayName("UserSearchRequest")
+  class UserSearchRequestTests {
+
+    private UserSearchRequest searchRequest;
+
+    @BeforeEach
+    void setUp() {
+      searchRequest = new UserSearchRequest();
+    }
+
+    @Test
+    @DisplayName("Deve criar UserSearchRequest com sucesso")
+    void shouldCreateUserSearchRequestSuccessfully() {
+      // Então
+      assertThat(searchRequest).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir userName como filtro")
+    void shouldAllowSettingUserNameFilter() {
+      // Quando
+      searchRequest.setUserName("testuser");
+
+      // Então
+      assertThat(searchRequest.getUserName()).isEqualTo("testuser");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir userCode como filtro")
+    void shouldAllowSettingUserCodeFilter() {
+      // Quando
+      searchRequest.setUserCode("USR001");
+
+      // Então
+      assertThat(searchRequest.getUserCode()).isEqualTo("USR001");
+    }
+
+    @Test
+    @DisplayName("Deve permitir filtrar por status enabled")
+    void shouldAllowFilteringByEnabled() {
+      // Quando
+      searchRequest.setEnabled(true);
+
+      // Então
+      assertThat(searchRequest.isEnabled()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir pagination")
+    void shouldAllowSettingPagination() {
+      // Quando
+      searchRequest.setPage(1);
+      searchRequest.setPageSize(20);
+
+      // Então
+      assertThat(searchRequest.getPage()).isEqualTo(1);
+      assertThat(searchRequest.getPageSize()).isEqualTo(20);
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir sorting")
+    void shouldAllowSettingSorting() {
+      // Quando
+      searchRequest.setSort("userName");
+      searchRequest.setDirection("ASC");
+
+      // Então
+      assertThat(searchRequest.getSort()).isEqualTo("userName");
+      assertThat(searchRequest.getDirection()).isEqualTo("ASC");
+    }
+  }
+
+  @Nested
+  @DisplayName("RoleSearchRequest")
+  class RoleSearchRequestTests {
+
+    private RoleSearchRequest searchRequest;
+
+    @BeforeEach
+    void setUp() {
+      searchRequest = new RoleSearchRequest();
+    }
+
+    @Test
+    @DisplayName("Deve criar RoleSearchRequest com sucesso")
+    void shouldCreateRoleSearchRequestSuccessfully() {
+      // Então
+      assertThat(searchRequest).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir name como filtro")
+    void shouldAllowSettingNameFilter() {
+      // Quando
+      searchRequest.setName("ROLE_ADMIN");
+
+      // Então
+      assertThat(searchRequest.getName()).isEqualTo("ROLE_ADMIN");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir pagination")
+    void shouldAllowSettingPagination() {
+      // Quando
+      searchRequest.setPage(0);
+      searchRequest.setPageSize(10);
+
+      // Então
+      assertThat(searchRequest.getPage()).isZero();
+      assertThat(searchRequest.getPageSize()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("Deve retornar valor padrão para página")
+    void shouldReturnDefaultPageValue() {
+      // Então
+      assertThat(searchRequest.getPage()).isZero();
+    }
+
+    @Test
+    @DisplayName("Deve retornar valor padrão para tamanho de página")
+    void shouldReturnDefaultPageSize() {
+      // Então
+      assertThat(searchRequest.getPageSize()).isPositive();
+    }
+  }
+
+  @Nested
+  @DisplayName("PrivilegeSearchRequest")
+  class PrivilegeSearchRequestTests {
+
+    private PrivilegeSearchRequest searchRequest;
+
+    @BeforeEach
+    void setUp() {
+      searchRequest = new PrivilegeSearchRequest();
+    }
+
+    @Test
+    @DisplayName("Deve criar PrivilegeSearchRequest com sucesso")
+    void shouldCreatePrivilegeSearchRequestSuccessfully() {
+      // Então
+      assertThat(searchRequest).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir tipo como filtro")
+    void shouldAllowSettingTypeFilter() {
+      // Quando
+      searchRequest.setTipo("EXECUTE");
+
+      // Então
+      assertThat(searchRequest.getTipo()).isEqualTo("EXECUTE");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir funcionalidade como filtro")
+    void shouldAllowSettingFunctionalityFilter() {
+      // Quando
+      searchRequest.setFuncionalidade("USER_MANAGEMENT");
+
+      // Então
+      assertThat(searchRequest.getFuncionalidade()).isEqualTo("USER_MANAGEMENT");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir operação como filtro")
+    void shouldAllowSettingOperationFilter() {
+      // Quando
+      searchRequest.setOperacao("CREATE");
+
+      // Então
+      assertThat(searchRequest.getOperacao()).isEqualTo("CREATE");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir pagination")
+    void shouldAllowSettingPagination() {
+      // Quando
+      searchRequest.setPage(2);
+      searchRequest.setPageSize(50);
+
+      // Então
+      assertThat(searchRequest.getPage()).isEqualTo(2);
+      assertThat(searchRequest.getPageSize()).isEqualTo(50);
+    }
+  }
+}

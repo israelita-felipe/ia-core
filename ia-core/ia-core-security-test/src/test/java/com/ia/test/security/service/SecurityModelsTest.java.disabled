@@ -1,0 +1,262 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.model.privilege.Privilege;
+import com.ia.core.security.model.privilege.PrivilegeType;
+import com.ia.test.security.builder.UserTestDataBuilder;
+import com.ia.test.security.builder.RoleTestDataBuilder;
+
+/**
+ * Testes unitários para modelos de Segurança.
+ * Valida inicialização, relacionamentos e comportamento das entidades.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Security Models")
+class SecurityModelsTest {
+
+  @Nested
+  @DisplayName("User Model")
+  class UserModelTests {
+
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+      user = UserTestDataBuilder.user().build();
+    }
+
+    @Test
+    @DisplayName("Deve criar User com valores padrão")
+    void shouldCreateUserWithDefaults() {
+      // Então
+      assertThat(user).isNotNull();
+      assertThat(user.getUserName()).isNotNull();
+      assertThat(user.getUserCode()).isNotNull();
+      assertThat(user.isEnabled()).isTrue();
+      assertThat(user.isAccountNotExpired()).isTrue();
+      assertThat(user.isAccountNotLocked()).isTrue();
+      assertThat(user.isCredentialsNotExpired()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir userName")
+    void shouldAllowSettingUserName() {
+      // Quando
+      user.setUserName("newuser");
+
+      // Então
+      assertThat(user.getUserName()).isEqualTo("newuser");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir password")
+    void shouldAllowSettingPassword() {
+      // Quando
+      user.setPassword("new_password");
+
+      // Então
+      assertThat(user.getPassword()).isEqualTo("new_password");
+    }
+
+    @Test
+    @DisplayName("Deve permitir ativar/desativar usuário")
+    void shouldAllowEnablingDisablingUser() {
+      // Quando
+      user.setEnabled(false);
+
+      // Então
+      assertThat(user.isEnabled()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de roles")
+    void shouldHaveRolesCollection() {
+      // Então
+      assertThat(user.getRoles()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de privilégios")
+    void shouldHavePrivilegesCollection() {
+      // Então
+      assertThat(user.getPrivileges()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir adicionar role")
+    void shouldAllowAddingRole() {
+      // Dado
+      Role role = RoleTestDataBuilder.role().withName("ROLE_TEST").build();
+
+      // Quando
+      user.getRoles().add(role);
+
+      // Então
+      assertThat(user.getRoles()).contains(role);
+    }
+
+    @Test
+    @DisplayName("Deve gerar toString")
+    void shouldGenerateToString() {
+      // Quando
+      String toString = user.toString();
+
+      // Então
+      assertThat(toString).isNotNull();
+      assertThat(toString).contains("User");
+      assertThat(toString).contains(user.getUserName());
+    }
+  }
+
+  @Nested
+  @DisplayName("Role Model")
+  class RoleModelTests {
+
+    private Role role;
+
+    @BeforeEach
+    void setUp() {
+      role = RoleTestDataBuilder.role().build();
+    }
+
+    @Test
+    @DisplayName("Deve criar Role com sucesso")
+    void shouldCreateRoleSuccessfully() {
+      // Então
+      assertThat(role).isNotNull();
+      assertThat(role.getName()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir name")
+    void shouldAllowSettingName() {
+      // Quando
+      role.setName("ROLE_ADMIN");
+
+      // Então
+      assertThat(role.getName()).isEqualTo("ROLE_ADMIN");
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de rolePrivileges")
+    void shouldHaveRolePrivilegesCollection() {
+      // Então
+      assertThat(role.getRolePrivileges()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de usuários")
+    void shouldHaveUsersCollection() {
+      // Então
+      assertThat(role.getUsers()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve gerar toString")
+    void shouldGenerateToString() {
+      // Quando
+      String toString = role.toString();
+
+      // Então
+      assertThat(toString).isNotNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("Privilege Model")
+  class PrivilegeModelTests {
+
+    private Privilege privilege;
+
+    @BeforeEach
+    void setUp() {
+      privilege = new Privilege();
+    }
+
+    @Test
+    @DisplayName("Deve criar Privilege com sucesso")
+    void shouldCreatePrivilegeSuccessfully() {
+      // Então
+      assertThat(privilege).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir tipo")
+    void shouldAllowSettingType() {
+      // Quando
+      privilege.setTipo(PrivilegeType.EXECUTE);
+
+      // Então
+      assertThat(privilege.getTipo()).isEqualTo(PrivilegeType.EXECUTE);
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir funcionalidade")
+    void shouldAllowSettingFunctionality() {
+      // Quando
+      privilege.setFuncionalidade("USER_MANAGEMENT");
+
+      // Então
+      assertThat(privilege.getFuncionalidade()).isEqualTo("USER_MANAGEMENT");
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir operação")
+    void shouldAllowSettingOperation() {
+      // Quando
+      privilege.setOperacao("CREATE");
+
+      // Então
+      assertThat(privilege.getOperacao()).isEqualTo("CREATE");
+    }
+  }
+
+  @Nested
+  @DisplayName("PrivilegeType Enum")
+  class PrivilegeTypeTests {
+
+    @Test
+    @DisplayName("Deve ter tipo EXECUTE")
+    void shouldHaveExecuteType() {
+      // Então
+      assertThat(PrivilegeType.EXECUTE).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter tipo READ")
+    void shouldHaveReadType() {
+      // Então
+      assertThat(PrivilegeType.READ).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter tipo WRITE")
+    void shouldHaveWriteType() {
+      // Então
+      assertThat(PrivilegeType.WRITE).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter tipo DELETE")
+    void shouldHaveDeleteType() {
+      // Então
+      assertThat(PrivilegeType.DELETE).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve conter valores válidos")
+    void shouldContainValidValues() {
+      // Então
+      assertThat(PrivilegeType.values()).isNotEmpty();
+    }
+  }
+}

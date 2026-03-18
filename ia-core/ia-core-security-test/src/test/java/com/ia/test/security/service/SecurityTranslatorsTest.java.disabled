@@ -1,0 +1,138 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.security.service.model.role.RoleTranslator;
+import com.ia.core.security.service.model.user.UserTranslator;
+import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
+
+/**
+ * Testes unitários para Translators de Segurança.
+ * Valida que as constantes de tradução estão definidas corretamente.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Security Translators")
+class SecurityTranslatorsTest {
+
+  @Nested
+  @DisplayName("UserTranslator")
+  class UserTranslatorTests {
+
+    @Test
+    @DisplayName("Deve ter constantes de ajuda definidas")
+    void shouldHaveHelpConstantsDefined() {
+      // Então
+      assertThat(UserTranslator.HELP.USER).isNotNull();
+      assertThat(UserTranslator.HELP.NOME).isNotNull();
+      assertThat(UserTranslator.HELP.CODIGO).isNotNull();
+      assertThat(UserTranslator.HELP.SENHA).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de validação definidas")
+    void shouldHaveValidationConstantsDefined() {
+      // Então
+      assertThat(UserTranslator.VALIDATION.USER_NAME_REQUIRED).isNotNull();
+      assertThat(UserTranslator.VALIDATION.USER_NAME_SIZE).isNotNull();
+      assertThat(UserTranslator.VALIDATION.USER_CODE_REQUIRED).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de atributos definidas")
+    void shouldHaveAttributeConstantsDefined() {
+      // Então
+      assertThat(UserTranslator.USER).isEqualTo("user");
+      assertThat(UserTranslator.NOME).isNotNull();
+      assertThat(UserTranslator.CODIGO).isNotNull();
+      assertThat(UserTranslator.SENHA).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter referência de classe definida")
+    void shouldHaveClassReferenceDefined() {
+      // Então
+      assertThat(UserTranslator.USER_CLASS).isNotNull();
+      assertThat(UserTranslator.USER_CLASS).contains("UserDTO");
+    }
+  }
+
+  @Nested
+  @DisplayName("RoleTranslator")
+  class RoleTranslatorTests {
+
+    @Test
+    @DisplayName("Deve ter constantes de ajuda definidas")
+    void shouldHaveHelpConstantsDefined() {
+      // Então
+      assertThat(RoleTranslator.HELP.ROLE).isNotNull();
+      assertThat(RoleTranslator.HELP.NOME).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de validação definidas")
+    void shouldHaveValidationConstantsDefined() {
+      // Então
+      assertThat(RoleTranslator.VALIDATION.ROLE_NAME_REQUIRED).isNotNull();
+      assertThat(RoleTranslator.VALIDATION.ROLE_NAME_SIZE).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de atributos definidas")
+    void shouldHaveAttributeConstantsDefined() {
+      // Então
+      assertThat(RoleTranslator.ROLE).isEqualTo("role");
+      assertThat(RoleTranslator.NOME).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter referência de classe definida")
+    void shouldHaveClassReferenceDefined() {
+      // Então
+      assertThat(RoleTranslator.ROLE_CLASS).isNotNull();
+      assertThat(RoleTranslator.ROLE_CLASS).contains("RoleDTO");
+    }
+  }
+
+  @Nested
+  @DisplayName("PrivilegeTranslator")
+  class PrivilegeTranslatorTests {
+
+    @Test
+    @DisplayName("Deve ter constantes de ajuda definidas")
+    void shouldHaveHelpConstantsDefined() {
+      // Então
+      assertThat(PrivilegeTranslator.HELP.PRIVILEGE).isNotNull();
+      assertThat(PrivilegeTranslator.HELP.FUNCIONALIDADE).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de validação definidas")
+    void shouldHaveValidationConstantsDefined() {
+      // Então
+      assertThat(PrivilegeTranslator.VALIDATION.PRIVILEGE_FUNCTIONALITY_REQUIRED).isNotNull();
+      assertThat(PrivilegeTranslator.VALIDATION.PRIVILEGE_OPERATION_REQUIRED).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter constantes de atributos definidas")
+    void shouldHaveAttributeConstantsDefined() {
+      // Então
+      assertThat(PrivilegeTranslator.PRIVILEGE).isEqualTo("privilege");
+      assertThat(PrivilegeTranslator.FUNCIONALIDADE).isNotNull();
+      assertThat(PrivilegeTranslator.OPERACAO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter referência de classe definida")
+    void shouldHaveClassReferenceDefined() {
+      // Então
+      assertThat(PrivilegeTranslator.PRIVILEGE_CLASS).isNotNull();
+      assertThat(PrivilegeTranslator.PRIVILEGE_CLASS).contains("PrivilegeDTO");
+    }
+  }
+}

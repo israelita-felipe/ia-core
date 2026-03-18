@@ -15,6 +15,7 @@ import com.ia.core.service.exception.ServiceException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 /**
  * Interface base para controladores do tipo delete.
@@ -37,7 +38,7 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
    */
   @Operation(summary = "Salva um objeto (inclusão ou alteração)")
   @PostMapping
-  default ResponseEntity<D> save(@RequestBody D dto,
+  default ResponseEntity<D> save(@Valid @RequestBody D dto,
                                  HttpServletRequest request)
     throws ServiceException {
     D response = ((SaveBaseService<?, D>) getService()).save(dto);
@@ -54,8 +55,8 @@ public interface SaveBaseController<T extends BaseEntity, D extends DTO<?>>
    */
   @Operation(summary = "Valida um objeto sem salvá-lo")
   @PostMapping("/validate")
-  default ResponseEntity<Collection<String>> validate(@RequestBody D dto,
-                                                      HttpServletRequest request)
+  default ResponseEntity<Collection<String>> validate(@Valid @RequestBody D dto,
+                                                        HttpServletRequest request)
     throws ServiceException {
     ((SaveBaseService<?, D>) getService()).validate(dto);
     return ResponseEntity.ok(Collections.emptyList());

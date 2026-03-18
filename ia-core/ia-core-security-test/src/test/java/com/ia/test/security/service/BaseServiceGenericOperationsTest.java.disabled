@@ -1,0 +1,292 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.BaseService;
+import com.ia.core.service.dto.DTO;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
+
+/**
+ * Testes unitários para operações genéricas de {@link BaseService}.
+ * Valida padrões CRUD comuns a todas as entidades.
+ *
+ * @author Israel Araújo
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("BaseService Generic Operations")
+class BaseServiceGenericOperationsTest {
+
+  @Mock
+  private BaseEntityMapper<TestEntity, TestDTO> mapper;
+
+  @Mock
+  private BaseEntityRepository<TestEntity> repository;
+
+  @Mock
+  private SearchRequestMapper searchRequestMapper;
+
+  @Mock
+  private Translator translator;
+
+  private BaseService<TestEntity, TestDTO> service;
+
+  @BeforeEach
+  void setUp() {
+    service = new TestBaseService(mapper, repository, searchRequestMapper, translator);
+  }
+
+  @Nested
+  @DisplayName("findAll")
+  class FindAllTests {
+
+    @Test
+    @DisplayName("Deve retornar todas as entidades")
+    void shouldReturnAllEntities() {
+      // Dado
+      TestEntity entity1 = new TestEntity();
+      entity1.setId(1L);
+      TestEntity entity2 = new TestEntity();
+      entity2.setId(2L);
+      Collection<TestEntity> entities = java.util.List.of(entity1, entity2);
+
+      when(repository.findAll()).thenReturn(entities);
+
+      // Quando
+      Collection<TestEntity> result = service.findAll();
+
+      // Então
+      assertThat(result).hasSize(2);
+      assertThat(result).contains(entity1, entity2);
+      verify(repository).findAll();
+    }
+
+    @Test
+    @DisplayName("Deve retornar coleção vazia quando nenhuma entidade existe")
+    void shouldReturnEmptyCollectionWhenNoEntitiesExist() {
+      // Dado
+      when(repository.findAll()).thenReturn(Collections.emptyList());
+
+      // Quando
+      Collection<TestEntity> result = service.findAll();
+
+      // Então
+      assertThat(result).isEmpty();
+      verify(repository).findAll();
+    }
+  }
+
+  @Nested
+  @DisplayName("findAllPageable")
+  class FindAllPageableTests {
+
+    @Test
+    @DisplayName("Deve retornar página de entidades")
+    void shouldReturnPageOfEntities() {
+      // Dado
+      Pageable pageable = mock(Pageable.class);
+      TestEntity entity1 = new TestEntity();
+      entity1.setId(1L);
+      Page<TestEntity> page = new PageImpl<>(java.util.List.of(entity1));
+
+      when(repository.findAll(pageable)).thenReturn(page);
+
+      // Quando
+      Page<TestEntity> result = service.findAll(pageable);
+
+      // Então
+      assertThat(result).hasSize(1);
+      assertThat(result.getTotalElements()).isEqualTo(1);
+      verify(repository).findAll(pageable);
+    }
+
+    @Test
+    @DisplayName("Deve retornar página vazia quando nenhuma entidade existe")
+    void shouldReturnEmptyPageWhenNoEntitiesExist() {
+      // Dado
+      Pageable pageable = mock(Pageable.class);
+      Page<TestEntity> emptyPage = new PageImpl<>(Collections.emptyList());
+
+      when(repository.findAll(pageable)).thenReturn(emptyPage);
+
+      // Quando
+      Page<TestEntity> result = service.findAll(pageable);
+
+      // Então
+      assertThat(result).isEmpty();
+      verify(repository).findAll(pageable);
+    }
+  }
+
+  @Nested
+  @DisplayName("count")
+  class CountTests {
+
+    @Test
+    @DisplayName("Deve retornar total de entidades")
+    void shouldReturnTotalOfEntities() {
+      // Dado
+      when(repository.count()).thenReturn(5L);
+
+      // Quando
+      long result = service.count();
+
+      // Então
+      assertThat(result).isEqualTo(5L);
+      verify(repository).count();
+    }
+
+    @Test
+    @DisplayName("Deve retornar zero quando nenhuma entidade existe")
+    void shouldReturnZeroWhenNoEntitiesExist() {
+      // Dado
+      when(repository.count()).thenReturn(0L);
+
+      // Quando
+      long result = service.count();
+
+      // Então
+      assertThat(result).isZero();
+      verify(repository).count();
+    }
+  }
+
+  @Nested
+  @DisplayName("toDTO")
+  class ToDTOTests {
+
+    @Test
+    @DisplayName("Deve converter entidade para DTO")
+    void shouldConvertEntityToDTO() {
+      // Dado
+      TestEntity entity = new TestEntity();
+      entity.setId(1L);
+      TestDTO dto = new TestDTO();
+      dto.setId(1L);
+
+      when(mapper.toDTO(entity)).thenReturn(dto);
+
+      // Quando
+      TestDTO result = service.toDTO(entity);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getId()).isEqualTo(1L);
+      verify(mapper).toDTO(entity);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando entidade é nula")
+    void shouldReturnNullWhenEntityIsNull() {
+      // Quando
+      TestDTO result = service.toDTO(null);
+
+      // Então
+      assertThat(result).isNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("toModel")
+  class ToModelTests {
+
+    @Test
+    @DisplayName("Deve converter DTO para entidade")
+    void shouldConvertDTOToEntity() {
+      // Dado
+      TestDTO dto = new TestDTO();
+      dto.setId(1L);
+      TestEntity entity = new TestEntity();
+      entity.setId(1L);
+
+      when(mapper.toModel(dto)).thenReturn(entity);
+
+      // Quando
+      TestEntity result = service.toModel(dto);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getId()).isEqualTo(1L);
+      verify(mapper).toModel(dto);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando DTO é nulo")
+    void shouldReturnNullWhenDTOIsNull() {
+      // Quando
+      TestEntity result = service.toModel(null);
+
+      // Então
+      assertThat(result).isNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("exists")
+  class ExistsTests {
+
+    @Test
+    @DisplayName("Deve verificar existência de entidade por ID")
+    void shouldCheckExistenceOfEntityById() {
+      // Dado
+      when(repository.existsById(1L)).thenReturn(true);
+
+      // Quando
+      boolean result = service.exists(1L);
+
+      // Então
+      assertThat(result).isTrue();
+      verify(repository).existsById(1L);
+    }
+
+    @Test
+    @DisplayName("Deve retornar false quando entidade não existe")
+    void shouldReturnFalseWhenEntityDoesNotExist() {
+      // Dado
+      when(repository.existsById(999L)).thenReturn(false);
+
+      // Quando
+      boolean result = service.exists(999L);
+
+      // Então
+      assertThat(result).isFalse();
+      verify(repository).existsById(999L);
+    }
+  }
+
+  // Classes internas para teste
+  private static class TestEntity extends BaseEntity {
+  }
+
+  private static class TestDTO implements DTO {
+  }
+
+  private static class TestBaseService extends BaseService<TestEntity, TestDTO> {
+    public TestBaseService(BaseEntityMapper<TestEntity, TestDTO> mapper,
+                          BaseEntityRepository<TestEntity> repository,
+                          SearchRequestMapper searchRequestMapper,
+                          Translator translator) {
+      super(mapper, repository, searchRequestMapper, translator);
+    }
+  }
+}

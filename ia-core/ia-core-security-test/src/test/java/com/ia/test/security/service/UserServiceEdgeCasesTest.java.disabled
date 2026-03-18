@@ -1,0 +1,330 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.service.UserService;
+import com.ia.core.service.exception.ServiceException;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
+import com.ia.test.security.builder.UserTestDataBuilder;
+
+/**
+ * Testes de casos extremos e comportamento especial de UserService.
+ * Valida tratamento de edge cases e situações de erro.
+ *
+ * @author Israel Araújo
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("UserService Edge Cases")
+class UserServiceEdgeCasesTest {
+
+  @Mock
+  private BaseEntityMapper<User, Object> mapper;
+
+  @Mock
+  private BaseEntityRepository<User> repository;
+
+  @Mock
+  private SearchRequestMapper searchRequestMapper;
+
+  @Mock
+  private Translator translator;
+
+  private UserService service;
+
+  @BeforeEach
+  void setUp() {
+    service = new UserService(mapper, repository, searchRequestMapper, translator);
+  }
+
+  @Nested
+  @DisplayName("Null Safety")
+  class NullSafetyTests {
+
+    @Test
+    @DisplayName("Deve lançar NPE ao salvar usuario nulo")
+    void shouldThrowNPEWhenSavingNullUser() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.save(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Deve lançar NPE ao atualizar usuario nulo")
+    void shouldThrowNPEWhenUpdatingNullUser() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.update(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Deve lidar com ID nulo em findById")
+    void shouldHandleNullIdInFindById() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.findById(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Deve lidar com userCode nulo em findByUserCode")
+    void shouldHandleNullUserCodeInFindByUserCode() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.findByUserCode(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+  }
+
+  @Nested
+  @DisplayName("Collection Operations")
+  class CollectionOperationsTests {
+
+    @Test
+    @DisplayName("Deve lidar com coleção vazia em findAllByUserCodes")
+    void shouldHandleEmptyCollectionInFindAllByUserCodes() {
+      // Dado
+      Collection<String> emptyCodes = Collections.emptySet();
+
+      // Quando
+      Collection<User> result = service.findAllByUserCodes(emptyCodes);
+
+      // Então
+      assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve retornar roles vazia para novo usuario")
+    void shouldReturnEmptyRolesForNewUser() {
+      // Dado
+      User user = UserTestDataBuilder.user().build();
+
+      // Então
+      assertThat(user.getRoles()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve retornar privileges vazia para novo usuario")
+    void shouldReturnEmptyPrivilegesForNewUser() {
+      // Dado
+      User user = UserTestDataBuilder.user().build();
+
+      // Então
+      assertThat(user.getPrivileges()).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("Password Validation")
+  class PasswordValidationTests {
+
+    @Test
+    @DisplayName("Deve permitir usuario sem password")
+    void shouldAllowUserWithoutPassword() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withPassword(null)
+          .build();
+
+      // Então
+      assertThat(user.getPassword()).isNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir usuario com password vazia")
+    void shouldAllowUserWithEmptyPassword() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withPassword("")
+          .build();
+
+      // Então
+      assertThat(user.getPassword()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve permitir usuario com password muito longa")
+    void shouldAllowUserWithVeryLongPassword() {
+      // Dado
+      String longPassword = "x".repeat(500);
+      User user = UserTestDataBuilder.user()
+          .withPassword(longPassword)
+          .build();
+
+      // Então
+      assertThat(user.getPassword()).hasSize(500);
+    }
+  }
+
+  @Nested
+  @DisplayName("Username Validation")
+  class UsernameValidationTests {
+
+    @Test
+    @DisplayName("Deve aceitar username com caracteres especiais")
+    void shouldAcceptUsernameWithSpecialCharacters() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("user@example.com")
+          .build();
+
+      // Então
+      assertThat(user.getUserName()).isEqualTo("user@example.com");
+    }
+
+    @Test
+    @DisplayName("Deve aceitar username com espaços")
+    void shouldAcceptUsernameWithSpaces() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("User Name")
+          .build();
+
+      // Então
+      assertThat(user.getUserName()).isEqualTo("User Name");
+    }
+
+    @Test
+    @DisplayName("Deve aceitar username unicode")
+    void shouldAcceptUnicodeUsername() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("用户名")
+          .build();
+
+      // Então
+      assertThat(user.getUserName()).isEqualTo("用户名");
+    }
+  }
+
+  @Nested
+  @DisplayName("Account Status Combinations")
+  class AccountStatusCombinationsTests {
+
+    @Test
+    @DisplayName("Deve permitir usuario desabilitado")
+    void shouldAllowDisabledUser() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withEnabled(false)
+          .build();
+
+      // Então
+      assertThat(user.isEnabled()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve permitir usuario com conta expirada")
+    void shouldAllowUserWithExpiredAccount() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withAccountNotExpired(false)
+          .build();
+
+      // Então
+      assertThat(user.isAccountNotExpired()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve permitir usuario com conta bloqueada")
+    void shouldAllowUserWithLockedAccount() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withAccountNotLocked(false)
+          .build();
+
+      // Então
+      assertThat(user.isAccountNotLocked()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve permitir usuario com credenciais expiradas")
+    void shouldAllowUserWithExpiredCredentials() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withCredentialsNotExpired(false)
+          .build();
+
+      // Então
+      assertThat(user.isCredentialsNotExpired()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve permitir todas as flags desabilitadas")
+    void shouldAllowAllFlagsDisabled() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withEnabled(false)
+          .withAccountNotExpired(false)
+          .withAccountNotLocked(false)
+          .withCredentialsNotExpired(false)
+          .build();
+
+      // Então
+      assertThat(user.isEnabled()).isFalse();
+      assertThat(user.isAccountNotExpired()).isFalse();
+      assertThat(user.isAccountNotLocked()).isFalse();
+      assertThat(user.isCredentialsNotExpired()).isFalse();
+    }
+  }
+
+  @Nested
+  @DisplayName("Builder Pattern")
+  class BuilderPatternTests {
+
+    @Test
+    @DisplayName("Deve criar usuario com todos os parametros")
+    void shouldCreateUserWithAllParameters() {
+      // Dado
+      String userName = "testuser";
+      String userCode = "USR001";
+      String password = "password123";
+
+      // Quando
+      User user = UserTestDataBuilder.user()
+          .withUserName(userName)
+          .withUserCode(userCode)
+          .withPassword(password)
+          .withEnabled(true)
+          .withAccountNotExpired(true)
+          .withAccountNotLocked(true)
+          .withCredentialsNotExpired(true)
+          .build();
+
+      // Então
+      assertThat(user.getUserName()).isEqualTo(userName);
+      assertThat(user.getUserCode()).isEqualTo(userCode);
+      assertThat(user.getPassword()).isEqualTo(password);
+      assertThat(user.isEnabled()).isTrue();
+      assertThat(user.isAccountNotExpired()).isTrue();
+      assertThat(user.isAccountNotLocked()).isTrue();
+      assertThat(user.isCredentialsNotExpired()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve permitir múltiplas chamadas do builder")
+    void shouldAllowMultipleBuilderCalls() {
+      // Quando
+      User user1 = UserTestDataBuilder.user().withUserName("user1").build();
+      User user2 = UserTestDataBuilder.user().withUserName("user2").build();
+
+      // Então
+      assertThat(user1.getUserName()).isEqualTo("user1");
+      assertThat(user2.getUserName()).isEqualTo("user2");
+      assertThat(user1).isNotEqualTo(user2);
+    }
+  }
+}

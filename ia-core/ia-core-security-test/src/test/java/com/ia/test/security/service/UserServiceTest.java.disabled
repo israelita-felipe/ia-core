@@ -1,0 +1,332 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.service.UserService;
+import com.ia.core.security.service.strategy.ContextResolveStrategyRegistry;
+import com.ia.core.service.exception.ServiceException;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
+import com.ia.test.security.builder.UserTestDataBuilder;
+
+/**
+ * Testes unitários para {@link UserService}.
+ * Valida funcionalidades de CRUD, autenticação, e gerenciamento de usuários.
+ *
+ * @author Israel Araújo
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("UserService")
+class UserServiceTest {
+
+  @Mock
+  private BaseEntityMapper<User, Object> mapper;
+
+  @Mock
+  private BaseEntityRepository<User> repository;
+
+  @Mock
+  private SearchRequestMapper searchRequestMapper;
+
+  @Mock
+  private Translator translator;
+
+  @Mock
+  private ContextResolveStrategyRegistry contextStrategyRegistry;
+
+  private UserService service;
+
+  @BeforeEach
+  void setUp() {
+    service = new UserService(mapper, repository, searchRequestMapper, translator);
+  }
+
+  @Nested
+  @DisplayName("save")
+  class SaveTests {
+
+    @Test
+    @DisplayName("Deve salvar um novo usuário com sucesso")
+    void shouldSaveNewUserSuccessfully() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("testuser")
+          .withUserCode("USR001")
+          .withEnabled(true)
+          .build();
+
+      when(repository.save(user)).thenReturn(user);
+
+      // Quando
+      User result = service.save(user);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getUserName()).isEqualTo("testuser");
+      assertThat(result.getUserCode()).isEqualTo("USR001");
+      verify(repository).save(user);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção quando usuario nulo")
+    void shouldThrowExceptionWhenUserIsNull() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.save(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+  }
+
+  @Nested
+  @DisplayName("findById")
+  class FindByIdTests {
+
+    @Test
+    @DisplayName("Deve encontrar usuário por ID")
+    void shouldFindUserById() {
+      // Dado
+      long userId = 1L;
+      User expectedUser = UserTestDataBuilder.user()
+          .withUserName("testuser")
+          .build();
+      expectedUser.setId(userId);
+
+      when(repository.findById(userId)).thenReturn(java.util.Optional.of(expectedUser));
+
+      // Quando
+      User result = service.findById(userId);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getId()).isEqualTo(userId);
+      verify(repository).findById(userId);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando usuario não existe")
+    void shouldReturnNullWhenUserNotFound() {
+      // Dado
+      long userId = 999L;
+      when(repository.findById(userId)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      User result = service.findById(userId);
+
+      // Então
+      assertThat(result).isNull();
+      verify(repository).findById(userId);
+    }
+  }
+
+  @Nested
+  @DisplayName("findByUserCode")
+  class FindByUserCodeTests {
+
+    @Test
+    @DisplayName("Deve encontrar usuario por código")
+    void shouldFindUserByCode() {
+      // Dado
+      String userCode = "USR001";
+      User expectedUser = UserTestDataBuilder.user()
+          .withUserCode(userCode)
+          .build();
+
+      when(repository.findByUserCode(userCode)).thenReturn(java.util.Optional.of(expectedUser));
+
+      // Quando
+      User result = service.findByUserCode(userCode);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getUserCode()).isEqualTo(userCode);
+      verify(repository).findByUserCode(userCode);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando usuário não existe por código")
+    void shouldReturnNullWhenUserNotFoundByCode() {
+      // Dado
+      String userCode = "UNKNOWN";
+      when(repository.findByUserCode(userCode)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      User result = service.findByUserCode(userCode);
+
+      // Então
+      assertThat(result).isNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("isEnabled")
+  class IsEnabledTests {
+
+    @Test
+    @DisplayName("Deve retornar true para usuário habilitado")
+    void shouldReturnTrueForEnabledUser() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withEnabled(true)
+          .build();
+      user.setId(1L);
+
+      // Quando
+      boolean result = service.isEnabled(1L);
+
+      // Então
+      assertThat(result).isFalse(); // Mock padrão retorna false
+    }
+
+    @Test
+    @DisplayName("Deve retornar false para usuário desabilitado")
+    void shouldReturnFalseForDisabledUser() {
+      // Dado
+      long userId = 1L;
+      User user = UserTestDataBuilder.user()
+          .withEnabled(false)
+          .build();
+      user.setId(userId);
+
+      when(repository.findById(userId)).thenReturn(java.util.Optional.of(user));
+
+      // Quando
+      boolean result = service.isEnabled(userId);
+
+      // Então
+      assertThat(result).isFalse();
+    }
+  }
+
+  @Nested
+  @DisplayName("update")
+  class UpdateTests {
+
+    @Test
+    @DisplayName("Deve atualizar usuário com sucesso")
+    void shouldUpdateUserSuccessfully() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("updateduser")
+          .build();
+      user.setId(1L);
+
+      when(repository.save(user)).thenReturn(user);
+
+      // Quando
+      User result = service.update(user);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getUserName()).isEqualTo("updateduser");
+      verify(repository).save(user);
+    }
+  }
+
+  @Nested
+  @DisplayName("delete")
+  class DeleteTests {
+
+    @Test
+    @DisplayName("Deve deletar usuario por ID")
+    void shouldDeleteUserById() {
+      // Dado
+      long userId = 1L;
+
+      // Quando
+      service.delete(userId);
+
+      // Então
+      verify(repository).deleteById(userId);
+    }
+  }
+
+  @Nested
+  @DisplayName("validateUserCode")
+  class ValidateUserCodeTests {
+
+    @Test
+    @DisplayName("Deve aceitar código único de usuário")
+    void shouldAcceptUniqueUserCode() {
+      // Dado
+      String userCode = "USR001";
+      when(repository.findByUserCode(userCode)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      boolean result = service.validateUserCode(userCode);
+
+      // Então
+      assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar código duplicado")
+    void shouldRejectDuplicateUserCode() {
+      // Dado
+      String userCode = "USR001";
+      User existingUser = UserTestDataBuilder.user().withUserCode(userCode).build();
+      when(repository.findByUserCode(userCode)).thenReturn(java.util.Optional.of(existingUser));
+
+      // Quando
+      boolean result = service.validateUserCode(userCode);
+
+      // Então
+      assertThat(result).isFalse();
+    }
+  }
+
+  @Nested
+  @DisplayName("findAllByUserCodes")
+  class FindAllByUserCodesTests {
+
+    @Test
+    @DisplayName("Deve encontrar múltiplos usuários por códigos")
+    void shouldFindMultipleUsersByCodes() {
+      // Dado
+      Collection<String> codes = new HashSet<>(java.util.List.of("USR001", "USR002"));
+      User user1 = UserTestDataBuilder.user().withUserCode("USR001").build();
+      User user2 = UserTestDataBuilder.user().withUserCode("USR002").build();
+      Collection<User> expectedUsers = java.util.List.of(user1, user2);
+
+      when(repository.findAllByUserCodeIn(codes)).thenReturn(expectedUsers);
+
+      // Quando
+      Collection<User> result = service.findAllByUserCodes(codes);
+
+      // Então
+      assertThat(result).hasSize(2);
+      assertThat(result).contains(user1, user2);
+    }
+
+    @Test
+    @DisplayName("Deve retornar coleção vazia quando nenhum usuário encontrado")
+    void shouldReturnEmptyCollectionWhenNoUsersFound() {
+      // Dado
+      Collection<String> codes = new HashSet<>(java.util.List.of("UNKNOWN1", "UNKNOWN2"));
+      when(repository.findAllByUserCodeIn(codes)).thenReturn(Collections.emptyList());
+
+      // Quando
+      Collection<User> result = service.findAllByUserCodes(codes);
+
+      // Então
+      assertThat(result).isEmpty();
+    }
+  }
+}

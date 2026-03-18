@@ -1,0 +1,273 @@
+package com.ia.test.security.integration;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.service.UserService;
+import com.ia.core.security.service.RoleService;
+import com.ia.test.security.builder.UserTestDataBuilder;
+import com.ia.test.security.builder.RoleTestDataBuilder;
+
+/**
+ * Testes de integração para paginação e filtros.
+ * Valida operações de busca avançada com paginação.
+ *
+ * @author Israel Araújo
+ */
+@SpringBootTest
+@ActiveProfiles("test")
+@DisplayName("Security Service Pagination and Filtering Integration Tests")
+class SecurityServicePaginationIntegrationTest {
+
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private RoleService roleService;
+
+  @Nested
+  @DisplayName("User Pagination")
+  class UserPaginationTests {
+
+    @BeforeEach
+    @Transactional
+    void setUp() {
+      // Limpar dados anteriores
+      java.util.Collection<User> allUsers = userService.findAll();
+      for (User user : allUsers) {
+        userService.delete(user.getId());
+      }
+
+      // Criar usuarios para teste
+      for (int i = 1; i <= 15; i++) {
+        User user = UserTestDataBuilder.user()
+            .withUserName("user_" + i)
+            .withUserCode("USR_" + String.format("%03d", i))
+            .build();
+        userService.save(user);
+      }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar primeira página de usuarios")
+    void shouldReturnFirstPageOfUsers() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(0, 5);
+
+      // Quando
+      Page<User> page = userService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.getContent()).isNotEmpty();
+      assertThat(page.getNumber()).isZero();
+      assertThat(page.getSize()).isEqualTo(5);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar segunda página de usuarios")
+    void shouldReturnSecondPageOfUsers() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(1, 5);
+
+      // Quando
+      Page<User> page = userService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.getNumber()).isEqualTo(1);
+      assertThat(page.getContent()).isNotEmpty();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar total correto de elementos")
+    void shouldReturnCorrectTotalElements() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(0, 5);
+
+      // Quando
+      Page<User> page = userService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.getTotalElements()).isGreaterThanOrEqualTo(5);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve indicar corretamente se há próxima página")
+    void shouldIndicateCorrectlyIfThereIsNextPage() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(0, 5);
+
+      // Quando
+      Page<User> page = userService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.hasNext()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve indicar corretamente se há página anterior")
+    void shouldIndicateCorrectlyIfThereIsPreviousPage() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(1, 5);
+
+      // Quando
+      Page<User> page = userService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.hasPrevious()).isTrue();
+    }
+  }
+
+  @Nested
+  @DisplayName("Role Pagination")
+  class RolePaginationTests {
+
+    @BeforeEach
+    @Transactional
+    void setUp() {
+      // Limpar dados anteriores
+      java.util.Collection<Role> allRoles = roleService.findAll();
+      for (Role role : allRoles) {
+        roleService.delete(role.getId());
+      }
+
+      // Criar roles para teste
+      for (int i = 1; i <= 10; i++) {
+        Role role = RoleTestDataBuilder.role()
+            .withName("ROLE_TEST_" + i)
+            .build();
+        roleService.save(role);
+      }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar primeira página de roles")
+    void shouldReturnFirstPageOfRoles() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(0, 3);
+
+      // Quando
+      Page<Role> page = roleService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.getContent()).isNotEmpty();
+      assertThat(page.getSize()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar número correto de páginas")
+    void shouldReturnCorrectNumberOfPages() {
+      // Dado
+      Pageable pageRequest = PageRequest.of(0, 3);
+
+      // Quando
+      Page<Role> page = roleService.findAll(pageRequest);
+
+      // Então
+      assertThat(page.getTotalPages()).isGreaterThan(0);
+    }
+  }
+
+  @Nested
+  @DisplayName("User Count and Statistics")
+  class UserCountTests {
+
+    @Test
+    @Transactional
+    @DisplayName("Deve contar total de usuarios")
+    void shouldCountTotalUsers() {
+      // Quando
+      long totalCount = userService.count();
+
+      // Então
+      assertThat(totalCount).isGreaterThanOrEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve verificar existência de usuario")
+    void shouldVerifyUserExistence() {
+      // Dado
+      User user = UserTestDataBuilder.user().build();
+      User savedUser = userService.save(user);
+
+      // Quando
+      boolean exists = userService.exists(savedUser.getId());
+
+      // Então
+      assertThat(exists).isTrue();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar false para usuario inexistente")
+    void shouldReturnFalseForNonExistentUser() {
+      // Quando
+      boolean exists = userService.exists(999999L);
+
+      // Então
+      assertThat(exists).isFalse();
+    }
+  }
+
+  @Nested
+  @DisplayName("Role Count and Statistics")
+  class RoleCountTests {
+
+    @Test
+    @Transactional
+    @DisplayName("Deve contar total de roles")
+    void shouldCountTotalRoles() {
+      // Quando
+      long totalCount = roleService.count();
+
+      // Então
+      assertThat(totalCount).isGreaterThanOrEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve verificar existência de role")
+    void shouldVerifyRoleExistence() {
+      // Dado
+      Role role = RoleTestDataBuilder.role().build();
+      Role savedRole = roleService.save(role);
+
+      // Quando
+      boolean exists = roleService.exists(savedRole.getId());
+
+      // Então
+      assertThat(exists).isTrue();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve retornar false para role inexistente")
+    void shouldReturnFalseForNonExistentRole() {
+      // Quando
+      boolean exists = roleService.exists(999999L);
+
+      // Então
+      assertThat(exists).isFalse();
+    }
+  }
+}

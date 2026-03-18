@@ -1,0 +1,178 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Set;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.role.RoleDTO;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+
+/**
+ * Testes de validação para DTOs de Segurança.
+ * Valida constraints de validação aplicados aos DTOs.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Security DTOs Validation")
+class SecurityDTOsValidationTest {
+
+  private Validator validator;
+
+  @BeforeEach
+  void setUp() {
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+  }
+
+  @Nested
+  @DisplayName("UserDTO Validation")
+  class UserDTOValidationTests {
+
+    @Test
+    @DisplayName("Deve aceitar UserDTO válido")
+    void shouldAcceptValidUserDTO() {
+      // Dado
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUserName("testuser");
+      userDTO.setUserCode("USR001");
+      userDTO.setEnabled(true);
+
+      // Quando
+      Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+      // Então
+      assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar UserDTO sem userName")
+    void shouldRejectUserDTOWithoutUserName() {
+      // Dado
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUserCode("USR001");
+      userDTO.setEnabled(true);
+
+      // Quando
+      Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+      // Então
+      assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar UserDTO sem userCode")
+    void shouldRejectUserDTOWithoutUserCode() {
+      // Dado
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUserName("testuser");
+      userDTO.setEnabled(true);
+
+      // Quando
+      Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+      // Então
+      assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar userName muito longo")
+    void shouldRejectUserNameTooLong() {
+      // Dado
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUserName("a".repeat(501)); // Máximo 500
+      userDTO.setUserCode("USR001");
+      userDTO.setEnabled(true);
+
+      // Quando
+      Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+      // Então
+      assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve aceitar UserDTO com password vazio")
+    void shouldAcceptUserDTOWithEmptyPassword() {
+      // Dado
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUserName("testuser");
+      userDTO.setUserCode("USR001");
+      userDTO.setPassword(null);
+      userDTO.setEnabled(true);
+
+      // Quando
+      Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+      // Então
+      assertThat(violations).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("RoleDTO Validation")
+  class RoleDTOValidationTests {
+
+    @Test
+    @DisplayName("Deve aceitar RoleDTO válido")
+    void shouldAcceptValidRoleDTO() {
+      // Dado
+      RoleDTO roleDTO = new RoleDTO();
+      roleDTO.setName("ROLE_ADMIN");
+
+      // Quando
+      Set<ConstraintViolation<RoleDTO>> violations = validator.validate(roleDTO);
+
+      // Então
+      assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar RoleDTO sem name")
+    void shouldRejectRoleDTOWithoutName() {
+      // Dado
+      RoleDTO roleDTO = new RoleDTO();
+
+      // Quando
+      Set<ConstraintViolation<RoleDTO>> violations = validator.validate(roleDTO);
+
+      // Então
+      assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar name muito longo")
+    void shouldRejectNameTooLong() {
+      // Dado
+      RoleDTO roleDTO = new RoleDTO();
+      roleDTO.setName("ROLE_".concat("A".repeat(496))); // Máximo 500
+
+      // Quando
+      Set<ConstraintViolation<RoleDTO>> violations = validator.validate(roleDTO);
+
+      // Então
+      assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve aceitar RoleDTO com name em tamanho máximo")
+    void shouldAcceptRoleDTOWithMaxNameLength() {
+      // Dado
+      RoleDTO roleDTO = new RoleDTO();
+      roleDTO.setName("ROLE_".concat("A".repeat(495))); // Máximo 500
+
+      // Quando
+      Set<ConstraintViolation<RoleDTO>> violations = validator.validate(roleDTO);
+
+      // Então
+      assertThat(violations).isEmpty();
+    }
+  }
+}

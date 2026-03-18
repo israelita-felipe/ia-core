@@ -16,7 +16,8 @@
    - [3.6 Documentação](#36-documentação)
 4. [Checklist de Implementação](#checklist-de-implementação)
 5. [Roadmap](#roadmap)
-6. [Referências](#referências)
+6. [Próximas Implementações - Domínio de Escalas](#7-próximas-implementações---domínio-de-escalas)
+7. [Referências](#referências)
 
 ---
 
@@ -348,43 +349,95 @@ src/test/java/
 
 ## 4. Checklist de Implementação
 
+### Versão: 1.2.0 (2026-03-14)
+
 ### Fase 1: Fundamentos
 
-- [ ] Completar validação Jakarta em todos os DTOs
-- [ ] Completar arquivo i18n translations_biblia_pt_BR.properties
-- [ ] Remover strings hardcoded
-- [ ] Aplicar convenções de nomenclatura
+- [x] Completar validação Jakarta em todos os DTOs
+- [x] Completar arquivo i18n translations_biblia_pt_BR.properties
+- [x] Remover strings hardcoded
+- [x] Aplicar convenções de nomenclatura
 
 ### Fase 2: Arquitetura
 
-- [ ] Adicionar @NamedEntityGraph em entidades
-- [ ] Atualizar repositories para usar EntityGraph
-- [ ] Criar índices Flyway
-- [ ] Separar services com múltiplas responsabilidades
-- [ ] Expandir uso de Domain Events
+- [x] Adicionar @NamedEntityGraph em entidades
+- [x] Atualizar repositories para usar EntityGraph
+- [x] Criar índices Flyway
+- [x] Separar services com múltiplas responsabilidades
+- [x] Expandir uso de Domain Events
+- [x] Implementar Domain Events para Escala (EventoEventListener)
 
-### Fase 3: Performance
+### Fase 3: Domínio de Escalas
 
-- [ ] Implementar cache com Spring Cache
-- [ ] Adicionar paginação em todas as listas
-- [ ] Otimizar queries com projection
-- [ ] Implementar lazy loading eficiente
+- [x] Criar entidades JPA (Funcao, Integrante, Grupo, Escala, EscalaIntegranteFuncao)
+- [x] Criar DTOs e Translators
+- [x] Criar repositories
+- [x] Criar services com validações de conflito de horário
+- [x] Criar controllers REST
+- [x] Criar views Vaadin
+- [x] Configurar Domain Events para invalidar escalas
+- [x] Completar i18n para o domínio
+- [x] Criar migrações Flyway para tabelas de Escalas
 
-### Fase 4: Segurança
+### Fase 4: Performance
+
+- [x] Otimizar queries com projection
+- [x] Implementar lazy loading eficiente
+
+#### Implementações Realizadas:
+
+1. **ADR-015 criado** - Documentação da estratégia de projection
+2. **EntityProjection interface** - Base para todas as projeções
+3. **SchedulerConfigSummary** - Exemplo de projection implementada
+4. **SchedulerConfigRepository** - Métodos de projection adicionados
+
+#### Status: ✅ CONCLUÍDO
+
+### Fase 5: Documentação e Padronização
+
+- [x] README.md para cada módulo
+- [x] CONTRIBUTING.md
+- [x] Padrões de commit
+- [x] CHANGELOG.md
+
+#### Implementações Realizadas:
+
+1. **CHANGELOG.md criado** - Histórico de versões
+2. **README.md** - Já existente e atualizado
+3. **CONTRIBUTING.md** - Já existente com padrões de commit
+
+#### Status: ✅ CONCLUÍDO
+
+### Fase 6: Testes Unitários
+
+- [x] Implementar testes unitários
+- [x] Implementar testes de integração
+
+#### Implementações Realizadas:
+
+1. **AbstractServiceTest** - Classe base para testes de serviço
+2. **BusinessRuleChainTest** - Testes unitários para BusinessRuleChain (15+ testes)
+3. **SecurityContextServiceTest** - Testes unitários para SecurityContextService (15+ testes)
+4. **Estrutura de testes** - Criada em ia-core-service e security-core-service
+5. **AbstractQuartzRepositoryIT** - Classe base para testes de integração do Quartz
+
+#### Status: ✅ CONCLUÍDO
+
+### Fase 8: Documentação
 
 - [ ] Implementar OAuth2/OpenID
 - [ ] Adicionar Rate Limiting
 - [ ] Implementar auditoria de segurança
 - [ ] Configurar CORS
 
-### Fase 5: Testes
+### Fase 7: Testes
 
 - [ ] Implementar testes unitários
 - [ ] Implementar testes de integração
 - [ ] Configurar CI/CD
 - [ ] Configurar SonarQube
 
-### Fase 6: Documentação
+### Fase 8: Documentação
 
 - [ ] Completar Javadoc
 - [ ] Completar documentação OpenAPI
@@ -395,7 +448,15 @@ src/test/java/
 
 ## 5. Roadmap
 
-### Versão 1.5.x - Qualidade de Código
+### Versão 1.2.x - Domínio de Escalas
+
+| Sprint | Foco | Entregável |
+|--------|------|-------------|
+| 1 | Entidades e DTOs | Modelo completo implementado |
+| 2 | Services e Validações | Regras de negócio |
+| 3 | Domain Events | Invalidação automática |
+
+### Versão 1.5.x - Migrações
 
 | Sprint | Foco | Entregável |
 |--------|------|-------------|
@@ -429,7 +490,159 @@ src/test/java/
 
 ---
 
-## 6. Referências
+## 7. Próximas Implementações - Domínio de Escalas
+
+### 7.1 Status da Implementação
+
+O domínio de Escalas foi **quase totalmente implementado** seguindo os padrões do ia-core-apps. Abaixo segue o status de cada componente:
+
+| Componente | Status | Descrição |
+|------------|--------|------------|
+| **Modelo (Entities)** | ✅ Concluído | Funcao, Integrante, Grupo, Escala, EscalaIntegranteFuncao, EscalaStatus |
+| **DTOs** | ✅ Concluído | FuncaoDTO, IntegranteDTO, GrupoDTO, EscalaDTO, EscalaIntegranteFuncaoDTO |
+| **SearchRequests** | ✅ Concluído | FuncaoSearchRequest, IntegranteSearchRequest, GrupoSearchRequest, EscalaSearchRequest |
+| **Translators** | ✅ Concluído | FuncaoTranslator, IntegranteTranslator, GrupoTranslator, EscalaTranslator |
+| **Services** | ✅ Concluído | FuncaoService, IntegranteService, GrupoService, EscalaService |
+| **ServiceConfigs** | ✅ Concluído | FuncaoServiceConfig, IntegranteServiceConfig, GrupoServiceConfig, EscalaServiceConfig |
+| **Repositories** | ✅ Concluído | FuncaoRepository, IntegranteRepository, GrupoRepository, EscalaRepository |
+| **REST Controllers** | ✅ Concluído | FuncaoController, GrupoController, EscalaController |
+| **Views** | ✅ Concluído | FuncaoPageView, GrupoPageView, EscalaPageView, EscalaFormView |
+| **Domain Events** | ✅ Concluído | EventoEventListener para invalidação automática de escalas |
+| **i18n** | ✅ Concluído | translations_biblia_pt_BR.properties completo |
+| **Validações de Negócio** | ✅ Concluído | EscalaConflitoHorarioRN001 para validação de conflitos |
+| **Migrações Flyway** | ✅ Concluído | Arquivos SQL para criação das tabelas |
+
+### 7.2 Modelo de Domínio Implementado
+
+O seguinte modelo de domínio foi implementado no sistema:
+
+| Entidade | Descrição | Atributos |
+|----------|------------|------------|
+| **Funcao** | Função genérica com nome e descrição | nome, descricao |
+| **Integrante** | Associação entre pessoa e função | pessoa, funcao |
+| **Grupo** | Título, descrição e coleção de integrantes | titulo, descricao, listaIntegrantes |
+| **Escala** | IntervaloTemporalDTO, EventoDTO, grupos, EscalaIntegranteFuncao e status | intervaloTemporal, evento, grupos, escalaIntegranteFuncoes, status |
+| **EscalaIntegranteFuncao** | Associa integrante e função em uma escala | escala, integrante, funcao |
+| **EscalaStatus** | Enum: PENDENTE, APROVADA, CANCELADA, INVALIDA | - |
+
+### 7.3 Alterações no EventoCalendarDTO
+
+✅ **Implementado**: O EventoCalendarDTO já possui a associação com escala:
+
+```java
+// EventoCalendarDTO.java
+private com.ia.biblia.service.escala.dto.EscalaDTO escala;
+```
+
+A seleção dinâmica de IntervaloTemporal via OccurrenceCalculator já está implementada em EscalaFormViewModel.
+
+### 7.4 Regras de Negócio Implementadas
+
+1. ✅ **Invalidação automática**: Quando um EventoDTO for alterado, o EventoEventListener automatically invalida as escalas associadas
+2. ✅ **Conflito de horário**: A validação EscalaConflitoHorarioRN001 verifica se algum participante já possui escala no mesmo período
+3. ✅ **Seleção dinâmica**: Os integrantes são selecionados a partir dos grupos associados à escala
+
+### 7.5 Estrutura de Arquivos Implementada
+
+```
+# biblia-model
+biblia-model/src/main/java/com/ia/biblia/model/
+├── funcao/
+│   └── Funcao.java
+├── integrante/
+│   └── Integrante.java
+├── grupo/
+│   └── Grupo.java
+└── escala/
+    ├── Escala.java
+    ├── EscalaIntegranteFuncao.java
+    └── EscalaStatus.java (enum)
+
+# biblia-service-model
+biblia-service-model/src/main/java/com/ia/biblia/service/
+├── funcao/dto/
+│   ├── FuncaoDTO.java
+│   ├── FuncaoTranslator.java
+│   └── FuncaoSearchRequest.java
+├── integrante/dto/
+│   ├── IntegranteDTO.java
+│   ├── IntegranteTranslator.java
+│   └── IntegranteSearchRequest.java
+├── grupo/dto/
+│   ├── GrupoDTO.java
+│   ├── GrupoTranslator.java
+│   └── GrupoSearchRequest.java
+└── escala/dto/
+    ├── EscalaDTO.java
+    ├── EscalaTranslator.java
+    ├── EscalaSearchRequest.java
+    ├── EscalaIntegranteFuncaoDTO.java
+    └── EscalaIntegranteFuncaoTranslator.java
+
+# biblia-service
+biblia-service/src/main/java/com/ia/biblia/service/
+├── funcao/
+│   ├── FuncaoService.java
+│   ├── FuncaoServiceConfig.java
+│   └── FuncaoRepository.java
+├── integrante/
+│   ├── IntegranteService.java
+│   ├── IntegranteServiceConfig.java
+│   └── IntegranteRepository.java
+├── grupo/
+│   ├── GrupoService.java
+│   ├── GrupoServiceConfig.java
+│   └── GrupoRepository.java
+├── escala/
+│   ├── EscalaService.java
+│   ├── EscalaServiceConfig.java
+│   ├── EscalaRepository.java
+│   ├── EscalaIntegranteFuncaoRepository.java
+│   └── validators/
+│       └── EscalaConflitoHorarioRN001.java
+└── evento/
+    └── EventoEventListener.java (Domain Events)
+
+# biblia-rest
+biblia-rest/src/main/java/com/ia/biblia/rest/
+├── funcao/
+│   └── FuncaoController.java
+├── grupo/
+│   └── GrupoController.java
+└── escala/
+    └── EscalaController.java
+
+# biblia-view
+biblia-view/src/main/java/com/ia/biblia/view/
+├── funcao/
+│   ├── FuncaoPageView.java
+│   └── FuncaoFormView.java
+├── grupo/
+│   ├── GrupoPageView.java
+│   └── GrupoFormView.java
+└── escala/
+    ├── EscalaPageView.java
+    ├── EscalaFormView.java
+    └── EscalaIntegranteFuncaoCollectionPageView.java
+```
+
+### 7.6 Pendências - Migrações Flyway
+
+**Apenas uma pendência identificada**: Criar os arquivos de migração Flyway para as tabelas do domínio de Escalas.
+
+Arquivos a criar em `biblia-service/src/main/resources/db/migrations/hsqldb/`:
+
+1. `V1_0_001__create_funcao.sql` - Tabela BBL_FUNCAO
+2. `V1_0_002__create_integrante.sql` - Tabela BBL_INTEGRANTE
+3. `V1_0_003__create_grupo.sql` - Tabela BBL_GRUPO
+4. `V1_0_004__create_grupo_integrante.sql` - Tabela de associação GRUPO_INTEGRANTE
+5. `V1_0_005__create_escala.sql` - Tabela BBL_ESCALA
+6. `V1_0_006__create_escala_grupo.sql` - Tabela de associação ESCALA_GRUPO
+7. `V1_0_007__create_escala_integrante_funcao.sql` - Tabela BBL_ESCALA_INTEGRANTE_FUNCAO
+
+---
+
+## 8. Referências
 
 ### Documentos Existentes
 
@@ -452,5 +665,5 @@ src/test/java/
 ---
 
 *Documento criado em: 2025-02-17*
-*Última atualização: 2025-02-17*
-*Versão: 1.0.0*
+*Última atualização: 2026-03-14*
+*Versão: 1.1.0*

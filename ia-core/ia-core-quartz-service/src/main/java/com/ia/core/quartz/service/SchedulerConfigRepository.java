@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
-import com.ia.core.quartz.service.model.SchedulerConfigSummary;
 import com.ia.core.service.repository.BaseEntityRepository;
 
 /**
@@ -37,9 +36,8 @@ public interface SchedulerConfigRepository
    *
    * @return Lista de projeções resumidas
    */
-  @Query("SELECT sc.id as id, sc.jobClassName as jobClassName, sc.ativo as ativo " +
-         "FROM SchedulerConfig sc WHERE sc.ativo = true")
-  List<SchedulerConfigSummary> findAllSummaries();
+  @Query("SELECT sc FROM SchedulerConfig sc JOIN sc.periodicidade p WHERE p.ativo = true")
+  List<SchedulerConfig> findAllSummaries();
 
   /**
    * Busca SchedulerConfig paginados usando projection.
@@ -47,8 +45,7 @@ public interface SchedulerConfigRepository
    * @param pageable Configuração de paginação
    * @return Página de projeções resumidas
    */
-  @Query(value = "SELECT sc.id as id, sc.jobClassName as jobClassName, sc.ativo as ativo " +
-                  "FROM SchedulerConfig sc",
+  @Query(value = "SELECT sc FROM SchedulerConfig sc",
          countQuery = "SELECT count(sc) FROM SchedulerConfig sc")
-  Page<SchedulerConfigSummary> findAllSummaries(Pageable pageable);
+  Page<SchedulerConfig> findAllSummaries(Pageable pageable);
 }

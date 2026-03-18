@@ -236,5 +236,7 @@
 		<module>ia-core-quartz-service-model</module>
 		<module>ia-core-quartz-service</module>
 		<module>ia-core-quartz-view</module>
+		<module>ia-core-integration-test</module>
+		<module>ia-core-security-test</module>
 	</modules>
 </project>

@@ -36,6 +36,13 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>com.ia</groupId>
+			<artifactId>ia-core-integration-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>		
 	</dependencies>
 	<build>
 		<pluginManagement>

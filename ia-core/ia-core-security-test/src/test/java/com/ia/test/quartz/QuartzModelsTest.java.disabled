@@ -1,0 +1,227 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.YearMonth;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
+import com.ia.core.quartz.model.periodicidade.Periodicidade;
+
+/**
+ * Testes unitários para modelos de Quartz.
+ * Valida funcionalidades de periodicidade e agendamento.
+ *
+ * @author Israel Araújo
+ */
+@DisplayName("Quartz Models")
+class QuartzModelsTest {
+
+  @Nested
+  @DisplayName("IntervaloTemporal")
+  class IntervaloTemporalTests {
+
+    private IntervaloTemporal intervalo;
+
+    @BeforeEach
+    void setUp() {
+      intervalo = new IntervaloTemporal();
+    }
+
+    @Test
+    @DisplayName("Deve criar intervalo temporal com valores padrão")
+    void shouldCreateIntervaloTemporalWithDefaults() {
+      // Então
+      assertThat(intervalo).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir data inicial")
+    void shouldAllowSettingStartDate() {
+      // Dado
+      LocalDate startDate = LocalDate.now();
+
+      // Quando
+      intervalo.setDataInicio(startDate);
+
+      // Então
+      assertThat(intervalo.getDataInicio()).isEqualTo(startDate);
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir data final")
+    void shouldAllowSettingEndDate() {
+      // Dado
+      LocalDate endDate = LocalDate.now().plusDays(30);
+
+      // Quando
+      intervalo.setDataFinal(endDate);
+
+      // Então
+      assertThat(intervalo.getDataFinal()).isEqualTo(endDate);
+    }
+  }
+
+  @Nested
+  @DisplayName("Frequencia")
+  class FrequenciaTests {
+
+    @Test
+    @DisplayName("Deve conter valores de frequência válidos")
+    void shouldContainValidFrequencyValues() {
+      // Então
+      assertThat(Frequencia.values()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Deve ter DIARIA como frequência")
+    void shouldHaveDiariaFrequency() {
+      // Então
+      assertThat(Frequencia.DIARIA).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter SEMANAL como frequência")
+    void shouldHaveSemanalFrequency() {
+      // Então
+      assertThat(Frequencia.SEMANAL).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter MENSAL como frequência")
+    void shouldHaveMensalFrequency() {
+      // Então
+      assertThat(Frequencia.MENSAL).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter ANUAL como frequência")
+    void shouldHaveAnualFrequency() {
+      // Então
+      assertThat(Frequencia.ANUAL).isNotNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("Periodicidade")
+  class PeriodicidadeTests {
+
+    private Periodicidade periodicidade;
+
+    @BeforeEach
+    void setUp() {
+      periodicidade = Periodicidade.builder().build();
+    }
+
+    @Test
+    @DisplayName("Deve criar periodicidade com sucesso")
+    void shouldCreatePeriodicidadeSuccessfully() {
+      // Então
+      assertThat(periodicidade).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir frequência")
+    void shouldAllowSettingFrequency() {
+      // Quando
+      periodicidade.setFrequencia(Frequencia.DIARIA);
+
+      // Então
+      assertThat(periodicidade.getFrequencia()).isEqualTo(Frequencia.DIARIA);
+    }
+
+    @Test
+    @DisplayName("Deve permitir definir intervalo")
+    void shouldAllowSettingInterval() {
+      // Quando
+      periodicidade.setIntervalo(2);
+
+      // Então
+      assertThat(periodicidade.getIntervalo()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de recorrências")
+    void shouldHaveRecurrenciesCollection() {
+      // Então
+      assertThat(periodicidade.getRecorrencias()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de exclusões")
+    void shouldHaveExclusionsCollection() {
+      // Então
+      assertThat(periodicidade.getExclusoes()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter coleção de datas de exceção")
+    void shouldHaveExceptionDatesCollection() {
+      // Então
+      assertThat(periodicidade.getDataExcecao()).isNotNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("DayOfWeek")
+  class DayOfWeekTests {
+
+    @Test
+    @DisplayName("Deve conter dias da semana válidos")
+    void shouldContainValidDaysOfWeek() {
+      // Então
+      assertThat(DayOfWeek.values()).hasSize(7);
+    }
+
+    @Test
+    @DisplayName("Deve ter MONDAY")
+    void shouldHaveMonday() {
+      // Então
+      assertThat(DayOfWeek.MONDAY).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve ter SUNDAY")
+    void shouldHaveSunday() {
+      // Então
+      assertThat(DayOfWeek.SUNDAY).isNotNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("YearMonth")
+  class YearMonthTests {
+
+    @Test
+    @DisplayName("Deve criar YearMonth para mês atual")
+    void shouldCreateYearMonthForCurrentMonth() {
+      // Quando
+      YearMonth current = YearMonth.now();
+
+      // Então
+      assertThat(current).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve permitir navegação entre meses")
+    void shouldAllowMonthNavigation() {
+      // Dado
+      YearMonth current = YearMonth.now();
+
+      // Quando
+      YearMonth next = current.plusMonths(1);
+      YearMonth previous = current.minusMonths(1);
+
+      // Então
+      assertThat(next).isAfter(current);
+      assertThat(previous).isBefore(current);
+    }
+  }
+}

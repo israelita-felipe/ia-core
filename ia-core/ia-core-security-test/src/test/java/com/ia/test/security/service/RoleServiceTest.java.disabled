@@ -1,0 +1,321 @@
+package com.ia.test.security.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.service.RoleService;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
+import com.ia.test.security.builder.RoleTestDataBuilder;
+
+/**
+ * Testes unitários para {@link RoleService}.
+ * Valida funcionalidades de CRUD, sincronização de roles e gerenciamento de privilégios.
+ *
+ * @author Israel Araújo
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("RoleService")
+class RoleServiceTest {
+
+  @Mock
+  private BaseEntityMapper<Role, Object> mapper;
+
+  @Mock
+  private BaseEntityRepository<Role> repository;
+
+  @Mock
+  private SearchRequestMapper searchRequestMapper;
+
+  @Mock
+  private Translator translator;
+
+  private RoleService service;
+
+  @BeforeEach
+  void setUp() {
+    service = new RoleService(mapper, repository, searchRequestMapper, translator);
+  }
+
+  @Nested
+  @DisplayName("save")
+  class SaveTests {
+
+    @Test
+    @DisplayName("Deve salvar uma nova role com sucesso")
+    void shouldSaveNewRoleSuccessfully() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ROLE_ADMIN")
+          .build();
+
+      when(repository.save(role)).thenReturn(role);
+
+      // Quando
+      Role result = service.save(role);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getName()).isEqualTo("ROLE_ADMIN");
+      verify(repository).save(role);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção quando role nula")
+    void shouldThrowExceptionWhenRoleIsNull() {
+      // Quando & Então
+      assertThatThrownBy(() -> service.save(null))
+          .isInstanceOf(NullPointerException.class);
+    }
+  }
+
+  @Nested
+  @DisplayName("findById")
+  class FindByIdTests {
+
+    @Test
+    @DisplayName("Deve encontrar role por ID")
+    void shouldFindRoleById() {
+      // Dado
+      long roleId = 1L;
+      Role expectedRole = RoleTestDataBuilder.role()
+          .withName("ROLE_ADMIN")
+          .build();
+      expectedRole.setId(roleId);
+
+      when(repository.findById(roleId)).thenReturn(java.util.Optional.of(expectedRole));
+
+      // Quando
+      Role result = service.findById(roleId);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getId()).isEqualTo(roleId);
+      assertThat(result.getName()).isEqualTo("ROLE_ADMIN");
+      verify(repository).findById(roleId);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando role não existe")
+    void shouldReturnNullWhenRoleNotFound() {
+      // Dado
+      long roleId = 999L;
+      when(repository.findById(roleId)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      Role result = service.findById(roleId);
+
+      // Então
+      assertThat(result).isNull();
+      verify(repository).findById(roleId);
+    }
+  }
+
+  @Nested
+  @DisplayName("findByName")
+  class FindByNameTests {
+
+    @Test
+    @DisplayName("Deve encontrar role por nome")
+    void shouldFindRoleByName() {
+      // Dado
+      String roleName = "ROLE_ADMIN";
+      Role expectedRole = RoleTestDataBuilder.role()
+          .withName(roleName)
+          .build();
+
+      when(repository.findByName(roleName)).thenReturn(java.util.Optional.of(expectedRole));
+
+      // Quando
+      Role result = service.findByName(roleName);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getName()).isEqualTo(roleName);
+      verify(repository).findByName(roleName);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null quando role não existe por nome")
+    void shouldReturnNullWhenRoleNotFoundByName() {
+      // Dado
+      String roleName = "ROLE_UNKNOWN";
+      when(repository.findByName(roleName)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      Role result = service.findByName(roleName);
+
+      // Então
+      assertThat(result).isNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("update")
+  class UpdateTests {
+
+    @Test
+    @DisplayName("Deve atualizar role com sucesso")
+    void shouldUpdateRoleSuccessfully() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ROLE_UPDATED")
+          .build();
+      role.setId(1L);
+
+      when(repository.save(role)).thenReturn(role);
+
+      // Quando
+      Role result = service.update(role);
+
+      // Então
+      assertThat(result).isNotNull();
+      assertThat(result.getName()).isEqualTo("ROLE_UPDATED");
+      verify(repository).save(role);
+    }
+  }
+
+  @Nested
+  @DisplayName("delete")
+  class DeleteTests {
+
+    @Test
+    @DisplayName("Deve deletar role por ID")
+    void shouldDeleteRoleById() {
+      // Dado
+      long roleId = 1L;
+
+      // Quando
+      service.delete(roleId);
+
+      // Então
+      verify(repository).deleteById(roleId);
+    }
+  }
+
+  @Nested
+  @DisplayName("findAllByNames")
+  class FindAllByNamesTests {
+
+    @Test
+    @DisplayName("Deve encontrar múltiplas roles por nomes")
+    void shouldFindMultipleRolesByNames() {
+      // Dado
+      Collection<String> names = new HashSet<>(java.util.List.of("ROLE_ADMIN", "ROLE_USER"));
+      Role adminRole = RoleTestDataBuilder.role().withName("ROLE_ADMIN").build();
+      Role userRole = RoleTestDataBuilder.role().withName("ROLE_USER").build();
+      Collection<Role> expectedRoles = java.util.List.of(adminRole, userRole);
+
+      when(repository.findAllByNameIn(names)).thenReturn(expectedRoles);
+
+      // Quando
+      Collection<Role> result = service.findAllByNames(names);
+
+      // Então
+      assertThat(result).hasSize(2);
+      assertThat(result).contains(adminRole, userRole);
+    }
+
+    @Test
+    @DisplayName("Deve retornar coleção vazia quando nenhuma role encontrada")
+    void shouldReturnEmptyCollectionWhenNoRolesFound() {
+      // Dado
+      Collection<String> names = new HashSet<>(java.util.List.of("ROLE_UNKNOWN1", "ROLE_UNKNOWN2"));
+      when(repository.findAllByNameIn(names)).thenReturn(Collections.emptyList());
+
+      // Quando
+      Collection<Role> result = service.findAllByNames(names);
+
+      // Então
+      assertThat(result).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("findAll")
+  class FindAllTests {
+
+    @Test
+    @DisplayName("Deve encontrar todas as roles")
+    void shouldFindAllRoles() {
+      // Dado
+      Role role1 = RoleTestDataBuilder.role().withName("ROLE_ADMIN").build();
+      Role role2 = RoleTestDataBuilder.role().withName("ROLE_USER").build();
+      Collection<Role> expectedRoles = java.util.List.of(role1, role2);
+
+      when(repository.findAll()).thenReturn(expectedRoles);
+
+      // Quando
+      Collection<Role> result = service.findAll();
+
+      // Então
+      assertThat(result).hasSize(2);
+      assertThat(result).contains(role1, role2);
+    }
+
+    @Test
+    @DisplayName("Deve retornar coleção vazia quando nenhuma role existe")
+    void shouldReturnEmptyCollectionWhenNoRolesExist() {
+      // Dado
+      when(repository.findAll()).thenReturn(Collections.emptyList());
+
+      // Quando
+      Collection<Role> result = service.findAll();
+
+      // Então
+      assertThat(result).isEmpty();
+    }
+  }
+
+  @Nested
+  @DisplayName("validateRoleName")
+  class ValidateRoleNameTests {
+
+    @Test
+    @DisplayName("Deve aceitar nome único de role")
+    void shouldAcceptUniqueRoleName() {
+      // Dado
+      String roleName = "ROLE_ADMIN";
+      when(repository.findByName(roleName)).thenReturn(java.util.Optional.empty());
+
+      // Quando
+      boolean result = service.validateRoleName(roleName);
+
+      // Então
+      assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve rejeitar nome duplicado")
+    void shouldRejectDuplicateRoleName() {
+      // Dado
+      String roleName = "ROLE_ADMIN";
+      Role existingRole = RoleTestDataBuilder.role().withName(roleName).build();
+      when(repository.findByName(roleName)).thenReturn(java.util.Optional.of(existingRole));
+
+      // Quando
+      boolean result = service.validateRoleName(roleName);
+
+      // Então
+      assertThat(result).isFalse();
+    }
+  }
+}

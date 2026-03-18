@@ -1,0 +1,262 @@
+package com.ia.test.security.integration;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.service.UserService;
+import com.ia.core.security.service.RoleService;
+import com.ia.test.security.builder.UserTestDataBuilder;
+import com.ia.test.security.builder.RoleTestDataBuilder;
+
+/**
+ * Testes de integração para serviços de Segurança.
+ * Valida persistência, transações e relacionamentos no banco de dados.
+ *
+ * @author Israel Araújo
+ */
+@SpringBootTest
+@ActiveProfiles("test")
+@DisplayName("Security Service Integration Tests")
+class SecurityServiceIntegrationTest {
+
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private RoleService roleService;
+
+  @Nested
+  @DisplayName("User Service Integration")
+  class UserServiceIntegrationTests {
+
+    @Test
+    @Transactional
+    @DisplayName("Deve salvar e recuperar usuario do banco de dados")
+    void shouldSaveAndRetrieveUserFromDatabase() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("integrationtestuser")
+          .withUserCode("INTTEST001")
+          .withEnabled(true)
+          .build();
+
+      // Quando
+      User savedUser = userService.save(user);
+      User retrievedUser = userService.findById(savedUser.getId());
+
+      // Então
+      assertThat(retrievedUser).isNotNull();
+      assertThat(retrievedUser.getUserName()).isEqualTo("integrationtestuser");
+      assertThat(retrievedUser.getUserCode()).isEqualTo("INTTEST001");
+      assertThat(retrievedUser.isEnabled()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve atualizar usuario no banco de dados")
+    void shouldUpdateUserInDatabase() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserName("originalname")
+          .build();
+      User savedUser = userService.save(user);
+
+      // Quando
+      savedUser.setUserName("updatedname");
+      User updatedUser = userService.update(savedUser);
+
+      // Então
+      User retrievedUser = userService.findById(updatedUser.getId());
+      assertThat(retrievedUser.getUserName()).isEqualTo("updatedname");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve encontrar usuario por código")
+    void shouldFindUserByCode() {
+      // Dado
+      User user = UserTestDataBuilder.user()
+          .withUserCode("UNIQUE_CODE_123")
+          .build();
+      userService.save(user);
+
+      // Quando
+      User foundUser = userService.findByUserCode("UNIQUE_CODE_123");
+
+      // Então
+      assertThat(foundUser).isNotNull();
+      assertThat(foundUser.getUserCode()).isEqualTo("UNIQUE_CODE_123");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve deletar usuario do banco de dados")
+    void shouldDeleteUserFromDatabase() {
+      // Dado
+      User user = UserTestDataBuilder.user().build();
+      User savedUser = userService.save(user);
+      long userId = savedUser.getId();
+
+      // Quando
+      userService.delete(userId);
+
+      // Então
+      User deletedUser = userService.findById(userId);
+      assertThat(deletedUser).isNull();
+    }
+  }
+
+  @Nested
+  @DisplayName("Role Service Integration")
+  class RoleServiceIntegrationTests {
+
+    @Test
+    @Transactional
+    @DisplayName("Deve salvar e recuperar role do banco de dados")
+    void shouldSaveAndRetrieveRoleFromDatabase() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ROLE_INTEGRATION_TEST")
+          .build();
+
+      // Quando
+      Role savedRole = roleService.save(role);
+      Role retrievedRole = roleService.findById(savedRole.getId());
+
+      // Então
+      assertThat(retrievedRole).isNotNull();
+      assertThat(retrievedRole.getName()).isEqualTo("ROLE_INTEGRATION_TEST");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve encontrar role por nome")
+    void shouldFindRoleByName() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ROLE_FIND_BY_NAME")
+          .build();
+      roleService.save(role);
+
+      // Quando
+      Role foundRole = roleService.findByName("ROLE_FIND_BY_NAME");
+
+      // Então
+      assertThat(foundRole).isNotNull();
+      assertThat(foundRole.getName()).isEqualTo("ROLE_FIND_BY_NAME");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve atualizar role no banco de dados")
+    void shouldUpdateRoleInDatabase() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ORIGINAL_ROLE_NAME")
+          .build();
+      Role savedRole = roleService.save(role);
+
+      // Quando
+      savedRole.setName("UPDATED_ROLE_NAME");
+      Role updatedRole = roleService.update(savedRole);
+
+      // Então
+      Role retrievedRole = roleService.findById(updatedRole.getId());
+      assertThat(retrievedRole.getName()).isEqualTo("UPDATED_ROLE_NAME");
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve deletar role do banco de dados")
+    void shouldDeleteRoleFromDatabase() {
+      // Dado
+      Role role = RoleTestDataBuilder.role().build();
+      Role savedRole = roleService.save(role);
+      long roleId = savedRole.getId();
+
+      // Quando
+      roleService.delete(roleId);
+
+      // Então
+      Role deletedRole = roleService.findById(roleId);
+      assertThat(deletedRole).isNull();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve encontrar todas as roles")
+    void shouldFindAllRoles() {
+      // Dado
+      Role role1 = RoleTestDataBuilder.role().withName("ROLE_TEST_1").build();
+      Role role2 = RoleTestDataBuilder.role().withName("ROLE_TEST_2").build();
+      roleService.save(role1);
+      roleService.save(role2);
+
+      // Quando
+      java.util.Collection<Role> allRoles = roleService.findAll();
+
+      // Então
+      assertThat(allRoles).isNotEmpty();
+      assertThat(allRoles.size()).isGreaterThanOrEqualTo(2);
+    }
+  }
+
+  @Nested
+  @DisplayName("User-Role Relationships")
+  class UserRoleRelationshipTests {
+
+    @Test
+    @Transactional
+    @DisplayName("Deve associar role a usuario")
+    void shouldAssociateRoleToUser() {
+      // Dado
+      Role role = RoleTestDataBuilder.role()
+          .withName("ROLE_ASSOCIATED")
+          .build();
+      Role savedRole = roleService.save(role);
+
+      User user = UserTestDataBuilder.user()
+          .withRole(savedRole)
+          .build();
+
+      // Quando
+      User savedUser = userService.save(user);
+
+      // Então
+      User retrievedUser = userService.findById(savedUser.getId());
+      assertThat(retrievedUser.getRoles()).contains(savedRole);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Deve remover role de usuario")
+    void shouldRemoveRoleFromUser() {
+      // Dado
+      Role role = RoleTestDataBuilder.role().build();
+      Role savedRole = roleService.save(role);
+
+      User user = UserTestDataBuilder.user()
+          .withRole(savedRole)
+          .build();
+      User savedUser = userService.save(user);
+
+      // Quando
+      savedUser.getRoles().remove(savedRole);
+      userService.update(savedUser);
+
+      // Então
+      User retrievedUser = userService.findById(savedUser.getId());
+      assertThat(retrievedUser.getRoles()).doesNotContain(savedRole);
+    }
+  }
+}
