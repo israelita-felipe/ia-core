@@ -35,9 +35,9 @@ public abstract class ServiceValidator<T extends Serializable>
   }
 
   @Override
-  public ServiceValidatorRegistry registry(HasValidation<T> hasValidator) {
-    var registry = IServiceValidator.super.registry(hasValidator);
+  public ValidatorRegistration registry(HasValidation<T> hasValidator) {
+    var registration = IServiceValidator.super.registry(hasValidator);
     log.info("{} registrado para  {}", getClass(), hasValidator.getClass());
-    return registry;
+    return registration;
   }
 }

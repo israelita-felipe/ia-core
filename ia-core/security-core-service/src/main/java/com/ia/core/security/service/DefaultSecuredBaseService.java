@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
@@ -76,30 +78,63 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
 
   /**
    * Publica evento automaticamente após salvar. Este método é chamado pelo
-   * callback do SaveBaseService após cada operação de save.
+   * callback do SaveBaseService após cada operação de save. Usa
+   * TransactionSynchronizationManager para garantir que o evento é publicado
+   * apenas após a transação ser confirmada com sucesso.
    */
   @Override
   public void afterSave(D original, D saved,
                         CrudOperationType operationType)
     throws ServiceException {
     if (saved != null && config.getEventPublisher() != null) {
-      publishEvent(saved, operationType);
-      log.debug("Evento de {} publicado para {}", operationType,
-                saved.getClass().getSimpleName());
+      // Registra sincronização para publicar evento apenas após commit
+      if (TransactionSynchronizationManager.isSynchronizationActive()) {
+        TransactionSynchronizationManager
+            .registerSynchronization(new TransactionSynchronization() {
+              @Override
+              public void afterCommit() {
+                publishEvent(saved, operationType);
+                log.debug("Evento de {} publicado para {} (pós-commit)",
+                          operationType, saved.getClass().getSimpleName());
+              }
+            });
+      } else {
+        // Fallback: contexto transacional não ativo, publica diretamente
+        // (pode ser perigoso em caso de rollback)
+        log.warn("Contexto transacional não ativo para {},publicando evento diretamente sem garantia de commit",
+                 operationType);
+        publishEvent(saved, operationType);
+      }
     }
   }
 
   /**
    * Publica evento automaticamente após deletar. Este método é chamado pelo
-   * callback do DeleteBaseService após cada operação de delete.
+   * callback do DeleteBaseService após cada operação de delete. Usa
+   * TransactionSynchronizationManager para garantir que o evento é publicado
+   * apenas após a transação ser confirmada com sucesso.
    */
   @Override
   public void afterDelete(Long id, D dto)
     throws ServiceException {
     if (dto != null && config.getEventPublisher() != null) {
-      publishEvent(dto, CrudOperationType.DELETED);
-      log.debug("Evento de DELETED publicado para {} com id {}",
-                dto.getClass().getSimpleName(), id);
+      // Registra sincronização para publicar evento apenas após commit
+      if (TransactionSynchronizationManager.isSynchronizationActive()) {
+        TransactionSynchronizationManager
+            .registerSynchronization(new TransactionSynchronization() {
+              @Override
+              public void afterCommit() {
+                publishEvent(dto, CrudOperationType.DELETED);
+                log.debug("Evento de DELETED publicado para {} com id {} (pós-commit)",
+                          dto.getClass().getSimpleName(), id);
+              }
+            });
+      } else {
+        // Fallback: contexto transacional não ativo, publica diretamente
+        // (pode ser perigoso em caso de rollback)
+        log.warn("Contexto transacional não ativo para DELETE,publicando evento diretamente sem garantia de commit");
+        publishEvent(dto, CrudOperationType.DELETED);
+      }
     }
   }
 
@@ -119,6 +154,23 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
 
   @Override
   public Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
+    // Auditoria de registro de funcionalidades - Compliance e rastreabilidade
+    LogOperationService logService = getLogOperationService();
+    if (logService != null) {
+      try {
+        String functionalityName = getFunctionalityTypeName();
+        log.info("Registrando funcionalidades para: {}", functionalityName);
+        // Registra auditoria usando contexto do LogOperationService
+        Map<String, Object> auditContext = LogOperationService.getContext();
+        auditContext.put("FUNCTIONALITY_REGISTRY", functionalityName);
+        auditContext.put("TIMESTAMP", java.time.LocalDateTime.now());
+        auditContext.put("ACTION", "REGISTRY_FUNCTIONALITIES");
+      } catch (Exception e) {
+        log.error("Falha ao registrar auditoria de funcionalidades: {}",
+                  e.getMessage());
+      }
+    }
+
     Set<Functionality> funcionalidades = new HashSet<>();
     funcionalidades
         .addAll(CountSecuredBaseService.super.registryFunctionalities(functionalityManager));

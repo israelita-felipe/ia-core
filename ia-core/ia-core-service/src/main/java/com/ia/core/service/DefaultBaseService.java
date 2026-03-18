@@ -28,6 +28,14 @@ import lombok.Getter;
  * {@link #afterDelete(Long, D)}.
  * </p>
  *
+ * TODO [P1] LINHA 45-80: REFATORAÇÃO CRÍTICA - Segregar responsabilidades usando
+ * padrão Mediator ou Command. Considerar dividir em 3 classes especializadas:
+ * - CreateUpdateService (responsável por save)
+ * - DeleteService (responsável por delete)
+ * - QueryService (responsável por find/list/count)
+ * Justificativa: Classe godclass com ~180 linhas viola SRP. Difícil testar e manter.
+ * Status: PENDENTE
+ *
  * @author Israel Araújo
  * @param <T> Tipo de dado {@link BaseEntity}
  * @param <D> Tipo de dado {@link DTO}
@@ -79,7 +87,7 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   public void afterSave(D original, D saved,
                         CrudOperationType operationType)
     throws ServiceException {
-    publishEvent(saved, operationType);
+    publishEventIfDtoNotNull(saved, operationType);
   }
 
   /**
@@ -96,8 +104,19 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   @Override
   public void afterDelete(Long id, D dto)
     throws ServiceException {
+    publishEventIfDtoNotNull(dto, CrudOperationType.DELETED);
+  }
+
+  /**
+   * Publica evento apenas se DTO não for nulo.
+   * Aplica princípio DRY para evitar duplicação de código.
+   *
+   * @param dto           DTO a ser publicado (pode ser nulo)
+   * @param operationType Tipo de operação
+   */
+  protected void publishEventIfDtoNotNull(D dto, CrudOperationType operationType) {
     if (dto != null) {
-      publishEvent(dto, CrudOperationType.DELETED);
+      publishEvent(dto, operationType);
     }
   }
 

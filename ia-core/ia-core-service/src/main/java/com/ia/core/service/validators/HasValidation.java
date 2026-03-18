@@ -33,9 +33,9 @@ public interface HasValidation<T extends Serializable> {
 
   /**
    * @param validators lista de validadores
-   * @return lista de regitros dos validadores
+   * @return lista de registros dos validadores
    */
-  default List<ServiceValidatorRegistry> registryValidators(List<IServiceValidator<T>> validators) {
+  default List<IServiceValidator.ValidatorRegistration> registryValidators(List<IServiceValidator<T>> validators) {
     return validators.stream().map(validator -> {
       return validator.registry(this);
     }).toList();

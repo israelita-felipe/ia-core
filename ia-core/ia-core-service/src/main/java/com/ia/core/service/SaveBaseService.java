@@ -1,11 +1,13 @@
 package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.service.context.ServiceExecutionContext;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.strategy.OperationTypeStrategy;
 
 /**
  * Interface que salva um {@link BaseEntity} por meio de um
@@ -60,20 +62,20 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
    * Verifica se o objeto pode ser criado
    *
    * @param toSave Objeto a ser salvo
-   * @return <code>true</code> por padrão
+   * @return true se puder criar, false caso contrário
    */
   default boolean canCreate(D toSave) {
-    return true;
+    return toSave != null;
   }
 
   /**
    * Verifica se o objeto pode ser atualizado
    *
    * @param toSave objeto a ser salvo
-   * @return <code>true</code> por padrão
+   * @return true se puder atualizar, false caso contrário
    */
   default boolean canUpdate(D toSave) {
-    return true;
+    return toSave != null;
   }
 
   /**
@@ -88,25 +90,9 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
     throws ServiceException {
     beforeSave(toSave);
     ServiceException ex = new ServiceException();
-    D savedEntity = onTransaction(() -> {
-      try {
-        validate(toSave);
-        T model = toModel(toSave);
-        model = synchronize(model);
-        boolean isUpdate = model.getId() != null;
-        if (isUpdate && !canUpdate(toSave)) {
-          return null;
-        } else if (!isUpdate && !canCreate(toSave)) {
-          return null;
-        }
-        T saved = getRepository().save(model);
-        return toDTO(saved);
-      } catch (Exception e) {
-        ex.add(e);
-      }
-      return null;
-    });
-    checkErrors(ex);
+    ServiceExecutionContext<T, D> context = new ServiceExecutionContext<>(toSave);
+    D savedEntity = onTransaction(() -> executeInTransaction(context, ex));
+    throwIfHasErrors(ex);
     if (savedEntity != null) {
       CrudOperationType operationType = determineOperationType(toSave, savedEntity);
       afterSave(toSave, savedEntity, operationType);
@@ -115,13 +101,76 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
   }
 
   /**
-   * Determina o tipo de operação (CREATE ou UPDATE) com base nos DTOs.
+   * Executa a lógica de transação para salvar a entidade.
+   * <p>
+   * Este método encapsula a lógica de validação, conversão, sincronização e persistência
+   * dentro de um contexto de execução gerenciado.
+   * </p>
+   *
+   * @param context Contexto de execução contendo o DTO e estado
+   * @param ex Exceção para acumular erros
+   * @return DTO salvo ou null se houver erros ou validação falhar
    */
+  private D executeInTransaction(ServiceExecutionContext<T, D> context, ServiceException ex) {
+    D toSave = context.getToSave();
+    try {
+      validate(toSave);
+      T model = toModel(toSave);
+      model = synchronize(model);
+      boolean isUpdate = model.getId() != null;
+      if (isUpdate && !canUpdate(toSave)) {
+        return null;
+      } else if (!isUpdate && !canCreate(toSave)) {
+        return null;
+      }
+      T saved = getRepository().save(model);
+      return toDTO(saved);
+    } catch (Exception e) {
+      ex.add(e);
+    }
+    return null;
+  }
+
+  /**
+   * Determina o tipo de operação (CREATE ou UPDATE) com base nos DTOs.
+   * <p>
+   * Implementação que verifica se o DTO salvo extende AbstractBaseEntityDTO e tem ID.
+   * </p>
+   * <p>
+   * Para comportamento customizado, sobrescreva este método em sua implementação.
+   * </p>
+   *
+   * @param original DTO original antes do save
+   * @param saved DTO salvo após o save
+   * @return Tipo de operação determined
+   */
+  // TODO [P2] LINHA 107-112: Implementar OperationTypeStrategy pattern com interface
+  // OperationTypeStrategy e implementações para diferentes tipos de DTO.
+  // Status: PENDENTE - determineOperationType() com casting inseguro, viola LSP
   private CrudOperationType determineOperationType(D original, D saved) {
+    // Fallback para comportamento original se D não for AbstractBaseEntityDTO
     if (saved instanceof AbstractBaseEntityDTO dto && dto.getId() != null) {
       return CrudOperationType.UPDATED;
     }
     return CrudOperationType.CREATED;
+  }
+
+  /**
+   * Cria uma estratégia para determinar o tipo de operação CRUD.
+   * <p>
+   * Use este método para obter uma estratégia customizável para determinar
+   * se uma operação é CREATE ou UPDATE.
+   * </p>
+   * <pre>
+   * OperationTypeStrategy&lt;MeuDTO&gt; strategy = createOperationTypeStrategy();
+   * CrudOperationType type = strategy.determine(dtoOriginal, dtoSalvo);
+   * </pre>
+   *
+   * @param <DTO> Tipo do DTO
+   * @return Estratégia de determination de tipo de operação
+   */
+  static <DTO extends AbstractBaseEntityDTO<?>> OperationTypeStrategy<DTO> createOperationTypeStrategy() {
+    return OperationTypeStrategy.defaultStrategy();
   }
 
   /**

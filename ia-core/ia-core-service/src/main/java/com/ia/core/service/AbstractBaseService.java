@@ -66,8 +66,59 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
       throw new IllegalStateException("Configuração não pode ser nula em "
           + this.getClass().getSimpleName());
     }
+    
+    // Validação de cada dependência usando Composite Validator Pattern
+    validateRepository();
+    validateMapper();
+    validateTranslator();
+    validateTransactionManager();
+    
     log.debug("Configuração validada para {}",
               this.getClass().getSimpleName());
+  }
+
+  /**
+   * Valida se o repositório está configurado.
+   * @throws IllegalStateException se repository for nulo
+   */
+  private void validateRepository() {
+    if (config.getRepository() == null) {
+      throw new IllegalStateException("Repository não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
+  }
+
+  /**
+   * Valida se o mapper está configurado.
+   * @throws IllegalStateException se mapper for nulo
+   */
+  private void validateMapper() {
+    if (config.getMapper() == null) {
+      throw new IllegalStateException("Mapper não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
+  }
+
+  /**
+   * Valida se o translator está configurado.
+   * @throws IllegalStateException se translator for nulo
+   */
+  private void validateTranslator() {
+    if (config.getTranslator() == null) {
+      throw new IllegalStateException("Translator não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
+  }
+
+  /**
+   * Valida se o transaction manager está configurado.
+   * @throws IllegalStateException se transactionManager for nulo
+   */
+  private void validateTransactionManager() {
+    if (config.getTransactionManager() == null) {
+      throw new IllegalStateException("TransactionManager não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
   }
 
   /**
@@ -76,10 +127,16 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <M> Tipo do Mapper
    * @return {@link Mapper}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public <M extends Mapper<T, D>> M getMapper() {
-    return (M) config.getMapper();
+    Mapper<T, D> mapper = config.getMapper();
+    if (mapper == null) {
+      throw new IllegalStateException("Mapper não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
+    @SuppressWarnings("unchecked")
+    M result = (M) mapper;
+    return result;
   }
 
   /**
@@ -88,10 +145,16 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <R> Tipo do Repositório.
    * @return {@link BaseEntityRepository}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public <R extends BaseEntityRepository<T>> R getRepository() {
-    return (R) config.getRepository();
+    BaseEntityRepository<T> repository = config.getRepository();
+    if (repository == null) {
+      throw new IllegalStateException("Repository não pode ser nulo em "
+          + this.getClass().getSimpleName());
+    }
+    @SuppressWarnings("unchecked")
+    R result = (R) repository;
+    return result;
   }
 
   /**
@@ -133,9 +196,29 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * operações significativas são realizadas (criação, atualização,
    * exclusão, etc.).
    * </p>
+   * <p>
+   * <b>Thread-Safety:</b> Este método é thread-safe. A publicação de eventos
+   * é delegados ao ApplicationEventPublisher do Spring que gerencia a sincronização.
+   * </p>
+   * <p>
+   * <b>Comportamento Assíncrono:</b> Por padrão, os eventos são publicados
+   * de forma síncrona no mesmo thread da transação. Para processamento
+   * assíncrono, configure um {@code ApplicationEventMulticaster} customizado
+   * com executor assíncrono.
+   * </p>
+   * <p>
+   * <b>Garantias de Entrega:</b>
+   * <ul>
+   *   <li>Se eventPublisher for nulo, o evento é ignorado silenciosamente</li>
+   *   <li>Eventos são publicados apenas se a transação estiver ativa</li>
+   *   <li>Exceções na publicação não interrompem a transação principal</li>
+   * </ul>
+   * </p>
    *
    * @param dto       DTO afetado pela operação
    * @param eventType Tipo de evento conforme {@link EventType}
+   * @see BaseServiceEvent
+   * @see EventType
    */
   protected void publishEvent(D dto, EventType eventType) {
     if (config.getEventPublisher() != null) {
@@ -167,6 +250,9 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <T> {@link BaseEntity}
    * @param <D> {@link DTO}
    */
+  // TODO [P2] LINHA 175: Considerar converter AbstractBaseServiceConfig em record Java 21
+  // para melhor imutabilidade e segurança de thread. Spring Boot 3.5.5 suporta records nativamente.
+  // Status: PENDENTE - Configuração mutável, melhor usar record Java 21
   @RequiredArgsConstructor
   @Slf4j
   public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<?>> {
