@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.translator.Translator;
-import com.ia.core.service.validators.IServiceValidator.ServiceValidatorRegistry;
 
 /**
  * Interface que indica que um objeto possui validação, indicado para realizar

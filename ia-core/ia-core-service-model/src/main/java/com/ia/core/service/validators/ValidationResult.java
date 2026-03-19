@@ -1,6 +1,6 @@
 package com.ia.core.service.validators;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -92,12 +92,36 @@ public interface ValidationResult {
   List<ValidationError> getErrorsBySeverity(Severity severity);
 
   /**
+   * Adds a validation error to the result.
+   * <p>
+   * This method is typically used during validation to accumulate errors.
+   * </p>
+   *
+   * @param error The validation error to add
+   */
+  default void addError(ValidationError error) {
+    throw new UnsupportedOperationException("ValidationResult is immutable. Use DefaultValidationResult with mutable list.");
+  }
+
+  /**
    * Creates an empty validation result.
    *
    * @return Empty ValidationResult instance
    */
   static ValidationResult empty() {
     return EmptyValidationResult.INSTANCE;
+  }
+
+  /**
+   * Creates a mutable validation result.
+   * <p>
+   * This allows adding errors dynamically during validation.
+   * </p>
+   *
+   * @return Mutable ValidationResult instance
+   */
+  static ValidationResult create() {
+    return new DefaultValidationResult(new ArrayList<>());
   }
 
   /**
@@ -175,21 +199,40 @@ public interface ValidationResult {
 
   /**
    * Default implementation of ValidationResult.
+   * <p>
+   * Supports mutable operations through {@link #addError(ValidationError)}.
+   * </p>
    */
   final class DefaultValidationResult implements ValidationResult {
     private final List<ValidationError> errors;
-    private final Map<String, List<ValidationError>> errorsByField;
+    private Map<String, List<ValidationError>> errorsByField;
 
     private static final Comparator<ValidationError> SEVERITY_COMPARATOR =
       Comparator.comparingInt(e -> e.getSeverity().getOrder());
 
+    /**
+     * Creates a DefaultValidationResult with a mutable list.
+     *
+     * @param errors The list of errors (can be mutable)
+     */
     DefaultValidationResult(List<ValidationError> errors) {
-      this.errors = errors != null ? List.copyOf(errors) : Collections.emptyList();
-      this.errorsByField = this.errors.stream()
-        .collect(Collectors.collectingAndThen(
-          Collectors.groupingBy(ValidationError::getField),
-          map -> Collections.unmodifiableMap(map)
-        ));
+      this.errors = errors;
+    }
+
+    private void updateErrorsByField() {
+      if (errorsByField == null) {
+        errorsByField = errors.stream()
+          .collect(Collectors.collectingAndThen(
+            Collectors.groupingBy(ValidationError::getField),
+            map -> Collections.unmodifiableMap(map)
+          ));
+      }
+    }
+
+    @Override
+    public void addError(ValidationError error) {
+      errors.add(error);
+      errorsByField = null; // Force recalculation on next access
     }
 
     @Override
@@ -211,11 +254,13 @@ public interface ValidationResult {
 
     @Override
     public Map<String, List<ValidationError>> getErrorsByField() {
+      updateErrorsByField();
       return errorsByField;
     }
 
     @Override
     public List<ValidationError> getErrorsByField(String field) {
+      updateErrorsByField();
       return errorsByField.getOrDefault(field, Collections.emptyList());
     }
 

@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ia.core.service.exception.ServiceException;
+import com.ia.core.service.HasTransaction;
+import com.ia.core.service.exception.ValidationException;
+import com.ia.core.service.validators.ValidationResult;
 
 /**
  * Implementação do padrão Chain of Responsibility para regras de negócio.
@@ -84,13 +86,13 @@ public class BusinessRuleChain<T extends Serializable> {
    * Executa todas as regras da corrente.
    *
    * @param object O objeto a ser avaliado
-   * @throws ServiceException se alguma regra falhar
+   * @throws ValidationException se alguma regra falhar
    */
-  public void validate(T object) throws ServiceException {
-    ServiceException exception = new ServiceException();
-    validate(object, exception);
-    if (exception.hasErros()) {
-      throw exception;
+  public void validate(T object) throws ValidationException {
+    ValidationResult result = ValidationResult.create();
+    validate(object, result);
+    if (result.hasErrors()) {
+      throw new ValidationException(result);
     }
   }
 
@@ -105,19 +107,19 @@ public class BusinessRuleChain<T extends Serializable> {
    * @param object O objeto a ser avaliado
    * @return Exceção contendo todos os erros, ou {@code null} se válido
    */
-  public ServiceException validateAndCollect(T object) {
-    ServiceException exception = new ServiceException();
-    validate(object, exception);
-    return exception.hasErros() ? exception : null;
+  public ValidationException validateAndCollect(T object) {
+    ValidationResult result = ValidationResult.create();
+    validate(object, result);
+    return result.hasErrors() ? new ValidationException(result) : null;
   }
 
   /**
    * Executa todas as regras da cadeia acumulando erros.
    *
-   * @param object    O objeto a ser avaliado
-   * @param exception Exceção para acumular erros
+   * @param object O objeto a ser avaliado
+   * @param result Resultado da validação para acumular erros
    */
-  public void validate(T object, ServiceException exception) {
+  public void validate(T object, ValidationResult result) {
     for (BusinessRule<? super T> rule : rules) {
       // Verifica condição de parada
       if (stopCondition != null && stopCondition.apply(object)) {
@@ -130,7 +132,7 @@ public class BusinessRuleChain<T extends Serializable> {
       }
 
       // Executa a validação
-      rule.validate(object, exception);
+      rule.validate(object, result);
     }
   }
 
@@ -171,5 +173,60 @@ public class BusinessRuleChain<T extends Serializable> {
    */
   public static <T extends Serializable> BusinessRuleChain<T> create(BusinessRule<? super T> rule) {
     return new BusinessRuleChain<T>().addRule(rule);
+  }
+
+  /**
+   * Executa a validação dentro de uma transação.
+   * <p>
+   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
+   * para realizar validações que requerem transação.
+   * </p>
+   *
+   * @param object         O objeto a ser avaliado
+   * @param hasTransaction Provedor de transação
+   * @throws ValidationException se alguma regra falhar
+   */
+  public void validateInTransaction(T object, HasTransaction hasTransaction)
+    throws ValidationException {
+    ValidationResult result = ValidationResult.create();
+    validateInTransaction(object, result, hasTransaction);
+    if (result.hasErrors()) {
+      throw new ValidationException(result);
+    }
+  }
+
+  /**
+   * Executa a validação dentro de uma transação sem lançar exceção.
+   * <p>
+   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
+   * para realizar validações que requerem transação.
+   * </p>
+   *
+   * @param object         O objeto a ser avaliado
+   * @param hasTransaction Provedor de transação
+   * @return Exceção contendo todos os erros, ou {@code null} se válido
+   */
+  public ValidationException validateInTransactionAndCollect(T object, HasTransaction hasTransaction) {
+    ValidationResult result = ValidationResult.create();
+    validateInTransaction(object, result, hasTransaction);
+    return result.hasErrors() ? new ValidationException(result) : null;
+  }
+
+  /**
+   * Executa a validação dentro de uma transação acumulando erros.
+   * <p>
+   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
+   * para realizar validações que requerem transação.
+   * </p>
+   *
+   * @param object         O objeto a ser avaliado
+   * @param result         Resultado da validação para acumular erros
+   * @param hasTransaction Provedor de transação
+   */
+  public void validateInTransaction(T object, ValidationResult result, HasTransaction hasTransaction) {
+    hasTransaction.onTransaction(() -> {
+      validate(object, result);
+      return null;
+    });
   }
 }

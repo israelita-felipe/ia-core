@@ -442,7 +442,7 @@ Todos os comentários TODO foram adicionados aos seguintes arquivos:
     - LINHA 20-25: P1 - Adicionar throws ou documentação em null ✅ IMPLEMENTADO (documentação)
 
 [✓] DefaultBaseController.java (2 TODOs adicionados)
-    - LINHA 25: P1 - Validação de entrada (Objects.requireNonNull)
+    - LINHA 25: P1 - Validação de entrada (Objects.requireNonNull) ✅ IMPLEMENTADO
     - LINHA 16-17: P2 - Segregação com CQRS pattern
 
 [✓] IServiceValidator.java (2 TODOs adicionados)

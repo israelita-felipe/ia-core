@@ -104,7 +104,7 @@ class ServiceValidatorTest {
 
     @Override
     public void validate(TestDTO object,
-                         com.ia.core.service.exception.ServiceException exception) {
+                         ValidationResult result) {
       // Não implementado para teste
     }
   }

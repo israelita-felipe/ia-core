@@ -1,6 +1,5 @@
 package com.ia.core.security.service.model.privilege;
 
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**

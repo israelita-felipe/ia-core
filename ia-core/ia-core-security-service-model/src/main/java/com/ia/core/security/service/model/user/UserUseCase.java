@@ -1,6 +1,5 @@
 package com.ia.core.security.service.model.user;
 
-import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**

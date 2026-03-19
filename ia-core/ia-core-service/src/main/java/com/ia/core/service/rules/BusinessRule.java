@@ -2,8 +2,8 @@ package com.ia.core.service.rules;
 
 import java.io.Serializable;
 
-import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.translator.Translator;
+import com.ia.core.service.validators.ValidationResult;
 
 /**
  * Interface que representa uma Regra de Negócio do sistema.
@@ -70,12 +70,12 @@ public interface BusinessRule<T extends Serializable> extends Serializable {
   /**
    * Executa a validação da regra de negócio.
    * <p>
-   * Este método deve adicionar erros à {@link ServiceException} caso a regra
+   * Este método deve adicionar erros à {@link ValidationResult} caso a regra
    * não seja satisfeita pelo objeto fornecido.
    * </p>
    *
-   * @param object    O objeto a ser validado
-   * @param exception Exceção para acumular erros de validação
+   * @param object O objeto a ser validado
+   * @param result Resultado da validação para acumular erros
    */
-  void validate(T object, ServiceException exception);
+  void validate(T object, ValidationResult result);
 }

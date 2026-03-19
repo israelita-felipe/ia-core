@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 
-import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.model.role.RolePrivilege;
 

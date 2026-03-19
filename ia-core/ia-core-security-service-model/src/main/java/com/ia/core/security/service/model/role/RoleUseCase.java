@@ -1,6 +1,5 @@
 package com.ia.core.security.service.model.role;
 
-import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**

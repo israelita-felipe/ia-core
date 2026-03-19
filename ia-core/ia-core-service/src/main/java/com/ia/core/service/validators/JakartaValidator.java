@@ -3,7 +3,6 @@ package com.ia.core.service.validators;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.translator.Translator;
 
 import jakarta.validation.ConstraintViolation;
@@ -60,14 +59,17 @@ public class JakartaValidator<T extends Serializable>
   }
 
   @Override
-  public void validate(T object, ServiceException exception) {
+  public void validate(T object, ValidationResult result) {
     Validator validator = getValidator();
     // para cada violação adiciona a mensagem de exceção
     Set<ConstraintViolation<Serializable>> validations = validator
         .validate(object);
-    validations.forEach(violation -> exception.add(getTranslator()
-        .getTranslation(violation.getPropertyPath().toString()) + ": "
-        + getTranslator().getTranslation(violation.getMessage())));
+    validations.forEach(violation -> result.addError(
+        new ValidationError(
+            getTranslator().getTranslation(violation.getPropertyPath().toString()),
+            getTranslator().getTranslation(violation.getMessage()),
+            Severity.ERROR,
+            null)));
   }
 
 }

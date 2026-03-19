@@ -1,11 +1,5 @@
 package com.ia.core.model.projection;
 
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.core.support.RepositoryProxyPostProcessor;
-
-import com.ia.core.model.BaseEntity;
-
 /**
  * Marker interface para projeções JPA.
  * <p>

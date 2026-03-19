@@ -144,15 +144,22 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
    * @param saved DTO salvo após o save
    * @return Tipo de operação determined
    */
-  // TODO [P2] LINHA 107-112: Implementar OperationTypeStrategy pattern com interface
-  // OperationTypeStrategy e implementações para diferentes tipos de DTO.
-  // Status: PENDENTE - determineOperationType() com casting inseguro, viola LSP
-  private CrudOperationType determineOperationType(D original, D saved) {
-    // Fallback para comportamento original se D não for AbstractBaseEntityDTO
-    if (saved instanceof AbstractBaseEntityDTO dto && dto.getId() != null) {
-      return CrudOperationType.UPDATED;
-    }
-    return CrudOperationType.CREATED;
+  /**
+   * Determina o tipo de operação CRUD usando OperationTypeStrategy.
+   * <p>
+   * Este método usa a strategy para determinar se a operação é CREATE ou UPDATE,
+   * seguindo o padrão Strategy para permitir customização.
+   * </p>
+   *
+   * @param original DTO original antes do save
+   * @param saved DTO salvo após o save
+   * @return Tipo de operação determinado
+   */
+  default CrudOperationType determineOperationType(D original, D saved) {    
+      return createOperationTypeStrategy().determine(
+        (AbstractBaseEntityDTO<?>) original,
+        (AbstractBaseEntityDTO<?>) saved
+      );    
   }
 
   /**
