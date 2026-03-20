@@ -3,7 +3,6 @@ package com.ia.core.security.service.log.operation;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.security.model.log.operation.LogOperation;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
@@ -29,14 +28,12 @@ public class LogOperationServiceConfig
    * @param authorizationManager
    * @param logOperationService
    */
-  public LogOperationServiceConfig(PlatformTransactionManager transactionManager,
-                                   BaseEntityRepository<LogOperation> repository,
+  public LogOperationServiceConfig(BaseEntityRepository<LogOperation> repository,
                                    BaseEntityMapper<LogOperation, LogOperationDTO> mapper,
                                    SearchRequestMapper searchRequestMapper,
                                    Translator translator,
                                    List<IServiceValidator<LogOperationDTO>> validators) {
-    super(transactionManager, repository, mapper, searchRequestMapper,
-          translator, validators);
+    super(repository, mapper, searchRequestMapper, translator, validators);
   }
 
 }

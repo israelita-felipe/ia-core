@@ -9,6 +9,7 @@ import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.privilege.PrivilegeUseCase;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 
 /**
  * @author Israel Araújo
@@ -35,9 +36,9 @@ public class PrivilegeService
    *
    * @return lista de {@link PrivilegeDTO}
    */
+  @TransactionalReadOnly
   public List<PrivilegeDTO> findAll() {
-    return onTransaction(() -> getRepository().findAll().stream()
-        .map(this::toDTO).toList());
+    return getRepository().findAll().stream().map(this::toDTO).toList();
   }
 
   /**

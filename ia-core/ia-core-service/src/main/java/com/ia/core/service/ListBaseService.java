@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -39,26 +40,24 @@ public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
    * @param requestDTO {@link SearchRequest}
    * @return {@link Page} de dados do tipo <T>
    */
+  @TransactionalReadOnly
   default Page<D> findAll(SearchRequestDTO requestDTO) {
-    return onTransaction(true, () -> {
-      if (canList(requestDTO)) {
-        SearchRequest request = getSearchRequestMapper()
-            .toModel(requestDTO);
-        request.setFilters(request.getFilters().stream()
-            .filter(filter -> filter.getKey() != null
-                && filter.getOperator() != null)
-            .collect(Collectors.toList()));
-        // cria a especificação
-        SearchSpecification<T> specification = new SearchSpecification<>(request);
-        // cria a paginação
-        Pageable pageable = SearchSpecification
-            .getPageable(request.getPage(), request.getSize());
-        // realiza a busca convertendo para o dto.
-        return getRepository().findAll(specification, pageable)
-            .map(this::toDTO);
-      }
-      return Page.empty();
-    });
+    if (canList(requestDTO)) {
+      SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
+      request.setFilters(request.getFilters().stream()
+          .filter(filter -> filter.getKey() != null
+              && filter.getOperator() != null)
+          .collect(Collectors.toList()));
+      // cria a especificação
+      SearchSpecification<T> specification = new SearchSpecification<>(request);
+      // cria a paginação
+      Pageable pageable = SearchSpecification
+          .getPageable(request.getPage(), request.getSize());
+      // realiza a busca convertendo para o dto.
+      return getRepository().findAll(specification, pageable)
+          .map(this::toDTO);
+    }
+    return Page.empty();
   }
 
 }

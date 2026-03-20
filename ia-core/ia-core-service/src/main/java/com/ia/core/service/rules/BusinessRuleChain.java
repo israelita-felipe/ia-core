@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ia.core.service.HasTransaction;
 import com.ia.core.service.exception.ValidationException;
 import com.ia.core.service.validators.ValidationResult;
 
@@ -17,9 +16,9 @@ import com.ia.core.service.validators.ValidationResult;
  * onde cada regra pode:
  * </p>
  * <ul>
- *   <li>Processar o objeto e passar para a próxima regra</li>
- *   <li>Processar o objeto e parar a corrente</li>
- *   <li>Encerrar a corrente com erro</li>
+ * <li>Processar o objeto e passar para a próxima regra</li>
+ * <li>Processar o objeto e parar a corrente</li>
+ * <li>Encerrar a corrente com erro</li>
  * </ul>
  * <p>
  * A cadeia mantém a ordem de inserção das regras e as executa sequencialmente.
@@ -88,7 +87,8 @@ public class BusinessRuleChain<T extends Serializable> {
    * @param object O objeto a ser avaliado
    * @throws ValidationException se alguma regra falhar
    */
-  public void validate(T object) throws ValidationException {
+  public void validate(T object)
+    throws ValidationException {
     ValidationResult result = ValidationResult.create();
     validate(object, result);
     if (result.hasErrors()) {
@@ -99,9 +99,9 @@ public class BusinessRuleChain<T extends Serializable> {
   /**
    * Executa todas as regras da cadeia sem lançar exceção.
    * <p>
-   * Este método executa cada regra sequencialmente e acumula os erros.
-   * Ao final, retorna uma exceção contendo todos os erros encontrados,
-   * ou {@code null} se nenhuma falha ocorrer.
+   * Este método executa cada regra sequencialmente e acumula os erros. Ao
+   * final, retorna uma exceção contendo todos os erros encontrados, ou
+   * {@code null} se nenhuma falha ocorrer.
    * </p>
    *
    * @param object O objeto a ser avaliado
@@ -167,66 +167,12 @@ public class BusinessRuleChain<T extends Serializable> {
   /**
    * Cria uma nova instância de {@link BusinessRuleChain} com uma regra inicial.
    *
-   * @param rule  Primeira regra da cadeia
-   * @param <T>   Tipo do objeto que a cadeia avaliará
+   * @param rule Primeira regra da cadeia
+   * @param <T>  Tipo do objeto que a cadeia avaliará
    * @return Nova instância da cadeia com a regra
    */
   public static <T extends Serializable> BusinessRuleChain<T> create(BusinessRule<? super T> rule) {
     return new BusinessRuleChain<T>().addRule(rule);
   }
 
-  /**
-   * Executa a validação dentro de uma transação.
-   * <p>
-   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
-   * para realizar validações que requerem transação.
-   * </p>
-   *
-   * @param object         O objeto a ser avaliado
-   * @param hasTransaction Provedor de transação
-   * @throws ValidationException se alguma regra falhar
-   */
-  public void validateInTransaction(T object, HasTransaction hasTransaction)
-    throws ValidationException {
-    ValidationResult result = ValidationResult.create();
-    validateInTransaction(object, result, hasTransaction);
-    if (result.hasErrors()) {
-      throw new ValidationException(result);
-    }
-  }
-
-  /**
-   * Executa a validação dentro de uma transação sem lançar exceção.
-   * <p>
-   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
-   * para realizar validações que requerem transação.
-   * </p>
-   *
-   * @param object         O objeto a ser avaliado
-   * @param hasTransaction Provedor de transação
-   * @return Exceção contendo todos os erros, ou {@code null} se válido
-   */
-  public ValidationException validateInTransactionAndCollect(T object, HasTransaction hasTransaction) {
-    ValidationResult result = ValidationResult.create();
-    validateInTransaction(object, result, hasTransaction);
-    return result.hasErrors() ? new ValidationException(result) : null;
-  }
-
-  /**
-   * Executa a validação dentro de uma transação acumulando erros.
-   * <p>
-   * Este método é útil quando as regras de negócio precisam acessar o banco de dados
-   * para realizar validações que requerem transação.
-   * </p>
-   *
-   * @param object         O objeto a ser avaliado
-   * @param result         Resultado da validação para acumular erros
-   * @param hasTransaction Provedor de transação
-   */
-  public void validateInTransaction(T object, ValidationResult result, HasTransaction hasTransaction) {
-    hasTransaction.onTransaction(() -> {
-      validate(object, result);
-      return null;
-    });
-  }
 }

@@ -19,7 +19,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
 import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
@@ -372,10 +371,9 @@ public abstract class CoreRestSecurityConfig
    * @return UserDetailsService serviço de detalhes do usuário configurado
    */
   @Bean
-  static UserDetailsService userDetailsService(PlatformTransactionManager transactionManager,
-                                               UserRepository repository) {
+  static UserDetailsService userDetailsService(UserRepository repository) {
     log.info(LOG_INICIALIZANDO_USER_DETAILS_SERVICE);
-    return new CoreUserDetailsService(transactionManager, repository);
+    return new CoreUserDetailsService(repository);
   }
 
   /**

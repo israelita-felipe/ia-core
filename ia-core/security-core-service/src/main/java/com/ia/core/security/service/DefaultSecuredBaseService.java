@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -18,6 +17,8 @@ import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.service.annotations.TransactionalReadOnly;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.event.CrudOperationType;
@@ -185,28 +186,33 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
     return funcionalidades;
   }
 
+  @TransactionalWrite
   @Override
   public void delete(Long id)
     throws ServiceException {
     DeleteSecuredBaseService.super.delete(id);
   }
 
+  @TransactionalWrite
   @Override
   public D save(D toSave)
     throws ServiceException {
     return SaveSecuredBaseService.super.save(toSave);
   }
 
+  @TransactionalReadOnly
   @Override
   public int count(SearchRequestDTO requestDTO) {
     return CountSecuredBaseService.super.count(requestDTO);
   }
 
+  @TransactionalReadOnly
   @Override
   public D find(Long id) {
     return FindSecuredBaseService.super.find(id);
   }
 
+  @TransactionalReadOnly
   @Override
   public Page<D> findAll(SearchRequestDTO requestDTO) {
     return ListSecuredBaseService.super.findAll(requestDTO);
@@ -228,8 +234,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
      * @param validators
      * @param eventPublisher
      */
-    public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
-                                           BaseEntityRepository<T> repository,
+    public DefaultSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
                                            Mapper<T, D> mapper,
                                            SearchRequestMapper searchRequestMapper,
                                            Translator translator,
@@ -238,8 +243,8 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
                                            LogOperationService logOperationService,
                                            List<IServiceValidator<D>> validators,
                                            ApplicationEventPublisher eventPublisher) {
-      super(transactionManager, repository, mapper, searchRequestMapper,
-            translator, authorizationManager, securityContextService,
+      super(repository, mapper, searchRequestMapper, translator,
+            authorizationManager, securityContextService,
             logOperationService, eventPublisher);
       this.validators = validators;
     }
@@ -247,8 +252,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
     /**
      * Construtor simplificado sem eventPublisher.
      */
-    public DefaultSecuredBaseServiceConfig(PlatformTransactionManager transactionManager,
-                                           BaseEntityRepository<T> repository,
+    public DefaultSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
                                            Mapper<T, D> mapper,
                                            SearchRequestMapper searchRequestMapper,
                                            Translator translator,
@@ -256,8 +260,8 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
                                            SecurityContextService securityContextService,
                                            LogOperationService logOperationService,
                                            List<IServiceValidator<D>> validators) {
-      this(transactionManager, repository, mapper, searchRequestMapper,
-           translator, authorizationManager, securityContextService,
+      this(repository, mapper, searchRequestMapper, translator,
+           authorizationManager, securityContextService,
            logOperationService, validators, null);
     }
   }

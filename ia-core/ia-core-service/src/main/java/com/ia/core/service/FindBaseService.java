@@ -3,6 +3,7 @@ package com.ia.core.service;
 import java.util.UUID;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.repository.BaseEntityRepository;
 
@@ -33,13 +34,12 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
    * @return {@link DTO} da entidade <T>, ou <code>null</code> caso a mesma não
    *         exista.
    */
+  @TransactionalReadOnly
   default D find(Long id) {
-    return onTransaction(true, () -> {
-      if (canFind(id)) {
-        return toDTO(getRepository().findById(id).orElse(null));
-      }
-      return null;
-    });
+    if (canFind(id)) {
+      return toDTO(getRepository().findById(id).orElse(null));
+    }
+    return null;
   }
 
 }

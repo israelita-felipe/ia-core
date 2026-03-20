@@ -12,6 +12,7 @@ import com.ia.core.security.service.exception.UserNotFountException;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 
 /**
  * @author Israel Araújo
@@ -39,6 +40,7 @@ public interface JwtAuthenticationService
   UserDTO getUser(AuthenticationRequest request)
     throws UserNotFountException;
 
+  @TransactionalReadOnly
   @Override
   default AuthenticationResponse login(AuthenticationRequest request,
                                        BiFunction<String, String, Boolean> passwordChecker)

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
@@ -27,14 +26,12 @@ import lombok.Getter;
  * métodos {@link #afterSave(D, D, CrudOperationType)} e
  * {@link #afterDelete(Long, D)}.
  * </p>
- *
- * TODO [P1] LINHA 45-80: REFATORAÇÃO CRÍTICA - Segregar responsabilidades usando
- * padrão Mediator ou Command. Considerar dividir em 3 classes especializadas:
- * - CreateUpdateService (responsável por save)
- * - DeleteService (responsável por delete)
- * - QueryService (responsável por find/list/count)
- * Justificativa: Classe godclass com ~180 linhas viola SRP. Difícil testar e manter.
- * Status: PENDENTE
+ * TODO [P1] LINHA 45-80: REFATORAÇÃO CRÍTICA - Segregar responsabilidades
+ * usando padrão Mediator ou Command. Considerar dividir em 3 classes
+ * especializadas: - CreateUpdateService (responsável por save) - DeleteService
+ * (responsável por delete) - QueryService (responsável por find/list/count)
+ * Justificativa: Classe godclass com ~180 linhas viola SRP. Difícil testar e
+ * manter. Status: PENDENTE
  *
  * @author Israel Araújo
  * @param <T> Tipo de dado {@link BaseEntity}
@@ -108,13 +105,14 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   }
 
   /**
-   * Publica evento apenas se DTO não for nulo.
-   * Aplica princípio DRY para evitar duplicação de código.
+   * Publica evento apenas se DTO não for nulo. Aplica princípio DRY para evitar
+   * duplicação de código.
    *
    * @param dto           DTO a ser publicado (pode ser nulo)
    * @param operationType Tipo de operação
    */
-  protected void publishEventIfDtoNotNull(D dto, CrudOperationType operationType) {
+  protected void publishEventIfDtoNotNull(D dto,
+                                          CrudOperationType operationType) {
     if (dto != null) {
       publishEvent(dto, operationType);
     }
@@ -162,7 +160,6 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
     /**
      * Construtor da configuração do serviço base.
      *
-     * @param transactionManager  Gestor de transação
      * @param repository          repositório do serviço
      * @param mapper              mapeador do objeto do serviço
      * @param searchRequestMapper mapeador do objeto de busca
@@ -170,29 +167,27 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
      * @param validators          validadores deste serviço
      * @param eventPublisher      publicador de eventos (opcional)
      */
-    public DefaultBaseServiceConfig(PlatformTransactionManager transactionManager,
-                                    BaseEntityRepository<T> repository,
+    public DefaultBaseServiceConfig(BaseEntityRepository<T> repository,
                                     BaseEntityMapper<T, D> mapper,
                                     SearchRequestMapper searchRequestMapper,
                                     Translator translator,
                                     List<IServiceValidator<D>> validators,
                                     ApplicationEventPublisher eventPublisher) {
-      super(transactionManager, repository, mapper, searchRequestMapper,
-            translator, eventPublisher);
+      super(repository, mapper, searchRequestMapper, translator,
+            eventPublisher);
       this.validators = validators;
     }
 
     /**
      * Construtor simplificado sem eventPublisher.
      */
-    public DefaultBaseServiceConfig(PlatformTransactionManager transactionManager,
-                                    BaseEntityRepository<T> repository,
+    public DefaultBaseServiceConfig(BaseEntityRepository<T> repository,
                                     BaseEntityMapper<T, D> mapper,
                                     SearchRequestMapper searchRequestMapper,
                                     Translator translator,
                                     List<IServiceValidator<D>> validators) {
-      this(transactionManager, repository, mapper, searchRequestMapper,
-           translator, validators, null);
+      this(repository, mapper, searchRequestMapper, translator, validators,
+           null);
     }
 
   }

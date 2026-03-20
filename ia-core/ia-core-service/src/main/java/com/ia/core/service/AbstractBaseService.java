@@ -1,13 +1,11 @@
 package com.ia.core.service;
 
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.contract.HasMapper;
 import com.ia.core.service.contract.HasRepository;
 import com.ia.core.service.contract.HasSearchRequestMapper;
-import com.ia.core.service.contract.HasTransactionManager;
 import com.ia.core.service.contract.HasTranslator;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.event.BaseServiceEvent;
@@ -28,8 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * segregadas para fornecer acesso a componentes específicos: -
  * {@link HasRepository} - Acesso ao repositório - {@link HasMapper} - Acesso ao
  * mapper - {@link HasSearchRequestMapper} - Acesso ao search request mapper -
- * {@link HasTranslator} - Acesso ao tradutor - {@link HasTransactionManager} -
- * Acesso ao gerenciador de transações
+ * {@link HasTranslator} - Acesso ao tradutor
  *
  * @author Israel Araújo
  * @param <T> {@link BaseEntity}
@@ -39,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>>
   implements BaseService<T, D>, HasRepository<T>, HasMapper<T, D>,
-  HasSearchRequestMapper, HasTranslator, HasTransactionManager {
+  HasSearchRequestMapper, HasTranslator {
   /**
    * Configuração do serviço base.
    */
@@ -66,19 +63,19 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
       throw new IllegalStateException("Configuração não pode ser nula em "
           + this.getClass().getSimpleName());
     }
-    
+
     // Validação de cada dependência usando Composite Validator Pattern
     validateRepository();
     validateMapper();
     validateTranslator();
-    validateTransactionManager();
-    
+
     log.debug("Configuração validada para {}",
               this.getClass().getSimpleName());
   }
 
   /**
    * Valida se o repositório está configurado.
+   *
    * @throws IllegalStateException se repository for nulo
    */
   private void validateRepository() {
@@ -90,6 +87,7 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
 
   /**
    * Valida se o mapper está configurado.
+   *
    * @throws IllegalStateException se mapper for nulo
    */
   private void validateMapper() {
@@ -101,22 +99,12 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
 
   /**
    * Valida se o translator está configurado.
+   *
    * @throws IllegalStateException se translator for nulo
    */
   private void validateTranslator() {
     if (config.getTranslator() == null) {
       throw new IllegalStateException("Translator não pode ser nulo em "
-          + this.getClass().getSimpleName());
-    }
-  }
-
-  /**
-   * Valida se o transaction manager está configurado.
-   * @throws IllegalStateException se transactionManager for nulo
-   */
-  private void validateTransactionManager() {
-    if (config.getTransactionManager() == null) {
-      throw new IllegalStateException("TransactionManager não pode ser nulo em "
           + this.getClass().getSimpleName());
     }
   }
@@ -177,41 +165,31 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
     return config.getTranslator();
   }
 
-  /**
-   * Obtém o gerenciador de transações do serviço.
-   *
-   * @return {@link PlatformTransactionManager}
-   */
-  @Override
-  public PlatformTransactionManager getTransactionManager() {
-    return config.getTransactionManager();
-  }
-
   // ========== MÉTODOS DE PUBLICAÇÃO DE EVENTOS ==========
 
   /**
    * Publica um evento de domínio relacionado ao DTO.
    * <p>
-   * Este método permite que subclasses publiquem eventos quando
-   * operações significativas são realizadas (criação, atualização,
-   * exclusão, etc.).
+   * Este método permite que subclasses publiquem eventos quando operações
+   * significativas são realizadas (criação, atualização, exclusão, etc.).
    * </p>
    * <p>
-   * <b>Thread-Safety:</b> Este método é thread-safe. A publicação de eventos
-   * é delegados ao ApplicationEventPublisher do Spring que gerencia a sincronização.
+   * <b>Thread-Safety:</b> Este método é thread-safe. A publicação de eventos é
+   * delegados ao ApplicationEventPublisher do Spring que gerencia a
+   * sincronização.
    * </p>
    * <p>
-   * <b>Comportamento Assíncrono:</b> Por padrão, os eventos são publicados
-   * de forma síncrona no mesmo thread da transação. Para processamento
-   * assíncrono, configure um {@code ApplicationEventMulticaster} customizado
-   * com executor assíncrono.
+   * <b>Comportamento Assíncrono:</b> Por padrão, os eventos são publicados de
+   * forma síncrona no mesmo thread da transação. Para processamento assíncrono,
+   * configure um {@code ApplicationEventMulticaster} customizado com executor
+   * assíncrono.
    * </p>
    * <p>
    * <b>Garantias de Entrega:</b>
    * <ul>
-   *   <li>Se eventPublisher for nulo, o evento é ignorado silenciosamente</li>
-   *   <li>Eventos são publicados apenas se a transação estiver ativa</li>
-   *   <li>Exceções na publicação não interrompem a transação principal</li>
+   * <li>Se eventPublisher for nulo, o evento é ignorado silenciosamente</li>
+   * <li>Eventos são publicados apenas se a transação estiver ativa</li>
+   * <li>Exceções na publicação não interrompem a transação principal</li>
    * </ul>
    * </p>
    *
@@ -250,18 +228,14 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <T> {@link BaseEntity}
    * @param <D> {@link DTO}
    */
-  // TODO [P2] LINHA 175: Considerar converter AbstractBaseServiceConfig em record Java 21
-  // para melhor imutabilidade e segurança de thread. Spring Boot 3.5.5 suporta records nativamente.
+  // TODO [P2] LINHA 175: Considerar converter AbstractBaseServiceConfig em
+  // record Java 21
+  // para melhor imutabilidade e segurança de thread. Spring Boot 3.5.5 suporta
+  // records nativamente.
   // Status: PENDENTE - Configuração mutável, melhor usar record Java 21
   @RequiredArgsConstructor
   @Slf4j
   public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<?>> {
-
-    /**
-     * Gestor de transação Spring.
-     */
-    @Getter
-    private final PlatformTransactionManager transactionManager;
 
     /**
      * Repositório para operações de persistência.

@@ -1,6 +1,7 @@
 package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseEntityMapper;
@@ -16,8 +17,7 @@ import com.ia.core.service.translator.Translator;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-public interface BaseService<T extends BaseEntity, D extends DTO<?>>
-  extends HasTransaction {
+public interface BaseService<T extends BaseEntity, D extends DTO<?>> {
 
   /**
    * {@link BaseEntityMapper}
@@ -51,10 +51,13 @@ public interface BaseService<T extends BaseEntity, D extends DTO<?>>
    * @param model {@link BaseEntity}
    * @return {@link DTO}
    */
-  // TODO [P2] LINHA 50-65: Avaliar eficiência de chamar getMapper() repetidamente
-  // toDTO() e toModel() são default methods que chamam getMapper() a cada invocação
+  // TODO [P2] LINHA 50-65: Avaliar eficiência de chamar getMapper()
+  // repetidamente
+  // toDTO() e toModel() são default methods que chamam getMapper() a cada
+  // invocação
   // Considerar decorator pattern ou composition se reutilizado frequentemente
   // Status: PENDENTE - Performance: cada chamada obtém referência do mapper
+  @TransactionalReadOnly
   default D toDTO(T model) {
     return getMapper().toDTO(model);
   }

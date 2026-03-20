@@ -2,8 +2,6 @@ package com.ia.core.service.attachment;
 
 import java.util.List;
 
-import org.springframework.transaction.PlatformTransactionManager;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
@@ -26,14 +24,12 @@ public class AttachmentServiceConfig<T extends Attachment, D extends AttachmentD
    * @param translator
    * @param validators
    */
-  public AttachmentServiceConfig(PlatformTransactionManager transactionManager,
-                                 BaseEntityRepository<T> repository,
+  public AttachmentServiceConfig(BaseEntityRepository<T> repository,
                                  BaseEntityMapper<T, D> mapper,
                                  SearchRequestMapper searchRequestMapper,
                                  Translator translator,
                                  List<IServiceValidator<D>> validators) {
-    super(transactionManager, repository, mapper, searchRequestMapper,
-          translator, validators);
+    super(repository, mapper, searchRequestMapper, translator, validators);
   }
 
 }

@@ -1,7 +1,6 @@
 package com.ia.core.service;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
@@ -15,8 +14,8 @@ import com.ia.core.service.repository.BaseEntityRepository;
  * Para publicação de eventos de domínio, sobrescreva os métodos:
  * </p>
  * <ul>
- *   <li>{@link #beforeDelete(Long)} - Chamado antes de deletar</li>
- *   <li>{@link #afterDelete(Long, D)} - Chamado após deletar</li>
+ * <li>{@link #beforeDelete(Long)} - Chamado antes de deletar</li>
+ * <li>{@link #afterDelete(Long, DTO)} - Chamado após deletar</li>
  * </ul>
  *
  * @author Israel Araújo
@@ -29,29 +28,31 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
   /**
    * Método chamado antes de deletar o registro.
    * <p>
-   * Sobrescreva este método para executar lógica antes do delete,
-   * como validações adicionais ou publicação de eventos.
+   * Sobrescreva este método para executar lógica antes do delete, como
+   * validações adicionais ou publicação de eventos.
    * </p>
    *
    * @param id Identificador do registro a ser deletado
    * @throws ServiceException em caso de erro
    */
-  default void beforeDelete(Long id) throws ServiceException {
+  default void beforeDelete(Long id)
+    throws ServiceException {
     // Default: sem ação
   }
 
   /**
    * Método chamado após deletar o registro.
    * <p>
-   * Sobrescreva este método para executar lógica após o delete,
-   * como publicação de eventos de domínio.
+   * Sobrescreva este método para executar lógica após o delete, como publicação
+   * de eventos de domínio.
    * </p>
    *
    * @param id  Identificador do registro deletado
    * @param dto DTO do registro deletado
    * @throws ServiceException em caso de erro
    */
-  default void afterDelete(Long id, D dto) throws ServiceException {
+  default void afterDelete(Long id, D dto)
+    throws ServiceException {
     // Default: sem ação
   }
 
@@ -76,20 +77,17 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
     throws ServiceException {
     beforeDelete(id);
     ServiceException ex = new ServiceException();
-    AtomicReference<D> dtoRef = new AtomicReference<>();
-    onTransaction(() -> {
-      if (canDelete(id)) {
-        try {
-          dtoRef.set(toDTO(getRepository().findById(id).orElse(null)));
-          getRepository().deleteById(id);
-        } catch (Exception e) {
-          ex.add(e);
-        }
+    D dto = null;
+    if (canDelete(id)) {
+      try {
+        dto = toDTO(getRepository().findById(id).orElse(null));
+        getRepository().deleteById(id);
+        afterDelete(id, dto);
+      } catch (Exception e) {
+        ex.add(e);
       }
-      return id;
-    });
-    checkErrors(ex);
-    afterDelete(id, dtoRef.get());
+    }
+    throwIfHasErrors(ex);
   }
 
 }

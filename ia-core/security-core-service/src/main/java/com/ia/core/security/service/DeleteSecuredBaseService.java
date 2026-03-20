@@ -9,6 +9,7 @@ import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.authorization.CoreAuthorizationManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.DeleteBaseService;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.exception.ServiceException;
@@ -45,23 +46,21 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
     return contextMap;
   }
 
+  @TransactionalWrite
   @Override
   default void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    onTransaction(() -> {
-      try {
-        D dto = getLogOperationService()
-            .logBeforeDelete(id, getRepository(), getMapper());
-        DeleteBaseService.super.delete(id);
-        getLogOperationService().logAfterDelete(dto, getRepository(),
-                                                getMapper());
-      } catch (Exception e) {
-        ex.add(ex);
-      }
-      return id;
-    });
-    checkErrors(ex);
+    try {
+      D dto = getLogOperationService().logBeforeDelete(id, getRepository(),
+                                                       getMapper());
+      DeleteBaseService.super.delete(id);
+      getLogOperationService().logAfterDelete(dto, getRepository(),
+                                              getMapper());
+    } catch (Exception e) {
+      ex.add(ex);
+    }
+    throwIfHasErrors(ex);
   }
 
   @Override

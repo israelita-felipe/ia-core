@@ -6,6 +6,7 @@ import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.SaveBaseService;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -43,24 +44,22 @@ public interface SaveSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
     return Set.of(functionalityManager.addFunctionality(this));
   }
 
+  @TransactionalWrite
   @Override
   default D save(D toSave)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    D savedEntity = onTransaction(() -> {
-      try {
-        getLogOperationService().logBeforeSave(toSave, getRepository(),
-                                               getMapper());
-        D saved = SaveBaseService.super.save(toSave);
-        getLogOperationService().logAfterSave(toSave, saved,
-                                              getRepository(), getMapper());
-        return saved;
-      } catch (Exception e) {
-        ex.add(e);
-      }
-      return null;
-    });
-    checkErrors(ex);
-    return savedEntity;
+    D saved = null;
+    try {
+      getLogOperationService().logBeforeSave(toSave, getRepository(),
+                                             getMapper());
+      saved = SaveBaseService.super.save(toSave);
+      getLogOperationService().logAfterSave(toSave, saved, getRepository(),
+                                            getMapper());
+    } catch (Exception e) {
+      ex.add(e);
+    }
+    throwIfHasErrors(ex);
+    return saved;
   }
 }

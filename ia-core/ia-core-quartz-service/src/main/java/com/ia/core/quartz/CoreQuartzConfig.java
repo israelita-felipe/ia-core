@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Configuração principal do Quartz Scheduler para a aplicação.
  * <p>
- * Esta classe define as configurações necessárias para inicializar o
- * scheduler Quartz, incluindo:
+ * Esta classe define as configurações necessárias para inicializar o scheduler
+ * Quartz, incluindo:
  * <ul>
  * <li>Configurações do scheduler (nome, ID)</li>
  * <li>Configurações do pool de threads</li>
@@ -68,7 +68,8 @@ public class CoreQuartzConfig {
   public static final String PROP_JOBSTORE_CLASS = "org.quartz.jobStore.class";
 
   /**
-   * Factory para criação de instâncias de jobs com injeção de dependências Spring.
+   * Factory para criação de instâncias de jobs com injeção de dependências
+   * Spring.
    */
   private final CoreSpringBeanJobFactory springBeanJobFactory;
 
@@ -104,8 +105,8 @@ public class CoreQuartzConfig {
   /**
    * Inicializador de contexto de execução de job.
    * <p>
-   * Este método pode ser sobrescrito para adicionar customização
-   * ao contexto de execução dos jobs.
+   * Este método pode ser sobrescrito para adicionar customização ao contexto de
+   * execução dos jobs.
    *
    * @param context Contexto de execução do job
    * @since 1.0.0
@@ -144,9 +145,9 @@ public class CoreQuartzConfig {
 
     properties.setProperty(PROP_JOBSTORE_DRIVER_DELEGATE_CLASS,
                            "org.quartz.impl.jdbcjobstore.StdJDBCDelegate");
-    properties.setProperty(PROP_JOBSTORE_TABLE_PREFIX,
-                           QuartzModel.SCHEMA + "."
-                               + QuartzModel.TABLE_PREFIX);
+    properties
+        .setProperty(PROP_JOBSTORE_TABLE_PREFIX,
+                     QuartzModel.SCHEMA + "." + QuartzModel.TABLE_PREFIX);
 
     return properties;
   }

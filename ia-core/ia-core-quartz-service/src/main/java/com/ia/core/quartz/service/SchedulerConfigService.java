@@ -36,6 +36,8 @@ import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.SchedulerUseCase;
 import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
 
@@ -82,8 +84,8 @@ public class SchedulerConfigService
   @Override
   public void baseServiceInit() {
     super.baseServiceInit();
-    criarListeners();
-    agendarJobs();
+    // criarListeners();
+    // agendarJobs();
   }
 
   /**
@@ -152,13 +154,12 @@ public class SchedulerConfigService
    * @param id ID da configuração
    * @return DTO da configuração com triggers preenchidos
    */
+  @TransactionalReadOnly
   @Override
   public SchedulerConfigDTO find(Long id) {
-    return onTransaction(() -> {
-      SchedulerConfigDTO schedulerConfigDTO = super.find(id);
-      processarTriggers(schedulerConfigDTO);
-      return schedulerConfigDTO;
-    });
+    SchedulerConfigDTO schedulerConfigDTO = super.find(id);
+    processarTriggers(schedulerConfigDTO);
+    return schedulerConfigDTO;
   }
 
   /**
@@ -168,13 +169,12 @@ public class SchedulerConfigService
    * @param requestDTO Critérios de busca
    * @return Página de DTOs com triggers preenchidos
    */
+  @TransactionalReadOnly
   @Override
   public Page<SchedulerConfigDTO> findAll(SearchRequestDTO requestDTO) {
-    return onTransaction(() -> {
-      Page<SchedulerConfigDTO> all = super.findAll(requestDTO);
-      all.forEach(this::processarTriggers);
-      return all;
-    });
+    Page<SchedulerConfigDTO> all = super.findAll(requestDTO);
+    all.forEach(this::processarTriggers);
+    return all;
   }
 
   /**
@@ -326,37 +326,35 @@ public class SchedulerConfigService
    * @return DTO salvo
    * @throws ServiceException se ocorrer erro durante o agendamento
    */
+  @TransactionalWrite
   @Override
   public SchedulerConfigDTO save(SchedulerConfigDTO toSave)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    SchedulerConfigDTO savedEntity = onTransaction(() -> {
-      SchedulerConfigDTO salvo = null;
-      try {
-        boolean isNovo = toSave.getId() == null;
-        salvo = super.save(toSave);
+    SchedulerConfigDTO salvo = null;
+    try {
+      boolean isNovo = toSave.getId() == null;
+      salvo = super.save(toSave);
 
-        if (isNovo && salvo.getPeriodicidade().getAtivo()) {
-          agendarJob(salvo);
-          log.info("Novo job agendado com ID: {}", salvo.getId());
-        } else if (!isNovo) {
-          if (salvo.getPeriodicidade().getAtivo()) {
-            atualizarJob(salvo);
-            log.info("Job atualizado com ID: {}", salvo.getId());
-          } else {
-            cancelarJob(salvo);
-            log.info("Job cancelado com ID: {}", salvo.getId());
-          }
+      if (isNovo && salvo.getPeriodicidade().getAtivo()) {
+        agendarJob(salvo);
+        log.info("Novo job agendado com ID: {}", salvo.getId());
+      } else if (!isNovo) {
+        if (salvo.getPeriodicidade().getAtivo()) {
+          atualizarJob(salvo);
+          log.info("Job atualizado com ID: {}", salvo.getId());
+        } else {
+          cancelarJob(salvo);
+          log.info("Job cancelado com ID: {}", salvo.getId());
         }
-      } catch (Exception e) {
-        ex.add(e);
-        log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
-                  toSave, e.getLocalizedMessage());
       }
-      return salvo;
-    });
-    checkErrors(ex);
-    return savedEntity;
+    } catch (Exception e) {
+      ex.add(e);
+      log.error("Erro ao sincronizar job com scheduler para configuração {}: {}",
+                toSave, e.getLocalizedMessage());
+    }
+    throwIfHasErrors(ex);
+    return salvo;
   }
 
   /**
@@ -366,26 +364,23 @@ public class SchedulerConfigService
    * @param id ID da configuração a ser excluída
    * @throws ServiceException se ocorrer erro durante o cancelamento
    */
+  @TransactionalWrite
   @Override
   public void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    onTransaction(() -> {
-      try {
-        SchedulerConfigDTO schedulerConfigDTO = find(id);
-        super.delete(id);
+    try {
+      SchedulerConfigDTO schedulerConfigDTO = find(id);
+      super.delete(id);
 
-        if (schedulerConfigDTO != null) {
-          cancelarJob(schedulerConfigDTO);
-          log.info("Job cancelado durante exclusão da configuração: {}",
-                   id);
-        }
-      } catch (Exception e) {
-        ex.add(e);
+      if (schedulerConfigDTO != null) {
+        cancelarJob(schedulerConfigDTO);
+        log.info("Job cancelado durante exclusão da configuração: {}", id);
       }
-      return id;
-    });
-    checkErrors(ex);
+    } catch (Exception e) {
+      ex.add(e);
+    }
+    throwIfHasErrors(ex);
   }
 
   @Override
@@ -433,15 +428,17 @@ public class SchedulerConfigService
    * @param active true para ativas, false para inativas
    * @return Lista de DTOs filtrados
    */
+  @TransactionalReadOnly
   public List<SchedulerConfigDTO> findAllActive(boolean active) {
-    return onTransaction(() -> getConfig().getRepository()
-        .findAllActiveWithPeriodicidade(active).stream()
-        .map(getMapper()::toDTO).toList());
+    return getConfig().getRepository()
+        .findAllActiveWithPeriodicidade(active).stream().map(this::toDTO)
+        .toList();
   }
 
   /**
    * Agenda todos os jobs ativos ao inicializar a aplicação.
    */
+  @TransactionalReadOnly
   public void agendarJobs() {
     try {
       List<SchedulerConfigDTO> configs = findAllActive(true);
@@ -465,7 +462,8 @@ public class SchedulerConfigService
    * @throws SchedulerException     se ocorrer erro no scheduler
    * @throws ClassNotFoundException se a classe do job não for encontrada
    */
-  private void agendarJob(SchedulerConfigDTO config)
+  @TransactionalWrite
+  public void agendarJob(SchedulerConfigDTO config)
     throws SchedulerException, ClassNotFoundException {
     JobDetail jobDetail = criarDetalhesJob(config);
     Trigger trigger = criarTrigger(config);

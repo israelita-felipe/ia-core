@@ -1,7 +1,5 @@
 package com.ia.core.service.attachment;
 
-import static com.ia.core.service.HasTransaction.log;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -9,6 +7,7 @@ import java.util.UUID;
 
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
@@ -18,6 +17,8 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.util.ZipUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Serviço para manipulação de anexos
  *
@@ -25,6 +26,7 @@ import com.ia.core.service.util.ZipUtil;
  * @param <T> Tipo do arquivo
  * @param <D> Tipo do {@link DTO} do arquivo.
  */
+@Slf4j
 public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
   extends DefaultBaseService<T, D> {
 
@@ -50,20 +52,18 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     super(config);
   }
 
+  @TransactionalWrite
   @Override
   public void delete(Long id)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    onTransaction(() -> {
-      try {
-        super.delete(id);
-        getFile(id).delete();
-      } catch (Exception e) {
-        ex.add(e);
-      }
-      return id;
-    });
-    checkErrors(ex);
+    try {
+      super.delete(id);
+      getFile(id).delete();
+    } catch (Exception e) {
+      ex.add(e);
+    }
+    throwIfHasErrors(ex);
   }
 
   /**
@@ -119,21 +119,22 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     return dto;
   }
 
+  @TransactionalWrite
   @Override
   public D save(D toSave)
     throws ServiceException {
     ServiceException ex = new ServiceException();
-    D savedEntity = onTransaction(() -> {
-      D saved = null;
-      try {
-        saved = super.save(toSave);
-        if (toSave.hasContent()) {
-          Long id = saved.getId();
-          FileWriter fw = new FileWriter(getFile(id));
-          fw.write(toSave.getContent());
-          fw.close();
-        }
-      } catch (Exception e) {
+    D saved = null;
+    try {
+      saved = super.save(toSave);
+      if (toSave.hasContent()) {
+        Long id = saved.getId();
+        FileWriter fw = new FileWriter(getFile(id));
+        fw.write(toSave.getContent());
+        fw.close();
+      }
+    } catch (Exception e) {
+      if (saved != null) {
         Long id = saved.getId();
         // se existir arquivo salvo e for um arquivo novo deleta o arquivo.
         // Evita deletar quando ocorre erro em atualização.
@@ -144,12 +145,11 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
             ex.add(e2);
           }
         }
-        ex.add(e);
       }
-      return saved;
-    });
-    checkErrors(ex);
-    return savedEntity;
+      ex.add(e);
+    }
+    throwIfHasErrors(ex);
+    return saved;
   }
 
   /**

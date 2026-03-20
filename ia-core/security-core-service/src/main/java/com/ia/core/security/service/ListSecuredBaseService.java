@@ -13,6 +13,7 @@ import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.ListBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
@@ -40,6 +41,7 @@ public interface ListSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
     return getAuthorizationManager().canRead(this, requestDTO);
   }
 
+  @TransactionalReadOnly
   @Override
   default Page<D> findAll(SearchRequestDTO requestDTO) {
     getAuthorizationManager().getCurrentContextDefinitions().definitions()
