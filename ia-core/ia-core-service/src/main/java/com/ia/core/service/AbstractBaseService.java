@@ -228,11 +228,6 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <T> {@link BaseEntity}
    * @param <D> {@link DTO}
    */
-  // TODO [P2] LINHA 175: Considerar converter AbstractBaseServiceConfig em
-  // record Java 21
-  // para melhor imutabilidade e segurança de thread. Spring Boot 3.5.5 suporta
-  // records nativamente.
-  // Status: PENDENTE - Configuração mutável, melhor usar record Java 21
   @RequiredArgsConstructor
   @Slf4j
   public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<?>> {

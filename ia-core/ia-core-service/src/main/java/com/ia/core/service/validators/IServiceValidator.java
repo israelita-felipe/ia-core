@@ -107,20 +107,4 @@ public interface IServiceValidator<D extends Serializable> {
       remove();
     }
   }
-
-  /**
-   * Registro de um validador
-   *
-   * @deprecated Use {@link ValidatorRegistration} para compatibilidade com
-   *             try-with-resources
-   */
-  @Deprecated
-  @FunctionalInterface
-  interface ServiceValidatorRegistry {
-    /**
-     * Ação de remoção do validador
-     */
-    @Deprecated
-    void remove();
-  }
 }

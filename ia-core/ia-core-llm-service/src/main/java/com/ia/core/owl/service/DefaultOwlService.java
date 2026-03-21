@@ -40,7 +40,7 @@ public class DefaultOwlService
   DefaultOWLUseCase {
 
   @Getter
-  private final CoreOWLReasoner reasonerService;
+  private final OWLReasoningService reasonerService;
   @Getter
   private final OWLDataFactory dataFactory;
   @Getter
@@ -118,7 +118,7 @@ public class DefaultOwlService
                                                     IRI.create(version)));
   }
 
-  public CoreOWLReasoner createOWLReasoner(OWLOntologyManager manager,
+  public OWLReasoningService createOWLReasoner(OWLOntologyManager manager,
                                            OWLOntology ontology,
                                            PrefixManager prefixManager) {
     return new OpenlletReasonerService(manager, ontology, prefixManager);

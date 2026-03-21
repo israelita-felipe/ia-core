@@ -16,7 +16,6 @@ public class ViewPrivilegeContext
    */
   public ViewPrivilegeContext() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   /**
@@ -24,7 +23,6 @@ public class ViewPrivilegeContext
    */
   public ViewPrivilegeContext(Collection<PrivilegeContext> context) {
     super(context);
-    // TODO Auto-generated constructor stub
   }
 
 }

@@ -118,8 +118,8 @@ class BaseServiceTest {
   }
 
   @Nested
-  @DisplayName("checkErrors")
-  class TestesCheckErrors {
+  @DisplayName("throwIfHasErrors")
+  class TestesThrowIfHasErrors {
 
     @Test
     @DisplayName("Deve lançar exceção quando o serviço tiver erros")
@@ -130,7 +130,7 @@ class BaseServiceTest {
       exception.add("Erro 2");
 
       // Quando & Então
-      assertThatThrownBy(() -> service.checkErrors(exception))
+      assertThatThrownBy(() -> service.throwIfHasErrors(exception))
           .isInstanceOf(ServiceException.class);
     }
 
@@ -141,7 +141,7 @@ class BaseServiceTest {
       ServiceException exception = new ServiceException();
 
       // Quando & Então
-      service.checkErrors(exception); // Não deve lançar
+      service.throwIfHasErrors(exception); // Não deve lançar
     }
   }
 

@@ -91,13 +91,6 @@ public abstract class BaseEntity
    *
    * @throws IllegalStateException se o gerador TSID não estiver disponível
    */
-  // TODO [P1] LINHA 85-100: Considerar sincronização de geração de ID em alta
-  // concorrência
-  // onCreate() chama TSID.Factory.getTsid4096().toLong() sem sincronização
-  // Se múltiplas threads persistem simultaneamente, considerar usar
-  // @GeneratedValue com custom sequence
-  // Status: PENDENTE - Concorrência: possível (embora raro) colisão de IDs em
-  // alta concorrência
   @PrePersist
   public void onCreate() {
     if (this.id == null) {

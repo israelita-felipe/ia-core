@@ -26,12 +26,6 @@ import lombok.Getter;
  * métodos {@link #afterSave(D, D, CrudOperationType)} e
  * {@link #afterDelete(Long, D)}.
  * </p>
- * TODO [P1] LINHA 45-80: REFATORAÇÃO CRÍTICA - Segregar responsabilidades
- * usando padrão Mediator ou Command. Considerar dividir em 3 classes
- * especializadas: - CreateUpdateService (responsável por save) - DeleteService
- * (responsável por delete) - QueryService (responsável por find/list/count)
- * Justificativa: Classe godclass com ~180 linhas viola SRP. Difícil testar e
- * manter. Status: PENDENTE
  *
  * @author Israel Araújo
  * @param <T> Tipo de dado {@link BaseEntity}

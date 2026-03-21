@@ -51,12 +51,6 @@ public interface BaseService<T extends BaseEntity, D extends DTO<?>> {
    * @param model {@link BaseEntity}
    * @return {@link DTO}
    */
-  // TODO [P2] LINHA 50-65: Avaliar eficiência de chamar getMapper()
-  // repetidamente
-  // toDTO() e toModel() são default methods que chamam getMapper() a cada
-  // invocação
-  // Considerar decorator pattern ou composition se reutilizado frequentemente
-  // Status: PENDENTE - Performance: cada chamada obtém referência do mapper
   @TransactionalReadOnly
   default D toDTO(T model) {
     return getMapper().toDTO(model);
@@ -83,16 +77,5 @@ public interface BaseService<T extends BaseEntity, D extends DTO<?>> {
     if (ex.hasErros()) {
       throw ex;
     }
-  }
-
-  /**
-   * @deprecated Use {@link #throwIfHasErrors(ServiceException)} em vez disso.
-   * @param ex {@link ServiceException}
-   * @throws ServiceException caso haja erros adicionados na exceção
-   */
-  @Deprecated
-  default void checkErrors(ServiceException ex)
-    throws ServiceException {
-    throwIfHasErrors(ex);
   }
 }
