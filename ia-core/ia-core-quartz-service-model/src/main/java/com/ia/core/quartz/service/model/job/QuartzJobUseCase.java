@@ -2,6 +2,10 @@ package com.ia.core.quartz.service.model.job;
 
 import java.util.List;
 
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
+
 /**
  * Interface de Use Case para manipulação direta de Jobs do Quartz.
  * <p>

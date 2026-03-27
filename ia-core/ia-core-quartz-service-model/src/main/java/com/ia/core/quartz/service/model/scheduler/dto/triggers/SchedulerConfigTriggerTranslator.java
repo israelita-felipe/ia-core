@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.scheduler.triggers;
+package com.ia.core.quartz.service.model.scheduler.dto.triggers;
 
 /**
  * @author Israel Araújo

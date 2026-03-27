@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.scheduler;
+package com.ia.core.quartz.service.model.scheduler.dto;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,8 +30,8 @@ class SchedulerConfigSearchRequest
              Arrays
                  .asList(FilterRequestDTO.builder()
                      .key(SchedulerConfigTranslator.JOB_CLASS_NAME)
-                     .fieldType(FieldType.STRING)
-                     .operator(OperatorDTO.LIKE).build(),
+                     .fieldType(FieldType.STRING).operator(OperatorDTO.LIKE)
+                     .build(),
                          FilterRequestDTO.builder()
                              .key(SchedulerConfigTranslator.JOB_CLASS_NAME)
                              .fieldType(FieldType.STRING)

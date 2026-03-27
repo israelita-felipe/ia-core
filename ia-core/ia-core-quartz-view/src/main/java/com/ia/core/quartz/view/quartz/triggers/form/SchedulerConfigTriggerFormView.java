@@ -1,7 +1,7 @@
 package com.ia.core.quartz.view.quartz.triggers.form;
 
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerTranslator;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;

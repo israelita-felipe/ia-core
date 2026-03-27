@@ -1,7 +1,7 @@
 package com.ia.core.quartz.view.quartz.triggers.page;
 
 import com.ia.core.model.TSID;
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;

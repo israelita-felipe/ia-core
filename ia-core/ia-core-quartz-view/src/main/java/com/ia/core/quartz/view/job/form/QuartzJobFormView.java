@@ -1,7 +1,7 @@
 package com.ia.core.quartz.view.job.form;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
-import com.ia.core.quartz.service.model.job.QuartzJobTranslator;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobTranslator;
 import com.ia.core.service.util.JsonUtil;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;

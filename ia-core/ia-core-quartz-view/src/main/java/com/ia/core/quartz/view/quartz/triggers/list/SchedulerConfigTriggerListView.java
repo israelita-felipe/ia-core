@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.quartz.triggers.list;
 
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 

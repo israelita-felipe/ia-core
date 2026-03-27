@@ -3,8 +3,8 @@ package com.ia.core.quartz.view.quartz.form;
 import java.util.Collection;
 
 import com.ia.core.model.TSID;
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormViewModel;
 import com.ia.core.quartz.view.periodicidade.form.PeriodicidadeFormViewModelConfig;
 import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollectionPageViewModel;

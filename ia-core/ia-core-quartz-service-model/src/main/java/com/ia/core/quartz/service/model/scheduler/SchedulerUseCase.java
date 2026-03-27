@@ -2,6 +2,7 @@ package com.ia.core.quartz.service.model.scheduler;
 
 import java.util.List;
 
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**

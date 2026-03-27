@@ -256,6 +256,28 @@ throw new BusinessException("DUPLICATE_EMAIL", "Email já cadastrado");
 - [RFC 7807 - Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807)
 - [Spring Exception Handling](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-exceptionhandlers)
 
+## Referências Adicionais
+
+1. **Spring Framework - Error Handling**
+   - URL: https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+   - Artigo oficial sobre tratamento de exceções no Spring MVC
+
+2. **Baeldung - Spring REST Error Handling**
+   - URL: https://www.baeldung.com/exception-handling-for-spring-rest-api
+   - Guia completo sobre exception handling em APIs REST
+
+3. **Vlad Mihalcea - Exception Handling**
+   - URL: https://vladmihalcea.com/spring-rest-error-handling/
+   - Boas práticas para exception handling com JPA
+
+4. **Baeldung - Controller Advice**
+   - URL: https://www.baeldung.com/spring-controllers
+   - Utilização do @RestControllerAdvice
+
+5. **Microsoft - API Error Codes Best Practices**
+   - URL: https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design
+   - Boas práticas para códigos de erro em APIs
+
 ## Histórico de Revisões
 
 | Versão | Data | Autor | Descrição |

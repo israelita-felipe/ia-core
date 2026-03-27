@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
-import com.ia.core.quartz.service.model.job.QuartzJobInstanceDTO;
-import com.ia.core.quartz.service.model.job.QuartzJobTriggerDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 
 /**

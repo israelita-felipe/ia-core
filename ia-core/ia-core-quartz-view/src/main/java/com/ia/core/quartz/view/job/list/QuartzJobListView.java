@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.job.list;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 

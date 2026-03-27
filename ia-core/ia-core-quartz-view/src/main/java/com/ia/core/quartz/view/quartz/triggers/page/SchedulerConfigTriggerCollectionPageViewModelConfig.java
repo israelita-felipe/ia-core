@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.quartz.triggers.page;
 
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 

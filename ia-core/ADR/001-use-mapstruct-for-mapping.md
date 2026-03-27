@@ -77,3 +77,25 @@ public interface PessoaMapper {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **MapStruct Official Documentation**
+   - URL: https://mapstruct.org/documentation/stable/reference/html/
+   - Documentação oficial com exemplos de configuração
+
+2. **MapStruct + Lombok Integration**
+   - URL: https://mapstruct.org/documentation/stable/reference/html/#_using_mapstruct_with_lombok
+   - Guia de integração com Lombok para evitar conflitos de geração
+
+3. **Baeldung - MapStruct Tutorial**
+   - URL: https://www.baeldung.com/mapstruct
+   - Tutorial completo com exemplos práticos
+
+4. **Vlad Mihalcea - MapStruct Best Practices**
+   - URL: https://vladmihalcea.com/mapstruct-tutorial/
+   - Boas práticas para integração com JPA e Hibernate
+
+5. **MapStruct GitHub Examples**
+   - URL: https://github.com/mapstruct/mapstruct.org/tree/main/examples
+   - Exemplos oficiais de projetos

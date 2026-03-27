@@ -142,3 +142,25 @@ public class AuditAspect {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Jakarta Persistence Specification - MappedSuperclass**
+   - URL: https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html#a1650
+   - Especificação oficial sobreMappedSuperclass
+
+2. **Baeldung - JPA MappedSuperclass**
+   - URL: https://www.baeldung.com/hibernate-inheritance#mapped-superclass
+   - Guia sobre herança de entidades comMappedSuperclass
+
+3. **Vlad Mihalcea - BaseEntity**
+   - URL: https://vladmihalcea.com/spring-boot-jpa-base-entity/
+   - Implementação de BaseEntity com Spring Boot
+
+4. **Baeldung - JPA Auditing**
+   - URL: https://www.baeldung.com/spring-data-jpa-auditing
+   - Auditoria automática com Spring Data JPA
+
+5. **Hibernate ORM - Entity**
+   - URL: https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#entity
+   - Documentação sobre entidades JPA/Hibernate

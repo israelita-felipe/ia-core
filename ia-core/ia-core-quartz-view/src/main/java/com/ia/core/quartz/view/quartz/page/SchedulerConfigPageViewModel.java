@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.quartz.page;
 
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.quartz.view.quartz.form.SchedulerConfigFormViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;

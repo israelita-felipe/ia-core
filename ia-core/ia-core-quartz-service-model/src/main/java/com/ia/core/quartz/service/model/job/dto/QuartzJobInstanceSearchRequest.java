@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.job;
+package com.ia.core.quartz.service.model.job.dto;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,10 +12,11 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 
 /**
  * Request de busca para Instâncias de Job do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
-class QuartzJobInstanceSearchRequest extends SearchRequestDTO {
+class QuartzJobInstanceSearchRequest
+  extends SearchRequestDTO {
 
   private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
 
@@ -24,16 +25,16 @@ class QuartzJobInstanceSearchRequest extends SearchRequestDTO {
    */
   public QuartzJobInstanceSearchRequest() {
     createFilters(filterMap, QuartzJobTranslator.INSTANCE_ID,
-                  QuartzJobInstanceDTO.CAMPOS.INSTANCE_ID,
-                  FieldType.STRING, OperatorDTO.EQUAL);
-    
+                  QuartzJobInstanceDTO.CAMPOS.INSTANCE_ID, FieldType.STRING,
+                  OperatorDTO.EQUAL);
+
     createFilters(filterMap, QuartzJobTranslator.JOB_NAME,
-                  QuartzJobInstanceDTO.CAMPOS.JOB_NAME,
-                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE);
-    
+                  QuartzJobInstanceDTO.CAMPOS.JOB_NAME, FieldType.STRING,
+                  OperatorDTO.EQUAL, OperatorDTO.LIKE);
+
     createFilters(filterMap, QuartzJobTranslator.JOB_GROUP,
-                  QuartzJobInstanceDTO.CAMPOS.JOB_GROUP,
-                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE);
+                  QuartzJobInstanceDTO.CAMPOS.JOB_GROUP, FieldType.STRING,
+                  OperatorDTO.EQUAL, OperatorDTO.LIKE);
   }
 
   @Override

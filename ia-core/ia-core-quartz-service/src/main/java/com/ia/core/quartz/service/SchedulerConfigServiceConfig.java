@@ -6,7 +6,7 @@ import org.quartz.Scheduler;
 import org.springframework.stereotype.Component;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;

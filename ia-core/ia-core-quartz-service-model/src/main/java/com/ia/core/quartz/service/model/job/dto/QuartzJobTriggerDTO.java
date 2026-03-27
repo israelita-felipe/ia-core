@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.job;
+package com.ia.core.quartz.service.model.job.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,14 +16,15 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * DTO para representação de um Trigger do Quartz associado a um Job.
- * 
+ *
  * @author Israel Araújo
  */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuartzJobTriggerDTO extends AbstractDTO<QuartzJobTriggerDTO>
+public class QuartzJobTriggerDTO
+  extends AbstractDTO<QuartzJobTriggerDTO>
   implements Serializable {
   /** Serial UID */
   private static final long serialVersionUID = -19560738760061625L;
@@ -36,21 +37,21 @@ public class QuartzJobTriggerDTO extends AbstractDTO<QuartzJobTriggerDTO>
   private String triggerState;
   private String triggerType;
   private String calendarName;
-  
+
   // Timestamps
   private LocalDateTime nextFireTime;
   private LocalDateTime prevFireTime;
   private LocalDateTime startTime;
   private LocalDateTime endTime;
   private LocalDateTime finalFireTime;
-  
+
   // Configurações
   private Long misFireInstr;
   private Integer priority;
   private Integer repeatCount;
   private Long repeatInterval;
   private Integer timesTriggered;
-  
+
   // Dados do job
   private Map<String, Object> jobData;
 

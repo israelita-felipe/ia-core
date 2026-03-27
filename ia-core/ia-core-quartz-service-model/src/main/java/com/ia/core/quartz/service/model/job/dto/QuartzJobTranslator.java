@@ -1,13 +1,13 @@
-package com.ia.core.quartz.service.model.job;
+package com.ia.core.quartz.service.model.job.dto;
 
 /**
  * Translator para mensagens internacionalizadas do QuartzJob.
- * 
+ *
  * @author Israel Araújo
  */
 @SuppressWarnings("javadoc")
 public class QuartzJobTranslator {
-  
+
   public static final class HELP {
     public static final String QUARTZ_JOB = "quartz.job.help";
     public static final String JOB_NAME = "quartz.job.name.help";
@@ -22,7 +22,8 @@ public class QuartzJobTranslator {
     public static final String ACTIONS = "quartz.job.actions.help";
   }
 
-  public static final String QUARTZ_JOB_CLASS = QuartzJobDTO.class.getCanonicalName();
+  public static final String QUARTZ_JOB_CLASS = QuartzJobDTO.class
+      .getCanonicalName();
   public static final String QUARTZ_JOB = "quartz.job";
   public static final String JOB_NAME = "quartz.job.name";
   public static final String JOB_GROUP = "quartz.job.group";
@@ -42,7 +43,7 @@ public class QuartzJobTranslator {
   public static final String SCHEDULED_FIRE_TIME = "quartz.job.scheduled.fire.time";
   public static final String COMPLETED_EXECUTION_TIME = "quartz.job.completed.execution.time";
   public static final String RECOVERED = "quartz.job.recovered";
-  
+
   public static final class ACTIONS {
     public static final String PAUSE = "quartz.job.action.pause";
     public static final String RESUME = "quartz.job.action.resume";
@@ -56,7 +57,7 @@ public class QuartzJobTranslator {
     public static final String DELETE_JOB = "quartz.job.action.delete.job";
     public static final String OPERACOES = "quartz.job.action.operacoes";
   }
-  
+
   public static final class STATE {
     public static final String BLOCKED = "BLOCKED";
     public static final String COMPLETE = "COMPLETE";
@@ -69,7 +70,7 @@ public class QuartzJobTranslator {
     public static final String EXECUTING = "EXECUTING";
     public static final String BLOCKED_MARKED_FOR_ABORT = "BLOCKED_MARKED_FOR_ABORT";
   }
-  
+
   // Trigger
   public static final String TRIGGER_NAME = "quartz.trigger.name";
   public static final String TRIGGER_GROUP = "quartz.trigger.group";
@@ -86,7 +87,7 @@ public class QuartzJobTranslator {
   public static final String REPEAT_INTERVAL = "quartz.trigger.repeat.interval";
   public static final String TIMES_TRIGGERED = "quartz.trigger.times.triggered";
   public static final String FINAL_FIRE_TIME = "quartz.trigger.final.fire.time";
-  
+
   public static final class TRIGGER_STATE {
     public static final String BLOCKED = "BLOCKED";
     public static final String COMPLETE = "COMPLETE";
@@ -97,7 +98,7 @@ public class QuartzJobTranslator {
     public static final String WAITING = "WAITING";
     public static final String ACQUIRED = "ACQUIRED";
   }
-  
+
   public static final class VALIDATION {
     public static final String JOB_NAME_REQUIRED = "validation.quartz.job.name.required";
     public static final String JOB_GROUP_REQUIRED = "validation.quartz.job.group.required";

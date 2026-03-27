@@ -139,3 +139,25 @@ void testSave() {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Spring Framework Documentation - Constructor Injection**
+   - URL: https://docs.spring.io/spring-framework/reference/core/beans/dependencies.html#beans-constructor-injection
+   - Documentação oficial sobre injeção de dependência via construtor
+
+2. **Baeldung - Spring Dependency Injection**
+   - URL: https://www.baeldung.com/spring-dependency-injection
+   - Guia completo sobre diferentes tipos de injeção de dependência no Spring
+
+3. **Martin Fowler - Inversion of Control Containers**
+   - URL: https://martinfowler.com/articles/injection.html
+   - Artigo clássico sobre containers de IoC e Service Locator
+
+4. **Baeldung - Spring Bean Configuration**
+   - URL: https://www.baeldung.com/spring-bean-configuration
+   - Boas práticas para configuração de beans
+
+5. **Reflectoring - Dependency Injection Patterns**
+   - URL: https://reflectoring.io/dependency-injection-patterns/
+   - Padrões de DI com exemplos práticos em Java

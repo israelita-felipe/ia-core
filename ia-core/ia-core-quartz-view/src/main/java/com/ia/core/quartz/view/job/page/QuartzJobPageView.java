@@ -3,7 +3,7 @@ package com.ia.core.quartz.view.job.page;
 import java.util.Collection;
 import java.util.List;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.quartz.view.job.QuartzJobManager;
 import com.ia.core.quartz.view.job.form.QuartzJobFormView;
 import com.ia.core.quartz.view.job.list.QuartzJobListView;

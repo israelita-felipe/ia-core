@@ -138,3 +138,25 @@ public class EventoTranslator {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Google Java Style Guide**
+   - URL: https://google.github.io/styleguide/javaguide.html
+   - Guia de estilo oficial do Google para Java
+
+2. **Oracle - Code Conventions for Java**
+   - URL: https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
+   - Convenções de código clássicas da Oracle
+
+3. **Baeldung - Java Naming Conventions**
+   - URL: https://www.baeldung.com/java-naming-conventions
+   - Convenções de nomenclatura modernas
+
+4. **Martin Fowler - Coding Conventions**
+   - URL: https://martinfowler.com/bliki/CodingConvention.html
+   - Importância de convenções de código
+
+5. **Clean Code - Robert C. Martin**
+   - URL: https://www.oreilly.com/library/view/clean-code/9780136083237/
+   - Livro de referência sobre código limpo

@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.job.page;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.quartz.view.job.form.QuartzJobFormViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;

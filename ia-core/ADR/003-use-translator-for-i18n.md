@@ -120,3 +120,25 @@ Label tipoLabel = new Label(PessoaTranslator.TIPO);
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Spring Framework - Message Source**
+   - URL: https://docs.spring.io/spring-framework/reference/core/beans/foundation-messages.html
+   - Documentação oficial sobre MessageSource e internacionalização
+
+2. **Baeldung - Spring Internationalization**
+   - URL: https://www.baeldung.com/spring-internationalization
+   - Guia completo sobre i18n com Spring
+
+3. **Jakarta Bean Validation Specification**
+   - URL: https://jakarta.ee/specifications/bean-validation/3.0/bean-validation-spec-3.0.html
+   - Especificação oficial com suporte a message interpolation
+
+4. **Java MessageFormat Documentation**
+   - URL: https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html
+   - Documentação para formatação de mensagens com parâmetros
+
+5. **Baeldung - Properties with Spring**
+   - URL: https://www.baeldung.com/spring-properties-file
+   - Boas práticas para carregar e usar arquivos properties

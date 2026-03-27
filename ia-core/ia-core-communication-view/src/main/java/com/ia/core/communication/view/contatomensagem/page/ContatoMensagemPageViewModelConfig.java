@@ -1,0 +1,39 @@
+package com.ia.core.communication.view.contatomensagem.page;
+
+import org.springframework.stereotype.Component;
+
+import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
+import com.ia.core.communication.view.contatomensagem.ContatoMensagemManager;
+import com.ia.core.communication.view.contatomensagem.form.ContatoMensagemFormViewModelConfig;
+import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
+import com.ia.core.view.components.page.viewModel.PageViewModelConfig;
+import com.ia.core.view.manager.DefaultBaseManager;
+import com.vaadin.flow.spring.annotation.UIScope;
+
+/**
+ * Configuração do ViewModel para a página de ContatoMensagem.
+ *
+ * @author Israel Araújo
+ */
+@UIScope
+@Component
+public class ContatoMensagemPageViewModelConfig
+  extends PageViewModelConfig<ContatoMensagemDTO> {
+
+  private final ContatoMensagemManager contatoMensagemManager;
+
+  public ContatoMensagemPageViewModelConfig(DefaultBaseManager<ContatoMensagemDTO> service,
+                                            ContatoMensagemManager contatoMensagemManager) {
+    super(service);
+    this.contatoMensagemManager = contatoMensagemManager;
+  }
+
+  @Override
+  protected FormViewModelConfig<ContatoMensagemDTO> createFormViewModelConfig(boolean readOnly) {
+    return new ContatoMensagemFormViewModelConfig(readOnly, contatoMensagemManager);
+  }
+
+  public ContatoMensagemManager getContatoMensagemManager() {
+    return contatoMensagemManager;
+  }
+}

@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigDTO;
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 
 /**

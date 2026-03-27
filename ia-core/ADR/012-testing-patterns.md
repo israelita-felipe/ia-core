@@ -203,3 +203,25 @@ Este ADR complementa e depende de:
 - [TestContainers](https://www.testcontainers.org/)
 - [Spring Boot Testing](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.testing)
 - [Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
+
+## Referências Adicionais
+
+1. **Baeldung - JUnit 5 Tutorial**
+   - URL: https://www.baeldung.com/junit-5-guide
+   - Guia completo sobre JUnit 5
+
+2. **Baeldung - Mockito Tutorial**
+   - URL: https://www.baeldung.com/mockito-series
+   - Série de tutoriais sobre Mockito
+
+3. **Baeldung - AssertJ**
+   - URL: https://www.baeldung.com/assertj
+   - Guia sobre assertions com AssertJ
+
+4. **TestContainers - Best Practices**
+   - URL: https://www.testcontainers.org/best_practices/
+   - Boas práticas para uso de containers em testes
+
+5. **Martin Fowler - Test Pyramid**
+   - URL: https://martinfowler.com/articles/practical-test-pyramid.html
+   - Artigo fundamental sobre pirâmide de testes

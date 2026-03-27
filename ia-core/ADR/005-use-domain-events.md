@@ -169,3 +169,25 @@ public class FamiliaEventListener {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Spring Framework - ApplicationEventPublisher**
+   - URL: https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html#context-functionality-events
+   - Documentação oficial sobre publicação de eventos no Spring
+
+2. **Spring Blog - Domain Events**
+   - URL: https://spring.io/blog/2015/02/11/domain-events-basics
+   - Artigo oficial sobre Domain Events no Spring
+
+3. **Vlad Mihalcea - Spring Domain Events**
+   - URL: https://vladmihalcea.com/spring-domain-events/
+   - Guia prático sobre implementação de domain events
+
+4. **Martin Fowler - Domain Event**
+   - URL: https://martinfowler.com/eaaDev/DomainEvent.html
+   - Artigo clássico sobre o padrão Domain Event
+
+5. **Baeldung - Spring Events**
+   - URL: https://www.baeldung.com/spring-events
+   - Tutorial completo sobre eventos no Spring

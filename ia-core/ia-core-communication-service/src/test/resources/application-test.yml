@@ -1,0 +1,69 @@
+spring:
+  datasource:
+    url: jdbc:hsqldb:file:${java.io.tmpdir}/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;HSQLDB.SCRIPT_NAMES=data.sql
+    driver-class-name: org.hsqldb.jdbcDriver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.HSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+  hsql:
+    console:
+      enabled: true
+      path: /hsql
+      port: 9001
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: israelita.felipe@gmail.com
+    password: @si1056la
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+          ssl:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+# Configuração de E-mail para testes
+email:
+  host: smtp.gmail.com
+  port: 465
+  username: israelita.felipe@gmail.com
+  password: @si1056la
+  auth: true
+  starttls: false
+  fromAddress: israelita.felipe@gmail.com
+  fromName: Sistema de Comunicação
+  timeout: 30000
+
+# Configuração de Telegram (desabilitado para testes)
+telegram:
+  enabled: false
+  botToken: ""
+  chatId: ""
+
+# Configuração de WhatsApp (desabilitado para testes)
+whatsapp:
+  enabled: false
+
+# Configuração de SMS/Twilio (desabilitado para testes)
+sms:
+  enabled: false
+
+logging:
+  level:
+    com.ia.core.communication: DEBUG
+    org.springframework.mail: DEBUG
+    org.hibernate.SQL: DEBUG

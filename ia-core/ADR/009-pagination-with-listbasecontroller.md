@@ -19,27 +19,27 @@ Usar **ListBaseController** com **SearchRequestDTO** para paginação e filtros 
 ```java
 public class EventoSearchRequest extends SearchRequestDTO {
 
-    @SearchFilter(field = "nome", operator = Operator.LIKE)
-    private String nome;
+    /** Mapa de filtros */
+  private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
 
-    @SearchFilter(field = "dataEvento", operator = Operator.GREATER_THAN_OR_EQUAL_TO)
-    private LocalDate dataEventoInicio;
+  /**
+   * Construtor padrão
+   */
+  protected EventoSearchRequest() {
+    createFilters(filterMap, EventoTranslator.DESCRICAO,
+                  EventoDTO.CAMPOS.DESCRICAO, FieldType.STRING,
+                  OperatorDTO.LIKE, OperatorDTO.EQUAL,
+                  OperatorDTO.NOT_EQUAL);
+    createFilters(filterMap, EventoTranslator.TITULO,
+                  EventoDTO.CAMPOS.TITULO, FieldType.STRING,
+                  OperatorDTO.LIKE, OperatorDTO.EQUAL,
+                  OperatorDTO.NOT_EQUAL);
+  }
 
-    @SearchFilter(field = "dataEvento", operator = Operator.LESS_THAN_OR_EQUAL_TO)
-    private LocalDate dataEventoFim;
-
-    @SearchFilter(field = "status", operator = Operator.EQUAL)
-    private EventoStatus status;
-
-    @SearchFilter(field = "local.nome", operator = Operator.LIKE)
-    private String localNome;
-
-    @Override
-    public SearchRequest toSearchRequest() {
-        SearchRequest request = super.toSearchRequest();
-        // Adicionar filtros específicos se necessário
-        return request;
-    }
+  @Override
+  public Map<FilterProperty, Collection<FilterRequestDTO>> getAvaliableFilters() {
+    return filterMap;
+  }
 }
 ```
 
@@ -169,3 +169,25 @@ POST /api/eventos/search
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Spring Data JPA - Pagination**
+   - URL: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.paging
+   - Documentação oficial sobre paginação com Spring Data
+
+2. **Spring REST Pagination Best Practices**
+   - URL: https://www.baeldung.com/spring-boot-pagination
+   - Guia completo sobre paginação em REST APIs
+
+3. **Baeldung - Spring Page Request**
+   - URL: https://www.baeldung.com/spring-data-jpa-pageable
+   - Implementação de Pageable com filtros dinâmicos
+
+4. **Google Cloud API Design - Pagination**
+   - URL: https://cloud.google.com/apis/design/design_patterns#list_standard_methods
+   - Boas práticas para paginação em APIs
+
+5. **Baeldung - Search Specifications**
+   - URL: https://www.baeldung.com/spring-data-jpa-specification
+   - Combining Specifications com paginação

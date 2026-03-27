@@ -1,6 +1,6 @@
 package com.ia.core.quartz.view.quartz.triggers.page;
 
-import com.ia.core.quartz.service.model.scheduler.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.quartz.view.quartz.triggers.form.SchedulerConfigTriggerFormView;
 import com.ia.core.quartz.view.quartz.triggers.list.SchedulerConfigTriggerListView;
 import com.ia.core.view.components.form.IFormView;

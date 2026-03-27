@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.scheduler;
+package com.ia.core.quartz.service.model.scheduler.dto;
 
 /**
  * @author Israel Araújo

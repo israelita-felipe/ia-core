@@ -137,3 +137,25 @@ void salvar(PessoaDTO dto);
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Oracle - Javadoc Tool Documentation**
+   - URL: https://docs.oracle.com/javase/8/docs/technotes/tools/unix/javadoc.html
+   - Documentação oficial da ferramenta Javadoc
+
+2. **Google Java Style Guide - Javadoc**
+   - URL: https://google.github.io/styleguide/javaguide.html#s7-javadoc
+   - Seção de Javadoc do guia de estilo do Google
+
+3. **Baeldung - Javadoc Guide**
+   - URL: https://www.baeldung.com/javadoc
+   - Guia completo sobre como escrever Javadoc
+
+4. **Spring Framework - JavaDoc**
+   - URL: https://spring.io/projects/spring-framework
+   - Exemplo de Javadoc em frameworks maduros
+
+5. **Apache Commons - Javadoc Guidelines**
+   - URL: https://commons.apache.org/guides/index.html
+   - Diretrizes de Javadoc de projetos open source maduros

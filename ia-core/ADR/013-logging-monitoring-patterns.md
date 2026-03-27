@@ -364,6 +364,28 @@ public ResponseEntity<DTO> metodo(String id) {
 - [MDC - Mapped Diagnostic Context](https://logback.qos.ch/manual/mdc.html)
 - [Prometheus Metrics](https://prometheus.io/docs/concepts/data_model/)
 
+## Referências Adicionais
+
+1. **Baeldung - Spring Boot Logging**
+   - URL: https://www.baeldung.com/spring-boot-logging
+   - Guia completo sobre logging no Spring Boot
+
+2. **Baeldung - SLF4J with Logback**
+   - URL: https://www.baeldung.com/slf4j-with-logback
+   - Configuração e uso do SLF4J com Logback
+
+3. **Baeldung - Micrometer**
+   - URL: https://www.baeldung.com/spring-micrometer
+   - Coleta de métricas com Micrometer
+
+4. **Spring Boot Actuator - Health**
+   - URL: https://docs.spring.io/spring-boot/reference/actuator/health.html
+   - Configuração de health checks
+
+5. **Prometheus - Querying with PromQL**
+   - URL: https://prometheus.io/docs/prometheus/latest/querying/basics/
+   - Query language para métricas
+
 ## Histórico de Revisões
 
 | Versão | Data | Autor | Descrição |

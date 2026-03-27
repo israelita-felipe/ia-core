@@ -207,3 +207,25 @@ public class EventoPageViewModel extends ViewModel<EventoDTO> {
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Microsoft - MVVM Pattern**
+   - URL: https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-pattern
+   - Artigo original sobre o padrão MVVM
+
+2. **Baeldung - MVVM Architecture**
+   - URL: https://www.baeldung.com/spring-boot-mvvm
+   - Implementação MVVM com Spring Boot
+
+3. **Vaadin - Using MVPC and MVVM**
+   - URL: https://vaadin.com/docs/latest/application/architecture/frameworks
+   - MVVM com componentes web Java
+
+4. **Baeldung - Spring Scoped Proxies**
+   - URL: https://www.baeldung.com/spring-bean-scopes
+   - Scoped proxies para ViewModels
+
+5. **Martin Fowler - Presentation Model**
+   - URL: https://martinfowler.com/eaaDev/PresentationModel.html
+   - Fundamentos do padrão Presentation Model (antecessor do MVVM)

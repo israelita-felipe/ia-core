@@ -88,3 +88,25 @@ public class Evento { ... }
 
 - Team Lead
 - Architect
+
+## Referências
+
+1. **Jakarta Persistence Specification - Entity Graphs**
+   - URL: https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html#_entity_graphs
+   - Especificação oficial sobre EntityGraph
+
+2. **Baeldung - JPA Entity Graph**
+   - URL: https://www.baeldung.com/jpa-entity-graph
+   - Guia completo sobre EntityGraph com Spring Data
+
+3. **Vlad Mihalcea - JPA Entity Graph**
+   - URL: https://vladmihalcea.com/jpa-entity-graph/
+   - Artigos avançados sobre performance com EntityGraph
+
+4. **Spring Data JPA - Entity Graph**
+   - URL: https://spring.io/blog/2016/04/15/improving-spring-data-jpa-queries
+   - Melhorias em queries com EntityGraph
+
+5. **Baeldung - N+1 Problem**
+   - URL: https://www.baeldung.com/n-plus-1-problem-jpa
+   - Soluções para o problema N+1 incluindo EntityGraph

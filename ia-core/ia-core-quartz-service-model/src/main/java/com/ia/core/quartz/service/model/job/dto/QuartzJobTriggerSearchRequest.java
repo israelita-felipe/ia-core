@@ -1,4 +1,4 @@
-package com.ia.core.quartz.service.model.job;
+package com.ia.core.quartz.service.model.job.dto;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,10 +12,11 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 
 /**
  * Request de busca para Triggers do Quartz.
- * 
+ *
  * @author Israel Araújo
  */
-class QuartzJobTriggerSearchRequest extends SearchRequestDTO {
+class QuartzJobTriggerSearchRequest
+  extends SearchRequestDTO {
 
   private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
 
@@ -24,23 +25,24 @@ class QuartzJobTriggerSearchRequest extends SearchRequestDTO {
    */
   public QuartzJobTriggerSearchRequest() {
     createFilters(filterMap, QuartzJobTranslator.TRIGGER_NAME,
-                  QuartzJobTriggerDTO.CAMPOS.TRIGGER_NAME,
-                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE,
+                  QuartzJobTriggerDTO.CAMPOS.TRIGGER_NAME, FieldType.STRING,
+                  OperatorDTO.EQUAL, OperatorDTO.LIKE,
                   OperatorDTO.NOT_EQUAL);
-    
+
     createFilters(filterMap, QuartzJobTranslator.TRIGGER_GROUP,
                   QuartzJobTriggerDTO.CAMPOS.TRIGGER_GROUP,
                   FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE,
                   OperatorDTO.NOT_EQUAL);
-    
+
     createFilters(filterMap, QuartzJobTranslator.JOB_NAME,
-                  QuartzJobTriggerDTO.CAMPOS.JOB_NAME,
-                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.LIKE,
+                  QuartzJobTriggerDTO.CAMPOS.JOB_NAME, FieldType.STRING,
+                  OperatorDTO.EQUAL, OperatorDTO.LIKE,
                   OperatorDTO.NOT_EQUAL);
-    
+
     createFilters(filterMap, QuartzJobTranslator.TRIGGER_STATE,
                   QuartzJobTriggerDTO.CAMPOS.TRIGGER_STATE,
-                  FieldType.STRING, OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
+                  FieldType.STRING, OperatorDTO.EQUAL,
+                  OperatorDTO.NOT_EQUAL);
   }
 
   @Override

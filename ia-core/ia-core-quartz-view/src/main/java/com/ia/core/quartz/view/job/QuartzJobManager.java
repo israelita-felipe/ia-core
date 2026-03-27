@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ia.core.quartz.service.model.job.QuartzJobDTO;
-import com.ia.core.quartz.service.model.job.QuartzJobInstanceDTO;
-import com.ia.core.quartz.service.model.job.QuartzJobTriggerDTO;
 import com.ia.core.quartz.service.model.job.QuartzJobUseCase;
-import com.ia.core.quartz.service.model.scheduler.SchedulerConfigTranslator;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 
 /**
