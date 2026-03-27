@@ -3,10 +3,7 @@ package com.ia.core.communication.service.telegram;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
@@ -18,14 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Serviço para interação com a API do Telegram. Implementa a interface
  * MensagemProvider para integração com estratégias de envio.
+ * <p>
+ * Este serviço agora usa Feign Client em vez de RestTemplate para maior
+ * resiliência e integração com Resilience4j.
+ * </p>
  *
  * @author Israel Araújo
  */
 @Slf4j
+@Service
 @RequiredArgsConstructor
-public class TelegramService
-  implements MensagemProvider {
+public class TelegramService implements MensagemProvider {
 
+  
   private final TelegramConfig telegramConfig;
 
   @Override
@@ -35,46 +37,33 @@ public class TelegramService
 
   public ResultadoEnvio enviarTelegram(MensagemDTO mensagem) {
     try {
-      String url = String.format("%s/bot%s/sendMessage",
-                                 telegramConfig.getApiUrl(),
-                                 telegramConfig.getBotToken());
-
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-
       // Determina o chat_id - usa o campo telefoneDestinatario como chat_id do
       // Telegram
-      String chatId = mensagem.getTelefoneDestinatario() != null ? mensagem
-          .getTelefoneDestinatario() : telegramConfig.getChatId();
+      String chatId = mensagem.getTelefoneDestinatario() != null
+          ? mensagem.getTelefoneDestinatario()
+          : telegramConfig.getChatId();
 
-      Map<String, Object> body = new HashMap<>();
-      body.put("chat_id", chatId);
-      body.put("text", mensagem.getCorpoMensagem());
+      // Determina o parse_mode
+      String parseMode = telegramConfig.isEnableHtml() ? "HTML" : null;
 
-      // Adiciona parse_mode se HTML estiver habilitado
-      if (telegramConfig.isEnableHtml()) {
-        body.put("parse_mode", "HTML");
-      }
+      // Cria o request
+      TelegramMessageRequest request = new TelegramMessageRequest(
+          chatId, mensagem.getCorpoMensagem(), parseMode);
 
-      HttpEntity<Map<String, Object>> request = new HttpEntity<>(body,
-                                                                 headers);
+      // Envia via Feign Client
+      Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
 
-      ResponseEntity<Map> response = telegramConfig.getRestTemplate()
-          .postForEntity(url, request, Map.class);
-
-      if (response.getStatusCode().is2xxSuccessful()
-          && response.getBody() != null) {
-        Boolean ok = (Boolean) response.getBody().get("ok");
+      if (response != null) {
+        Boolean ok = (Boolean) response.get("ok");
         if (Boolean.TRUE.equals(ok)) {
           Map<String, Object> result = (Map<String, Object>) response
-              .getBody().get("result");
+              .get("result");
           Long messageId = ((Number) result.get("message_id")).longValue();
           log.info("Mensagem Telegram enviada com sucesso para {}: message_id={}",
                    chatId, messageId);
           return ResultadoEnvio.sucesso(String.valueOf(messageId));
         } else {
-          String errorDescription = (String) response.getBody()
-              .get("description");
+          String errorDescription = (String) response.get("description");
           log.error("Falha ao enviar mensagem Telegram: {}",
                     errorDescription);
           return ResultadoEnvio.falha(errorDescription);
@@ -91,33 +80,20 @@ public class TelegramService
 
   public ResultadoEnvio enviarTelegramHtml(MensagemDTO mensagem) {
     try {
-      String url = String.format("%s/bot%s/sendMessage",
-                                 telegramConfig.getApiUrl(),
-                                 telegramConfig.getBotToken());
+      String chatId = mensagem.getTelefoneDestinatario() != null
+          ? mensagem.getTelefoneDestinatario()
+          : telegramConfig.getChatId();
 
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
+      TelegramMessageRequest request = new TelegramMessageRequest(
+          chatId, mensagem.getCorpoMensagem(), "HTML");
 
-      String chatId = mensagem.getTelefoneDestinatario() != null ? mensagem
-          .getTelefoneDestinatario() : telegramConfig.getChatId();
+      Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
 
-      Map<String, Object> body = new HashMap<>();
-      body.put("chat_id", chatId);
-      body.put("text", mensagem.getCorpoMensagem());
-      body.put("parse_mode", "HTML");
-
-      HttpEntity<Map<String, Object>> request = new HttpEntity<>(body,
-                                                                 headers);
-
-      ResponseEntity<Map> response = telegramConfig.getRestTemplate()
-          .postForEntity(url, request, Map.class);
-
-      if (response.getStatusCode().is2xxSuccessful()
-          && response.getBody() != null) {
-        Boolean ok = (Boolean) response.getBody().get("ok");
+      if (response != null) {
+        Boolean ok = (Boolean) response.get("ok");
         if (Boolean.TRUE.equals(ok)) {
           Map<String, Object> result = (Map<String, Object>) response
-              .getBody().get("result");
+              .get("result");
           Long messageId = ((Number) result.get("message_id")).longValue();
           return ResultadoEnvio.sucesso(String.valueOf(messageId));
         }

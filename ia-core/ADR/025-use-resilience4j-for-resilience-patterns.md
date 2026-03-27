@@ -216,6 +216,70 @@ public class ResilienceEventListener {
 
 - Circuit breaker em serviços externos
 - Retry configurado para APIs instáveis
+- Dependência adicionada em ia-core-view
+- Feign Clients devem usar Resilience4j (configuração disponível)
+
+### 5.1 Feign Clients com Resilience4j (via Spring Cloud)
+
+A partir de 2026-03-27, o projeto suporta Resilience4j para clientes Feign via Spring Cloud Circuit Breaker.
+
+1. **Dependências** (já adicionadas em ia-core-view/pom.xml):
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot3</artifactId>
+</dependency>
+```
+
+2. **Habilite CircuitBreaker no cliente Feign**:
+
+```java
+@FeignClient(name = "externalApi", url = "https://api.example.com", circuitbreaker = "true")
+public interface ExternalApiClient {
+    @GetMapping("/data")
+    DataResponse getData();
+}
+```
+
+3. **Configure fallback** (opcional):
+
+```java
+@FeignClient(name = "externalApi", url = "https://api.example.com", 
+             circuitbreaker = "true", fallback = ExternalApiFallback.class)
+public interface ExternalApiClient {
+    @GetMapping("/data")
+    DataResponse getData();
+}
+
+@Component
+public class ExternalApiFallback implements ExternalApiClient {
+    @Override
+    public DataResponse getData() {
+        return DataResponse.empty(); // Retorna dados padrão em caso de falha
+    }
+}
+```
+
+4. **Configure via application.yml**:
+
+```yaml
+resilience4j:
+  circuitbreaker:
+    instances:
+      externalApi:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+```
+
+**Nota**: O uso de RestTemplate é desencorajado. Todos os clientes HTTP devem usar Feign.
 
 ## Data
 

@@ -22,7 +22,7 @@
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
 		<vaadin.version>24.8.7</vaadin.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
+		<spring-cloud.version>2024.0.0</spring-cloud.version>
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
@@ -33,7 +33,19 @@
 		<reflections.version>0.10.2</reflections.version>
 		<cron-utils.version>9.2.1</cron-utils.version>
 		<apache.poi.version>5.5.0</apache.poi.version>
+		<resilience4j.version>2.2.0</resilience4j.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -231,7 +243,6 @@
 		<module>ia-core-llm-model</module>
 		<module>ia-core-llm-service</module>
 		<module>ia-core-llm-view</module>
-		<module>ia-core-flyway</module>
 		<module>ia-core-quartz</module>
 		<module>ia-core-quartz-service-model</module>
 		<module>ia-core-quartz-service</module>

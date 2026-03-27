@@ -42,19 +42,30 @@ public class FeignConfig {
   }
 
   /**
-   * @return {@link Feign#builder()}
-   */
-  public Feign.Builder feignBuilder() {
-    return Feign.builder().retryer(new Retryer.Default())
-        .client(new ApacheHttpClient());
-  }
-
-  /**
    * @return {@link Contract} para hierarquia.
    */
 
   public Contract feignContract() {
     return new FeignHierarchicalContract();
+  }
+
+  /**
+   * @return {@link Feign.Builder} com Resilience4j configurado via Spring Cloud.
+   * <p>
+   * Para habilitar CircuitBreaker nos clientes Feign, use a anotação:
+   * </p>
+   * <pre>
+   * @FeignClient(name = "service", circuitbreaker = "true")
+   * </pre>
+   * <p>
+   * A configuração é feita via application.yml com resilience4j.circuitbreaker.instances.
+   * </p>
+   *
+   * @see <a href="https://docs.spring.io/spring-cloud-commons/reference/html#circuit-breaker">Spring Cloud Circuit Breaker</a>
+   */
+  public Feign.Builder feignBuilder() {
+    return Feign.builder().retryer(new Retryer.Default())
+        .client(new ApacheHttpClient());
   }
 
   /**

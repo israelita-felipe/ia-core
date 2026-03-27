@@ -1,9 +1,9 @@
 package com.ia.core.communication.service.telegram;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.web.client.RestTemplate;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -41,6 +41,8 @@ public class TelegramConfig {
    */
   private int timeout = 30000;
 
-  private final RestTemplate restTemplate;
+  /** Cliente do telegram */
+  @Getter
+  private final TelegramClient telegramClient;
 
 }

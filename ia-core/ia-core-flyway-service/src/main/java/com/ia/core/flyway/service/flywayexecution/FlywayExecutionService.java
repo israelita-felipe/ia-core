@@ -2,12 +2,15 @@ package com.ia.core.flyway.service.flywayexecution;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionTranslator;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
+import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionSearchRequest;
 import com.ia.core.flyway.service.model.flywayexecution.usecase.FlywayExecutionUseCase;
+import com.ia.core.service.dto.request.SearchRequestDTO;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -4,11 +4,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ia.core.communication.model.StatusMensagem;
@@ -21,14 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Serviço para interação com a API do WhatsApp Business.
+ * <p>
+ * Este serviço agora usa Feign Client em vez de RestTemplate para maior
+ * resiliência e integração com Resilience4j.
+ * </p>
  *
  * @author Israel Araújo
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WhatsAppService
-  implements MensagemProvider {
+public class WhatsAppService implements MensagemProvider {
 
   private final WhatsAppConfig whatsAppConfig;
 
@@ -50,38 +48,30 @@ public class WhatsAppService
    */
   public MensagemDTO enviarMensagem(MensagemDTO mensagem) {
     try {
-      String url = String.format("%s/%s/messages",
-                                 whatsAppConfig.getApiUrl(),
-                                 whatsAppConfig.getPhoneNumberId());
-
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_JSON);
-      headers.setBearerAuth(whatsAppConfig.getAccessToken());
-
-      Map<String, Object> body = new HashMap<>();
-      body.put("messaging_product", "whatsapp");
-      body.put("to", mensagem.getTelefoneDestinatario());
-      body.put("type", "text");
-
+      // Cria o request
       Map<String, String> textMessage = new HashMap<>();
       textMessage.put("body", mensagem.getCorpoMensagem());
-      body.put("text", textMessage);
 
-      HttpEntity<Map<String, Object>> request = new HttpEntity<>(body,
-                                                                 headers);
+      WhatsAppMessageRequest request = new WhatsAppMessageRequest(
+          "whatsapp",
+          mensagem.getTelefoneDestinatario(),
+          "text",
+          textMessage
+      );
 
-      ResponseEntity<Map> response = whatsAppConfig.getRestTemplate()
-          .exchange(url, HttpMethod.POST, request, Map.class);
+      // Envia via Feign Client com token Bearer
+      String bearerToken = "Bearer " + whatsAppConfig.getAccessToken();
+      Map<String, Object> response = whatsAppConfig.getWhatsAppClient()
+          .sendMessage(bearerToken, request);
 
-      if (response.getStatusCode().is2xxSuccessful()) {
+      if (response != null) {
         mensagem.setStatusMensagem(StatusMensagem.ENVIADA);
         mensagem.setDataEnvio(LocalDateTime.now());
 
         // Extrai o ID da mensagem da resposta
-        Map<String, Object> responseBody = response.getBody();
-        if (responseBody != null && responseBody.containsKey("messages")) {
+        if (response.containsKey("messages")) {
           @SuppressWarnings("unchecked")
-          java.util.List<Map<String, Object>> messages = (java.util.List<Map<String, Object>>) responseBody
+          java.util.List<Map<String, Object>> messages = (java.util.List<Map<String, Object>>) response
               .get("messages");
           if (!messages.isEmpty()) {
             mensagem.setIdExterno((String) messages.get(0).get("id"));
@@ -89,8 +79,7 @@ public class WhatsAppService
         }
       } else {
         mensagem.setStatusMensagem(StatusMensagem.FALHA);
-        mensagem
-            .setMotivoFalha("Erro ao enviar mensagem para API do WhatsApp");
+        mensagem.setMotivoFalha("Erro ao enviar mensagem para API do WhatsApp");
       }
 
     } catch (Exception e) {

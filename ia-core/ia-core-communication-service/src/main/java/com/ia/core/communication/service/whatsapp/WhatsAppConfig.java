@@ -2,9 +2,10 @@ package com.ia.core.communication.service.whatsapp;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Configuração do WhatsApp Business API.
@@ -12,6 +13,7 @@ import lombok.Data;
  * @author Israel Araújo
  */
 @Data
+@RequiredArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "whatsapp")
 public class WhatsAppConfig {
@@ -38,6 +40,8 @@ public class WhatsAppConfig {
 
   /** Timeout em milissegundos para requisições */
   private int timeout = 30000;
-  /** Rest template */
-  private final RestTemplate restTemplate;
+
+  /** Cliente do WhatsApp */
+  @Getter
+  private final WhatsAppClient whatsAppClient;
 }

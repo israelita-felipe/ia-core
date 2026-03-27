@@ -2,6 +2,9 @@ package com.ia.core.flyway.service.flywayexecution;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.service.repository.BaseEntityRepository;
 
@@ -37,4 +40,15 @@ public interface FlywayExecutionRepository
    * @return Lista de execuções falhadas
    */
   List<FlywayExecution> findBySuccessFalseOrderByIdAsc();
+
+  /**
+   * Busca execuções com paginação e Specification.
+   *
+   * @param specification a especificação de filtro
+   * @param pageable      a configuração de paginação
+   * @return Página de execuções
+   */
+  Page<FlywayExecution> findAll(
+    org.springframework.data.jpa.domain.Specification<FlywayExecution> specification,
+    Pageable pageable);
 }
