@@ -438,7 +438,7 @@ public class SchedulerConfigService
   /**
    * Agenda todos os jobs ativos ao inicializar a aplicação.
    */
-  @TransactionalReadOnly
+  @TransactionalWrite
   public void agendarJobs() {
     try {
       List<SchedulerConfigDTO> configs = findAllActive(true);

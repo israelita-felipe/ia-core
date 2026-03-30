@@ -7,6 +7,7 @@
 		<artifactId>ia-core</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<groupId>com.ia.core</groupId>
 	<artifactId>ia-core-flyway-service-model</artifactId>
 	<name>ia-core-flyway-service-model</name>
 	<description>Modelo de serviço para execuções do Flyway</description>
@@ -19,11 +20,6 @@
 		<dependency>
 			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-service-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ia.core</groupId>
-			<artifactId>ia-core-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

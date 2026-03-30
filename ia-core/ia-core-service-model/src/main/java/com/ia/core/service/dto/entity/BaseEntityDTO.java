@@ -14,7 +14,7 @@ import com.ia.core.service.dto.DTO;
  * @param <T> Tipo do dado que extende {@link Serializable}
  */
 public interface BaseEntityDTO<T extends BaseEntity>
-  extends DTO<T>, HasVersion {
+  extends DTO<T>, HasVersion<Long> {
   /**
    * @return {@link UUID} do objeto.
    */

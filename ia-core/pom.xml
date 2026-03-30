@@ -22,7 +22,7 @@
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
 		<vaadin.version>24.8.7</vaadin.version>
-		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
@@ -149,7 +149,6 @@
 					<version>3.3.0</version>
 					<configuration>
 						<configLocation>checkstyle.xml</configLocation>
-						<encoding>UTF-8</encoding>
 						<consoleOutput>true</consoleOutput>
 						<failsOnError>true</failsOnError>
 						<linkXRef>false</linkXRef>

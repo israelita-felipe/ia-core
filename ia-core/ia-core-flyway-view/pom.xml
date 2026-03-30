@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>
-			<artifactId>ia-core-flyway-model</artifactId>
+			<artifactId>ia-core-security-view</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -24,13 +24,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ia.core</groupId>
-			<artifactId>ia-core-flyway-service</artifactId>
+			<artifactId>ia-core-flyway-model</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ia.core</groupId>
-			<artifactId>ia-core-security-view</artifactId>
-			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-data-jpa</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

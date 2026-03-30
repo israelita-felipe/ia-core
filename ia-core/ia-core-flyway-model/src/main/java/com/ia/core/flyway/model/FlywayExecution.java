@@ -3,14 +3,14 @@ package com.ia.core.flyway.model;
 import java.time.LocalDateTime;
 
 import com.ia.core.model.BaseEntity;
-import com.ia.core.model.HasVersion;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
-import lombok.Builder.Default;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -29,25 +29,25 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class FlywayExecution
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class FlywayExecution
   extends BaseEntity {
-
   /**
    * Mapeia para a coluna installed_rank. O valor é fornecido pelo banco do
    * Flyway, não é gerado automaticamente.
    */
-  @Column(name = "installed_rank")
   @Id
+  @Column(name = "installed_rank")
   private Long id;
 
-  @Default
-  @Version
-  @Column(name = "version", columnDefinition = "bigint default 1",
-          nullable = false)
-  private Long version = HasVersion.DEFAULT_VERSION;
+  @Column(name = "version", insertable = false, updatable = false)
+  private Long version;
 
-  @Column(name = "version", length = 50)
+  @Column(name = "version", length = 50, insertable = false,
+          updatable = false)
   private String migrationVersion;
 
   @Column(name = "description", length = 200)
@@ -73,12 +73,5 @@ public abstract class FlywayExecution
 
   @Column(name = "success")
   private Boolean success;
-
-  /**
-   * Construtor padrão.
-   */
-  public FlywayExecution() {
-    super();
-  }
 
 }

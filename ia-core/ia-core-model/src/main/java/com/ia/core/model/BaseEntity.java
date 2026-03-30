@@ -35,10 +35,9 @@ import lombok.experimental.SuperBuilder;
  * <p>
  * <b>Exemplo de uso:</b>
  * </p>
- * {@code @Entity
+ * {@code @Entity @Table(name = "pessoas") public class Pessoa extends
+ * BaseEntity { private String nome; private String email; } }
  *
- * @Table(name = "pessoas") public class Pessoa extends BaseEntity { private
- *             String nome; private String email; } }
  * @see HasVersion
  * @see Serializable
  * @see Comparable
@@ -53,7 +52,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class BaseEntity
-  implements Serializable, HasVersion, Comparable<BaseEntity> {
+  implements Serializable, HasVersion<Long>, Comparable<BaseEntity> {
 
   /**
    * Identificador único da entidade no banco de dados.

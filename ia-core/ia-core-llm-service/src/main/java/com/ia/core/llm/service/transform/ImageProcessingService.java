@@ -17,13 +17,22 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 import org.springframework.stereotype.Service;
 
 /**
- * Serviço especializado para processamento de imagens.
- * Responsabilidade única: operações de binarização, compressão e redimensionamento.
- * 
+ * Serviço especializado para processamento de imagens. Responsabilidade única:
+ * operações de binarização, compressão e redimensionamento.
+ *
  * @author Israel Araújo
  */
 @Service
 public class ImageProcessingService {
+  /**
+   *
+   */
+  public static final int BRANCO = 0xFFFFFF;
+
+  /**
+   *
+   */
+  public static final int PRETO = 0x000000;
 
   /**
    * Aplica limiar de Otsu para binarização de imagem.
@@ -32,21 +41,26 @@ public class ImageProcessingService {
    * @return imagem binarizada em bytes
    * @throws IOException se houver erro na leitura/escrita
    */
-  public byte[] binarizarComOtsu(InputStream input) throws IOException {
+  public byte[] binarizarComOtsu(InputStream input)
+    throws IOException {
     BufferedImage image = ImageIO.read(input);
     int limiar = calcularLimiarOtsu(image);
     return compressJpeg(binarizarImagem(image, limiar), 1.0f);
   }
 
   /**
-   * Binariza uma imagem usando o limiar especificado.
-   * Pixels com valor acima do limiar tornam-se brancos, abaixo tornam-se pretos.
+   * Binariza uma imagem usando o limiar especificado. Pixels com valor acima do
+   * limiar tornam-se brancos, abaixo tornam-se pretos.
    *
    * @param imagemOriginal imagem original
-   * @param limiar limiar para binarização
+   * @param limiar         limiar para binarização
    * @return imagem binarizada
    */
-  public BufferedImage binarizarImagem(BufferedImage imagemOriginal, int limiar) {
+  public BufferedImage binarizarImagem(BufferedImage imagemOriginal,
+                                       int limiar) {
+    if (imagemOriginal == null) {
+      throw new IllegalArgumentException("imagem não pode ser null");
+    }
     int largura = imagemOriginal.getWidth();
     int altura = imagemOriginal.getHeight();
 
@@ -57,7 +71,7 @@ public class ImageProcessingService {
       for (int x = 0; x < largura; x++) {
         int rgb = imagemOriginal.getRGB(x, y);
         int nivelCinza = calcularNivelCinza(rgb);
-        int novoPixel = (nivelCinza > limiar) ? 0xFFFFFF : 0x000000;
+        int novoPixel = (nivelCinza > limiar) ? PRETO : BRANCO;
         imagemBinarizada.setRGB(x, y, novoPixel);
       }
     }
@@ -66,8 +80,8 @@ public class ImageProcessingService {
   }
 
   /**
-   * Calcula o limiar ótimo usando método de Otsu.
-   * O método de Otsu minimiza a variância intra-classe entre pixels de fundo e primeiro plano.
+   * Calcula o limiar ótimo usando método de Otsu. O método de Otsu minimiza a
+   * variância intra-classe entre pixels de fundo e primeiro plano.
    *
    * @param imagem imagem a ser analisada
    * @return limiar ótimo calculado
@@ -101,7 +115,7 @@ public class ImageProcessingService {
       double mediaFrente = (somaTotal - somaFundo) / pesoFrente;
 
       double variancia = (double) pesoFundo * pesoFrente
-                          * Math.pow(mediaFundo - mediaFrente, 2);
+          * Math.pow(mediaFundo - mediaFrente, 2);
 
       if (variancia > varianciaMaxima) {
         varianciaMaxima = variancia;
@@ -116,20 +130,23 @@ public class ImageProcessingService {
    * Comprime e redimensiona uma imagem mantendo aspect ratio.
    *
    * @param inputFile stream de entrada da imagem
-   * @param quality qualidade da compressão (0.0 a 1.0)
-   * @param maxWidth largura máxima desejada
+   * @param quality   qualidade da compressão (0.0 a 1.0)
+   * @param maxWidth  largura máxima desejada
    * @param maxHeight altura máxima desejada
    * @return imagem processada em bytes
    */
   public byte[] compressAndResize(InputStream inputFile, float quality,
-                                   int maxWidth, int maxHeight) throws IOException {
+                                  int maxWidth, int maxHeight)
+    throws IOException {
     BufferedImage originalImage = ImageIO.read(inputFile);
 
-    int[] novasDimensoes = calcularNovasDimensoes(originalImage, maxWidth, maxHeight);
+    int[] novasDimensoes = calcularNovasDimensoes(originalImage, maxWidth,
+                                                  maxHeight);
     int newWidth = novasDimensoes[0];
     int newHeight = novasDimensoes[1];
 
-    BufferedImage resizedImage = redimensionarImagem(originalImage, newWidth, newHeight);
+    BufferedImage resizedImage = redimensionarImagem(originalImage,
+                                                     newWidth, newHeight);
 
     return compressJpeg(resizedImage, quality);
   }
@@ -137,13 +154,15 @@ public class ImageProcessingService {
   /**
    * Comprime imagem no formato JPEG.
    *
-   * @param image imagem a ser comprimida
+   * @param image   imagem a ser comprimida
    * @param quality qualidade da compressão (0.0 a 1.0)
    * @return imagem comprimida em bytes
    * @throws IOException se houver erro na compressão
    */
-  public byte[] compressJpeg(BufferedImage image, float quality) throws IOException {
-    Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpeg");
+  public byte[] compressJpeg(BufferedImage image, float quality)
+    throws IOException {
+    Iterator<ImageWriter> writers = ImageIO
+        .getImageWritersByFormatName("jpeg");
     ImageWriter writer = writers.next();
 
     ImageWriteParam params = writer.getDefaultWriteParam();
@@ -151,7 +170,7 @@ public class ImageProcessingService {
     params.setCompressionQuality(quality);
 
     try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-         MemoryCacheImageOutputStream outputStream = new MemoryCacheImageOutputStream(out)) {
+        MemoryCacheImageOutputStream outputStream = new MemoryCacheImageOutputStream(out)) {
       writer.setOutput(outputStream);
       writer.write(null, new IIOImage(image, null, null), params);
       return out.toByteArray();
@@ -201,7 +220,8 @@ public class ImageProcessingService {
   /**
    * Calcula novas dimensões mantendo aspect ratio.
    */
-  private int[] calcularNovasDimensoes(BufferedImage imagem, int maxWidth, int maxHeight) {
+  private int[] calcularNovasDimensoes(BufferedImage imagem, int maxWidth,
+                                       int maxHeight) {
     int originalWidth = imagem.getWidth();
     int originalHeight = imagem.getHeight();
 
@@ -224,9 +244,10 @@ public class ImageProcessingService {
   /**
    * Redimensiona uma imagem para as dimensões especificadas.
    */
-  private BufferedImage redimensionarImagem(BufferedImage imagemOriginal, int newWidth,
-                                            int newHeight) {
-    BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+  private BufferedImage redimensionarImagem(BufferedImage imagemOriginal,
+                                            int newWidth, int newHeight) {
+    BufferedImage resizedImage = new BufferedImage(newWidth, newHeight,
+                                                   BufferedImage.TYPE_INT_RGB);
     Graphics2D g = resizedImage.createGraphics();
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);

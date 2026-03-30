@@ -18,14 +18,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Testes unitários para ImageProcessingService.
- * 
- * <p>Este teste cobre as seguintes funcionalidades:</p>
+ * <p>
+ * Este teste cobre as seguintes funcionalidades:
+ * </p>
  * <ul>
- *   <li>Binarização de imagens usando método de Otsu</li>
- *   <li>Compressão JPEG</li>
- *   <li>Redimensionamento mantendo aspect ratio</li>
+ * <li>Binarização de imagens usando método de Otsu</li>
+ * <li>Compressão JPEG</li>
+ * <li>Redimensionamento mantendo aspect ratio</li>
  * </ul>
- * 
+ *
  * @author Israel Araújo
  */
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +41,8 @@ class ImageProcessingServiceTest {
   private BufferedImage testImage;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp()
+    throws IOException {
     // Criar imagem de teste 100x100 em escala de cinza
     testImage = new BufferedImage(100, 100, BufferedImage.TYPE_BYTE_GRAY);
   }
@@ -72,7 +74,8 @@ class ImageProcessingServiceTest {
     assertThat(binarizada).isNotNull();
     assertThat(binarizada.getWidth()).isEqualTo(image.getWidth());
     assertThat(binarizada.getHeight()).isEqualTo(image.getHeight());
-    assertThat(binarizada.getType()).isEqualTo(BufferedImage.TYPE_BYTE_BINARY);
+    assertThat(binarizada.getType())
+        .isEqualTo(BufferedImage.TYPE_BYTE_BINARY);
   }
 
   @Test
@@ -107,7 +110,8 @@ class ImageProcessingServiceTest {
 
   @Test
   @DisplayName("Deve comprimir imagem JPEG")
-  void deveComprimirImagemJpeg() throws IOException {
+  void deveComprimirImagemJpeg()
+    throws IOException {
     // Given
     BufferedImage image = createGrayscaleImage(100, 100);
 
@@ -121,7 +125,8 @@ class ImageProcessingServiceTest {
 
   @Test
   @DisplayName("Deve comprimir com qualidade máxima")
-  void deveComprimirComQualidadeMaxima() throws IOException {
+  void deveComprimirComQualidadeMaxima()
+    throws IOException {
     // Given
     BufferedImage image = createGrayscaleImage(100, 100);
 
@@ -135,7 +140,8 @@ class ImageProcessingServiceTest {
 
   @Test
   @DisplayName("Deve comprimir e redimensionar mantendo aspect ratio")
-  void deveComprimirERedimensionarMantendoAspectRatio() throws IOException {
+  void deveComprimirERedimensionarMantendoAspectRatio()
+    throws IOException {
     // Given
     BufferedImage image = createGrayscaleImage(200, 100); // 2:1 aspect ratio
     float quality = 0.5f;
@@ -143,8 +149,8 @@ class ImageProcessingServiceTest {
     int maxHeight = 100;
 
     // When
-    byte[] result = service.compressAndResize(
-        imageToInputStream(image), quality, maxWidth, maxHeight);
+    byte[] result = service.compressAndResize(imageToInputStream(image),
+                                              quality, maxWidth, maxHeight);
 
     // Then
     assertThat(result).isNotNull();
@@ -153,7 +159,8 @@ class ImageProcessingServiceTest {
 
   @Test
   @DisplayName("Deve reduzir dimensões quando largura excede máximo")
-  void deveReduzirDimensoesQuandoLarguraExcede() throws IOException {
+  void deveReduzirDimensoesQuandoLarguraExcede()
+    throws IOException {
     // Given
     BufferedImage image = createGrayscaleImage(200, 100);
     float quality = 0.5f;
@@ -161,8 +168,8 @@ class ImageProcessingServiceTest {
     int maxHeight = 100;
 
     // When
-    byte[] result = service.compressAndResize(
-        imageToInputStream(image), quality, maxWidth, maxHeight);
+    byte[] result = service.compressAndResize(imageToInputStream(image),
+                                              quality, maxWidth, maxHeight);
 
     // Then
     assertThat(result).isNotNull();
@@ -171,7 +178,8 @@ class ImageProcessingServiceTest {
 
   @Test
   @DisplayName("Deve reduzir dimensões quando altura excede máximo")
-  void deveReduzirDimensoesQuandoAlturaExcede() throws IOException {
+  void deveReduzirDimensoesQuandoAlturaExcede()
+    throws IOException {
     // Given
     BufferedImage image = createGrayscaleImage(100, 200);
     float quality = 0.5f;
@@ -179,8 +187,8 @@ class ImageProcessingServiceTest {
     int maxHeight = 50;
 
     // When
-    byte[] result = service.compressAndResize(
-        imageToInputStream(image), quality, maxWidth, maxHeight);
+    byte[] result = service.compressAndResize(imageToInputStream(image),
+                                              quality, maxWidth, maxHeight);
 
     // Then
     assertThat(result).isNotNull();
@@ -196,8 +204,8 @@ class ImageProcessingServiceTest {
 
     // When/Then
     assertThatThrownBy(() -> service.binarizarImagem(image, limiar))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("imagem");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("imagem");
   }
 
   @Test
@@ -217,7 +225,8 @@ class ImageProcessingServiceTest {
   @DisplayName("Deve calcular limiar para imagem vazia")
   void deveCalcularLimiarParaImagemVazia() {
     // Given
-    BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_GRAY);
+    BufferedImage image = new BufferedImage(1, 1,
+                                            BufferedImage.TYPE_BYTE_GRAY);
 
     // When
     int limiar = service.calcularLimiarOtsu(image);
@@ -229,9 +238,9 @@ class ImageProcessingServiceTest {
   // Métodos auxiliares
 
   private BufferedImage createGrayscaleImage(int width, int height) {
-    BufferedImage image = new BufferedImage(
-        width, height, BufferedImage.TYPE_BYTE_GRAY);
-    
+    BufferedImage image = new BufferedImage(width, height,
+                                            BufferedImage.TYPE_BYTE_GRAY);
+
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         // Criar gradiente de cinza
@@ -240,7 +249,7 @@ class ImageProcessingServiceTest {
         image.setRGB(x, y, rgb);
       }
     }
-    
+
     return image;
   }
 
@@ -248,7 +257,8 @@ class ImageProcessingServiceTest {
     int blackCount = 0;
     for (int y = 0; y < image.getHeight(); y++) {
       for (int x = 0; x < image.getWidth(); x++) {
-        if (image.getRGB(x, y) == 0x000000) {
+        if ((image.getRGB(x, y)
+            & 0x00000000) == ImageProcessingService.PRETO) {
           blackCount++;
         }
       }
@@ -260,7 +270,8 @@ class ImageProcessingServiceTest {
     int whiteCount = 0;
     for (int y = 0; y < image.getHeight(); y++) {
       for (int x = 0; x < image.getWidth(); x++) {
-        if (image.getRGB(x, y) == 0xFFFFFF) {
+        if ((image.getRGB(x, y)
+            & 0x00FFFFFF) == ImageProcessingService.BRANCO) {
           whiteCount++;
         }
       }
@@ -268,7 +279,8 @@ class ImageProcessingServiceTest {
     assertThat(whiteCount).isEqualTo(image.getWidth() * image.getHeight());
   }
 
-  private InputStream imageToInputStream(BufferedImage image) throws IOException {
+  private InputStream imageToInputStream(BufferedImage image)
+    throws IOException {
     byte[] bytes = service.compressJpeg(image, 1.0f);
     return new ByteArrayInputStream(bytes);
   }

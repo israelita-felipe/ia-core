@@ -1,24 +1,40 @@
 package com.ia.core.flyway.service.flywayexecution;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 import com.ia.core.flyway.model.FlywayExecution;
-import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionTranslator;
+import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionUseCase;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
-import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionSearchRequest;
-import com.ia.core.flyway.service.model.flywayexecution.usecase.FlywayExecutionUseCase;
+import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionTranslator;
+import com.ia.core.model.filter.FieldType;
+import com.ia.core.security.model.functionality.Functionality;
+import com.ia.core.security.service.CountSecuredBaseService;
+import com.ia.core.security.service.FindSecuredBaseService;
+import com.ia.core.security.service.ListSecuredBaseService;
+import com.ia.core.security.service.log.operation.LogOperationService;
+import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
+import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.service.dto.filter.FilterRequestDTO;
+import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.service.mapper.Mapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Serviço para gerenciar execuções de migrations do Flyway.
  * <p>
- * Este serviço fornece métodos para consultar o histórico de execuções
- * de migrações do banco de dados. Os dados são somente leitura pois são
+ * Este serviço fornece métodos para consultar o histórico de execuções de
+ * migrações do banco de dados. Os dados são somente leitura pois são
  * gerenciados automaticamente pelo Flyway.
  * </p>
  *
@@ -26,55 +42,123 @@ import lombok.extern.slf4j.Slf4j;
  * @see FlywayExecutionUseCase
  */
 @Slf4j
-@Service
-public class FlywayExecutionService implements FlywayExecutionUseCase {
+public class FlywayExecutionService
+  implements FindSecuredBaseService<FlywayExecution, FlywayExecutionDTO>,
+  ListSecuredBaseService<FlywayExecution, FlywayExecutionDTO>,
+  CountSecuredBaseService<FlywayExecution, FlywayExecutionDTO>,
+  FlywayExecutionUseCase {
 
-	private final FlywayExecutionRepository repository;
-	private final FlywayExecutionMapper mapper;
+  /**
+   * Configuração
+   */
+  @Getter
+  private final FlywayExecutionServiceConfig config;
 
-	/**
-	 * Construtor com injeção de dependências.
-	 *
-	 * @param config a configuração do serviço
-	 */
-	public FlywayExecutionService(FlywayExecutionServiceConfig config) {
-		this.repository = config.getFlywayRepository();
-		this.mapper = config.getFlywayMapper();
-	}
+  /**
+   * Construtor com injeção de dependências.
+   *
+   * @param config a configuração do serviço
+   */
+  public FlywayExecutionService(FlywayExecutionServiceConfig config) {
+    this.config = config;
+  }
 
-	@Override
-	public List<FlywayExecutionDTO> listAll() {
-		log.debug("Listando todas as execuções de migrations");
-		List<FlywayExecution> executions = repository.findAllByOrderByIdAsc();
-		return mapper.toDTOList(executions);
-	}
+  /**
+   * Retorna o tipo de funcionalidade para controls de segurança.
+   *
+   * @return o nome da funcionalidade
+   */
+  @Override
+  public String getFunctionalityTypeName() {
+    return FlywayExecutionTranslator.FLYWAY_EXECUTION;
+  }
 
-	@Override
-	public List<FlywayExecutionDTO> listSuccessful() {
-		log.debug("Listando execuções bem-sucedidas");
-		List<FlywayExecution> executions = repository.findBySuccessTrueOrderByIdAsc();
-		return mapper.toDTOList(executions);
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public Mapper<FlywayExecution, FlywayExecutionDTO> getMapper() {
+    return getConfig().getMapper();
+  }
 
-	@Override
-	public List<FlywayExecutionDTO> listFailed() {
-		log.debug("Listando execuções falhadas");
-		List<FlywayExecution> executions = repository.findBySuccessFalseOrderByIdAsc();
-		return mapper.toDTOList(executions);
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public BaseEntityRepository<FlywayExecution> getRepository() {
+    return getConfig().getRepository();
+  }
 
-	@Override
-	public FlywayExecutionDTO findById(Long id) {
-		log.debug("Buscando execução por id: {}", id);
-		return repository.findById(id).map(mapper::toDTO).orElse(null);
-	}
+  @Override
+  public SearchRequestMapper getSearchRequestMapper() {
+    return getConfig().getSearchRequestMapper();
+  }
 
-	/**
-	 * Retorna o tipo de funcionalidade para controls de segurança.
-	 *
-	 * @return o nome da funcionalidade
-	 */
-	public String getFunctionalityTypeName() {
-		return FlywayExecutionTranslator.FLYWAY_EXECUTION;
-	}
+  @Override
+  public Translator getTranslator() {
+    return getConfig().getTranslator();
+  }
+
+  @Override
+  public void createContext() {
+
+  }
+
+  @Override
+  public int count(SearchRequestDTO requestDTO) {
+    return CountSecuredBaseService.super.count(requestDTO);
+  }
+
+  @Override
+  public FlywayExecutionDTO find(Long id) {
+    return FindSecuredBaseService.super.find(id);
+  }
+
+  @Override
+  public Page<FlywayExecutionDTO> findAll(SearchRequestDTO requestDTO) {
+    return ListSecuredBaseService.super.findAll(requestDTO);
+  }
+
+  @Override
+  public Map<String, String> getContextValue(Object object) {
+    Map<String, String> context = new HashMap<>();
+    context.putAll(FindSecuredBaseService.super.getContextValue(object));
+    context.putAll(CountSecuredBaseService.super.getContextValue(object));
+    context.putAll(ListSecuredBaseService.super.getContextValue(object));
+    return context;
+  }
+
+  @Override
+  public Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
+    Set<Functionality> func = new HashSet<>();
+    func.addAll(FindSecuredBaseService.super.registryFunctionalities(functionalityManager));
+    func.addAll(CountSecuredBaseService.super.registryFunctionalities(functionalityManager));
+    func.addAll(ListSecuredBaseService.super.registryFunctionalities(functionalityManager));
+    return func;
+  }
+
+  @Override
+  public LogOperationService getLogOperationService() {
+    return getConfig().getLogOperationService();
+  }
+
+  @Override
+  public CoreSecurityAuthorizationManager getAuthorizationManager() {
+    return getConfig().getAuthorizationManager();
+  }
+
+  @Override
+  public Page<FlywayExecutionDTO> listSuccessful(SearchRequestDTO request) {
+    request.getContext()
+        .add(FilterRequestDTO.builder().fieldType(FieldType.BOOLEAN)
+            .key("success").operator(OperatorDTO.EQUAL).value(Boolean.TRUE)
+            .build());
+    return findAll(request);
+  }
+
+  @Override
+  public Page<FlywayExecutionDTO> listFailed(SearchRequestDTO request) {
+    request.getContext()
+        .add(FilterRequestDTO.builder().fieldType(FieldType.BOOLEAN)
+            .key("success").operator(OperatorDTO.EQUAL).value(Boolean.FALSE)
+            .build());
+    return findAll(request);
+  }
+
 }

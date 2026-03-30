@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
 import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
@@ -308,8 +307,8 @@ public abstract class CoreRestSecurityConfig
   static SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                  UserDetailsService userDetailsService)
     throws Exception {
-    http.securityMatcher(PathPatternRequestMatcher.withDefaults()
-        .matcher("/**")).csrf(csrf -> csrf.disable())
+    http.securityMatcher("/**")
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize.anyRequest()
             .authenticated())
         .exceptionHandling(handling -> handling
