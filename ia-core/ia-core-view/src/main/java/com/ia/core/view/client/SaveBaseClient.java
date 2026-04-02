@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.manager.SaveBaseManager;
 
-import jakarta.validation.Valid;
-
 /**
  * Interface base para clientes do tipo save.
  *
@@ -27,7 +25,7 @@ public interface SaveBaseClient<D extends Serializable>
    * @see SaveBaseManager#save(Serializable)
    */
   @PostMapping
-  D save(@RequestBody @Valid D dto);
+  D save(@RequestBody D dto);
 
   /**
    * Realiza a validação de um objeto.

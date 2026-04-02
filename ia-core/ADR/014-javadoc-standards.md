@@ -31,7 +31,7 @@ Estabelecer padrões Javadoc consistentes para todo o projeto.
 ```java
 /**
  * Descrição clara e concisa da classe/método.
- * 
+ *
  * Detalhes adicionais quando necessários para compreensão.
  *
  * @author Nome do Autor
@@ -68,7 +68,7 @@ public void metodoExemplo() { }
 ```java
 /**
  * Repositório para operações de persistência de Pessoa.
- * 
+ *
  * Fornece métodos CRUD e consultas específicas para a entidade
  * Pessoa, incluindo suporte a paginação e filtros dinâmicos.
  *
@@ -85,7 +85,7 @@ public interface PessoaRepository { }
 ```java
 /**
  * Busca uma pessoa pelo ID.
- * 
+ *
  * Utiliza EntityGraph para carregar relacionamentos em uma
  * única query, otimizando performance.
  *
@@ -121,13 +121,6 @@ void salvar(PessoaDTO dto);
 
 - ❌ Overhead inicial de escrita
 - ❌ Documentação pode ficar desatualizada
-
-## Status de Implementação
-
-✅ **COMPLETO**
-
-- [`JAVADOC_STANDARDS.md`](JAVADOC_STANDARDS.md) criado
-- Padrões documentados e disponíveis
 
 ## Data
 

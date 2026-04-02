@@ -1,11 +1,5 @@
 package com.ia.core.view.components.properties;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-
 import com.ia.core.view.components.converters.StringToBigDecimalConverter;
 import com.ia.core.view.components.converters.StringToIntegerConverter;
 import com.ia.core.view.components.converters.StringToLongConverter;
@@ -17,6 +11,12 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Binder.Binding;
 import com.vaadin.flow.data.converter.Converter;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * Possui propriedade de realizar bind dos dados
@@ -206,6 +206,30 @@ public interface HasBinder<T> {
 
     return thread.get();
   }
+    /**
+     * Realiza o binding em campos decimais
+     *
+     * @param property propriedades
+     * @param field    {@link HasValue}
+     * @return {@link Binding}
+     */
+    default Binding<?, BigDecimal> bindDecimal(String property,
+                                               HasValue<?, String> field,boolean readOnly) {
+        AtomicReference<Binding<?, BigDecimal>> thread = new AtomicReference<>();
+        this.bind(binder -> {
+           if(readOnly){
+               thread.set(binder.forField(field).withNullRepresentation("")
+                   .withConverter(new StringToBigDecimalConverter())
+                   .bindReadOnly(parseProperty(property)));
+           }else{
+               thread.set(binder.forField(field).withNullRepresentation("")
+                   .withConverter(new StringToBigDecimalConverter())
+                   .bind(parseProperty(property)));
+           }
+        });
+
+        return thread.get();
+    }
 
   /**
    * Realiza o binding em campos inteiros
@@ -226,6 +250,31 @@ public interface HasBinder<T> {
     return thread.get();
 
   }
+    /**
+     * Realiza o binding em campos inteiros
+     *
+     * @param property propriedade
+     * @param field    {@link HasValue}
+     * @return {@link Binding}
+     */
+    default Binding<?, Integer> bindInteger(String property,
+                                            HasValue<?, String> field, boolean readOnly) {
+        AtomicReference<Binding<?, Integer>> thread = new AtomicReference<>();
+        this.bind(binder -> {
+            if(readOnly){
+                thread.set(binder.forField(field).withNullRepresentation("")
+                    .withConverter(new StringToIntegerConverter())
+                    .bindReadOnly(parseProperty(property)));
+            }else{
+                thread.set(binder.forField(field).withNullRepresentation("")
+                    .withConverter(new StringToIntegerConverter())
+                    .bind(parseProperty(property)));
+            }
+        });
+
+        return thread.get();
+
+    }
 
   /**
    * Realiza o binding em campos inteiros
@@ -246,6 +295,31 @@ public interface HasBinder<T> {
     return thread.get();
 
   }
+    /**
+     * Realiza o binding em campos inteiros
+     *
+     * @param property propriedade
+     * @param field    {@link HasValue}
+     * @return {@link Binding}
+     */
+    default Binding<?, Long> bindLong(String property,
+                                      HasValue<?, String> field,boolean readOnly) {
+        AtomicReference<Binding<?, Long>> thread = new AtomicReference<>();
+        this.bind(binder -> {
+            if(readOnly){
+                thread.set(binder.forField(field).withNullRepresentation("")
+                    .withConverter(new StringToLongConverter())
+                    .bindReadOnly(parseProperty(property)));
+            }else{
+                thread.set(binder.forField(field).withNullRepresentation("")
+                    .withConverter(new StringToLongConverter())
+                    .bind(parseProperty(property)));
+            }
+        });
+
+        return thread.get();
+
+    }
 
   /**
    * @return {@link Binder}

@@ -7,10 +7,10 @@
 		<artifactId>ia-core</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+  <groupId>com.ia.core</groupId>
 	<artifactId>ia-core-flyway-service</artifactId>
 	<name>ia-core-flyway-service</name>
 	<description>Serviços para execuções do Flyway</description>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>

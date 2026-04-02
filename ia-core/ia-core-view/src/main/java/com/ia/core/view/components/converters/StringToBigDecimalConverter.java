@@ -18,6 +18,7 @@ public class StringToBigDecimalConverter
     if (value == null || "".equals(value)) {
       return Result.ok(null);
     }
+    value = value.replaceAll("\\.", "").replaceAll(",", ".");
     return Result.ok(new BigDecimal(value));
   }
 

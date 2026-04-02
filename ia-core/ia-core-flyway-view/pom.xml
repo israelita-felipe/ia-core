@@ -8,6 +8,7 @@
 		<artifactId>ia-core</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+  <groupId>com.ia.core</groupId>
 	<artifactId>ia-core-flyway-view</artifactId>
 	<name>ia-core-flyway-view</name>
 	<description>View Vaadin do módulo de monitoramento do Flyway</description>

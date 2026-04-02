@@ -114,18 +114,11 @@ Este documento apresenta uma análise completa dos projetos **ia-core-apps** e *
 Todas as entidades do projeto extendem `BaseEntity`:
 
 ```
-BaseEntity (抽象类)
+BaseEntity (Modelo)
 ├── id: Long
-├── createdAt: LocalDateTime
-├── updatedAt: LocalDateTime
+├── version: Long
 └── get/set methods
 ```
-
-**Entidades Verificadas**:
-- FlywayExecution (ia-core-flyway-model) ✅
-- SchedulerConfig (ia-core-quartz) ✅
-- Entidades do biblia-model ✅
-
 ---
 
 ### 3.3 ADR-008: Arquitetura MVVM com ViewModel
@@ -166,7 +159,7 @@ public class EntidadeController extends DefaultBaseController<Entity, EntityDTO>
 
 ### 3.5 ADR-010: Padrões de Nomenclatura
 
-**Status**: ✅ CONFORME (após refatoração)
+**Status**: ✅ CONFORME 
 
 #### Packages por Camada:
 
@@ -239,28 +232,18 @@ mvn clean compile -DskipTests
 ### 5.1 Dependencies do ia-core-flyway
 
 ```
-ia-core-flyway
-├── (configuration only - spring boot auto-configuration)
-
 ia-core-flyway-model
 ├── ia-core-model (BaseEntity)
 
 ia-core-flyway-service-model
-├── ia-core-model
 ├── ia-core-service-model
-├── ia-core-security-service-model
-└── ia-core-flyway-model
 
 ia-core-flyway-service
-├── ia-core-flyway-model
-├── ia-core-flyway-service-model
 ├── ia-core-security-service
 └── (Spring Boot Starter)
 
 ia-core-flyway-view
-├── ia-core-flyway-model
 ├── ia-core-flyway-service-model
-├── ia-core-flyway-service
 └── ia-core-security-view
 ```
 
