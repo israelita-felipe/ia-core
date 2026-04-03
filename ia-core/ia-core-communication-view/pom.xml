@@ -14,7 +14,7 @@
 	<description>View Vaadin do módulo de comunicação</description>
 	<dependencies>
 		<dependency>
-			<groupId>com.ia</groupId>
+			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-communication-service-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
