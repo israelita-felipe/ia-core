@@ -23,21 +23,19 @@
 			<version>${mapstruct.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<!-- Versão gerenciada pelo parent POM (0.13.0+ para suporte a Jackson 3) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>${jjwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
-			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
@@ -61,15 +59,15 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- Classpath elements to supply as annotation processor path. If
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those classpath elements.
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

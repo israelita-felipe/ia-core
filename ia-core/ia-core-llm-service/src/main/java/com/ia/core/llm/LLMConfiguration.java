@@ -17,7 +17,6 @@ public class LLMConfiguration {
   static RestClient.Builder restClientBuilder() {
     return RestClient.builder().requestFactory((uri, method) -> {
       HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-      factory.setConnectTimeout(3600000);
       factory.setReadTimeout(3600000);
       return factory.createRequest(uri, method);
     });

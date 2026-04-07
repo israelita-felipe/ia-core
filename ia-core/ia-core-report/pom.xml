@@ -11,6 +11,11 @@
 	<name>ia-core-report</name>
 	<description>Módulo de relatórios</description>
 	<dependencies>
+		<!-- Jackson 3 dependencies -->
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>

@@ -1,9 +1,7 @@
 package com.ia.core.view.components.form;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,8 +15,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import com.vaadin.flow.data.binder.Binder;
-
-import elemental.json.JsonArray;
 
 /**
  * Implementação padrão de um formulário
@@ -159,16 +155,7 @@ public abstract class FormView<T extends Serializable>
    * @return the list of {@link ResponsiveStep}s used to configure this layout
    */
   public List<ResponsiveStep> getResponsiveSteps() {
-    JsonArray stepsJsonArray = (JsonArray) getElement()
-        .getPropertyRaw("responsiveSteps");
-    if (stepsJsonArray == null) {
-      return Collections.emptyList();
-    }
-    List<ResponsiveStep> steps = new ArrayList<>();
-    for (int i = 0; i < stepsJsonArray.length(); i++) {
-      steps.add(stepsJsonArray.get(i));
-    }
-    return steps;
+    return this.layout.getResponsiveSteps();
   }
 
   /**

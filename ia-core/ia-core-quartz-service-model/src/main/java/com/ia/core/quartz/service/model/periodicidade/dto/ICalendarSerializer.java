@@ -65,33 +65,15 @@ public final class ICalendarSerializer {
       appendParam(sb, "INTERVAL", recur.getIntervalValue().toString());
     }
 
-    // UNTIL
-    if (recur.getUntilDate() != null) {
-      appendParam(sb, "UNTIL",
-                  recur.getUntilDate().atStartOfDay().format(UTC_FORMAT));
-    }
-
     // COUNT
     if (recur.getCountLimit() != null) {
       appendParam(sb, "COUNT", recur.getCountLimit().toString());
     }
 
-    // BYSECOND
-    if (!recur.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYMINUTE
-    if (!recur.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYHOUR
-    if (!recur.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // UNTIL
+    if (recur.getUntilDate() != null) {
+      appendParam(sb, "UNTIL",
+                  recur.getUntilDate().atStartOfDay().format(UTC_FORMAT));
     }
 
     // BYDAY
@@ -108,18 +90,6 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYYEARDAY
-    if (!recur.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYWEEKNO
-    if (!recur.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
     // BYMONTH
     if (!recur.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
@@ -128,9 +98,40 @@ public final class ICalendarSerializer {
                       .collect(Collectors.joining(",")));
     }
 
+    // BYWEEKNO
+    if (!recur.getByWeekNo().isEmpty()) {
+      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYYEARDAY
+    if (!recur.getByYearDay().isEmpty()) {
+      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYHOUR
+    if (!recur.getByHour().isEmpty()) {
+      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYMINUTE
+    if (!recur.getByMinute().isEmpty()) {
+      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYSECOND
+    if (!recur.getBySecond().isEmpty()) {
+      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
     // BYSETPOS
-    if (recur.getBySetPosition() != null) {
-      appendParam(sb, "BYSETPOS", recur.getBySetPosition().toString());
+    if (recur.getBySetPosition() != null && !recur.getBySetPosition().isEmpty()) {
+      appendParam(sb, "BYSETPOS", recur.getBySetPosition().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // WKST
@@ -162,33 +163,15 @@ public final class ICalendarSerializer {
       appendParam(sb, "INTERVAL", recur.getIntervalValue().toString());
     }
 
-    // UNTIL
-    if (recur.getUntilDate() != null) {
-      appendParam(sb, "UNTIL",
-                  recur.getUntilDate().atStartOfDay().format(UTC_FORMAT));
-    }
-
     // COUNT
     if (recur.getCountLimit() != null) {
       appendParam(sb, "COUNT", recur.getCountLimit().toString());
     }
 
-    // BYSECOND
-    if (!recur.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYMINUTE
-    if (!recur.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYHOUR
-    if (!recur.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // UNTIL
+    if (recur.getUntilDate() != null) {
+      appendParam(sb, "UNTIL",
+                  recur.getUntilDate().atStartOfDay().format(UTC_FORMAT));
     }
 
     // BYDAY
@@ -205,18 +188,6 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYYEARDAY
-    if (!recur.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYWEEKNO
-    if (!recur.getByWeekNo().isEmpty()) {
-      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
     // BYMONTH
     if (!recur.getByMonth().isEmpty()) {
       appendParam(sb, "BYMONTH",
@@ -225,9 +196,40 @@ public final class ICalendarSerializer {
                       .collect(Collectors.joining(",")));
     }
 
+    // BYWEEKNO
+    if (!recur.getByWeekNo().isEmpty()) {
+      appendParam(sb, "BYWEEKNO", recur.getByWeekNo().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYYEARDAY
+    if (!recur.getByYearDay().isEmpty()) {
+      appendParam(sb, "BYYEARDAY", recur.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYHOUR
+    if (!recur.getByHour().isEmpty()) {
+      appendParam(sb, "BYHOUR", recur.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYMINUTE
+    if (!recur.getByMinute().isEmpty()) {
+      appendParam(sb, "BYMINUTE", recur.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYSECOND
+    if (!recur.getBySecond().isEmpty()) {
+      appendParam(sb, "BYSECOND", recur.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
     // BYSETPOS
-    if (recur.getBySetPosition() != null) {
-      appendParam(sb, "BYSETPOS", recur.getBySetPosition().toString());
+    if (recur.getBySetPosition() != null && !recur.getBySetPosition().isEmpty()) {
+      appendParam(sb, "BYSETPOS", recur.getBySetPosition().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // WKST
@@ -259,33 +261,15 @@ public final class ICalendarSerializer {
       appendParam(sb, "INTERVAL", ex.getIntervalValue().toString());
     }
 
-    // UNTIL
-    if (ex.getUntilDate() != null) {
-      appendParam(sb, "UNTIL",
-                  ex.getUntilDate().atStartOfDay().format(UTC_FORMAT));
-    }
-
     // COUNT
     if (ex.getCountLimit() != null) {
       appendParam(sb, "COUNT", ex.getCountLimit().toString());
     }
 
-    // BYSECOND
-    if (!ex.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYMINUTE
-    if (!ex.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYHOUR
-    if (!ex.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // UNTIL
+    if (ex.getUntilDate() != null) {
+      appendParam(sb, "UNTIL",
+                  ex.getUntilDate().atStartOfDay().format(UTC_FORMAT));
     }
 
     // BYDAY
@@ -302,10 +286,12 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYYEARDAY
-    if (!ex.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // BYMONTH
+    if (!ex.getByMonth().isEmpty()) {
+      appendParam(sb, "BYMONTH",
+                  ex.getByMonth().stream().sorted()
+                      .map(ICalendarSerializer::monthToRfc)
+                      .collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
@@ -314,12 +300,28 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYMONTH
-    if (!ex.getByMonth().isEmpty()) {
-      appendParam(sb, "BYMONTH",
-                  ex.getByMonth().stream().sorted()
-                      .map(ICalendarSerializer::monthToRfc)
-                      .collect(Collectors.joining(",")));
+    // BYYEARDAY
+    if (!ex.getByYearDay().isEmpty()) {
+      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYHOUR
+    if (!ex.getByHour().isEmpty()) {
+      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYMINUTE
+    if (!ex.getByMinute().isEmpty()) {
+      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYSECOND
+    if (!ex.getBySecond().isEmpty()) {
+      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYSETPOS
@@ -356,33 +358,15 @@ public final class ICalendarSerializer {
       appendParam(sb, "INTERVAL", ex.getIntervalValue().toString());
     }
 
-    // UNTIL
-    if (ex.getUntilDate() != null) {
-      appendParam(sb, "UNTIL",
-                  ex.getUntilDate().atStartOfDay().format(UTC_FORMAT));
-    }
-
     // COUNT
     if (ex.getCountLimit() != null) {
       appendParam(sb, "COUNT", ex.getCountLimit().toString());
     }
 
-    // BYSECOND
-    if (!ex.getBySecond().isEmpty()) {
-      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYMINUTE
-    if (!ex.getByMinute().isEmpty()) {
-      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
-    }
-
-    // BYHOUR
-    if (!ex.getByHour().isEmpty()) {
-      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // UNTIL
+    if (ex.getUntilDate() != null) {
+      appendParam(sb, "UNTIL",
+                  ex.getUntilDate().atStartOfDay().format(UTC_FORMAT));
     }
 
     // BYDAY
@@ -399,10 +383,12 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYYEARDAY
-    if (!ex.getByYearDay().isEmpty()) {
-      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
-          .map(String::valueOf).collect(Collectors.joining(",")));
+    // BYMONTH
+    if (!ex.getByMonth().isEmpty()) {
+      appendParam(sb, "BYMONTH",
+                  ex.getByMonth().stream().sorted()
+                      .map(ICalendarSerializer::monthToRfc)
+                      .collect(Collectors.joining(",")));
     }
 
     // BYWEEKNO
@@ -411,12 +397,28 @@ public final class ICalendarSerializer {
           .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
-    // BYMONTH
-    if (!ex.getByMonth().isEmpty()) {
-      appendParam(sb, "BYMONTH",
-                  ex.getByMonth().stream().sorted()
-                      .map(ICalendarSerializer::monthToRfc)
-                      .collect(Collectors.joining(",")));
+    // BYYEARDAY
+    if (!ex.getByYearDay().isEmpty()) {
+      appendParam(sb, "BYYEARDAY", ex.getByYearDay().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYHOUR
+    if (!ex.getByHour().isEmpty()) {
+      appendParam(sb, "BYHOUR", ex.getByHour().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYMINUTE
+    if (!ex.getByMinute().isEmpty()) {
+      appendParam(sb, "BYMINUTE", ex.getByMinute().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
+    }
+
+    // BYSECOND
+    if (!ex.getBySecond().isEmpty()) {
+      appendParam(sb, "BYSECOND", ex.getBySecond().stream().sorted()
+          .map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     // BYSETPOS
@@ -518,7 +520,7 @@ public final class ICalendarSerializer {
     if (month == null) {
       return null;
     }
-    return month.name();
+    return String.valueOf(month.getValue());
   }
 
   /**

@@ -5,15 +5,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.Version;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.module.SimpleDeserializers;
+import tools.jackson.databind.module.SimpleSerializers;
+
 import com.ia.core.model.util.DateTimeUtils;
 
 /**
@@ -21,8 +23,7 @@ import com.ia.core.model.util.DateTimeUtils;
  *
  * @author Israel Araújo
  */
-public class LocalDateTimeModule
-  extends com.fasterxml.jackson.databind.Module {
+public class LocalDateTimeModule extends JacksonModule {
   /**
    * Formatador de data e hora
    */
@@ -51,27 +52,93 @@ public class LocalDateTimeModule
 
     // serializadores
     SimpleSerializers serializers = new SimpleSerializers();
-    serializers
-        .addSerializer(LocalDateTime.class,
-                       new LocalDateTimeSerializer(dateTimeFormatter));
-    serializers.addSerializer(LocalDate.class,
-                              new LocalDateSerializer(dateFormatter));
-    serializers.addSerializer(LocalTime.class,
-                              new LocalTimeSerializer(timeFormatter));
+    serializers.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+    serializers.addSerializer(LocalDate.class, new LocalDateSerializer());
+    serializers.addSerializer(LocalTime.class, new LocalTimeSerializer());
     context.addSerializers(serializers);
 
     // deserializadores
     SimpleDeserializers deserializers = new SimpleDeserializers();
-
-    deserializers
-        .addDeserializer(LocalDateTime.class,
-                         new LocalDateTimeDeserializer(dateTimeFormatter));
-    deserializers.addDeserializer(LocalDate.class,
-                                  new LocalDateDeserializer(dateFormatter));
-    deserializers.addDeserializer(LocalTime.class,
-                                  new LocalTimeDeserializer(timeFormatter));
+    deserializers.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+    deserializers.addDeserializer(LocalDate.class, new LocalDateDeserializer());
+    deserializers.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
     context.addDeserializers(deserializers);
 
+  }
+
+  class LocalDateTimeSerializer extends ValueSerializer<LocalDateTime> {
+    @Override
+    public void serialize(LocalDateTime value, JsonGenerator gen, SerializationContext serializers) {
+      gen.writeString(dateTimeFormatter.format(value));
+    }
+
+    @Override
+    public Class<LocalDateTime> handledType() {
+      return LocalDateTime.class;
+    }
+  }
+
+  class LocalDateSerializer extends ValueSerializer<LocalDate> {
+    @Override
+    public void serialize(LocalDate value, JsonGenerator gen, SerializationContext serializers) {
+      gen.writeString(dateFormatter.format(value));
+    }
+
+    @Override
+    public Class<LocalDate> handledType() {
+      return LocalDate.class;
+    }
+  }
+
+  class LocalTimeSerializer extends ValueSerializer<LocalTime> {
+    @Override
+    public void serialize(LocalTime value, JsonGenerator gen, SerializationContext serializers) {
+      gen.writeString(timeFormatter.format(value));
+    }
+
+    @Override
+    public Class<LocalTime> handledType() {
+      return LocalTime.class;
+    }
+  }
+
+  class LocalDateTimeDeserializer extends ValueDeserializer<LocalDateTime> {
+    @Override
+    public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) {
+      String text = p.getText();
+      return text != null ? LocalDateTime.parse(text, dateTimeFormatter) : null;
+    }
+
+    @Override
+    public Class<LocalDateTime> handledType() {
+      return LocalDateTime.class;
+    }
+  }
+
+  class LocalDateDeserializer extends ValueDeserializer<LocalDate> {
+    @Override
+    public LocalDate deserialize(JsonParser p, DeserializationContext ctxt) {
+      String text = p.getText();
+      return text != null ? LocalDate.parse(text, dateFormatter) : null;
+    }
+
+    @Override
+    public Class<LocalDate> handledType() {
+      return LocalDate.class;
+    }
+  }
+
+  class LocalTimeDeserializer extends ValueDeserializer<LocalTime> {
+    @Override
+    public LocalTime deserialize(JsonParser p, DeserializationContext ctxt) {
+      String text = p.getText();
+      return text != null ? LocalTime.parse(text, timeFormatter) : null;
+    }
+
+    @Override
+    public Class<LocalTime> handledType() {
+      return LocalTime.class;
+    }
   }
 
 }

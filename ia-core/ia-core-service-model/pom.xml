@@ -21,15 +21,20 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!-- Jackson 3 dependencies -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
+			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
-<dependency>
-    <groupId>com.fasterxml.jackson.datatype</groupId>
-    <artifactId>jackson-datatype-jsr310</artifactId>
-</dependency>
+		<!-- Jackson annotations permanecem no groupId 2.x mesmo no Jackson 3 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -53,15 +58,15 @@
 					<configuration>
 
 						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- Classpath elements to supply as annotation processor path. If
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those classpath elements.
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

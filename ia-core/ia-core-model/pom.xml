@@ -25,6 +25,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+      <scope>test</scope>
+    </dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -55,15 +60,15 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- Classpath elements to supply as annotation processor path. If
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those classpath elements.
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

@@ -78,18 +78,18 @@
 						<!-- See
 						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 						<!-- Classpath elements to supply as annotation
-						processor path. If 
+						processor path. If
 							specified, the compiler -->
 						<!-- will detect annotation processors only in those
-						classpath elements. 
+						classpath elements.
 							If omitted, the -->
 						<!-- default classpath is used to detect annotation
-						processors. The 
+						processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
 						<!-- According to this documentation, the provided
-						dependency processor 
+						dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

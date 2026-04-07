@@ -2,19 +2,18 @@ package com.ia.core.service.util;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.core.Version;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.module.SimpleDeserializers;
+import tools.jackson.databind.module.SimpleSerializers;
+
 import com.ia.core.model.util.EnumUtils;
 
 /**
@@ -22,8 +21,7 @@ import com.ia.core.model.util.EnumUtils;
  *
  * @author Israel Araújo
  */
-public class EnumModule
-  extends com.fasterxml.jackson.databind.Module {
+public class EnumModule extends JacksonModule {
 
   private SimpleSerializers serializers = new SimpleSerializers();
   private SimpleDeserializers deserializers = new SimpleDeserializers();
@@ -42,13 +40,12 @@ public class EnumModule
   public void setupModule(SetupContext context) {
 
     // serializadores
-    addSerializers(Enum.class, new CustomEnumSerializer<Enum>(Enum.class));
+    addSerializers(Enum.class, new CustomEnumSerializer());
     context.addSerializers(serializers);
 
     // deserializadores
 
-    addDeserializers(Enum.class,
-                     new CustomEnumDeserializer<Enum>(Enum.class));
+    addDeserializers(Enum.class, new CustomEnumDeserializer());
     context.addDeserializers(deserializers);
 
   }
@@ -58,7 +55,7 @@ public class EnumModule
    */
   @SuppressWarnings("rawtypes")
   public <T extends Enum> void addDeserializers(Class<T> type,
-                                                JsonDeserializer<T> deserializer) {
+                                                ValueDeserializer<T> deserializer) {
     deserializers.addDeserializer(type, deserializer);
   }
 
@@ -67,7 +64,7 @@ public class EnumModule
    */
   @SuppressWarnings("rawtypes")
   public <T extends Enum> void addSerializers(Class<T> type,
-                                              JsonSerializer<T> serializer) {
+                                              ValueSerializer<T> serializer) {
     serializers.addSerializer(type, serializer);
   }
 
@@ -77,25 +74,16 @@ public class EnumModule
    * @param <T> Tipo do enum
    */
   @SuppressWarnings("rawtypes")
-  public static class CustomEnumSerializer<T extends Enum>
-    extends StdSerializer<T> {
-    /** Serial UID */
-    private static final long serialVersionUID = 4101055497571531181L;
-
-    /**
-     * @param t Tipo do {@link Enum}
-     */
-    public CustomEnumSerializer(Class<T> t) {
-      super(t);
-    }
-
+  public static class CustomEnumSerializer extends ValueSerializer<Enum> {
     @Override
-    public void serialize(T value, JsonGenerator gen,
-                          SerializerProvider provider)
-      throws IOException {
+    public void serialize(Enum value, JsonGenerator gen, SerializationContext serializers) {
       gen.writeString(EnumUtils.serialize(value));
     }
 
+    @Override
+    public Class<Enum> handledType() {
+      return Enum.class;
+    }
   }
 
   /**
@@ -104,21 +92,9 @@ public class EnumModule
    * @param <T> Tipo do enumerador
    */
   @SuppressWarnings("rawtypes")
-  public static class CustomEnumDeserializer<T extends Enum>
-    extends StdDeserializer<T> {
-    /** Serial UID */
-    private static final long serialVersionUID = 446973271420100633L;
-
-    /**
-     * @param t Tipo do {@link Enum}
-     */
-    public CustomEnumDeserializer(Class<T> t) {
-      super(t);
-    }
-
+  public static class CustomEnumDeserializer extends ValueDeserializer<Enum> {
     @Override
-    public T deserialize(JsonParser p, DeserializationContext ctxt)
-      throws IOException, JacksonException {
+    public Enum deserialize(JsonParser p, DeserializationContext ctxt) {
       if (p.hasToken(JsonToken.VALUE_STRING)) {
         try {
           return EnumUtils.deserialize(p.getText());
@@ -129,6 +105,10 @@ public class EnumModule
       return null;
     }
 
+    @Override
+    public Class<Enum> handledType() {
+      return Enum.class;
+    }
   }
 
 }

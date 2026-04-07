@@ -1,15 +1,13 @@
 package com.ia.core.flyway.service;
 
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
-import org.springframework.context.annotation.Bean;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 
 @Slf4j
 public abstract class CoreFlywayConfiguration {
 
   @Bean
-  static FlywayMigrationStrategy flywayMigrationStrategy() {
+  static org.springframework.boot.flyway.autoconfigure.FlywayMigrationStrategy flywayMigrationStrategy() {
     return flyway -> {
       log.info("Realizando migração com flyway");
       var validateWithResult = flyway.validateWithResult();

@@ -14,8 +14,6 @@ import com.vaadin.flow.server.streams.InMemoryUploadHandler;
 import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.server.streams.UploadMetadata;
 
-import elemental.json.impl.JreJsonArray;
-
 /**
  * Implementação padrão do formulário de anexo
  *
@@ -120,9 +118,9 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    */
   protected void onFileChangeListener(PropertyChangeEvent listener,
                                       UploadHandler receiver) {
-    JreJsonArray oldValue = (JreJsonArray) listener.getOldValue();
-    JreJsonArray value = (JreJsonArray) listener.getValue();
-    if ("[]".equals(value.toJson()) && oldValue != null) {
+    String value = listener.getValue() != null ? listener.getValue().toString() : "[]";
+    String oldValue = listener.getOldValue() != null ? listener.getOldValue().toString() : null;
+    if ("[]".equals(value) && oldValue != null) {
       onReset(listener, receiver);
     }
   }

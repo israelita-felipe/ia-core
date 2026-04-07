@@ -27,6 +27,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ia.core</groupId>
+			<artifactId>ia-core-service-model</artifactId>
+			<version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </exclusion>
+      </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-security-service-model</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -48,6 +59,10 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-jackson</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
 		<dependency>
@@ -98,7 +113,12 @@
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-dev</artifactId>
+      <optional>true</optional>
+      <version>${vaadin.version}</version>
+    </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -146,15 +166,15 @@
 					<configuration>
 
 						<!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
-						<!-- Classpath elements to supply as annotation processor path. If 
+						<!-- Classpath elements to supply as annotation processor path. If
 							specified, the compiler -->
-						<!-- will detect annotation processors only in those classpath elements. 
+						<!-- will detect annotation processors only in those classpath elements.
 							If omitted, the -->
-						<!-- default classpath is used to detect annotation processors. The 
+						<!-- default classpath is used to detect annotation processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
-						<!-- According to this documentation, the provided dependency processor 
+						<!-- According to this documentation, the provided dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

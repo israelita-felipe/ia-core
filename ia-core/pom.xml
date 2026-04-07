@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>4.0.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<packaging>pom</packaging>
@@ -21,10 +21,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
-		<vaadin.version>24.8.7</vaadin.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
+		<vaadin.version>25.1.1</vaadin.version>
+		<spring-cloud.version>2025.1.1</spring-cloud.version>
 		<antlr.version>4.13.2</antlr.version>
-		<jjwt.version>0.12.6</jjwt.version>
+		<jjwt.version>0.13.0</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
 		<spring-ai.version>1.1.0-M3</spring-ai.version>
 		<ckeditor.version>4.1.2-8</ckeditor.version>
@@ -43,6 +43,22 @@
 				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!-- JJWT 0.13.0+ para suporte a Jackson 3 -->
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-api</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-impl</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-jackson</artifactId>
+				<version>${jjwt.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -233,7 +249,7 @@
 		<module>ia-core-grammar</module>
 		<module>ia-core-nlp</module>
 		<module>ia-core-security-model</module>
-		<module>security-core-service</module>
+		<module>ia-core-security-service</module>
 		<module>ia-core-service-model</module>
 		<module>ia-core-security-view</module>
 		<module>ia-core-security-service-model</module>
