@@ -1,10 +1,10 @@
 package com.ia.core.view.components.converters;
 
-import java.math.BigDecimal;
-
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
+
+import java.math.BigDecimal;
 
 /**
  *
@@ -18,7 +18,7 @@ public class StringToBigDecimalConverter
     if (value == null || "".equals(value)) {
       return Result.ok(null);
     }
-    value = value.replaceAll("\\.", "").replaceAll(",", ".");
+    value = value.replaceAll(",", ".");
     return Result.ok(new BigDecimal(value));
   }
 
@@ -28,7 +28,7 @@ public class StringToBigDecimalConverter
     if (value == null) {
       return null;
     }
-    return String.valueOf(value);
+    return String.valueOf(value).replace(".",",");
   }
 
 }

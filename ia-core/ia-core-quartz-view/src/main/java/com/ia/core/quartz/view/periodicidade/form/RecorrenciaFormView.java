@@ -1,8 +1,5 @@
 package com.ia.core.quartz.view.periodicidade.form;
 
-import java.time.DayOfWeek;
-import java.time.Month;
-
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
@@ -14,6 +11,9 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.time.DayOfWeek;
+import java.time.Month;
 
 /**
  * @author Israel Araújo
@@ -259,6 +259,7 @@ public class RecorrenciaFormView
 
   private void createMainLayout() {
     mainLayout = createFormLayout();
+    mainLayout.setSizeFull();
     add(mainLayout, 6);
 
     // ========================

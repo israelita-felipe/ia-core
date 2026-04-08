@@ -1,0 +1,4 @@
+vaadin-tabsheet[part='content']{
+	padding: var(--lumo-space-s) 0;
+    --vaadin-scroller-padding-inline: 0px;
+}

@@ -119,6 +119,11 @@
       <optional>true</optional>
       <version>${vaadin.version}</version>
     </dependency>
+    <!-- Vaadin Card Component para transformação Grid em Cards -->
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-card-flow</artifactId>
+    </dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
