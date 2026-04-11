@@ -20,7 +20,8 @@ public interface HasTextAreaCreator
    * @return {@link RichTextArea}
    */
   default RichTextArea createRichTextArea(String label, String help) {
-    RichTextArea field = new RichTextArea(label);
+    RichTextArea field = new RichTextArea();
+    field.setLabel(label);
     setHelp(field, help);
     return field;
   }

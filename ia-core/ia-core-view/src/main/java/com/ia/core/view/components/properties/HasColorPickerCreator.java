@@ -1,7 +1,8 @@
 package com.ia.core.view.components.properties;
 
 import com.vaadin.flow.component.customfield.CustomField;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.html.Input;
+import com.vaadin.flow.component.shared.HasAllowedCharPattern;
 
 /**
  * Criadores de campos de seleção de cor.
@@ -28,31 +29,23 @@ public interface HasColorPickerCreator
    * Componente de seleção de cor que combina um TextField para entrada de
    * código hexadecimal com uma pré-visualização da cor.
    */
-  class ColorPicker
-    extends CustomField<String> {
+    class ColorPicker
+    extends CustomField<String> implements HasAllowedCharPattern {
 
-    private final TextField textField;
+    private final Input textField;
 
     public ColorPicker(String label) {
-      textField = new TextField(label);
-      textField.getElement().executeJs("this.inputElement.type = 'color';");
+        setLabel(label);
+      textField = new Input();
+      textField.setType("color");
       textField.setPlaceholder("#FF5733");
-      textField.setPattern("^#[0-9A-Fa-f]{6}$");
-      textField.setAllowedCharPattern("[#0-9A-Fa-f]");
-      textField.setSizeFull();
+      setAllowedCharPattern("[#0-9A-Fa-f]");
+      textField.setWidthFull();
       add(textField);
     }
 
-    public void setPlaceholder(String placeholder) {
+      public void setPlaceholder(String placeholder) {
       textField.setPlaceholder(placeholder);
-    }
-
-    public void setPattern(String pattern) {
-      textField.setPattern(pattern);
-    }
-
-    public void setAllowedCharPattern(String pattern) {
-      textField.setAllowedCharPattern(pattern);
     }
 
     @Override

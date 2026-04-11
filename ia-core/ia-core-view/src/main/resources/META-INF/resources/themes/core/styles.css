@@ -6,3 +6,18 @@
 /* Importação dos estilos existentes */
 @import url('./scroll-styles.css');
 @import url('./tab-sheet-styles.css');
+
+/* Estiliza o input nativo dentro do ColorPicker para se parecer com um TextField do Vaadin */
+vaadin-custom-field input[type="color"] {
+    /* Propriedades de base do Vaadin 25 que funcionam com ambos os temas */
+    background-color: var(--vaadin-input-field-background, var(--lumo-contrast-5pct));
+    color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
+    border: 0px solid var(--vaadin-input-field-border-color, var(--lumo-contrast-20pct));
+    border-radius: var(--vaadin-input-field-border-radius, var(--lumo-border-radius-m));
+    padding: 0 var(--vaadin-input-field-horizontal-padding, var(--lumo-space-m));
+    font-family: var(--vaadin-input-field-value-font-family, var(--lumo-font-family));
+    font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
+    height: var(--vaadin-input-field-height, var(--lumo-size-m));
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    width: 100%;
+}

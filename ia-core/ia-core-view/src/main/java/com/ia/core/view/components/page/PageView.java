@@ -1,13 +1,5 @@
 package com.ia.core.view.components.page;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.report.AbstractJasperReport.ExportType;
 import com.ia.core.service.dto.filter.FilterProperty;
@@ -45,8 +37,10 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-
 import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Abstração de uma página padrão
@@ -363,8 +357,10 @@ public abstract class PageView<T extends Serializable>
         actions.addAll(super.createDefaultEditorActions());
         return actions;
       }
-
     };
+    editorView.addClosedListener(onClose->{
+        refreshAll();
+    });
     editorView.show();
     return editorView;
   }
