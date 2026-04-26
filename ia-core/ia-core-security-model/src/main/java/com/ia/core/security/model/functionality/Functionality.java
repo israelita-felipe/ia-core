@@ -1,8 +1,8 @@
 package com.ia.core.security.model.functionality;
 
-import java.util.Set;
-
 import com.ia.core.security.model.privilege.PrivilegeType;
+
+import java.util.Set;
 
 /**
  * @author Israel Araújo

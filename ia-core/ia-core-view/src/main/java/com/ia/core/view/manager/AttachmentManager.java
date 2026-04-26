@@ -1,15 +1,14 @@
 package com.ia.core.view.manager;
 
-import java.io.InputStream;
-import java.util.Base64;
-import java.util.UUID;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.view.client.BaseClient;
-
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.InputStream;
+import java.util.Base64;
+import java.util.UUID;
 
 /**
  * Serviço para anexos

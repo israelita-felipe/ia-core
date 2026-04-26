@@ -1,9 +1,5 @@
 package com.ia.core.security.service.model.authorization;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-
 import com.ia.core.security.model.authentication.JwtManager.Context;
 import com.ia.core.security.model.functionality.Operation;
 import com.ia.core.security.model.functionality.OperationEnum;
@@ -11,10 +7,13 @@ import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationContextDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Israel Araújo

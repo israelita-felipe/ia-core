@@ -1,12 +1,11 @@
 package com.ia.core.quartz.view.quartz;
 
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * Manager unificado para operações do Quartz (SchedulerConfig e Jobs).

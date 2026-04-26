@@ -1,9 +1,8 @@
 package com.ia.core.security.view.util;
 
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 /**
  * @author Israel Araújo

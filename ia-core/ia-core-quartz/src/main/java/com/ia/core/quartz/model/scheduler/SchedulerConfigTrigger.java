@@ -1,11 +1,6 @@
 package com.ia.core.quartz.model.scheduler;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
 import com.ia.core.quartz.model.QuartzModel;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Entidade que representa um trigger do Quartz.

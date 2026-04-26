@@ -2,7 +2,6 @@ package com.ia.core.service.dto.sort;
 
 import com.ia.core.model.filter.SortRequest;
 import com.ia.core.service.dto.DTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;

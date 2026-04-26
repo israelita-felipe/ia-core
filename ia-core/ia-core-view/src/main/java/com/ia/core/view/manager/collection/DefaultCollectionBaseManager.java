@@ -1,23 +1,17 @@
 package com.ia.core.view.manager.collection;
 
+import com.ia.core.service.dto.DTO;
+import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
+import com.ia.core.view.exception.ValidationException;
+import com.ia.core.view.manager.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.function.BiConsumer;
-
-import com.ia.core.service.dto.DTO;
-import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
-import com.ia.core.view.exception.ValidationException;
-import com.ia.core.view.manager.CountBaseManager;
-import com.ia.core.view.manager.DefaultBaseManager;
-import com.ia.core.view.manager.DeleteBaseManager;
-import com.ia.core.view.manager.FindBaseManager;
-import com.ia.core.view.manager.ListBaseManager;
-import com.ia.core.view.manager.SaveBaseManager;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Classe padrão para criação de um serviço da view com todos os clientes.

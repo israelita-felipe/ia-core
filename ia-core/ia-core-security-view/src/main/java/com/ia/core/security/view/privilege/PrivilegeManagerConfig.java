@@ -1,10 +1,9 @@
 package com.ia.core.security.view.privilege;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
+import org.springframework.stereotype.Component;
 
 /**
  *

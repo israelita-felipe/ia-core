@@ -1,10 +1,10 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.client.FindBaseClient;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Interface base para serviços do tipo find.

@@ -1,8 +1,15 @@
 package com.ia.core.communication.view.mensagem.form;
 
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.view.mensagem.MensagemManager;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * ViewModel para o formulário de Mensagens.
@@ -12,11 +19,8 @@ import com.ia.core.view.components.form.viewModel.FormViewModel;
 public class MensagemFormViewModel
   extends FormViewModel<MensagemDTO> {
 
-  private final MensagemManager mensagemManager;
-
   public MensagemFormViewModel(MensagemFormViewModelConfig config) {
     super(config);
-    this.mensagemManager = config.getMensagemManager();
   }
 
   @Override
@@ -30,6 +34,28 @@ public class MensagemFormViewModel
   }
 
   public MensagemManager getMensagemManager() {
-    return mensagemManager;
+    return getConfig().getMensagemManager();
   }
+
+    /**
+     * Retorna a lista de variáveis disponíveis para edição de templates.
+     * Cada variável contém chave e descrição para exibição na UI.
+     *
+     * @return lista de VariavelTemplate
+     */
+    public List<Variavel> getVariaveisDisponiveis() {
+        if (getModel() instanceof HasVariavel) {
+            HasVariavel hasVariavel = (HasVariavel) getModel();
+            return hasVariavel.getVariaveis();
+        }
+        return Collections.emptyList();
+    }
+    public String processarVariaveis(String value){
+        return getConfig().getProcessadorVariaveis().processar(value, getContextoMensagem());
+    }
+
+    @NotNull
+    private HashMap<Variavel, Object> getContextoMensagem() {
+        return new HashMap<>();
+    }
 }

@@ -1,10 +1,5 @@
 package com.ia.core.quartz.service;
 
-import java.util.List;
-
-import org.quartz.Scheduler;
-import org.springframework.stereotype.Component;
-
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
@@ -15,8 +10,11 @@ import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
-
 import lombok.Getter;
+import org.quartz.Scheduler;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  *

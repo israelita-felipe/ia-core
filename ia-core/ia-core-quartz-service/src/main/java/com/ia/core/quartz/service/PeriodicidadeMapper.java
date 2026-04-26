@@ -1,10 +1,9 @@
 package com.ia.core.quartz.service;
 
-import org.mapstruct.Mapper;
-
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.service.mapper.BaseEntityMapper;
+import org.mapstruct.Mapper;
 
 /**
  * {@link Mapper} de {@link Periodicidade} para {@link PeriodicidadeDTO}

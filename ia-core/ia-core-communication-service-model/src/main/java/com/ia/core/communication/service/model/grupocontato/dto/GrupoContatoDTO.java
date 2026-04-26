@@ -1,11 +1,11 @@
 package com.ia.core.communication.service.model.grupocontato.dto;
 
-import java.util.Set;
-
-import com.ia.core.communication.model.GrupoContato;
+import com.ia.core.communication.model.contato.GrupoContato;
+import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * DTO para a entidade GrupoContato.
@@ -24,7 +27,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> {
+public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
@@ -63,6 +66,15 @@ public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> {
   @Override
   public GrupoContatoDTO copyObject() {
     return toBuilder().id(null).version(null).build();
+  }
+
+  @Override
+  public Map<Variavel, Object> getContext() {
+    return Map.of(
+        VariavelTemplate.NOME, nome,
+        VariavelTemplate.DESCRICAO_GRUPO, descricao,
+        VariavelTemplate.ATIVO_GRUPO, ativo
+    );
   }
 
   @Override

@@ -1,11 +1,10 @@
 package com.ia.core.communication.view.grupocontato;
 
-import org.springframework.stereotype.Service;
-
 import com.ia.core.communication.service.model.grupocontato.GrupoContatoUseCase;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
+import org.springframework.stereotype.Service;
 
 /**
  * Manager para operações de GrupoContato.

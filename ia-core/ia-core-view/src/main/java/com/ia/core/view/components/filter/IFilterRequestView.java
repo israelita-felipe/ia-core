@@ -1,20 +1,12 @@
 package com.ia.core.view.components.filter;
 
-import java.util.Collection;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.filter.viewModel.IFilterRequestViewModel;
-import com.ia.core.view.components.properties.HasBinder;
-import com.ia.core.view.components.properties.HasCheckBoxCreator;
-import com.ia.core.view.components.properties.HasComboBoxCreator;
-import com.ia.core.view.components.properties.HasDateTimeCreator;
-import com.ia.core.view.components.properties.HasId;
-import com.ia.core.view.components.properties.HasTextFieldCreator;
-import com.ia.core.view.components.properties.HasTranslator;
+import com.ia.core.view.components.properties.*;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
@@ -22,6 +14,8 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+
+import java.util.Collection;
 
 /**
  * Inteface que define o contrato de uma View para filtro

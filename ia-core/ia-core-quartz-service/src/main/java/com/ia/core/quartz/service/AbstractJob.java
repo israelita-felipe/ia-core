@@ -1,14 +1,13 @@
 package com.ia.core.quartz.service;
 
-import java.util.function.Consumer;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.function.Consumer;
 
 /**
  * Classe abstrata base para jobs do Quartz.

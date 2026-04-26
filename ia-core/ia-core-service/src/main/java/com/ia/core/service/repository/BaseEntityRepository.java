@@ -1,11 +1,10 @@
 package com.ia.core.service.repository;
 
+import com.ia.core.model.BaseEntity;
+import com.ia.core.model.projection.EntityProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
-
-import com.ia.core.model.BaseEntity;
-import com.ia.core.model.projection.EntityProjection;
 
 /**
  * Repositório base da camada de serviço.

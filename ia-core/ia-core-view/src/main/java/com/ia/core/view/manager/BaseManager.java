@@ -1,13 +1,12 @@
 package com.ia.core.view.manager;
 
+import com.ia.core.service.dto.DTO;
+import com.ia.core.view.client.BaseClient;
+import org.springframework.core.ParameterizedTypeReference;
+
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
-import org.springframework.core.ParameterizedTypeReference;
-
-import com.ia.core.service.dto.DTO;
-import com.ia.core.view.client.BaseClient;
 
 /**
  * Interface base para o cliente.

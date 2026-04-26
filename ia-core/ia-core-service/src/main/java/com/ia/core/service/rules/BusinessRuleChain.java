@@ -1,13 +1,13 @@
 package com.ia.core.service.rules;
 
+import com.ia.core.service.exception.ValidationException;
+import com.ia.core.service.validators.ValidationResult;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-
-import com.ia.core.service.exception.ValidationException;
-import com.ia.core.service.validators.ValidationResult;
 
 /**
  * Implementação do padrão Chain of Responsibility para regras de negócio.

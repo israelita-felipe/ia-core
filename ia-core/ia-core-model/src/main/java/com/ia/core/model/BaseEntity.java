@@ -1,19 +1,15 @@
 package com.ia.core.model;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Classe base abstrata para todas as entidades do sistema. Fornece a estrutura

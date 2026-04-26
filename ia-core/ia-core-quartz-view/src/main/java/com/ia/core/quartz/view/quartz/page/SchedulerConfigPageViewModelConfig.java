@@ -1,7 +1,5 @@
 package com.ia.core.quartz.view.quartz.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.quartz.view.quartz.QuartzManager;
 import com.ia.core.quartz.view.quartz.form.SchedulerConfigFormViewModelConfig;
@@ -10,6 +8,7 @@ import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  *

@@ -1,9 +1,8 @@
 package com.ia.core.communication.view.grupocontato;
 
-import org.springframework.cloud.openfeign.FeignClient;
-
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.view.client.DefaultBaseClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * Cliente Feign para operações de GrupoContato.

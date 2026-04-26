@@ -1,10 +1,9 @@
 package com.ia.core.security.service.privilege;
 
-import org.mapstruct.Mapper;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.service.mapper.BaseEntityMapper;
+import org.mapstruct.Mapper;
 
 /**
  * {@link Mapper} de {@link Autor} para {@link PrivilegeDTO}

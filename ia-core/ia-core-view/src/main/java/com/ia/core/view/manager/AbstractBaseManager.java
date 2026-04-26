@@ -1,13 +1,12 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-
 import com.ia.core.view.client.BaseClient;
-
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
 
 /**
  * Classe abstrata base para um service da view.

@@ -1,7 +1,5 @@
 package com.ia.core.service.attachment;
 
-import java.util.List;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
@@ -10,6 +8,8 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
+
+import java.util.List;
 
 /**
  *

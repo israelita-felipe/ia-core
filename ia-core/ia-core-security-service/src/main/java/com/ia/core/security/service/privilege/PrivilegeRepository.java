@@ -1,10 +1,9 @@
 package com.ia.core.security.service.privilege;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.service.repository.BaseEntityRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * @author Israel Araújo

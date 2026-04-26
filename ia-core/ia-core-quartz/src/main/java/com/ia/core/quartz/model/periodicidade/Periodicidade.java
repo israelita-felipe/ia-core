@@ -1,27 +1,16 @@
 package com.ia.core.quartz.model.periodicidade;
 
+import com.ia.core.model.BaseEntity;
+import com.ia.core.quartz.model.QuartzModel;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.Builder.Default;
+import lombok.experimental.SuperBuilder;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.ia.core.model.BaseEntity;
-import com.ia.core.quartz.model.QuartzModel;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 /**
  * Entidade que representa a periodicidade de um evento.

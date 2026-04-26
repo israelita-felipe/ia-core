@@ -1,10 +1,5 @@
 package com.ia.core.service.attachment;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.nio.file.Files;
-import java.util.UUID;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.DefaultBaseService;
 import com.ia.core.service.annotations.TransactionalWrite;
@@ -16,8 +11,12 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.util.ZipUtil;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Files;
+import java.util.UUID;
 
 /**
  * Serviço para manipulação de anexos

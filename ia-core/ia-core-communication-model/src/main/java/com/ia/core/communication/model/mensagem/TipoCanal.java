@@ -1,4 +1,4 @@
-package com.ia.core.communication.model;
+package com.ia.core.communication.model.mensagem;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

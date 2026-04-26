@@ -1,17 +1,16 @@
 package com.ia.core.security.service.functionality;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.privilege.PrivilegeRepository;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

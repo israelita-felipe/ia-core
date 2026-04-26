@@ -1,8 +1,5 @@
 package com.ia.core.security.view.log.operation.page;
 
-import java.io.Serializable;
-import java.util.Collection;
-
 import com.ia.core.security.view.log.operation.list.LogOperationListView;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
@@ -13,6 +10,9 @@ import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Página de entidade

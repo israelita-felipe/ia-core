@@ -1,15 +1,15 @@
 package com.ia.core.service.dto.filter;
 
+import com.ia.core.model.filter.FilterRequest;
+import com.ia.core.model.filter.Operator;
+import com.ia.core.service.dto.DTO;
+
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import com.ia.core.model.filter.FilterRequest;
-import com.ia.core.model.filter.Operator;
-import com.ia.core.service.dto.DTO;
 
 /**
  * Operadores

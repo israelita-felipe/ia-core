@@ -1,7 +1,5 @@
 package com.ia.core.security.view.user.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.security.view.log.operation.LogOperationManager;
@@ -17,6 +15,7 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Israel Araújo

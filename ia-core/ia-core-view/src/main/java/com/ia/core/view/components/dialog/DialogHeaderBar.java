@@ -1,15 +1,14 @@
 package com.ia.core.view.components.dialog;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A component which implements the Dialog header bar. The header bar by default

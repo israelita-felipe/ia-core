@@ -1,15 +1,15 @@
 package com.ia.core.service.attachment.dto;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Filtro para um {@link AttachmentDTO}

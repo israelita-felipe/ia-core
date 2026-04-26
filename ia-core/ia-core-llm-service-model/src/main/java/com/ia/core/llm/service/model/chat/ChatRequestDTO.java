@@ -1,7 +1,6 @@
 package com.ia.core.llm.service.model.chat;
 
 import com.ia.core.service.dto.DTO;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

@@ -1,19 +1,12 @@
 package com.ia.core.security.service.model.log.operation;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.util.JsonUtil;
-
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+
+import java.util.*;
 
 /**
  * @author Israel Araújo

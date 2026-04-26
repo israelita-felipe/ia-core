@@ -1,18 +1,16 @@
 package com.ia.core.quartz.model.periodicidade.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
-import java.util.List;
-
+import com.ia.core.quartz.model.periodicidade.Periodicidade;
+import com.ia.core.quartz.support.AbstractQuartzRepositoryIT;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ia.core.quartz.model.periodicidade.Periodicidade;
-import com.ia.core.quartz.support.AbstractQuartzRepositoryIT;
+import java.time.LocalDate;
+import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testes de integração para {@link PeriodicidadeRepository}.
@@ -285,7 +283,7 @@ class PeriodicidadeRepositoryIT extends AbstractQuartzRepositoryIT {
     periodicidade.getIntervaloBase().setStartDate(dataInicio);
     periodicidade.getIntervaloBase().setEndDate(dataFim);
 
-    com.ia.core.quartz.model.periodicidade.Recorrencia regra = 
+    com.ia.core.quartz.model.periodicidade.Recorrencia regra =
         new com.ia.core.quartz.model.periodicidade.Recorrencia();
     regra.setFrequency(com.ia.core.quartz.model.periodicidade.Frequencia.SEMANALMENTE);
     periodicidade.setRegra(regra);

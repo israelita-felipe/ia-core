@@ -1,8 +1,7 @@
 package com.ia.core.llm.service.vector;
 
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 
 /**
  * Implementação de VectorStoreOperations.

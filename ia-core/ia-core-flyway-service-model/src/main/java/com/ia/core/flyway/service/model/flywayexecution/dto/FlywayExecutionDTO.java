@@ -1,16 +1,11 @@
 package com.ia.core.flyway.service.model.flywayexecution.dto;
 
-import java.time.LocalDateTime;
-
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 /**
  * DTO para representação de execuções de migrations do Flyway.

@@ -1,7 +1,5 @@
 package com.ia.core.view.components.filter;
 
-import java.util.Locale;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
@@ -21,8 +19,9 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.Converter;
-
 import lombok.Getter;
+
+import java.util.Locale;
 
 /**
  * Implementação padrão de view para {@link SearchRequestDTO}

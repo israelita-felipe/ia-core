@@ -1,13 +1,5 @@
 package com.ia.core.llm.service.chat;
 
-import java.util.Map;
-
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.core.ParameterizedTypeReference;
-
 import com.google.gson.Gson;
 import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
 import com.ia.core.llm.service.template.PromptTemplateService;
@@ -15,8 +7,14 @@ import com.ia.core.llm.service.template.PromptTemplateServiceImpl;
 import com.ia.core.llm.service.vector.VectorStoreOperations;
 import com.ia.core.llm.service.vector.VectorStoreOperationsImpl;
 import com.ia.core.llm.service.vector.VectorStoreService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.core.ParameterizedTypeReference;
+
+import java.util.Map;
 
 /**
  * Serviço principal de Chat que orquestra as operações de chat.

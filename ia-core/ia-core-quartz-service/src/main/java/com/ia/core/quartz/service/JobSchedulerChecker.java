@@ -1,13 +1,12 @@
 package com.ia.core.quartz.service;
 
-import java.time.LocalTime;
-
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.PersistJobDataAfterExecution;
 
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalTime;
 
 /**
  * Job de verificação do scheduler.

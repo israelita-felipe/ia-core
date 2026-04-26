@@ -1,7 +1,14 @@
 package com.ia.core.security.view.authentication;
 
-import java.util.List;
-
+import com.ia.core.security.model.authentication.AuthenticationRequest;
+import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
+import com.ia.core.security.service.model.privilege.PrivilegeDTO;
+import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.user.UserPrivilegeDTO;
+import com.vaadin.flow.server.VaadinRequest;
+import com.vaadin.flow.server.VaadinServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,16 +18,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
-import com.ia.core.security.model.authentication.AuthenticationRequest;
-import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
-import com.ia.core.security.service.model.privilege.PrivilegeDTO;
-import com.ia.core.security.service.model.user.UserDTO;
-import com.ia.core.security.service.model.user.UserPrivilegeDTO;
-import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinServletRequest;
-
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 /**
  * @author Israel Araújo

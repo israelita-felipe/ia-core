@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Classe base para testes de interface (E2E) de Views Vaadin.
@@ -96,7 +96,7 @@ public abstract class AbstractViewTest {
             "//button[contains(text(),'" + buttonText + "')] | " +
             "//span[contains(@class, 'v-button') and contains(text(),'" + buttonText + "')]"
         ));
-        
+
         if (!buttons.isEmpty()) {
             buttons.get(0).click();
         } else {

@@ -1,11 +1,10 @@
 package com.ia.core.view.components.form.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.properties.AutoCastable;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * Configuração base para FormViewModel.

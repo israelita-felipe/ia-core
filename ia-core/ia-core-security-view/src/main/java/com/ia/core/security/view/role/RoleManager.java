@@ -1,10 +1,5 @@
 package com.ia.core.security.view.role;
 
-import java.util.Objects;
-
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
@@ -14,6 +9,10 @@ import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.manager.ListBaseManager;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * Serviço para {@link RoleDTO}

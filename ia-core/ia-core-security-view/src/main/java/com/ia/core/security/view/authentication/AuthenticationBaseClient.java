@@ -1,11 +1,10 @@
 package com.ia.core.security.view.authentication;
 
+import com.ia.core.security.model.authentication.AuthenticationRequest;
+import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.ia.core.security.model.authentication.AuthenticationRequest;
-import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 
 /**
  * @author Israel Araújo

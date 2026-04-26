@@ -1,11 +1,10 @@
 package com.ia.test.security.builder;
 
-import java.util.UUID;
-
 import com.ia.core.security.model.privilege.Privilege;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * Builder para criar instâncias de {@link Privilege} com dados de teste.

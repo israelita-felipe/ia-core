@@ -3,7 +3,6 @@ package com.ia.core.view.exception;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.ErrorEvent;
 import com.vaadin.flow.server.ErrorHandler;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**

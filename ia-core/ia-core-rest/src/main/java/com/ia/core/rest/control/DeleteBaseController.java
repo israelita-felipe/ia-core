@@ -1,18 +1,16 @@
 package com.ia.core.rest.control;
 
-import java.util.UUID;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.DeleteBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.UUID;
 
 /**
  * Interface base para controladores do tipo delete.

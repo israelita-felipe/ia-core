@@ -1,15 +1,14 @@
 package com.ia.core.security.view.log.operation.form;
 
-import java.util.Collection;
-
 import com.ia.core.security.service.model.log.operation.LogOperationDetails;
 import com.ia.core.security.service.model.log.operation.OperationItemDetails;
 import com.ia.core.security.view.log.operation.list.OperationItemDetailsListViewModel;
 import com.ia.core.security.view.log.operation.list.OperationItemDetailsListViewModelConfig;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-
 import lombok.Getter;
+
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

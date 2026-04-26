@@ -1,15 +1,14 @@
 package com.ia.test.security.builder;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
-
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.model.user.UserPrivilege;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
 
 /**
  * Builder para criar instâncias de {@link User} com dados de teste.

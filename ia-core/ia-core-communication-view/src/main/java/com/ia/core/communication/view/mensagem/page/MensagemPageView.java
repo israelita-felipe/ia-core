@@ -1,12 +1,9 @@
 package com.ia.core.communication.view.mensagem.page;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.ia.core.communication.view.mensagem.form.MensagemFormView;
-import com.ia.core.communication.view.mensagem.list.MensagemListView;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.communication.view.mensagem.MensagemManager;
+import com.ia.core.communication.view.mensagem.form.MensagemFormView;
+import com.ia.core.communication.view.mensagem.list.MensagemListView;
 import com.ia.core.view.components.form.IFormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.IListView;
@@ -14,6 +11,9 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.PageView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Página principal para visualização de Mensagens.
@@ -41,14 +41,22 @@ public class MensagemPageView
 
   @Override
   public Collection<PageAction<MensagemDTO>> createDefaultPageActions() {
-    List<PageAction<MensagemDTO>> actions = new java.util.ArrayList<>();
-    actions.add(createViewAction());
+    List<PageAction<MensagemDTO>> actions = new java.util.ArrayList<>(super.createDefaultPageActions());
     actions.add(createEnviarMensagemAction());
-    actions.add(createPrintAction());
     return actions;
   }
 
-  public PageAction<MensagemDTO> createEnviarMensagemAction() {
+    @Override
+    public boolean isEditButtonVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean isNewButtonVisible() {
+        return false;
+    }
+
+    public PageAction<MensagemDTO> createEnviarMensagemAction() {
     return PageAction.<MensagemDTO> builder()
         .icon(VaadinIcon.PAPERPLANE)
         .enableFunction(this::canEnviar)

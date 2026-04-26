@@ -1,8 +1,7 @@
 package com.ia.core.security.view.config;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author Israel Araújo

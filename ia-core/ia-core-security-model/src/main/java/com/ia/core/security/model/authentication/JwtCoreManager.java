@@ -1,17 +1,15 @@
 package com.ia.core.security.model.authentication;
 
-import java.util.Collection;
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+
+import javax.crypto.SecretKey;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * @author Israel Araújo

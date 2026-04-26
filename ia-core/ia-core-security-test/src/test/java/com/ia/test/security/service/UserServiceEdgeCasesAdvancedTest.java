@@ -1,22 +1,21 @@
 package com.ia.test.security.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.model.user.User;
+import com.ia.core.security.model.user.UserPrivilege;
+import com.ia.test.security.builder.UserTestDataBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.ia.core.security.model.role.Role;
-import com.ia.core.security.model.user.User;
-import com.ia.core.security.model.user.UserPrivilege;
-import com.ia.test.security.builder.UserTestDataBuilder;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Testes para casos extremos (edge cases) de {@link User}. Valida

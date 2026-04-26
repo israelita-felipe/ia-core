@@ -1,7 +1,5 @@
 package com.ia.core.view.components.attachment.form;
 
-import java.util.Base64;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.attachment.dto.AttachmentTranslator;
 import com.ia.core.service.util.ZipUtil;
@@ -13,6 +11,8 @@ import com.vaadin.flow.dom.PropertyChangeEvent;
 import com.vaadin.flow.server.streams.InMemoryUploadHandler;
 import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.server.streams.UploadMetadata;
+
+import java.util.Base64;
 
 /**
  * Implementação padrão do formulário de anexo

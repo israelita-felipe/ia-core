@@ -1,9 +1,9 @@
 package com.ia.core.view.components.list.viewModel;
 
+import lombok.Getter;
+
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-
-import lombok.Getter;
 
 /**
  * Implementação padrão de um View Model de lista
@@ -23,7 +23,7 @@ public abstract class ListViewModel<T extends Serializable>
   private ListViewModelConfig<T> config;
 
   /**
-   * 
+   *
    */
   public ListViewModel(ListViewModelConfig<T> config) {
     this.config = config;

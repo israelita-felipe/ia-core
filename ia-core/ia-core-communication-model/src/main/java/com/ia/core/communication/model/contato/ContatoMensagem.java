@@ -1,13 +1,8 @@
-package com.ia.core.communication.model;
+package com.ia.core.communication.model.contato;
 
+import com.ia.core.communication.model.CommunicationModel;
 import com.ia.core.model.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,9 +25,9 @@ public class ContatoMensagem extends BaseEntity {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "biblia_CONTATO_MENSAGEM";
+  public static final String TABLE_NAME = CommunicationModel.TABLE_PREFIX+"CONTATO_MENSAGEM";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "biblia";
+  public static final String SCHEMA_NAME = CommunicationModel.SCHEMA;
 
   /** Grupo de contato */
   @ManyToOne(fetch = FetchType.LAZY)

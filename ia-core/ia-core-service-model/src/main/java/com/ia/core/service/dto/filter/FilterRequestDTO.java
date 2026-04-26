@@ -3,7 +3,6 @@ package com.ia.core.service.dto.filter;
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.FilterRequest;
 import com.ia.core.service.dto.DTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;

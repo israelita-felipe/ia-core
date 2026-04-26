@@ -1,7 +1,6 @@
 package com.ia.core.security.model.privilege.converter;
 
 import com.ia.core.security.model.privilege.PrivilegeType;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

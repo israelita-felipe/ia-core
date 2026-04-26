@@ -1,11 +1,8 @@
 package com.ia.core.llm.service.model.template;
 
-import java.util.Set;
-
 import com.ia.core.llm.model.template.TemplateParameter;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Set;
 
 /**
  * @author Israel Araújo

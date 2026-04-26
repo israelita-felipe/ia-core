@@ -1,16 +1,10 @@
 package com.ia.core.owl.service;
 
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDocumentFormat;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.PrefixManager;
-
 import com.ia.core.owl.service.exception.OWLParserException;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 import com.ia.core.owl.service.model.axioma.HasAxiomas;
+import org.semanticweb.owlapi.model.*;
 
 /**
  * Interface para serviços de gerenciamento de ontologias OWL.

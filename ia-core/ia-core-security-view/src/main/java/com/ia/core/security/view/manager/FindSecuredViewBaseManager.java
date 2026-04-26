@@ -1,9 +1,9 @@
 package com.ia.core.security.view.manager;
 
-import java.io.Serializable;
-
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.manager.FindBaseManager;
+
+import java.io.Serializable;
 
 /**
  * Interface base para clientes do tipo find.

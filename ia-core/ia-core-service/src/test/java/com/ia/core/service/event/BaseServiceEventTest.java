@@ -1,14 +1,13 @@
 package com.ia.core.service.event;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.Serializable;
-
+import com.ia.core.service.dto.DTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import com.ia.core.service.dto.DTO;
+import java.io.Serializable;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testes para {@link BaseServiceEvent}.

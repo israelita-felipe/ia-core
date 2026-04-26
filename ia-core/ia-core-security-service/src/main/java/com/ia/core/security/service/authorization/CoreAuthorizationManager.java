@@ -1,7 +1,6 @@
 package com.ia.core.security.service.authorization;
 
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

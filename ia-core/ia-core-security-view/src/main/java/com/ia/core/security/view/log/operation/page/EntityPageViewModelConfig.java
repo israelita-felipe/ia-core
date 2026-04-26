@@ -1,13 +1,12 @@
 package com.ia.core.security.view.log.operation.page;
 
-import java.io.Serializable;
-
 import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.view.components.page.viewModel.PageViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 /**
  *

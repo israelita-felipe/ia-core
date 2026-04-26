@@ -1,7 +1,6 @@
 package com.ia.core.security.service.model.log.operation;
 
 import com.ia.core.service.dto.DTO;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;

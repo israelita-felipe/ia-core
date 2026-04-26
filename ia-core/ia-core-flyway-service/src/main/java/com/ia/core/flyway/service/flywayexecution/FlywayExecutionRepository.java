@@ -1,9 +1,8 @@
 package com.ia.core.flyway.service.flywayexecution;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.service.repository.BaseEntityRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * Repository para entidade FlywayExecution.

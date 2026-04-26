@@ -1,20 +1,19 @@
 package com.ia.core.service.dto.entity;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.AbstractDTO;
 import com.ia.core.service.dto.DTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Classe base para DTO

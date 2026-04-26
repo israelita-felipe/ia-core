@@ -1,17 +1,16 @@
 package com.ia.core.service.validators;
 
+import com.ia.core.service.rules.BusinessRule;
+import com.ia.core.service.rules.BusinessRuleChain;
+import com.ia.core.service.translator.Translator;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.ia.core.service.rules.BusinessRule;
-import com.ia.core.service.rules.BusinessRuleChain;
-import com.ia.core.service.translator.Translator;
-
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Serviço de validação de um objeto
@@ -88,7 +87,7 @@ public abstract class ServiceValidator<T extends Serializable>
       log.info("DTO [{}] validado com {} regras", object, businessRules.size());
     }
 
-    
+
   }
 
   /**

@@ -1,8 +1,8 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-
 import com.ia.core.view.client.BaseClient;
+
+import java.io.Serializable;
 
 /**
  *

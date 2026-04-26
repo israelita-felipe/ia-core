@@ -1,7 +1,6 @@
 package com.ia.core.security.service.model.authentication;
 
 import com.ia.core.security.model.authentication.AuthenticationResponse;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

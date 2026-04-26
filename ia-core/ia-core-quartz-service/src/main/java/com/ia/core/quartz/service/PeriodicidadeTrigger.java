@@ -1,20 +1,18 @@
 package com.ia.core.quartz.service;
 
+import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.OccurrenceCalculator;
+import lombok.Getter;
+import lombok.Setter;
+import org.quartz.ScheduleBuilder;
+import org.quartz.impl.triggers.AbstractTrigger;
+
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Optional;
-
-import org.quartz.ScheduleBuilder;
-import org.quartz.impl.triggers.AbstractTrigger;
-
-import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
-import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
-import com.ia.core.quartz.service.model.recorrencia.dto.OccurrenceCalculator;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class PeriodicidadeTrigger
   extends AbstractTrigger<PeriodicidadeTrigger>

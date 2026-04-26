@@ -1,8 +1,5 @@
 package com.ia.core.security.view.log.operation.list;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.view.log.operation.form.LogOperationFormViewModel;
@@ -13,8 +10,10 @@ import com.ia.core.service.dto.sort.SortDirectionDTO;
 import com.ia.core.service.dto.sort.SortRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
-
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Israel Araújo

@@ -1,10 +1,10 @@
 package com.ia.core.rest.control;
 
-import java.util.Objects;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.BaseService;
 import com.ia.core.service.dto.DTO;
+
+import java.util.Objects;
 
 /**
  * Classe padrão para criação de um controlador com todos os serviços.

@@ -7,7 +7,11 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.PageViewModel;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
+@UIScope
+@Component
 public class GrupoContatoPageViewModel extends PageViewModel<GrupoContatoDTO> {
 
   public GrupoContatoPageViewModel(GrupoContatoPageViewModelConfig config) {

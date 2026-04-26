@@ -1,9 +1,5 @@
 package com.ia.core.security.service;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
@@ -11,6 +7,10 @@ import com.ia.core.service.FindBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um

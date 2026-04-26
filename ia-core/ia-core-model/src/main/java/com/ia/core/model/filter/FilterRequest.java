@@ -1,14 +1,14 @@
 package com.ia.core.model.filter;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Classe que representa uma requisição de filtro para buscas dinâmicas.

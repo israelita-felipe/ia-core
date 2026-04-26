@@ -6,7 +6,6 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.PageViewModel;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**

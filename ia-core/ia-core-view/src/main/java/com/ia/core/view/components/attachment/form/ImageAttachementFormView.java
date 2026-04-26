@@ -1,7 +1,5 @@
 package com.ia.core.view.components.attachment.form;
 
-import java.util.Base64;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.textfield.TextField;
@@ -9,6 +7,8 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.dom.PropertyChangeEvent;
 import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.server.streams.UploadMetadata;
+
+import java.util.Base64;
 
 /**
  * Abstração de um formulário de anexo para imagens

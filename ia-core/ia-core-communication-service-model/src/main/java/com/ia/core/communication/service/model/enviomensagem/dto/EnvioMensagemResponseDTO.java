@@ -1,13 +1,12 @@
 package com.ia.core.communication.service.model.enviomensagem.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * DTO para resposta de envio de mensagem em massa.

@@ -1,7 +1,5 @@
 package com.ia.core.communication.view.grupocontato.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.communication.view.grupocontato.GrupoContatoManager;
 import com.ia.core.communication.view.grupocontato.form.GrupoContatoFormViewModelConfig;
@@ -9,6 +7,7 @@ import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.page.viewModel.PageViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 @UIScope
 @Component

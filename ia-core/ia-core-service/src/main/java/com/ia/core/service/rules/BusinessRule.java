@@ -1,9 +1,9 @@
 package com.ia.core.service.rules;
 
-import java.io.Serializable;
-
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.ValidationResult;
+
+import java.io.Serializable;
 
 /**
  * Interface que representa uma Regra de Negócio do sistema.

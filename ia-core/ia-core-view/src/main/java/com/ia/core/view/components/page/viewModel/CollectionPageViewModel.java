@@ -1,9 +1,9 @@
 package com.ia.core.view.components.page.viewModel;
 
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
+
 import java.io.Serializable;
 import java.util.function.BiConsumer;
-
-import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 /**
  * Implementação padrão de um ViewModel de página para itens de coleção em

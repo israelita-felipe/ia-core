@@ -1,11 +1,11 @@
 package com.ia.core.security.view.authorization;
 
+import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 
 /**
  * @author Israel Araújo

@@ -1,7 +1,6 @@
 package com.ia.core.llm.model.template.converters;
 
 import com.ia.core.llm.model.template.TemplateParameterEnum;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

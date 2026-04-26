@@ -1,14 +1,13 @@
 package com.ia.core.model.filter;
 
+import com.ia.core.model.util.DateTimeUtils;
+import com.ia.core.model.util.EnumUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
-
-import com.ia.core.model.util.DateTimeUtils;
-import com.ia.core.model.util.EnumUtils;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Enum que representa o tipo de campo para filtros de busca.

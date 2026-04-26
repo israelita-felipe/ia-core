@@ -1,20 +1,19 @@
 package com.ia.core.security.service.strategy;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.springframework.stereotype.Component;
-
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Registry centralizado para estratégias de resolução de contexto.
- * 
+ *
  * Padrão: Registry Pattern (Service Locator)
  * Responsabilidade: Descobrir e registrar estratégias automaticamente.
- * 
+ *
  * Spring injeta todas as implementações de ContextResolveStrategy automaticamente,
  * permitindo extensão via plugin sem modificar esta classe.
  *

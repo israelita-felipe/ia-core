@@ -1,13 +1,12 @@
 package com.ia.core.security.view.role.privilege.form;
 
-import java.util.List;
-
 import com.ia.core.security.service.model.authorization.HasContext;
 import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-
 import lombok.Getter;
+
+import java.util.List;
 
 /**
  *

@@ -1,19 +1,17 @@
 package com.ia.core.view.components.form;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
+import com.vaadin.flow.data.binder.ValidationResult;
+import com.vaadin.flow.data.binder.ValueContext;
+import com.vaadin.flow.data.validator.AbstractValidator;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.vaadin.flow.data.binder.ValidationResult;
-import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.data.validator.AbstractValidator;
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Componente de validação de formulários para Views Vaadin.

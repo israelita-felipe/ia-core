@@ -1,12 +1,10 @@
 package com.ia.core.view.manager;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.view.client.DefaultBaseClient;
-
 import feign.Response;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Cliente para anexos

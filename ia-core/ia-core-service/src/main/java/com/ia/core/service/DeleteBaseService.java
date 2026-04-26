@@ -1,11 +1,11 @@
 package com.ia.core.service;
 
-import java.util.UUID;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
+
+import java.util.UUID;
 
 /**
  * Interface que deleta um {@link BaseEntity} por meio de um

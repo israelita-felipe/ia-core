@@ -1,10 +1,10 @@
 package com.ia.core.view.components.editor.pageEditor.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
+
+import java.io.Serializable;
 
 /**
  * Interface que define o contrato do comportamento padrão de um

@@ -1,18 +1,13 @@
 package com.ia.core.flyway.model;
 
-import java.time.LocalDateTime;
-
 import com.ia.core.model.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 /**
  * Entidade que mapeia a tabela de histórico de execuções do Flyway.

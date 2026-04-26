@@ -1,7 +1,5 @@
 package com.ia.core.view.components.layout;
 
-import java.util.Locale;
-
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutView;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
@@ -14,8 +12,9 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.RouterLayout;
-
 import lombok.Getter;
+
+import java.util.Locale;
 
 /**
  * Layout principal de aplicações.

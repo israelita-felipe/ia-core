@@ -1,15 +1,14 @@
 package com.ia.core.security.service.privilege;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.privilege.PrivilegeUseCase;
 import com.ia.core.service.annotations.TransactionalReadOnly;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Israel Araújo

@@ -3,6 +3,7 @@ package com.ia.core.communication.service.mensagem.validators;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.ServiceValidator;
+import com.ia.core.service.validators.ValidatorScope;
 
 /**
  * Validador para MensagemDTO.
@@ -12,19 +13,10 @@ import com.ia.core.service.validators.ServiceValidator;
  *
  * @author Israel Araújo
  */
+@ValidatorScope
 public class MensagemValidator extends ServiceValidator<MensagemDTO> {
 
-  /**
-   * Construtor com tradutor.
-   *
-   * @param translator tradutor para mensagens de validação
-   */
-  public MensagemValidator(Translator translator) {
-    super(translator);
-    // Adicionar regras de negócio específicas
-  }
-
-  /**
+   /**
    * Construtor com tradutor e regras de negócio.
    *
    * @param translator   tradutor para mensagens de validação

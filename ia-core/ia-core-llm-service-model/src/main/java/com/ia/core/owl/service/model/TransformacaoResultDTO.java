@@ -1,10 +1,10 @@
 package com.ia.core.owl.service.model;
 
+import com.ia.core.owl.service.model.axioma.AxiomaDTO;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 
 /**
  * Record que representa o resultado de uma operação de transformação.

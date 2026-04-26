@@ -1,8 +1,8 @@
 package com.ia.core.communication.service.sms;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuração para serviço de SMS.
@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties(prefix = "sms")
+@Configuration
 public class SmsConfig {
   private String provider = "twilio";
   private String accountSid;

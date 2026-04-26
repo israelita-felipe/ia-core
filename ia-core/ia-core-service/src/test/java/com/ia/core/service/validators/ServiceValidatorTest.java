@@ -1,11 +1,7 @@
 package com.ia.core.service.validators;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
-import java.io.Serializable;
-import java.util.Set;
-
+import com.ia.core.service.translator.Translator;
+import com.ia.core.service.validators.IServiceValidator.ValidatorRegistration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,8 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ia.core.service.translator.Translator;
-import com.ia.core.service.validators.IServiceValidator.ValidatorRegistration;
+import java.io.Serializable;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 /**
  * Testes para {@link ServiceValidator}.

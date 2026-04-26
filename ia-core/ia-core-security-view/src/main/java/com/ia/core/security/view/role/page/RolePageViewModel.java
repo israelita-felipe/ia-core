@@ -1,7 +1,5 @@
 package com.ia.core.security.view.role.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.role.RoleDTO;
@@ -13,6 +11,7 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  * View Model para {@link RoleDTO}

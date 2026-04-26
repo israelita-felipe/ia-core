@@ -1,8 +1,8 @@
 package com.ia.core.view.components.properties;
 
-import java.io.Serializable;
-
 import com.vaadin.flow.data.provider.DataProvider;
+
+import java.io.Serializable;
 
 /**
  * Interface de propriedade de criar um {@link DataProvider}

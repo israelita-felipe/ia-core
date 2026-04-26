@@ -1,8 +1,8 @@
 package com.ia.core.view.components.page.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
+
+import java.io.Serializable;
 
 /**
  *

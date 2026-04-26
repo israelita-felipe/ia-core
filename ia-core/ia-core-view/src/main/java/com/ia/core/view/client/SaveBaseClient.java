@@ -1,14 +1,13 @@
 package com.ia.core.view.client;
 
-import java.io.Serializable;
-import java.util.Collection;
-
+import com.ia.core.service.dto.DTO;
+import com.ia.core.view.manager.SaveBaseManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.ia.core.service.dto.DTO;
-import com.ia.core.view.manager.SaveBaseManager;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Interface base para clientes do tipo save.

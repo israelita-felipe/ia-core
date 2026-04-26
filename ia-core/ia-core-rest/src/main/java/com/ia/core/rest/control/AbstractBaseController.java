@@ -3,7 +3,6 @@ package com.ia.core.rest.control;
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.BaseService;
 import com.ia.core.service.dto.DTO;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

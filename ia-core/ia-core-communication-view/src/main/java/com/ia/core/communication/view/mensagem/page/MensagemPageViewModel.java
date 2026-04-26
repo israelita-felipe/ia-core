@@ -1,5 +1,6 @@
 package com.ia.core.communication.view.mensagem.page;
 
+
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.communication.view.mensagem.form.MensagemFormViewModel;
 import com.ia.core.communication.view.mensagem.form.MensagemFormViewModelConfig;
@@ -7,12 +8,16 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.PageViewModel;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  * ViewModel para a página de Mensagens.
  *
  * @author Israel Araújo
  */
+@UIScope
+@Component
 public class MensagemPageViewModel
   extends PageViewModel<MensagemDTO> {
 

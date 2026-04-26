@@ -1,8 +1,6 @@
 package com.ia.core.communication.service.grupocontato;
 
-import java.util.List;
-
-import com.ia.core.communication.model.GrupoContato;
+import com.ia.core.communication.model.contato.GrupoContato;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
@@ -13,8 +11,10 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
-
 import lombok.Getter;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Configuração de injeção de dependência para GrupoContatoService.
@@ -22,6 +22,7 @@ import lombok.Getter;
  * @author Israel Araújo
  */
 @Getter
+@Component
 public class GrupoContatoServiceConfig
   extends DefaultSecuredBaseServiceConfig<GrupoContato, GrupoContatoDTO> {
 

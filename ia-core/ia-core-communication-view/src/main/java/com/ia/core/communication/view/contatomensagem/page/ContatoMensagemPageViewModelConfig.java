@@ -1,7 +1,5 @@
 package com.ia.core.communication.view.contatomensagem.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.communication.view.contatomensagem.ContatoMensagemManager;
 import com.ia.core.communication.view.contatomensagem.form.ContatoMensagemFormViewModelConfig;
@@ -9,6 +7,7 @@ import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.page.viewModel.PageViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  * Configuração do ViewModel para a página de ContatoMensagem.

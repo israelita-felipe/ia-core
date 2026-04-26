@@ -1,16 +1,15 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Objects;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.ListBaseClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Interface base para serviços do tipo list.

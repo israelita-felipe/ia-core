@@ -1,22 +1,21 @@
 package com.ia.core.llm.service.transform;
 
+import com.ia.core.owl.service.LLMCommunicator;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.content.Media;
+import org.springframework.stereotype.Service;
+import org.springframework.util.MimeTypeUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.content.Media;
-import org.springframework.stereotype.Service;
-import org.springframework.util.MimeTypeUtils;
-
-import com.ia.core.owl.service.LLMCommunicator;
-
 /**
  * Serviço especializado para extração de texto de imagens usando LLM.
  * Responsabilidade única: extração e processamento de texto via modelo de linguagem.
- * 
+ *
  * @author Israel Araújo
  */
 @Service

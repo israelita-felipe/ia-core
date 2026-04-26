@@ -1,7 +1,6 @@
 package com.ia.core.llm.model.comando.converters;
 
 import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

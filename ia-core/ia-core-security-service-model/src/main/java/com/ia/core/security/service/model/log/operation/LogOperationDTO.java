@@ -1,21 +1,16 @@
 package com.ia.core.security.service.model.log.operation;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.log.operation.LogOperation;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import lombok.Builder.Default;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * @author Israel Araújo

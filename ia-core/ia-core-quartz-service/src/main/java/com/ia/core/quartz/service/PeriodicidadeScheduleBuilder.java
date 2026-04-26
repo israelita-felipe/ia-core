@@ -1,8 +1,7 @@
 package com.ia.core.quartz.service;
 
-import org.quartz.ScheduleBuilder;
-
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+import org.quartz.ScheduleBuilder;
 
 /**
  * Construtor de schedule específico para periodicidades.

@@ -1,12 +1,11 @@
 package com.ia.core.llm.service.template;
 
-import java.util.Map;
-
+import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 
-import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
+import java.util.Map;
 
 /**
  * Interface para manipulação de Prompt Templates.

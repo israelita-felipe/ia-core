@@ -1,14 +1,14 @@
 package com.ia.core.service.mapper;
 
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.dto.DTO;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.ia.core.model.BaseEntity;
-import com.ia.core.service.dto.DTO;
 
 /**
  * Interface para mapeamento entre entidades e DTOs.

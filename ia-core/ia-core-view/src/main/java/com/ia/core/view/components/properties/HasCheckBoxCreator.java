@@ -1,10 +1,10 @@
 package com.ia.core.view.components.properties;
 
-import java.util.Arrays;
-
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
+
+import java.util.Arrays;
 
 /**
  * Criador de checkbox

@@ -1,10 +1,10 @@
 package com.ia.core.service.validators;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.translator.Translator;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Interface que indica que um objeto possui validação, indicado para realizar

@@ -1,7 +1,5 @@
 package com.ia.core.security.view.privilege.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.log.operation.LogOperationManager;
@@ -11,6 +9,7 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  * View Model para página de {@link PrivilegeDTO}

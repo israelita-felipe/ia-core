@@ -1,7 +1,6 @@
 package com.ia.core.model.converter;
 
 import com.ia.core.model.TSID;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

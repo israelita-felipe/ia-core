@@ -1,23 +1,18 @@
 package com.ia.core.quartz.model.periodicidade;
 
+import com.ia.core.quartz.model.QuartzModel;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.ia.core.quartz.model.QuartzModel;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Representa a regra de recorrência de uma Periodicidade.

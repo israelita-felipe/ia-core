@@ -1,12 +1,12 @@
 package com.ia.core.communication.service.model.contatomensagem.dto;
 
-import java.util.Set;
-
-import com.ia.core.communication.model.ContatoMensagem;
+import com.ia.core.communication.model.contato.ContatoMensagem;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
+import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +15,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * DTO para a entidade ContatoMensagem.
@@ -26,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> {
+public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
@@ -71,6 +74,14 @@ public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> {
   @Override
   public String toString() {
     return String.format("%s - %s", telefone, nome);
+  }
+
+  @Override
+  public Map<Variavel, Object> getContext() {
+    return Map.of(
+        VariavelTemplate.TELEFONE, telefone,
+        VariavelTemplate.NOME, nome
+    );
   }
 
   @SuppressWarnings("javadoc")

@@ -1,18 +1,17 @@
 package com.ia.core.quartz.service.model.periodicidade.dto;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Objects;
-import java.util.Set;
-
 import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * DTO para intervalo temporal de eventos.

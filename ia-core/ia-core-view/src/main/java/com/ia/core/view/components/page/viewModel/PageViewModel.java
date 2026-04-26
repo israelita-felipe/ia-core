@@ -1,8 +1,5 @@
 package com.ia.core.view.components.page.viewModel;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.formEditor.viewModel.FormEditorViewModel;
@@ -16,9 +13,11 @@ import com.ia.core.view.components.list.viewModel.ListViewModel;
 import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
 import com.ia.core.view.exception.ValidationException;
 import com.ia.core.view.manager.DefaultBaseManager;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Implementação padrão para ViewModel de uma Página

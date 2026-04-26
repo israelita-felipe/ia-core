@@ -1,9 +1,5 @@
 package com.ia.core.security.view.user.page;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.authorization.HasContext;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
@@ -15,8 +11,10 @@ import com.ia.core.security.view.user.UserManager;
 import com.ia.core.security.view.user.form.UserFormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.vaadin.flow.spring.annotation.UIScope;
-
 import lombok.Getter;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  *

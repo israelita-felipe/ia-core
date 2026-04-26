@@ -1,30 +1,5 @@
 package com.ia.core.quartz.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
-import org.quartz.JobListener;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
-import org.quartz.TriggerListener;
-import org.quartz.impl.matchers.GroupMatcher;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.job.QuartzJobUseCase;
 import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
@@ -40,9 +15,18 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
-
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 /**
  * Serviço para gerenciamento de configurações do agendador Quartz. Responsável
@@ -449,7 +433,7 @@ public class SchedulerConfigService
       }
 
       log.info("Agendamento de jobs concluído com sucesso");
-    } catch (SchedulerException | ClassNotFoundException e) {
+    } catch (Exception e) {
       log.error("Erro durante o agendamento automático de jobs: {}",
                 e.getLocalizedMessage(), e);
     }

@@ -2,16 +2,11 @@ package com.ia.core.owl.model.axiom;
 
 import com.ia.core.llm.model.LLMModel;
 import com.ia.core.model.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = Axioma.TABLE_NAME, schema = Axioma.SCHEMA_NAME)

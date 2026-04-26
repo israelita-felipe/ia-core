@@ -1,11 +1,11 @@
 package com.ia.core.view.components.editor.pageEditor;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.editor.EditorView;
 import com.ia.core.view.components.editor.pageEditor.viewModel.IPageEditorViewModel;
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel;
 import com.ia.core.view.components.page.IPageView;
+
+import java.io.Serializable;
 
 /**
  * Implementação padrão de um editor de página

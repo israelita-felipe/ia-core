@@ -1,7 +1,6 @@
 package com.ia.core.llm.service.vector;
 
-import java.io.ByteArrayInputStream;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
@@ -10,7 +9,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import java.io.ByteArrayInputStream;
 
 /**
  * @author Israel Araújo

@@ -1,29 +1,16 @@
 package com.ia.core.security.model.role;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.SecurityModel;
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.privilege.PrivilegeOperation;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.Builder.Default;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = RolePrivilege.TABLE_NAME, schema = RolePrivilege.SCHEMA_NAME)

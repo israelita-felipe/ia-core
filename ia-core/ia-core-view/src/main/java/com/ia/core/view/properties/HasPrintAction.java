@@ -1,8 +1,8 @@
 package com.ia.core.view.properties;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.list.IListView;
+
+import java.io.Serializable;
 
 /**
  * Propriedade que indica visualizar item.

@@ -1,10 +1,5 @@
 package com.ia.core.security.service;
 
-import java.util.Collection;
-import java.util.Objects;
-
-import org.springframework.context.ApplicationEventPublisher;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -15,9 +10,12 @@ import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Classe base para um serviço com capacidades de segurança. Herda de

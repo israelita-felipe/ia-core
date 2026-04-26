@@ -1,15 +1,5 @@
 package com.ia.core.view.utils;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.SortRequest;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
@@ -23,13 +13,18 @@ import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.manager.ListBaseManager;
 import com.vaadin.flow.data.provider.CallbackDataProvider.CountCallback;
 import com.vaadin.flow.data.provider.CallbackDataProvider.FetchCallback;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.data.provider.QuerySortOrder;
-import com.vaadin.flow.data.provider.SortDirection;
-
+import com.vaadin.flow.data.provider.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Classe que implementa o padrão factory para os {@link DataProvider}

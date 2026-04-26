@@ -1,9 +1,5 @@
 package com.ia.core.flyway.service.flywayexecution;
 
-import java.util.List;
-
-import org.springframework.context.ApplicationEventPublisher;
-
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
@@ -14,6 +10,9 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
+import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.List;
 
 /**
  * Configuração de injeção de dependência para FlywayExecutionService.

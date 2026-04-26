@@ -1,13 +1,12 @@
 package com.ia.core.security.view.config;
 
-import java.util.List;
-
 import com.ia.core.security.view.authorization.CoreSecurityViewAuthorizationManager;
 import com.vaadin.flow.server.auth.AccessCheckDecisionResolver;
 import com.vaadin.flow.server.auth.AccessCheckResult;
 import com.vaadin.flow.server.auth.NavigationContext;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class ViewAcessDecisionResolver

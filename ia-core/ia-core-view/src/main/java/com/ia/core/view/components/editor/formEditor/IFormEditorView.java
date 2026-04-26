@@ -1,10 +1,10 @@
 package com.ia.core.view.components.editor.formEditor;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.editor.IEditorView;
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel;
 import com.ia.core.view.components.form.IFormView;
+
+import java.io.Serializable;
 
 /**
  * Interface que define o contrato de comportamento padrão para o editor de

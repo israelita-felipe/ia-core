@@ -1,12 +1,5 @@
 package com.ia.core.security.service.role;
 
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
 import com.ia.core.security.model.role.Role;
@@ -18,6 +11,12 @@ import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

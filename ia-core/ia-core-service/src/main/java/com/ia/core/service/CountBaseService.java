@@ -1,7 +1,5 @@
 package com.ia.core.service;
 
-import java.util.stream.Collectors;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
@@ -9,6 +7,8 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
+
+import java.util.stream.Collectors;
 
 /**
  * Interface que conta os elementos de um determinado

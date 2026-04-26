@@ -1,9 +1,8 @@
 package com.ia.core.security.view.log.operation;
 
-import org.springframework.cloud.openfeign.FeignClient;
-
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.view.client.DefaultBaseClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * Cliente de log de operações

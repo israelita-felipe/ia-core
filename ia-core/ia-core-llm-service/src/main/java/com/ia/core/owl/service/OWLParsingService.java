@@ -1,13 +1,12 @@
 package com.ia.core.owl.service;
 
-import java.util.Set;
-
+import com.ia.core.owl.service.exception.OWLParserException;
+import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
-import com.ia.core.owl.service.exception.OWLParserException;
-import com.ia.core.owl.service.model.axioma.AxiomaDTO;
+import java.util.Set;
 
 /**
  * Interface para serviços de parsing OWL.

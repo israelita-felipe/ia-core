@@ -1,10 +1,10 @@
 package com.ia.core.view.components.page;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.page.viewModel.ICollectionPageViewModel;
 import com.ia.core.view.properties.HasDownAction;
 import com.ia.core.view.properties.HasUpAction;
+
+import java.io.Serializable;
 
 /**
  * Página para edição de uma coleção

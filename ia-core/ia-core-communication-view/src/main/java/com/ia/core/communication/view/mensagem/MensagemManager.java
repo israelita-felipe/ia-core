@@ -1,13 +1,12 @@
 package com.ia.core.communication.view.mensagem;
 
-import org.springframework.stereotype.Service;
-
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemRequestDTO;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemResponseDTO;
 import com.ia.core.communication.service.model.mensagem.MensagemUseCase;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
+import org.springframework.stereotype.Service;
 
 /**
  * Manager para operações de Mensagens.

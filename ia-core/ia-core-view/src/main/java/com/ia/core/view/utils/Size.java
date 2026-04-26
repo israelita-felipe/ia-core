@@ -1,7 +1,6 @@
 package com.ia.core.view.utils;
 
 import com.vaadin.flow.component.Unit;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;

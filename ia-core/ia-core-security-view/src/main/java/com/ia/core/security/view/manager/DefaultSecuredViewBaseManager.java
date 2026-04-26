@@ -1,8 +1,5 @@
 package com.ia.core.security.view.manager;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.service.dto.DTO;
@@ -10,8 +7,10 @@ import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import com.ia.core.view.manager.DefaultBaseManager;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Classe padrão para criação de um serviço da view com todos os clientes.

@@ -1,10 +1,9 @@
 package com.ia.core.security.view.role;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
+import org.springframework.stereotype.Component;
 
 /**
  *

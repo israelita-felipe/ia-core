@@ -1,18 +1,17 @@
 package com.ia.core.security.service.model.privilege;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ia.core.security.model.privilege.PrivilegeOperationContext;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @SuperBuilder(toBuilder = true)

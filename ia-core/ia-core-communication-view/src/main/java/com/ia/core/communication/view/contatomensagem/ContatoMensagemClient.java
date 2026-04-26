@@ -1,9 +1,8 @@
 package com.ia.core.communication.view.contatomensagem;
 
-import org.springframework.cloud.openfeign.FeignClient;
-
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.view.client.DefaultBaseClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * Cliente Feign para operações de ContatoMensagem.

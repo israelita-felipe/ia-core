@@ -1,15 +1,14 @@
 package com.ia.core.service.dto;
 
-import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ia.core.service.dto.properties.HasPropertyChangeSupport;
-
 import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 
 /**
  * Classe base para DTO de uma entidade

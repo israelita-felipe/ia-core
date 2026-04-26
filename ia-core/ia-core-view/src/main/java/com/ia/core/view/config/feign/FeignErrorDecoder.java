@@ -1,14 +1,13 @@
 package com.ia.core.view.config.feign;
 
-import java.util.Collection;
-import java.util.Objects;
-
 import com.ia.core.service.exception.ServiceException;
-
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Decodificador de erros do feign.

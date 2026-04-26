@@ -1,20 +1,13 @@
 package com.ia.core.service.util;
 
-import java.io.IOException;
-
+import com.ia.core.model.util.EnumUtils;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.core.JsonParser;
 import tools.jackson.core.JsonToken;
 import tools.jackson.core.Version;
-import tools.jackson.databind.DeserializationContext;
-import tools.jackson.databind.JacksonModule;
-import tools.jackson.databind.SerializationContext;
-import tools.jackson.databind.ValueDeserializer;
-import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.*;
 import tools.jackson.databind.module.SimpleDeserializers;
 import tools.jackson.databind.module.SimpleSerializers;
-
-import com.ia.core.model.util.EnumUtils;
 
 /**
  * Módulo para conversão de enumeração

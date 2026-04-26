@@ -1,8 +1,7 @@
 package com.ia.core.rest.security;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Implementação de codificador de senhas usando BCrypt.

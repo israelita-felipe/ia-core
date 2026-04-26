@@ -1,9 +1,11 @@
 package com.ia.core.communication.view.mensagem.form;
 
-import com.ia.core.communication.model.StatusMensagem;
-import com.ia.core.communication.model.TipoCanal;
+
+import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemTranslator;
+import com.ia.core.communication.view.mensagem.component.VariableSidebarComponent;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -24,6 +26,8 @@ public class MensagemFormView extends FormView<MensagemDTO> {
   private ComboBox<TipoCanal> tipoCanalField;
   private ComboBox<StatusMensagem> statusField;
 
+  private VariableSidebarComponent variableSidebar;
+
   /**
    * @param formViewModel ViewModel do formulário
    */
@@ -34,11 +38,36 @@ public class MensagemFormView extends FormView<MensagemDTO> {
   @Override
   public void createLayout() {
     super.createLayout();
-    bind(MensagemDTO.CAMPOS.TELEFONE_DESTINATARIO, createTelefoneDestinatarioField());
-    bind(MensagemDTO.CAMPOS.NOME_DESTINATARIO, createNomeDestinatarioField());
-    bind(MensagemDTO.CAMPOS.CORPO_MENSAGEM, createCorpoMensagemField());
-    bind(MensagemDTO.CAMPOS.TIPO_CANAL, createTipoCanalField());
-    bind(MensagemDTO.CAMPOS.STATUS_MENSAGEM, createStatusField());
+
+    // Criar componentes auxiliares
+    variableSidebar = new VariableSidebarComponent(getViewModel()::getVariaveisDisponiveis);
+
+    // Adicionar campos do formulário
+    add(createTelefoneDestinatarioField());
+    add(createNomeDestinatarioField());
+    add(createCorpoMensagemField());
+    add(createTipoCanalField());
+    add(createStatusField());
+
+    corpoMensagemField.setHelperComponent(variableSidebar);
+      // Configurar listener para inserção de variáveis
+      variableSidebar.setVariableInsertListener(variableKey -> {
+          if (corpoMensagemField != null) {
+              String currentValue = corpoMensagemField.getValue();
+              String newValue = currentValue + variableKey ;
+              corpoMensagemField.setValue(newValue);
+              // Move cursor to the end of the newly added placeholder
+              corpoMensagemField.focus();
+          }
+      });
+
+
+      // Manter os bindings existentes
+    bind(MensagemDTO.CAMPOS.TELEFONE_DESTINATARIO, telefoneDestinatarioField);
+    bind(MensagemDTO.CAMPOS.NOME_DESTINATARIO, nomeDestinatarioField);
+    bind(MensagemDTO.CAMPOS.CORPO_MENSAGEM, corpoMensagemField);
+    bind(MensagemDTO.CAMPOS.TIPO_CANAL, tipoCanalField);
+    bind(MensagemDTO.CAMPOS.STATUS_MENSAGEM, statusField);
   }
 
   /**
@@ -76,7 +105,7 @@ public class MensagemFormView extends FormView<MensagemDTO> {
     corpoMensagemField = createTextArea(
         $(MensagemTranslator.CORPO_MENSAGEM),
         $(MensagemTranslator.HELP.CORPO_MENSAGEM));
-    add(corpoMensagemField, 3);
+    add(corpoMensagemField, 6);
     return corpoMensagemField;
   }
 

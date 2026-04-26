@@ -1,9 +1,5 @@
 package com.ia.core.security.service.config;
 
-import java.util.Collection;
-
-import org.springframework.context.annotation.Bean;
-
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.authentication.AuthenticationService;
 import com.ia.core.security.service.authentication.CoreJwtAuthenticationService;
@@ -14,8 +10,10 @@ import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.privilege.PrivilegeRepository;
 import com.ia.core.security.service.user.UserRepository;
 import com.ia.core.service.mapper.BaseEntityMapper;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

@@ -1,9 +1,9 @@
 package com.ia.core.view.components.properties;
 
+import com.vaadin.flow.component.UI;
+
 import java.util.List;
 import java.util.Locale;
-
-import com.vaadin.flow.component.UI;
 
 /**
  * Possui local

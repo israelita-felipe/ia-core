@@ -1,12 +1,5 @@
 package com.ia.core.view.components.editor;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.dialog.DialogHeaderBar;
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
@@ -18,8 +11,10 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
-
 import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Implementação padrão de um editor

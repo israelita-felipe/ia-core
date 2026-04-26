@@ -1,7 +1,5 @@
 package com.ia.core.security.view.role.form;
 
-import java.util.Collection;
-
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.security.view.role.privilege.page.RolePrivilegePageViewModel;
@@ -9,8 +7,9 @@ import com.ia.core.security.view.role.privilege.page.RolePrivilegePageViewModelC
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 import com.ia.core.view.utils.ManagerFactory;
-
 import lombok.Getter;
+
+import java.util.Collection;
 
 /**
  * View Model de formulário para {@link RoleDTO}

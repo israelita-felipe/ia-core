@@ -1,8 +1,8 @@
 package com.ia.core.security.service.model.functionality;
 
-import java.util.Set;
-
 import com.ia.core.security.model.functionality.Functionality;
+
+import java.util.Set;
 
 /**
  * @author Israel Araújo

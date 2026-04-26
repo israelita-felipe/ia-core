@@ -1,17 +1,16 @@
 package com.ia.core.view.components.editor.viewModel;
 
-import java.io.Serializable;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.ia.core.view.properties.HasModel;
 import com.vaadin.flow.component.icon.VaadinIcon;
-
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Interface que define o contrato de comportamento de um {@link IViewModel} de

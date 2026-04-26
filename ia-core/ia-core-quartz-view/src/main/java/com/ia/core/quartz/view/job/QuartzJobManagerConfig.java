@@ -1,10 +1,9 @@
 package com.ia.core.quartz.view.job;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
+import org.springframework.stereotype.Component;
 
 /**
  * Configuração do QuartzJobManager.

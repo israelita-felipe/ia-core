@@ -1,9 +1,9 @@
 package com.ia.core.report;
 
-import java.util.Collection;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

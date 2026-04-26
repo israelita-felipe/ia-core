@@ -1,14 +1,14 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
+import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
-import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 
 /**
  *

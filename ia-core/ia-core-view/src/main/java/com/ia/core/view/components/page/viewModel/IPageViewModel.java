@@ -1,8 +1,5 @@
 package com.ia.core.view.components.page.viewModel;
 
-import java.io.Serializable;
-import java.util.function.Function;
-
 import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.formEditor.viewModel.IFormEditorViewModel;
@@ -17,10 +14,12 @@ import com.ia.core.view.properties.HasErrorHandle;
 import com.ia.core.view.properties.HasObjectCoping;
 import com.ia.core.view.properties.HasObjectCreation;
 import com.vaadin.flow.component.icon.VaadinIcon;
-
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * Interface que define um contrato para um view model de página

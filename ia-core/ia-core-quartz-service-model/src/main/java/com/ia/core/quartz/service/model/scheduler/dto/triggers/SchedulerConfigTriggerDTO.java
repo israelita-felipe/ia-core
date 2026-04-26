@@ -1,19 +1,18 @@
 package com.ia.core.quartz.service.model.scheduler.dto.triggers;
 
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
 import com.ia.core.quartz.model.scheduler.SchedulerConfigTrigger;
 import com.ia.core.service.dto.AbstractDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Israel Araújo

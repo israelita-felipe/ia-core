@@ -1,9 +1,9 @@
 package com.ia.core.quartz.model.periodicidade.converter;
 
-import java.time.DayOfWeek;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
+import java.time.DayOfWeek;
 
 /**
  * Conversor JPA para mapeamento de {@link java.time.DayOfWeek} para {@link Integer} e vice-versa.

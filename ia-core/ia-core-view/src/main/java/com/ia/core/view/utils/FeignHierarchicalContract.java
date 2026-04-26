@@ -1,14 +1,7 @@
 package com.ia.core.view.utils;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import feign.MethodMetadata;
+import feign.Util;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -16,8 +9,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import feign.MethodMetadata;
-import feign.Util;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Contrato de hierarquia do feign para que seja possível utilizar herança e

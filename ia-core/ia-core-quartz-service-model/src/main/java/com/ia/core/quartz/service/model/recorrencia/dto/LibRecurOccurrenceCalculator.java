@@ -1,26 +1,15 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.rfc5545.recur.RecurrenceRuleIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
-import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+import java.time.*;
+import java.util.*;
 
 public class LibRecurOccurrenceCalculator
   implements OccurrenceCalculator {

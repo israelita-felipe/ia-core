@@ -1,12 +1,9 @@
 package com.ia.core.communication.service.model.modelomensagem.dto;
 
-import java.util.Set;
-
-import com.ia.core.communication.model.ModeloMensagem;
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.ModeloMensagem;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * DTO para a entidade ModeloMensagem.
@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> {
+public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
@@ -71,6 +71,17 @@ public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> {
   @Override
   public ModeloMensagemDTO copyObject() {
     return toBuilder().id(null).version(null).build();
+  }
+
+  @Override
+  public Map<Variavel, Object> getContext() {
+    return Map.of(
+        VariavelTemplate.NOME_MODELO, nome,
+        VariavelTemplate.DESCRICAO_MODELO, descricao,
+        VariavelTemplate.CORPO_MODELO, corpoModelo,
+        VariavelTemplate.TIPO_CANAL, tipoCanal,
+        VariavelTemplate.ATIVO_MODELO, ativo
+    );
   }
 
   @Override

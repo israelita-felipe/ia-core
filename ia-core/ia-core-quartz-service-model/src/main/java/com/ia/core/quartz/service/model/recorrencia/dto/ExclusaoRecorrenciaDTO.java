@@ -1,5 +1,14 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
+import com.ia.core.quartz.model.periodicidade.ExclusaoRecorrencia;
+import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.service.dto.DTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -7,16 +16,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.ia.core.quartz.model.periodicidade.ExclusaoRecorrencia;
-import com.ia.core.quartz.model.periodicidade.Frequencia;
-import com.ia.core.service.dto.DTO;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 /**
  * DTO para ExclusaoRecorrencia.

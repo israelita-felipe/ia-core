@@ -1,7 +1,5 @@
 package com.ia.core.security.view.privilege;
 
-import org.springframework.stereotype.Service;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
@@ -10,6 +8,7 @@ import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import org.springframework.stereotype.Service;
 
 /**
  * Serviço para {@link PrivilegeDTO}

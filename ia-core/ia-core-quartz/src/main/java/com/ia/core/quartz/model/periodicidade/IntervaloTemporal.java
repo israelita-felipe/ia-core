@@ -1,14 +1,14 @@
 package com.ia.core.quartz.model.periodicidade;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Intervalo temporal para eventos.

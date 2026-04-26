@@ -1,13 +1,12 @@
 package com.ia.core.view.components.page.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
 import com.ia.core.view.properties.AutoCastable;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 /**
  *

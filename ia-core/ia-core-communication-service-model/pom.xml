@@ -17,11 +17,23 @@
 			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-communication-model</artifactId>
 			<version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </exclusion>
+      </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-service-model</artifactId>
 			<version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </exclusion>
+      </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

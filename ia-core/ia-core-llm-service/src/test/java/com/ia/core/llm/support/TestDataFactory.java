@@ -1,25 +1,24 @@
 package com.ia.core.llm.support;
 
+import com.ia.core.llm.model.comando.ComandoSistema;
+import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
+import com.ia.core.llm.model.template.Template;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Component;
-
-import com.ia.core.llm.model.comando.ComandoSistema;
-import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
-import com.ia.core.llm.model.template.Template;
-
 /**
  * Factory for creating test data entities.
  * Provides fluent builders for test data creation.
- * 
+ *
  * Features:
  * - Template builders for all domain entities
  * - Customizable entity attributes
  * - Batch creation support
  * - Random data generation
- * 
+ *
  * Usage:
  * <pre>
  * {@code
@@ -29,7 +28,7 @@ import com.ia.core.llm.model.template.Template;
  *     .build();
  * }
  * </pre>
- * 
+ *
  * @author Israel Araújo
  */
 @Component
@@ -171,7 +170,7 @@ public class TestDataFactory {
 
     /**
      * Generates a random UUID string.
-     * 
+     *
      * @return random UUID string
      */
     public String randomUuid() {
@@ -180,7 +179,7 @@ public class TestDataFactory {
 
     /**
      * Generates a unique test name based on counter.
-     * 
+     *
      * @param prefix the prefix for the name
      * @return unique test name
      */

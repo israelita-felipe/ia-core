@@ -1,21 +1,19 @@
 package com.ia.core.security.service.strategy.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Component;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.service.strategy.ContextResolveStrategy;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implementação de estratégia para resolver contexto de ID. Esta é a estratégia

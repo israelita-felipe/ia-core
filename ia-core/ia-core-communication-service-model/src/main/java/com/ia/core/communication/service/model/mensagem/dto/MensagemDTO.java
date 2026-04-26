@@ -1,14 +1,13 @@
 package com.ia.core.communication.service.model.mensagem.dto;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
-import com.ia.core.communication.model.Mensagem;
-import com.ia.core.communication.model.StatusMensagem;
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.Mensagem;
+import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.model.mensagem.TipoCanal;
+import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
+import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +16,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * DTO para a entidade Mensagem.
@@ -28,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> {
+public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
@@ -86,6 +89,17 @@ public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> {
   @Override
   public MensagemDTO copyObject() {
     return toBuilder().id(null).version(null).build();
+  }
+
+  @Override
+  public Map<Variavel, Object> getContext() {
+    return Map.of(
+        VariavelTemplate.TELEFONE, telefoneDestinatario,
+        VariavelTemplate.NOME, nomeDestinatario,
+        VariavelTemplate.CORPO_MENSAGEM, corpoMensagem,
+        VariavelTemplate.DATA_ENVIO, dataEnvio,
+        VariavelTemplate.STATUS, statusMensagem
+    );
   }
 
   @Override

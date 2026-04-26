@@ -1,14 +1,13 @@
 package com.ia.test.security.builder;
 
+import com.ia.core.security.model.role.Role;
+import com.ia.core.security.model.role.RolePrivilege;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
-
-import com.ia.core.security.model.role.Role;
-import com.ia.core.security.model.role.RolePrivilege;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Builder para criar instâncias de {@link Role} com dados de teste.

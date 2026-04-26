@@ -1,11 +1,10 @@
 package com.ia.core.service.attachment;
 
-import org.mapstruct.Mapper;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.mapper.BaseEntityMapper;
+import org.mapstruct.Mapper;
 
 /**
  * {@link Mapper} de {@link Attachment} para {@link AttachmentDTO}

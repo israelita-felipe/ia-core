@@ -1,10 +1,10 @@
 package com.ia.core.security.model.authentication;
 
-import java.util.Collection;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

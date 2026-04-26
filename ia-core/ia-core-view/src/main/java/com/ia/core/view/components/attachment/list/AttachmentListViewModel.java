@@ -1,14 +1,14 @@
 package com.ia.core.view.components.attachment.list;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.function.Supplier;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.util.ZipUtil;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
 import com.ia.core.view.manager.AttachmentManager;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.function.Supplier;
 
 /**
  * Implementação padrão de um {@link ListViewModel} para {@link AttachmentDTO}

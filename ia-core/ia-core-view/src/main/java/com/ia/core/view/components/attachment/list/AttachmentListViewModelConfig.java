@@ -1,12 +1,10 @@
 package com.ia.core.view.components.attachment.list;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.view.components.list.viewModel.ListViewModelConfig;
 import com.ia.core.view.manager.AttachmentManager;
-
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  *

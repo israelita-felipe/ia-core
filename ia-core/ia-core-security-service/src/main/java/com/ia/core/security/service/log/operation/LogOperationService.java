@@ -1,17 +1,5 @@
 package com.ia.core.security.service.log.operation;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.log.operation.LogOperation;
@@ -23,8 +11,18 @@ import com.ia.core.service.dto.entity.BaseEntityDTO;
 import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
  * @author Israel Araújo

@@ -1,10 +1,5 @@
 package com.ia.core.security.service;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.model.functionality.Functionality;
@@ -17,6 +12,11 @@ import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Interface que conta os elementos de um determinado

@@ -9,7 +9,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Executor customizado para testes E2E com Vaadin.
@@ -76,7 +75,7 @@ public class VaadinTestRunner implements Extension, BeforeEachCallback, AfterEac
         options.addArguments("--disable-extensions");
         options.addArguments("--disable-logging");
         options.addArguments("--log-level=3");
-        
+
         return new ChromeDriver(options);
     }
 
@@ -90,11 +89,11 @@ public class VaadinTestRunner implements Extension, BeforeEachCallback, AfterEac
         if (driver != null) {
             driver.quit();
         }
-        
+
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(IMPLICIT_WAIT_SECONDS));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TIMEOUT_SECONDS));
-        
+
         return driver;
     }
 

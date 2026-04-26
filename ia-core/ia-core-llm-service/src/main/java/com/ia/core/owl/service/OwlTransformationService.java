@@ -1,15 +1,14 @@
 package com.ia.core.owl.service;
 
+import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
+import com.ia.core.owl.service.model.TransformacaoResultDTO;
+import com.ia.core.owl.service.model.axioma.AxiomaDTO;
+import org.springframework.ai.chat.model.ChatModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import org.springframework.ai.chat.model.ChatModel;
-
-import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
-import com.ia.core.owl.service.model.TransformacaoResultDTO;
-import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 
 /**
  * Serviço para transformação de descrições em linguagem natural em axiomas OWL

@@ -1,7 +1,5 @@
 package com.ia.core.security.view.privilege.operation.form;
 
-import java.util.Collection;
-
 import com.ia.core.security.service.model.privilege.PrivilegeOperationContextDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
@@ -11,8 +9,9 @@ import com.ia.core.security.view.role.RoleManager;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 import com.ia.core.view.utils.ManagerFactory;
-
 import lombok.Getter;
+
+import java.util.Collection;
 
 /**
  * View Model formulário de usuário

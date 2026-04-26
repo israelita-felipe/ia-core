@@ -3,6 +3,7 @@ package com.ia.core.communication.service.contatomensagem.validators;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.ServiceValidator;
+import com.ia.core.service.validators.ValidatorScope;
 
 /**
  * Validador para ContatoMensagemDTO.
@@ -11,16 +12,9 @@ import com.ia.core.service.validators.ServiceValidator;
  *
  * @author Israel Araújo
  */
+@ValidatorScope
 public class ContatoMensagemValidator extends ServiceValidator<ContatoMensagemDTO> {
 
-  /**
-   * Construtor com tradutor.
-   *
-   * @param translator tradutor para mensagens de validação
-   */
-  public ContatoMensagemValidator(Translator translator) {
-    super(translator);
-  }
 
   /**
    * Construtor com tradutor e regras de negócio.

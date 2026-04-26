@@ -1,10 +1,10 @@
 package com.ia.core.service.dto.filter;
 
-import java.io.Serializable;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * Propriedade de um filtro

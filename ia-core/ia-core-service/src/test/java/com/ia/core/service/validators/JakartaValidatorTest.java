@@ -1,12 +1,12 @@
 package com.ia.core.service.validators;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.Serializable;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.io.Serializable;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testes para {@link JakartaValidator}.

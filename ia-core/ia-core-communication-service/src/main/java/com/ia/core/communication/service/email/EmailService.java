@@ -1,17 +1,16 @@
 package com.ia.core.communication.service.email;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-
-import com.ia.core.communication.model.Mensagem;
-import com.ia.core.communication.model.StatusMensagem;
+import com.ia.core.communication.model.mensagem.Mensagem;
+import com.ia.core.communication.model.mensagem.StatusMensagem;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
 /**
  * Serviço para envio de e-mails. Implementa a interface MensagemProvider para
@@ -21,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class EmailService
   implements MensagemProvider {
 

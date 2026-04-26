@@ -1,11 +1,9 @@
 package com.ia.core.llm.view.chat;
 
+import com.ia.core.llm.service.model.chat.ChatRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.ia.core.llm.service.model.chat.ChatRequestDTO;
-
-import jakarta.validation.Valid;
 
 /**
  * @author Israel Araújo

@@ -1,8 +1,8 @@
 package com.ia.core.service.dto;
 
-import java.io.Serializable;
-
 import com.ia.core.model.BaseEntity;
+
+import java.io.Serializable;
 
 /**
  * Interface para Data Transport Object de uma {@link BaseEntity}

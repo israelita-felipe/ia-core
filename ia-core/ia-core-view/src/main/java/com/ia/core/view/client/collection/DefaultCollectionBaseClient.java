@@ -1,24 +1,18 @@
 package com.ia.core.view.client.collection;
 
+import com.ia.core.model.filter.SearchRequest;
+import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.service.specification.CollectionSearchSpecification;
+import com.ia.core.view.client.*;
+import com.ia.core.view.manager.ListBaseManager;
+import jakarta.validation.ValidationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-
-import com.ia.core.model.filter.SearchRequest;
-import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.service.specification.CollectionSearchSpecification;
-import com.ia.core.view.client.CountBaseClient;
-import com.ia.core.view.client.DeleteBaseClient;
-import com.ia.core.view.client.FindBaseClient;
-import com.ia.core.view.client.ListBaseClient;
-import com.ia.core.view.client.SaveBaseClient;
-import com.ia.core.view.manager.ListBaseManager;
-
-import jakarta.validation.ValidationException;
 
 /**
  * Classe padrão para criação de um client com todos os serviços.

@@ -1,8 +1,5 @@
 package com.ia.core.security.service.authentication;
 
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.model.authentication.AuthenticationResponse;
 import com.ia.core.security.model.authentication.JwtManager;
@@ -13,6 +10,9 @@ import com.ia.core.security.service.model.authentication.JwtAuthenticationRespon
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.service.annotations.TransactionalReadOnly;
+
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

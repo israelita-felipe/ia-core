@@ -1,13 +1,12 @@
 package com.ia.core.view.components.filter.viewModel;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Implementação padrão de uma requisição de busca

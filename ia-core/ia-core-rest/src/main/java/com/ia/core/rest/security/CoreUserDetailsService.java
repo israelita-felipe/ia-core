@@ -1,22 +1,20 @@
 package com.ia.core.rest.security;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.role.RolePrivilege;
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.model.user.UserPrivilege;
 import com.ia.core.security.service.user.UserRepository;
 import com.ia.core.service.annotations.TransactionalReadOnly;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service de detalhes de usuário para autenticação JWT.

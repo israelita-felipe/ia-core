@@ -1,11 +1,5 @@
 package com.ia.core.view.components.layout.menu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
 import com.ia.core.view.components.properties.HasConfirmDialog;
 import com.ia.core.view.components.properties.HasMessageNotification;
@@ -20,8 +14,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.component.tabs.Tab;
-
 import lombok.Getter;
+
+import java.util.*;
 
 /**
  * Abstração de um menu

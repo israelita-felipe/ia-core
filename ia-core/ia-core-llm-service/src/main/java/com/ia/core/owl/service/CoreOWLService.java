@@ -1,12 +1,11 @@
 package com.ia.core.owl.service;
 
-import org.semanticweb.owlapi.model.OWLDocumentFormat;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-
 import com.ia.core.owl.service.exception.OWLParserException;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 import com.ia.core.owl.service.model.axioma.HasAxiomas;
+import org.semanticweb.owlapi.model.OWLDocumentFormat;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 /**
  * Serviço para manipulação de ontologias

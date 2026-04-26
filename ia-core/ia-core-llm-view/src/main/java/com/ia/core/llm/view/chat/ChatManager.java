@@ -1,7 +1,6 @@
 package com.ia.core.llm.view.chat;
 
 import com.ia.core.llm.service.model.chat.ChatRequestDTO;
-
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

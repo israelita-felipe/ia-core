@@ -1,7 +1,5 @@
 package com.ia.core.quartz.view.periodicidade.form;
 
-import java.time.ZoneId;
-
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.view.components.form.FormView;
@@ -11,6 +9,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.TabSheet;
+
+import java.time.ZoneId;
 
 /**
  * @author Israel Araújo

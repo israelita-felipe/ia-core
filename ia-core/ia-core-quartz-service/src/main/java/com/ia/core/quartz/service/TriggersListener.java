@@ -1,11 +1,10 @@
 package com.ia.core.quartz.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementação de {@link org.quartz.TriggerListener} para monitoramento de triggers.

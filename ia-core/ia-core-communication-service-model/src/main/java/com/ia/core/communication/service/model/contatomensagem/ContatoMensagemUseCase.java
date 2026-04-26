@@ -1,7 +1,6 @@
 package com.ia.core.communication.service.model.contatomensagem;
 
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
-import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 
 /**

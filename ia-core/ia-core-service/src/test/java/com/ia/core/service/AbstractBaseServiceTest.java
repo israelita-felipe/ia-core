@@ -1,9 +1,12 @@
 package com.ia.core.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.dto.DTO;
+import com.ia.core.service.mapper.BaseEntityMapper;
+import com.ia.core.service.mapper.Mapper;
+import com.ia.core.service.mapper.SearchRequestMapper;
+import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.service.translator.Translator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,13 +16,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import com.ia.core.model.BaseEntity;
-import com.ia.core.service.dto.DTO;
-import com.ia.core.service.mapper.BaseEntityMapper;
-import com.ia.core.service.mapper.Mapper;
-import com.ia.core.service.mapper.SearchRequestMapper;
-import com.ia.core.service.repository.BaseEntityRepository;
-import com.ia.core.service.translator.Translator;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Testes para {@link AbstractBaseService}.

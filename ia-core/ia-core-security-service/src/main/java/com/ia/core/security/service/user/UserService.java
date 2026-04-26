@@ -1,25 +1,18 @@
 package com.ia.core.security.service.user;
 
-import org.springframework.stereotype.Service;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.model.user.User;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.security.service.exception.InvalidPasswordException;
 import com.ia.core.security.service.exception.UserNotFountException;
-import com.ia.core.security.service.model.user.UserDTO;
-import com.ia.core.security.service.model.user.UserPasswordChangeDTO;
-import com.ia.core.security.service.model.user.UserPasswordEncoder;
-import com.ia.core.security.service.model.user.UserPasswordResetDTO;
-import com.ia.core.security.service.model.user.UserTranslator;
-import com.ia.core.security.service.model.user.UserUseCase;
+import com.ia.core.security.service.model.user.*;
 import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Israel Araújo

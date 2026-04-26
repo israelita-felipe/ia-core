@@ -1,10 +1,9 @@
 package com.ia.core.communication.view.modelomensagem;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
+import org.springframework.stereotype.Component;
 
 /**
  * Configuração do ModeloMensagemManager.

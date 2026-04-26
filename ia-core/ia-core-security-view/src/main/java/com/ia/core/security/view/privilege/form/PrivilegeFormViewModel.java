@@ -1,14 +1,14 @@
 package com.ia.core.security.view.privilege.form;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * View Model de formulário para {@link PrivilegeDTO}

@@ -1,13 +1,13 @@
 package com.ia.core.communication.service.estrategia;
 
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.email.EstrategiaEmail;
 import com.ia.core.communication.service.sms.EstrategiaSms;
 import com.ia.core.communication.service.telegram.EstrategiaTelegram;
 import com.ia.core.communication.service.whatsapp.EstrategiaWhatsApp;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * Factory para criação de estratégias de envio baseadas no tipo de canal.
@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class EstrategiaEnvioFactory {
 
   private final EstrategiaWhatsApp estrategiaWhatsApp;

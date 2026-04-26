@@ -1,17 +1,15 @@
 package com.ia.core.security.service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.security.service.strategy.ContextResolveStrategy;
 import com.ia.core.security.service.strategy.ContextResolveStrategyRegistry;
 import com.ia.core.service.repository.BaseEntityRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Serviço para gerenciamento de contextos de segurança. Princípio: SRP (Single

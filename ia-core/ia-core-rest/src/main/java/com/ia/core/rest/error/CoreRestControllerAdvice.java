@@ -1,10 +1,15 @@
 package com.ia.core.rest.error;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.ia.core.model.exception.BusinessException;
+import com.ia.core.model.exception.ResourceNotFoundException;
+import com.ia.core.model.exception.ValidationException;
+import com.ia.core.service.exception.ServiceException;
+import com.ia.core.service.translator.CoreApplicationTranslator;
+import com.ia.core.service.translator.Translator;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +20,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.ia.core.model.exception.BusinessException;
-import com.ia.core.model.exception.ResourceNotFoundException;
-import com.ia.core.model.exception.ValidationException;
-import com.ia.core.service.exception.ServiceException;
-import com.ia.core.service.translator.CoreApplicationTranslator;
-import com.ia.core.service.translator.Translator;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Centralizador de tratamento de exceções para a API REST. Fornece tratamento

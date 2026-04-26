@@ -1,14 +1,13 @@
 package com.ia.core.security.service.model.authorization;
 
+import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
+import io.jsonwebtoken.lang.Arrays;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
-
-import io.jsonwebtoken.lang.Arrays;
 
 /**
  *

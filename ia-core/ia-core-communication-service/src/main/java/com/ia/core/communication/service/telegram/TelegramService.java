@@ -1,16 +1,13 @@
 package com.ia.core.communication.service.telegram;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * Serviço para interação com a API do Telegram. Implementa a interface
@@ -23,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
  * @author Israel Araújo
  */
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class TelegramService implements MensagemProvider {
 
-  
+
   private final TelegramConfig telegramConfig;
 
   @Override

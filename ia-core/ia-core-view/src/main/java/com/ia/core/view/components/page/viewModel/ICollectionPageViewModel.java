@@ -1,9 +1,9 @@
 package com.ia.core.view.components.page.viewModel;
 
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
+
 import java.io.Serializable;
 import java.util.function.BiConsumer;
-
-import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 
 /**
  * Interface que define um contrato para páginas de coleções em memória

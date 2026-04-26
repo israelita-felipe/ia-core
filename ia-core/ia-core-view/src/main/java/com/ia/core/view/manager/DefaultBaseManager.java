@@ -1,16 +1,14 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-
-import org.springframework.data.domain.Page;
-
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.usecase.CrudUseCase;
 import com.ia.core.view.client.BaseClient;
 import com.ia.core.view.exception.ValidationException;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+
+import java.io.Serializable;
 
 /**
  * Classe padrão para criação de um serviço da view com todos os clientes.

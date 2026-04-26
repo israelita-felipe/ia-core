@@ -1,11 +1,11 @@
 package com.ia.core.view.manager;
 
-import java.io.Serializable;
-import java.util.Collection;
-
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.client.SaveBaseClient;
 import com.ia.core.view.exception.ValidationException;
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Interface base para serviços do tipo save.

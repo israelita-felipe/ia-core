@@ -1,14 +1,13 @@
 package com.ia.core.nlp.model.services;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import org.springframework.core.io.Resource;
-
 import lombok.RequiredArgsConstructor;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
+import org.springframework.core.io.Resource;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * @author Israel Araújo

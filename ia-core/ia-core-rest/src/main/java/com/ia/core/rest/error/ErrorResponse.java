@@ -1,16 +1,15 @@
 package com.ia.core.rest.error;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
 
 /**
  * DTO padronizado para resposta de erro da API REST.

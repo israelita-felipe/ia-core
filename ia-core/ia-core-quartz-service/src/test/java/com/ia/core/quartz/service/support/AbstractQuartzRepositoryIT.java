@@ -1,7 +1,6 @@
 package com.ia.core.quartz.service.support;
 
-import javax.sql.DataSource;
-
+import com.ia.test.integration.AbstractRepositoryIT;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.ia.test.integration.AbstractRepositoryIT;
+import javax.sql.DataSource;
 
 /**
  * Base class for integration tests of Quartz Repository layer. Uses H2

@@ -1,10 +1,9 @@
 package com.ia.core.quartz.support;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
+import com.ia.core.quartz.model.periodicidade.Periodicidade;
+import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +14,9 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ia.core.quartz.model.periodicidade.Periodicidade;
-import com.ia.core.quartz.model.periodicidade.Recorrencia;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Classe base para testes de integração do módulo quartz.

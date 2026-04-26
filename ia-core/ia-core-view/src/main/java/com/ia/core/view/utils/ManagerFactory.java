@@ -1,13 +1,13 @@
 package com.ia.core.view.utils;
 
+import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
+import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
+import com.ia.core.view.manager.collection.DefaultCollectionManagerConfig;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.ia.core.view.client.collection.DefaultCollectionBaseClient;
-import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
-import com.ia.core.view.manager.collection.DefaultCollectionManagerConfig;
 
 /**
  * Classe que implementa os padrão factory para os serviços

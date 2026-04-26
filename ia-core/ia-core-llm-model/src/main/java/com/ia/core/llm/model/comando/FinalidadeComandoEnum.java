@@ -1,9 +1,9 @@
 package com.ia.core.llm.model.comando;
 
+import org.springframework.core.ParameterizedTypeReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.springframework.core.ParameterizedTypeReference;
 
 /**
  * Finalidade de um comando

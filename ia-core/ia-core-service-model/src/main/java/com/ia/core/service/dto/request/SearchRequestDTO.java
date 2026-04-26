@@ -1,16 +1,5 @@
 package com.ia.core.service.dto.request;
 
-import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.service.dto.DTO;
@@ -18,12 +7,16 @@ import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.sort.SortRequestDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.beans.Transient;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * {@link DTO} para requisição de busca

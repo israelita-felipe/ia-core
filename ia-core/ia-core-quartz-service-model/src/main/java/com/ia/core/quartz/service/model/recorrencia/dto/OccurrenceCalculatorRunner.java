@@ -1,17 +1,13 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
 import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
+
+import java.time.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Runner para testar a classe OccurrenceCalculator.

@@ -1,9 +1,9 @@
 package com.ia.core.security.view.authorization;
 
-import java.util.Collection;
-
 import com.ia.core.security.model.authentication.JwtManager.Context;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager.HasContextDefinitions.PrivilegeContext;
+
+import java.util.Collection;
 
 /**
  *

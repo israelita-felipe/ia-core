@@ -1,11 +1,10 @@
 package com.ia.core.communication.view.contatomensagem;
 
-import org.springframework.stereotype.Service;
-
 import com.ia.core.communication.service.model.contatomensagem.ContatoMensagemUseCase;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemTranslator;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
+import org.springframework.stereotype.Service;
 
 /**
  * Manager para operações de ContatoMensagem.

@@ -1,9 +1,5 @@
 package com.ia.core.communication.view.contatomensagem.page;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.communication.view.contatomensagem.ContatoMensagemManager;
 import com.ia.core.communication.view.contatomensagem.form.ContatoMensagemFormView;
@@ -14,6 +10,10 @@ import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.PageView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Página principal para visualização de ContatoMensagem.

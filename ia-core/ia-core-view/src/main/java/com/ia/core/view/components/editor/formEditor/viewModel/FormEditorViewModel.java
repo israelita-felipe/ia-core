@@ -1,9 +1,9 @@
 package com.ia.core.view.components.editor.formEditor.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.editor.viewModel.EditorViewModel;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
+
+import java.io.Serializable;
 
 /**
  * Implementação padrão do editor de formulário

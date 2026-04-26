@@ -1,18 +1,16 @@
 package com.ia.core.communication.service.whatsapp;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
-import com.ia.core.communication.model.StatusMensagem;
+import com.ia.core.communication.model.mensagem.StatusMensagem;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Serviço para interação com a API do WhatsApp Business.
@@ -24,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Israel Araújo
  */
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class WhatsAppService implements MensagemProvider {
 

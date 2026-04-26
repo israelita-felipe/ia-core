@@ -1,11 +1,11 @@
 package com.ia.core.security.service.model.functionality;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.authorization.HasContext;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Israel Araújo

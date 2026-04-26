@@ -1,8 +1,5 @@
 package com.ia.core.view.components.page;
 
-import java.io.Serializable;
-import java.util.Collection;
-
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.editor.formEditor.IFormEditorView;
 import com.ia.core.view.components.editor.formEditor.viewModel.IFormEditorViewModel;
@@ -18,19 +15,14 @@ import com.ia.core.view.components.properties.HasConfirmDialog;
 import com.ia.core.view.components.properties.HasDataProviderCreator;
 import com.ia.core.view.components.properties.HasId;
 import com.ia.core.view.components.properties.HasMessageNotification;
-import com.ia.core.view.properties.AutoCastable;
-import com.ia.core.view.properties.HasCopyAction;
-import com.ia.core.view.properties.HasCreateAction;
-import com.ia.core.view.properties.HasDeleteAction;
-import com.ia.core.view.properties.HasEditAction;
-import com.ia.core.view.properties.HasErrorHandle;
-import com.ia.core.view.properties.HasPrintAction;
-import com.ia.core.view.properties.HasSaveAction;
-import com.ia.core.view.properties.HasViewAction;
+import com.ia.core.view.properties.*;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Interface que define o contrato de uma página

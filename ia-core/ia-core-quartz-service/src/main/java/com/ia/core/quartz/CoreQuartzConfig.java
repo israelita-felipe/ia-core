@@ -1,17 +1,14 @@
 package com.ia.core.quartz;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import com.ia.core.quartz.model.QuartzModel;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import com.ia.core.quartz.model.QuartzModel;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * Configuração principal do Quartz Scheduler para a aplicação.
@@ -144,7 +141,7 @@ public class CoreQuartzConfig {
     // "org.quartz.impl.jdbcjobstore.JobStoreTX");
 
     properties.setProperty(PROP_JOBSTORE_DRIVER_DELEGATE_CLASS,
-                           "org.quartz.impl.jdbcjobstore.StdJDBCDelegate");
+                           "org.quartz.impl.jdbcjobstore.HSQLDBDelegate");
     properties
         .setProperty(PROP_JOBSTORE_TABLE_PREFIX,
                      QuartzModel.SCHEMA + "." + QuartzModel.TABLE_PREFIX);

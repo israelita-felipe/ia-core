@@ -1,15 +1,14 @@
 package com.ia.core.owl.service;
 
-import java.util.Collection;
-import java.util.stream.Stream;
-
+import lombok.Getter;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.BidirectionalShortFormProviderAdapter;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
-import lombok.Getter;
+import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  *

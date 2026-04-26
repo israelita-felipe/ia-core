@@ -1,8 +1,21 @@
 package com.ia.core.rest.security;
 
-import java.util.Collections;
-import java.util.Map;
-
+import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
+import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
+import com.ia.core.security.model.authentication.JwtCoreManager;
+import com.ia.core.security.service.authorization.CoreAuthorizationManager;
+import com.ia.core.security.service.authorization.JWTPrivilegeContext;
+import com.ia.core.security.service.config.CoreSecurityServiceConfiguration;
+import com.ia.core.security.service.log.operation.LogOperationService;
+import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
+import com.ia.core.security.service.model.user.UserPasswordEncoder;
+import com.ia.core.security.service.user.UserRepository;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,23 +32,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
-import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
-import com.ia.core.security.model.authentication.JwtCoreManager;
-import com.ia.core.security.service.authorization.CoreAuthorizationManager;
-import com.ia.core.security.service.authorization.JWTPrivilegeContext;
-import com.ia.core.security.service.config.CoreSecurityServiceConfiguration;
-import com.ia.core.security.service.log.operation.LogOperationService;
-import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
-import com.ia.core.security.service.model.user.UserPasswordEncoder;
-import com.ia.core.security.service.user.UserRepository;
-
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Classe abstrata de configuração de segurança para APIs REST que utiliza

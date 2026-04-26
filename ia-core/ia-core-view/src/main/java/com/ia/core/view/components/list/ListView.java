@@ -1,13 +1,12 @@
 package com.ia.core.view.components.list;
 
-import java.io.Serializable;
-import java.util.Locale;
-
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-
 import lombok.Getter;
+
+import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Implementação padrão da uma lista de itens

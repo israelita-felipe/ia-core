@@ -1,12 +1,11 @@
 package com.ia.core.llm.view.template.page;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.security.view.log.operation.LogOperationManager;
 import com.ia.core.security.view.log.operation.page.EntityPageViewModelConfig;
 import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.stereotype.Component;
 
 /**
  *

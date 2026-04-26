@@ -1,10 +1,10 @@
 package com.ia.core.service.exception;
 
+import com.ia.core.model.exception.DomainException;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Stream;
-
-import com.ia.core.model.exception.DomainException;
 
 /**
  * Classe de retenção de erros de serviço.

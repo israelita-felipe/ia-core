@@ -1,13 +1,11 @@
 package com.ia.core.security.view.user;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserPasswordEncoder;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
-
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 /**
  *

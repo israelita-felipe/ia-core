@@ -6,6 +6,7 @@ import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.Severity;
 import com.ia.core.service.validators.ValidationError;
 import com.ia.core.service.validators.ValidationResult;
+import com.ia.core.service.validators.ValidatorScope;
 
 /**
  * Regra de negócio que verifica se o telefone do contato é válido.
@@ -14,6 +15,7 @@ import com.ia.core.service.validators.ValidationResult;
  *
  * @author Israel Araújo
  */
+@ValidatorScope
 public class ContatoTelefoneValidoRule implements BusinessRule<ContatoMensagemDTO> {
 
   /**

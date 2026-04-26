@@ -1,12 +1,13 @@
 package com.ia.core.communication.service.mensagem.rules;
 
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.service.rules.BusinessRule;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.Severity;
 import com.ia.core.service.validators.ValidationError;
 import com.ia.core.service.validators.ValidationResult;
+import com.ia.core.service.validators.ValidatorScope;
 
 /**
  * Regra de negócio que verifica se o canal de comunicação é válido para envio.
@@ -15,6 +16,7 @@ import com.ia.core.service.validators.ValidationResult;
  *
  * @author Israel Araújo
  */
+@ValidatorScope
 public class MensagemCanalValidoRule implements BusinessRule<MensagemDTO> {
 
   /**

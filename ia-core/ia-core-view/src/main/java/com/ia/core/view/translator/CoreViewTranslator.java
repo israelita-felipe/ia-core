@@ -1,15 +1,14 @@
 package com.ia.core.view.translator;
 
+import com.ia.core.service.translator.Translator;
+import com.vaadin.flow.i18n.I18NProvider;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ResourceBundleMessageSource;
-
-import com.ia.core.service.translator.Translator;
-import com.vaadin.flow.i18n.I18NProvider;
 
 /**
  * @author Israel Araújo

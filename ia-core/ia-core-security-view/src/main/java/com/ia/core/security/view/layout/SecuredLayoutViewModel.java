@@ -3,7 +3,6 @@ package com.ia.core.security.view.layout;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.view.components.layout.MainLayoutViewModel;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
-
 import lombok.Getter;
 
 /**

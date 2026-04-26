@@ -1,11 +1,10 @@
 package com.ia.core.security.view.layout;
 
-import java.util.function.Consumer;
-
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.vaadin.flow.router.AccessDeniedException;
-
 import io.jsonwebtoken.ExpiredJwtException;
+
+import java.util.function.Consumer;
 
 /**
  * @author Israel Araújo

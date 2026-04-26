@@ -1,21 +1,20 @@
 package com.ia.test.security.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Collection;
-import java.util.HashSet;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.model.user.User;
 import com.ia.test.security.builder.PrivilegeTestDataBuilder;
 import com.ia.test.security.builder.RoleTestDataBuilder;
 import com.ia.test.security.builder.UserTestDataBuilder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testes de integração para fluxos de autenticação e autorização.

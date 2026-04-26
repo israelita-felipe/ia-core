@@ -1,10 +1,5 @@
 package com.ia.core.view.components.form;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.properties.HasColorPickerCreator;
 import com.vaadin.flow.component.Component;
@@ -15,6 +10,11 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.orderedlayout.ThemableLayout;
 import com.vaadin.flow.data.binder.Binder;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Implementação padrão de um formulário

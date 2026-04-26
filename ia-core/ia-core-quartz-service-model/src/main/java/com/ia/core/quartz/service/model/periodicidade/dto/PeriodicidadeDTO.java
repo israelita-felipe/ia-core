@@ -1,20 +1,11 @@
 package com.ia.core.quartz.service.model.periodicidade.dto;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
 import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -22,6 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

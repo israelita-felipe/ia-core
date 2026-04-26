@@ -1,8 +1,8 @@
 package com.ia.core.view.client;
 
-import java.io.Serializable;
-
 import com.ia.core.service.dto.DTO;
+
+import java.io.Serializable;
 
 /**
  * Classe padrão para criação de um client com todos os serviços.

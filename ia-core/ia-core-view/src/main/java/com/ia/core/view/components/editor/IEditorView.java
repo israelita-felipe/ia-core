@@ -1,8 +1,5 @@
 package com.ia.core.view.components.editor;
 
-import java.io.Serializable;
-import java.util.Collection;
-
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.editor.viewModel.IEditorViewModel;
@@ -13,6 +10,9 @@ import com.ia.core.view.properties.HasClose;
 import com.ia.core.view.properties.HasErrorHandle;
 import com.ia.core.view.utils.Size;
 import com.vaadin.flow.component.HasSize;
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

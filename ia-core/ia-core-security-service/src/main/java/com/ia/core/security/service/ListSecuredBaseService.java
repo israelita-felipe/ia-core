@@ -1,12 +1,5 @@
 package com.ia.core.security.service;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
-import org.springframework.data.domain.Page;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.security.model.functionality.Functionality;
@@ -20,6 +13,12 @@ import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
+import org.springframework.data.domain.Page;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um

@@ -1,11 +1,10 @@
 package com.ia.core.view.client;
 
-import java.io.Serializable;
-
+import com.ia.core.service.dto.request.SearchRequestDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.ia.core.service.dto.request.SearchRequestDTO;
+import java.io.Serializable;
 
 /**
  * Count client.

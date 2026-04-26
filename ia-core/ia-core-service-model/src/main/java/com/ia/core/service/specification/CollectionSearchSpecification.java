@@ -1,12 +1,11 @@
 package com.ia.core.service.specification;
 
-import java.util.function.Predicate;
-
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import lombok.AllArgsConstructor;
+
+import java.util.function.Predicate;
 
 /**
  * Classe de especificação para coleção

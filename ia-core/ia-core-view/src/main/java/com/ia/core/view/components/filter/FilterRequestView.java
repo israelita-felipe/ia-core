@@ -1,20 +1,12 @@
 package com.ia.core.view.components.filter;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
 import com.ia.core.model.filter.FieldType;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.FilterRequestTranslator;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.view.components.filter.viewModel.IFilterRequestViewModel;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasSize;
-import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -26,8 +18,11 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Binder.Binding;
 import com.vaadin.flow.data.converter.Converter;
-
 import lombok.Getter;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Implementação padrão de uma view para filter request

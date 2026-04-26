@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.telegram;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Configurações para integração com Telegram.
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "communication.telegram")
+@Configuration
 public class TelegramConfig {
 
   /**

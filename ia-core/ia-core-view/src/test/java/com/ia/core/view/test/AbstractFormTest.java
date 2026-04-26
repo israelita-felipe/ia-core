@@ -1,12 +1,12 @@
 package com.ia.core.view.test;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Classe base para testes de formulários Vaadin.
@@ -43,11 +43,11 @@ public abstract class AbstractFormTest extends AbstractViewTest {
             "//div[contains(@class, 'v-textfield') and .//label[contains(text(),'" + fieldLabel + "')]] | " +
             "//input[../label[contains(text(),'" + fieldLabel + "')]]"
         ));
-        
+
         if (fields.isEmpty()) {
             fail("Campo não encontrado: " + fieldLabel);
         }
-        
+
         fields.get(0).clear();
         fields.get(0).sendKeys(value);
     }
@@ -75,11 +75,11 @@ public abstract class AbstractFormTest extends AbstractViewTest {
             "//div[contains(@class, 'v-textfield') and .//label[contains(text(),'" + fieldLabel + "')]] | " +
             "//input[../label[contains(text(),'" + fieldLabel + "')]]"
         ));
-        
+
         if (fields.isEmpty()) {
             return null;
         }
-        
+
         return fields.get(0).getAttribute("value");
     }
 
@@ -93,11 +93,11 @@ public abstract class AbstractFormTest extends AbstractViewTest {
         List<WebElement> fields = driver.findElements(By.xpath(
             "//div[contains(@class, 'v-textfield') and .//label[contains(text(),'" + fieldLabel + "')]]"
         ));
-        
+
         if (fields.isEmpty()) {
             return false;
         }
-        
+
         String disabled = fields.get(0).getAttribute("disabled");
         return disabled == null;
     }
@@ -123,12 +123,12 @@ public abstract class AbstractFormTest extends AbstractViewTest {
      */
     protected void clickSaveButton(String... buttonText) {
         String button = buttonText.length > 0 ? buttonText[0] : "Salvar";
-        
+
         List<WebElement> buttons = driver.findElements(By.xpath(
             "//button[contains(text(),'" + button + "')] | " +
             "//span[contains(@class, 'v-button') and contains(text(),'" + button + "')]"
         ));
-        
+
         assertFalse(buttons.isEmpty(), "Botão não encontrado: " + button);
         buttons.get(0).click();
     }

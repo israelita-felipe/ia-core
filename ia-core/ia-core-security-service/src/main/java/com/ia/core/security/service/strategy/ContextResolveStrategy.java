@@ -1,15 +1,15 @@
 package com.ia.core.security.service.strategy;
 
-import java.util.Collection;
-
 import com.ia.core.service.repository.BaseEntityRepository;
+
+import java.util.Collection;
 
 /**
  * Interface estratégia para resolver diferentes tipos de contextos de segurança.
- * 
+ *
  * Padrão: Strategy Pattern
  * Princípio: OCP (Open/Closed Principle)
- * 
+ *
  * Diferentes tipos de contexto (ID, Role, Department, etc) implementam esta interface
  * para resolver seus valores e validar correspondência sem modificar a classe base.
  *

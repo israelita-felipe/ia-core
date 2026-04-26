@@ -1,7 +1,5 @@
 package com.ia.core.quartz.view.quartz.form;
 
-import java.util.Collection;
-
 import com.ia.core.model.TSID;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
@@ -12,8 +10,9 @@ import com.ia.core.quartz.view.quartz.triggers.page.SchedulerConfigTriggerCollec
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
 import com.ia.core.view.utils.ManagerFactory;
-
 import lombok.Getter;
+
+import java.util.Collection;
 
 /**
  *

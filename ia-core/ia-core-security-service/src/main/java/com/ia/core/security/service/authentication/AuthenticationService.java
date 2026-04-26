@@ -1,12 +1,12 @@
 package com.ia.core.security.service.authentication;
 
-import java.util.function.BiFunction;
-
 import com.ia.core.security.model.authentication.AuthenticationResponse;
 import com.ia.core.security.service.exception.InvalidPasswordException;
 import com.ia.core.security.service.exception.UserNotFountException;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.service.exception.ServiceException;
+
+import java.util.function.BiFunction;
 
 /**
  * @author Israel Araújo

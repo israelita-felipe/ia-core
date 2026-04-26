@@ -1,23 +1,17 @@
 package com.ia.core.model.specification;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.ia.core.model.filter.FilterRequest;
+import com.ia.core.model.filter.SearchRequest;
+import com.ia.core.model.filter.SortRequest;
+import jakarta.persistence.criteria.*;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ia.core.model.filter.FilterRequest;
-import com.ia.core.model.filter.SearchRequest;
-import com.ia.core.model.filter.SortRequest;
-
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Order;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementação de {@link Specification} do Spring Data JPA para buscas dinâmicas.

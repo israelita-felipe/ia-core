@@ -1,11 +1,11 @@
 package com.ia.core.view.components.properties;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.data.provider.DataProvider;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Propriedade de criação de {@link ComboBox}

@@ -1,7 +1,5 @@
 package com.ia.core.security.service;
 
-import java.util.Set;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
@@ -10,6 +8,8 @@ import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
+
+import java.util.Set;
 
 /**
  * Interface que salva um {@link BaseEntity} por meio de um

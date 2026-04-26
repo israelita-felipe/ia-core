@@ -1,10 +1,10 @@
 package com.ia.core.view.components.list.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.service.dto.properties.HasPropertyChangeSupport;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.properties.HasTranslator;
+
+import java.io.Serializable;
 
 /**
  * Interface que define o contrato de um View Model para lista

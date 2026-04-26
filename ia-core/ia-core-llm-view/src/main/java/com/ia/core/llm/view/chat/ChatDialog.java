@@ -1,18 +1,10 @@
 package com.ia.core.llm.view.chat;
 
-import java.util.Locale;
-import java.util.Objects;
-
 import com.ia.core.llm.service.model.chat.ChatRequestTranslator;
 import com.ia.core.llm.service.model.chat.ChatTranslator;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.view.components.dialog.DialogHeaderBar;
-import com.ia.core.view.components.properties.HasBinder;
-import com.ia.core.view.components.properties.HasCheckBoxCreator;
-import com.ia.core.view.components.properties.HasComboBoxCreator;
-import com.ia.core.view.components.properties.HasTextAreaCreator;
-import com.ia.core.view.components.properties.HasTextFieldCreator;
-import com.ia.core.view.components.properties.HasTranslator;
+import com.ia.core.view.components.properties.*;
 import com.ia.core.view.properties.HasErrorHandle;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.ia.core.view.utils.Size;
@@ -30,8 +22,10 @@ import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.provider.DataProvider;
-
 import lombok.Getter;
+
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @author Israel Araújo

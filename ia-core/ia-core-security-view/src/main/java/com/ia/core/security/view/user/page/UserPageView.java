@@ -1,8 +1,5 @@
 package com.ia.core.security.view.user.page;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.log.operation.list.AuditOperationListView;
 import com.ia.core.security.view.log.operation.list.AuditOperationListViewModel;
@@ -19,6 +16,9 @@ import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

@@ -1,20 +1,18 @@
 package com.ia.core.rest.control;
 
-import java.util.Collection;
-import java.util.Collections;
-
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.SaveBaseService;
+import com.ia.core.service.dto.DTO;
+import com.ia.core.service.exception.ServiceException;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.ia.core.model.BaseEntity;
-import com.ia.core.service.SaveBaseService;
-import com.ia.core.service.dto.DTO;
-import com.ia.core.service.exception.ServiceException;
-
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Interface base para controladores do tipo delete.

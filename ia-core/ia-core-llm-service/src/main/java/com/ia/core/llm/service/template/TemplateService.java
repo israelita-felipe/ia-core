@@ -4,7 +4,6 @@ import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.service.model.template.TemplateUseCase;
 import com.ia.core.service.DefaultBaseService;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**

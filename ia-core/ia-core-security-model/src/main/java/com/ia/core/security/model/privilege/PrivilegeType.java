@@ -1,11 +1,11 @@
 package com.ia.core.security.model.privilege;
 
+import com.ia.core.security.model.functionality.Operation;
+import com.ia.core.security.model.functionality.OperationEnum;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import com.ia.core.security.model.functionality.Operation;
-import com.ia.core.security.model.functionality.OperationEnum;
 
 /**
  * @author Israel Araújo

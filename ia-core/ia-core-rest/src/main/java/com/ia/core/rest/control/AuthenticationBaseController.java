@@ -1,21 +1,19 @@
 package com.ia.core.rest.control;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.model.authentication.AuthenticationResponse;
 import com.ia.core.security.service.authentication.AuthenticationService;
 import com.ia.core.security.service.exception.InvalidPasswordException;
 import com.ia.core.security.service.exception.UserNotFountException;
 import com.ia.core.service.exception.ServiceException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Israel Araújo

@@ -1,17 +1,15 @@
 package com.ia.core.rest.control;
 
-import java.util.UUID;
-
+import com.ia.core.model.BaseEntity;
+import com.ia.core.service.FindBaseService;
+import com.ia.core.service.dto.DTO;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ia.core.model.BaseEntity;
-import com.ia.core.service.FindBaseService;
-import com.ia.core.service.dto.DTO;
-
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * Interface base para controladores do tipo find.

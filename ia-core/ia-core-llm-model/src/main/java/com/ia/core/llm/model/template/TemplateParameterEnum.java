@@ -1,9 +1,9 @@
 package com.ia.core.llm.model.template;
 
+import lombok.Getter;
+
 import java.util.Objects;
 import java.util.stream.Stream;
-
-import lombok.Getter;
 
 /**
  * Enumerador que lista os parâmetros de um template que são padrão de sistema e

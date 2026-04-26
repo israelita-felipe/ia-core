@@ -1,12 +1,5 @@
 package com.ia.core.flyway.service.flywayexecution;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.data.domain.Page;
-
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionUseCase;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
@@ -26,9 +19,14 @@ import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Serviço para gerenciar execuções de migrations do Flyway.

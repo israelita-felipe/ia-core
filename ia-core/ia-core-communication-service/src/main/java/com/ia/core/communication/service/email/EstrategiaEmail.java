@@ -1,14 +1,15 @@
 package com.ia.core.communication.service.email;
 
-import java.time.LocalDateTime;
 
-import com.ia.core.communication.model.StatusMensagem;
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.estrategia.EstrategiaEnvio;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 /**
  * Estratégia de envio para E-mail.
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Israel Araújo
  */
 @Slf4j
+@Component
 public class EstrategiaEmail
   extends EstrategiaEnvio {
 

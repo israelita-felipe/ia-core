@@ -1,15 +1,14 @@
 package com.ia.core.quartz.service;
 
-import java.util.List;
-
+import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ia.core.quartz.model.scheduler.SchedulerConfig;
-import com.ia.core.service.repository.BaseEntityRepository;
+import java.util.List;
 
 /**
  * Repository para entidade SchedulerConfig. Implementa EntityGraph para evitar

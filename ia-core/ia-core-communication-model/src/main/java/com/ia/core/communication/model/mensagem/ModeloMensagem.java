@@ -1,12 +1,8 @@
-package com.ia.core.communication.model;
+package com.ia.core.communication.model.mensagem;
 
+import com.ia.core.communication.model.CommunicationModel;
 import com.ia.core.model.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,9 +25,9 @@ public class ModeloMensagem extends BaseEntity {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "biblia_MODELO_MENSAGEM";
+  public static final String TABLE_NAME = CommunicationModel.TABLE_PREFIX+"MODELO_MENSAGEM";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "biblia";
+  public static final String SCHEMA_NAME = CommunicationModel.SCHEMA;
 
   /** Nome do modelo */
   @Column(name = "nome", length = 100, nullable = false)
@@ -42,7 +38,8 @@ public class ModeloMensagem extends BaseEntity {
   private String descricao;
 
   /** Corpo do modelo com placeholders */
-  @Column(name = "corpo_modelo", columnDefinition = "TEXT", nullable = false)
+  @Lob
+  @Column(name = "corpo_modelo", nullable = false)
   private String corpoModelo;
 
   /** Tipo do canal */

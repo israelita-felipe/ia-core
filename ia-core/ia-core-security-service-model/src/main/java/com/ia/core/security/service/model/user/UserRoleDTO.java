@@ -1,14 +1,9 @@
 package com.ia.core.security.service.model.user;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ia.core.model.HasVersion;
 import com.ia.core.security.model.role.Role;
 import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -16,6 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Israel Araújo

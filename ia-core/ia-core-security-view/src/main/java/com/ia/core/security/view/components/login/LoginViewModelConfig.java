@@ -3,7 +3,6 @@ package com.ia.core.security.view.components.login;
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-
 import lombok.Getter;
 
 /**

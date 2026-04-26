@@ -1,7 +1,7 @@
 package com.ia.core.quartz;
 
-import java.util.function.Consumer;
-
+import com.ia.core.quartz.service.AbstractJob;
+import lombok.Setter;
 import org.quartz.JobExecutionContext;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -10,9 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.stereotype.Component;
 
-import com.ia.core.quartz.service.AbstractJob;
-
-import lombok.Setter;
+import java.util.function.Consumer;
 
 @Component
 public class CoreSpringBeanJobFactory

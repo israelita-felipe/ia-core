@@ -1,18 +1,17 @@
 package com.ia.core.quartz.service.model.job.dto;
 
+import com.ia.core.service.dto.AbstractDTO;
+import com.ia.core.service.dto.request.SearchRequestDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
-import com.ia.core.service.dto.AbstractDTO;
-import com.ia.core.service.dto.request.SearchRequestDTO;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 /**
  * DTO para representação de um Job do Quartz.

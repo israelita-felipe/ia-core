@@ -1,10 +1,5 @@
 package com.ia.core.security.service.authentication;
 
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.privilege.PrivilegeOperation;
@@ -18,8 +13,12 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseEntityMapper;
-
 import lombok.RequiredArgsConstructor;
+
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Israel Araújo

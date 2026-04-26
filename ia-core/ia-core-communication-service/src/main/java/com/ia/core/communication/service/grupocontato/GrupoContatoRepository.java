@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.grupocontato;
 
+import com.ia.core.communication.model.contato.GrupoContato;
+import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
-
-import com.ia.core.communication.model.GrupoContato;
-import com.ia.core.service.repository.BaseEntityRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository para GrupoContato.
@@ -14,7 +14,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  *
  * @author Israel Araújo
  */
-@NoRepositoryBean
+@Repository
 public interface GrupoContatoRepository
   extends BaseEntityRepository<GrupoContato> {
   /**

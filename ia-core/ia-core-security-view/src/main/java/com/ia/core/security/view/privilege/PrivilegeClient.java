@@ -1,9 +1,8 @@
 package com.ia.core.security.view.privilege;
 
-import org.springframework.cloud.openfeign.FeignClient;
-
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.view.client.DefaultBaseClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * Cliente para {@link PrivilegeDTO}

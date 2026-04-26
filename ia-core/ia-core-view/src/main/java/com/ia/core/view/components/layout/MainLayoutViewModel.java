@@ -3,7 +3,6 @@ package com.ia.core.view.components.layout;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.ia.core.view.properties.HasErrorHandle;
-
 import lombok.Getter;
 
 /**

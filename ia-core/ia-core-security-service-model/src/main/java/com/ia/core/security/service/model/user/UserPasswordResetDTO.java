@@ -1,13 +1,13 @@
 package com.ia.core.security.service.model.user;
 
-import java.io.Serializable;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
 
 /**
  * @author Israel Araújo

@@ -1,11 +1,11 @@
 package com.ia.core.quartz.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
-
+import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
+import com.ia.core.quartz.model.periodicidade.Periodicidade;
+import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import com.ia.core.quartz.model.scheduler.SchedulerConfig;
+import com.ia.core.quartz.service.support.AbstractQuartzRepositoryIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +16,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ia.core.quartz.model.periodicidade.Frequencia;
-import com.ia.core.quartz.model.periodicidade.IntervaloTemporal;
-import com.ia.core.quartz.model.periodicidade.Periodicidade;
-import com.ia.core.quartz.model.periodicidade.Recorrencia;
-import com.ia.core.quartz.model.scheduler.SchedulerConfig;
-import com.ia.core.quartz.service.support.AbstractQuartzRepositoryIT;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testes de integração para o repositório de configuração de agendamento.

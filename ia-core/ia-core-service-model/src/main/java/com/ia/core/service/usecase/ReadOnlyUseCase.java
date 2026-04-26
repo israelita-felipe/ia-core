@@ -1,10 +1,9 @@
 package com.ia.core.service.usecase;
 
-import java.io.Serializable;
-
+import com.ia.core.service.dto.request.SearchRequestDTO;
 import org.springframework.data.domain.Page;
 
-import com.ia.core.service.dto.request.SearchRequestDTO;
+import java.io.Serializable;
 
 /**
  * Interface de Use Case para operações apenas de leitura e consulta.

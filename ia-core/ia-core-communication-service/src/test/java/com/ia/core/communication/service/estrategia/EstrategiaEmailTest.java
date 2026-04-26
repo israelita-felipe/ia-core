@@ -1,26 +1,22 @@
 package com.ia.core.communication.service.estrategia;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.model.mensagem.TipoCanal;
+import com.ia.core.communication.service.email.EmailService;
+import com.ia.core.communication.service.email.EstrategiaEmail;
+import com.ia.core.communication.service.mensagem.ResultadoEnvio;
+import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.model.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ia.core.communication.model.StatusMensagem;
-import com.ia.core.communication.model.TipoCanal;
-import com.ia.core.communication.service.email.EmailService;
-import com.ia.core.communication.service.email.EstrategiaEmail;
-import com.ia.core.communication.service.mensagem.ResultadoEnvio;
-import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-import com.ia.core.model.exception.ValidationException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Testes unitários para EstrategiaEmail.

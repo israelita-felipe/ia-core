@@ -1,24 +1,17 @@
 package com.ia.core.security.view.user;
 
-import java.util.Objects;
-
-import org.springframework.stereotype.Service;
-
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
-import com.ia.core.security.service.model.user.UserDTO;
-import com.ia.core.security.service.model.user.UserPasswordChangeDTO;
-import com.ia.core.security.service.model.user.UserPasswordEncoder;
-import com.ia.core.security.service.model.user.UserPasswordResetDTO;
-import com.ia.core.security.service.model.user.UserTranslator;
-import com.ia.core.security.service.model.user.UserUseCase;
+import com.ia.core.security.service.model.user.*;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseManager;
 import com.ia.core.service.dto.DTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * @author Israel Araújo

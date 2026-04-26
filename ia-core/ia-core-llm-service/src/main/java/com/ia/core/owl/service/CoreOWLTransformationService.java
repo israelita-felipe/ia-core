@@ -1,8 +1,7 @@
 package com.ia.core.owl.service;
 
-import org.springframework.ai.chat.model.ChatModel;
-
 import com.ia.core.owl.service.model.TransformacaoResultDTO;
+import org.springframework.ai.chat.model.ChatModel;
 
 /**
  *

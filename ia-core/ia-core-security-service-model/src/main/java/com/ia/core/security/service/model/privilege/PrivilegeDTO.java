@@ -1,14 +1,9 @@
 package com.ia.core.security.service.model.privilege;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import com.ia.core.security.model.privilege.Privilege;
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,6 +12,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Israel Araújo

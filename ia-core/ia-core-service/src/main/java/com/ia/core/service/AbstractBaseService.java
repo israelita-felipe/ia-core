@@ -1,7 +1,5 @@
 package com.ia.core.service;
 
-import org.springframework.context.ApplicationEventPublisher;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.contract.HasMapper;
 import com.ia.core.service.contract.HasRepository;
@@ -14,11 +12,11 @@ import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
-
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Classe base abstrata para serviços de entidades. Responsabilidade Única:

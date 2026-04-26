@@ -1,15 +1,14 @@
 package com.ia.core.view.components.filter.viewModel;
 
+import com.ia.core.service.dto.filter.FilterProperty;
+import com.ia.core.service.dto.filter.FilterRequestDTO;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.ia.core.service.dto.filter.FilterProperty;
-import com.ia.core.service.dto.filter.FilterRequestDTO;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Implementação padrão de um view model para requisição de filtro

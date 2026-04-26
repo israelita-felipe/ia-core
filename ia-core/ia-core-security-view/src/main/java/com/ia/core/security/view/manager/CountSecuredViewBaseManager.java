@@ -1,10 +1,10 @@
 package com.ia.core.security.view.manager;
 
-import java.io.Serializable;
-
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.manager.CountBaseManager;
+
+import java.io.Serializable;
 
 /**
  * Count client.

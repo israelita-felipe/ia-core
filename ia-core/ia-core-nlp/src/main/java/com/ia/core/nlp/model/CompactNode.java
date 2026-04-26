@@ -1,9 +1,9 @@
 package com.ia.core.nlp.model;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
-
-import lombok.Getter;
 
 /**
  * @author Israel Araújo

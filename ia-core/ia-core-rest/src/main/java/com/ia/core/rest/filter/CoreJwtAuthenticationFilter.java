@@ -1,18 +1,16 @@
 package com.ia.core.rest.filter;
 
-import java.util.Objects;
-
+import com.ia.core.security.model.authentication.JwtManager;
+import com.ia.core.security.service.exception.UserNotFountException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import com.ia.core.security.model.authentication.JwtManager;
-import com.ia.core.security.service.exception.UserNotFountException;
-
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 /**
  * @author Israel Araújo

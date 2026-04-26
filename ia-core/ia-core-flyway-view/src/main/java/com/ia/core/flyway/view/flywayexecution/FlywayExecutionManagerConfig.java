@@ -1,12 +1,10 @@
 package com.ia.core.flyway.view.flywayexecution;
 
-import org.springframework.stereotype.Component;
-
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import com.ia.core.security.view.manager.DefaultSecuredViewBaseMangerConfig;
-
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 /**
  * Configuração de injeção de dependência para FlywayExecutionManager.

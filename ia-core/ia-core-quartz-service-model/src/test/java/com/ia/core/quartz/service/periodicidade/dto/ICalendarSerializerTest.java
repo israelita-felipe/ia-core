@@ -1,6 +1,13 @@
 package com.ia.core.quartz.service.periodicidade.dto;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.ia.core.quartz.model.periodicidade.Frequencia;
+import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import com.ia.core.quartz.service.model.periodicidade.dto.ICalendarSerializer;
+import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
+import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -8,15 +15,7 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import com.ia.core.quartz.model.periodicidade.Frequencia;
-import com.ia.core.quartz.model.periodicidade.Recorrencia;
-import com.ia.core.quartz.service.model.periodicidade.dto.ICalendarSerializer;
-import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
-import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Testes unitários para ICalendarSerializer.

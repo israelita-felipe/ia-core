@@ -1,15 +1,14 @@
 package com.ia.core.owl.service;
 
-import java.util.List;
-import java.util.Set;
-
+import com.ia.core.owl.service.exception.OWLParserException;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.InferredAxiomGenerator;
 
-import com.ia.core.owl.service.exception.OWLParserException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Interface para serviços de raciocínio OWL.

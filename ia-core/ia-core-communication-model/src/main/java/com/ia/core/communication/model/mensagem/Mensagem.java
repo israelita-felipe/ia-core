@@ -1,19 +1,15 @@
-package com.ia.core.communication.model;
+package com.ia.core.communication.model.mensagem;
 
-import java.time.LocalDateTime;
-
+import com.ia.core.communication.model.CommunicationModel;
 import com.ia.core.model.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 /**
  * Entidade que representa uma mensagem de comunicação.
@@ -31,9 +27,9 @@ public class Mensagem extends BaseEntity {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
   /** NOME DA TABELA */
-  public static final String TABLE_NAME = "biblia_MENSAGEM";
+  public static final String TABLE_NAME = CommunicationModel.TABLE_PREFIX+"MENSAGEM";
   /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = "biblia";
+  public static final String SCHEMA_NAME = CommunicationModel.SCHEMA;
 
   /** Telefone do destinatário */
   @Column(name = "telefone_destinatario", length = 20, nullable = false)
@@ -44,7 +40,8 @@ public class Mensagem extends BaseEntity {
   private String nomeDestinatario;
 
   /** Corpo da mensagem */
-  @Column(name = "corpo_mensagem", columnDefinition = "TEXT", nullable = false)
+  @Lob
+  @Column(name = "corpo_mensagem", nullable = false)
   private String corpoMensagem;
 
   /** Tipo do canal de comunicação */

@@ -1,12 +1,10 @@
 package com.ia.core.communication.service.mensagem;
 
-import java.time.LocalDateTime;
-
+import com.ia.core.communication.model.mensagem.StatusMensagem;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import com.ia.core.communication.model.StatusMensagem;
-
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
 
 /**
  * Listener para eventos de mensagens.

@@ -1,11 +1,10 @@
 package com.ia.core.view.client;
 
-import java.io.Serializable;
-
+import com.ia.core.service.dto.DTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ia.core.service.dto.DTO;
+import java.io.Serializable;
 
 /**
  * Interface base para clientes do tipo find.

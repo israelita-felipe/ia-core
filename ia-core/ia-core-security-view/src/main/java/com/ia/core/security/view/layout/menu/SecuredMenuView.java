@@ -1,9 +1,5 @@
 package com.ia.core.security.view.layout.menu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.ia.core.security.service.model.privilege.PrivilegeTranslator;
 import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.user.UserDTO;
@@ -33,9 +29,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.dom.Style.TextAlign;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author Israel Araújo

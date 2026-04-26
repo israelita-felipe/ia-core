@@ -3,7 +3,6 @@ package com.ia.core.quartz.view.job.form;
 import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.quartz.view.job.QuartzJobManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-
 import lombok.Getter;
 
 /**

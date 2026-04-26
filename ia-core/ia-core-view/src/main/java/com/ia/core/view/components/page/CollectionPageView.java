@@ -1,12 +1,12 @@
 package com.ia.core.view.components.page;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.ia.core.view.components.page.viewModel.ICollectionPageViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Implementação padrão de uma página para manipular coleções em memória

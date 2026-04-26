@@ -1,8 +1,9 @@
 package com.ia.core.communication.view.modelomensagem.form;
 
-import com.ia.core.communication.model.TipoCanal;
+import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemTranslator;
+import com.ia.core.communication.view.mensagem.component.VariableSidebarComponent;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -23,6 +24,8 @@ public class ModeloMensagemFormView extends FormView<ModeloMensagemDTO> {
   private ComboBox<TipoCanal> tipoCanalField;
   private Checkbox ativoField;
 
+  private VariableSidebarComponent variableSidebar;
+
   /**
    * @param formViewModel ViewModel do formulário
    */
@@ -33,11 +36,30 @@ public class ModeloMensagemFormView extends FormView<ModeloMensagemDTO> {
   @Override
   public void createLayout() {
     super.createLayout();
+
+    // Criar componentes auxiliares
+    variableSidebar = new VariableSidebarComponent(getViewModel()::getVariaveisDisponiveis);
+
+    // Adicionar campos do formulário
     bind(ModeloMensagemDTO.CAMPOS.NOME, createNomeField());
     bind(ModeloMensagemDTO.CAMPOS.DESCRICAO, createDescricaoField());
     bind(ModeloMensagemDTO.CAMPOS.CORPO_MODELO, createCorpoModeloField());
     bind(ModeloMensagemDTO.CAMPOS.TIPO_CANAL, createTipoCanalField());
     bind(ModeloMensagemDTO.CAMPOS.ATIVO, createAtivoField());
+
+    // Configurar sidebar como helper do campo de corpo do modelo
+    corpoModeloField.setHelperComponent(variableSidebar);
+
+    // Configurar listener para inserção de variáveis
+    variableSidebar.setVariableInsertListener(variableKey -> {
+        if (corpoModeloField != null) {
+            String currentValue = corpoModeloField.getValue();
+            String newValue = currentValue + variableKey;
+            corpoModeloField.setValue(newValue);
+            // Move cursor to the end of the newly added placeholder
+            corpoModeloField.focus();
+        }
+    });
   }
 
   /**

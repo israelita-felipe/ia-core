@@ -1,7 +1,6 @@
 package com.ia.core.quartz.model.periodicidade.converter;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

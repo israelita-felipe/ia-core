@@ -1,19 +1,18 @@
 package com.ia.core.quartz.view.quartz;
 
-import java.util.List;
-import java.util.Map;
-
+import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
+import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
+import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
-import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
-import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
-import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
-import com.ia.core.view.client.DefaultBaseClient;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Cliente Feign unificado para operações do Quartz (SchedulerConfig e Jobs).

@@ -1,11 +1,11 @@
 package com.ia.core.communication.service.whatsapp;
 
-import java.util.Map;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+
+import java.util.Map;
 
 /**
  * Cliente Feign para API do WhatsApp Business.
@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
  * @author Israel Araújo
  * @see <a href="https://developers.facebook.com/docs/whatsapp</a>
  */
-@FeignClient(name = "whatsAppClient", url = "${whatsapp.api.url:https://graph.facebook.com/v18.0}",
-             configuration = WhatsAppFeignConfig.class)
+@FeignClient(name = "whatsAppClient", url = "${whatsapp.api.url:https://graph.facebook.com/v18.0}")
 public interface WhatsAppClient {
 
   /**

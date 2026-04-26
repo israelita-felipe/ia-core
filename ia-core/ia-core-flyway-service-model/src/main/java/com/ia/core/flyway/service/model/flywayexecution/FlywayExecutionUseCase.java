@@ -1,10 +1,9 @@
 package com.ia.core.flyway.service.model.flywayexecution;
 
-import org.springframework.data.domain.Page;
-
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.usecase.ReadOnlyUseCase;
+import org.springframework.data.domain.Page;
 
 /**
  * Interface de Use Case para FlywayExecution.

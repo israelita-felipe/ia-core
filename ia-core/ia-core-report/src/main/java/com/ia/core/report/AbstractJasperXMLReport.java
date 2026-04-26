@@ -1,10 +1,10 @@
 package com.ia.core.report;
 
-import java.io.ByteArrayInputStream;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * @author Israel Araújo

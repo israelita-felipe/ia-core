@@ -3,6 +3,7 @@ package com.ia.core.communication.service.grupocontato.validators;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.ServiceValidator;
+import com.ia.core.service.validators.ValidatorScope;
 
 /**
  * Validador para GrupoContatoDTO.
@@ -11,16 +12,8 @@ import com.ia.core.service.validators.ServiceValidator;
  *
  * @author Israel Araújo
  */
+@ValidatorScope
 public class GrupoContatoValidator extends ServiceValidator<GrupoContatoDTO> {
-
-  /**
-   * Construtor com tradutor.
-   *
-   * @param translator tradutor para mensagens de validação
-   */
-  public GrupoContatoValidator(Translator translator) {
-    super(translator);
-  }
 
   /**
    * Construtor com tradutor e regras de negócio.

@@ -1,8 +1,8 @@
 package com.ia.core.owl.service.model;
 
-import java.util.List;
-
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
+
+import java.util.List;
 
 /**
  * Resultado da análise de consistência e inferências

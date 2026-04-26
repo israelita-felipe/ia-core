@@ -1,10 +1,5 @@
 package com.ia.core.security.view.role;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.user.UserRoleDTO;
@@ -12,6 +7,10 @@ import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import com.ia.core.view.manager.ListBaseManager;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Cliente para {@link RoleDTO}

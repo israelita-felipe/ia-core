@@ -1,10 +1,9 @@
 package com.ia.core.view.components.editor.viewModel;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.IViewModel;
-
 import lombok.Getter;
+
+import java.io.Serializable;
 
 /**
  * Implementação padrão do View Model de um editor

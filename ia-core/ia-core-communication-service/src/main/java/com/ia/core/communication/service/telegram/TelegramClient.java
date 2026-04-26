@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.telegram;
 
-import java.util.Map;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Map;
 
 /**
  * Cliente Feign para API do Telegram.
@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Israel Araújo
  * @see <a href="https://core.telegram.org/bots/api">Telegram Bot API</a>
  */
-@FeignClient(name = "telegramClient", url = "${telegram.api.url:https://api.telegram.org}",
-             configuration = TelegramFeignConfig.class)
+@FeignClient(name = "telegramClient", url = "${telegram.api.url:https://api.telegram.org}")
 public interface TelegramClient {
 
   /**

@@ -1,14 +1,9 @@
 package com.ia.core.security.service.model.privilege;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.privilege.PrivilegeOperation;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
@@ -16,6 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder(toBuilder = true)

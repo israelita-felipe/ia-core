@@ -1,9 +1,9 @@
 package com.ia.core.service.exception;
 
-import java.util.stream.Stream;
-
 import com.ia.core.service.validators.ValidationError;
 import com.ia.core.service.validators.ValidationResult;
+
+import java.util.stream.Stream;
 
 /**
  * Exception thrown when validation fails.

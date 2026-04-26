@@ -1,9 +1,5 @@
 package com.ia.core.security.view.functionality;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
@@ -11,8 +7,11 @@ import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.ia.core.view.exception.ValidationException;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

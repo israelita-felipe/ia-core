@@ -1,9 +1,9 @@
 package com.ia.core.view.manager.collection;
 
-import java.io.Serializable;
-
 import com.ia.core.view.client.BaseClient;
 import com.ia.core.view.manager.DefaultBaseManagerConfig;
+
+import java.io.Serializable;
 
 /**
  *

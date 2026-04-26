@@ -1,9 +1,9 @@
 package com.ia.core.service.mapper;
 
-import java.io.Serializable;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
+
+import java.io.Serializable;
 
 /**
  * Mapeador bidirecional {@link BaseEntity} <-> {@link DTO} utilizando

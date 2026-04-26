@@ -1,11 +1,11 @@
 package com.ia.core.quartz.service.model.recorrencia.dto;
 
+import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
+import org.dmfs.rfc5545.recur.RecurrenceRule;
+
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
-
-import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
-import org.dmfs.rfc5545.recur.RecurrenceRule;
 
 public class RecurrenceRuleAdapter {
 

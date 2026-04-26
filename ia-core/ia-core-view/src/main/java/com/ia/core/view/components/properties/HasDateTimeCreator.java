@@ -1,10 +1,5 @@
 package com.ia.core.view.components.properties;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.Month;
-import java.util.stream.Stream;
-
 import com.ia.core.model.util.FormatUtils;
 import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.service.util.ShortDayOfWeek;
@@ -12,6 +7,11 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datepicker.DatePicker.DatePickerI18n;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.timepicker.TimePicker;
+
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.Month;
+import java.util.stream.Stream;
 
 /**
  * Cria data de tempo

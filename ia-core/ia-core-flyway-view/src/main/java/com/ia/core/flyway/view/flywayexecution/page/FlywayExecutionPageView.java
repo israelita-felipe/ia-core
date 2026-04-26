@@ -1,8 +1,5 @@
 package com.ia.core.flyway.view.flywayexecution.page;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.flyway.view.flywayexecution.list.FlywayExecutionListView;
 import com.ia.core.view.components.form.IFormView;
@@ -11,6 +8,9 @@ import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.PageView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * PageView para exibir o histórico de execuções do Flyway.

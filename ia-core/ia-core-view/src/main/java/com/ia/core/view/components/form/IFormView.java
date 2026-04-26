@@ -1,24 +1,16 @@
 package com.ia.core.view.components.form;
 
-import java.io.Serializable;
-
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-import com.ia.core.view.components.properties.HasBinder;
-import com.ia.core.view.components.properties.HasCheckBoxCreator;
-import com.ia.core.view.components.properties.HasComboBoxCreator;
-import com.ia.core.view.components.properties.HasDateTimeCreator;
-import com.ia.core.view.components.properties.HasId;
-import com.ia.core.view.components.properties.HasPasswordCreator;
-import com.ia.core.view.components.properties.HasTextAreaCreator;
-import com.ia.core.view.components.properties.HasTextFieldCreator;
-import com.ia.core.view.components.properties.HasUploaderCreator;
+import com.ia.core.view.components.properties.*;
 import com.ia.core.view.properties.AutoCastable;
 import com.ia.core.view.properties.HasTabSheetCreator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
+
+import java.io.Serializable;
 
 /**
  * Contrato que define o comportamento de um formulário

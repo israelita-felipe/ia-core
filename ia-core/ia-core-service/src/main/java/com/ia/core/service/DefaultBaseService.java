@@ -1,10 +1,5 @@
 package com.ia.core.service;
 
-import java.util.List;
-
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-
 import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -16,8 +11,11 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.usecase.CrudUseCase;
 import com.ia.core.service.validators.IServiceValidator;
-
 import lombok.Getter;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Classe base de um serviço com todas as funcionalidades de um CRUD.

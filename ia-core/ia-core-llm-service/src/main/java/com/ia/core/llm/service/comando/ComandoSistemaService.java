@@ -4,7 +4,6 @@ import com.ia.core.llm.model.comando.ComandoSistema;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.llm.service.model.comando.ComandoSistemaUseCase;
 import com.ia.core.service.DefaultBaseService;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**

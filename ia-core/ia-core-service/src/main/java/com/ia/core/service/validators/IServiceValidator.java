@@ -1,10 +1,10 @@
 package com.ia.core.service.validators;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import com.ia.core.service.exception.ValidationException;
 import com.ia.core.service.translator.Translator;
+
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Serviço do validação

@@ -1,14 +1,5 @@
 package com.ia.core.view.utils;
 
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
 import com.ia.core.report.AbstractJasperReport;
 import com.ia.core.report.AbstractJasperReport.ExportType;
 import com.ia.core.report.DynamicJasperJsonObjectStreamReport;
@@ -26,8 +17,12 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.streams.DownloadHandler;
 import com.vaadin.flow.server.streams.DownloadResponse;
 import com.vaadin.flow.server.streams.InputStreamDownloadHandler;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayInputStream;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author Israel Araújo

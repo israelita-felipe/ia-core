@@ -1,13 +1,12 @@
 package com.ia.core.security.view.components.login;
 
-import java.util.function.Consumer;
-
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.function.Consumer;
 
 /**
  * @author Israel Araújo

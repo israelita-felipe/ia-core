@@ -1,16 +1,16 @@
 package com.ia.core.security.view.privilege.operation.context.form;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.service.model.authorization.ContextManager.ContextDefinition;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeOperationContextDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.ia.core.security.view.role.RoleManager;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * View Model formulário de usuário

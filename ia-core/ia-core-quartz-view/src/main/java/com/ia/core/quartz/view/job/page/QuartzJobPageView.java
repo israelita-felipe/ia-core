@@ -1,8 +1,5 @@
 package com.ia.core.quartz.view.job.page;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.quartz.view.job.QuartzJobManager;
 import com.ia.core.quartz.view.job.form.QuartzJobFormView;
@@ -14,6 +11,9 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.PageView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import com.vaadin.flow.component.icon.VaadinIcon;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Página principal para visualização de Jobs do Quartz.

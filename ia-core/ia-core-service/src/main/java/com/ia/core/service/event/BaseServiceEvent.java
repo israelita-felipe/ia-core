@@ -1,8 +1,7 @@
 package com.ia.core.service.event;
 
-import org.springframework.context.ApplicationEvent;
-
 import com.ia.core.service.dto.DTO;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * Evento de domínio genérico para serviços.
@@ -11,7 +10,7 @@ import com.ia.core.service.dto.DTO;
  * serviço do sistema quando operações de negócio significativas ocorrem.
  * O evento carrega o DTO afetado e o tipo da operação realizada.
  * </p>
- * 
+ *
  * @param <D> Tipo do DTO que gerou o evento
  * @author Israel Araújo
  */
@@ -25,7 +24,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Construtor para evento sem dados adicionais.
-   * 
+   *
    * @param source    Origem do evento (normalmente o serviço)
    * @param dto       DTO afetado pela operação
    * @param eventType Tipo de evento
@@ -39,7 +38,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Construtor para evento com dados adicionais.
-   * 
+   *
    * @param source    Origem do evento
    * @param dto       DTO afetado
    * @param eventType Tipo de evento
@@ -54,7 +53,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Retorna o DTO afetado pelo evento.
-   * 
+   *
    * @return DTO
    */
   public D getDto() {
@@ -63,7 +62,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Retorna o tipo do evento.
-   * 
+   *
    * @return Tipo do evento
    */
   public EventType getEventType() {
@@ -72,7 +71,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Retorna dados adicionais do evento, se houver.
-   * 
+   *
    * @return Dados adicionais ou null
    */
   public Object getData() {
@@ -81,7 +80,7 @@ public class BaseServiceEvent<D extends DTO<?>> extends ApplicationEvent {
 
   /**
    * Verifica se o evento possui dados adicionais.
-   * 
+   *
    * @return true se possui dados
    */
   public boolean hasData() {

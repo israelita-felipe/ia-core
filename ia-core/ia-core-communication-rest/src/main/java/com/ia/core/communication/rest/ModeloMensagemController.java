@@ -1,22 +1,16 @@
 package com.ia.core.communication.rest;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ia.core.communication.model.ModeloMensagem;
+import com.ia.core.communication.model.mensagem.ModeloMensagem;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.communication.service.modelomensagem.ModeloMensagemService;
 import com.ia.core.rest.control.DefaultBaseController;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * REST Controller para operações de modelos de mensagens.
@@ -27,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "ModeloMensagem",
      description = "Gerenciamento de modelos de mensagens")
 @RestController
-@RequestMapping("/api/${api.version}/modelo-mensagem")
+@RequestMapping("/api/${api.version}/modelo/mensagem")
 public class ModeloMensagemController
   extends DefaultBaseController<ModeloMensagem, ModeloMensagemDTO> {
 

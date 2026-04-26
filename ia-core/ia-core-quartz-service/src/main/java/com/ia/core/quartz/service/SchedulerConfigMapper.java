@@ -1,10 +1,9 @@
 package com.ia.core.quartz.service;
 
-import org.mapstruct.Mapper;
-
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.service.mapper.BaseEntityMapper;
+import org.mapstruct.Mapper;
 
 /**
  * {@link Mapper} de {@link SchedulerConfig} para {@link SchedulerConfigDTO}

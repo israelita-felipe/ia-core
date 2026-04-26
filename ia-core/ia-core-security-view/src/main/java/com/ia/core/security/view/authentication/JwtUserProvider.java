@@ -1,14 +1,14 @@
 package com.ia.core.security.view.authentication;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import com.ia.core.security.model.authentication.JwtManager;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.model.user.UserPrivilegeDTO;
 import com.ia.core.security.view.login.UserProvider;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author Israel Araújo

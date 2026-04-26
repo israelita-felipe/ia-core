@@ -1,8 +1,8 @@
 package com.ia.core.service.usecase;
 
-import java.io.Serializable;
-
 import com.ia.core.service.exception.ServiceException;
+
+import java.io.Serializable;
 
 /**
  * Interface de Use Case para operações de CRUD.

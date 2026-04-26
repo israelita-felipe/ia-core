@@ -1,9 +1,8 @@
 package com.ia.core.service.attachment;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
 import com.ia.core.model.attachment.Attachment;
 import com.ia.core.service.repository.BaseEntityRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @author Israel Araújo

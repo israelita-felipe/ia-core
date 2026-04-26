@@ -1,9 +1,9 @@
 package com.ia.core.communication.service.email;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.mail.javamail.JavaMailSender;
-
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 
 /**
  * Configuração para serviço de E-mail.
@@ -12,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties(prefix = "email")
+@Configuration
 public class EmailConfig {
   private String host = "smtp.gmail.com";
   private int port = 587;

@@ -1,13 +1,13 @@
 package com.ia.core.communication.service.mensagem;
 
-import java.util.Optional;
-
+import com.ia.core.communication.model.mensagem.Mensagem;
+import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import com.ia.core.communication.model.Mensagem;
-import com.ia.core.service.repository.BaseEntityRepository;
+import java.util.Optional;
 
 /**
  * Repository para Mensagem.
@@ -17,7 +17,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
  *
  * @author Israel Araújo
  */
-@NoRepositoryBean
+@Repository
 public interface MensagemRepository
   extends BaseEntityRepository<Mensagem> {
   /**

@@ -1,13 +1,13 @@
 package com.ia.core.view.components.filter.viewModel;
 
-import java.util.Collection;
-import java.util.Map;
-
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.view.components.IViewModel;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.ia.core.view.properties.HasModel;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Interface que define o viewModel de um filtro

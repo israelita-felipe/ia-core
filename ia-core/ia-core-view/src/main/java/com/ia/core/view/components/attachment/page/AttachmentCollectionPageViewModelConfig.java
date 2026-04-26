@@ -6,7 +6,6 @@ import com.ia.core.view.components.attachment.list.AttachmentListViewModelConfig
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModelConfig;
 import com.ia.core.view.manager.AttachmentManager;
 import com.ia.core.view.manager.collection.DefaultCollectionBaseManager;
-
 import lombok.Getter;
 
 /**
