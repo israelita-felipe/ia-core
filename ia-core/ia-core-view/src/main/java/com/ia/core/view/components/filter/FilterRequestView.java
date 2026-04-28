@@ -91,7 +91,7 @@ public class FilterRequestView
   /**
    * Realiza o binding no campo
    */
-  protected void bindCampo() {
+  protected void bindField() {
     List<FilterProperty> items = viewModel.getFilterMap().keySet().stream()
         .distinct().toList();
     ComboBox<FilterProperty> combo = createFieldsComboBox($(FilterRequestTranslator.KEY),
@@ -122,7 +122,7 @@ public class FilterRequestView
   /**
    * Realiza o binding na operação
    */
-  protected void bindOperacao() {
+  protected void bindOperator() {
     ComboBox<OperatorDTO> combo = createOperatorsComboBox($(OperatorDTO.class
         .getCanonicalName()), viewModel.getFilterMap().values().stream()
             .flatMap(colecao -> colecao.stream())
@@ -197,8 +197,8 @@ public class FilterRequestView
     layout.getStyle().setBorderRadius("5px");
     add(layout);
     bindNegacao();
-    bindCampo();
-    bindOperacao();
+    bindField();
+    bindOperator();
   }
 
   /**

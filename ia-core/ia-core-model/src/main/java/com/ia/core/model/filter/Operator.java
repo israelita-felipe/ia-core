@@ -22,7 +22,9 @@ import java.util.Objects;
  * @see FieldType
  * @since 1.0.0
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public enum Operator {
+
 
   /**
    * Operador de igualdade. Compara se o valor do campo é igual ao valor fornecido.
@@ -179,10 +181,7 @@ public enum Operator {
       if (request.isNegate()) {
         newPredicate = newPredicate.not();
       }
-      if (disjunction) {
-        return cb.and(newPredicate, predicate);
-      }
-      return cb.or(newPredicate, predicate);
+      return combinePredicate(newPredicate, predicate, disjunction, cb);
     }
   },
   /**
@@ -235,13 +234,11 @@ public enum Operator {
       if (request.isNegate()) {
         newPredicate = newPredicate.not();
       }
-      if (disjunction) {
-        return cb.and(newPredicate, predicate);
-      } else {
-        return cb.or(newPredicate, predicate);
-      }
+      return combinePredicate(newPredicate, predicate, disjunction, cb);
     }
   };
+  /**
+   * Operador de menor ou igual.
 
   /**
    * Constrói o predicado JPA para este operador.
@@ -282,4 +279,15 @@ public enum Operator {
     return path;
   }
 
+    /**
+     * Combines predicates based on disjunction flag.
+     * If disjunction is true, uses AND; otherwise uses OR.
+     */
+    private static <T> Predicate combinePredicate(Predicate newPredicate,
+                                                  Predicate predicate,
+                                                  boolean disjunction,
+                                                  CriteriaBuilder cb) {
+        return disjunction ? cb.and(newPredicate, predicate)
+            : cb.or(newPredicate, predicate);
+    }
 }

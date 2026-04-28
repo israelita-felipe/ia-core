@@ -159,10 +159,9 @@ public abstract class BaseEntity
     if (id == null) {
       return this == obj;
     }
-    if (!(getClass().isInstance(obj))) {
+    if (!(obj instanceof BaseEntity other)) {
       return false;
     }
-    BaseEntity other = (BaseEntity) obj;
     return Objects.equals(id, other.id);
   }
 

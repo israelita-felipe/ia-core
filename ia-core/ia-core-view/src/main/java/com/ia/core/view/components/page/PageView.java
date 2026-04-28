@@ -59,9 +59,9 @@ public abstract class PageView<T extends Serializable>
   private IPageViewModel<T> viewModel;
 
   /** Mapa de botão x ação */
-  private Map<PageAction<T>, Button> toolBarMap = new LinkedHashMap<>();
-  /** Papa de grupos da barra de tarefas */
-  private Map<String, HasComponents> tabBarMap = new LinkedHashMap<>();
+  private Map<PageAction<T>, Button> actionButtonsMap = new LinkedHashMap<>();
+  /** Mapa de grupos da barra de tarefas */
+  private Map<String, HasComponents> tabGroupsMap = new LinkedHashMap<>();
 
   /** Barra de tarefas */
   private TabSheet tabBar;
@@ -90,7 +90,7 @@ public abstract class PageView<T extends Serializable>
   @Override
   public void addAction(PageAction<T> action) {
     Button button = createActionButton(action);
-    toolBarMap.put(action, button);
+    actionButtonsMap.put(action, button);
   }
 
   @Override
@@ -205,7 +205,7 @@ public abstract class PageView<T extends Serializable>
   public TabSheet createToolBar() {
     this.tabBar = createTabSheet();
     this.tabBar.setWidthFull();
-    this.toolBarMap.entrySet().forEach(entry -> {
+    this.actionButtonsMap.entrySet().forEach(entry -> {
       String group = entry.getKey().getGroup();
       Button button = entry.getValue();
       addPageButton(group, button);
@@ -220,10 +220,10 @@ public abstract class PageView<T extends Serializable>
    * @param component componente que deve ser adicionado
    */
   public void addToolBarComponent(String group, Component component) {
-    HasComponents hasComponent = this.tabBarMap.get(group);
+    HasComponents hasComponent = this.tabGroupsMap.get(group);
     if (hasComponent == null) {
       hasComponent = new FlexLayout();
-      this.tabBarMap.put(group, hasComponent);
+      this.tabGroupsMap.put(group, hasComponent);
       createTab(tabBar, $(group), (Component) hasComponent);
     }
     hasComponent.add(component);
@@ -287,7 +287,7 @@ public abstract class PageView<T extends Serializable>
    * @return {@link Collection} de {@link EditorAction} da página
    */
   public Collection<EditorAction<T>> createDefaultEditorActions() {
-    return Arrays.asList(createSalvarAction());
+    return Arrays.asList(createSaveAction());
   }
 
   @Override
@@ -495,7 +495,7 @@ public abstract class PageView<T extends Serializable>
   /**
    * @return {@link EditorAction} com a ação de salvar
    */
-  private EditorAction<T> createSalvarAction() {
+  public EditorAction<T> createSaveAction() {
     return EditorAction.<T> builder().icon(VaadinIcon.CHECK)
         .label($("Salvar")).enableFunction(this::canSave).action(this::save)
         .build();
@@ -674,7 +674,7 @@ public abstract class PageView<T extends Serializable>
 
   @Override
   public void refreshButtons() {
-    toolBarMap.entrySet().forEach(entry -> {
+    actionButtonsMap.entrySet().forEach(entry -> {
       refreshButton(entry.getKey(), entry.getValue());
     });
   }

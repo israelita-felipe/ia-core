@@ -84,6 +84,8 @@ public final class TSID
   static final int RANDOM_BITS = 22;
   /** Mask to random bits */
   static final int RANDOM_MASK = 0x003fffff;
+  /** Minimum value for unsigned long comparison */
+  static final long UNSIGNED_MIN_VALUE = 0x8000000000000000L;
   /** Alphanumeric characteres uppercase */
   private static final char[] ALPHABET_UPPERCASE = //
       { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
@@ -468,7 +470,7 @@ public final class TSID
   public int compareTo(TSID that) {
 
     // used to compare as UNSIGNED longs
-    final long min = 0x8000000000000000L;
+    final long min = UNSIGNED_MIN_VALUE;
 
     final long a = this.number + min;
     final long b = that.number + min;

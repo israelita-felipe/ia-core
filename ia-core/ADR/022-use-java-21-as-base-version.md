@@ -1,4 +1,4 @@
-# ADR-022: Usar Java 17 como Versão Base do Projeto
+# ADR-022: Usar Java 21 como Versão Base do Projeto
 
 ## Status
 
@@ -130,8 +130,8 @@ String json = """
 """.formatted(pessoa.getNome(), pessoa.getTipo());
 
 String sql = """
-    SELECT p.id, p.nome 
-    FROM pessoa p 
+    SELECT p.id, p.nome
+    FROM pessoa p
     WHERE p.ativo = true
     """;
 ```

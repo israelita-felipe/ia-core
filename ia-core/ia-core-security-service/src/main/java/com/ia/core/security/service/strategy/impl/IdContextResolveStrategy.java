@@ -5,8 +5,8 @@ import com.ia.core.security.service.strategy.ContextResolveStrategy;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -78,7 +78,7 @@ public class IdContextResolveStrategy
     try {
       List<String> fromJson = JsonUtil
           .fromJson(serviceContextValue,
-                    new ParameterizedTypeReference<List<String>>() {
+                    new TypeToken<List<String>>() {
                     }.getType());
 
       return fromJson.stream().collect(Collectors.toSet())
