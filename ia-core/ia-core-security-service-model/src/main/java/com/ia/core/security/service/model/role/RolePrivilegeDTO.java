@@ -15,6 +15,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+/**
+ * Classe que representa o objeto de transferência de dados para role privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegeDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Data
 @SuperBuilder(toBuilder = true)

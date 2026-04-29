@@ -15,6 +15,15 @@ import java.util.Set;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o objeto de transferência de dados para log operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)

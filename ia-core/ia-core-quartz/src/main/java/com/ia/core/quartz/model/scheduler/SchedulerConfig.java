@@ -25,6 +25,15 @@ import lombok.experimental.SuperBuilder;
        schema = SchedulerConfig.SCHEMA_NAME)
 @NamedEntityGraph(name = "SchedulerConfig.withPeriodicidade",
                   attributeNodes = @NamedAttributeNode("periodicidade"))
+/**
+ * Classe que representa as configurações para scheduler.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder

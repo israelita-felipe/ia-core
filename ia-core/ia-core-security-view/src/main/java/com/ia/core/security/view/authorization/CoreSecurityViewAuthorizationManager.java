@@ -6,9 +6,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 /**
- * @author Israel Araújo
+ * Gerenciador de core security view authorization.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreSecurityViewAuthorizationManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface CoreSecurityViewAuthorizationManager
   extends CoreSecurityAuthorizationManager {

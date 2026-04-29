@@ -17,6 +17,7 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = QuartzJobClient.NOME, url = QuartzJobClient.URL)
 public interface QuartzJobClient
   extends DefaultBaseClient<QuartzJobDTO> {

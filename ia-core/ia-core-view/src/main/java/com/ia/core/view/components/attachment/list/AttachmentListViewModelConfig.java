@@ -9,6 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  *
  */
+/**
+ * Classe de configuração para attachment list view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AttachmentListViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class AttachmentListViewModelConfig<T extends AttachmentDTO<?>>
   extends ListViewModelConfig<T> {
 

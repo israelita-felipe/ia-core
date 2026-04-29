@@ -10,6 +10,15 @@ import org.mapstruct.Mapper;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o mapeamento de dados para scheduler config.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigMapper
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Mapper(componentModel = "spring", uses = { PeriodicidadeMapper.class })
 public interface SchedulerConfigMapper
   extends BaseEntityMapper<SchedulerConfig, SchedulerConfigDTO> {

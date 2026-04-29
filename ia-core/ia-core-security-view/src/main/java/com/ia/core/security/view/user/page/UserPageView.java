@@ -19,9 +19,14 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de user page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPageView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class UserPageView
   extends EntityPageView<UserDTO> {

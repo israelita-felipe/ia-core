@@ -14,6 +14,15 @@ import java.util.HashSet;
 @Entity
 @Table(name = PrivilegeOperation.TABLE_NAME,
        schema = PrivilegeOperation.SCHEMA_NAME)
+/**
+ * Classe que representa a entidade de domínio privilege operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperation
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder

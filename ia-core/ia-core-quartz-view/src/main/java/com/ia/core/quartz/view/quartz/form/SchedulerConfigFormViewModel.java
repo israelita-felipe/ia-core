@@ -17,6 +17,16 @@ import java.util.Collection;
 /**
  *
  */
+/**
+ * Model de dados para a view de scheduler config form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigFormViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class SchedulerConfigFormViewModel
   extends FormViewModel<SchedulerConfigDTO> {
   @Getter

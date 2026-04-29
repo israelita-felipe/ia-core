@@ -10,6 +10,15 @@ import java.io.Serializable;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio authentication request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuthenticationRequest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

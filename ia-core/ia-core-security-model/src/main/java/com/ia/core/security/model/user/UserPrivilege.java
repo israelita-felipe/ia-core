@@ -11,6 +11,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+/**
+ * Classe que representa a entidade de domínio user privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilege
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Entity
 @Table(name = UserPrivilege.TABLE_NAME, schema = UserPrivilege.SCHEMA_NAME)

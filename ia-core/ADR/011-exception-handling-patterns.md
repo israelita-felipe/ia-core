@@ -137,7 +137,7 @@ public static final String ERROR_INTERNAL = "error.internal";
 
 ## Detalhamento Técnico
 
-### Hierarquia de Classes
+### Hierarquia de Classes (Atualizada)
 
 ```
 Throwable
@@ -148,6 +148,57 @@ Throwable
                 ├── ValidationException
                 └── BusinessException
 ```
+
+### Implementação Real no Projeto
+
+```java
+// DomainException - classe base
+public abstract class DomainException extends RuntimeException {
+    private final String errorCode;
+
+    protected DomainException(String message) {
+        super(message);
+        this.errorCode = determineErrorCode();
+    }
+
+    private String determineErrorCode() {
+        String className = getClass().getSimpleName();
+        return className.replaceAll("(?<!^)(?=[A-Z])", "_").toUpperCase();
+    }
+}
+
+// ValidationException - para erros de validação
+public class ValidationException extends DomainException {
+    private final ValidationResult result;
+
+    public ValidationException(ValidationResult result) {
+        super(buildMessage(result));
+        this.result = result;
+    }
+}
+
+// BusinessException - para regras de negócio
+public class BusinessException extends DomainException {
+    private final String code;
+
+    public BusinessException(String code, String message) {
+        super(message);
+        this.code = code;
+    }
+}
+
+// ResourceNotFoundException - para entidades não encontradas
+public class ResourceNotFoundException extends DomainException {
+    public ResourceNotFoundException(String entity, Object id) {
+        super(String.format("%s não encontrado com id: %s", entity, id));
+    }
+}
+```
+
+### Ver ADRs Relacionados
+
+- [ADR-018: Usar Business Rule Chain](018-use-business-rule-chain-pattern.md)
+- [ADR-019: Usar Service Validator](019-use-service-validator-pattern.md)
 
 ### Mapeamento para HTTP Status
 
@@ -218,7 +269,7 @@ public class CoreRestControllerAdvice {
     public ResponseEntity<ErrorResponse> handleAuthenticationException(
             AuthenticationException ex, WebRequest request) {
         String traceId = generateTraceId();
-        
+
         ErrorResponse error = ErrorResponse.of(
             HttpStatus.UNAUTHORIZED.value(),
             RestErrorCode.AUTHENTICATION_ERROR.getCode(),

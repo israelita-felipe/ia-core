@@ -6,6 +6,16 @@ import org.springframework.ai.chat.model.ChatModel;
 /**
  *
  */
+/**
+ * Serviço de negócio para gerenciamento de core o w l transformation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreOWLTransformationService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public interface CoreOWLTransformationService {
 
   /**

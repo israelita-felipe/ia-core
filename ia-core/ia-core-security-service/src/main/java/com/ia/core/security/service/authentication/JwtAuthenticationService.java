@@ -13,9 +13,14 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-
 /**
- * @author Israel Araújo
+ * Serviço de negócio para gerenciamento de jwt authentication.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JwtAuthenticationService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface JwtAuthenticationService
   extends AuthenticationService<AuthenticationRequest> {

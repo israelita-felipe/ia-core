@@ -10,10 +10,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
- * @author Israel Araújo
- * @return
+ * Enumeração que representa os valores possíveis para abstract jasper report.
+ * <p>
+ * Define os valores possíveis para AbstractJasperReport no sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public abstract class AbstractJasperReport<T> {
 

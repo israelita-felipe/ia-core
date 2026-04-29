@@ -10,9 +10,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
- * @author Israel Araújo
+ * Entidade de domínio que representa user search request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserSearchRequest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 class UserSearchRequest
   extends SearchRequestDTO {

@@ -19,6 +19,16 @@ import java.util.stream.Stream;
 /**
  *
  */
+/**
+ * Classe responsável por dynamic jasper object array stream report.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DynamicJasperObjectArrayStreamReport
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class DynamicJasperObjectArrayStreamReport
   extends AbstractJasperReport<Supplier<Stream<Object[]>>> {
 

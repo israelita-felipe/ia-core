@@ -12,6 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+/**
+ * Enumeração que representa os serviços de negócio para l l m communicator.
+ * <p>
+ * Define os valores possíveis para LLMCommunicator no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Slf4j
 @Component

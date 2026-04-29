@@ -13,8 +13,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para comando sistema service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaServiceConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class ComandoSistemaServiceConfig
   extends DefaultBaseServiceConfig<ComandoSistema, ComandoSistemaDTO> {

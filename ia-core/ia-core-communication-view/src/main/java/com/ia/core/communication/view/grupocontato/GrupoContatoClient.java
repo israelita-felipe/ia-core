@@ -13,6 +13,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @see DefaultBaseClient
  */
+
 @FeignClient(name = GrupoContatoClient.NOME, url = GrupoContatoClient.URL)
 public interface GrupoContatoClient extends DefaultBaseClient<GrupoContatoDTO> {
 

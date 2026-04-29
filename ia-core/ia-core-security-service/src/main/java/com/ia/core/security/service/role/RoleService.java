@@ -17,10 +17,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 /**
- * @author Israel Araújo
+ * Serviço de negócio para gerenciamento de role.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RoleService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
+
 @Service
 public class RoleService
   extends DefaultSecuredBaseService<Role, RoleDTO>

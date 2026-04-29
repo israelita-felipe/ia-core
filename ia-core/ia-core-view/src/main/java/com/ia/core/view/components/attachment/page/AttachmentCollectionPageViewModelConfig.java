@@ -11,6 +11,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para attachment collection page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AttachmentCollectionPageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class AttachmentCollectionPageViewModelConfig<T extends AttachmentDTO<?>>
   extends CollectionPageViewModelConfig<T> {
   /** Serviço de persistência de aqruivos */

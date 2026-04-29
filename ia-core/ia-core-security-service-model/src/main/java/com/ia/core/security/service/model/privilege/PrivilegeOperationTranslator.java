@@ -5,6 +5,15 @@ package com.ia.core.security.service.model.privilege;
  * 
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio privilege operation translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class PrivilegeOperationTranslator {
 

@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = LogOperationClient.NOME, url = LogOperationClient.URL)
 public interface LogOperationClient
   extends DefaultBaseClient<LogOperationDTO> {

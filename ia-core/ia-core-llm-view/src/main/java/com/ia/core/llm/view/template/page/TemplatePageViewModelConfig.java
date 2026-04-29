@@ -8,7 +8,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
 /**
+ * Classe que representa as configurações para template page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplatePageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -19,7 +25,8 @@ public class TemplatePageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public TemplatePageViewModelConfig(DefaultBaseManager<TemplateDTO> service,
+
+public TemplatePageViewModelConfig(DefaultBaseManager<TemplateDTO> service,
                                      LogOperationManager logOperationService) {
     super(service, logOperationService);
   }

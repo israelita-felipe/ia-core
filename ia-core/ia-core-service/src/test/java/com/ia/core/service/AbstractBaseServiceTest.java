@@ -25,6 +25,15 @@ import static org.mockito.Mockito.when;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para abstract base service test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AbstractBaseServiceTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AbstractBaseService")
 class AbstractBaseServiceTest {

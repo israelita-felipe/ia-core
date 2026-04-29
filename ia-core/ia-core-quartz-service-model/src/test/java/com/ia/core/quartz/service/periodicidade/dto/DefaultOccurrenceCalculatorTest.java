@@ -25,6 +25,15 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio default occurrence calculator test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DefaultOccurrenceCalculatorTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("OccurrenceCalculator")
 class DefaultOccurrenceCalculatorTest {
 

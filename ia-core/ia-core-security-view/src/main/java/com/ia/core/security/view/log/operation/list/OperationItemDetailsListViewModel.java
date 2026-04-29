@@ -2,9 +2,14 @@ package com.ia.core.security.view.log.operation.list;
 
 import com.ia.core.security.service.model.log.operation.OperationItemDetails;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de operation item details list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OperationItemDetailsListViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class OperationItemDetailsListViewModel
   extends ListViewModel<OperationItemDetails> {

@@ -7,6 +7,15 @@ import jakarta.persistence.Converter;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o conversor de dados para privilege type.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeTypeConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Converter(autoApply = true)
 public class PrivilegeTypeConverter
   implements AttributeConverter<PrivilegeType, Integer> {

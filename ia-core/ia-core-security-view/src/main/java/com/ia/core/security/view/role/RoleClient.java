@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = RoleClient.NOME, url = RoleClient.URL)
 public interface RoleClient
   extends DefaultBaseClient<RoleDTO> {

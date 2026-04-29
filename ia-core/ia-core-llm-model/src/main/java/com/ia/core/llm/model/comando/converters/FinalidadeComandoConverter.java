@@ -5,9 +5,13 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 /**
- * Convertte um {@link FinalidadeComandoEnum} para {@link String}
+ * Converte um {@link FinalidadeComandoEnum} para {@link String}.
+ * <p>
+ * Responsável por gerenciar a conversão entre o enum de finalidade de comando
+ * e sua representação no banco de dados.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
 @Converter(autoApply = true)
 public class FinalidadeComandoConverter

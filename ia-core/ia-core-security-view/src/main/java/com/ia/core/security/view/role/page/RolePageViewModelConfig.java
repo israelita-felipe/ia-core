@@ -16,7 +16,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para role page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -39,7 +45,8 @@ public class RolePageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public RolePageViewModelConfig(RoleManager roleService,
+
+public RolePageViewModelConfig(RoleManager roleService,
                                  UserManager userService,
                                  PrivilegeManager privilegeService,
                                  List<HasContext> hasContext,

@@ -11,6 +11,16 @@ import java.io.Serializable;
 /**
  *
  */
+/**
+ * Classe de configuração para entity page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EntityPageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class EntityPageViewModelConfig<T extends AbstractBaseEntityDTO<? extends Serializable> & Serializable>
   extends PageViewModelConfig<T> {
 

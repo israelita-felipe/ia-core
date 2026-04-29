@@ -10,6 +10,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
+/**
+ * Classe que representa a entidade de domínio user.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a User
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Entity
 @Table(name = User.TABLE_NAME, schema = User.SCHEMA_NAME)

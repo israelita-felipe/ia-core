@@ -6,9 +6,13 @@ import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
 /**
- * {@link Mapper} de {@link Template} para {@link TemplateDTO}
+ * Mapper para conversão entre {@link Template} e {@link TemplateDTO}.
+ * <p>
+ * Responsável por gerenciar o mapeamento entre a entidade Template
+ * e seu respectivo DTO.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
 @Mapper(componentModel = "spring", uses = { TemplateParameterMapper.class })
 public interface TemplateMapper

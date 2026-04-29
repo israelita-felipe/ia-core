@@ -22,7 +22,7 @@ public interface HasVersion<T> {
   /**
    * Versão default utilizada quando uma nova entidade é criada.
    */
-  public static final Long DEFAULT_VERSION = 1l;
+  public static final Long DEFAULT_VERSION = 1L;
 
   /**
    * Obtém a versão atual da entidade para controle de lock otimista.

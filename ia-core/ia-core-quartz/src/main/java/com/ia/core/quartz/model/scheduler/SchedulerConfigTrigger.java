@@ -27,6 +27,15 @@ import java.util.UUID;
 @Entity
 @Table(name = SchedulerConfigTrigger.TABLE_NAME,
        schema = SchedulerConfigTrigger.SCHEMA_NAME)
+/**
+ * Classe que representa a entidade de domínio scheduler config trigger.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTrigger
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder

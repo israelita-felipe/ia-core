@@ -15,6 +15,15 @@ import org.springframework.stereotype.Component;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o modelo de dados para a view de contato mensagem page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemPageViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @UIScope
 @Component
 public class ContatoMensagemPageViewModel

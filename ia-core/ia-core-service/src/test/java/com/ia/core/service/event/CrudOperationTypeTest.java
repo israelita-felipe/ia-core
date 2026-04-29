@@ -11,6 +11,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para crud operation type test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CrudOperationTypeTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("CrudOperationType")
 class CrudOperationTypeTest {
 

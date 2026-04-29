@@ -7,9 +7,14 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
-
 /**
- * @author Israel Araújo
+ * Classe de configuração para l l m.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LLMConfiguration
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class LLMConfiguration {
 

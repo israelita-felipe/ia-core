@@ -10,6 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import java.time.*;
 import java.util.*;
+/**
+ * Classe que representa a entidade de domínio lib recur occurrence calculator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LibRecurOccurrenceCalculator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public class LibRecurOccurrenceCalculator
   implements OccurrenceCalculator {

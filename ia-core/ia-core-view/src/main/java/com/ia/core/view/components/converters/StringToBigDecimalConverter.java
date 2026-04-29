@@ -9,6 +9,16 @@ import java.math.BigDecimal;
 /**
  *
  */
+/**
+ * Conversor de dados para string to big decimal.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a StringToBigDecimalConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class StringToBigDecimalConverter
   implements Converter<String, BigDecimal> {
 

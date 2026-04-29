@@ -13,14 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Serviço de validação de um objeto
+ * Classe que representa a validação de service.
  * <p>
- * Fornece estrutura base para validação usando BusinessRuleChain e
- * HasValidation. Subclasses podem adicionar regras de negócio através do
- * atributo businessRules.
- * </p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ServiceValidator
+ * dentro do sistema.
  *
- * @param <T> Tipo do objeto
+ * @author IA
+ * @since 1.0
  */
 @Slf4j
 public abstract class ServiceValidator<T extends Serializable>
@@ -40,7 +39,8 @@ public abstract class ServiceValidator<T extends Serializable>
    *
    * @param translator {@link Translator}
    */
-  public ServiceValidator(Translator translator) {
+
+public ServiceValidator(Translator translator) {
     super();
     this.translator = translator;
   }

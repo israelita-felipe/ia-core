@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
  * @author Israel Araújo
  * @see ModeloMensagemManager
  */
+
 @Component
 public class ModeloMensagemManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<ModeloMensagemDTO> {

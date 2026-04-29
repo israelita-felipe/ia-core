@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
  * @author Israel Araújo
  * @see GrupoContatoManager
  */
+
 @Component
 public class GrupoContatoManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<GrupoContatoDTO> {

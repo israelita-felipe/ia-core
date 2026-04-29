@@ -5,6 +5,15 @@ package com.ia.core.security.service.model.role;
  * 
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio role privilege translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegeTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class RolePrivilegeTranslator {
 

@@ -24,6 +24,15 @@ import org.springframework.stereotype.Service;
  * @author Israel Araújo
  * @see FlywayExecutionUseCase
  */
+/**
+ * Classe que representa o gerenciamento de flyway execution.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Service
 public class FlywayExecutionManager

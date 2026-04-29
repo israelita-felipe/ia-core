@@ -6,6 +6,16 @@ import java.util.function.Supplier;
 /**
  *
  */
+/**
+ * Gerenciador de context.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContextManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ContextManager {
   /** Coleção de contexto */
   private Map<String, Set<String>> context = new HashMap<>();

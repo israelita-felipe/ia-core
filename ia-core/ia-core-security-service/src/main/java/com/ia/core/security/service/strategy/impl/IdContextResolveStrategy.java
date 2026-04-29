@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Israel Araújo
  */
+
 @Component
 @Slf4j
 public class IdContextResolveStrategy
@@ -54,6 +56,9 @@ public class IdContextResolveStrategy
           .findAllById(values.stream().map(Long::valueOf).toList()).stream()
           .map(BaseEntity::getId).map(String::valueOf)
           .collect(Collectors.toSet());
+    } catch (NumberFormatException e) {
+      log.error("IDs com formato inválido: {}", e.getMessage());
+      return Collections.emptyList();
     } catch (Exception e) {
       log.error("Erro ao resolver contexto de ID", e);
       return Collections.emptyList();
@@ -81,8 +86,7 @@ public class IdContextResolveStrategy
                     new TypeToken<List<String>>() {
                     }.getType());
 
-      return fromJson.stream().collect(Collectors.toSet())
-          .contains(userContextValue);
+      return new HashSet<>(fromJson).contains(userContextValue);
     } catch (Exception e) {
       log.error("Erro ao validar correspondência de contexto de ID", e);
       return false;

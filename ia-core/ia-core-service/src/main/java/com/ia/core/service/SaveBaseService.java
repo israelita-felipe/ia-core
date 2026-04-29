@@ -119,21 +119,6 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
   }
 
   /**
-   * Determina o tipo de operação (CREATE ou UPDATE) com base nos DTOs.
-   * <p>
-   * Implementação que verifica se o DTO salvo extende AbstractBaseEntityDTO e
-   * tem ID.
-   * </p>
-   * <p>
-   * Para comportamento customizado, sobrescreva este método em sua
-   * implementação.
-   * </p>
-   *
-   * @param original DTO original antes do save
-   * @param saved    DTO salvo após o save
-   * @return Tipo de operação determined
-   */
-  /**
    * Determina o tipo de operação CRUD usando OperationTypeStrategy.
    * <p>
    * Este método usa a strategy para determinar se a operação é CREATE ou

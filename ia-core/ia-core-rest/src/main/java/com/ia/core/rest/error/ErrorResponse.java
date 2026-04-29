@@ -16,6 +16,7 @@ import java.util.Set;
  * Fornece estrutura consistente para comunicação de erros ao cliente.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
 @Getter
 @ToString
@@ -24,7 +25,7 @@ import java.util.Set;
 public class ErrorResponse {
 
   /**
-   * Timestamp do momento em que o erro ocorreu.
+   * Timestamp de quando o erro ocorreu.
    */
   private final Instant timestamp;
 

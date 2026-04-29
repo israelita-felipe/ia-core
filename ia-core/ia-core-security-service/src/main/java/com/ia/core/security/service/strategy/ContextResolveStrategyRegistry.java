@@ -19,6 +19,7 @@ import java.util.Objects;
  *
  * @author Israel Araújo
  */
+
 @Component
 @Slf4j
 public class ContextResolveStrategyRegistry {

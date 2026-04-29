@@ -6,9 +6,14 @@ import com.ia.core.security.view.log.operation.page.EntityPageViewModel;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de template page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplatePageViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class TemplatePageViewModel
   extends EntityPageViewModel<TemplateDTO> {

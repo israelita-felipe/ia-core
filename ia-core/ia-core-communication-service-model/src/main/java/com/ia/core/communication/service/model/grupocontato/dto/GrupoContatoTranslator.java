@@ -5,6 +5,15 @@ package com.ia.core.communication.service.model.grupocontato.dto;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio grupo contato translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class GrupoContatoTranslator {
   public static final class HELP {

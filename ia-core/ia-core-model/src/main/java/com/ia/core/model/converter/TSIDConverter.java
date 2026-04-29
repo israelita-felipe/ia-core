@@ -25,6 +25,15 @@ import jakarta.persistence.Converter;
  * @see AttributeConverter
  * @since 1.0.0
  */
+/**
+ * Classe que representa o conversor de dados para t s i d.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TSIDConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Converter(autoApply = true)
 public class TSIDConverter
   implements AttributeConverter<TSID, Long> {

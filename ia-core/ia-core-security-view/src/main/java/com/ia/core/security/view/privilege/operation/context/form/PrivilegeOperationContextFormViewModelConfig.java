@@ -12,6 +12,16 @@ import java.util.function.Supplier;
 /**
  *
  */
+/**
+ * Classe de configuração para privilege operation context form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationContextFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class PrivilegeOperationContextFormViewModelConfig
   extends FormViewModelConfig<PrivilegeOperationContextDTO> {
   @Getter

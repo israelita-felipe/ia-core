@@ -5,6 +5,15 @@ package com.ia.core.service.translator;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio core application translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreApplicationTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class CoreApplicationTranslator {
 

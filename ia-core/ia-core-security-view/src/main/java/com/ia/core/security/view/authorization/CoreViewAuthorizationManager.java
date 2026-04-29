@@ -7,6 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+/**
+ * Classe que representa o gerenciamento de core view authorization.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreViewAuthorizationManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Slf4j
 public abstract class CoreViewAuthorizationManager

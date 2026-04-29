@@ -9,9 +9,14 @@ import com.ia.core.security.view.login.UserProvider;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
-
 /**
- * @author Israel Araújo
+ * Provedor de jwt user.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JwtUserProvider
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class JwtUserProvider
   implements UserProvider<JwtAuthenticationResponseDTO> {

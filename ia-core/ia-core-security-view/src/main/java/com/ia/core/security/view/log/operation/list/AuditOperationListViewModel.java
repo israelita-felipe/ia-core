@@ -14,9 +14,14 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de audit operation list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuditOperationListViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class AuditOperationListViewModel
   extends ListViewModel<LogOperationDTO> {

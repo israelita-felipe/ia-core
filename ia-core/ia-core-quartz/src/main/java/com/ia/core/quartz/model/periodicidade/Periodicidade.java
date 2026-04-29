@@ -23,6 +23,7 @@ import java.util.Set;
  * @see Recorrencia
  * @see ExclusaoRecorrencia
  */
+
 @Entity
 @Table(name = Periodicidade.TABLE_NAME, schema = Periodicidade.SCHEMA_NAME)
 @Getter

@@ -8,6 +8,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para chat dialog view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ChatDialogViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ChatDialogViewModelConfig
   extends FormViewModelConfig<ChatRequestDTO> {
   /** Serviço de chat */

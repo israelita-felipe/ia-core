@@ -9,6 +9,16 @@ import com.vaadin.flow.data.converter.Converter;
 /**
  *
  */
+/**
+ * Conversor de dados para base entity d t o to long.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a BaseEntityDTOToLongConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class BaseEntityDTOToLongConverter<T extends BaseEntityDTO<?>>
   implements Converter<T, Long> {
 

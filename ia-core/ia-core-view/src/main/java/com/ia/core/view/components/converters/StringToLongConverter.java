@@ -7,6 +7,16 @@ import com.vaadin.flow.data.converter.Converter;
 /**
  *
  */
+/**
+ * Conversor de dados para string to long.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a StringToLongConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class StringToLongConverter
   implements Converter<String, Long> {
 

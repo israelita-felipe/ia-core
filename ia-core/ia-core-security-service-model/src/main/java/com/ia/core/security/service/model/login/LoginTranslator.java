@@ -3,6 +3,15 @@ package com.ia.core.security.service.model.login;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio login translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LoginTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class LoginTranslator {
   public static final String LOGIN = "login";

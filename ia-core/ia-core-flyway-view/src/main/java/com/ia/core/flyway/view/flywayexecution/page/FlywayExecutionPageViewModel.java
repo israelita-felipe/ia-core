@@ -18,6 +18,15 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o modelo de dados para a view de flyway execution page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionPageViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 public class FlywayExecutionPageViewModel
   extends PageViewModel<FlywayExecutionDTO> {

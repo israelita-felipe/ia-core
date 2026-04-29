@@ -9,6 +9,15 @@ import lombok.NoArgsConstructor;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o objeto de transferência de dados para jwt authentication response.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JwtAuthenticationResponseDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

@@ -3,6 +3,15 @@ package com.ia.core.llm.service.model.chat;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio chat translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ChatTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class ChatTranslator {
   public static final class HELP {

@@ -14,6 +14,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para user privilege page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegePageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class UserPrivilegePageViewModelConfig
   extends CollectionPageViewModelConfig<UserPrivilegeDTO> {
   @Getter

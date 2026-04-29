@@ -21,6 +21,15 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa as configurações para grupo contato service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoServiceConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Component
 public class GrupoContatoServiceConfig

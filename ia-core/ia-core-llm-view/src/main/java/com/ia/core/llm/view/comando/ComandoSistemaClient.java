@@ -2,9 +2,14 @@ package com.ia.core.llm.view.comando;
 
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.view.client.DefaultBaseClient;
-
 /**
- * @author Israel Araújo
+ * Cliente Feign para comunicação com o serviço de comando sistema.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaClient
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface ComandoSistemaClient
   extends DefaultBaseClient<ComandoSistemaDTO> {

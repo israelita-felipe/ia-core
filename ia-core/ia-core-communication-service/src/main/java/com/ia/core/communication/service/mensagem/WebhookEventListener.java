@@ -12,6 +12,15 @@ import java.time.LocalDateTime;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o listener para eventos de webhook event.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a WebhookEventListener
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Component
 public class WebhookEventListener {

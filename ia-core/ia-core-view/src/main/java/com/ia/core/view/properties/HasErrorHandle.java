@@ -1,9 +1,14 @@
 package com.ia.core.view.properties;
 
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
-
 /**
- * @author Israel Araújo
+ * Componente de interface visual para has error handle.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a HasErrorHandle
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface HasErrorHandle {
   /**

@@ -9,9 +9,14 @@ import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.CollectionPageView;
 import com.ia.core.view.components.page.viewModel.ICollectionPageViewModel;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de role privilege page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegePageView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class RolePrivilegePageView
   extends CollectionPageView<RolePrivilegeDTO> {

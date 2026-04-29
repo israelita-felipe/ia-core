@@ -13,6 +13,16 @@ import java.util.Optional;
 /**
  *
  */
+/**
+ * Entidade de domínio que representa occurrence calculator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OccurrenceCalculator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public interface OccurrenceCalculator {
 
   public static OccurrenceCalculator defaultCalculator() {

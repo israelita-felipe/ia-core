@@ -7,6 +7,16 @@ import java.io.Serializable;
 /**
  *
  */
+/**
+ * Classe de configuração para default base manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DefaultBaseManagerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class DefaultBaseManagerConfig<T extends Serializable>
   extends AbstractBaseManagerConfig<T> {
 

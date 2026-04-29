@@ -5,9 +5,14 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
 import java.io.ByteArrayInputStream;
-
 /**
- * @author Israel Araújo
+ * Classe responsável por abstract jasper x m l report.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AbstractJasperXMLReport
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public abstract class AbstractJasperXMLReport
   extends AbstractJasperReport<String> {

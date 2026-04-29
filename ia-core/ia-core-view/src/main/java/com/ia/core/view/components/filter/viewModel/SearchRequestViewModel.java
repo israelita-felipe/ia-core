@@ -13,6 +13,15 @@ import java.util.Collection;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o modelo de dados para a view de search request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SearchRequestViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 public class SearchRequestViewModel
   implements ISearchRequestViewModel {

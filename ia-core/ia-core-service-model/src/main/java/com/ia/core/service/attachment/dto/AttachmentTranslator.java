@@ -3,6 +3,15 @@ package com.ia.core.service.attachment.dto;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio attachment translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AttachmentTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class AttachmentTranslator {
   public static final class HELP {

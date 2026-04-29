@@ -19,6 +19,15 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @see BaseEntity
  * @see EntityProjection
  */
+/**
+ * Classe que representa o acesso a dados de base entity.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a BaseEntityRepository
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @NoRepositoryBean
 public interface BaseEntityRepository<T extends BaseEntity>
   extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {

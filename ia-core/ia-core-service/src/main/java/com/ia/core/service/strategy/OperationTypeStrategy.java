@@ -18,6 +18,15 @@ import com.ia.core.service.event.CrudOperationType;
  *
  * @param <D> Tipo do DTO que extende {@link AbstractBaseEntityDTO}
  */
+/**
+ * Classe que representa a estratégia de operation type.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OperationTypeStrategy
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @FunctionalInterface
 public interface OperationTypeStrategy<D extends AbstractBaseEntityDTO<?>> {
 

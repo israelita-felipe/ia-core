@@ -86,7 +86,7 @@ public class CoreQuartzConfig {
    * @since 1.0.0
    */
   @Bean
-  SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
+  public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
     log.info("Configurando SchedulerFactoryBean");
     SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
     springBeanJobFactory

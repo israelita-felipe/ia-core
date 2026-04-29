@@ -11,6 +11,15 @@ import org.mapstruct.Mapper;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o mapeamento de dados para contato mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemMapper
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Mapper(componentModel = "spring",uses = {GrupoContatoMapper.class})
 public interface ContatoMensagemMapper
   extends BaseEntityMapper<ContatoMensagem, ContatoMensagemDTO> {

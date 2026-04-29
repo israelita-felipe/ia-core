@@ -18,6 +18,7 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class TextExtractionService {
 

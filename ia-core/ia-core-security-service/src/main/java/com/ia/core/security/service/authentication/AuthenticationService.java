@@ -7,11 +7,14 @@ import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.service.exception.ServiceException;
 
 import java.util.function.BiFunction;
-
 /**
- * @author Israel Araújo
- * @param <R>
- * @param <S>
+ * Serviço de negócio para gerenciamento de authentication.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuthenticationService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface AuthenticationService<R> {
 

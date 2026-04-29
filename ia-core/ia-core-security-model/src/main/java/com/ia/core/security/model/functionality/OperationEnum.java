@@ -1,4 +1,12 @@
 package com.ia.core.security.model.functionality;
+/**
+ * Enumeração que representa a entidade de domínio operation enum.
+ * <p>
+ * Define os valores possíveis para OperationEnum no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public enum OperationEnum implements Operation {
   CREATE {

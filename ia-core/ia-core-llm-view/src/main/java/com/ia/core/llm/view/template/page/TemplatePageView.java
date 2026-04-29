@@ -9,9 +9,14 @@ import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de template page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplatePageView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class TemplatePageView
   extends EntityPageView<TemplateDTO> {

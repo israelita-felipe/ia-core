@@ -21,9 +21,14 @@ import com.vaadin.flow.dom.Style.JustifyContent;
 import com.vaadin.flow.dom.Style.TextAlign;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de login.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LoginView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 
 public class LoginView

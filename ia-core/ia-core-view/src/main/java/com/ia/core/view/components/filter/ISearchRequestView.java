@@ -35,15 +35,7 @@ public interface ISearchRequestView
    */
   void closeFilter();
 
-  /**
-   * @param label Título do componente
-   */
-  void createLabel(String label);
-
-  /**
-   * @return se o componente está visível
-   */
-  public boolean isVisible();
+public boolean isVisible();
 
   /**
    * @param filter filtro a ser removido

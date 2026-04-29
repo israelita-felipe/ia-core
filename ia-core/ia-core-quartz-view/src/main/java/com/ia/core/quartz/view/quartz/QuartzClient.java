@@ -19,6 +19,7 @@ import java.util.Map;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = QuartzClient.NOME, url = QuartzClient.URL)
 public interface QuartzClient
   extends DefaultBaseClient<SchedulerConfigDTO> {

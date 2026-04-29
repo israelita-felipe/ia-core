@@ -15,6 +15,15 @@ import lombok.experimental.SuperBuilder;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+/**
+ * Classe que representa o objeto de transferência de dados para privilege operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Data
 @SuperBuilder(toBuilder = true)

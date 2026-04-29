@@ -11,6 +11,16 @@ import java.io.Serializable;
 /**
  *
  */
+/**
+ * Classe de configuração para page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public abstract class PageViewModelConfig<D extends Serializable>
   implements AutoCastable {
   @Getter

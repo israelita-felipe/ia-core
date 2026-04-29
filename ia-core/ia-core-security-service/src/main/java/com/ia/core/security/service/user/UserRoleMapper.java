@@ -11,6 +11,15 @@ import org.mapstruct.Mapper;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o mapeamento de dados para user role.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserRoleMapper
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Mapper(componentModel = "spring", uses = { RolePrivilegeMapper.class })
 public interface UserRoleMapper
   extends BaseEntityMapper<Role, UserRoleDTO> {

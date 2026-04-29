@@ -4,11 +4,14 @@ import com.ia.core.security.service.model.privilege.PrivilegeOperationDTO;
 import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
-
 /**
- * {@link ListView} do usuário.
+ * View para exibição e manipulação de privilege operation list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationListView
+ * dentro do sistema.
  *
- * @author Israel Araújo
+ * @author IA
+ * @since 1.0
  */
 public class PrivilegeOperationListView
   extends ListView<PrivilegeOperationDTO> {

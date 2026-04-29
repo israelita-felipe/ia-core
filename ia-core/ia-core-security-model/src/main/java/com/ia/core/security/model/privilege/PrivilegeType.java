@@ -6,9 +6,13 @@ import com.ia.core.security.model.functionality.OperationEnum;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
-
 /**
- * @author Israel Araújo
+ * Enumeração que representa os valores possíveis para privilege type.
+ * <p>
+ * Define os valores possíveis para PrivilegeType no sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public enum PrivilegeType {
   SYSTEM(1) {

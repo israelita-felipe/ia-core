@@ -12,6 +12,16 @@ import java.util.function.Supplier;
 /**
  *
  */
+/**
+ * Entidade de domínio que representa has context.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a HasContext
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public interface HasContext {
   default Map<String, String> getContextValue(Object object) {
     return new HashMap<>();

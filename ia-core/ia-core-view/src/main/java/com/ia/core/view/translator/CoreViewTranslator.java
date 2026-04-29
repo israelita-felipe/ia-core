@@ -9,9 +9,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 /**
- * @author Israel Araújo
+ * Componente de interface visual para core view translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreViewTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class CoreViewTranslator
   implements Translator, I18NProvider {

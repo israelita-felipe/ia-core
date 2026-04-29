@@ -7,6 +7,15 @@ import com.vaadin.flow.server.auth.NavigationContext;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+/**
+ * Classe que representa a interface visual para view acess decision resolver.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ViewAcessDecisionResolver
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @RequiredArgsConstructor
 public class ViewAcessDecisionResolver

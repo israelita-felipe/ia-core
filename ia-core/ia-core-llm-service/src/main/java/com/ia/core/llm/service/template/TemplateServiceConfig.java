@@ -8,20 +8,30 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
+ * Classe de configuração para template service.
+ * <p>
+ * Responsável por gerenciar as dependências e configurações do TemplateService.
  *
+ * @author Israel Araújo
+ * @since 1.0
  */
+@Component
 public class TemplateServiceConfig
   extends DefaultBaseServiceConfig<Template, TemplateDTO> {
 
   /**
-   * @param repository
-   * @param mapper
-   * @param searchRequestMapper
-   * @param translator
+   * Construtor da configuração do serviço de template.
+   *
+   * @param repository repositório de Template
+   * @param mapper mapper de Template
+   * @param searchRequestMapper mapper de requisição de busca
+   * @param translator tradutor de mensagens
+   * @param validators validadores de serviço
    */
   public TemplateServiceConfig(BaseEntityRepository<Template> repository,
                                BaseEntityMapper<Template, TemplateDTO> mapper,

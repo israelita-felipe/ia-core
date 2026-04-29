@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class LogOperationManager
   extends DefaultBaseManager<LogOperationDTO> {

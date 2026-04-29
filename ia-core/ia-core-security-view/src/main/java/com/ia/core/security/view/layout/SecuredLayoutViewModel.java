@@ -4,9 +4,14 @@ import com.ia.core.security.view.authentication.AuthenticationDetails;
 import com.ia.core.view.components.layout.MainLayoutViewModel;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
 import lombok.Getter;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de secured layout.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SecuredLayoutViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 
 public class SecuredLayoutViewModel

@@ -16,6 +16,15 @@ import java.time.LocalDateTime;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para estrategia telegram.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EstrategiaTelegram
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Component
 public class EstrategiaTelegram

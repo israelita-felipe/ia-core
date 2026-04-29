@@ -320,11 +320,7 @@ public class JsonUtil {
    * Adaptadores para tipos temporais do Java Time API
    ***************************************************************************/
 
-  /**
-   * Adaptador para serialização e desserialização de LocalDateTime. Utiliza o
-   * formato ISO com timezone: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
-   */
-  public static class LocalDateTimeTypeAdapter
+public static class LocalDateTimeTypeAdapter
     implements JsonDeserializer<LocalDateTime>,
     JsonSerializer<LocalDateTime> {
 

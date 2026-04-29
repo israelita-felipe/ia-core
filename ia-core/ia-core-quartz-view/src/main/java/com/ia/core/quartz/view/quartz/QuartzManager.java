@@ -12,6 +12,7 @@ import java.util.Map;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class QuartzManager
   extends DefaultSecuredViewBaseManager<SchedulerConfigDTO> {

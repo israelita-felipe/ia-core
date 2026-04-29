@@ -14,9 +14,14 @@ import lombok.NoArgsConstructor;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-
 /**
- * @author Israel Araújo
+ * Interface que define o contrato para core security authorization.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreSecurityAuthorizationManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface CoreSecurityAuthorizationManager {
 

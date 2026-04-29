@@ -58,6 +58,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW,
                isolation = Isolation.DEFAULT, timeout = 30)
+/**
+ * Classe que representa os serviços de negócio para transactional write independent.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TransactionalWriteIndependent
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public @interface TransactionalWriteIndependent {
 
 }

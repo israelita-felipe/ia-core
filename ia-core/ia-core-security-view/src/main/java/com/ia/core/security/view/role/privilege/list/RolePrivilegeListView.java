@@ -3,11 +3,14 @@ package com.ia.core.security.view.role.privilege.list;
 import com.ia.core.security.service.model.role.RolePrivilegeDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
-
 /**
- * {@link ListView} do usuário.
+ * View para exibição e manipulação de role privilege list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegeListView
+ * dentro do sistema.
  *
- * @author Israel Araújo
+ * @author IA
+ * @since 1.0
  */
 public class RolePrivilegeListView
   extends ListView<RolePrivilegeDTO> {

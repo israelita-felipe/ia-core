@@ -10,6 +10,15 @@ import org.antlr.v4.runtime.dfa.DFA;
 
 @SuppressWarnings({ "all", "warnings", "unchecked", "unused", "cast",
     "CheckReturnValue", "this-escape" })
+/**
+ * Classe que representa leitura lexer no sistema.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LeituraLexer
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public class LeituraLexer
   extends Lexer {
   static {

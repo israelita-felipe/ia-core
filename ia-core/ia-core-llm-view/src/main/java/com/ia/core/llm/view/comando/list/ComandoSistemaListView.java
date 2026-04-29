@@ -4,9 +4,14 @@ import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
 import com.ia.core.llm.service.model.comando.ComandoSistemaTranslator;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de comando sistema list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaListView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class ComandoSistemaListView
   extends ListView<ComandoSistemaDTO> {

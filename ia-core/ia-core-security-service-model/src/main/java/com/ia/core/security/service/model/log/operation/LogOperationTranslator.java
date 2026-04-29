@@ -3,6 +3,15 @@ package com.ia.core.security.service.model.log.operation;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio log operation translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class LogOperationTranslator {
   public static final class HELP {

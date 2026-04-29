@@ -3,6 +3,15 @@ package com.ia.core.quartz.service.model.periodicidade.dto;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio periodicidade translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PeriodicidadeTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class PeriodicidadeTranslator {
 

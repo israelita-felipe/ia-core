@@ -3,6 +3,15 @@ package com.ia.core.owl.service.model.axioma;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio axioma translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AxiomaTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class AxiomaTranslator {
   public static final class HELP {

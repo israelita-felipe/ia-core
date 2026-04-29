@@ -6,9 +6,14 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Parâmetros nominais do template para associação com legislação
+ * Classe que representa a entidade de domínio template parameter.
+ * <p>
+ * Parâmetros nominais do template para associação com legislação.
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplateParameter
+ * dentro do sistema.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
 @Entity
 @Table(name = TemplateParameter.TABLE_NAME,
@@ -19,20 +24,20 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = false)
 public class TemplateParameter
   extends BaseEntity {
   /** Serial UID */
   private static final long serialVersionUID = 6823579073228741182L;
-  /**
-   * Nome da tabela onde esta entidade será persistida.
-   */
 
-  /** NOME DA TABELA */
+  /** Nome da tabela onde esta entidade será persistida. */
   public static final String TABLE_NAME = "LLM_TEMPLATE_PARAMETER";
-  /** NOME DO SCHEMA */
+
+  /** Nome do schema */
   public static final String SCHEMA_NAME = "LARGE_LANGUAGE_MODEL";
+
   /**
-   * /** Nome do parâmetro. Deve corresponder a um parâmetro textual
+   * Nome do parâmetro. Deve corresponder a um parâmetro textual
    * parametrizado no template. <br/>
    * Ex.: {documento} corresponde ao parâmetro documento.<br/>
    * O parâmetro não precisa apresentar chaves, basta informar o nome.
@@ -46,17 +51,5 @@ public class TemplateParameter
   @ManyToOne(optional = false, targetEntity = Template.class)
   @JoinColumn(name = "template", referencedColumnName = "id")
   private Template template;
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("TemplateParameter [");
-    if (nome != null) {
-      builder.append("nome=");
-      builder.append(nome);
-    }
-    builder.append("]");
-    return builder.toString();
-  }
 
 }

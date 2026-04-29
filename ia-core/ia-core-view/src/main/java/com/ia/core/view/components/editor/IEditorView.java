@@ -13,11 +13,14 @@ import com.vaadin.flow.component.HasSize;
 
 import java.io.Serializable;
 import java.util.Collection;
-
 /**
- * @author Israel Araújo
- * @param <T> Tipo do objeto editado
- * @param <V> Tipo da {@link IView} do objeto editado
+ * View para exibição e manipulação de i editor.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a IEditorView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface IEditorView<T extends Serializable, V extends IView<T>>
   extends AutoCastable, HasErrorHandle, HasSize, HasId, IView<T>, HasClose {

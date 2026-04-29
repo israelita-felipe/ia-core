@@ -12,6 +12,14 @@ import lombok.experimental.SuperBuilder;
  * <p>Fornece campos comuns para manipulação de arquivos, incluindo
  * descrição, nome do arquivo, tamanho e tipo MIME.
  *
+ * <p><b>Campos definidos:</b></p>
+ * <ul>
+ *   <li>{@link #description} - Descrição do arquivo</li>
+ *   <li>{@link #filename} - Nome original do arquivo</li>
+ *   <li>{@link #size} - Tamanho do arquivo em bytes</li>
+ *   <li>{@link #mediaType} - Tipo MIME do arquivo</li>
+ * </ul>
+ *
  * <p><b>Por quê usar Attachment?</b></p>
  * <ul>
  *   <li>Padroniza o modelo de dados para arquivos</li>
@@ -24,15 +32,17 @@ import lombok.experimental.SuperBuilder;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class Attachment
+public abstract class Attachment
   extends BaseEntity {
+
   /**
    * Descrição do arquivo.
    *

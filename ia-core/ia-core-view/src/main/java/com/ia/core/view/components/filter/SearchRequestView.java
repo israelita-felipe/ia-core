@@ -256,7 +256,6 @@ public class SearchRequestView
     createCancelButton(filterToolBar);
   }
 
-  @Override
   public void createLabel(String label) {
     setLabel(label);
   }

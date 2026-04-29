@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+
 @Entity
 @Table(name = Template.TABLE_NAME, schema = Template.SCHEMA_NAME)
 @Getter

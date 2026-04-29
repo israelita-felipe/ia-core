@@ -9,6 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o gerenciamento de chat.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ChatManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class ChatManager {

@@ -29,6 +29,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para image processing service test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ImageProcessingServiceTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 class ImageProcessingServiceTest {
 

@@ -5,9 +5,14 @@ import com.ia.core.security.service.model.authentication.JwtAuthenticationRespon
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 /**
- * @author Israel Araújo
+ * Cliente Feign para comunicação com o serviço de authentication base.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuthenticationBaseClient
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface AuthenticationBaseClient {
 

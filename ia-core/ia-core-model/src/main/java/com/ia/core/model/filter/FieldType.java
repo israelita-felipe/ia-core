@@ -28,6 +28,14 @@ import java.util.Optional;
  * @see Operator
  * @since 1.0.0
  */
+/**
+ * Enumeração que representa a entidade de domínio field type.
+ * <p>
+ * Define os valores possíveis para FieldType no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 public enum FieldType {
   /**

@@ -50,6 +50,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Transactional(propagation = Propagation.MANDATORY,
                isolation = Isolation.DEFAULT)
+/**
+ * Classe que representa os serviços de negócio para transactional mandatory.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TransactionalMandatory
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public @interface TransactionalMandatory {
 
 }

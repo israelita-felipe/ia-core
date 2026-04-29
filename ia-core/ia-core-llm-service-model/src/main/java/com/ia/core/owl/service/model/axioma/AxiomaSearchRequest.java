@@ -9,9 +9,14 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
- * @author Israel Araújo
+ * Entidade de domínio que representa axioma search request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AxiomaSearchRequest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 class AxiomaSearchRequest
   extends SearchRequestDTO {

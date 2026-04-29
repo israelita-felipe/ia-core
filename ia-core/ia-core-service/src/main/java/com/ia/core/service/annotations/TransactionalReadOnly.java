@@ -33,6 +33,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.METHOD)
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED,
                isolation = Isolation.DEFAULT)
+/**
+ * Classe que representa os serviços de negócio para transactional read only.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TransactionalReadOnly
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Inherited
 public @interface TransactionalReadOnly {
 

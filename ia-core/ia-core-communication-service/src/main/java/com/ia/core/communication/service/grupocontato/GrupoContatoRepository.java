@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Israel Araújo
  */
+
 @Repository
 public interface GrupoContatoRepository
   extends BaseEntityRepository<GrupoContato> {

@@ -6,6 +6,16 @@ import com.ia.core.view.manager.DefaultBaseManagerConfig;
 /**
  *
  */
+/**
+ * Classe de configuração para comando sistema manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaManagerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ComandoSistemaManagerConfig
   extends DefaultBaseManagerConfig<ComandoSistemaDTO> {
 

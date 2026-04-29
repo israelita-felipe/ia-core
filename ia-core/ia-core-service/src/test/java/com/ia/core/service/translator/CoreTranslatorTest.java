@@ -15,6 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para core translator test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreTranslatorTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("CoreTranslator")
 class CoreTranslatorTest {
 

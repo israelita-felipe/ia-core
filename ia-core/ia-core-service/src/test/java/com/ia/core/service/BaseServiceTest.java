@@ -26,6 +26,15 @@ import static org.mockito.Mockito.when;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para base service test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a BaseServiceTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("BaseService")
 class BaseServiceTest {

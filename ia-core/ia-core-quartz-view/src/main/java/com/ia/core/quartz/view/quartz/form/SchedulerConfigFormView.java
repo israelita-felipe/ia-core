@@ -16,6 +16,16 @@ import com.vaadin.flow.component.tabs.TabSheet;
 /**
  *
  */
+/**
+ * View para exibição e manipulação de scheduler config form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class SchedulerConfigFormView
   extends FormView<SchedulerConfigDTO> {
 

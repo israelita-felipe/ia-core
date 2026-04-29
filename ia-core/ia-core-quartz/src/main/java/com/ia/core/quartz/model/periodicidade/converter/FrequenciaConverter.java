@@ -24,6 +24,14 @@ import jakarta.persistence.Converter;
  * @see Frequencia
  * @see jakarta.persistence.AttributeConverter
  */
+/**
+ * Enumeração que representa o conversor de dados para frequencia.
+ * <p>
+ * Define os valores possíveis para FrequenciaConverter no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Converter(autoApply = true)
 public class FrequenciaConverter
   implements AttributeConverter<Frequencia, Integer> {

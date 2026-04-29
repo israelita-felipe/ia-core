@@ -16,6 +16,15 @@ import java.util.Set;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o objeto de transferência de dados para template parameter.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplateParameterDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor

@@ -5,6 +5,15 @@ package com.ia.core.security.service.model.user;
  * 
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio user privilege translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegeTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class UserPrivilegeTranslator {
 

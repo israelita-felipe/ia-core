@@ -16,6 +16,15 @@ import java.time.LocalDateTime;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para estrategia email.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EstrategiaEmail
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Component
 public class EstrategiaEmail

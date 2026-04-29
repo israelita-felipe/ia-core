@@ -8,8 +8,15 @@ import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 /**
+ * Classe que representa as configurações para user manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserManagerConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class UserManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<UserDTO> {

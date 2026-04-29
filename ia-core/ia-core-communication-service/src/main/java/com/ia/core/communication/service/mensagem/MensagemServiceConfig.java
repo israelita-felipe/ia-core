@@ -27,6 +27,15 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa as configurações para mensagem service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a MensagemServiceConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Component
 public class MensagemServiceConfig

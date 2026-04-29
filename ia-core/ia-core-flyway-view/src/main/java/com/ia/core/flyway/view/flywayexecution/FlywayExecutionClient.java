@@ -20,6 +20,15 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @FeignClient(name = FlywayExecutionClient.NOME,
              url = FlywayExecutionClient.URL)
+/**
+ * Classe que representa o cliente de comunicação para flyway execution.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionClient
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public interface FlywayExecutionClient
   extends DefaultBaseClient<FlywayExecutionDTO> {
 

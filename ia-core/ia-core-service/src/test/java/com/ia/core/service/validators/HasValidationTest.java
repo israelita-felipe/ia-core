@@ -24,6 +24,15 @@ import static org.mockito.Mockito.*;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para has validation test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a HasValidationTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("HasValidation")
 class HasValidationTest {

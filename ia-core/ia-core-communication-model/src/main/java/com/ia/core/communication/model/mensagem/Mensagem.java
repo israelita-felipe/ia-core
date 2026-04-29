@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
  *
  * @author Israel Araújo
  */
+
 @Entity
 @Table(name = Mensagem.TABLE_NAME, schema = Mensagem.SCHEMA_NAME)
 @Data

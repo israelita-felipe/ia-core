@@ -1,19 +1,20 @@
 package com.ia.core.llm.service.comando;
 
 import com.ia.core.llm.model.comando.ComandoSistema;
-import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
-import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.llm.service.template.TemplateMapper;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
 /**
- * {@link Mapper} de {@link Template} para {@link TemplateDTO}
+ * Mapper para conversão entre {@link ComandoSistema} e {@link ComandoSistemaDTO}.
+ * <p>
+ * Responsável por gerenciar o mapeamento entre a entidade ComandoSistema
+ * e seu respectivo DTO.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
-@Mapper(componentModel = "spring", uses = { TemplateMapper.class })
+@Mapper(componentModel = "spring")
 public interface ComandoSistemaMapper
   extends BaseEntityMapper<ComandoSistema, ComandoSistemaDTO> {
 

@@ -12,6 +12,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para role form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RoleFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class RoleFormViewModelConfig
   extends FormViewModelConfig<RoleDTO> {
   /** Serviço de usuário */

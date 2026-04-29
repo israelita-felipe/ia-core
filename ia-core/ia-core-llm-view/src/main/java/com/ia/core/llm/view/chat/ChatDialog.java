@@ -26,9 +26,14 @@ import lombok.Getter;
 
 import java.util.Locale;
 import java.util.Objects;
-
 /**
- * @author Israel Araújo
+ * Componente de interface visual para chat dialog.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ChatDialog
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class ChatDialog
   extends Dialog

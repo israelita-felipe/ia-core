@@ -22,6 +22,15 @@ import java.util.Collection;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a interface visual para i filter request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a IFilterRequestView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Tag("filter-request-view")
 public interface IFilterRequestView
   extends HasId, HasComboBoxCreator, HasTextFieldCreator,

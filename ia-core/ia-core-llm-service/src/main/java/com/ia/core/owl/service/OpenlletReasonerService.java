@@ -45,6 +45,16 @@ import java.util.stream.Collectors;
  * @author Israel Araújo
  * @version 1.0
  */
+/**
+ * Serviço de negócio para gerenciamento de openllet reasoner.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OpenlletReasonerService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class OpenlletReasonerService
   implements OWLReasoningService {
   /** Tipos de inferências padrão a serem pré-computadas */

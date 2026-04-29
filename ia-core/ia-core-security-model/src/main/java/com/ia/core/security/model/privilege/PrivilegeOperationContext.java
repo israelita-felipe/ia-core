@@ -13,6 +13,15 @@ import java.util.Set;
 @Entity
 @Table(schema = PrivilegeOperationContext.SCHEMA_NAME,
        name = PrivilegeOperationContext.TABLE_NAME)
+/**
+ * Classe que representa a entidade de domínio privilege operation context.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationContext
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder

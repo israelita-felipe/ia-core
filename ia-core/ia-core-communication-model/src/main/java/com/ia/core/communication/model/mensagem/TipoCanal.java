@@ -8,6 +8,14 @@ import lombok.Getter;
  *
  * @author Israel Araújo
  */
+/**
+ * Enumeração que representa a entidade de domínio tipo canal.
+ * <p>
+ * Define os valores possíveis para TipoCanal no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @AllArgsConstructor
 public enum TipoCanal {

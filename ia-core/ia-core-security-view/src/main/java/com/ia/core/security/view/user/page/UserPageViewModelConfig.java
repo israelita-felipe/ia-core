@@ -17,7 +17,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para user page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -36,7 +42,8 @@ public class UserPageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public UserPageViewModelConfig(AuthenticationDetails authentication,
+
+public UserPageViewModelConfig(AuthenticationDetails authentication,
                                  UserManager service,
                                  PrivilegeManager privilegeService,
                                  RoleManager roleService,

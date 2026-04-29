@@ -34,11 +34,11 @@ import java.util.Objects;
  * {@code @Entity @Table(name = "pessoas") public class Pessoa extends
  * BaseEntity { private String nome; private String email; } }
  *
+ * @author Israel Araújo
  * @see HasVersion
  * @see Serializable
  * @see Comparable
  * @since 1.0.0
- * @author Israel Araújo
  */
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -87,7 +87,7 @@ public abstract class BaseEntity
    * @throws IllegalStateException se o gerador TSID não estiver disponível
    */
   @PrePersist
-  public void onCreate() {
+  public void generateIdIfAbsent() {
     if (this.id == null) {
       this.id = TSID.Factory.getTsid4096().toLong();
     }

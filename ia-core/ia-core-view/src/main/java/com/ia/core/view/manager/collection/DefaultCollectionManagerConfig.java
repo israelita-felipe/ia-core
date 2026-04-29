@@ -8,6 +8,16 @@ import java.io.Serializable;
 /**
  *
  */
+/**
+ * Classe de configuração para default collection manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DefaultCollectionManagerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class DefaultCollectionManagerConfig<D extends Serializable>
   extends DefaultBaseManagerConfig<D> {
 

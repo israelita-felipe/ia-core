@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = PrivilegeClient.NOME, url = PrivilegeClient.URL)
 public interface PrivilegeClient
   extends DefaultBaseClient<PrivilegeDTO> {

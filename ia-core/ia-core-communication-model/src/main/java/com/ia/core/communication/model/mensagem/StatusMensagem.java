@@ -8,6 +8,14 @@ import lombok.Getter;
  *
  * @author Israel Araújo
  */
+/**
+ * Enumeração que representa a entidade de domínio status mensagem.
+ * <p>
+ * Define os valores possíveis para StatusMensagem no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @AllArgsConstructor
 public enum StatusMensagem {

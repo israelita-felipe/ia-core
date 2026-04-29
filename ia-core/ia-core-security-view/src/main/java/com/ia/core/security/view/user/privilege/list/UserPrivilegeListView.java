@@ -3,11 +3,14 @@ package com.ia.core.security.view.user.privilege.list;
 import com.ia.core.security.service.model.user.UserPrivilegeDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
-
 /**
- * {@link ListView} do usuário.
+ * View para exibição e manipulação de user privilege list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegeListView
+ * dentro do sistema.
  *
- * @author Israel Araújo
+ * @author IA
+ * @since 1.0
  */
 public class UserPrivilegeListView
   extends ListView<UserPrivilegeDTO> {

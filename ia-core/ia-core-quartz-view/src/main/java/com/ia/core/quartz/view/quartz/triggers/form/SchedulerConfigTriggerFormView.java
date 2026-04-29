@@ -10,6 +10,16 @@ import com.vaadin.flow.component.textfield.TextField;
 /**
  *
  */
+/**
+ * View para exibição e manipulação de scheduler config trigger form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTriggerFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class SchedulerConfigTriggerFormView
   extends FormView<SchedulerConfigTriggerDTO> {
 

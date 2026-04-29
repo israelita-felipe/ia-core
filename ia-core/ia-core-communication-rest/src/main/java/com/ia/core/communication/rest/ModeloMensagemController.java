@@ -20,6 +20,15 @@ import java.util.Map;
 @Slf4j
 @Tag(name = "ModeloMensagem",
      description = "Gerenciamento de modelos de mensagens")
+/**
+ * Classe que representa os endpoints REST para gerenciamento de modelo mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemController
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api/${api.version}/modelo/mensagem")
 public class ModeloMensagemController

@@ -9,6 +9,15 @@ import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvi
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para vector store operations.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a VectorStoreOperationsImpl
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 public class VectorStoreOperationsImpl implements VectorStoreOperations {
 

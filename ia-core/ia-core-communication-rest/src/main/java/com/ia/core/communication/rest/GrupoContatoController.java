@@ -17,6 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(name = "GrupoContato",
      description = "Gerenciamento de grupos de contatos")
+/**
+ * Classe que representa os endpoints REST para gerenciamento de grupo contato.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoController
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api/${api.version}/grupo/contato")
 public class GrupoContatoController

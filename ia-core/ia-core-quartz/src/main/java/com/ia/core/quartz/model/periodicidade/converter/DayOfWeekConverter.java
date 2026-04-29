@@ -28,6 +28,14 @@ import java.time.DayOfWeek;
  * @see java.time.DayOfWeek
  * @see jakarta.persistence.AttributeConverter
  */
+/**
+ * Enumeração que representa o conversor de dados para day of week.
+ * <p>
+ * Define os valores possíveis para DayOfWeekConverter no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Converter(autoApply = true)
 public class DayOfWeekConverter
   implements AttributeConverter<DayOfWeek, Integer> {

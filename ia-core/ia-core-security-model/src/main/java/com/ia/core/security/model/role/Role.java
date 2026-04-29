@@ -10,6 +10,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
+/**
+ * Classe que representa a entidade de domínio role.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a Role
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Entity
 @Table(name = Role.TABLE_NAME, schema = Role.SCHEMA_NAME)

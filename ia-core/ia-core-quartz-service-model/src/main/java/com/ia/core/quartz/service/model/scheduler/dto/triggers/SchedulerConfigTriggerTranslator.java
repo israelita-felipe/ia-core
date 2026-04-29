@@ -3,6 +3,15 @@ package com.ia.core.quartz.service.model.scheduler.dto.triggers;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio scheduler config trigger translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTriggerTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class SchedulerConfigTriggerTranslator {
   public static final class HELP {

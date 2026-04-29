@@ -7,8 +7,15 @@ import com.ia.core.view.client.BaseClient;
 import org.springframework.stereotype.Component;
 
 /**
+ * Classe que representa as configurações para quartz manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a QuartzManagerConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class QuartzManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<SchedulerConfigDTO> {

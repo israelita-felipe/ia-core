@@ -1,6 +1,5 @@
 package com.ia.core.service.mapper;
 
-import com.ia.core.model.BaseEntity;
 import com.ia.core.service.dto.DTO;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Interface para mapeamento entre entidades e DTOs.
  * <p>
- * Implementações devem definir os métodos {@link #toDTO(Object)} e {@link #toModel(DTO)}
+ * Implementações devem definir os métodos {@link #toDTO(T)} e {@link #toModel(DTO)}
  * para conversão bidirecional entre modelos de domínio e objetos de transferência.
  * </p>
  * <p>
@@ -28,25 +27,25 @@ import java.util.stream.Collectors;
 public interface Mapper<T extends Serializable, D extends DTO<?>> {
 
   /**
-   * Mapeamento {@link BaseEntity} to {@link DTO}
+   * Mapeamento {@link T} to {@link DTO}
    *
-   * @param t {@link BaseEntity}
+   * @param t {@link T}
    * @return {@link DTO} ou null se a entrada for null
    */
   D toDTO(T t);
 
   /**
-   * Mapeamento {@link DTO} para {@link BaseEntity}
+   * Mapeamento {@link DTO} para {@link T}
    *
    * @param dto {@link DTO}
-   * @return {@link BaseEntity} ou null se a entrada for null
+   * @return {@link T} ou null se a entrada for null
    */
   T toModel(D dto);
 
   /**
    * Mapeia uma lista de entidades para uma lista de DTOs.
    * <p>
-   * Método utilitário que itera sobre a lista de entrada e aplica {@link #toDTO(Object)}
+   * Método utilitário que itera sobre a lista de entrada e aplica {@link #toDTO(T)}
    * para cada elemento. Valores nulos na lista de entrada são preservados como nulos
    * na lista de saída.
    * </p>

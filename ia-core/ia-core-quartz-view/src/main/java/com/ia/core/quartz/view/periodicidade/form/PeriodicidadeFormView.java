@@ -11,9 +11,14 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.TabSheet;
 
 import java.time.ZoneId;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de periodicidade form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PeriodicidadeFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class PeriodicidadeFormView
   extends FormView<PeriodicidadeDTO> {

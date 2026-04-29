@@ -8,6 +8,15 @@ import lombok.experimental.SuperBuilder;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio operation item details.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OperationItemDetails
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuperBuilder(toBuilder = true)
 @Data
 @RequiredArgsConstructor

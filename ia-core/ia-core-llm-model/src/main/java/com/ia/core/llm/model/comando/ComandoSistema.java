@@ -9,9 +9,13 @@ import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Classe que representa um comando de sistema
+ * Classe que representa a entidade de domínio comando sistema.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistema
+ * dentro do sistema.
  *
  * @author Israel Araújo
+ * @since 1.0
  */
 @Entity
 @Table(name = ComandoSistema.TABLE_NAME,
@@ -22,13 +26,16 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = false)
 public class ComandoSistema
   extends BaseEntity {
   /** Serial UID */
   private static final long serialVersionUID = 5644976387280082125L;
+
   /** NOME DA TABELA */
   public static final String TABLE_NAME = LLMModel.TABLE_PREFIX
       + "COMANDO_SISTEMA";
+
   /** NOME DO SCHEMA */
   public static final String SCHEMA_NAME = LLMModel.SCHEMA;
 
@@ -59,32 +66,5 @@ public class ComandoSistema
   @ManyToOne(targetEntity = Template.class)
   @JoinColumn(name = "template", referencedColumnName = "id")
   private Template template;
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("ComandoDeSistema [");
-    if (finalidade != null) {
-      builder.append("finalidade=");
-      builder.append(finalidade);
-      builder.append(", ");
-    }
-    if (titulo != null) {
-      builder.append("titulo=");
-      builder.append(titulo);
-      builder.append(", ");
-    }
-    if (comando != null) {
-      builder.append("comando=");
-      builder.append(comando);
-      builder.append(", ");
-    }
-    if (template != null) {
-      builder.append("template=");
-      builder.append(template);
-    }
-    builder.append("]");
-    return builder.toString();
-  }
 
 }

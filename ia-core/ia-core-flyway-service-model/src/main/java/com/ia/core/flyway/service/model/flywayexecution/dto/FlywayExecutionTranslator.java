@@ -10,6 +10,15 @@ package com.ia.core.flyway.service.model.flywayexecution.dto;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio flyway execution translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class FlywayExecutionTranslator {
 

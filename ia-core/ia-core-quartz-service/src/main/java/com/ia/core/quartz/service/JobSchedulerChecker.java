@@ -12,19 +12,20 @@ import java.time.LocalTime;
  * Job de verificação do scheduler.
  * <p>
  * Job de exemplo que verifica e loga a execução do scheduler.
- * Utiliza as anotações @DisallowConcurrentExecution e @PersistJobDataAfterExecution
+ * Utiliza as anotações {@link DisallowConcurrentExecution} e {@link PersistJobDataAfterExecution}
  * para controle de concorrência e persistência de dados.
  *
  * @author Israel Araújo
+ * @since 1.0
+ * @see AbstractJob
  */
 @Slf4j
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution
-public final class JobSchedulerChecker
-  extends AbstractJob {
+public final class JobSchedulerChecker extends AbstractJob {
 
   @Override
-  protected void executeInternal(JobExecutionContext context)
+  protected void executeJob(JobExecutionContext context)
     throws JobExecutionException {
     log.info("JobSchedulerChecker executed at {} {}", LocalTime.now(),
              context.getJobDetail().getDescription());

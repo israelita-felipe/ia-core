@@ -5,6 +5,15 @@ package com.ia.core.communication.service.model.contatomensagem.dto;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio contato mensagem translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class ContatoMensagemTranslator {
   public static final class HELP {

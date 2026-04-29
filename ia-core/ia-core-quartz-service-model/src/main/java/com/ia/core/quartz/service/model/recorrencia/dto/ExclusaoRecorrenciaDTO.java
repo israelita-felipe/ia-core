@@ -18,10 +18,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * DTO para ExclusaoRecorrencia.
+ * Classe que representa o objeto de transferência de dados para exclusao recorrencia.
  * <p>
- * Equivalente ao parâmetro EXRULE da RFC 5545 (iCalendar).
- * Define datas específicas a serem excluídas de uma recorrência.
+ * Responsável por gerenciar as funcionalidades relacionadas a ExclusaoRecorrenciaDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -31,7 +34,8 @@ public class ExclusaoRecorrenciaDTO
   implements DTO<ExclusaoRecorrencia> {
 
   /** Serial UID */
-  private static final long serialVersionUID = 1L;
+
+private static final long serialVersionUID = 1L;
 
   private Frequencia frequency;
 

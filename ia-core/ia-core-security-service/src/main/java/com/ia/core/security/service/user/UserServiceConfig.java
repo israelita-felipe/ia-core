@@ -18,8 +18,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para user service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserServiceConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class UserServiceConfig
   extends DefaultSecuredBaseServiceConfig<User, UserDTO> {

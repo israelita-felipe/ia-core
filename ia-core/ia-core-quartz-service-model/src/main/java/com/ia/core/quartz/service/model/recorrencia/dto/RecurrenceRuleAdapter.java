@@ -6,6 +6,14 @@ import org.dmfs.rfc5545.recur.RecurrenceRule;
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
+/**
+ * Enumeração que representa a entidade de domínio recurrence rule adapter.
+ * <p>
+ * Define os valores possíveis para RecurrenceRuleAdapter no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public class RecurrenceRuleAdapter {
 

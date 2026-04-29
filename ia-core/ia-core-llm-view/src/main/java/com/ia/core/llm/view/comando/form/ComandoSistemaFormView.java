@@ -13,9 +13,14 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de comando sistema form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class ComandoSistemaFormView
   extends FormView<ComandoSistemaDTO> {

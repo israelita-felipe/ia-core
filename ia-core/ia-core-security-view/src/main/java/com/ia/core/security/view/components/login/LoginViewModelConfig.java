@@ -8,6 +8,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para login view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LoginViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class LoginViewModelConfig
   extends FormViewModelConfig<AuthenticationRequest> {
 

@@ -12,6 +12,15 @@ import java.time.LocalDateTime;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para resultado envio.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ResultadoEnvio
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

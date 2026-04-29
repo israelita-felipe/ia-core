@@ -23,6 +23,15 @@ import java.util.stream.Stream;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para core jwt authentication.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreJwtAuthenticationService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 public class CoreJwtAuthenticationService
   implements JwtAuthenticationService {

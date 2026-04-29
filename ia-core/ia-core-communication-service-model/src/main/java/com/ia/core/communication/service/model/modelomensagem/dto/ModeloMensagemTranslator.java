@@ -5,6 +5,15 @@ package com.ia.core.communication.service.model.modelomensagem.dto;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio modelo mensagem translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class ModeloMensagemTranslator {
   public static final class HELP {

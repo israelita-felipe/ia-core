@@ -13,6 +13,15 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o objeto de transferência de dados para envio mensagem response.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EnvioMensagemResponseDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @Builder
 @NoArgsConstructor

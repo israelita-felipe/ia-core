@@ -6,9 +6,14 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.page.viewModel.CollectionPageViewModel;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de user privilege page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegePageViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class UserPrivilegePageViewModel
   extends CollectionPageViewModel<UserPrivilegeDTO> {

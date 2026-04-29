@@ -10,6 +10,15 @@ import org.mapstruct.Mapper;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o mapeamento de dados para privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeMapper
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Mapper(componentModel = "spring")
 public interface PrivilegeMapper
   extends BaseEntityMapper<Privilege, PrivilegeDTO> {

@@ -3,6 +3,15 @@ package com.ia.core.communication.view.grupocontato.list;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
+/**
+ * Classe que representa a interface visual para grupo contato list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoListView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public class GrupoContatoListView extends ListView<GrupoContatoDTO> {
 

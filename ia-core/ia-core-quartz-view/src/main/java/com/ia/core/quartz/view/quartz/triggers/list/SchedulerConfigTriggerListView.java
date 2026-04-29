@@ -7,6 +7,16 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
 /**
  *
  */
+/**
+ * View para exibição e manipulação de scheduler config trigger list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTriggerListView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class SchedulerConfigTriggerListView
   extends ListView<SchedulerConfigTriggerDTO> {
 

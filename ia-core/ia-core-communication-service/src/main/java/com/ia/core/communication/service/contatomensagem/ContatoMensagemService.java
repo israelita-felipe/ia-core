@@ -13,6 +13,15 @@ import org.springframework.stereotype.Service;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para contato mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Service
 public class ContatoMensagemService

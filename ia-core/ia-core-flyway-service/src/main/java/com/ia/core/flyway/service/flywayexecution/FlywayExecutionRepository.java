@@ -13,6 +13,15 @@ import org.springframework.data.repository.NoRepositoryBean;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o acesso a dados de flyway execution.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionRepository
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @NoRepositoryBean
 public interface FlywayExecutionRepository
   extends BaseEntityRepository<FlywayExecution> {

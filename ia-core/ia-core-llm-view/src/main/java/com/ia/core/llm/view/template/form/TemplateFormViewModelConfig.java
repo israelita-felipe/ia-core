@@ -8,6 +8,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para template form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplateFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class TemplateFormViewModelConfig
   extends FormViewModelConfig<TemplateDTO> {
 

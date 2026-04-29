@@ -11,6 +11,16 @@ import java.io.Serializable;
 /**
  *
  */
+/**
+ * Classe de configuração para default secured view base manger.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DefaultSecuredViewBaseMangerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class DefaultSecuredViewBaseMangerConfig<D extends DTO<? extends Serializable>>
   extends DefaultBaseManagerConfig<D> {
   /** Gestor de autorizações */

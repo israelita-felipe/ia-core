@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+
 @Repository
 public interface ModeloMensagemRepository
   extends BaseEntityRepository<ModeloMensagem> {

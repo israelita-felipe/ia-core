@@ -5,29 +5,56 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 /**
+ * Enumeração dos valores EIIP (Electron-Ion Interaction Pseudopotential).
+ *
+ * <p>Esta enumeração define os valores numéricos usados para mapeamento
+ * de bases nitrogenadas (G, A, T, C) em processamento de sequências
+ * biológicas e análise de texto usando o algoritmo EIIP.
+ *
+ * <p><b>Valores EIIP:</b></p>
+ * <ul>
+ *   <li><b>G (Guanina):</b> 0.0806</li>
+ *   <li><b>A (Adenina):</b> 0.1260</li>
+ *   <li><b>T (Timina):</b> 0.1335</li>
+ *   <li><b>C (Citosina):</b> 0.1340</li>
+ * </ul>
+ *
+ * <p><b>Por quê usar EIIPEnum?</b></p>
+ * <ul>
+ *   <li>Fornece valores padronizados para mapeamento de caracteres</li>
+ *   <li>Usado pelo {@link NodeCreator} para conversão de texto</li>
+ *   <li>Base do algoritmo de processamento NLP do projeto</li>
+ * </ul>
+ *
  * @author Israel Araújo
- * @see <a href="https://doi.org/10.1371/journal.pone.0173288">doi</a>
+ * @see NodeCreator
+ * @see Node
+ * @since 1.0.0
  */
 public enum EIIPEnum {
-  /** adenina */
+
+  /** Adenina - valor EIIP: 0.1260 */
   A(new BigDecimal("0.1260")),
-  /** citosina */
+
+  /** Citosina - valor EIIP: 0.1340 */
   C(new BigDecimal("0.1340")),
-  /** guanina */
+
+  /** Guanina - valor EIIP: 0.0806 */
   G(new BigDecimal("0.0806")),
-  /** tinina */
+
+  /** Timina - valor EIIP: 0.1335 */
   T(new BigDecimal("0.1335"));
 
-  /** valor do enum */
+  /** Valor numérico do EIIP para esta base nitrogenada. */
   @Getter
   private final BigDecimal value;
 
   /**
-   * Construtor Privado
+   * Construtor privado para definir o valor EIIP.
    *
-   * @param value valor padrão
+   * @param value valor numérico do EIIP
    */
-  private EIIPEnum(BigDecimal value) {
+  EIIPEnum(BigDecimal value) {
     this.value = value;
   }
 }

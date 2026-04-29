@@ -6,9 +6,14 @@ import com.ia.core.security.service.model.authorization.HasContext;
 
 import java.util.HashSet;
 import java.util.Set;
-
 /**
- * @author Israel Araújo
+ * Gerenciador de functionality.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a FunctionalityManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface FunctionalityManager {
   void addFunctionality(Functionality functionality);

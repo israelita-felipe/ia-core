@@ -17,6 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(name = "ContatoMensagem",
      description = "Gerenciamento de contatos de mensagens")
+/**
+ * Classe que representa os endpoints REST para gerenciamento de contato mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemController
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api/${api.version}/contato/mensagem")
 public class ContatoMensagemController

@@ -31,13 +31,13 @@ public class BaseServiceEvent<T> extends ApplicationEvent {
     private final T dto;
     private final EventType eventType;
     private final Object additionalData;
-    
+
     public BaseServiceEvent(Object source, T dto, EventType eventType) {
         super(source);
         this.dto = dto;
         this.eventType = eventType;
     }
-    
+
     public BaseServiceEvent(Object source, T dto, EventType eventType, Object data) {
         this(source, dto, eventType);
         this.additionalData = data;
@@ -52,8 +52,8 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>> {
     default void beforeSave(D toSave) throws ServiceException {
         // Hook para lógica antes do save
     }
-    
-    default void afterSave(D original, D saved, CrudOperationType type) 
+
+    default void afterSave(D original, D saved, CrudOperationType type)
         throws ServiceException {
         // Publish event here in implementations
     }
@@ -96,7 +96,7 @@ public abstract class DefaultSecuredBaseService<T extends BaseEntity, D extends 
 
 ```java
 @Service
-public class FamiliaService 
+public class FamiliaService
     extends DefaultSecuredBaseService<Familia, FamiliaDTO> {
     // Herda publicação automática de afterSave/afterDelete
 }
@@ -107,7 +107,7 @@ public class FamiliaService
 ```java
 @Component
 public class FamiliaEventListener {
-    
+
     @EventListener
     public void handleFamiliaEvent(BaseServiceEvent<FamiliaDTO> event) {
         if (event.getEventType() == CrudOperationType.CREATED) {
@@ -160,6 +160,27 @@ public class FamiliaEventListener {
 - [`SaveBaseService.afterSave()`](../../ia-core-service/src/main/java/com/ia/core/service/SaveBaseService.java) com callback
 - [`DeleteBaseService.afterDelete()`](../../ia-core-service/src/main/java/com/ia/core/service/DeleteBaseService.java) com callback
 - [`DefaultSecuredBaseService.afterSave/afterDelete()`](../../security-core-service/src/main/java/com/ia/core/security/service/DefaultSecuredBaseService.java) publicação automática
+
+### Estrutura de Eventos
+
+```java
+// EventType - interface para tipos de evento
+public interface EventType { }
+
+// CrudOperationType - enum de tipos de evento
+public enum CrudOperationType implements EventType {
+    CREATED,   // Entidade criada
+    UPDATED,   // Entidade atualizada
+    DELETED;   // Entidade deletada
+}
+
+// BaseServiceEvent - classe de evento genérica
+public class BaseServiceEvent<T> extends ApplicationEvent {
+    private final T dto;
+    private final EventType eventType;
+    private final Object additionalData;
+}
+```
 
 ## Data
 

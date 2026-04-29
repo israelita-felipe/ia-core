@@ -14,6 +14,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para role privilege page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegePageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class RolePrivilegePageViewModelConfig
   extends CollectionPageViewModelConfig<RolePrivilegeDTO> {
   @Getter

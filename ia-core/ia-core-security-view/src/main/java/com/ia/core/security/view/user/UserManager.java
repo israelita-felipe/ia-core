@@ -12,10 +12,16 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-
 /**
- * @author Israel Araújo
+ * Gerenciador de user.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
+
 @Service
 public class UserManager
   extends DefaultSecuredViewBaseManager<UserDTO>

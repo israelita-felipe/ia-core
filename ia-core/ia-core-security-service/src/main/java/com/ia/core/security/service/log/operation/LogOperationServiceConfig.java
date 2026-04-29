@@ -13,8 +13,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para log operation service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationServiceConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class LogOperationServiceConfig
   extends DefaultBaseServiceConfig<LogOperation, LogOperationDTO> {

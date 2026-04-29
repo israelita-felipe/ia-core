@@ -7,9 +7,14 @@ import com.ia.core.view.components.layout.MainLayoutViewModel;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de secured layout.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SecuredLayoutView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public abstract class SecuredLayoutView
   extends MainLayoutView

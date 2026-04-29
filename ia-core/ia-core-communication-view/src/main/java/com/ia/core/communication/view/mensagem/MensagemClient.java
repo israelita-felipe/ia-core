@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = MensagemClient.NOME, url = MensagemClient.URL)
 public interface MensagemClient extends DefaultBaseClient<MensagemDTO> {
 

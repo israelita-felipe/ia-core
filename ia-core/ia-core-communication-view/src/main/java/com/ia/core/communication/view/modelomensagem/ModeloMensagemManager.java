@@ -18,6 +18,7 @@ import java.util.Map;
  * @author Israel Araújo
  * @see ModeloMensagemUseCase
  */
+
 @Service
 public class ModeloMensagemManager
   extends DefaultSecuredViewBaseManager<ModeloMensagemDTO>

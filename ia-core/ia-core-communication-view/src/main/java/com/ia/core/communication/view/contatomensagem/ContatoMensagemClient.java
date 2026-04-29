@@ -13,6 +13,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @see DefaultBaseClient
  */
+
 @FeignClient(name = ContatoMensagemClient.NOME, url = ContatoMensagemClient.URL)
 public interface ContatoMensagemClient extends DefaultBaseClient<ContatoMensagemDTO> {
 

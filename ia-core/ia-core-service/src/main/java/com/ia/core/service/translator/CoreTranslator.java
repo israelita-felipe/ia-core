@@ -7,9 +7,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 /**
- * @author Israel Araújo
+ * Serviço de negócio para gerenciamento de core translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class CoreTranslator
   implements Translator {

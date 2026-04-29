@@ -11,6 +11,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para role privilege form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilegeFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class RolePrivilegeFormViewModelConfig
   extends FormViewModelConfig<RolePrivilegeDTO> {
   /** {@link PrivilegeManager} */

@@ -18,8 +18,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para role service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RoleServiceConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
+
 @Component
 public class RoleServiceConfig
   extends DefaultSecuredBaseServiceConfig<Role, RoleDTO> {

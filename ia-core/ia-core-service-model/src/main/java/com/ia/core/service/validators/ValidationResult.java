@@ -34,6 +34,16 @@ import java.util.stream.Collectors;
  * }
  * </pre>
  */
+/**
+ * Interface que define o contrato para validation result.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ValidationResult
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public interface ValidationResult {
 
   /**

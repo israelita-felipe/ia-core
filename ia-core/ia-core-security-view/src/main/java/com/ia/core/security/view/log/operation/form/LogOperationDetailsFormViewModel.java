@@ -9,9 +9,14 @@ import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import lombok.Getter;
 
 import java.util.Collection;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de log operation details form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationDetailsFormViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class LogOperationDetailsFormViewModel
   extends FormViewModel<LogOperationDetails> {

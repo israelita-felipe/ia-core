@@ -19,6 +19,15 @@ import java.util.Map;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa o objeto de transferência de dados para envio mensagem request.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EnvioMensagemRequestDTO
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor

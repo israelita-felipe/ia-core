@@ -5,9 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
-
 /**
- * @author Israel Araújo
+ * Interface que define o contrato para jwt.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JwtManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface JwtManager {
 

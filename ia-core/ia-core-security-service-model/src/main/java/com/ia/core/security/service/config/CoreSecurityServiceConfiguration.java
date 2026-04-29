@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0
  * @since 1.0
  */
+
 @Configuration
 public abstract class CoreSecurityServiceConfiguration {
 

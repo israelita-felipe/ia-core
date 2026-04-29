@@ -10,6 +10,15 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * can be extended to create a listener which only needs to handle a subset of
  * the available methods.
  */
+/**
+ * Classe que representa o listener para eventos de leitura base.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LeituraBaseListener
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("CheckReturnValue")
 public class LeituraBaseListener
   implements LeituraListener {

@@ -17,6 +17,7 @@ import java.util.Map;
  * @author Israel Araújo
  * @see <a href="https://developers.facebook.com/docs/whatsapp</a>
  */
+
 @FeignClient(name = "whatsAppClient", url = "${whatsapp.api.url:https://graph.facebook.com/v18.0}")
 public interface WhatsAppClient {
 

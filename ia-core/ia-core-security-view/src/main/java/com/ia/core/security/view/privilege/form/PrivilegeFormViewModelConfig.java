@@ -10,6 +10,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para privilege form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class PrivilegeFormViewModelConfig
   extends FormViewModelConfig<PrivilegeDTO> {
   @Getter

@@ -7,6 +7,16 @@ import com.vaadin.flow.data.converter.Converter;
 /**
  *
  */
+/**
+ * Conversor de dados para string to integer.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a StringToIntegerConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class StringToIntegerConverter
   implements Converter<String, Integer> {
 

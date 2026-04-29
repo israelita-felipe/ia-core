@@ -6,13 +6,20 @@ import com.vaadin.flow.server.ErrorHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Capturador de erros genéricos da view
+ * Classe que representa o manipulador de core error.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreErrorHandler
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 @Slf4j
 public abstract class CoreErrorHandler
   implements ErrorHandler {
   /** Serial UID */
-  private static final long serialVersionUID = 3665080427109738331L;
+
+private static final long serialVersionUID = 3665080427109738331L;
 
   @Override
   public void error(ErrorEvent event) {

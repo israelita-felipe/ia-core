@@ -5,9 +5,14 @@ import com.vaadin.flow.router.AccessDeniedException;
 import io.jsonwebtoken.ExpiredJwtException;
 
 import java.util.function.Consumer;
-
 /**
- * @author Israel Araújo
+ * Componente de interface visual para has user authentication.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a HasUserAuthentication
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface HasUserAuthentication {
   default void access(Consumer<AuthenticationDetails> onAccess) {

@@ -9,10 +9,16 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 /**
- * @author Israel Araújo
+ * Serviço de negócio para gerenciamento de privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
+
 @Service
 public class PrivilegeService
   extends DefaultSecuredBaseService<Privilege, PrivilegeDTO>

@@ -11,7 +11,13 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
 /**
+ * Classe que representa as configurações para scheduler config page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigPageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -24,7 +30,8 @@ public class SchedulerConfigPageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public SchedulerConfigPageViewModelConfig(DefaultBaseManager<SchedulerConfigDTO> service,
+
+public SchedulerConfigPageViewModelConfig(DefaultBaseManager<SchedulerConfigDTO> service,
                                             QuartzManager schedulerService,
                                             LogOperationManager logOperationService) {
     super(service, logOperationService);

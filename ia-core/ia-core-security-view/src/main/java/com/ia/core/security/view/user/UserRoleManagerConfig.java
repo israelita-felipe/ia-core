@@ -10,6 +10,16 @@ import com.ia.core.view.utils.ManagerFactory;
 /**
  *
  */
+/**
+ * Classe de configuração para user role manager.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserRoleManagerConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 
 public class UserRoleManagerConfig
   extends DefaultCollectionManagerConfig<UserRoleDTO> {

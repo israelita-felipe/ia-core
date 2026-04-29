@@ -8,6 +8,16 @@ import java.util.Collection;
 /**
  *
  */
+/**
+ * Componente de interface visual para view privilege context.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ViewPrivilegeContext
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ViewPrivilegeContext
   extends Context<PrivilegeContext> {
 

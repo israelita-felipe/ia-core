@@ -9,6 +9,15 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa as configurações para sms.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SmsConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @ConfigurationProperties(prefix = "sms")
 @Configuration

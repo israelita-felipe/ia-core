@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Israel Araújo
  */
+
 @FeignClient(name = UserClient.NOME, url = UserClient.URL)
 public interface UserClient
   extends DefaultBaseClient<UserDTO> {

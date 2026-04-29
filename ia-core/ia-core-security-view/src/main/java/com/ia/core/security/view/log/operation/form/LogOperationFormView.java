@@ -5,9 +5,14 @@ import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.textfield.TextField;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de log operation form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class LogOperationFormView
   extends FormView<LogOperationDTO> {

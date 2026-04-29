@@ -3,6 +3,15 @@ package com.ia.core.security.service.model.user;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio user translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class UserTranslator {
   public static final class HELP {

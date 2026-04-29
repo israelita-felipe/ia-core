@@ -33,6 +33,14 @@ import java.time.Month;
  * @see java.time.Month
  * @see jakarta.persistence.AttributeConverter
  */
+/**
+ * Enumeração que representa o conversor de dados para month.
+ * <p>
+ * Define os valores possíveis para MonthConverter no sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Converter(autoApply = true)
 public class MonthConverter
   implements AttributeConverter<Month, Integer> {

@@ -21,6 +21,15 @@ import static org.mockito.Mockito.mock;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para service validator test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ServiceValidatorTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ServiceValidator")
 class ServiceValidatorTest {

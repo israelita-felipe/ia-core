@@ -25,6 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio i calendar serializer test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ICalendarSerializerTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("ICalendarSerializer")
 class ICalendarSerializerTest {
 

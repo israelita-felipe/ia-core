@@ -31,6 +31,7 @@ import java.util.UUID;
  *
  * @author Israel Araújo
  */
+
 @Component
 public class TestDataFactory {
 

@@ -20,6 +20,7 @@ import java.util.List;
  * @see Periodicidade
  * @see org.springframework.data.jpa.repository.JpaRepository
  */
+
 @Repository
 public interface PeriodicidadeRepository
   extends JpaRepository<Periodicidade, Long> {

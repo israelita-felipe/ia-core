@@ -10,7 +10,13 @@ import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 /**
+ * Classe que representa as configurações para comando sistema page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaPageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -25,7 +31,8 @@ public class ComandoSistemaPageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public ComandoSistemaPageViewModelConfig(DefaultBaseManager<ComandoSistemaDTO> service,
+
+public ComandoSistemaPageViewModelConfig(DefaultBaseManager<ComandoSistemaDTO> service,
                                            LogOperationManager logOperationService,
                                            TemplateManager templateService) {
     super(service, logOperationService);

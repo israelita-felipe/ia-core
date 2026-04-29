@@ -20,6 +20,7 @@ import java.util.Iterator;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class ImageProcessingService {
   /**

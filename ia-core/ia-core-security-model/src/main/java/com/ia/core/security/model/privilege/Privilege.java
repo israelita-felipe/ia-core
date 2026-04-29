@@ -9,6 +9,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+/**
+ * Classe que representa a entidade de domínio privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a Privilege
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Entity
 @Table(name = Privilege.TABLE_NAME, schema = Privilege.SCHEMA_NAME)

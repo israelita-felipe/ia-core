@@ -7,9 +7,14 @@ import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de template form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplateFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class TemplateFormView
   extends FormView<TemplateDTO> {

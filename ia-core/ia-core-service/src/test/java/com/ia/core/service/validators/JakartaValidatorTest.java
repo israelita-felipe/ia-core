@@ -13,6 +13,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para jakarta validator test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JakartaValidatorTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("JakartaValidator")
 class JakartaValidatorTest {
 

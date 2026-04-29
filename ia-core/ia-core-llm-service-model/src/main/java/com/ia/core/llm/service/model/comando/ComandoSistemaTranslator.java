@@ -3,6 +3,15 @@ package com.ia.core.llm.service.model.comando;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio comando sistema translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class ComandoSistemaTranslator {
   public static final class HELP {

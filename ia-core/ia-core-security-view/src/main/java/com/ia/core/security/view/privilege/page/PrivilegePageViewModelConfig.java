@@ -14,7 +14,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * Classe que representa as configurações para privilege page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegePageViewModelConfig
+ * dentro do sistema.
  *
+ * @author IA
+ * @since 1.0
  */
 @UIScope
 @Component
@@ -27,7 +33,8 @@ public class PrivilegePageViewModelConfig
    * @param service
    * @param logOperationService
    */
-  public PrivilegePageViewModelConfig(PrivilegeManager service,
+
+public PrivilegePageViewModelConfig(PrivilegeManager service,
                                       List<HasContext> hasContext,
                                       LogOperationManager logOperationService) {
     super(service, logOperationService);

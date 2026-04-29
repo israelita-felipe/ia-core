@@ -19,6 +19,7 @@ import java.util.Objects;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class RoleManager
   extends DefaultSecuredViewBaseManager<RoleDTO>

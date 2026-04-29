@@ -18,6 +18,15 @@ import java.time.LocalDateTime;
        indexes = {
            @Index(name = "idx_log_operation_type_value_id_date_time_operation",
                   columnList = "type ASC, value_id ASC, date_time_operation DESC") })
+/**
+ * Classe que representa a entidade de domínio log operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperation
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Getter
 @Setter
 @SuperBuilder

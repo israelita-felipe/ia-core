@@ -15,6 +15,16 @@ import java.util.function.Supplier;
 /**
  *
  */
+/**
+ * Classe de configuração para privilege operation context page view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationContextPageViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class PrivilegeOperationContextPageViewModelConfig
   extends CollectionPageViewModelConfig<PrivilegeOperationContextDTO> {
   @Getter

@@ -9,9 +9,14 @@ import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de comando sistema page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaPageView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class ComandoSistemaPageView
   extends EntityPageView<ComandoSistemaDTO> {

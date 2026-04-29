@@ -10,9 +10,14 @@ import com.ia.core.view.components.editor.formEditor.viewModel.FormEditorViewMod
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.layout.menu.AbstractMenuLayoutViewModel;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de secured menu.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SecuredMenuViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 
 public class SecuredMenuViewModel

@@ -16,6 +16,7 @@ import java.util.Map;
  * @author Israel Araújo
  * @see <a href="https://core.telegram.org/bots/api">Telegram Bot API</a>
  */
+
 @FeignClient(name = "telegramClient", url = "${telegram.api.url:https://api.telegram.org}")
 public interface TelegramClient {
 

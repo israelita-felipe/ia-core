@@ -13,6 +13,15 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Optional;
+/**
+ * Classe que representa os serviços de negócio para periodicidade trigger.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PeriodicidadeTrigger
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public class PeriodicidadeTrigger
   extends AbstractTrigger<PeriodicidadeTrigger>

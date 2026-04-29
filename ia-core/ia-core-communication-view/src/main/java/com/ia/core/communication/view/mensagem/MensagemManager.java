@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Israel Araújo
  */
+
 @Service
 public class MensagemManager
   extends DefaultSecuredViewBaseManager<MensagemDTO>

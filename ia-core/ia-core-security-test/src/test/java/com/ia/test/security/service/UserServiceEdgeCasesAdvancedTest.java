@@ -23,6 +23,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para user service edge cases advanced test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserServiceEdgeCasesAdvancedTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("User Model Edge Cases")
 class UserServiceEdgeCasesAdvancedTest {
 

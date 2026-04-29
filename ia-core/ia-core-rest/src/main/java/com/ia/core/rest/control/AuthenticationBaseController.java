@@ -20,6 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @Tag(name = "Autenticação",
      description = "Endpoints para autenticação de usuários")
+/**
+ * Classe que representa os endpoints REST para gerenciamento de authentication base.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuthenticationBaseController
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public interface AuthenticationBaseController {
 
   /**

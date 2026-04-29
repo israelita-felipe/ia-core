@@ -2,6 +2,15 @@ package com.ia.core.security.service.authorization;
 
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
 import lombok.extern.slf4j.Slf4j;
+/**
+ * Classe que representa o gerenciamento de core authorization.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreAuthorizationManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Slf4j
 public abstract class CoreAuthorizationManager

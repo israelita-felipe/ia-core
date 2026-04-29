@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
  * </pre>
  * </p>
  */
+
 @Component
 public class ProcessadorVariaveis {
 

@@ -8,6 +8,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para comando sistema form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ComandoSistemaFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ComandoSistemaFormViewModelConfig
   extends FormViewModelConfig<ComandoSistemaDTO> {
   @Getter

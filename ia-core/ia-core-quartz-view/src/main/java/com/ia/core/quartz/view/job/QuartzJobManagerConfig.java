@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Israel Araújo
  */
+
 @Component
 public class QuartzJobManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<QuartzJobDTO> {

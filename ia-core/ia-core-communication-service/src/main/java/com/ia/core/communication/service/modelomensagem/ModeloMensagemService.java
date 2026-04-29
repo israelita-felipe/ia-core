@@ -19,6 +19,15 @@ import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensag
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para modelo mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 @Service
 public class ModeloMensagemService

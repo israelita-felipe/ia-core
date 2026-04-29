@@ -9,9 +9,14 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 /**
- * @author Israel Araújo
+ * Model de dados para a view de log operation form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationFormViewModel
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class LogOperationFormViewModel
   extends FormViewModel<LogOperationDTO> {

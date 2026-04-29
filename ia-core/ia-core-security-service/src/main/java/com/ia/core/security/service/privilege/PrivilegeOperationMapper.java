@@ -13,6 +13,15 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring",
         uses = { PrivilegeOperationContextMapper.class })
+/**
+ * Classe que representa o mapeamento de dados para privilege operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationMapper
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public interface PrivilegeOperationMapper
   extends BaseEntityMapper<PrivilegeOperation, PrivilegeOperationDTO> {
 

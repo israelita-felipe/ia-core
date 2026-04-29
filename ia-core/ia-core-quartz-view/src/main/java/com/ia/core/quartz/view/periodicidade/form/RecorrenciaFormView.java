@@ -14,9 +14,14 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import java.time.DayOfWeek;
 import java.time.Month;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de recorrencia form.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RecorrenciaFormView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class RecorrenciaFormView
   extends FormView<RecorrenciaDTO> {

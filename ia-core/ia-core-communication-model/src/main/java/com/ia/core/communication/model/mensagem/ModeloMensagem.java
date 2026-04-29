@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
  *
  * @author Israel Araújo
  */
+
 @Entity
 @Table(name = ModeloMensagem.TABLE_NAME, schema = ModeloMensagem.SCHEMA_NAME)
 @Data

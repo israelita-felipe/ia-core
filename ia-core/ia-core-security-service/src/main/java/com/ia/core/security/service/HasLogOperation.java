@@ -1,9 +1,14 @@
 package com.ia.core.security.service;
 
 import com.ia.core.security.service.log.operation.LogOperationService;
-
 /**
- * @author Israel Araújo
+ * Serviço de negócio para gerenciamento de has log operation.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a HasLogOperation
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface HasLogOperation {
 

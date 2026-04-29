@@ -22,6 +22,15 @@ import static org.mockito.Mockito.*;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para security context service test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SecurityContextServiceTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("SecurityContextService")
 class SecurityContextServiceTest {

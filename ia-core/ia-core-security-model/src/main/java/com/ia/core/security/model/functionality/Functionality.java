@@ -3,9 +3,14 @@ package com.ia.core.security.model.functionality;
 import com.ia.core.security.model.privilege.PrivilegeType;
 
 import java.util.Set;
-
 /**
- * @author Israel Araújo
+ * Entidade de domínio que representa functionality.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a Functionality
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface Functionality
   extends Comparable<Functionality> {

@@ -43,6 +43,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see Propagation#NOT_SUPPORTED
  */
+/**
+ * Classe que representa os serviços de negócio para non transactional.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a NonTransactional
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Documented
 @Retention(RUNTIME)

@@ -14,9 +14,14 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de log operation list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationListView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class LogOperationListView
   extends ListView<LogOperationDTO> {

@@ -4,6 +4,15 @@ import com.ia.core.quartz.service.model.periodicidade.dto.IntervaloTemporalDTO;
 import org.dmfs.rfc5545.DateTime;
 
 import java.time.*;
+/**
+ * Classe que representa a entidade de domínio date time adapter.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a DateTimeAdapter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 public class DateTimeAdapter {
 

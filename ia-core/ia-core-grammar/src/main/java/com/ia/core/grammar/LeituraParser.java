@@ -14,6 +14,15 @@ import java.util.List;
 
 @SuppressWarnings({ "all", "warnings", "unchecked", "unused", "cast",
     "CheckReturnValue", "this-escape" })
+/**
+ * Classe que representa leitura parser no sistema.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LeituraParser
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public class LeituraParser
   extends Parser {
   @SuppressWarnings("CheckReturnValue")

@@ -14,6 +14,16 @@ import java.util.List;
 /**
  *
  */
+/**
+ * Classe de configuração para user form view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a UserFormViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class UserFormViewModelConfig
   extends FormViewModelConfig<UserDTO> {
   /** {@link PrivilegeManager} */

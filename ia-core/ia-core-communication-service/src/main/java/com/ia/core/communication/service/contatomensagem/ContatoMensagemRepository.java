@@ -17,6 +17,7 @@ import java.util.Optional;
  *
  * @author Israel Araújo
  */
+
 @Repository
 public interface ContatoMensagemRepository
   extends BaseEntityRepository<ContatoMensagem> {

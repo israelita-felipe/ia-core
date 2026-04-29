@@ -13,6 +13,16 @@ import com.ia.core.view.components.page.viewModel.ICollectionPageViewModel;
 /**
  *
  */
+/**
+ * View para exibição e manipulação de scheduler config trigger collection page.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTriggerCollectionPageView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class SchedulerConfigTriggerCollectionPageView
   extends CollectionPageView<SchedulerConfigTriggerDTO> {
 

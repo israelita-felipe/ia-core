@@ -10,9 +10,14 @@ import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Date;
-
 /**
- * @author Israel Araújo
+ * Gerenciador de jwt core.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JwtCoreManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class JwtCoreManager
   implements JwtManager {

@@ -17,6 +17,7 @@ import java.util.List;
  *
  * @author Israel Araújo
  */
+
 @Entity
 @Table(name = GrupoContato.TABLE_NAME, schema = GrupoContato.SCHEMA_NAME)
 @Data

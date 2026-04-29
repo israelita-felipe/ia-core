@@ -4,9 +4,14 @@ import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
 import com.ia.core.security.service.model.log.operation.OperationItemDetails;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
-
 /**
- * @author Israel Araújo
+ * View para exibição e manipulação de operation item details list.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a OperationItemDetailsListView
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public class OperationItemDetailsListView
   extends ListView<OperationItemDetails> {

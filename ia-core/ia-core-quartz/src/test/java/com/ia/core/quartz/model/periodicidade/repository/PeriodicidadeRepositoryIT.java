@@ -22,6 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Israel Araújo
  * @since 1.0.0
  */
+/**
+ * Classe que representa a entidade de domínio periodicidade repository i t.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a PeriodicidadeRepositoryIT
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 class PeriodicidadeRepositoryIT extends AbstractQuartzRepositoryIT {
 

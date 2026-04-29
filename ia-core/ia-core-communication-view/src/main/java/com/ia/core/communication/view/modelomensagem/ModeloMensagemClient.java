@@ -18,6 +18,15 @@ import java.util.Map;
  */
 @FeignClient(name = ModeloMensagemClient.NOME,
              url = ModeloMensagemClient.URL)
+/**
+ * Classe que representa o cliente de comunicação para modelo mensagem.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemClient
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public interface ModeloMensagemClient
   extends DefaultBaseClient<ModeloMensagemDTO> {
 

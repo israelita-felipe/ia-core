@@ -17,10 +17,10 @@ import java.util.function.Consumer;
  * abstrai a complexidade do ciclo de vida do Quartz e permite que
  * subclasses foquem apenas na lógica de negócio.
  * <p>
- *用法示例:
+ * Exemplo de uso:
  * <pre>
  * public class MeuJob extends AbstractJob {
- *     \&#64;Override
+ *     &#64;Override
  *     protected void executeInternal(JobExecutionContext context)
  *             throws JobExecutionException {
  *         // Lógica do job
@@ -35,45 +35,18 @@ import java.util.function.Consumer;
  */
 @Slf4j
 @NoArgsConstructor
-public abstract class AbstractJob
-  extends QuartzJobBean {
+public abstract class AbstractJob extends QuartzJobBean {
 
   /**
-   * Consumer para inicialização customizada do contexto de execução.
-   * <p>
-   * Permite que cada job defina sua própria lógica de preparação
-   * do contexto antes da execução.
-   *
-   * @since 1.0.0
+   * Inicializador de contexto para jobs.
    */
   @Getter
-  private Consumer<JobExecutionContext> contextInitializer = context -> {
-  };
+  private Consumer<JobExecutionContext> contextInitializer;
 
   /**
-   * Método interno do Quartz que executa a lógica do job.
-   * <p>
-   * Este método é chamado pelo framework Quartz. Ele inicializa o contexto
-   * e delega a execução para a lógica específica do job.
+   * Inicializa o contexto do job com um consumer customizado.
    *
-   * @param context Contexto de execução do Quartz contendo informações do job e trigger
-   * @throws JobExecutionException se ocorrer erro durante a execução do job
-   * @since 1.0.0
-   */
-  @Override
-  protected void executeInternal(JobExecutionContext context)
-    throws JobExecutionException {
-    initContext(context);
-  }
-
-  /**
-   * Define um consumidor customizado para inicialização do contexto.
-   * <p>
-   * Permite que o job defina preparações específicas que devem ser
-   * executadas antes de cada execução.
-   *
-   * @param contextInitializer Consumer que será executado para inicializar o contexto
-   * @since 1.0.0
+   * @param contextInitializer consumer para inicialização do contexto
    */
   public void initContext(Consumer<JobExecutionContext> contextInitializer) {
     this.contextInitializer = contextInitializer;
@@ -86,6 +59,24 @@ public abstract class AbstractJob
    * @since 1.0.0
    */
   public void initContext(JobExecutionContext context) {
-    this.contextInitializer.accept(context);
+    if (this.contextInitializer != null) {
+      this.contextInitializer.accept(context);
+    }
   }
+
+  @Override
+  protected void executeInternal(JobExecutionContext context)
+    throws JobExecutionException {
+    initContext(context);
+    executeJob(context);
+  }
+
+  /**
+   * Método abstrato para implementação da lógica do job.
+   *
+   * @param context contexto de execução do Quartz
+   * @throws JobExecutionException se ocorrer um erro na execução
+   */
+  protected abstract void executeJob(JobExecutionContext context)
+    throws JobExecutionException;
 }

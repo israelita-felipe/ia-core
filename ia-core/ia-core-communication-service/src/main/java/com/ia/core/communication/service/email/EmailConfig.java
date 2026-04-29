@@ -10,6 +10,15 @@ import org.springframework.mail.javamail.JavaMailSender;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa as configurações para email.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a EmailConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Data
 @ConfigurationProperties(prefix = "email")
 @Configuration

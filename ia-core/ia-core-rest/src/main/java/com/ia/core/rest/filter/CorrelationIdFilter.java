@@ -26,6 +26,7 @@ import java.util.UUID;
  * @see <a href="../../ADR/013-logging-monitoring-patterns.md">ADR-013 - Padrões de Logging e Monitoramento</a>
  * @version 1.0
  */
+
 @Component
 @Order(1)
 public class CorrelationIdFilter extends OncePerRequestFilter {

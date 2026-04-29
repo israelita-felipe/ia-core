@@ -14,6 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Israel Araújo
  */
+/**
+ * Classe que representa os serviços de negócio para base service event test.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a BaseServiceEventTest
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @DisplayName("BaseServiceEvent")
 class BaseServiceEventTest {
 

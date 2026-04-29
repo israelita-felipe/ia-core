@@ -3,6 +3,15 @@ package com.ia.core.llm.service.model.template;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa a entidade de domínio template translator.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TemplateTranslator
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @SuppressWarnings("javadoc")
 public class TemplateTranslator {
   public static final class HELP {

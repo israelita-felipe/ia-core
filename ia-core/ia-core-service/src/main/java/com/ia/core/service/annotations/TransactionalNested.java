@@ -62,6 +62,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Transactional(readOnly = false, propagation = Propagation.NESTED,
                isolation = Isolation.DEFAULT, timeout = 30)
+/**
+ * Classe que representa os serviços de negócio para transactional nested.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a TransactionalNested
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 public @interface TransactionalNested {
 
 }

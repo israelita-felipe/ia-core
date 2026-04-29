@@ -25,6 +25,15 @@ import java.util.stream.Stream;
  * @author Israel Araújo
  * @see UserDetailsService
  */
+/**
+ * Classe que representa os serviços de negócio para core user details.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreUserDetailsService
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @RequiredArgsConstructor
 public class CoreUserDetailsService
   implements UserDetailsService {

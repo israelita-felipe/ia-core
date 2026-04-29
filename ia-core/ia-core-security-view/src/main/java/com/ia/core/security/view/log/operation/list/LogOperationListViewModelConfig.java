@@ -8,6 +8,16 @@ import lombok.Getter;
 /**
  *
  */
+/**
+ * Classe de configuração para log operation list view model.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a LogOperationListViewModelConfig
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class LogOperationListViewModelConfig
   extends ListViewModelConfig<LogOperationDTO> {
   @Getter

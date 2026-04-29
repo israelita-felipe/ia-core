@@ -97,76 +97,85 @@ public final class TSID
           'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', //
           'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z' };
   /** Alphabet values */
-  private static final long[] ALPHABET_VALUES = new long[128];
-  static {
-    for (int i = 0; i < ALPHABET_VALUES.length; i++) {
-      ALPHABET_VALUES[i] = -1;
+  private static final long[] ALPHABET_VALUES = initializeAlphabetValues();
+
+  /**
+   * Initializes the alphabet values for Crockford's Base32 encoding.
+   * Maps each valid character to its numeric value (-1 for invalid chars).
+   *
+   * @return array of alphabet values indexed by character code
+   */
+  private static long[] initializeAlphabetValues() {
+    final long[] values = new long[128];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = -1;
     }
     // Numbers
-    ALPHABET_VALUES['0'] = 0x00;
-    ALPHABET_VALUES['1'] = 0x01;
-    ALPHABET_VALUES['2'] = 0x02;
-    ALPHABET_VALUES['3'] = 0x03;
-    ALPHABET_VALUES['4'] = 0x04;
-    ALPHABET_VALUES['5'] = 0x05;
-    ALPHABET_VALUES['6'] = 0x06;
-    ALPHABET_VALUES['7'] = 0x07;
-    ALPHABET_VALUES['8'] = 0x08;
-    ALPHABET_VALUES['9'] = 0x09;
+    values['0'] = 0x00;
+    values['1'] = 0x01;
+    values['2'] = 0x02;
+    values['3'] = 0x03;
+    values['4'] = 0x04;
+    values['5'] = 0x05;
+    values['6'] = 0x06;
+    values['7'] = 0x07;
+    values['8'] = 0x08;
+    values['9'] = 0x09;
     // Lower case
-    ALPHABET_VALUES['a'] = 0x0a;
-    ALPHABET_VALUES['b'] = 0x0b;
-    ALPHABET_VALUES['c'] = 0x0c;
-    ALPHABET_VALUES['d'] = 0x0d;
-    ALPHABET_VALUES['e'] = 0x0e;
-    ALPHABET_VALUES['f'] = 0x0f;
-    ALPHABET_VALUES['g'] = 0x10;
-    ALPHABET_VALUES['h'] = 0x11;
-    ALPHABET_VALUES['j'] = 0x12;
-    ALPHABET_VALUES['k'] = 0x13;
-    ALPHABET_VALUES['m'] = 0x14;
-    ALPHABET_VALUES['n'] = 0x15;
-    ALPHABET_VALUES['p'] = 0x16;
-    ALPHABET_VALUES['q'] = 0x17;
-    ALPHABET_VALUES['r'] = 0x18;
-    ALPHABET_VALUES['s'] = 0x19;
-    ALPHABET_VALUES['t'] = 0x1a;
-    ALPHABET_VALUES['v'] = 0x1b;
-    ALPHABET_VALUES['w'] = 0x1c;
-    ALPHABET_VALUES['x'] = 0x1d;
-    ALPHABET_VALUES['y'] = 0x1e;
-    ALPHABET_VALUES['z'] = 0x1f;
-    // Lower case OIL
-    ALPHABET_VALUES['o'] = 0x00;
-    ALPHABET_VALUES['i'] = 0x01;
-    ALPHABET_VALUES['l'] = 0x01;
+    values['a'] = 0x0a;
+    values['b'] = 0x0b;
+    values['c'] = 0x0c;
+    values['d'] = 0x0d;
+    values['e'] = 0x0e;
+    values['f'] = 0x0f;
+    values['g'] = 0x10;
+    values['h'] = 0x11;
+    values['j'] = 0x12;
+    values['k'] = 0x13;
+    values['m'] = 0x14;
+    values['n'] = 0x15;
+    values['p'] = 0x16;
+    values['q'] = 0x17;
+    values['r'] = 0x18;
+    values['s'] = 0x19;
+    values['t'] = 0x1a;
+    values['v'] = 0x1b;
+    values['w'] = 0x1c;
+    values['x'] = 0x1d;
+    values['y'] = 0x1e;
+    values['z'] = 0x1f;
+    // Lower case OIL (ambiguous characters)
+    values['o'] = 0x00;
+    values['i'] = 0x01;
+    values['l'] = 0x01;
     // Upper case
-    ALPHABET_VALUES['A'] = 0x0a;
-    ALPHABET_VALUES['B'] = 0x0b;
-    ALPHABET_VALUES['C'] = 0x0c;
-    ALPHABET_VALUES['D'] = 0x0d;
-    ALPHABET_VALUES['E'] = 0x0e;
-    ALPHABET_VALUES['F'] = 0x0f;
-    ALPHABET_VALUES['G'] = 0x10;
-    ALPHABET_VALUES['H'] = 0x11;
-    ALPHABET_VALUES['J'] = 0x12;
-    ALPHABET_VALUES['K'] = 0x13;
-    ALPHABET_VALUES['M'] = 0x14;
-    ALPHABET_VALUES['N'] = 0x15;
-    ALPHABET_VALUES['P'] = 0x16;
-    ALPHABET_VALUES['Q'] = 0x17;
-    ALPHABET_VALUES['R'] = 0x18;
-    ALPHABET_VALUES['S'] = 0x19;
-    ALPHABET_VALUES['T'] = 0x1a;
-    ALPHABET_VALUES['V'] = 0x1b;
-    ALPHABET_VALUES['W'] = 0x1c;
-    ALPHABET_VALUES['X'] = 0x1d;
-    ALPHABET_VALUES['Y'] = 0x1e;
-    ALPHABET_VALUES['Z'] = 0x1f;
-    // Upper case OIL
-    ALPHABET_VALUES['O'] = 0x00;
-    ALPHABET_VALUES['I'] = 0x01;
-    ALPHABET_VALUES['L'] = 0x01;
+    values['A'] = 0x0a;
+    values['B'] = 0x0b;
+    values['C'] = 0x0c;
+    values['D'] = 0x0d;
+    values['E'] = 0x0e;
+    values['F'] = 0x0f;
+    values['G'] = 0x10;
+    values['H'] = 0x11;
+    values['J'] = 0x12;
+    values['K'] = 0x13;
+    values['M'] = 0x14;
+    values['N'] = 0x15;
+    values['P'] = 0x16;
+    values['Q'] = 0x17;
+    values['R'] = 0x18;
+    values['S'] = 0x19;
+    values['T'] = 0x1a;
+    values['V'] = 0x1b;
+    values['W'] = 0x1c;
+    values['X'] = 0x1d;
+    values['Y'] = 0x1e;
+    values['Z'] = 0x1f;
+    // Upper case OIL (ambiguous characters)
+    values['O'] = 0x00;
+    values['I'] = 0x01;
+    values['L'] = 0x01;
+    return values;
   }
 
   /**
@@ -448,12 +457,7 @@ public final class TSID
    */
   @Override
   public boolean equals(Object other) {
-    if (other == null)
-      return false;
-    if (other.getClass() != TSID.class)
-      return false;
-    TSID that = (TSID) other;
-    return (this.number == that.number);
+    return (other instanceof TSID that) && (this.number == that.number);
   }
 
   /**
@@ -468,19 +472,7 @@ public final class TSID
    */
   @Override
   public int compareTo(TSID that) {
-
-    // used to compare as UNSIGNED longs
-    final long min = UNSIGNED_MIN_VALUE;
-
-    final long a = this.number + min;
-    final long b = that.number + min;
-
-    if (a > b)
-      return 1;
-    else if (a < b)
-      return -1;
-
-    return 0;
+    return Long.compareUnsigned(this.number, that.number);
   }
 
   /**

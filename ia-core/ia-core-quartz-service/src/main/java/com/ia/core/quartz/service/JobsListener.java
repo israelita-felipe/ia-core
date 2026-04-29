@@ -23,6 +23,15 @@ import org.quartz.JobListener;
  * @see org.quartz.JobListener
  * @see org.quartz.JobExecutionContext
  */
+/**
+ * Classe que representa o listener para eventos de jobs.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a JobsListener
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 public class JobsListener
   implements JobListener {

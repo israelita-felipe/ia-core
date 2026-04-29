@@ -15,6 +15,16 @@ import java.util.stream.Collectors;
 /**
  *
  */
+/**
+ * Conversor de dados para context definition.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a ContextDefinitionConverter
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
+
 public class ContextDefinitionConverter
   implements Converter<Set<ContextDefinition>, Set<String>> {
 

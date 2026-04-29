@@ -2,9 +2,14 @@ package com.ia.core.security.view.authentication;
 
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
-
 /**
- * @author Israel Araújo
+ * Gerenciador de authentication.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a AuthenticationManager
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
  */
 public interface AuthenticationManager {
 

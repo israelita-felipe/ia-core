@@ -18,6 +18,15 @@ import java.util.Collection;
 /**
  * @author Israel Araújo
  */
+/**
+ * Classe que representa as configurações para core security service.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreSecurityServiceConfiguration
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 @Slf4j
 public abstract class CoreSecurityServiceConfiguration {
 

@@ -11,6 +11,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+/**
+ * Classe que representa a entidade de domínio role privilege.
+ * <p>
+ * Responsável por gerenciar as funcionalidades relacionadas a RolePrivilege
+ * dentro do sistema.
+ *
+ * @author IA
+ * @since 1.0
+ */
 
 @Entity
 @Table(name = RolePrivilege.TABLE_NAME, schema = RolePrivilege.SCHEMA_NAME)
