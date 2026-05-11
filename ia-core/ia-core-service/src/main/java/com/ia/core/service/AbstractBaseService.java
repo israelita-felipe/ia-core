@@ -120,9 +120,14 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
       throw new IllegalStateException("Mapper não pode ser nulo em "
           + this.getClass().getSimpleName());
     }
-    @SuppressWarnings("unchecked")
-    M result = (M) mapper;
-    return result;
+    try {
+      @SuppressWarnings("unchecked")
+      M result = (M) mapper;
+      return result;
+    } catch (ClassCastException e) {
+      throw new IllegalStateException("Mapper incompatível em "
+          + this.getClass().getSimpleName(), e);
+    }
   }
 
   /**
@@ -138,9 +143,14 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
       throw new IllegalStateException("Repository não pode ser nulo em "
           + this.getClass().getSimpleName());
     }
-    @SuppressWarnings("unchecked")
-    R result = (R) repository;
-    return result;
+    try {
+      @SuppressWarnings("unchecked")
+      R result = (R) repository;
+      return result;
+    } catch (ClassCastException e) {
+      throw new IllegalStateException("Repository incompatível em "
+          + this.getClass().getSimpleName(), e);
+    }
   }
 
   /**

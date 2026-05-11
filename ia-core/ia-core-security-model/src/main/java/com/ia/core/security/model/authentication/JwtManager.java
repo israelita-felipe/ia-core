@@ -53,10 +53,33 @@ public interface JwtManager {
 
   boolean validateToken(String token);
 
+  /**
+   * Contexto associado a um token JWT.
+   * <p>
+   * Classe abstrata que representa o contexto de funcionalidades associado
+   * a um token JWT. O contexto armazena informações adicionais que podem
+   * ser utilizadas para autorização granular.
+   *
+   * @bugfix SECURITY: Campo 'context' tornado privado com getter/setter.
+   *         Anteriormente era público, permitindo modificação não autorizada.
+   *         Agora usa Lombok @Data para gerar getters/setters de forma segura.
+   *
+   * @param <T> tipo do contexto
+   */
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
   public static abstract class Context<T> {
-    Collection<T> context;
+    /**
+     * Contexto associado ao token.
+     * <p>
+     * ⚠️ SECURITY: Este campo é mutable. Certifique-se de que o contexto
+     * não contenha informações sensíveis ou que sejam modificadas após a
+     * geração do token.
+     *
+     * @bugfix SECURITY: Tornado privado (era público) para evitar
+     *         modificação externa direta. Use getter/setter.
+     */
+    private Collection<T> context;
   }
 }

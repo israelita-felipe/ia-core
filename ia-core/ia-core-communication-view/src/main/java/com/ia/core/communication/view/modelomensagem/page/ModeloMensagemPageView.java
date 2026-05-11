@@ -3,6 +3,7 @@ package com.ia.core.communication.view.modelomensagem.page;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.communication.view.contatomensagem.ContatoMensagemManager;
 import com.ia.core.communication.view.grupocontato.GrupoContatoManager;
 import com.ia.core.communication.view.modelomensagem.ModeloMensagemManager;
@@ -125,7 +126,7 @@ public class ModeloMensagemPageView extends PageView<ModeloMensagemDTO> {
     dialog.setHeader($(getGrupoContatoManager().getFunctionalityTypeName() + ".selecionar"));
     dialog.setText(grupoComboBox);
     dialog.setConfirmText($(getGrupoContatoManager().getFunctionalityTypeName() + ".enviar"));
-    dialog.setCancelText($("Cancelar"));
+    dialog.setCancelText($(CoreApplicationTranslator.ACTION.CANCEL));
 
     dialog.addConfirmListener(event -> {
       GrupoContatoDTO grupoSelecionado = grupoComboBox.getValue();
@@ -160,7 +161,7 @@ public class ModeloMensagemPageView extends PageView<ModeloMensagemDTO> {
     dialog.setHeader($(contatoMensagemManager.getFunctionalityTypeName() + ".selecionar"));
     dialog.setText(contatoComboBox);
     dialog.setConfirmText($(contatoMensagemManager.getFunctionalityTypeName() + ".enviar"));
-    dialog.setCancelText($("Cancelar"));
+    dialog.setCancelText($(CoreApplicationTranslator.ACTION.CANCEL));
 
     dialog.addConfirmListener(event -> {
       ContatoMensagemDTO contatoSelecionado = contatoComboBox.getValue();

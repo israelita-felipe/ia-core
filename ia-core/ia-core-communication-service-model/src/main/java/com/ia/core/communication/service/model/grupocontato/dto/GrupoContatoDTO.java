@@ -4,8 +4,10 @@ import com.ia.core.communication.model.contato.GrupoContato;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
+import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoTranslator;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Dados de um grupo de contatos")
 public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
@@ -49,14 +52,17 @@ public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> impleme
     return getSearchRequest().propertyFilters();
   }
 
-  @NotBlank(message = "Nome é obrigatório")
-  @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-  private String nome;
+   @NotBlank(message = GrupoContatoTranslator.VALIDATION.NOME_NOT_BLANK)
+    @Size(max = 100, message = GrupoContatoTranslator.VALIDATION.NOME_SIZE)
+    @Schema(description = "Nome do grupo de contatos", example = "Clientes VIP", required = true)
+    private String nome;
 
-  @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
-  private String descricao;
+    @Size(max = 500, message = GrupoContatoTranslator.VALIDATION.DESCRICAO_SIZE)
+    @Schema(description = "Descrição do grupo", example = "Grupo de clientes VIP com benefícios especiais")
+    private String descricao;
 
-  private Boolean ativo;
+   @Schema(description = "Indica se o grupo está ativo", example = "true")
+   private Boolean ativo;
 
   @Override
   public GrupoContatoDTO cloneObject() {
@@ -87,5 +93,9 @@ public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> impleme
     public static final String NOME = "nome";
     public static final String DESCRICAO = "descricao";
     public static final String ATIVO = "ativo";
+
+    public static Set<String> values() {
+      return Set.of(NOME, DESCRICAO, ATIVO);
+    }
   }
 }

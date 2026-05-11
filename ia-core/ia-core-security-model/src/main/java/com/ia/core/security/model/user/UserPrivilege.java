@@ -62,4 +62,18 @@ public class UserPrivilege
                  "USER_PRIVILEGE", "PRIVILEGE_OPERATION" }))
   private Set<PrivilegeOperation> operations = new HashSet<>();
 
+  /**
+   * Retorna o conjunto de operações de privilégio.
+   * <p>
+   * <b>Security Critical:</b> Operações definem o que o usuário pode fazer.
+   * Esta coleção é sensível e sua integridade deve ser protegida.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableSet (era Set mutável exposto via Lombok).
+   *
+   * @return conjunto imutável de operações permitidas
+   */
+  public Set<PrivilegeOperation> getOperations() {
+    return java.util.Collections.unmodifiableSet(operations);
+  }
+
 }

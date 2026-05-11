@@ -497,7 +497,7 @@ public abstract class PageView<T extends Serializable>
    */
   public EditorAction<T> createSaveAction() {
     return EditorAction.<T> builder().icon(VaadinIcon.CHECK)
-        .label($("Salvar")).enableFunction(this::canSave).action(this::save)
+        .label($(CoreApplicationTranslator.ACTION.SAVE)).enableFunction(this::canSave).action(this::save)
         .build();
   }
 
@@ -532,13 +532,13 @@ public abstract class PageView<T extends Serializable>
       try {
         getViewModel().delete(item);
         getViewModel().setSelected(null);
-        showSucessMessage($("Excluir"));
+        showSucessMessage($(CoreApplicationTranslator.MESSAGE.DELETE_SUCCESS));
       } catch (Exception e) {
         handleError(e);
       } finally {
         this.listView.refreshAll();
       }
-    }, $("Excluir"), $("Deseja realmente excluir este item?"));
+    }, $(CoreApplicationTranslator.ACTION.DELETE), $(CoreApplicationTranslator.MESSAGE.CONFIRM_DELETE));
   }
 
   /**
@@ -690,7 +690,7 @@ public abstract class PageView<T extends Serializable>
         salvo = getViewModel().update(selected, object);
       }
       editorView.close();
-      showSucessMessage($("Salvo com sucesso", salvo));
+      showSucessMessage($(CoreApplicationTranslator.MESSAGE.SAVE_SUCCESS));
     } catch (Exception e) {
       handleError(e);
     } finally {

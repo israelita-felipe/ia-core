@@ -51,15 +51,15 @@ public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> i
     return getSearchRequest().propertyFilters();
   }
 
-  @NotNull(message = "Grupo de contato é obrigatório")
-  private GrupoContatoDTO grupoContato;
+   @NotNull(message = ContatoMensagemTranslator.VALIDATION.GRUPO_CONTATO_NOT_NULL)
+   private GrupoContatoDTO grupoContato;
 
-  @NotBlank(message = "Telefone é obrigatório")
-  @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres")
-  private String telefone;
+   @NotBlank(message = ContatoMensagemTranslator.VALIDATION.TELEFONE_NOT_BLANK)
+   @Size(max = 20, message = ContatoMensagemTranslator.VALIDATION.TELEFONE_SIZE)
+   private String telefone;
 
-  @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-  private String nome;
+   @Size(max = 100, message = ContatoMensagemTranslator.VALIDATION.NOME_SIZE)
+   private String nome;
 
   @Override
   public ContatoMensagemDTO cloneObject() {

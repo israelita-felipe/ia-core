@@ -1,5 +1,6 @@
 package com.ia.core.view.components.editor;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.IView;
 import com.ia.core.view.components.dialog.DialogHeaderBar;
 import com.ia.core.view.components.dialog.exception.ExceptionViewFactory;
@@ -80,7 +81,7 @@ public abstract class EditorView<T extends Serializable, V extends IView<T>>
    * @return {@link EditorAction}
    */
   public EditorAction<T> createCancelAction() {
-    return EditorAction.<T> builder().label($("Cancelar"))
+    return EditorAction.<T> builder().label($(CoreApplicationTranslator.ACTION.CANCEL))
         .icon(VaadinIcon.CLOSE).action(this::cancelAction).build();
   }
 

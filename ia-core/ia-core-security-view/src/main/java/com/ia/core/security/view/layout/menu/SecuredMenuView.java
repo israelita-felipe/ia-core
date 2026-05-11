@@ -93,7 +93,7 @@ public abstract class SecuredMenuView
   }
 
   protected void bindMenuSecurity() {
-    criarGrupoSeguranca($("Segurança"));
+    criarGrupoSeguranca($(UserTranslator.MENU.SECURITY));
     addMenuItemUser($(UserTranslator.USER));
     addMenuItemRole($(RoleTranslator.ROLE));
     addMenuItemPrivilege($(PrivilegeTranslator.PRIVILEGE));
@@ -133,7 +133,7 @@ public abstract class SecuredMenuView
    * @return
    */
   protected Component createChangePasswordButton(Runnable action) {
-    Button button = new Button($("Alterar Senha"),
+    Button button = new Button($(UserTranslator.ACTION.CHANGE_PASSWORD),
                                VaadinIcon.PASSWORD.create(), onClick -> {
                                  action.run();
                                });
@@ -146,17 +146,17 @@ public abstract class SecuredMenuView
    */
   private EditorAction<UserPasswordChangeSuportDTO> createConfirmChangePasswordAction(UserDTO authenticatedUser) {
     return EditorAction.<UserPasswordChangeSuportDTO> builder()
-        .label($("Confirmar")).icon(VaadinIcon.PASSWORD)
+        .label($(UserTranslator.ACTION.CONFIRM)).icon(VaadinIcon.PASSWORD)
         .action(userPasswordChange -> {
           confirm(() -> {
             try {
               getViewModel().changePassword(authenticatedUser,
                                             userPasswordChange.copy());
-              showSucessMessage($("Senha alterada com sucesso"));
+              showSucessMessage($(UserTranslator.MESSAGE.PASSWORD_CHANGED_SUCCESS));
             } catch (Exception e) {
               handleError(e);
             }
-          }, $("Alterar senha"), $("Deseja realmente alterar a senha?"));
+          }, $(UserTranslator.ACTION.CHANGE_PASSWORD), $(UserTranslator.MESSAGE.CONFIRM_CHANGE_PASSWORD));
         }).build();
   }
 
@@ -171,7 +171,7 @@ public abstract class SecuredMenuView
    * @return
    */
   protected Component createLogoutButton(Runnable action) {
-    Button button = new Button($("Sair"), VaadinIcon.SIGN_OUT.create(),
+    Button button = new Button($(UserTranslator.ACTION.LOGOUT), VaadinIcon.SIGN_OUT.create(),
                                onClick -> {
                                  action.run();
                                });

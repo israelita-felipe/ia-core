@@ -6,6 +6,7 @@ import com.ia.core.view.exception.ValidationException;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Interface base para serviços do tipo save.
@@ -44,6 +45,7 @@ public interface SaveBaseManager<D extends Serializable>
    */
   default D save(D dto)
     throws ValidationException {
+    Objects.requireNonNull(dto, "DTO não pode ser null");
     if (canInsert(dto)) {
       try {
         validate(dto);
@@ -69,6 +71,8 @@ public interface SaveBaseManager<D extends Serializable>
    */
   default D update(D old, D updated)
     throws ValidationException {
+    Objects.requireNonNull(old, "Objeto antigo não pode ser null");
+    Objects.requireNonNull(updated, "Objeto atualizado não pode ser null");
     if (canEdit(old)) {
       try {
         validate(updated);
@@ -91,6 +95,7 @@ public interface SaveBaseManager<D extends Serializable>
    * @return Coleção de erros apurados.
    */
   default Collection<String> validate(D dto) {
+    Objects.requireNonNull(dto, "DTO não pode ser null");
     return ((SaveBaseClient<D>) getClient()).validate(dto);
   }
 }

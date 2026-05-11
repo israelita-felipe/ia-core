@@ -260,14 +260,14 @@ public class DataProviderFactory {
         SearchRequestDTO request = query.getFilter()
             .orElse(SearchRequestDTO.builder().build());
         try {
-          request.toBuilder().sorts(Collections.emptyList());
+          request = request.toBuilder().sorts(Collections.emptyList()).build();
         } catch (Exception e) {
           log.info(e.getLocalizedMessage(), e);
         }
         // sorting
         request.setPage(page);
         request.setSize(size);
-        request.toBuilder().sorts(toSortRequest(query));
+        request = request.toBuilder().sorts(toSortRequest(query)).build();
 
         // filtering
         return requestFunction.apply(request);
@@ -288,7 +288,7 @@ public class DataProviderFactory {
   public static <T extends Serializable> FetchCallback<T, SearchRequestDTO> createFetchCallbackFromSupplier(Supplier<Collection<T>> listSupplier) {
     return query -> {
       try {
-        int page = query.getOffset();
+        int page = query.getPage();
         int size = query.getLimit();
         var sortingComparator = query.getSortingComparator();
         var result = listSupplier.get().stream().skip(page).limit(size);

@@ -3,6 +3,7 @@ package com.ia.core.llm.service.model.template;
 import com.ia.core.llm.model.template.TemplateParameter;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.llm.service.model.template.TemplateParameterTranslator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.Set;
  *
  * @author IA
  * @since 1.0
+ * @see TemplateParameterTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -41,8 +43,8 @@ public class TemplateParameterDTO
     return getSearchRequest().propertyFilters();
   }
 
-  @NotNull(message = "{validation.template.parameter.nome.required}")
-  @Size(min = 1, max = 100, message = "{validation.template.parameter.nome.size}")
+  @NotNull(message = TemplateParameterTranslator.VALIDATION.NOME_REQUIRED)
+  @Size(min = 1, max = 100, message = TemplateParameterTranslator.VALIDATION.NOME_SIZE)
   private String nome;
 
   @Override

@@ -55,19 +55,19 @@ public class IntervaloTemporalFormView
   }
 
   @Override
-  public void createLayout() {
-    super.createLayout();
-    bind("startDate",
-         createStartDateField($(PeriodicidadeTranslator.INTERVALO_TEMPORAL.START_DATE),
-                              $(PeriodicidadeTranslator.INTERVALO_TEMPORAL.HELP.START_DATE)));
-    bind("startTime",
-         createStartTimeField($(PeriodicidadeTranslator.INTERVALO_TEMPORAL.START_TIME),
-                              $(PeriodicidadeTranslator.INTERVALO_TEMPORAL.HELP.START_TIME)));
-    bind("endDate",
-         createEndDateField($(PeriodicidadeTranslator.INTERVALO_TEMPORAL.END_DATE),
-                            $(PeriodicidadeTranslator.INTERVALO_TEMPORAL.HELP.END_DATE)));
-    bind("endTime",
-         createEndTimeField($(PeriodicidadeTranslator.INTERVALO_TEMPORAL.END_TIME),
-                            $(PeriodicidadeTranslator.INTERVALO_TEMPORAL.HELP.END_TIME)));
-  }
+    public void createLayout() {
+     super.createLayout();
+     bind("startDate",
+          createStartDateField($(PeriodicidadeTranslator.DATA_INICIO),
+                               $(PeriodicidadeTranslator.HELP.START_DATE)));
+     bind("startTime",
+          createStartTimeField($(PeriodicidadeTranslator.HORA_INICIO),
+                               $(PeriodicidadeTranslator.HELP.START_TIME)));
+     bind("endDate",
+          createEndDateField($(PeriodicidadeTranslator.DATA_FIM),
+                             $(PeriodicidadeTranslator.HELP.END_DATE)));
+     bind("endTime",
+          createEndTimeField($(PeriodicidadeTranslator.HORA_FIM),
+                             $(PeriodicidadeTranslator.HELP.END_TIME)));
+   }
 }

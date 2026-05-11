@@ -62,4 +62,18 @@ public class RolePrivilege
                  "ROLE_PRIVILEGE", "PRIVILEGE_OPERATION" }))
   private Set<PrivilegeOperation> operations = new HashSet<>();
 
+  /**
+   * Retorna o conjunto de operações de privilégio.
+   * <p>
+   * <b>Security Note:</b> Retorna visão imutável. As operações de privilégio
+   * são sensíveis e não devem ser modificadas externamente sem validação.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableSet (era Set mutável exposto).
+   *
+   * @return conjunto imutável de operações
+   */
+  public Set<PrivilegeOperation> getOperations() {
+    return java.util.Collections.unmodifiableSet(operations);
+  }
+
 }

@@ -13,8 +13,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 /**
  * Classe que representa o objeto de transferência de dados para role privilege.
  * <p>
@@ -39,22 +41,25 @@ public class RolePrivilegeDTO
   @Default
   private Set<PrivilegeOperationDTO> operations = new HashSet<>();
 
-  @Override
-  public RolePrivilegeDTO cloneObject() {
-    return toBuilder()
-        .privilege(privilege != null ? privilege.cloneObject() : null)
-        .operations(new HashSet<>(operations.stream()
-            .map(PrivilegeOperationDTO::cloneObject).toList()))
-        .build();
+  /**
+   * Retorna uma visão imutável das operações do privilégio.
+   *
+   * @return conjunto de operações não modificável
+   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
+   */
+  public Set<PrivilegeOperationDTO> getOperations() {
+    return Collections.unmodifiableSet(operations);
   }
 
-  @Override
-  public RolePrivilegeDTO copyObject() {
-    return ((RolePrivilegeDTO) super.copyObject()).toBuilder()
-        .privilege(privilege != null ? privilege.copyObject() : null)
-        .operations(new HashSet<>(operations.stream()
-            .map(PrivilegeOperationDTO::copyObject).toList()))
-        .build();
+  /**
+   * Define as operações (faz uma cópia defensiva).
+   *
+   * @param operations novo conjunto de operações (não pode ser null)
+   * @throws NullPointerException se operations for null
+   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
+   */
+  public void setOperations(Set<PrivilegeOperationDTO> operations) {
+    this.operations = new HashSet<>(operations);
   }
 
   public static class CAMPOS
@@ -68,5 +73,23 @@ public class RolePrivilegeDTO
    */
   public static SearchRequestDTO getSearchRequest() {
     return SearchRequestDTO.builder().build();
+  }
+
+  @Override
+  public RolePrivilegeDTO cloneObject() {
+    return toBuilder()
+        .privilege(privilege != null ? privilege.cloneObject() : null)
+        .operations(new HashSet<>(getOperations().stream()
+            .map(PrivilegeOperationDTO::cloneObject).toList()))
+        .build();
+  }
+
+  @Override
+  public RolePrivilegeDTO copyObject() {
+    return ((RolePrivilegeDTO) super.copyObject()).toBuilder()
+        .privilege(privilege != null ? privilege.copyObject() : null)
+        .operations(new HashSet<>(getOperations().stream()
+            .map(PrivilegeOperationDTO::copyObject).toList()))
+        .build();
   }
 }

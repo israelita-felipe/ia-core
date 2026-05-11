@@ -1,5 +1,6 @@
 package com.ia.core.view.components.dialog.information;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -60,7 +61,7 @@ public class InformationDialogViewFactory
    * @param message Mensagem do diálogo
    */
   private void showInfo(Runnable action, String title, String message) {
-    ConfirmDialog confirm = new ConfirmDialog(title, message, $("Ok"),
+    ConfirmDialog confirm = new ConfirmDialog(title, message, $(CoreApplicationTranslator.ACTION.OK),
                                               click -> action.run());
     confirm.open();
   }
@@ -69,7 +70,7 @@ public class InformationDialogViewFactory
     ConfirmDialog confirm = new ConfirmDialog();
     confirm.setHeader(title);
     confirm.setText(message);
-    confirm.setConfirmButton("Ok", evt -> {
+    confirm.setConfirmButton($(CoreApplicationTranslator.ACTION.OK), evt -> {
       action.run();
       confirm.close();
     });
@@ -80,7 +81,7 @@ public class InformationDialogViewFactory
     ConfirmDialog confirm = new ConfirmDialog();
     confirm.setHeader(title);
     confirm.setText(message);
-    confirm.setConfirmButton("Ok", evt -> confirm.close());
+    confirm.setConfirmButton($(CoreApplicationTranslator.ACTION.OK), evt -> confirm.close());
     confirm.open();
   }
 }

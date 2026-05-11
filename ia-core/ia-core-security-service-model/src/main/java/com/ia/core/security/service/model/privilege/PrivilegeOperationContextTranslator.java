@@ -1,31 +1,68 @@
 package com.ia.core.security.service.model.privilege;
 
 /**
- * Translator para PrivilegeOperationContext.
- * 
- * @author Israel Araújo
- */
-/**
- * Classe que representa a entidade de domínio privilege operation context translator.
+ * Translator constants for PrivilegeOperationContext DTO.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationContextTranslator
- * dentro do sistema.
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the PrivilegeOperationContext DTO processing pipeline.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.security.service.model.privilege.PrivilegeOperationContextDTO
  */
-@SuppressWarnings("javadoc")
-public class PrivilegeOperationContextTranslator {
+public final class PrivilegeOperationContextTranslator {
 
-  public static final class HELP {
-    public static final String PRIVILEGE_OPERATION_CONTEXT = "privilege.operation.context.help";
-    public static final String CONTEXT_KEY = "privilege.operation.context.help.contextKey";
-    public static final String VALUES = "privilege.operation.context.help.values";
-  }
+    private PrivilegeOperationContextTranslator() {
+        // Utility class
+    }
 
-  public static final String PRIVILEGE_OPERATION_CONTEXT_CLASS = PrivilegeOperationContextDTO.class
-      .getCanonicalName();
-  public static final String PRIVILEGE_OPERATION_CONTEXT = "privilege.operation.context";
-  public static final String CONTEXT_KEY = "privilege.operation.context.contextKey";
-  public static final String VALUES = "privilege.operation.context.values";
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String PRIVILEGE_OPERATION_CONTEXT = "privilege.operation.context.help";
+        public static final String CONTEXT_KEY = "privilege.operation.context.help.contextKey";
+        public static final String VALUES = "privilege.operation.context.help.values";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String PRIVILEGE_OPERATION_CONTEXT_CLASS = PrivilegeOperationContextDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String PRIVILEGE_OPERATION_CONTEXT = "privilege.operation.context";
+    public static final String CONTEXT_KEY = "privilege.operation.context.contextKey";
+    public static final String VALUES = "privilege.operation.context.values";
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String CONTEXT_KEY_REQUIRED = "validation.privilege.operation.context.key.required";
+        public static final String VALUES_REQUIRED = "validation.privilege.operation.context.values.required";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String CONTEXTO_INVALIDO = "privilege.operation.context.rule.contexto.invalido";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "privilege.operation.context.message.criado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String CONTEXTO_CRIADO = "privilege.operation.context.event.criado";
+    }
 }

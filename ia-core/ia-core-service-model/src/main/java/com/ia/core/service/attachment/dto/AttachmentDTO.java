@@ -111,40 +111,69 @@ public class AttachmentDTO<T extends Attachment>
     return size == null;
   }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("AttachmentDTO [");
-    if (filename != null) {
-      builder.append("filename=");
-      builder.append(filename);
-      builder.append(", ");
-    }
-    if (mediaType != null) {
-      builder.append("mediaType=");
-      builder.append(mediaType);
-      builder.append(", ");
-    }
-    if (size != null) {
-      builder.append("size=");
-      builder.append(size);
-      builder.append(", ");
-    }
-    if (content != null) {
-      builder.append("content=");
-      builder.append(content);
-    }
-    builder.append("]");
-    return builder.toString();
-  }
+   @Override
+   public String toString() {
+     StringBuilder builder = new StringBuilder();
+     builder.append("AttachmentDTO [");
+     if (filename != null) {
+       builder.append("filename=");
+       builder.append(filename);
+       builder.append(", ");
+     }
+     if (mediaType != null) {
+       builder.append("mediaType=");
+       builder.append(mediaType);
+       builder.append(", ");
+     }
+     if (size != null) {
+       builder.append("size=");
+       builder.append(size);
+       builder.append(", ");
+     }
+     if (content != null) {
+       builder.append("content=");
+       builder.append(content);
+     }
+     builder.append("]");
+     return builder.toString();
+   }
 
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String DESCRIPTION = "description";
-    public static final String FILE_NAME = "filename";
-    public static final String CONTENT = "content";
-    public static final String SIZE = "size";
-    public static final String MEDIA_TYPE = "mediaType";
-  }
+   public void setDescription(String description) {
+       firePropertyChange(CAMPOS.DESCRIPTION, this.description, description);
+       this.description = description;
+   }
+
+   public void setFilename(String filename) {
+       firePropertyChange(CAMPOS.FILE_NAME, this.filename, filename);
+       this.filename = filename;
+   }
+
+   public void setContent(String content) {
+       firePropertyChange(CAMPOS.CONTENT, this.content, content);
+       this.content = content;
+   }
+
+   public void setSize(Long size) {
+       firePropertyChange(CAMPOS.SIZE, this.size, size);
+       this.size = size;
+   }
+
+   public void setMediaType(String mediaType) {
+       firePropertyChange(CAMPOS.MEDIA_TYPE, this.mediaType, mediaType);
+       this.mediaType = mediaType;
+   }
+
+   @SuppressWarnings("javadoc")
+   public static class CAMPOS
+     extends AbstractBaseEntityDTO.CAMPOS {
+     public static final String DESCRIPTION = "description";
+     public static final String FILE_NAME = "filename";
+     public static final String CONTENT = "content";
+     public static final String SIZE = "size";
+     public static final String MEDIA_TYPE = "mediaType";
+
+     public static Set<String> values() {
+         return Set.of(DESCRIPTION, FILE_NAME, CONTENT, SIZE, MEDIA_TYPE);
+     }
+   }
 }

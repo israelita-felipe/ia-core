@@ -1,43 +1,84 @@
 package com.ia.core.communication.service.model.modelomensagem.dto;
 
 /**
- * Translator para ModeloMensagem.
+ * Translator constants for ModeloMensagem (Message Template) DTO.
+ * <p>
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the ModeloMensagem DTO processing pipeline.
  *
  * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO
  */
-/**
- * Classe que representa a entidade de domínio modelo mensagem translator.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemTranslator
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
-@SuppressWarnings("javadoc")
-public class ModeloMensagemTranslator {
-  public static final class HELP {
-    public static final String MODELO_MENSAGEM = "modelo.mensagem.help";
-    public static final String NOME = "modelo.mensagem.help.nome";
-    public static final String DESCRICAO = "modelo.mensagem.help.descricao";
-    public static final String CORPO_MODELO = "modelo.mensagem.help.corpo.modelo";
-    public static final String TIPO_CANAL = "modelo.mensagem.help.tipo.canal";
-    public static final String ATIVO = "modelo.mensagem.help.ativo";
-  }
+public final class ModeloMensagemTranslator {
 
-  public static final String MODELO_MENSAGEM_CLASS = ModeloMensagemDTO.class.getCanonicalName();
-  public static final String MODELO_MENSAGEM = "modelo.mensagem";
-  public static final String NOME = "modelo.mensagem.nome";
-  public static final String DESCRICAO = "modelo.mensagem.descricao";
-  public static final String CORPO_MODELO = "modelo.mensagem.corpo.modelo";
-  public static final String TIPO_CANAL = "modelo.mensagem.tipo.canal";
-  public static final String ATIVO = "modelo.mensagem.ativo";
+    private ModeloMensagemTranslator() {
+        // Utility class
+    }
 
-  public static final class VALIDATION {
-    public static final String NOME_NOT_BLANK = "modelo.mensagem.validation.nome.not.blank";
-    public static final String NOME_SIZE = "modelo.mensagem.validation.nome.size";
-    public static final String DESCRICAO_SIZE = "modelo.mensagem.validation.descricao.size";
-    public static final String CORPO_MODELO_NOT_BLANK = "modelo.mensagem.validation.corpo.modelo.not.blank";
-    public static final String TIPO_CANAL_NOT_NULL = "modelo.mensagem.validation.tipo.canal.not.null";
-  }
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String MODELO_MENSAGEM = "modelo.mensagem.help";
+        public static final String NOME = "modelo.mensagem.help.nome";
+        public static final String DESCRICAO = "modelo.mensagem.help.descricao";
+        public static final String CORPO_MODELO = "modelo.mensagem.help.corpo.modelo";
+        public static final String TIPO_CANAL = "modelo.mensagem.help.tipo.canal";
+        public static final String ATIVO = "modelo.mensagem.help.ativo";
+    }
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String NOME_NOT_BLANK = "modelo.mensagem.validation.nome.not.blank";
+        public static final String NOME_SIZE = "modelo.mensagem.validation.nome.size";
+        public static final String DESCRICAO_SIZE = "modelo.mensagem.validation.descricao.size";
+        public static final String CORPO_MODELO_NOT_BLANK = "modelo.mensagem.validation.corpo.modelo.not.blank";
+        public static final String TIPO_CANAL_NOT_NULL = "modelo.mensagem.validation.tipo.canal.not.null";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String NOME_DUPLICADO = "modelo.mensagem.rule.nome.duplicado";
+        public static final String MODELO_INATIVO = "modelo.mensagem.rule.modelo.inativo";
+        public static final String VARIAVEIS_INVALIDAS = "modelo.mensagem.rule.variaveis.invalidas";
+        public static final String MODELO_NAO_ENCONTRADO = "modelo.mensagem.rule.modelo.nao.encontrado";
+        public static final String CONTATO_NAO_ENCONTRADO = "modelo.mensagem.rule.contato.nao.encontrado";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "modelo.mensagem.message.criado.sucesso";
+        public static final String ATUALIZADO_SUCESSO = "modelo.mensagem.message.atualizado.sucesso";
+        public static final String DELETADO_SUCESSO = "modelo.mensagem.message.deletado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String MODELO_CRIADO = "modelo.mensagem.event.criado";
+        public static final String MODELO_ATUALIZADO = "modelo.mensagem.event.atualizado";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String MODELO_MENSAGEM_CLASS = ModeloMensagemDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String MODELO_MENSAGEM = "modelo.mensagem";
+    public static final String NOME = "modelo.mensagem.nome";
+    public static final String DESCRICAO = "modelo.mensagem.descricao";
+    public static final String CORPO_MODELO = "modelo.mensagem.corpo.modelo";
+    public static final String TIPO_CANAL = "modelo.mensagem.tipo.canal";
+    public static final String ATIVO = "modelo.mensagem.ativo";
 }

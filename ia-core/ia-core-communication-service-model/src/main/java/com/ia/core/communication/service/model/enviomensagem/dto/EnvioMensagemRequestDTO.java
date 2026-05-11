@@ -1,6 +1,7 @@
 package com.ia.core.communication.service.model.enviomensagem.dto;
 
 import com.ia.core.communication.model.mensagem.TipoCanal;
+import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemTranslator;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
@@ -34,11 +35,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class EnvioMensagemRequestDTO implements HasVariavel {
 
-  @NotNull(message = "Tipo do canal é obrigatório")
-  private TipoCanal tipoCanal;
+   @NotNull(message = EnvioMensagemTranslator.VALIDATION.TIPO_CANAL_NOT_NULL)
+   private TipoCanal tipoCanal;
 
-  @NotBlank(message = "Corpo da mensagem é obrigatório")
-  private String corpoMensagem;
+   @NotBlank(message = EnvioMensagemTranslator.VALIDATION.CORPO_MENSAGEM_NOT_BLANK)
+   private String corpoMensagem;
 
   private Long modeloMensagemId;
 

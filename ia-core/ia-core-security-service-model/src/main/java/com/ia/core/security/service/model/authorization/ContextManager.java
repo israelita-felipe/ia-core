@@ -1,6 +1,12 @@
 package com.ia.core.security.service.model.authorization;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
@@ -21,23 +27,19 @@ public class ContextManager {
   private Map<String, Set<String>> context = new HashMap<>();
   /** Coleção de itens de definição de contexto */
   private Map<String, Supplier<Collection<ContextDefinition>>> contextDefinition = new HashMap<>();
-  /** Instância singleton */
-  private static ContextManager INSTANCE = null;
+  /** Instância singleton - inicialização thread-safe */
+  private static final ContextManager INSTANCE = new ContextManager();
 
-  private static ContextManager get() {
-    if (INSTANCE == null) {
-      INSTANCE = new ContextManager();
-    }
-    return INSTANCE;
-  }
-
-  /**
-   * Construtor privado
-   */
   private ContextManager() {
   }
 
+  private static ContextManager get() {
+    return INSTANCE;
+  }
+
   public static void put(String key, String value) {
+    Objects.requireNonNull(key, "Context key cannot be null");
+    Objects.requireNonNull(value, "Context value cannot be null");
     Set<String> current = get(key);
     current.add(value);
   }
@@ -47,6 +49,7 @@ public class ContextManager {
    * @return
    */
   public static Set<String> get(String key) {
+    Objects.requireNonNull(key, "Context key cannot be null");
     Set<String> current = get().context.get(key);
     if (current == null) {
       current = new HashSet<>();
@@ -56,11 +59,14 @@ public class ContextManager {
   }
 
   public static void delete(String key) {
+    Objects.requireNonNull(key, "Context key cannot be null");
     get().context.remove(key);
   }
 
   public static void putDefinition(String key,
                                    Supplier<Collection<ContextDefinition>> value) {
+    Objects.requireNonNull(key, "Context definition key cannot be null");
+    Objects.requireNonNull(value, "Context definition value supplier cannot be null");
     get().contextDefinition.put(key, value);
   }
 
@@ -69,6 +75,7 @@ public class ContextManager {
    * @return
    */
   public static Supplier<Collection<ContextDefinition>> getDefinition(String key) {
+    Objects.requireNonNull(key, "Context definition key cannot be null");
     Supplier<Collection<ContextDefinition>> current = get().contextDefinition
         .get(key);
     if (current == null) {
@@ -79,6 +86,7 @@ public class ContextManager {
   }
 
   public static void deleteDefinition(String key) {
+    Objects.requireNonNull(key, "Context definition key cannot be null");
     get().contextDefinition.remove(key);
   }
 
@@ -89,10 +97,7 @@ public class ContextManager {
       if (this == obj) {
         return true;
       }
-      if (key == null) {
-        return this == obj;
-      }
-      if (!(getClass().isInstance(obj))) {
+      if (obj == null || getClass() != obj.getClass()) {
         return false;
       }
       ContextDefinition other = (ContextDefinition) obj;
@@ -101,10 +106,7 @@ public class ContextManager {
 
     @Override
     public int hashCode() {
-      if (key != null) {
-        return Objects.hash(key);
-      }
-      return Objects.hashCode(this);
+      return Objects.hash(key);
     }
 
     @Override

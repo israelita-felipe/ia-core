@@ -273,7 +273,7 @@ public class FilterRequestView
                                  $(FilterRequestTranslator.BOOLEAN_FILTER));
     case CHAR:
       return createTextField(label,
-                             $(FilterRequestTranslator.CHARACTER_FLTER));
+                             $(FilterRequestTranslator.CHARACTER_FILTER));
     case DATE:
       return createDateField(label, $(FilterRequestTranslator.DATE_FILTER));
     case TIME:

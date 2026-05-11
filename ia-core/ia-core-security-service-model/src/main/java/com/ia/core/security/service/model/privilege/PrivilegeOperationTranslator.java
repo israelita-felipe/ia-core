@@ -1,31 +1,68 @@
 package com.ia.core.security.service.model.privilege;
 
 /**
- * Translator para PrivilegeOperation.
- * 
- * @author Israel Araújo
- */
-/**
- * Classe que representa a entidade de domínio privilege operation translator.
+ * Translator constants for PrivilegeOperation DTO.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a PrivilegeOperationTranslator
- * dentro do sistema.
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the PrivilegeOperation DTO processing pipeline.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.security.service.model.privilege.PrivilegeOperationDTO
  */
-@SuppressWarnings("javadoc")
-public class PrivilegeOperationTranslator {
+public final class PrivilegeOperationTranslator {
 
-  public static final class HELP {
-    public static final String PRIVILEGE_OPERATION = "privilege.operation.help";
-    public static final String OPERATION = "privilege.operation.help.operation";
-    public static final String CONTEXT = "privilege.operation.help.context";
-  }
+    private PrivilegeOperationTranslator() {
+        // Utility class
+    }
 
-  public static final String PRIVILEGE_OPERATION_CLASS = PrivilegeOperationDTO.class
-      .getCanonicalName();
-  public static final String PRIVILEGE_OPERATION = "privilege.operation";
-  public static final String OPERATION = "privilege.operation.operation";
-  public static final String CONTEXT = "privilege.operation.context";
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String PRIVILEGE_OPERATION = "privilege.operation.help";
+        public static final String OPERATION = "privilege.operation.help.operation";
+        public static final String CONTEXT = "privilege.operation.help.context";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String PRIVILEGE_OPERATION_CLASS = PrivilegeOperationDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String PRIVILEGE_OPERATION = "privilege.operation";
+    public static final String OPERATION = "privilege.operation.operation";
+    public static final String CONTEXT = "privilege.operation.context";
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String OPERATION_REQUIRED = "validation.privilege.operation.operation.required";
+        public static final String CONTEXT_REQUIRED = "validation.privilege.operation.context.required";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String OPERACAO_JA_EXISTE = "privilege.operation.rule.operacao.ja.existe";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "privilege.operation.message.criado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String OPERACAO_CRIADA = "privilege.operation.event.criada";
+    }
 }

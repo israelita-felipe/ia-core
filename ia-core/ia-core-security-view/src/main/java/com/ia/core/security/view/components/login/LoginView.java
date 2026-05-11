@@ -94,15 +94,15 @@ public class LoginView
     return component;
   }
 
-  private LoginI18n getLoginI18n() {
-    LoginI18n loginI18n = LoginI18n.createDefault();
-    if (getViewModel().isFirstLogin()) {
-      loginI18n
-          .setAdditionalInformation("Primeiro login! Anote o usuário e senha utilizados, pois estes serão utilizados para login de administração");
-    } else {
-      loginI18n
-          .setAdditionalInformation($(LoginTranslator.ADDITIONAL_INFORMATION));
-    }
+    private LoginI18n getLoginI18n() {
+      LoginI18n loginI18n = LoginI18n.createDefault();
+      if (getViewModel().isFirstLogin()) {
+        loginI18n
+            .setAdditionalInformation($(LoginTranslator.FIRST_LOGIN_ADDITIONAL_INFORMATION));
+      } else {
+        loginI18n
+            .setAdditionalInformation($(LoginTranslator.ADDITIONAL_INFORMATION));
+      }
     ErrorMessage errorMessage = new ErrorMessage();
     errorMessage.setMessage($(LoginTranslator.ERROR_MESSAGE));
     errorMessage.setPassword($(LoginTranslator.ERROR_WRONG_PASSWORD));

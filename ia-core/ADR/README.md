@@ -21,6 +21,7 @@ Este diretório contém os **Architectural Decision Records** do projeto, docume
 | ADR-022 | [Usar Java 21 como Base](022-use-java-21-as-base-version.md) | ✅ Aceito | Versão LTS do Java |
 | ADR-023 | [Usar Builder Pattern com Lombok](023-use-builder-pattern-with-lombok.md) | ✅ Aceito | Criação fluente de objetos |
 | ADR-026 | [Usar HasVersion para Versionamento](026-use-has-version-for-entity-versioning.md) | ✅ Aceito | Controle de versão de entidades |
+| ADR-040 | [Usar Classe CAMPOS Aninhada para Constantes](040-use-nested-campos-class-for-dto-field-constants.md) | ✅ Aceito | Constantes de campos em DTOs |
 
 ### Arquitetura de Aplicação (100-299)
 
@@ -49,6 +50,7 @@ Este diretório contém os **Architectural Decision Records** do projeto, docume
 | ADR-036 | [Conventional Commits](036-use-conventional-commits.md) | ✅ Aceito | Padrão de mensagens de commit |
 | ADR-037 | [Semantic Versioning](037-use-semantic-versioning.md) | ✅ Aceito | Controle de versão SemVer |
 | ADR-039 | [Testes E2E Vaadin](039-testes-e2e-vaadin.md) | ✅ Aceito | Testes de interface gráfica |
+| ADR-041 | [Implementar Análise de Pontos de Função](041-implement-function-point-analysis.md) | ✅ Proposto | Medição funcional objetiva |
 
 ## Formato ADR
 
@@ -118,4 +120,4 @@ Para revisar, crie um novo ADR referenciando o anterior.
 
 ---
 
-**Última Atualização:** 2026-04-28
+**Última Atualização:** 2026-05-06

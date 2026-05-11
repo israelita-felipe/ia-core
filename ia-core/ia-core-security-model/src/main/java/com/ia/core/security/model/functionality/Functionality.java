@@ -16,13 +16,31 @@ public interface Functionality
   extends Comparable<Functionality> {
   @Override
   default int compareTo(Functionality o) {
+    // Contrato do Comparable: lança NPE se comparado com null (padrão do Java)
+    // Mas aqui optamos por retornar 1 (this > null) para consistência com implementações anteriores
     if (o == null) {
       return 1;
     }
     if (o == this) {
       return 0;
     }
-    return getName().compareTo(o.getName());
+
+    // @bugfix SECURITY: Null safety para getName()
+    // Evita NullPointerException se getName() retornar null
+    String thisName = this.getName();
+    String otherName = o.getName();
+
+    if (thisName == null && otherName == null) {
+      return 0;
+    }
+    if (thisName == null) {
+      return -1;  // null vem antes de não-null
+    }
+    if (otherName == null) {
+      return 1;   // não-null vem depois de null
+    }
+
+    return thisName.compareTo(otherName);
   }
 
   /**

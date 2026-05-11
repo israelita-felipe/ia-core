@@ -1,31 +1,66 @@
 package com.ia.core.llm.service.model.template;
 
 /**
- * @author Israel Araújo
- */
-/**
- * Classe que representa a entidade de domínio template parameter translator.
+ * Translator constants for TemplateParameter DTO.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a TemplateParameterTranslator
- * dentro do sistema.
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the TemplateParameter DTO processing pipeline.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.llm.service.model.template.TemplateParameterDTO
  */
-@SuppressWarnings("javadoc")
-public class TemplateParameterTranslator {
-  public static final class HELP {
-    public static final String TEMPLATE_PARAMETER = "template.parameter.help";
-    public static final String NOME = "template.parameter.help.nome";
-  }
-  public static final String TEMPLATE_PARAMETER_CLASS = TemplateParameterDTO.class
-      .getCanonicalName();
-  public static final String TEMPLATE_PARAMETER = "template.parameter";
+public final class TemplateParameterTranslator {
 
-  public static final String NOME = "template.parameter.nome";
+    private TemplateParameterTranslator() {
+        // Utility class
+    }
 
-  public static final class VALIDATION {
-    public static final String NOME_REQUIRED = "validation.template.parameter.nome.required";
-    public static final String NOME_SIZE = "validation.template.parameter.nome.size";
-  }
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String TEMPLATE_PARAMETER = "template.parameter.help";
+        public static final String NOME = "template.parameter.help.nome";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String TEMPLATE_PARAMETER_CLASS = TemplateParameterDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String TEMPLATE_PARAMETER = "template.parameter";
+    public static final String NOME = "template.parameter.nome";
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String NOME_REQUIRED = "validation.template.parameter.nome.required";
+        public static final String NOME_SIZE = "validation.template.parameter.nome.size";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String NOME_DUPLICADO = "template.parameter.rule.nome.duplicado";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "template.parameter.message.criado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String PARAMETRO_CRIADO = "template.parameter.event.criado";
+    }
 }

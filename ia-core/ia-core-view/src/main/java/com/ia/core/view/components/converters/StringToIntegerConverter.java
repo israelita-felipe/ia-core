@@ -26,7 +26,11 @@ public class StringToIntegerConverter
     if (value == null || "".equals(value)) {
       return Result.ok(null);
     }
-    return Result.ok(Integer.valueOf(value));
+    try {
+      return Result.ok(Integer.valueOf(value));
+    } catch (NumberFormatException e) {
+      return Result.error("Valor inválido para número inteiro: " + value);
+    }
   }
 
   @Override

@@ -7,6 +7,7 @@ import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,16 @@ import java.util.Set;
 
 /**
  * @author Israel Araújo
+ */
+/**
+ * DTO for SchedulerConfig.
+ * <p>
+ * Represents a scheduler configuration in the Quartz system.
+ * </p>
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see SchedulerConfigTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -43,12 +54,12 @@ public class SchedulerConfigDTO
   /**
    * Nome da classe do Job
    */
-  @NotNull(message = "{validation.scheduler.jobClassName.required}")
+  @NotNull(message = SchedulerConfigTranslator.VALIDATION.JOB_CLASS_NAME_REQUIRED)
   @Pattern(regexp = "^[a-zA-Z0-9_.]+$",
-           message = "{validation.scheduler.jobClassName.pattern}")
+           message = SchedulerConfigTranslator.VALIDATION.JOB_CLASS_NAME_PATTERN)
   private String jobClassName;
 
-  @NotNull(message = "{validation.scheduler.periodicidade.required}")
+  @NotNull(message = SchedulerConfigTranslator.VALIDATION.PERIODICIDADE_REQUIRED)
   @Default
   private PeriodicidadeDTO periodicidade = PeriodicidadeDTO.builder()
       .build();

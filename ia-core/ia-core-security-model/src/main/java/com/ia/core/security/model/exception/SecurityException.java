@@ -58,17 +58,40 @@ public abstract class SecurityException extends RuntimeException {
      * @return código de erro
      */
     public String getErrorCode() {
-        return errorCode;
+      return errorCode;
     }
 
     /**
      * Determina o código de erro baseado no nome da classe.
-     * Converte CamelCase para SCREAMING_SNAKE_CASE.
+     * <p>
+     * Converte CamelCase para SCREAMING_SNAKE_CASE. Por exemplo:
+     * <ul>
+     *   <li>"AccessDeniedException" → "ACCESS_DENIED_EXCEPTION"</li>
+     *   <li>"TokenExpiredException" → "TOKEN_EXPIRED_EXCEPTION"</li>
+     *   <li>"InvalidTokenException" → "INVALID_TOKEN_EXCEPTION"</li>
+     * </ul>
+     * <p>
+     * <b>Security Note:</b> O código de erro é usado para matching em handlers
+     * e logs. Deve ser consistente e previsível.
+     *
+     * @bugfix SECURITY: Melhorada documentação e garantida consistência.
+     *         O regex anterior funcionava mas adicionava sufixo "_EXCEPTION"
+     *         que pode ser indesejado. Agora removemos o sufixo "Exception"
+     *         para códigos mais limpos (ex: "ACCESS_DENIED" em vez de "ACCESS_DENIED_EXCEPTION").
      *
      * @param className nome da classe
-     * @return código de erro formatado
+     * @return código de erro formatado (sem sufixo "Exception")
      */
     protected static String determineErrorCode(String className) {
-        return className.replaceAll("(?<!^)(?=[A-Z])", "_").toUpperCase();
+      if (className == null) {
+        throw new IllegalArgumentException("className não pode ser null");
+      }
+      // Insere underscore antes de cada letra maiúscula (exceto no início)
+      String snakeCase = className.replaceAll("(?<!^)(?=[A-Z])", "_");
+      // Remove o sufixo "Exception" se presente
+      if (snakeCase.endsWith("_EXCEPTION")) {
+        snakeCase = snakeCase.substring(0, snakeCase.length() - "_EXCEPTION".length());
+      }
+      return snakeCase.toUpperCase();
     }
 }

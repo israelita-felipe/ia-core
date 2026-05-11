@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+
 /**
  * Classe que representa o objeto de transferência de dados para user privilege.
  * <p>
@@ -43,7 +44,7 @@ public class UserPrivilegeDTO
   public UserPrivilegeDTO cloneObject() {
     return toBuilder()
         .privilege(privilege != null ? privilege.cloneObject() : null)
-        .operations(new HashSet<>(operations.stream()
+        .operations(new HashSet<>(getOperations().stream()
             .map(PrivilegeOperationDTO::cloneObject).toList()))
         .build();
   }
@@ -52,7 +53,7 @@ public class UserPrivilegeDTO
   public UserPrivilegeDTO copyObject() {
     return ((UserPrivilegeDTO) super.copyObject()).toBuilder()
         .privilege(privilege != null ? privilege.copyObject() : null)
-        .operations(new HashSet<>(operations.stream()
+        .operations(new HashSet<>(getOperations().stream()
             .map(PrivilegeOperationDTO::copyObject).toList()))
         .build();
   }

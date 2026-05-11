@@ -28,8 +28,12 @@ public class StringToBigDecimalConverter
     if (value == null || "".equals(value)) {
       return Result.ok(null);
     }
-    value = value.replaceAll(",", ".");
-    return Result.ok(new BigDecimal(value));
+    try {
+      value = value.replaceAll(",", ".");
+      return Result.ok(new BigDecimal(value));
+    } catch (NumberFormatException e) {
+      return Result.error("Valor inválido para número decimal: " + value);
+    }
   }
 
   @Override

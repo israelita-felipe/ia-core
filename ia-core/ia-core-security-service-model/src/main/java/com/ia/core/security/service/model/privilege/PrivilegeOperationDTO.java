@@ -12,9 +12,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 /**
  * Classe que representa o objeto de transferência de dados para privilege operation.
  * <p>
@@ -37,11 +39,32 @@ public class PrivilegeOperationDTO
   private OperationEnum operation;
 
   @Default
-  private Collection<PrivilegeOperationContextDTO> context = new HashSet<>();
+  private Set<PrivilegeOperationContextDTO> context = new HashSet<>();
+
+  /**
+   * Retorna uma visão imutável do conjunto de contextos.
+   *
+   * @return conjunto de contextos não modificável
+   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
+   */
+  public Set<PrivilegeOperationContextDTO> getContext() {
+    return Collections.unmodifiableSet(context);
+  }
+
+  /**
+   * Define o conjunto de contextos (faz uma cópia defensiva).
+   *
+   * @param context novo conjunto de contextos (não pode ser null)
+   * @throws NullPointerException se context for null
+   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
+   */
+  public void setContext(Set<PrivilegeOperationContextDTO> context) {
+    this.context = new HashSet<>(context);
+  }
 
   @Override
   public PrivilegeOperationDTO cloneObject() {
-    return toBuilder().context(new HashSet<>(context.stream()
+    return toBuilder().context(new HashSet<>(getContext().stream()
         .map(PrivilegeOperationContextDTO::cloneObject)
         .collect(Collectors.toSet()))).build();
   }
@@ -49,7 +72,7 @@ public class PrivilegeOperationDTO
   @Override
   public PrivilegeOperationDTO copyObject() {
     return ((PrivilegeOperationDTO) super.copyObject()).toBuilder()
-        .context(new HashSet<>(context.stream()
+        .context(new HashSet<>(getContext().stream()
             .map(PrivilegeOperationContextDTO::copyObject)
             .collect(Collectors.toSet())))
         .build();
@@ -61,5 +84,4 @@ public class PrivilegeOperationDTO
   public static SearchRequestDTO getSearchRequest() {
     return SearchRequestDTO.builder().build();
   }
-
 }

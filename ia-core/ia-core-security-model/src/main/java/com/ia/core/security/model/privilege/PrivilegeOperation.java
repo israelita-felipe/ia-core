@@ -49,4 +49,19 @@ public class PrivilegeOperation
              orphanRemoval = true, mappedBy = "privilegeOperation")
   private Collection<PrivilegeOperationContext> context = new HashSet<>();
 
+  /**
+   * Retorna a coleção de contextos de operação.
+   * <p>
+   * <b>Security Note:</b> Retorna uma visão imutável da coleção para
+   * evitar modificações externas não autorizadas.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableCollection para proteger
+   *         a coleção de contextos de operação de privilégio.
+   *
+   * @return coleção imutável de contextos
+   */
+  public Collection<PrivilegeOperationContext> getContext() {
+    return java.util.Collections.unmodifiableCollection(context);
+  }
+
 }

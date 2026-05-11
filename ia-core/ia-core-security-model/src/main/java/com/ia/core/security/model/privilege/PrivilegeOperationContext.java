@@ -57,4 +57,18 @@ public class PrivilegeOperationContext
   @Column(name = "privilege_operation_context_value")
   private Set<String> values = new HashSet<>();
 
+  /**
+   * Retorna o conjunto de valores de contexto.
+   * <p>
+   * <b>Security Note:</b> Retorna uma visão imutável para evitar
+   * modificações externas que possam comprometer a segurança.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableSet (era coleção mutável exposta).
+   *
+   * @return conjunto imutável de valores
+   */
+  public Set<String> getValues() {
+    return java.util.Collections.unmodifiableSet(values);
+  }
+
 }

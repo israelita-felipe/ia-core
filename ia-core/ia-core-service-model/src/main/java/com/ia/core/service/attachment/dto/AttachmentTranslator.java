@@ -1,77 +1,117 @@
 package com.ia.core.service.attachment.dto;
 
 /**
- * @author Israel Araújo
- */
-/**
- * Classe que representa a entidade de domínio attachment translator.
+ * Translator constants for Attachment DTO.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a AttachmentTranslator
- * dentro do sistema.
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the Attachment DTO processing pipeline.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.service.attachment.dto.AttachmentDTO
  */
-@SuppressWarnings("javadoc")
-public class AttachmentTranslator {
-  public static final class HELP {
-    public static final String ATTACHMENT = "attachment.help";
-    public static final String NOME = "attachment.help.filename";
-    public static final String DESCRICAO = "attachment.help.description";
-    public static final String TAMANHO = "attachment.help.size";
-    public static final String TIPO = "attachment.help.media.type";
-    public static final String ADD_MANY = "attachment.help.add.many";
-    public static final String ADD_ONE = "attachment.help.add.one";
-    public static final String DROP_MANY = "attachment.help.drop.many";
-    public static final String DROP_ONE = "attachment.help.drop.one";
-    public static final String FILE_TOO_BIG = "attachment.help.file.too.big";
-    public static final String INCORRECT_FILE_TYPE = "attachment.help.incorrect.file.type";
-    public static final String TOO_MANY_FILES = "attachment.help.too.many.files";
-    public static final String FILE_REMOVE = "attachment.help.file.remove";
-    public static final String FILE_RETRY = "attachment.help.file.retry";
-    public static final String FILE_START = "attachment.help.file.start";
-    public static final String STATUS_CONECTANDO = "attachment.help.status.connecting";
-    public static final String STATUS_HELD = "attachment.help.status.held";
-    public static final String STATUS_PROCESSING = "attachment.help.status.processing";
-    public static final String STATUS_STALLED = "attachment.help.status.stalled";
-    public static final String REMAINING_TIME_PREFIX = "attachment.help.remaining.time.prefix";
-    public static final String REMAINING_TIME_UNKNOW = "attachment.help.remaining.time.unknow";
-    public static final String FORBIDDEN = "attachment.help.forbidden";
-    public static final String SERVER_UNAVALIABLE = "attachment.help.server.unavaliable";
-    public static final String UNEXPECTED_SERVER_ERROR = "attachment.help.unexpected.server.error";
-  }
+public final class AttachmentTranslator {
 
-  public static final class VALIDATION {
-    public static final String FILE_NAME_NOT_NULL = "attachment.validation.filename.not.null";
-    public static final String SIZE_NOT_NULL = "attachment.validation.size.not.null";
-    public static final String MEDIA_TYPE_NOT_NULL = "attachment.validation.mediatype.not.null";
-    public static final String CONTENT_NOT_NULL = "attachment.validation.content.not.null";
-  }
+    private AttachmentTranslator() {
+        // Utility class
+    }
 
-  public static final String ATTACHMENT_CLASS = AttachmentDTO.class
-      .getCanonicalName();
-  public static final String ATTACHMENT = "attachment";
-  public static final String NOME = "attachment.filename";
-  public static final String DESCRICAO = "attachment.description";
-  public static final String TAMANHO = "attachment.size";
-  public static final String TIPO = "attachment.media.type";
-  public static final String ADD_MANY = "attachment.add.many";
-  public static final String ADD_ONE = "attachment.add.one";
-  public static final String DROP_MANY = "attachment.drop.many";
-  public static final String DROP_ONE = "attachment.drop.one";
-  public static final String FILE_TOO_BIG = "attachment.file.too.big";
-  public static final String INCORRECT_FILE_TYPE = "attachment.incorrect.file.type";
-  public static final String TOO_MANY_FILES = "attachment.too.many.files";
-  public static final String FILE_REMOVE = "attachment.file.remove";
-  public static final String FILE_RETRY = "attachment.file.retry";
-  public static final String FILE_START = "attachment.file.start";
-  public static final String STATUS_CONECTANDO = "attachment.status.connecting";
-  public static final String STATUS_HELD = "attachment.status.held";
-  public static final String STATUS_PROCESSING = "attachment.status.processing";
-  public static final String STATUS_STALLED = "attachment.status.stalled";
-  public static final String REMAINING_TIME_PREFIX = "attachment.remaining.time.prefix";
-  public static final String REMAINING_TIME_UNKNOW = "attachment.remaining.time.unknow";
-  public static final String FORBIDDEN = "attachment.forbidden";
-  public static final String SERVER_UNAVALIABLE = "attachment.server.unavaliable";
-  public static final String UNEXPECTED_SERVER_ERROR = "attachment.unexpected.server.error";
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String ATTACHMENT = "attachment.help";
+        public static final String NOME = "attachment.help.filename";
+        public static final String DESCRICAO = "attachment.help.description";
+        public static final String TAMANHO = "attachment.help.size";
+        public static final String TIPO = "attachment.help.media.type";
+        public static final String ADD_MANY = "attachment.help.add.many";
+        public static final String ADD_ONE = "attachment.help.add.one";
+        public static final String DROP_MANY = "attachment.help.drop.many";
+        public static final String DROP_ONE = "attachment.help.drop.one";
+        public static final String FILE_TOO_BIG = "attachment.help.file.too.big";
+        public static final String INCORRECT_FILE_TYPE = "attachment.help.incorrect.file.type";
+        public static final String TOO_MANY_FILES = "attachment.help.too.many.files";
+        public static final String FILE_REMOVE = "attachment.help.file.remove";
+        public static final String FILE_RETRY = "attachment.help.file.retry";
+        public static final String FILE_START = "attachment.help.file.start";
+        public static final String STATUS_CONECTANDO = "attachment.help.status.connecting";
+        public static final String STATUS_HELD = "attachment.help.status.held";
+        public static final String STATUS_PROCESSING = "attachment.help.status.processing";
+        public static final String STATUS_STALLED = "attachment.help.status.stalled";
+        public static final String REMAINING_TIME_PREFIX = "attachment.help.remaining.time.prefix";
+        public static final String REMAINING_TIME_UNKNOW = "attachment.help.remaining.time.unknow";
+        public static final String FORBIDDEN = "attachment.help.forbidden";
+        public static final String SERVER_UNAVALIABLE = "attachment.help.server.unavaliable";
+        public static final String UNEXPECTED_SERVER_ERROR = "attachment.help.unexpected.server.error";
+    }
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String FILE_NAME_NOT_NULL = "attachment.validation.filename.not.null";
+        public static final String SIZE_NOT_NULL = "attachment.validation.size.not.null";
+        public static final String MEDIA_TYPE_NOT_NULL = "attachment.validation.mediatype.not.null";
+        public static final String CONTENT_NOT_NULL = "attachment.validation.content.not.null";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String ARQUIVO_MUITO_GRANDE = "attachment.rule.arquivo.muito.grande";
+        public static final String TIPO_NAO_PERMITADO = "attachment.rule.tipo.nao.permitado";
+        public static final String LIMITE_EXCEDIDO = "attachment.rule.limite.excedido";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String UPLOAD_SUCESSO = "attachment.message.upload.sucesso";
+        public static final String REMOVIDO_SUCESSO = "attachment.message.removido.sucesso";
+        public static final String ERRO_PROCESSAMENTO = "attachment.message.erro.processamento";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String ANEXO_ADICIONADO = "attachment.event.anexo.adicionado";
+        public static final String ANEXO_REMOVIDO = "attachment.event.anexo.removido";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String ATTACHMENT_CLASS = AttachmentDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String ATTACHMENT = "attachment";
+    public static final String NOME = "attachment.filename";
+    public static final String DESCRICAO = "attachment.description";
+    public static final String TAMANHO = "attachment.size";
+    public static final String TIPO = "attachment.media.type";
+    public static final String ADD_MANY = "attachment.add.many";
+    public static final String ADD_ONE = "attachment.add.one";
+    public static final String DROP_MANY = "attachment.drop.many";
+    public static final String DROP_ONE = "attachment.drop.one";
+    public static final String FILE_TOO_BIG = "attachment.file.too.big";
+    public static final String INCORRECT_FILE_TYPE = "attachment.incorrect.file.type";
+    public static final String TOO_MANY_FILES = "attachment.too.many.files";
+    public static final String FILE_REMOVE = "attachment.file.remove";
+    public static final String FILE_RETRY = "attachment.file.retry";
+    public static final String FILE_START = "attachment.file.start";
+    public static final String STATUS_CONECTANDO = "attachment.status.connecting";
+    public static final String STATUS_HELD = "attachment.status.held";
+    public static final String STATUS_PROCESSING = "attachment.status.processing";
+    public static final String STATUS_STALLED = "attachment.status.stalled";
+    public static final String REMAINING_TIME_PREFIX = "attachment.remaining.time.prefix";
+    public static final String REMAINING_TIME_UNKNOW = "attachment.remaining.time.unknow";
+    public static final String FORBIDDEN = "attachment.forbidden";
+    public static final String SERVER_UNAVALIABLE = "attachment.server.unavaliable";
+    public static final String UNEXPECTED_SERVER_ERROR = "attachment.unexpected.server.error";
 }

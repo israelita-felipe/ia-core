@@ -24,10 +24,10 @@ public class CoreViewTranslator
   /** Serial UID */
   private static final long serialVersionUID = -6976279851016981778L;
 
-  /**
-   * Prefixo
-   */
-  public static final String BUNDLE_PREFIX = "i18n/translations";
+   /**
+    * Prefixo
+    */
+   public static final String BUNDLE_PREFIX = "i18n/translations";
 
   /**
    * Local padrão

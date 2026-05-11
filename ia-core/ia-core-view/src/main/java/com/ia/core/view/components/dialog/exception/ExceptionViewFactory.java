@@ -1,5 +1,6 @@
 package com.ia.core.view.components.dialog.exception;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.server.ErrorEvent;
@@ -78,9 +79,9 @@ public class ExceptionViewFactory
    */
   private ConfirmDialog criarDialogo(String mensagem) {
     ConfirmDialog dialog = new ConfirmDialog();
-    dialog.setHeader($("Erro"));
+    dialog.setHeader($(CoreApplicationTranslator.TITLE.ERROR));
     dialog.setText(mensagem);
-    dialog.setConfirmText($("OK"));
+    dialog.setConfirmText($(CoreApplicationTranslator.ACTION.OK));
     return dialog;
   }
 }

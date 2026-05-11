@@ -28,6 +28,37 @@ public class CoreApplicationTranslator {
   public static final String REPORTS = "reports";
 
   ///////////////////////////////////////////////////////
+  /// AÇÕES
+  ///////////////////////////////////////////////////////
+
+  public static final class ACTION {
+    public static final String SAVE = "action.save";
+    public static final String DELETE = "action.delete";
+    public static final String CANCEL = "action.cancel";
+    public static final String OK = "action.ok";
+    public static final String YES = "action.yes";
+    public static final String NO = "action.no";
+  }
+
+  ///////////////////////////////////////////////////////
+  /// MENSAGENS
+  ///////////////////////////////////////////////////////
+
+  public static final class MESSAGE {
+    public static final String DELETE_SUCCESS = "dialog.message.success.delete";
+    public static final String CONFIRM_DELETE = "dialog.message.confirm.delete";
+    public static final String SAVE_SUCCESS = "dialog.message.success.save";
+  }
+
+  ///////////////////////////////////////////////////////
+  /// TÍTULOS
+  ///////////////////////////////////////////////////////
+
+  public static final class TITLE {
+    public static final String ERROR = "title.error";
+  }
+
+  ///////////////////////////////////////////////////////
   /// MENSAGENS DE ERROR
   ///////////////////////////////////////////////////////
 

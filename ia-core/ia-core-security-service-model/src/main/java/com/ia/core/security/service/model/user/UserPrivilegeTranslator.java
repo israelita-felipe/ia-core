@@ -1,34 +1,70 @@
 package com.ia.core.security.service.model.user;
 
 /**
- * Translator para UserPrivilege.
- * 
- * @author Israel Araújo
- */
-/**
- * Classe que representa a entidade de domínio user privilege translator.
+ * Translator constants for UserPrivilege DTO.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegeTranslator
- * dentro do sistema.
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the UserPrivilege DTO processing pipeline.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.security.service.model.user.UserPrivilegeDTO
  */
-@SuppressWarnings("javadoc")
-public class UserPrivilegeTranslator {
+public final class UserPrivilegeTranslator {
 
-  public static final class HELP {
-    public static final String USER_PRIVILEGE = "user.privilege.help";
-    public static final String PRIVILEGE = "user.privilege.help.privilege";
-    public static final String OPERATIONS = "user.privilege.help.operations";
-  }
+    private UserPrivilegeTranslator() {
+        // Utility class
+    }
 
-  public static final String USER_PRIVILEGE_CLASS = UserPrivilegeDTO.class.getCanonicalName();
-  public static final String USER_PRIVILEGE = "user.privilege";
-  public static final String PRIVILEGE = "user.privilege.privilege";
-  public static final String OPERATIONS = "user.privilege.operations";
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String USER_PRIVILEGE = "user.privilege.help";
+        public static final String PRIVILEGE = "user.privilege.help.privilege";
+        public static final String OPERATIONS = "user.privilege.help.operations";
+    }
 
-  public static final class VALIDATION {
-    public static final String PRIVILEGE_REQUIRED = "validation.user.privilege.privilege.required";
-  }
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String PRIVILEGE_REQUIRED = "validation.user.privilege.privilege.required";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String PERMISSAO_NEGADA = "user.privilege.rule.permissao.negada";
+        public static final String OPERACAO_INVALIDA = "user.privilege.rule.operacao.invalida";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "user.privilege.message.criado.sucesso";
+        public static final String DELETADO_SUCESSO = "user.privilege.message.deletado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String PERMISSAO_ATRIBUIDA = "user.privilege.event.permissao.atribuida";
+        public static final String PERMISSAO_REMOVIDA = "user.privilege.event.permissao.removida";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String USER_PRIVILEGE_CLASS = UserPrivilegeDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String USER_PRIVILEGE = "user.privilege";
+    public static final String PRIVILEGE = "user.privilege.privilege";
+    public static final String OPERATIONS = "user.privilege.operations";
 }

@@ -1,6 +1,8 @@
 package com.ia.core.security.view.user.page;
 
+import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
 import com.ia.core.security.service.model.user.UserDTO;
+import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.security.view.log.operation.list.AuditOperationListView;
 import com.ia.core.security.view.log.operation.list.AuditOperationListViewModel;
 import com.ia.core.security.view.log.operation.page.EntityPageView;
@@ -75,9 +77,9 @@ public class UserPageView
             if (user != null) {
               getViewModel().resetPassword(user);
             }
-            showSucessMessage($("Senha resetada com sucesso"));
-          }, $("Resetar senha"),
-                  $("Deseja realmente resetar a senha do usuário?"));
+            showSucessMessage($(UserTranslator.MESSAGE.PASSWORD_RESET_SUCCESS));
+          }, $(UserTranslator.ACTION.RESET_PASSWORD),
+                  $(UserTranslator.MESSAGE.CONFIRM_RESET_PASSWORD));
         }).build();
   }
 
@@ -118,13 +120,13 @@ public class UserPageView
       if (canViewAudit(object)) {
         Dialog dialog = new Dialog();
         DialogHeaderBar.addTo(dialog);
-        dialog.getFooter().add(new Button($("Fechar"), onClick -> {
+        dialog.getFooter().add(new Button($(LogOperationTranslator.ACTION.CLOSE), onClick -> {
           dialog.close();
         }));
         AuditOperationListViewModel logOperationListViewModel = getViewModel()
             .viewAudit(object);
         dialog.add(new AuditOperationListView(logOperationListViewModel));
-        dialog.setHeaderTitle($("Audição"));
+        dialog.setHeaderTitle($(LogOperationTranslator.TITLE.AUDIT));
         var width = getEditorWidth();
         dialog.setWidth(width.getSize(), width.getUnit());
         var height = getEditorHeight();

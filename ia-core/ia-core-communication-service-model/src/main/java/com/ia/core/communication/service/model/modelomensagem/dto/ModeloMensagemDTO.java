@@ -4,6 +4,7 @@ import com.ia.core.communication.model.mensagem.ModeloMensagem;
 import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +27,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Dados de um modelo de mensagem")
 public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
@@ -48,20 +50,25 @@ public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> imp
     return getSearchRequest().propertyFilters();
   }
 
-  @NotBlank(message = "Nome é obrigatório")
-  @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-  private String nome;
+   @NotBlank(message = ModeloMensagemTranslator.VALIDATION.NOME_NOT_BLANK)
+    @Size(max = 100, message = ModeloMensagemTranslator.VALIDATION.NOME_SIZE)
+    @Schema(description = "Nome do modelo de mensagem", example = "Modelo de Boas Vindas", required = true)
+    private String nome;
 
-  @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
-  private String descricao;
+    @Size(max = 500, message = ModeloMensagemTranslator.VALIDATION.DESCRICAO_SIZE)
+    @Schema(description = "Descrição do modelo", example = "Modelo para mensagem de boas vindas a novos usuários")
+    private String descricao;
 
-  @NotBlank(message = "Corpo do modelo é obrigatório")
-  private String corpoModelo;
+    @NotBlank(message = ModeloMensagemTranslator.VALIDATION.CORPO_MODELO_NOT_BLANK)
+    @Schema(description = "Corpo do modelo com variáveis", example = "Olá {{nome}}, seja bem-vindo!", required = true)
+    private String corpoModelo;
 
-  @NotNull(message = "Tipo do canal é obrigatório")
-  private TipoCanal tipoCanal;
+    @NotNull(message = ModeloMensagemTranslator.VALIDATION.TIPO_CANAL_NOT_NULL)
+    @Schema(description = "Tipo do canal de comunicação", example = "WHATSAPP", required = true)
+    private TipoCanal tipoCanal;
 
-  private Boolean ativo;
+   @Schema(description = "Indica se o modelo está ativo", example = "true")
+   private Boolean ativo;
 
   @Override
   public ModeloMensagemDTO cloneObject() {
@@ -96,5 +103,9 @@ public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> imp
     public static final String CORPO_MODELO = "corpoModelo";
     public static final String TIPO_CANAL = "tipoCanal";
     public static final String ATIVO = "ativo";
+
+    public static Set<String> values() {
+      return Set.of(NOME, DESCRICAO, CORPO_MODELO, TIPO_CANAL, ATIVO);
+    }
   }
 }

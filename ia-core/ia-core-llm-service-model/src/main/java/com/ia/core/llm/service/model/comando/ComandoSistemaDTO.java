@@ -5,6 +5,7 @@ import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import com.ia.core.llm.service.model.comando.ComandoSistemaTranslator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.Set;
  *
  * @author IA
  * @since 1.0
+ * @see ComandoSistemaTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -50,17 +52,17 @@ public class ComandoSistemaDTO
   /**
    * Título do comando
    */
-  @NotNull(message = "{validation.comando.titulo.required}")
-  @Size(min = 3, max = 200, message = "{validation.comando.titulo.size}")
+  @NotNull(message = ComandoSistemaTranslator.VALIDATION.TITULO_REQUIRED)
+  @Size(min = 3, max = 200, message = ComandoSistemaTranslator.VALIDATION.TITULO_SIZE)
   private String titulo;
 
   /**
    * Comando a ser executado, expresso em linguagem natural
    */
-  @Size(max = 500, message = "{validation.comando.comando.size}")
+  @Size(max = 500, message = ComandoSistemaTranslator.VALIDATION.COMANDO_SIZE)
   private String comando;
 
-  @NotNull(message = "{validation.comando.template.required}")
+  @NotNull(message = ComandoSistemaTranslator.VALIDATION.TEMPLATE_REQUIRED)
   private TemplateDTO template;
 
   @Override

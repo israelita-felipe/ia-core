@@ -108,9 +108,9 @@ public class UserDTO
     return Stream
         .concat(this.privileges.stream()
             .map(UserPrivilegeDTO::getPrivilege),
-                this.roles.stream()
-                    .flatMap(role -> role.getPrivileges().stream()
-                        .map(RolePrivilegeDTO::getPrivilege)))
+            this.roles.stream()
+                .flatMap(role -> role.getPrivileges().stream()
+                    .map(RolePrivilegeDTO::getPrivilege)))
         .collect(Collectors.toSet());
   }
 

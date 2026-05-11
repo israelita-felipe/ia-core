@@ -55,4 +55,21 @@ public class Privilege
   @Column(name = "context")
   private Set<String> values = new HashSet<>();
 
+  /**
+   * Retorna o conjunto de valores de contexto.
+   * <p>
+   * <b>Security Note:</b> Retorna uma visão imutável do conjunto para
+   * evitar modificações externas que poderiam comprometer a segurança.
+   * O conjunto interno permanece mutável para JPA, mas o acesso externo
+   * é protegido.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableSet para evitar modificação
+   *         não autorizada da coleção de contextos de privilégio.
+   *
+   * @return conjunto imutável de valores de contexto
+   */
+  public Set<String> getValues() {
+    return java.util.Collections.unmodifiableSet(values);
+  }
+
 }

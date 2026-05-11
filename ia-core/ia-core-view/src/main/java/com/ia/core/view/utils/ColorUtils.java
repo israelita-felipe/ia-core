@@ -23,7 +23,7 @@ public class ColorUtils {
   public static String hexToRgba(String hex, int alpha) {
     // Valida e normaliza o alpha
     int alphaVal = Math.max(0, Math.min(255, alpha));
-    double alphaDouble = alphaVal / 255.0;
+    double alphaDouble = (double) alphaVal / 255.0;
     return hexToRgba(hex, alphaDouble);
   }
 

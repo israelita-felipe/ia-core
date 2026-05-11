@@ -25,7 +25,11 @@ public class StringToLongConverter
     if (value == null || "".equals(value)) {
       return Result.ok(null);
     }
-    return Result.ok(Long.valueOf(value));
+    try {
+      return Result.ok(Long.valueOf(value));
+    } catch (NumberFormatException e) {
+      return Result.error("Valor inválido para número long: " + value);
+    }
   }
 
   @Override

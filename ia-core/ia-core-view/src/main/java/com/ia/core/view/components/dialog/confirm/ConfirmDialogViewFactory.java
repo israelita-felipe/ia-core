@@ -1,5 +1,6 @@
 package com.ia.core.view.components.dialog.confirm;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.properties.HasTranslator;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 
@@ -50,9 +51,9 @@ public class ConfirmDialogViewFactory
    * @param message Mensagem do diálogo
    */
   private void showConfirm(Runnable action, String title, String message) {
-    ConfirmDialog confirm = new ConfirmDialog(title, message, $("Sim"),
+    ConfirmDialog confirm = new ConfirmDialog(title, message, $(CoreApplicationTranslator.ACTION.YES),
                                               click -> action.run(),
-                                              $("Não"), click -> {
+                                              $(CoreApplicationTranslator.ACTION.NO), click -> {
                                               });
     confirm.open();
   }

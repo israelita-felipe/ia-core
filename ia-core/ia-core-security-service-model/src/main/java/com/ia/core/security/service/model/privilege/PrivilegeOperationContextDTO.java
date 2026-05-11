@@ -10,8 +10,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 /**
  * Classe que representa o objeto de transferência de dados para privilege operation context.
  * <p>
@@ -35,15 +37,36 @@ public class PrivilegeOperationContextDTO
   @Default
   private Set<String> values = new HashSet<>();
 
+  /**
+   * Retorna uma visão imutável dos valores do contexto.
+   *
+   * @return conjunto de valores não modificável
+   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
+   */
+  public Set<String> getValues() {
+    return Collections.unmodifiableSet(values);
+  }
+
+  /**
+   * Define os valores (faz uma cópia defensiva).
+   *
+   * @param values novo conjunto de valores (não pode ser null)
+   * @throws NullPointerException se values for null
+   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
+   */
+  public void setValues(Set<String> values) {
+    this.values = new HashSet<>(values);
+  }
+
   @Override
   public PrivilegeOperationContextDTO cloneObject() {
-    return toBuilder().values(new HashSet<>(values)).build();
+    return toBuilder().values(new HashSet<>(getValues())).build();
   }
 
   @Override
   public PrivilegeOperationContextDTO copyObject() {
     return ((PrivilegeOperationContextDTO) super.copyObject()).toBuilder()
-        .values(new HashSet<>(values)).build();
+        .values(new HashSet<>(getValues())).build();
   }
 
   /**

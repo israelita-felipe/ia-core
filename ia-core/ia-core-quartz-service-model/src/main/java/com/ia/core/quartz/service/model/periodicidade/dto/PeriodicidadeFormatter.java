@@ -7,11 +7,36 @@ import java.time.DayOfWeek;
 import java.time.Month;
 import java.util.Set;
 
+/**
+ * Utilitário para formatação de periodicidade em diferentes representações.
+ * <p>
+ * Esta classe fornece métodos para converter objetos {@link PeriodicidadeDTO}
+ * em strings formatadas adequadas para exibição ao usuário, suportando múltiplos
+ * níveis de detalhamento (compacto, completo e padrão).
+ *
+ * @author Equipe de Desenvolvimento
+ * @since 1.0.0
+ * @see PeriodicidadeDTO
+ * @see Translator
+ */
 public final class PeriodicidadeFormatter {
 
+  /**
+   * Construtor privado para evitar instanciação da classe utilitária.
+   */
   private PeriodicidadeFormatter() {
   }
 
+  /**
+   * Formata a periodicidade em versão padrão com descrição amigável.
+   * <p>
+   * Gera uma representação textual legível da periodicidade, incluindo
+   * frequência, intervalo, dias da semana, meses e horários quando aplicável.
+   *
+   * @param p           objeto {@link PeriodicidadeDTO} a ser formatado (pode ser null)
+   * @param translator  serviço de tradução para internacionalização (pode ser null)
+   * @return string formatada descrevendo a periodicidade, ou string vazia se p for null
+   */
   public static String format(PeriodicidadeDTO p, Translator translator) {
 
     if (p == null || p.getRegra() == null) {
@@ -96,11 +121,11 @@ public final class PeriodicidadeFormatter {
         }
       } else if (base.getEndTime() != null) {
         endFormatted = base.getStartDate() != null
-                                                   ? base.getStartDate()
-                                                       .toString() + " "
-                                                       + base.getEndTime()
-                                                   : base.getEndTime()
-                                                       .toString();
+                                           ? base.getStartDate()
+                                               .toString() + " "
+                                               + base.getEndTime()
+                                           : base.getEndTime()
+                                               .toString();
       }
 
       sb.append(" às ").append(startFormatted).append(" até ")
@@ -127,6 +152,12 @@ public final class PeriodicidadeFormatter {
     return sb.toString();
   }
 
+  /**
+   * Obtém a unidade de medida correspondente à frequência.
+   *
+   * @param f a frequência a ser convertida (não pode ser null)
+   * @return string representando a unidade de medida (dias, semanas, meses ou anos)
+   */
   private static String unidadeFrequencia(Frequencia f) {
     return switch (f) {
     case DIARIAMENTE -> "dias";
@@ -136,6 +167,12 @@ public final class PeriodicidadeFormatter {
     };
   }
 
+  /**
+   * Formata uma posição ordinal em português.
+   *
+   * @param pos conjunto de posições ordinais (não pode ser null)
+   * @return string formatada com as posições ordinais separadas por vírgula
+   */
   private static String ordem(Set<Integer> pos) {
     String result = "";
     for (Integer i : pos) {
@@ -144,6 +181,12 @@ public final class PeriodicidadeFormatter {
     return result;
   }
 
+  /**
+   * Converte um número de posição ordinal para sua representação textual em português.
+   *
+   * @param pos a posição ordinal (1 = primeira, 2 = segunda, etc., -1 = última)
+   * @return string representando a posição ordinal por extenso
+   */
   private static String ordem(int pos) {
     return switch (pos) {
     case 1 -> "primeira";
@@ -155,6 +198,12 @@ public final class PeriodicidadeFormatter {
     };
   }
 
+  /**
+   * Converte um dia da semana para sua representação textual em português.
+   *
+   * @param d o dia da semana a ser convertido (não pode ser null)
+   * @return string representando o dia da semana por extenso
+   */
   private static String diaSemanaPT(DayOfWeek d) {
     return switch (d) {
     case MONDAY -> "segunda-feira";
@@ -167,6 +216,12 @@ public final class PeriodicidadeFormatter {
     };
   }
 
+  /**
+   * Converte um mês para sua representação textual em português.
+   *
+   * @param m o mês a ser convertido (não pode ser null)
+   * @return string representando o mês por extenso
+   */
   private static String mesPT(Month m) {
     return switch (m) {
     case JANUARY -> "janeiro";
@@ -184,6 +239,16 @@ public final class PeriodicidadeFormatter {
     };
   }
 
+  /**
+   * Formata a periodicidade em versão compacta.
+   * <p>
+   * Gera uma representação resumida da periodicidade, adequada para
+   * exibição em espaços limitados.
+   *
+   * @param p           objeto {@link PeriodicidadeDTO} a ser formatado (pode ser null)
+   * @param translator  serviço de tradução para internacionalização (pode ser null)
+   * @return string formatada em versão compacta, ou string vazia se p for null
+   */
   public static String formatCompact(PeriodicidadeDTO p,
                                      Translator translator) {
 
@@ -224,11 +289,11 @@ public final class PeriodicidadeFormatter {
         }
       } else if (base.getEndTime() != null) {
         endFormatted = base.getStartDate() != null
-                                                   ? base.getStartDate()
-                                                       .toString() + " "
-                                                       + base.getEndTime()
-                                                   : base.getEndTime()
-                                                       .toString();
+                                           ? base.getStartDate()
+                                               .toString() + " "
+                                               + base.getEndTime()
+                                           : base.getEndTime()
+                                               .toString();
       }
 
       sb.append(" • ").append(startFormatted).append("–")
@@ -254,12 +319,12 @@ public final class PeriodicidadeFormatter {
    * COUNT, BYMONTH, BYMONTHDAY, BYDAY, BYSETPOS, WKST, BYYEARDAY, BYWEEKNO,
    * BYHOUR, BYMINUTE, BYSECOND
    *
-   * @param p          Periodicidade a formatar
-   * @param translator Translator para internacionalização (opcional)
-   * @return String com todos os campos da periodicidade
+   * @param p           objeto {@link PeriodicidadeDTO} a ser formatado (pode ser null)
+   * @param translator  serviço de tradução para internacionalização (pode ser null)
+   * @return string com todos os campos da periodicidade formatados
    */
   public static String formatFull(PeriodicidadeDTO p,
-                                  Translator translator) {
+                                   Translator translator) {
 
     if (p == null) {
       return "";
@@ -431,6 +496,12 @@ public final class PeriodicidadeFormatter {
     return sb.toString();
   }
 
+  /**
+   * Obtém o nome da frequência por extenso em português.
+   *
+   * @param f a frequência a ser convertida (não pode ser null)
+   * @return string representando a frequência por extenso
+   */
   private static String nomeFrequencia(Frequencia f) {
     return switch (f) {
     case DIARIAMENTE -> "Diario";

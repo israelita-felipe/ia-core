@@ -157,13 +157,12 @@ public class RecorrenciaFormView
   // Métodos de criação de campos com layout
   // ========================
 
-  private void createFrequencyField(FormLayout layout) {
-    frequencyField = createFrequencyField($(PeriodicidadeTranslator.RECORRENCIA.FREQUENCY),
-                                          $(PeriodicidadeTranslator.RECORRENCIA.HELP.FREQUENCY));
-    layout.add(frequencyField, 2);
-    bind(RecorrenciaDTO.CAMPOS.FREQUENCY, frequencyField);
-
-  }
+    private void createFrequencyField(FormLayout layout) {
+     frequencyField = createFrequencyField($(PeriodicidadeTranslator.RECORRENCIA.FREQUENCY),
+                                           $(PeriodicidadeTranslator.RECORRENCIA.HELP.FREQUENCY));
+     layout.add(frequencyField, 2);
+     bind(RecorrenciaDTO.CAMPOS.FREQUENCY, frequencyField);
+   }
 
   private void createIntervalValueField(FormLayout layout) {
     intervalValueField = createIntervalValueField($(PeriodicidadeTranslator.RECORRENCIA.INTERVAL_VALUE),
@@ -281,14 +280,14 @@ public class RecorrenciaFormView
 
     // Seção: Mensal
     mainLayout
-        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_MONTHLY)),
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB.MONTHLY)),
              6);
     createByMonthDayField(mainLayout);
     createByMonthField(mainLayout);
 
     // Seção: Avançado
     mainLayout
-        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_ADVANCED)),
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB.ADVANCED)),
              6);
     createWeekStartDayField(mainLayout);
     createByYearDayField(mainLayout);
@@ -296,7 +295,7 @@ public class RecorrenciaFormView
 
     // Seção: Horário
     mainLayout
-        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_TIME)),
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB.TIME)),
              6);
     createByHourField(mainLayout);
     createByMinuteField(mainLayout);
@@ -304,7 +303,7 @@ public class RecorrenciaFormView
 
     // Seção: Limites
     mainLayout
-        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB_LIMITS)),
+        .add(new NativeLabel($(PeriodicidadeTranslator.RECORRENCIA.TAB.LIMITS)),
              6);
     createUntilDateField(mainLayout);
     createCountLimitField(mainLayout);

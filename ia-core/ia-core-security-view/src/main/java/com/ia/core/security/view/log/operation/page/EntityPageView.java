@@ -1,5 +1,6 @@
 package com.ia.core.security.view.log.operation.page;
 
+import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
 import com.ia.core.security.view.log.operation.list.LogOperationListView;
 import com.ia.core.security.view.log.operation.list.LogOperationListViewModel;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
@@ -76,7 +77,7 @@ public abstract class EntityPageView<T extends AbstractBaseEntityDTO<? extends S
       if (canViewHistory(object)) {
         Dialog dialog = new Dialog();
         DialogHeaderBar.addTo(dialog);
-        dialog.getFooter().add(new Button($("Fechar"), onClick -> {
+        dialog.getFooter().add(new Button($(LogOperationTranslator.ACTION.CLOSE), onClick -> {
           dialog.close();
         }));
         LogOperationListViewModel logOperationListViewModel = getViewModel()

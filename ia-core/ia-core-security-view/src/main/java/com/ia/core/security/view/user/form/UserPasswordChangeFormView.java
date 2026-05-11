@@ -1,5 +1,6 @@
 package com.ia.core.security.view.user.form;
 
+import com.ia.core.security.service.model.user.UserTranslator;
 import com.ia.core.security.view.user.UserManager.UserPasswordChangeSuportDTO;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
@@ -54,12 +55,12 @@ public class UserPasswordChangeFormView
   public void createLayout() {
     super.createLayout();
     bind("oldPassword",
-         createCurrentPasswordField($("Senha atual"), $("Senha atual")));
+         createCurrentPasswordField($(UserTranslator.PASSWORD.CURRENT), $(UserTranslator.PASSWORD.CURRENT)));
     bind("newPassword",
-         createNewPasswordField($("Senha nova"), $("Senha nova")));
+         createNewPasswordField($(UserTranslator.PASSWORD.NEW), $(UserTranslator.PASSWORD.NEW)));
     bind("confirmPassword",
-         createConfirmPasswordField($("Repita a nova senha"),
-                                    $("Confirmação de nova senha")));
+         createConfirmPasswordField($(UserTranslator.PASSWORD.CONFIRM_NEW),
+                                    $(UserTranslator.PASSWORD.CONFIRM_NEW)));
   }
 
   /**

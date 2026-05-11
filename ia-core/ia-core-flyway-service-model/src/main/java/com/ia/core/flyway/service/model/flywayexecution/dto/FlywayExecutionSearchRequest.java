@@ -34,7 +34,7 @@ public class FlywayExecutionSearchRequest extends SearchRequestDTO {
 		createFilters(filterMap, FlywayExecutionTranslator.VERSION,
 				"migrationVersion", FieldType.STRING,
 				OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL, OperatorDTO.LIKE);
-		createFilters(filterMap, FlywayExecutionTranslator.DESCRICAO,
+		createFilters(filterMap, FlywayExecutionTranslator.DESCRIPTION,
 				"description", FieldType.STRING,
 				OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL, OperatorDTO.LIKE);
 		createFilters(filterMap, FlywayExecutionTranslator.TYPE,

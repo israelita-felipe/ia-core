@@ -1,37 +1,76 @@
 package com.ia.core.communication.service.model.grupocontato.dto;
 
 /**
- * Translator para GrupoContato.
+ * Translator constants for GrupoContato (Contact Group) DTO.
+ * <p>
+ * Contains constants for i18n keys, validation messages, and field names
+ * used throughout the GrupoContato DTO processing pipeline.
  *
  * @author Israel Araújo
+ * @since 1.0.0
+ * @see com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO
  */
-/**
- * Classe que representa a entidade de domínio grupo contato translator.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoTranslator
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
-@SuppressWarnings("javadoc")
-public class GrupoContatoTranslator {
-  public static final class HELP {
-    public static final String GRUPO_CONTATO = "grupo.contato.help";
-    public static final String NOME = "grupo.contato.help.nome";
-    public static final String DESCRICAO = "grupo.contato.help.descricao";
-    public static final String ATIVO = "grupo.contato.help.ativo";
-  }
+public final class GrupoContatoTranslator {
 
-  public static final String GRUPO_CONTATO_CLASS = GrupoContatoDTO.class.getCanonicalName();
-  public static final String GRUPO_CONTATO = "grupo.contato";
-  public static final String NOME = "grupo.contato.nome";
-  public static final String DESCRICAO = "grupo.contato.descricao";
-  public static final String ATIVO = "grupo.contato.ativo";
+    private GrupoContatoTranslator() {
+        // Utility class
+    }
 
-  public static final class VALIDATION {
-    public static final String NOME_NOT_BLANK = "grupo.contato.validation.nome.not.blank";
-    public static final String NOME_SIZE = "grupo.contato.validation.nome.size";
-    public static final String DESCRICAO_SIZE = "grupo.contato.validation.descricao.size";
-  }
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String GRUPO_CONTATO = "grupo.contato.help";
+        public static final String NOME = "grupo.contato.help.nome";
+        public static final String DESCRICAO = "grupo.contato.help.descricao";
+        public static final String ATIVO = "grupo.contato.help.ativo";
+    }
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String NOME_NOT_BLANK = "grupo.contato.validation.nome.not.blank";
+        public static final String NOME_SIZE = "grupo.contato.validation.nome.size";
+        public static final String DESCRICAO_SIZE = "grupo.contato.validation.descricao.size";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String GRUPO_SEM_CONTATOS = "grupo.contato.rule.grupo.sem.contatos";
+        public static final String CONTATO_DUPLICADO = "grupo.contato.rule.contato.duplicado";
+    }
+
+    /**
+     * Success/error message keys
+     */
+    public static final class MESSAGE {
+        public static final String CRIADO_SUCESSO = "grupo.contato.message.criado.sucesso";
+        public static final String ATUALIZADO_SUCESSO = "grupo.contato.message.atualizado.sucesso";
+        public static final String DELETADO_SUCESSO = "grupo.contato.message.deletado.sucesso";
+    }
+
+    /**
+     * Domain event message keys
+     */
+    public static final class EVENT {
+        public static final String GRUPO_CRIADO = "grupo.contato.event.criado";
+        public static final String GRUPO_ATUALIZADO = "grupo.contato.event.atualizado";
+        public static final String CONTATO_ADICIONADO_AO_GRUPO = "grupo.contato.event.contato.adicionado";
+    }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String GRUPO_CONTATO_CLASS = GrupoContatoDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String GRUPO_CONTATO = "grupo.contato";
+    public static final String NOME = "grupo.contato.nome";
+    public static final String DESCRICAO = "grupo.contato.descricao";
+    public static final String ATIVO = "grupo.contato.ativo";
 }

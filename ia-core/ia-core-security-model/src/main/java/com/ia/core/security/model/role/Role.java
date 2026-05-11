@@ -51,8 +51,37 @@ public class Role
                  "user_id", "role_id" }))
   private Collection<User> users = new HashSet<>();
 
+  /**
+   * Retorna a coleção de usuários com esta role.
+   * <p>
+   * <b>Security Note:</b> Retorna visão imutável para evitar modificações
+   * não autorizadas na associação role-usuário.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableCollection (era mutável).
+   *
+   * @return coleção imutável de usuários
+   */
+  public Collection<User> getUsers() {
+    return java.util.Collections.unmodifiableCollection(users);
+  }
+
   @Default
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
              mappedBy = "role", orphanRemoval = true)
   private Collection<RolePrivilege> privileges = new HashSet<>();
+
+  /**
+   * Retorna a coleção de privilégios desta role.
+   * <p>
+   * <b>Security Note:</b> Retorna visão imutável. A modificação de privilégios
+   * deve ser feita através dos métodos de negócio (addPrivilege, removePrivilege)
+   * que garantam auditoria e validação.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableCollection (era mutável).
+   *
+   * @return coleção imutável de privilégios da role
+   */
+  public Collection<RolePrivilege> getPrivileges() {
+    return java.util.Collections.unmodifiableCollection(privileges);
+  }
 }

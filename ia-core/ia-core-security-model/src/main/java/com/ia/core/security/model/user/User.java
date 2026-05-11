@@ -64,10 +64,40 @@ public class User
                  "user_id", "role_id" }))
   private Collection<Role> roles = new HashSet<>();
 
+  /**
+   * Retorna as roles (funções) deste usuário.
+   * <p>
+   * <b>Security Critical:</b> As roles determinam o nível de acesso do usuário.
+   * Esta coleção é sensível e não deve ser modificada externamente sem auditoria.
+   * Retorna visão imutável para evitar elevação de privilégio via manipulação direta.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableCollection (era Collection mutável exposta).
+   *
+   * @return coleção imutável de roles
+   */
+  public Collection<Role> getRoles() {
+    return java.util.Collections.unmodifiableCollection(roles);
+  }
+
   @Default
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
              mappedBy = "user", orphanRemoval = true)
   private Collection<UserPrivilege> privileges = new HashSet<>();
+
+  /**
+   * Retorna os privilégios deste usuário.
+   * <p>
+   * <b>Security Critical:</b> Privilégios concedem permissões específicas.
+   * A coleção não deve ser modificada diretamente; use métodos de negócio
+   * que realizem validação e auditoria.
+   *
+   * @bugfix SECURITY: Retorna unmodifiableCollection (era Collection mutável exposta).
+   *
+   * @return coleção imutável de privilégios do usuário
+   */
+  public Collection<UserPrivilege> getPrivileges() {
+    return java.util.Collections.unmodifiableCollection(privileges);
+  }
 
   @Override
   public String toString() {

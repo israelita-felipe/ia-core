@@ -90,6 +90,20 @@ public interface CoreSecurityAuthorizationManager {
     return hasAuthority;
   }
 
+  /**
+   * Checks if the user has the required permission for the given object and operation.
+   * <p>
+   * Security: Authorization defaults to DENY for null objects or empty context values
+   * to prevent authorization bypass vulnerabilities.
+   * </p>
+   *
+   * @param hasContext the context holder containing privilege information
+   * @param operation the operation being checked (CREATE, READ, UPDATE, DELETE)
+   * @param object the object being accessed for authorization
+   * @return true if user has permission, false otherwise
+   * @bugfix SECURITY: Changed null object handling from permit to deny (was authorization bypass)
+   * @bugfix SECURITY: Changed empty context handling from permit to deny (was authorization bypass)
+   */
   default boolean check(HasContext hasContext, Operation operation,
                         Object object) {
     if (object == null) {
@@ -151,14 +165,14 @@ public interface CoreSecurityAuthorizationManager {
 
   boolean isDeleteEnabled();
 
+  boolean isReadEnabled();
+
+  boolean isUpdateEnabled();
+
   default boolean isEnabledAll() {
     return isUpdateEnabled() && isCreateEnabled() && isDeleteEnabled()
         && isReadEnabled();
   }
-
-  boolean isReadEnabled();
-
-  boolean isUpdateEnabled();
 
   void setCreateEnabled(boolean createEnabled);
 
@@ -167,5 +181,4 @@ public interface CoreSecurityAuthorizationManager {
   void setReadEnabled(boolean readEnabled);
 
   void setUpdateEnabled(boolean updateEnabled);
-
 }

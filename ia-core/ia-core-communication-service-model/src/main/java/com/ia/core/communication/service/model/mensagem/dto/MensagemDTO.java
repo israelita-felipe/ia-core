@@ -6,8 +6,10 @@ import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
+import com.ia.core.communication.service.model.mensagem.dto.MensagemTranslator;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +33,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Dados de uma mensagem de comunicação")
 public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasVariavel {
   /** Serial UID */
   private static final long serialVersionUID = 1L;
@@ -53,33 +56,43 @@ public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasV
     return getSearchRequest().propertyFilters();
   }
 
-  @NotBlank(message = "Telefone do destinatário é obrigatório")
-  @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres")
-  private String telefoneDestinatario;
+   @NotBlank(message = MensagemTranslator.VALIDATION.TELEFONE_DESTINATARIO_NOT_BLANK)
+    @Size(max = 20, message = MensagemTranslator.VALIDATION.TELEFONE_DESTINATARIO_SIZE)
+    @Schema(description = "Telefone do destinatário", example = "+5511999999999", required = true)
+    private String telefoneDestinatario;
 
-  @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
-  private String nomeDestinatario;
+    @Size(max = 100, message = MensagemTranslator.VALIDATION.NOME_DESTINATARIO_SIZE)
+    @Schema(description = "Nome do destinatário", example = "João Silva")
+    private String nomeDestinatario;
 
-  @NotBlank(message = "Corpo da mensagem é obrigatório")
-  private String corpoMensagem;
+    @NotBlank(message = MensagemTranslator.VALIDATION.CORPO_MENSAGEM_NOT_BLANK)
+    @Schema(description = "Corpo da mensagem", example = "Olá, esta é uma mensagem de teste", required = true)
+    private String corpoMensagem;
 
-  @NotNull(message = "Tipo do canal é obrigatório")
-  private TipoCanal tipoCanal;
+    @NotNull(message = MensagemTranslator.VALIDATION.TIPO_CANAL_NOT_NULL)
+    @Schema(description = "Tipo do canal de comunicação", example = "WHATSAPP", required = true)
+    private TipoCanal tipoCanal;
 
-  @NotNull(message = "Status da mensagem é obrigatório")
-  private StatusMensagem statusMensagem;
+    @NotNull(message = MensagemTranslator.VALIDATION.STATUS_MENSAGEM_NOT_NULL)
+    @Schema(description = "Status da mensagem", example = "ENVIADA", required = true)
+    private StatusMensagem statusMensagem;
 
-  @Size(max = 100, message = "ID externo deve ter no máximo 100 caracteres")
-  private String idExterno;
+    @Size(max = 100, message = MensagemTranslator.VALIDATION.ID_EXTERNO_SIZE)
+    @Schema(description = "ID externo da mensagem", example = "msg-12345")
+    private String idExterno;
 
-  private LocalDateTime dataEnvio;
+   @Schema(description = "Data de envio da mensagem", example = "2024-01-15T10:30:00")
+   private LocalDateTime dataEnvio;
 
-  private LocalDateTime dataEntrega;
+   @Schema(description = "Data de entrega da mensagem", example = "2024-01-15T10:31:00")
+   private LocalDateTime dataEntrega;
 
-  private LocalDateTime dataLeitura;
+   @Schema(description = "Data de leitura da mensagem", example = "2024-01-15T10:35:00")
+   private LocalDateTime dataLeitura;
 
-  @Size(max = 500, message = "Motivo da falha deve ter no máximo 500 caracteres")
-  private String motivoFalha;
+    @Size(max = 500, message = MensagemTranslator.VALIDATION.MOTIVO_FALHA_SIZE)
+    @Schema(description = "Motivo da falha no envio", example = "Número inválido")
+    private String motivoFalha;
 
   @Override
   public MensagemDTO cloneObject() {
@@ -118,5 +131,21 @@ public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasV
     public static final String DATA_ENVIO = "dataEnvio";
     public static final String DATA_ENTREGA = "dataEntrega";
     public static final String DATA_LEITURA = "dataLeitura";
+    public static final String MOTIVO_FALHA = "motivoFalha";
+
+    public static Set<String> values() {
+      return Set.of(
+        TELEFONE_DESTINATARIO,
+        NOME_DESTINATARIO,
+        CORPO_MENSAGEM,
+        TIPO_CANAL,
+        STATUS_MENSAGEM,
+        ID_EXTERNO,
+        DATA_ENVIO,
+        DATA_ENTREGA,
+        DATA_LEITURA,
+        MOTIVO_FALHA
+      );
+    }
   }
 }

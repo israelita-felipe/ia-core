@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -52,6 +53,50 @@ public class RoleDTO
 
   @Default
   private Collection<RolePrivilegeDTO> privileges = new HashSet<>();
+
+  /**
+   * Retorna uma visão imutável dos usuários associados a esta função.
+   *
+   * @return coleção de usuários não modificável
+   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
+   */
+  public Collection<UserDTO> getUsers() {
+    return Collections.unmodifiableCollection(users);
+  }
+
+  /**
+   * Define os usuários (faz uma cópia defensiva).
+   *
+   * @param users nova coleção de usuários (não pode ser null)
+   * @throws NullPointerException se users for null
+   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
+   */
+  public void setUsers(Collection<UserDTO> users) {
+    Objects.requireNonNull(users, "Users collection cannot be null");
+    this.users = new HashSet<>(users);
+  }
+
+  /**
+   * Retorna uma visão imutável dos privilégios associados a esta função.
+   *
+   * @return coleção de privilégios não modificável
+   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
+   */
+  public Collection<RolePrivilegeDTO> getPrivileges() {
+    return Collections.unmodifiableCollection(privileges);
+  }
+
+  /**
+   * Define os privilégios (faz uma cópia defensiva).
+   *
+   * @param privileges nova coleção de privilégios (não pode ser null)
+   * @throws NullPointerException se privileges for null
+   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
+   */
+  public void setPrivileges(Collection<RolePrivilegeDTO> privileges) {
+    Objects.requireNonNull(privileges, "Privileges collection cannot be null");
+    this.privileges = new HashSet<>(privileges);
+  }
 
   @Override
   public RoleDTO cloneObject() {

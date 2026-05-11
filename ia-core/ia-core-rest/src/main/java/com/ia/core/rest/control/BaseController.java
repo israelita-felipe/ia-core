@@ -20,4 +20,6 @@ public interface BaseController<T extends BaseEntity, D extends DTO<?>> {
    */
   <R extends BaseService<?, D>> R getService();
 
+  // Constante para o nome do esquema de segurança JWT
+  String TOKEN_AUTENTICACAO = "Token de Autenticação";
 }

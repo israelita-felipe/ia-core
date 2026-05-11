@@ -28,6 +28,7 @@ import java.util.Set;
  *
  * @author IA
  * @since 1.0
+ * @see TemplateTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -48,15 +49,15 @@ public class TemplateDTO
   /**
    * Título do template
    */
-  @NotNull(message = "{validation.template.titulo.required}")
-  @Size(min = 3, max = 200, message = "{validation.template.titulo.size}")
+  @NotNull(message = TemplateTranslator.VALIDATION.TITULO_NOT_BLANK)
+  @Size(min = 3, max = 200, message = TemplateTranslator.VALIDATION.TITULO_SIZE)
   private String titulo;
 
   /**
    * Conteúdo do template
    */
-  @NotNull(message = "{validation.template.conteudo.required}")
-  @Size(max = 10000, message = "{validation.template.conteudo.size}")
+  @NotNull(message = TemplateTranslator.VALIDATION.CONTEUDO_NOT_BLANK)
+  @Size(max = 10000, message = TemplateTranslator.VALIDATION.CONTEUDO_SIZE)
   private String conteudo;
 
   /**
