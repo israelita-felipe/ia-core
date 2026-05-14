@@ -64,7 +64,7 @@ Estabelecer padrões Javadoc consistentes e rigorosos para todo o projeto, segui
  *
  * [Parágrafo com exemplos de uso ou implementação, se aplicável].
  *
- * @author Nome do Autor
+ * @author Israel Araújo
  * @since 1.0.0
  * @see ClasseRelacionada
  */
@@ -107,7 +107,7 @@ public class Exemplo { }
  * @param otherParam descrição do outro parâmetro
  * @return descrição do retorno
  * @throws Exception descrição de quando ocorre
- * @author Nome do Autor
+ * @author Israel Araújo
  * @since 1.0.0
  */
 public void metodoExemplo(String paramName, int otherParam) { }

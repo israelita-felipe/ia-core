@@ -19,180 +19,297 @@ O projeto precisa lidar com cenários de falha como:
 
 ## Decisão
 
-Usar **Resilience4j** como biblioteca de padrões de resiliência, integrado ao Spring Boot via Spring Retry.
+Usar **Resilience4j** como biblioteca de padrões de resiliência, integrado ao Spring Boot via **ia-core-resilience4j** — um módulo reutilizável que fornece anotações declarativas (`@Resilient`) e perfis de resiliência (`ResilienceProfile`) para aplicação consistente de padrões de resiliência em toda a aplicação.
 
 ## Detalhes
 
-### Dependências Maven
+ ### Dependências Maven
 
-```xml
-<dependency>
-    <groupId>io.github.resilience4j</groupId>
-    <artifactId>resilience4j-spring-boot3</artifactId>
-    <version>2.2.0</version>
-</dependency>
-<dependency>
-    <groupId>org.springframework.retry</groupId>
-    <artifactId>spring-retry</artifactId>
-</dependency>
+ ```xml
+ <dependency>
+     <groupId>com.ia</groupId>
+     <artifactId>ia-core-resilience4j</artifactId>
+     <version>0.0.1-SNAPSHOT</version>
+ </dependency>
+ ```
+
+ ### Habilitação do Módulo
+
+ Adicionar `@EnableResilience` na classe principal da aplicação:
+
+ O módulo `ia-core-resilience4j` fornece:
+ - `@EnableResilience` - Anotação para ativar a configuração automática
+ - `@Resilient` - Anotação para aplicar padrões de resiliência
+ - `ResilienceProfile` - Enum com perfis predefinidos
+
+```java
+@SpringBootApplication
+@EnableResilience
+public class MyApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
 ```
 
 ### 1. Circuit Breaker
 
-```java
-@Service
-@RequiredArgsConstructor
-public class ExternalApiService {
-    
-    @CircuitBreaker(name = "externalApi", fallbackMethod = "fallback")
-    public String callExternalApi(String param) {
-        return externalClient.getData(param);
-    }
-    
-    private String fallback(String param, Exception e) {
-        log.warn("Circuit breaker fallback para: {}", param);
-        return "{\"status\": \"unavailable\"}";
-    }
-}
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-### Configuração
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-```yaml
-resilience4j:
-  circuitbreaker:
-    instances:
-      externalApi:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        waitDurationInOpenState: 5s
-        failureRateThreshold: 50
-        eventConsumerBufferSize: 10
-```
+ @Service
+ @RequiredArgsConstructor
+ public class ExternalApiService {
 
-### 2. Retry
+     @Resilient(ResilienceProfile.EXTERNAL_API)
+     public String callExternalApi(String param) {
+         return externalClient.getData(param);
+     }
+ }
+ ```
 
-```java
-@Service
-@RequiredArgsConstructor
-public class PaymentService {
-    
-    @Retry(name = "paymentRetry", maxAttempts = 3)
-    public PaymentResult processPayment(PaymentDTO payment) {
-        return paymentGateway.process(payment);
-    }
-}
-```
+ ### 2. Retry
 
-```yaml
-resilience4j:
-  retry:
-    instances:
-      paymentRetry:
-        maxAttempts: 3
-        waitDuration: 2s
-        enableExponentialBackoff: true
-        exponentialBackoffMultiplier: 2
-        retryExceptions:
-          - java.io.IOException
-          - java.util.concurrent.TimeoutException
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-### 3. Rate Limiter
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-```java
-@Service
-public class ApiService {
-    
-    @RateLimiter(name = "apiRateLimit")
-    public Response getData() {
-        // limit: 100 requests per 10 seconds
-    }
-}
-```
+ @Service
+ @RequiredArgsConstructor
+ public class PaymentService {
 
-```yaml
-resilience4j:
-  ratelimiter:
-    instances:
-      apiRateLimit:
-        limitForPeriod: 100
-        limitRefreshPeriod: 10s
-        timeoutDuration: 0
-```
+     @Resilient(value = ResilienceProfile.LLM_SERVICE, maxRetryAttempts = 3)
+     public PaymentResult processPayment(PaymentDTO payment) {
+         return paymentGateway.process(payment);
+     }
+ }
+ ```
 
-### 4. Bulkhead
+ ### 3. Rate Limiter
 
-```java
-@Service
-public class ConcurrentService {
-    
-    @Bulkhead(name = "concurrentBulkhead")
-    public Result processConcurrently(Request request) {
-        // Máximo 10 chamadas simultâneas
-    }
-}
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-```yaml
-resilience4j:
-  bulkhead:
-    instances:
-      concurrentBulkhead:
-        maxConcurrentCalls: 10
-        maxWaitDuration: 0
-```
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-### 5. Timeout
+ @Service
+ public class ApiService {
 
-```java
-@Service
-public class TimeoutService {
-    
-    @Timeout(name = "timeoutService", duration = 5)
-    public Response getWithTimeout() {
-        // Timeout de 5 segundos
-    }
-}
-```
+     @Resilient(ResilienceProfile.WEB_SCRAPING)
+     public Response getData() {
+         // limit: 100 requests per 10 seconds
+     }
+ }
+ ```
 
-### Combinação de Patterns
+ ### 4. Bulkhead
 
-```java
-@Service
-public class CombinedService {
-    
-    @CircuitBreaker(name = "combined", fallbackMethod = "fallback")
-    @Retry(maxAttempts = 3, delay = 1000)
-    @RateLimiter(name = "apiLimit")
-    public Response combinedCall(String param) {
-        return externalService.call(param);
-    }
-}
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-### Events e Monitoramento
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-```java
-@Component
-public class ResilienceEventListener {
-    
-    @EventListener
-    public void onCircuitStateTransition(CircuitBreakerEvent event) {
-        log.info("Circuit breaker transition: {} -> {}", 
-            event.getStateTransition().getFromState(),
-            event.getStateTransition().getToState());
-    }
-    
-    @EventListener
-    public void onRetry(RetryEvent event) {
-        log.warn("Retry attempt: {}", event.getAttemptNumber());
-    }
-}
-```
+ @Service
+ public class ConcurrentService {
+
+     @Resilient(ResilienceProfile.INTERNAL_SERVICE)
+     public Result processConcurrently(Request request) {
+         // Máximo 10 chamadas simultâneas
+     }
+ }
+ ```
+
+ ### 5. Timeout
+
+ ```java
+ package com.ia.biblia.service.resilience;
+
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
+
+ @Service
+ public class TimeoutService {
+
+     @Resilient(value = ResilienceProfile.DATABASE, timeoutMs = 5000)
+     public Response getWithTimeout() {
+         // Timeout de 5 segundos
+     }
+ }
+ ```
+
+ ### Combinação de Patterns
+
+ ```java
+ package com.ia.biblia.service.resilience;
+
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
+
+ @Service
+ public class CombinedService {
+
+     @Resilient(value = ResilienceProfile.EXTERNAL_API, maxRetryAttempts = 3)
+     public Response combinedCall(String param) {
+         return ibgeClient.call(param);
+     }
+ }
+ ```
+
+### Configuração Centralizada
+
+A configuração é centralizada via namespace `ia.core.resilience4j` no `application.yml`:
+
+ ```yaml
+ia:
+  core:
+    resilience4j:
+      global:
+        circuit-breaker:
+          failure-rate-threshold: 50
+          wait-duration-in-open-state-ms: 60000
+          sliding-window-size: 20
+          minimum-number-of-calls: 10
+          permitted-calls-in-half-open: 3
+          automatic-transition-from-open-to-half-open: true
+          slow-call-duration-threshold-ms: 5000
+          slow-call-rate-threshold: 100
+          record-exceptions:
+            - java.io.IOException
+            - java.net.ConnectException
+            - java.net.SocketTimeoutException
+        retry:
+          max-attempts: 3
+          initial-wait-ms: 1000
+          retry-exceptions:
+            - java.io.IOException
+            - java.net.ConnectException
+        bulkhead:
+          max-concurrent-calls: 10
+          max-wait-duration-ms: 100
+        rate-limiter:
+          limit-for-period: 10
+          limit-refresh-period-ms: 1000
+          timeout-duration-ms: 500
+        timeout:
+          duration-ms: 5000
+          cancel-running-future: true
+
+      profiles:
+        EXTERNAL_API:
+          circuit-breaker:
+            failure-rate-threshold: 40
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 10
+            minimum-number-of-calls: 5
+            permitted-calls-in-half-open: 2
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 3000
+            slow-call-rate-threshold: 80
+          retry:
+            max-attempts: 2
+            initial-wait-ms: 500
+          bulkhead:
+            max-concurrent-calls: 5
+            max-wait-duration-ms: 50
+        LLM_SERVICE:
+          circuit-breaker:
+            failure-rate-threshold: 30
+            wait-duration-in-open-state-ms: 60000
+            sliding-window-size: 10
+            minimum-number-of-calls: 3
+            permitted-calls-in-half-open: 1
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 10000
+            slow-call-rate-threshold: 50
+          retry:
+            max-attempts: 1
+            initial-wait-ms: 2000
+          bulkhead:
+            max-concurrent-calls: 3
+            max-wait-duration-ms: 100
+        WEB_SCRAPING:
+          circuit-breaker:
+            failure-rate-threshold: 50
+            wait-duration-in-open-state-ms: 60000
+            sliding-window-size: 10
+            minimum-number-of-calls: 3
+            permitted-calls-in-half-open: 1
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 15000
+            slow-call-rate-threshold: 40
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 2000
+          bulkhead:
+            max-concurrent-calls: 2
+            max-wait-duration-ms: 100
+        INTERNAL_SERVICE:
+          circuit-breaker:
+            failure-rate-threshold: 50
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 20
+            minimum-number-of-calls: 10
+            permitted-calls-in-half-open: 3
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 3000
+            slow-call-rate-threshold: 100
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 1000
+          bulkhead:
+            max-concurrent-calls: 20
+            max-wait-duration-ms: 100
+        DATABASE:
+          circuit-breaker:
+            failure-rate-threshold: 60
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 20
+            minimum-number-of-calls: 10
+            permitted-calls-in-half-open: 3
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 2000
+            slow-call-rate-threshold: 100
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 1000
+          bulkhead:
+            max-concurrent-calls: 15
+            max-wait-duration-ms: 100
+ ```
+
+## Perfis Predefinidos
+
+O módulo `ia-core-resilience4j` fornece perfis de resiliência predefinidos, cada um otimizado para um tipo específico de operação. Os perfis podem ser usados diretamente na anotação `@Resilient` e suas configurações podem ser ajustadas individualmente via `application.yml` sob o namespace `ia.core.resilience4j.profiles`.
+
+| Perfil | Descrição | Casos de Uso |
+|--------|-----------|--------------|
+| `EXTERNAL_API` | Resiliência para chamadas a APIs externas com tolerância a falhas de rede e latência variável. | IBGE, WhatsApp, Telegram, serviços de terceiros |
+| `LLM_SERVICE` | Configuração otimizada para serviços de LLM com alta latência e custos elevados por requisição. | OpenAI, Ollama, GPT-4, Claude |
+| `WEB_SCRAPING` | Resiliência para operações de web scraping com alta taxa de falha e necessidade de retry agressivo. | Scraping de sites, coleta de dados web |
+| `INTERNAL_SERVICE` | Resiliência para chamadas entre serviços internos via Feign, com maior tolerância a concorrência. | Chamadas Feign entre módulos, microserviços internos |
+| `DATABASE` | Resiliência para operações de banco de dados com foco em evitar sobrecarga do SGBD. | JPA Repositories, queries complexas, conexões JDBC |
+| `DEFAULT` | Configurações padrão equilibradas para operações gerais sem perfil específico. | Uso genérico, operações internas simples |
+
+### Comparação de Parâmetros
+
+| Parâmetro | `DEFAULT` | `EXTERNAL_API` | `LLM_SERVICE` | `WEB_SCRAPING` | `INTERNAL_SERVICE` | `DATABASE` |
+|-----------|-----------|----------------|---------------|----------------|--------------------|------------|
+| CB Failure Rate | 50% | 40% | 30% | 50% | 50% | 60% |
+| CB Wait (ms) | 30000 | 30000 | 60000 | 60000 | 30000 | 30000 |
+| CB Sliding Window | 10 | 10 | 10 | 10 | 20 | 20 |
+| Retry Max Attempts | 3 | 2 | 1 | 3 | 3 | 3 |
+| Retry Initial Wait (ms) | 1000 | 500 | 2000 | 2000 | 1000 | 1000 |
+| Bulkhead Max Concurrent | 10 | 5 | 3 | 2 | 20 | 15 |
+| Timeout (ms) | 5000 | 15000 | 30000 | 60000 | 10000 | 5000 |
+
+---
 
 ## Consequências
 
@@ -202,7 +319,9 @@ public class ResilienceEventListener {
 - ✅ Recuperação automática
 - ✅ Monitoramento de resiliência
 - ✅ Fallbacks configuráveis
-- ✅ Patterns combinaveis
+- ✅ Patterns combináveis
+- ✅ Configuração centralizada via `ia.core.resilience4j`
+- ✅ Perfis predefinidos para diferentes tipos de serviço
 
 ### Negativas
 
@@ -225,61 +344,178 @@ A partir de 2026-03-27, o projeto suporta Resilience4j para clientes Feign via S
 
 1. **Dependências** (já adicionadas em ia-core-view/pom.xml):
 
-```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.github.resilience4j</groupId>
-    <artifactId>resilience4j-spring-boot3</artifactId>
-</dependency>
-```
+ ```xml
+ <dependency>
+     <groupId>com.ia</groupId>
+     <artifactId>ia-core-resilience4j</artifactId>
+     <version>0.0.1-SNAPSHOT</version>
+ </dependency>
+ ```
 
-2. **Habilite CircuitBreaker no cliente Feign**:
+2. **Habilite Resilience4j no cliente Feign**:
 
-```java
-@FeignClient(name = "externalApi", url = "https://api.example.com", circuitbreaker = "true")
-public interface ExternalApiClient {
-    @GetMapping("/data")
-    DataResponse getData();
-}
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-3. **Configure fallback** (opcional):
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-```java
-@FeignClient(name = "externalApi", url = "https://api.example.com", 
-             circuitbreaker = "true", fallback = ExternalApiFallback.class)
-public interface ExternalApiClient {
-    @GetMapping("/data")
-    DataResponse getData();
-}
+ @FeignClient(name = "externalApi", url = "https://api.example.com")
+ public interface ExternalApiClient {
 
-@Component
-public class ExternalApiFallback implements ExternalApiClient {
-    @Override
-    public DataResponse getData() {
-        return DataResponse.empty(); // Retorna dados padrão em caso de falha
-    }
-}
-```
+     @GetMapping("/data")
+     @Resilient(ResilienceProfile.EXTERNAL_API)
+     DataResponse getData();
+ }
+ ```
 
-4. **Configure via application.yml**:
+ 3. **Configure fallback** (opcional):
 
-```yaml
-resilience4j:
-  circuitbreaker:
-    instances:
-      externalApi:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-```
+ ```java
+ package com.ia.biblia.service.resilience;
 
-**Nota**: O uso de RestTemplate é desencorajado. Todos os clientes HTTP devem usar Feign.
+ import com.ia.core.resilience4j.annotation.Resilient;
+ import com.ia.core.resilience4j.profile.ResilienceProfile;
+
+ @FeignClient(name = "externalApi", url = "https://api.example.com")
+ public interface ExternalApiClient {
+
+     @GetMapping("/data")
+     @Resilient(value = ResilienceProfile.EXTERNAL_API,
+                fallbackBean = "municipioFallbackService")
+     DataResponse getData();
+ }
+
+ @Service
+ public class MunicipioFallbackService {
+
+     public DataResponse getData(String param, Exception exception) {
+         return DataResponse.empty(); // Retorna dados padrão em caso de falha
+     }
+ }
+ ```
+
+ 4. **Configure via application.yml**:
+
+  ```yaml
+ia:
+  core:
+    resilience4j:
+      global:
+        circuit-breaker:
+          failure-rate-threshold: 50
+          wait-duration-in-open-state-ms: 60000
+          sliding-window-size: 20
+          minimum-number-of-calls: 10
+          permitted-calls-in-half-open: 3
+          automatic-transition-from-open-to-half-open: true
+          slow-call-duration-threshold-ms: 5000
+          slow-call-rate-threshold: 100
+          record-exceptions:
+            - java.io.IOException
+            - java.net.ConnectException
+            - java.net.SocketTimeoutException
+        retry:
+          max-attempts: 3
+          initial-wait-ms: 1000
+          retry-exceptions:
+            - java.io.IOException
+            - java.net.ConnectException
+        bulkhead:
+          max-concurrent-calls: 10
+          max-wait-duration-ms: 100
+        rate-limiter:
+          limit-for-period: 10
+          limit-refresh-period-ms: 1000
+          timeout-duration-ms: 500
+        timeout:
+          duration-ms: 5000
+          cancel-running-future: true
+
+      profiles:
+        EXTERNAL_API:
+          circuit-breaker:
+            failure-rate-threshold: 40
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 10
+            minimum-number-of-calls: 5
+            permitted-calls-in-half-open: 2
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 3000
+            slow-call-rate-threshold: 80
+          retry:
+            max-attempts: 2
+            initial-wait-ms: 500
+          bulkhead:
+            max-concurrent-calls: 5
+            max-wait-duration-ms: 50
+        LLM_SERVICE:
+          circuit-breaker:
+            failure-rate-threshold: 30
+            wait-duration-in-open-state-ms: 60000
+            sliding-window-size: 10
+            minimum-number-of-calls: 3
+            permitted-calls-in-half-open: 1
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 10000
+            slow-call-rate-threshold: 50
+          retry:
+            max-attempts: 1
+            initial-wait-ms: 2000
+          bulkhead:
+            max-concurrent-calls: 3
+            max-wait-duration-ms: 100
+        WEB_SCRAPING:
+          circuit-breaker:
+            failure-rate-threshold: 50
+            wait-duration-in-open-state-ms: 60000
+            sliding-window-size: 10
+            minimum-number-of-calls: 3
+            permitted-calls-in-half-open: 1
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 15000
+            slow-call-rate-threshold: 40
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 2000
+          bulkhead:
+            max-concurrent-calls: 2
+            max-wait-duration-ms: 100
+        INTERNAL_SERVICE:
+          circuit-breaker:
+            failure-rate-threshold: 50
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 20
+            minimum-number-of-calls: 10
+            permitted-calls-in-half-open: 3
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 3000
+            slow-call-rate-threshold: 100
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 1000
+          bulkhead:
+            max-concurrent-calls: 20
+            max-wait-duration-ms: 100
+        DATABASE:
+          circuit-breaker:
+            failure-rate-threshold: 60
+            wait-duration-in-open-state-ms: 30000
+            sliding-window-size: 20
+            minimum-number-of-calls: 10
+            permitted-calls-in-half-open: 3
+            automatic-transition-from-open-to-half-open: true
+            slow-call-duration-threshold-ms: 2000
+            slow-call-rate-threshold: 100
+          retry:
+            max-attempts: 3
+            initial-wait-ms: 1000
+          bulkhead:
+            max-concurrent-calls: 15
+            max-wait-duration-ms: 100
+  ```
+
+ **Nota**: O uso de RestTemplate é desencorajado. Todos os clientes HTTP devem usar Feign.
 
 ## Data
 
