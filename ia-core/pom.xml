@@ -26,7 +26,7 @@
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.13.0</jjwt.version>
 		<jasper.version>6.21.4</jasper.version>
-		<spring-ai.version>1.1.0-M3</spring-ai.version>
+		<spring-ai.version>2.0.0-M1</spring-ai.version>
 		<ckeditor.version>4.1.2-8</ckeditor.version>
 		<owlapi.version>5.5.1</owlapi.version>
 		<openllet.version>2.6.5</openllet.version>

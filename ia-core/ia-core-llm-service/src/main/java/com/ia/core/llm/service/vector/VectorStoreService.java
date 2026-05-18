@@ -34,7 +34,7 @@ public class VectorStoreService {
    *         injetado neste serviço.
    */
   public QuestionAnswerAdvisor getQuestionAnswerAdvisor() {
-    return new QuestionAnswerAdvisor(vectorStore);
+    return QuestionAnswerAdvisor.builder(vectorStore).build();
   }
 
   /**

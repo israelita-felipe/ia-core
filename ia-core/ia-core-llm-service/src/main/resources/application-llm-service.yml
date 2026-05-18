@@ -10,6 +10,14 @@ spring:
           model: llama3.2-vision
       embedding:
         model: llama3.2-vision
+    mcp:
+      server:
+        port: 8081
+        path: /mcp
+      tools:
+        usecase-scan:
+          enabled: true
+          base-package: com.ia
   http:
     client:
       read-timeout: 600000
