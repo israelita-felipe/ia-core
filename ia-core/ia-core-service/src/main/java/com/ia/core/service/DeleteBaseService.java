@@ -1,9 +1,12 @@
 package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 
 import java.util.UUID;
 
@@ -66,15 +69,16 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
     return true;
   }
 
-  /**
-   * Deleta um {@link DTO} pelo seu {@link UUID}.
-   *
-   * @param id {@link UUID} da entidade <T>
-   * @throws ServiceException caso ocorra alguma exceção
-   */
-
-  default void delete(Long id)
-    throws ServiceException {
+   /**
+    * Deleta um {@link DTO} pelo seu {@link UUID}.
+    *
+    * @param id {@link UUID} da entidade <T>
+    * @throws ServiceException caso ocorra alguma exceção
+    */
+   @TransactionalWrite
+   @Resilient(ResilienceProfile.DATABASE)
+   default void delete(Long id)
+     throws ServiceException {
     beforeDelete(id);
     ServiceException ex = new ServiceException();
     D dto = null;

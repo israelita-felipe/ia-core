@@ -68,6 +68,7 @@ public class ResilienceAspect {
     private final ResilienceRegistry resilienceRegistry;
     private final FallbackStrategyRegistry fallbackRegistry;
     private final ResilienceTemplate resilienceTemplate;
+    private final ResilienceAspectContext contextPropagator;
 
     /**
      * Thread pool for asynchronous execution with timeout.
@@ -105,6 +106,10 @@ public class ResilienceAspect {
         RateLimiter rateLimiter = resolveRateLimiter(context);
         TimeLimiter timeLimiter = resolveTimeLimiter(context);
 
+        // Capture context state from the current thread.
+        // This allows the context propagator to restore state in a different thread.
+        Object contextSnapshot = contextPropagator.captureContext();
+
         // 4. Execute within the resilient template
         try {
             return resilienceTemplate.execute(context, () -> {
@@ -119,13 +124,28 @@ public class ResilienceAspect {
                                                             return timeLimiter.executeFutureSupplier(() ->
                                                                     CompletableFuture.supplyAsync(() -> {
                                                                         try {
-                                                                            return joinPoint.proceed();
+                                                                            return contextPropagator.executeWithContext(
+                                                                                    contextSnapshot,
+                                                                                    () -> {
+                                                                                        try {
+                                                                                            return joinPoint.proceed();
+                                                                                        } catch (RuntimeException e) {
+                                                                                            throw e;
+                                                                                        } catch (Throwable e) {
+                                                                                            throw new ResilienceExecutionException(e);
+                                                                                        }
+                                                                                    });
+                                                                        } catch (RuntimeException e) {
+                                                                            throw e;
                                                                         } catch (Throwable e) {
                                                                             throw new ResilienceExecutionException(e);
                                                                         }
-                                                                    }, timeoutExecutor)
+                                                                    },
+                                                                    timeoutExecutor)
                                                             );
-                                                        } catch (Exception e) {
+                                                        } catch (RuntimeException e) {
+                                                            throw e;
+                                                        } catch (Throwable e) {
                                                             throw new ResilienceExecutionException(e);
                                                         }
                                                     }
@@ -289,5 +309,57 @@ public class ResilienceAspect {
                 .build();
 
         return resilienceRegistry.timeLimiter(name, config);
+    }
+
+    /**
+     * Encapsulates context propagation for thread environments (e.g., SecurityContext, MDC, etc).
+     *
+     * <p>This interface allows decoupling the resilience aspect from specific context implementations.
+     * Implementations can capture and restore any ThreadLocal-based context (Spring Security,
+     * SLF4J MDC, custom contexts, etc.) without coupling the aspect to those frameworks.</p>
+     *
+     * <p>Implementations should be Spring beans and will be automatically injected into
+     * {@link ResilienceAspect}.</p>
+     *
+     * @author Israel Araújo
+     * @since 1.0.0
+     */
+    public interface ResilienceAspectContext {
+
+        /**
+         * Captures the current context state from the calling thread.
+         *
+         * <p>This method is invoked in the original thread (where the method annotated
+         * with @Resilient is being called) and should capture any ThreadLocal state
+         * that needs to be propagated to the executor thread.</p>
+         *
+         * @return A snapshot of the context state. The returned object should be
+         *         serializable (or at least transferable) to another thread.
+         */
+        Object captureContext();
+
+        /**
+         * Executes a supplier with the captured context restored.
+         *
+         * <p>This method is invoked in a worker thread (from the executor pool) and
+         * should restore the captured context state before executing the supplier,
+         * then clean up after execution.</p>
+         *
+         * @param contextSnapshot The context snapshot captured by {@link #captureContext()}.
+         * @param supplier        The code to execute with the restored context.
+         * @param <T>             The return type of the supplier.
+         * @return The result returned by the supplier.
+         * @throws Exception If the supplier throws an exception, it should be propagated.
+         */
+        <T> T executeWithContext(Object contextSnapshot, ContextSupplier<T> supplier) throws Exception;
+
+        /**
+         * A supplier that can execute code and throw checked exceptions.
+         *
+         * @param <T> The return type.
+         */
+        interface ContextSupplier<T> {
+            T get() throws Throwable;
+        }
     }
 }

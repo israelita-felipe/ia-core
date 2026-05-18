@@ -41,7 +41,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("EXTERNAL_SERVICE_UNAVAILABLE")
                     .message("External service temporarily unavailable")
-                    .retryable(true)
+                    .retryable(true).originalException(exception)
                     .build();
         });
         register(ResilienceProfile.LLM_SERVICE, (method, args, exception) -> {
@@ -50,7 +50,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("LLM_SERVICE_UNAVAILABLE")
                     .message("AI service temporarily unavailable")
-                    .retryable(false)
+                    .retryable(false).originalException(exception)
                     .build();
         });
         register(ResilienceProfile.WEB_SCRAPING, (method, args, exception) -> {
@@ -59,7 +59,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("SCRAPING_UNAVAILABLE")
                     .message("Scraping service temporarily unavailable")
-                    .retryable(true)
+                    .retryable(true).originalException(exception)
                     .build();
         });
         register(ResilienceProfile.INTERNAL_SERVICE, (method, args, exception) -> {
@@ -68,7 +68,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("INTERNAL_SERVICE_ERROR")
                     .message("Internal service error")
-                    .retryable(true)
+                    .retryable(true).originalException(exception)
                     .build();
         });
         register(ResilienceProfile.DATABASE, (method, args, exception) -> {
@@ -77,7 +77,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("DATABASE_ERROR")
                     .message("Data access error. Please try again.")
-                    .retryable(false)
+                    .retryable(false).originalException(exception)
                     .build();
         });
         register(ResilienceProfile.DEFAULT, (method, args, exception) -> {
@@ -86,7 +86,7 @@ public class FallbackStrategyRegistry {
                     .success(false)
                     .errorCode("SERVICE_UNAVAILABLE")
                     .message("Service temporarily unavailable")
-                    .retryable(true)
+                    .retryable(true).originalException(exception)
                     .build();
         });
     }

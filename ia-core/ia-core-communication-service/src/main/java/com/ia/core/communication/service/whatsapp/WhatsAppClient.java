@@ -1,5 +1,7 @@
 package com.ia.core.communication.service.whatsapp;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,17 +23,17 @@ import java.util.Map;
 @FeignClient(name = "whatsAppClient", url = "${whatsapp.api.url:https://graph.facebook.com/v18.0}")
 public interface WhatsAppClient {
 
-  /**
-   * Envia uma mensagem via WhatsApp.
-   *
-   * @param accessToken o token de acesso
-   * @param request o request com os parâmetros da mensagem
-   * @return resposta da API do WhatsApp
-   */
-  @PostMapping("/${whatsapp.phone-number-id}/messages")
-  Map<String, Object> sendMessage(
-      @RequestHeader("Authorization") String accessToken,
-      @RequestBody WhatsAppMessageRequest request);
+   /**
+    * Envia uma mensagem via WhatsApp.
+    *
+    * @param accessToken o token de acesso
+    * @param request o request com os parâmetros da mensagem
+    * @return resposta da API do WhatsApp
+    */
+   @PostMapping("/${whatsapp.phone-number-id}/messages")
+   Map<String, Object> sendMessage(
+       @RequestHeader("Authorization") String accessToken,
+       @RequestBody WhatsAppMessageRequest request);
 }
 
 /**

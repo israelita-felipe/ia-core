@@ -7,6 +7,8 @@ import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -33,14 +35,15 @@ public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
     return true;
   }
 
-  /**
-   * Busca elementos a partir de uma requisição de busca
-   *
-   * @param requestDTO {@link SearchRequest}
-   * @return {@link Page} de dados do tipo <T>
-   */
-  @TransactionalReadOnly
-  default Page<D> findAll(SearchRequestDTO requestDTO) {
+   /**
+    * Busca elementos a partir de uma requisição de busca
+    *
+    * @param requestDTO {@link SearchRequest}
+    * @return {@link Page} de dados do tipo <T>
+    */
+   @TransactionalReadOnly
+   @Resilient(ResilienceProfile.DATABASE)
+   default Page<D> findAll(SearchRequestDTO requestDTO) {
     if (canList(requestDTO)) {
       SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
       request.setFilters(request.getFilters().stream()

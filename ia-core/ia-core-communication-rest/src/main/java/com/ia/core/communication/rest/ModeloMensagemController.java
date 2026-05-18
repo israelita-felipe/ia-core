@@ -3,6 +3,8 @@ package com.ia.core.communication.rest;
 import com.ia.core.communication.model.mensagem.ModeloMensagem;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.communication.service.modelomensagem.ModeloMensagemService;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.rest.control.DefaultBaseController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,44 +45,44 @@ public class ModeloMensagemController
     return (ModeloMensagemService) super.getService();
   }
 
-  /**
-   * Aplica um template de mensagem com os parâmetros fornecidos.
-   *
-   * @param id         ID do modelo de mensagem
-   * @param parametros mapa de parâmetros para substituição no template
-   * @param request    requisição HTTP
-   * @return corpo da mensagem com os parâmetros aplicados
-   */
-  @Operation(
-      summary = "Aplica template de mensagem",
-      description = "Aplica os parâmetros fornecidos a um template de mensagem"
-  )
-  @ApiResponses(value = {
-      @ApiResponse(
-          responseCode = "200",
-          description = "Template aplicado com sucesso",
-          content = @Content(mediaType = "text/plain",
-              schema = @Schema(implementation = String.class))
-      ),
-      @ApiResponse(
-          responseCode = "404",
-          description = "Modelo de mensagem não encontrado"
-      ),
-      @ApiResponse(
-          responseCode = "401",
-          description = "Token inválido ou expirado"
-      )
-  })
-  @SecurityRequirement(name = "Token de Autenticação")
-  @PostMapping("/{id}/aplicar-template")
-  public ResponseEntity<?> aplicarTemplate(
-      @Parameter(description = "ID do modelo de mensagem", required = true, example = "1")
-      @PathVariable Long id,
-      @Parameter(description = "Parâmetros para substituição no template")
-      @RequestBody Map<String, String> parametros,
-      HttpServletRequest request) {
-    log.info("Aplicando template {} com parâmetros", id);
-    String corpo = getService().aplicarTemplate(id, parametros);
-    return ResponseEntity.ok(corpo);
-  }
+   /**
+    * Aplica um template de mensagem com os parâmetros fornecidos.
+    *
+    * @param id         ID do modelo de mensagem
+    * @param parametros mapa de parâmetros para substituição no template
+    * @param request    requisição HTTP
+    * @return corpo da mensagem com os parâmetros aplicados
+    */
+   @Operation(
+       summary = "Aplica template de mensagem",
+       description = "Aplica os parâmetros fornecidos a um template de mensagem"
+   )
+   @ApiResponses(value = {
+       @ApiResponse(
+           responseCode = "200",
+           description = "Template aplicado com sucesso",
+           content = @Content(mediaType = "text/plain",
+               schema = @Schema(implementation = String.class))
+       ),
+       @ApiResponse(
+           responseCode = "404",
+           description = "Modelo de mensagem não encontrado"
+       ),
+       @ApiResponse(
+           responseCode = "401",
+           description = "Token inválido ou expirado"
+       )
+   })
+   @SecurityRequirement(name = "Token de Autenticação")
+   @PostMapping("/{id}/aplicar-template")
+   public ResponseEntity<?> aplicarTemplate(
+       @Parameter(description = "ID do modelo de mensagem", required = true, example = "1")
+       @PathVariable Long id,
+       @Parameter(description = "Parâmetros para substituição no template")
+       @RequestBody Map<String, String> parametros,
+       HttpServletRequest request) {
+     log.info("Aplicando template {} com parâmetros", id);
+     String corpo = getService().aplicarTemplate(id, parametros);
+     return ResponseEntity.ok(corpo);
+   }
 }

@@ -1,6 +1,8 @@
 package com.ia.core.view.client.collection;
 
 import com.ia.core.model.filter.SearchRequest;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.specification.CollectionSearchSpecification;
 import com.ia.core.view.client.*;
@@ -36,6 +38,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    * @return {@link Integer}
    */
   @Override
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   default int count(SearchRequestDTO searchRequest) {
     if (Objects.isNull(searchRequest)) {
       searchRequest = SearchRequestDTO.builder().build();
@@ -49,6 +52,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    * @param id Id do objeto.
    */
   @Override
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   default void delete(Long id) {
     getData().removeIf(object -> Objects.equals(getId(object), id));
   }
@@ -58,6 +62,7 @@ public interface DefaultCollectionBaseClient<D extends Serializable>
    * @return {@link Serializable}
    */
   @Override
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   default D find(Long id) {
     return getData().stream()
         .filter(object -> Objects.equals(getId(object), id)).findAny()

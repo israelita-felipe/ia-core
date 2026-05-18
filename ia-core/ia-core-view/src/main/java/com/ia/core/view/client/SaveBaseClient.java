@@ -1,5 +1,7 @@
 package com.ia.core.view.client;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.view.manager.SaveBaseManager;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public interface SaveBaseClient<D extends Serializable>
    * @see SaveBaseManager#save(Serializable)
    */
   @PostMapping
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   D save(@RequestBody D dto);
 
   /**
@@ -40,6 +43,7 @@ public interface SaveBaseClient<D extends Serializable>
    *         </ul>
    */
   @PostMapping("/validate")
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   Collection<String> validate(@RequestBody D dto);
 
 }

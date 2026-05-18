@@ -3,6 +3,8 @@ package com.ia.core.communication.rest;
 import com.ia.core.communication.model.contato.ContatoMensagem;
 import com.ia.core.communication.service.contatomensagem.ContatoMensagemService;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.rest.control.DefaultBaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

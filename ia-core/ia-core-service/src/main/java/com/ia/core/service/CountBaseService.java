@@ -3,6 +3,8 @@ package com.ia.core.service;
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -31,14 +33,15 @@ public interface CountBaseService<T extends BaseEntity, D extends DTO<?>>
     return true;
   }
 
-  /**
-   * Conta as entidades do repositório.
-   *
-   * @param requestDTO {@link SearchRequestDTO}
-   * @return {@link Integer}
-   */
-  @TransactionalReadOnly
-  default int count(SearchRequestDTO requestDTO) {
+   /**
+    * Conta as entidades do repositório.
+    *
+    * @param requestDTO {@link SearchRequestDTO}
+    * @return {@link Integer}
+    */
+   @TransactionalReadOnly
+   @Resilient(ResilienceProfile.DATABASE)
+   default int count(SearchRequestDTO requestDTO) {
     if (canCount(requestDTO)) {
       SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
       request.setFilters(request.getFilters().stream()

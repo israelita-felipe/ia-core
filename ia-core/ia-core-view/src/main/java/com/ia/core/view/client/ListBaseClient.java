@@ -3,6 +3,8 @@ package com.ia.core.view.client;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.manager.ListBaseManager;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,7 @@ public interface ListBaseClient<D extends Serializable>
    * @see ListBaseManager#findAll(SearchRequestDTO)
    */
   @PostMapping("/all")
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   Page<D> findAll(@RequestBody SearchRequestDTO request);
 
 }

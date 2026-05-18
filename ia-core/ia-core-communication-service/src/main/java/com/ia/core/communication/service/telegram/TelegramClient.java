@@ -1,5 +1,7 @@
 package com.ia.core.communication.service.telegram;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +22,14 @@ import java.util.Map;
 @FeignClient(name = "telegramClient", url = "${telegram.api.url:https://api.telegram.org}")
 public interface TelegramClient {
 
-  /**
-   * Envia uma mensagem via Telegram.
-   *
-   * @param request o request com os parâmetros da mensagem
-   * @return resposta da API do Telegram
-   */
-  @PostMapping("/bot${telegram.bot.token}/sendMessage")
-  Map<String, Object> sendMessage(@RequestBody TelegramMessageRequest request);
+   /**
+    * Envia uma mensagem via Telegram.
+    *
+    * @param request o request com os parâmetros da mensagem
+    * @return resposta da API do Telegram
+    */
+   @PostMapping("/bot${telegram.bot.token}/sendMessage")
+   Map<String, Object> sendMessage(@RequestBody TelegramMessageRequest request);
 }
 
 /**

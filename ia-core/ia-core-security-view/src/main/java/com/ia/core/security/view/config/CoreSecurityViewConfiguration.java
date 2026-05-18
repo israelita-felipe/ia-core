@@ -16,20 +16,17 @@ import com.ia.core.security.view.functionality.DefaultViewFunctionalityManager;
 import com.ia.core.security.view.login.CustomAccessDeniedError;
 import com.ia.core.security.view.privilege.PrivilegeManager;
 import com.vaadin.flow.router.RouteAccessDeniedError;
+import com.vaadin.flow.spring.SpringSecurityAutoConfiguration;
 import com.vaadin.flow.spring.security.NavigationAccessControlConfigurer;
-import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategy;
-import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.Collections;
@@ -42,7 +39,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Slf4j
-@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
+@Import(SpringSecurityAutoConfiguration.class)
 public abstract class CoreSecurityViewConfiguration {
   /**
    * Path de login
@@ -97,19 +94,6 @@ public abstract class CoreSecurityViewConfiguration {
   }
 
   /**
-   * Configura o gerenciador de autorização de visualizações
-   *
-   * @param authorizationManager {@link CoreSecurityViewAuthorizationManager}
-   * @return {@link NavigationAccessControlConfigurer}
-   */
-  @Bean
-  static NavigationAccessControlConfigurer navigationAccessControlConfigurer(CoreSecurityViewAuthorizationManager authorizationManager) {
-    log.info("CONFIGURA navigationAccessControlConfigurer");
-    return new NavigationAccessControlConfigurer()
-        .withDecisionResolver(new ViewAcessDecisionResolver(authorizationManager));
-  }
-
-  /**
    * Configura o codificador de senhas
    *
    * @return {@link UserPasswordEncoder}
@@ -120,22 +104,6 @@ public abstract class CoreSecurityViewConfiguration {
     return new ViewPasswordEncoder();
   }
 
-  /**
-   * Configura o executor de tarefas assíncronas com contexto de segurança
-   *
-   * @param strategy {@link VaadinAwareSecurityContextHolderStrategy}
-   * @return {@link DelegatingSecurityContextAsyncTaskExecutor}
-   */
-  @Bean
-  static DelegatingSecurityContextAsyncTaskExecutor securityContextAsyncTaskExecutor(VaadinAwareSecurityContextHolderStrategy strategy) {
-    var delegate = new ThreadPoolTaskExecutor();
-    // configure the executor
-    delegate.initialize();
-
-    var executor = new DelegatingSecurityContextAsyncTaskExecutor(delegate);
-    executor.setSecurityContextHolderStrategy(strategy);
-    return executor;
-  }
 
   /**
    * @return {@link CoreSecurityViewAuthorizationManager}
@@ -152,11 +120,10 @@ public abstract class CoreSecurityViewConfiguration {
             return Collections.emptyList();
           }
           Object principal = authentication.getPrincipal();
-          if (principal == null || !UserDTO.class.isInstance(principal)) {
+          if (!(principal instanceof UserDTO user)) {
             return Collections.emptyList();
           }
-          UserDTO user = (UserDTO) principal;
-          return user.getAllPrivileges().stream().map(PrivilegeDTO::getName)
+            return user.getAllPrivileges().stream().map(PrivilegeDTO::getName)
               .toList();
         };
       }
@@ -170,11 +137,10 @@ public abstract class CoreSecurityViewConfiguration {
             return new ViewPrivilegeContext(Collections.emptySet());
           }
           Object principal = authentication.getPrincipal();
-          if (principal == null || !UserDTO.class.isInstance(principal)) {
+          if (!(principal instanceof UserDTO user)) {
             return new ViewPrivilegeContext(Collections.emptySet());
           }
-          UserDTO user = (UserDTO) principal;
-          return new ViewPrivilegeContext(user.getAllContexts());
+            return new ViewPrivilegeContext(user.getAllContexts());
         };
       }
     };
@@ -205,7 +171,7 @@ public abstract class CoreSecurityViewConfiguration {
    * @param customNavigationAccessControlConfigurer {@link NavigationAccessControlConfigurer}
    */
   public void configure(NavigationAccessControlConfigurer customNavigationAccessControlConfigurer) {
-    customNavigationAccessControlConfigurer.withAnnotatedViewAccessChecker()
+    customNavigationAccessControlConfigurer.withAnnotatedViewAccessChecker().withDecisionResolver(new ViewAcessDecisionResolver(authorizationManager))
         .withLoginView(getLoginClass());
   }
 

@@ -40,7 +40,7 @@ public class ResilienceMetrics {
      */
     public void recordSuccess(String profile, String methodName, long durationMs) {
         counter("result", "success", profile, methodName).increment();
-        timer("success", profile, methodName).record(durationMs, java.util.concurrent.TimeUnit.MILLISECONDS);
+        timer("success","success", profile, methodName).record(durationMs, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ResilienceMetrics {
     public void recordError(String profile, String methodName, String errorType, long durationMs) {
         counter("result", "error", profile, methodName).increment();
         counter("error", errorType, profile, methodName).increment();
-        timer("error", profile, methodName).record(durationMs, java.util.concurrent.TimeUnit.MILLISECONDS);
+        timer("error",errorType, profile, methodName).record(durationMs, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
 
     /**

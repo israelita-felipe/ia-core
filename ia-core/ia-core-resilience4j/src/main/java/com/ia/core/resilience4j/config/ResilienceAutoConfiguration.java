@@ -5,11 +5,11 @@ import com.ia.core.resilience4j.fallback.FallbackStrategyRegistry;
 import com.ia.core.resilience4j.metrics.ResilienceMetrics;
 import com.ia.core.resilience4j.registry.ResilienceRegistry;
 import com.ia.core.resilience4j.template.ResilienceTemplate;
+import io.github.resilience4j.bulkhead.BulkheadRegistry;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.github.resilience4j.retry.RetryRegistry;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
-import io.github.resilience4j.bulkhead.BulkheadRegistry;
-import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -68,9 +68,11 @@ public class ResilienceAutoConfiguration {
             ResilienceProperties properties,
             ResilienceRegistry registry,
             FallbackStrategyRegistry fallbackRegistry,
-            ResilienceTemplate template) {
+            ResilienceTemplate template,
+            ResilienceAspect.ResilienceAspectContext contextPropagator) {
         log.info("Creating ResilienceAspect");
-        return new ResilienceAspect(properties, registry, fallbackRegistry, template);
+        return new ResilienceAspect(properties, registry, fallbackRegistry, template,
+                 contextPropagator);
     }
 
     @Bean

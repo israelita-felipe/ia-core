@@ -7,6 +7,8 @@ import com.ia.core.llm.service.template.PromptTemplateServiceImpl;
 import com.ia.core.llm.service.vector.VectorStoreOperations;
 import com.ia.core.llm.service.vector.VectorStoreOperationsImpl;
 import com.ia.core.llm.service.vector.VectorStoreService;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;

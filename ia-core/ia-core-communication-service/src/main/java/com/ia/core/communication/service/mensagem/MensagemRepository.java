@@ -1,6 +1,8 @@
 package com.ia.core.communication.service.mensagem;
 
 import com.ia.core.communication.model.mensagem.Mensagem;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -21,12 +23,12 @@ import java.util.Optional;
 @Repository
 public interface MensagemRepository
   extends BaseEntityRepository<Mensagem> {
-  /**
-   * Busca uma mensagem pelo ID externo do WhatsApp.
-   *
-   * @param idExterno ID externo da mensagem
-   * @return Optional contendo a mensagem se encontrada
-   */
-  @Query("SELECT m FROM Mensagem m WHERE m.idExterno = :idExterno")
-  Optional<Mensagem> findByIdExterno(@Param("idExterno") String idExterno);
+   /**
+    * Busca uma mensagem pelo ID externo do WhatsApp.
+    *
+    * @param idExterno ID externo da mensagem
+    * @return Optional contendo a mensagem se encontrada
+    */
+   @Query("SELECT m FROM Mensagem m WHERE m.idExterno = :idExterno")
+   Optional<Mensagem> findByIdExterno(@Param("idExterno") String idExterno);
 }

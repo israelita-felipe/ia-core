@@ -1,5 +1,7 @@
 package com.ia.core.view.manager;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import feign.Response;
@@ -22,6 +24,6 @@ public interface AttachmentClient<T extends AttachmentDTO<?>>
    * @return {@link Response} contendo as informações de download do arquivo
    */
   @GetMapping("/download/{id}")
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   public Response download(@PathVariable("id") String id);
-
 }

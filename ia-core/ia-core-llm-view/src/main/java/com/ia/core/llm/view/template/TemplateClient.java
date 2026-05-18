@@ -1,6 +1,8 @@
 package com.ia.core.llm.view.template;
 
 import com.ia.core.llm.service.model.template.TemplateDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 /**
  * Cliente Feign para comunicação com o serviço de template.

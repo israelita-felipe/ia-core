@@ -1,5 +1,7 @@
 package com.ia.core.security.view.authentication;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.security.model.authentication.AuthenticationRequest;
 import com.ia.core.security.service.model.authentication.JwtAuthenticationResponseDTO;
 import org.springframework.web.bind.annotation.GetMapping;

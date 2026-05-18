@@ -10,6 +10,8 @@ import com.ia.core.quartz.service.model.scheduler.SchedulerUseCase;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.security.service.DefaultSecuredBaseService;
 import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.annotations.TransactionalWrite;
@@ -131,20 +133,20 @@ public class SchedulerConfigService
     return jobClasses;
   }
 
-  /**
-   * Busca uma configuração de scheduler pelo ID, incluindo informações dos
-   * triggers.
-   *
-   * @param id ID da configuração
-   * @return DTO da configuração com triggers preenchidos
-   */
-  @TransactionalReadOnly
-  @Override
-  public SchedulerConfigDTO find(Long id) {
-    SchedulerConfigDTO schedulerConfigDTO = super.find(id);
-    processarTriggers(schedulerConfigDTO);
-    return schedulerConfigDTO;
-  }
+    /**
+     * Busca uma configuração de scheduler pelo ID, incluindo informações dos
+     * triggers.
+     *
+     * @param id ID da configuração
+     * @return DTO da configuração com triggers preenchidos
+     */
+    @TransactionalReadOnly
+    @Override
+    public SchedulerConfigDTO find(Long id) {
+        SchedulerConfigDTO schedulerConfigDTO = super.find(id);
+        processarTriggers(schedulerConfigDTO);
+        return schedulerConfigDTO;
+    }
 
   /**
    * Busca todas as configurações de scheduler, incluindo informações dos

@@ -1,6 +1,8 @@
 package com.ia.core.security.view.role;
 
 import com.ia.core.model.filter.SearchRequest;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;

@@ -4,6 +4,8 @@ import com.ia.core.quartz.service.model.job.dto.QuartzJobDTO;
 import com.ia.core.quartz.service.model.job.dto.QuartzJobInstanceDTO;
 import com.ia.core.quartz.service.model.job.dto.QuartzJobTriggerDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,7 +70,7 @@ public interface QuartzClient
    */
   @GetMapping("/jobs/{jobGroup}/{jobName}")
   QuartzJobDTO findJob(@PathVariable("jobName") String jobName,
-                       @PathVariable("jobGroup") String jobGroup);
+                        @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Pausa um job.
@@ -79,7 +81,7 @@ public interface QuartzClient
    */
   @PostMapping("/jobs/{jobGroup}/{jobName}/pause")
   Boolean pauseJob(@PathVariable("jobName") String jobName,
-                   @PathVariable("jobGroup") String jobGroup);
+                    @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Resume um job pausado.
@@ -90,7 +92,7 @@ public interface QuartzClient
    */
   @PostMapping("/jobs/{jobGroup}/{jobName}/resume")
   Boolean resumeJob(@PathVariable("jobName") String jobName,
-                    @PathVariable("jobGroup") String jobGroup);
+                     @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Remove um job.
@@ -101,7 +103,7 @@ public interface QuartzClient
    */
   @DeleteMapping("/jobs/{jobGroup}/{jobName}")
   Boolean deleteJob(@PathVariable("jobName") String jobName,
-                    @PathVariable("jobGroup") String jobGroup);
+                     @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Dispara um job para execução imediata.
@@ -112,7 +114,7 @@ public interface QuartzClient
    */
   @PostMapping("/jobs/{jobGroup}/{jobName}/trigger")
   Boolean triggerJob(@PathVariable("jobName") String jobName,
-                     @PathVariable("jobGroup") String jobGroup);
+                      @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Lista os triggers de um job.
@@ -123,7 +125,7 @@ public interface QuartzClient
    */
   @GetMapping("/jobs/{jobGroup}/{jobName}/triggers")
   List<QuartzJobTriggerDTO> findTriggersOfJob(@PathVariable("jobName") String jobName,
-                                              @PathVariable("jobGroup") String jobGroup);
+                                               @PathVariable("jobGroup") String jobGroup);
 
   /**
    * Lista os jobs em execução.
@@ -142,7 +144,7 @@ public interface QuartzClient
    */
   @PostMapping("/triggers/{triggerGroup}/{triggerName}/pause")
   Boolean pauseTrigger(@PathVariable("triggerName") String triggerName,
-                       @PathVariable("triggerGroup") String triggerGroup);
+                        @PathVariable("triggerGroup") String triggerGroup);
 
   /**
    * Resume um trigger.
@@ -153,6 +155,6 @@ public interface QuartzClient
    */
   @PostMapping("/triggers/{triggerGroup}/{triggerName}/resume")
   Boolean resumeTrigger(@PathVariable("triggerName") String triggerName,
-                        @PathVariable("triggerGroup") String triggerGroup);
+                         @PathVariable("triggerGroup") String triggerGroup);
 
 }

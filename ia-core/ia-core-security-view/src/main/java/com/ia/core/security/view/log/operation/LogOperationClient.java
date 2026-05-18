@@ -1,5 +1,7 @@
 package com.ia.core.security.view.log.operation;
 
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;

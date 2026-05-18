@@ -21,7 +21,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
-		<vaadin.version>25.1.1</vaadin.version>
+		<vaadin.version>25.1.5</vaadin.version>
 		<spring-cloud.version>2025.1.1</spring-cloud.version>
 		<antlr.version>4.13.2</antlr.version>
 		<jjwt.version>0.13.0</jjwt.version>

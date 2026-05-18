@@ -8,6 +8,8 @@ import com.ia.core.service.event.CrudOperationType;
 import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.strategy.OperationTypeStrategy;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 
 /**
  * Interface que salva um {@link BaseEntity} por meio de um
@@ -81,17 +83,18 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
     return toSave != null;
   }
 
-  /**
-   * Salva um {@link DTO} e retorna um {@link DTO}.
-   *
-   * @param toSave Objeto a ser salvo (criado ou atualizado).
-   * @return {@link DTO}
-   * @throws ServiceException exceção lançada ao validar o dto
-   * @see ValidationBaseService
-   */
-  @TransactionalWrite
-  default D save(D toSave)
-    throws ServiceException {
+   /**
+    * Salva um {@link DTO} e retorna um {@link DTO}.
+    *
+    * @param toSave Objeto a ser salvo (criado ou atualizado).
+    * @return {@link DTO}
+    * @throws ServiceException exceção lançada ao validar o dto
+    * @see ValidationBaseService
+    */
+   @TransactionalWrite
+   @Resilient(ResilienceProfile.DATABASE)
+   default D save(D toSave)
+     throws ServiceException {
     beforeSave(toSave);
     ServiceException ex = new ServiceException();
     D saved = null;

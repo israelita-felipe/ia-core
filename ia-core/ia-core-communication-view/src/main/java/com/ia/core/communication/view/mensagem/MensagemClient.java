@@ -3,6 +3,8 @@ package com.ia.core.communication.view.mensagem;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemRequestDTO;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemResponseDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,21 +31,21 @@ public interface MensagemClient extends DefaultBaseClient<MensagemDTO> {
    */
   public static final String URL = "${feign.host}/api/${api.version}/${feign.url.mensagem}";
 
-  /**
-   * Envia uma mensagem.
-   *
-   * @param dto mensagem a ser enviada
-   * @return mensagem enviada
-   */
-  @PostMapping("/enviar")
-  MensagemDTO enviar(@RequestBody MensagemDTO dto);
+   /**
+    * Envia uma mensagem.
+    *
+    * @param dto mensagem a ser enviada
+    * @return mensagem enviada
+    */
+   @PostMapping("/enviar")
+   MensagemDTO enviar(@RequestBody MensagemDTO dto);
 
-  /**
-   * Envia mensagens em massa.
-   *
-   * @param request requisição de envio em massa
-   * @return resposta do envio
-   */
-  @PostMapping("/enviar-massa")
-  EnvioMensagemResponseDTO enviarEmMassa(@RequestBody EnvioMensagemRequestDTO request);
+   /**
+    * Envia mensagens em massa.
+    *
+    * @param request requisição de envio em massa
+    * @return resposta do envio
+    */
+   @PostMapping("/enviar-massa")
+   EnvioMensagemResponseDTO enviarEmMassa(@RequestBody EnvioMensagemRequestDTO request);
 }

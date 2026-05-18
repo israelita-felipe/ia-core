@@ -1,6 +1,8 @@
 package com.ia.core.flyway.service.flywayexecution;
 
 import com.ia.core.flyway.model.FlywayExecution;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

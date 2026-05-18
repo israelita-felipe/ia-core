@@ -1,6 +1,8 @@
 package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.event.CrudOperationType;
@@ -114,24 +116,24 @@ public abstract class DefaultBaseService<T extends BaseEntity, D extends DTO<T>>
   public int count(SearchRequestDTO requestDTO) {
     return CountBaseService.super.count(requestDTO);
   }
-
+    @Resilient(ResilienceProfile.DATABASE)
   @Override
   public D save(D toSave)
     throws ServiceException {
     return SaveBaseService.super.save(toSave);
   }
-
+    @Resilient(ResilienceProfile.DATABASE)
   @Override
   public void delete(Long id)
     throws ServiceException {
     DeleteBaseService.super.delete(id);
   }
-
+    @Resilient(ResilienceProfile.DATABASE)
   @Override
   public Page<D> findAll(SearchRequestDTO requestDTO) {
     return ListBaseService.super.findAll(requestDTO);
   }
-
+    @Resilient(ResilienceProfile.DATABASE)
   @Override
   public D find(Long id) {
     return FindBaseService.super.find(id);

@@ -1,6 +1,8 @@
 package com.ia.core.llm.view.chat;
 
 import com.ia.core.llm.service.model.chat.ChatRequestDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

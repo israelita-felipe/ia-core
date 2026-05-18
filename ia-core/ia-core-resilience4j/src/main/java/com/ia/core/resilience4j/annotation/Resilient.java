@@ -15,7 +15,7 @@ import java.lang.annotation.*;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited

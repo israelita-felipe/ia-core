@@ -1,6 +1,8 @@
 package com.ia.core.view.client;
 
 import com.ia.core.service.dto.DTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -20,6 +22,7 @@ public interface FindBaseClient<D extends Serializable>
    * @return {@link DTO}
    */
   @GetMapping("/{id}")
+  @Resilient(ResilienceProfile.INTERNAL_SERVICE)
   D find(@PathVariable("id") Long id);
 
 }
