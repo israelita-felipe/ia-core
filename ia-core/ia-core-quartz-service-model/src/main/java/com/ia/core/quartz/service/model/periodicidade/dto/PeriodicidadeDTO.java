@@ -1,5 +1,6 @@
 package com.ia.core.quartz.service.model.periodicidade.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
@@ -191,6 +192,7 @@ public class PeriodicidadeDTO
     return regra.getFrequency() != null;
   }
 
+  @JsonIgnore
   public ZoneId getZoneIdValue() {
     return ZoneId.of(zoneId);
   }

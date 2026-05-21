@@ -2,6 +2,7 @@ package com.ia.core.resilience4j.dto;
 
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
+import com.ia.core.resilience4j.registry.ResilienceRegistry;
 import lombok.Builder;
 import lombok.Data;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,37 +55,9 @@ public class ResilienceContext {
     private Object[] args;
 
     /**
-     * Circuit Breaker name based on the method.
+     * Resilience registry for creating resilience4j components.
      */
-    public String getCircuitBreakerName() {
-        return profile.getName() + "-" + method.getName() + "-cb";
-    }
+    private ResilienceRegistry resilienceRegistry;
 
-    /**
-     * Retry name based on the method.
-     */
-    public String getRetryName() {
-        return profile.getName() + "-" + method.getName() + "-retry";
-    }
 
-    /**
-     * Bulkhead name based on the method.
-     */
-    public String getBulkheadName() {
-        return profile.getName() + "-" + method.getName() + "-bulkhead";
-    }
-
-    /**
-     * Rate Limiter name based on the method.
-     */
-    public String getRateLimiterName() {
-        return profile.getName() + "-" + method.getName() + "-ratelimiter";
-    }
-
-    /**
-     * Time Limiter name based on the method.
-     */
-    public String getTimeLimiterName() {
-        return profile.getName() + "-" + method.getName() + "-timelimiter";
-    }
 }

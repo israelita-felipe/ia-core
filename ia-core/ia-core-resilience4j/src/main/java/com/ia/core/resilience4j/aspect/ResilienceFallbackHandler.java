@@ -43,28 +43,28 @@ public class ResilienceFallbackHandler {
 
         if (isCircuitBreakerOpen(throwable)) {
             log.warn("Circuit breaker open for {}#{} - rejecting call",
-                    method.getDeclaringClass().getSimpleName(), method.getName());
-            throw new CircuitBreakerOpenException(context.getCircuitBreakerName());
+                method.getDeclaringClass().getSimpleName(), method.getName());
+        throw new CircuitBreakerOpenException(profileName.getName()+"-"+method.getName()+"-circuitbreaker");
         }
 
         if (isBulkheadFull(throwable)) {
             log.warn("Bulkhead full for {}#{} - rejecting call",
-                    method.getDeclaringClass().getSimpleName(), method.getName());
-            throw new BulkheadFullException(context.getBulkheadName());
+                method.getDeclaringClass().getSimpleName(), method.getName());
+            throw new BulkheadFullException(profileName.getName()+"-"+method.getName()+"-bulkhead");
         }
 
         if (isRateLimitExceeded(throwable)) {
             log.warn("Rate limit exceeded for {}#{} - rejecting call",
-                    method.getDeclaringClass().getSimpleName(), method.getName());
-            throw new RateLimitExceededException(context.getRateLimiterName());
+                method.getDeclaringClass().getSimpleName(), method.getName());
+            throw new RateLimitExceededException(profileName.getName()+"-"+method.getName()+"-ratelimiter");
         }
 
         FallbackResponse response = fallbackRegistry.executeFallback(
-                profileName, method, context.getArgs(), throwable);
+            profileName, method, context.getArgs(), throwable);
 
         if (response != null && response.isSuccess()) {
             log.info("Fallback executed successfully for {}#{}",
-                    method.getDeclaringClass().getSimpleName(), method.getName());
+                method.getDeclaringClass().getSimpleName(), method.getName());
             return response.getData();
         }
 
@@ -73,27 +73,27 @@ public class ResilienceFallbackHandler {
         }
 
         throw new ResilienceException(
-                "FAILURE_NOT_RECOVERABLE",
-                "Non-recoverable error in " + method.getName(),
-                throwable,
-                false);
+            "FAILURE_NOT_RECOVERABLE",
+            "Non-recoverable error in " + method.getName(),
+            throwable,
+            false);
     }
 
     private boolean isCircuitBreakerOpen(Throwable t) {
         return t != null && (t.getMessage() != null &&
-                t.getMessage().contains("CircuitBreaker") &&
-                t.getMessage().contains("OPEN"));
+            t.getMessage().contains("CircuitBreaker") &&
+            t.getMessage().contains("OPEN"));
     }
 
     private boolean isBulkheadFull(Throwable t) {
         return t != null && (t.getMessage() != null &&
-                t.getMessage().contains("Bulkhead") &&
-                t.getMessage().contains("full"));
+            t.getMessage().contains("Bulkhead") &&
+            t.getMessage().contains("full"));
     }
 
     private boolean isRateLimitExceeded(Throwable t) {
         return t != null && (t.getMessage() != null &&
-                t.getMessage().contains("RateLimiter") &&
-                t.getMessage().contains("wait"));
+            t.getMessage().contains("RateLimiter") &&
+            t.getMessage().contains("wait"));
     }
 }

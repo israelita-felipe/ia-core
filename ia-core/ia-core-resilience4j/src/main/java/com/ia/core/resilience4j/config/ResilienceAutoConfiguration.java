@@ -1,6 +1,8 @@
 package com.ia.core.resilience4j.config;
 
 import com.ia.core.resilience4j.aspect.ResilienceAspect;
+import com.ia.core.resilience4j.aspect.ResilienceExecutionChainBuilder;
+import com.ia.core.resilience4j.aspect.ResilienceFallbackHandler;
 import com.ia.core.resilience4j.fallback.FallbackStrategyRegistry;
 import com.ia.core.resilience4j.metrics.ResilienceMetrics;
 import com.ia.core.resilience4j.registry.ResilienceRegistry;
@@ -57,22 +59,22 @@ public class ResilienceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ResilienceTemplate resilienceTemplate(ResilienceMetrics metrics) {
-        log.info("Creating ResilienceTemplate");
-        return new ResilienceTemplate(metrics);
+    public ResilienceTemplate resilienceTemplate(ResilienceMetrics metrics, ResilienceFallbackHandler fallbackHandler) {
+        log.info("Creating ResilienceTemplate with ResilienceMetrics: {} and ResilienceFallbackHandler: {}",
+                metrics != null ? metrics.getClass().getSimpleName() : "null",
+                fallbackHandler != null ? fallbackHandler.getClass().getSimpleName() : "null");
+        return new ResilienceTemplate(metrics, fallbackHandler);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ResilienceAspect resilienceAspect(
-            ResilienceProperties properties,
             ResilienceRegistry registry,
-            FallbackStrategyRegistry fallbackRegistry,
             ResilienceTemplate template,
-            ResilienceAspect.ResilienceAspectContext contextPropagator) {
+            ResilienceExecutionChainBuilder executionChainBuilder) {
         log.info("Creating ResilienceAspect");
-        return new ResilienceAspect(properties, registry, fallbackRegistry, template,
-                 contextPropagator);
+        return new ResilienceAspect(registry, template,
+                 executionChainBuilder);
     }
 
     @Bean

@@ -59,5 +59,5 @@ public @interface Resilient {
 
     Class<? extends Throwable>[] noFallbackOn() default {};
 
-    boolean fallbackEnabled() default true;
+    boolean fallbackEnabled() default false;
 }

@@ -7,7 +7,6 @@ import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeDTO;
 import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -115,7 +114,7 @@ public class SchedulerConfigDTO
 
   @Override
   public String toString() {
-    return String.format("%s (%s)", periodicidade);
+    return String.format("%s (%s)",jobClassName, periodicidade);
   }
 
   @SuppressWarnings("javadoc")

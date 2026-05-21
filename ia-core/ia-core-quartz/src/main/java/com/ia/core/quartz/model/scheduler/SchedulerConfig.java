@@ -58,7 +58,7 @@ public class SchedulerConfig
    *
    * @since 1.0.0
    */
-  @Column(name = "JOB_CLASS_NAME", nullable = false, unique = true)
+  @Column(name = "JOB_CLASS_NAME", nullable = false, unique = false)
   private String jobClassName;
 
   /**
