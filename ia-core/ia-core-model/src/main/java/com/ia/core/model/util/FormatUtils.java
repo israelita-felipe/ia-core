@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * Utilitário para formatação de dados.
@@ -51,6 +52,8 @@ public class FormatUtils {
    */
   public static String formatDateTime(String pattern,
                                       LocalDateTime dateTime) {
+    Objects.requireNonNull(pattern, "Pattern não pode ser null");
+    Objects.requireNonNull(dateTime, "DateTime não pode ser null");
     return dateTime.format(DateTimeFormatter.ofPattern(pattern));
   }
 
@@ -69,6 +72,7 @@ public class FormatUtils {
    * @throws NullPointerException se value for {@code null}
    */
   public static String formatCurrency(BigDecimal value) {
+    Objects.requireNonNull(value, "Valor não pode ser null");
     return NumberFormat.getCurrencyInstance().format(value);
   }
 }

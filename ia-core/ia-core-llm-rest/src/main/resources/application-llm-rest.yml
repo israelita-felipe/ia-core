@@ -1,0 +1,11 @@
+# Configuração para módulo ia-core-llm-rest
+# Este módulo expõe endpoints REST específicos para LLM
+
+spring:
+  application:
+    name: ia-core-llm-rest
+
+# Brave Search API Key para WebSearchTool
+brave:
+  api:
+    key: ${BRAVE_API_KEY:}

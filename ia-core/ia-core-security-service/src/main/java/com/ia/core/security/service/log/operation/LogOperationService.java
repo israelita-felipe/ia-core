@@ -5,7 +5,7 @@ import com.ia.core.security.model.functionality.OperationEnum;
 import com.ia.core.security.model.log.operation.LogOperation;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
 import com.ia.core.security.service.model.log.operation.LogOperationTranslator;
-import com.ia.core.service.DefaultBaseService;
+import com.ia.core.service.CrudBaseService;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.BaseEntityDTO;
 import com.ia.core.service.mapper.Mapper;
@@ -30,7 +30,7 @@ import java.util.function.BiFunction;
 @Slf4j
 @Service
 public class LogOperationService
-  extends DefaultBaseService<LogOperation, LogOperationDTO> {
+  extends CrudBaseService<LogOperation, LogOperationDTO> {
   /** Parâmetro - nome do usuário */
   public static final String USER_NAME_PARAMETER = LogOperationTranslator.USER_NAME;
   /** Parâmetro - código do usuário */
@@ -51,25 +51,13 @@ public class LogOperationService
   /** Escutador da operação que define nome de usuário e código */
   private Runnable operationSetUserDetailsListenerRemover;
   /** Contexto */
-  private static InheritableThreadLocal<Map<String, Object>> context;
+  private ThreadLocal<Map<String, Object>> context;
   /**
-   * Construtor estático para contexto no escopo de thread
-   */
-  static {
-    context = new InheritableThreadLocal<>();
-  }
-
-  /**
-   * Construtor padrão
-   *
-   * @param repository          repositório do tipo do objeto
-   * @param mapper              mapeador do objeto
-   * @param searchRequestMapper mapeador de busca
-   * @param translator          tradutor
-   * @param validators          validadores
+   * Construtor para contexto no escopo de thread
    */
   public LogOperationService(LogOperationServiceConfig config) {
     super(config);
+    this.context = ThreadLocal.withInitial(ConcurrentHashMap::new);
     initLogOperationListeners();
   }
 
@@ -93,9 +81,9 @@ public class LogOperationService
             .userCode(userCode).userName(userName).build();
         log(logOperation, entity);
       }
-    } catch (Exception e) {
-      log.error(e.getLocalizedMessage(), e);
-      throw new RuntimeException(e.getLocalizedMessage(), e);
+    } catch (IOException e) {
+      log.error("Erro ao converter DTO para JSON durante logDelete: {}", e.getLocalizedMessage(), e);
+      throw new RuntimeException("Erro ao converter DTO para JSON durante logDelete", e);
     } finally {
       getContext().clear();
     }
@@ -104,7 +92,7 @@ public class LogOperationService
   /**
    * @return
    */
-  public static Map<String, Object> getContext() {
+  public Map<String, Object> getContext() {
     Map<String, Object> map = context.get();
     if (map == null) {
       map = new ConcurrentHashMap<>();
@@ -133,9 +121,9 @@ public class LogOperationService
             .userCode(userCode).userName(userName).build();
         log(logOperation, entity);
       }
-    } catch (Exception e) {
-      log.error(e.getLocalizedMessage(), e);
-      throw new RuntimeException(e.getLocalizedMessage(), e);
+    } catch (IOException e) {
+      log.error("Erro ao converter DTO para JSON durante logInsert: {}", e.getLocalizedMessage(), e);
+      throw new RuntimeException("Erro ao converter DTO para JSON durante logInsert", e);
     } finally {
       getContext().clear();
     }
@@ -165,9 +153,9 @@ public class LogOperationService
             .build();
         log(logOperation, entity);
       }
-    } catch (Exception e) {
-      log.error(e.getLocalizedMessage(), e);
-      throw new RuntimeException(e.getLocalizedMessage(), e);
+    } catch (IOException e) {
+      log.error("Erro ao converter DTO para JSON durante logUpdate: {}", e.getLocalizedMessage(), e);
+      throw new RuntimeException("Erro ao converter DTO para JSON durante logUpdate", e);
     } finally {
       getContext().clear();
     }
@@ -193,7 +181,11 @@ public class LogOperationService
    * @return objeto excluído
    */
   private BaseEntityDTO<?> getDeletedObject(Map<String, Object> map) {
-    return (BaseEntityDTO<?>) map.get(DELETE_ENTITY_PARAMETER);
+    Object obj = map.get(DELETE_ENTITY_PARAMETER);
+    if (obj instanceof BaseEntityDTO) {
+      return (BaseEntityDTO<?>) obj;
+    }
+    return null;
   }
 
   /**
@@ -201,7 +193,11 @@ public class LogOperationService
    * @return objeto inserido
    */
   private BaseEntityDTO<?> getInsertedObject(Map<String, Object> map) {
-    return (BaseEntityDTO<?>) map.get(INSERT_ENTITY_PARAMETER);
+    Object obj = map.get(INSERT_ENTITY_PARAMETER);
+    if (obj instanceof BaseEntityDTO) {
+      return (BaseEntityDTO<?>) obj;
+    }
+    return null;
   }
 
   /**
@@ -209,7 +205,11 @@ public class LogOperationService
    * @return objeto antigo
    */
   private BaseEntityDTO<?> getOldObject(Map<String, Object> map) {
-    return (BaseEntityDTO<?>) map.get(UPDATE_ENTITY_OLD_OBJECT_PARAMETER);
+    Object obj = map.get(UPDATE_ENTITY_OLD_OBJECT_PARAMETER);
+    if (obj instanceof BaseEntityDTO) {
+      return (BaseEntityDTO<?>) obj;
+    }
+    return null;
   }
 
   /**
@@ -217,8 +217,11 @@ public class LogOperationService
    * @return objeto atualizado
    */
   private BaseEntityDTO<?> getUpdatedObject(Map<String, Object> map) {
-    return (BaseEntityDTO<?>) map
-        .get(UPDATE_ENTITY_UPDATED_OBJECT_PARAMETER);
+    Object obj = map.get(UPDATE_ENTITY_UPDATED_OBJECT_PARAMETER);
+    if (obj instanceof BaseEntityDTO) {
+      return (BaseEntityDTO<?>) obj;
+    }
+    return null;
   }
 
   /**
@@ -226,7 +229,8 @@ public class LogOperationService
    * @return código do usuário
    */
   private String getUserCode(Map<String, Object> map) {
-    return (String) map.get(USER_CODE_PARAMETER);
+    Object obj = map.get(USER_CODE_PARAMETER);
+    return obj instanceof String ? (String) obj : null;
   }
 
   /**
@@ -234,7 +238,8 @@ public class LogOperationService
    * @return nome do usuário
    */
   private String getUserName(Map<String, Object> map) {
-    return (String) map.get(USER_NAME_PARAMETER);
+    Object obj = map.get(USER_NAME_PARAMETER);
+    return obj instanceof String ? (String) obj : null;
   }
 
   /**
@@ -280,9 +285,9 @@ public class LogOperationService
       LogOperationDTO saved = save(logOperation);
       log.info("{}", saved);
       return saved;
-    } catch (Exception e) {
-      log.error(e.getLocalizedMessage(), e);
-      throw new RuntimeException(e.getLocalizedMessage(), e);
+    } catch (RuntimeException e) {
+      log.error("Erro ao salvar log de operação: {}", e.getLocalizedMessage(), e);
+      throw e;
     }
   }
 
@@ -361,7 +366,7 @@ public class LogOperationService
    * @param key   chave
    * @param value valor
    */
-  private static void putObject(String key, Object value) {
+  private void putObject(String key, Object value) {
     if (value != null && key != null) {
       getContext().put(key, value);
     }
@@ -467,91 +472,95 @@ public class LogOperationService
   /**
    * Antes de salvar
    *
-   * @param <T>        Tipo da entidade
-   * @param <D>        Tipo do DTO
-   * @param toSave     DTO a ser salvo
-   * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link Mapper}
+   * @param <T>    Tipo da entidade
+   * @param <D>    Tipo do DTO
+   * @param toSave DTO a ser salvo
    * @return {@link DTO} a ser salvo.
    */
-  public <T extends BaseEntity, D extends DTO<?>> D logBeforeSave(final D toSave,
-                                                                  BaseEntityRepository<T> repository,
-                                                                  Mapper<T, D> mapper) {
-    T model = mapper.toModel(toSave);
-    boolean isUpdating = model.getId() != null;
-    if (isUpdating) {
-      model = repository.findById(model.getId()).orElse(null);
-      D oldDTO = mapper.toDTO(model);
-      putOldObject(oldDTO);
-      preUpdate(toSave);
-    } else {
-      prePersist(toSave);
+  public <T extends BaseEntity, D extends DTO<?>> D logBeforeSave(final D toSave,BaseEntityRepository<T> repository,Mapper<T, D> mapper) {
+    try {
+
+      T model = mapper.toModel(toSave);
+      Long id = model.getId();
+      boolean isUpdating = model.getId() != null;
+      if (isUpdating) {
+        model = repository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id));
+        D oldDTO = mapper.toDTO(model);
+        putOldObject(oldDTO);
+        preUpdate(toSave);
+      } else {
+        prePersist(toSave);
+      }
+      return toSave;
+    } finally {
+      getContext().clear();
     }
-    return toSave;
   }
 
   /**
    * Depois de salvar
    *
-   * @param <T>        Tipo da entidade
-   * @param <D>        Tipo do DTO
-   * @param toSave     DTO a ser salvo
-   * @param saved      DTO salvo
-   * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link Mapper}
+   * @param <T>    Tipo da entidade
+   * @param <D>    Tipo do DTO
+   * @param toSave DTO a ser salvo
+   * @param saved  DTO salvo
    * @return {@link DTO} que foi salvo
    */
   public <T extends BaseEntity, D extends DTO<?>> D logAfterSave(final D toSave,
-                                                                 final D saved,
-                                                                 BaseEntityRepository<T> repository,
-                                                                 Mapper<T, D> mapper) {
-    T model = mapper.toModel(toSave);
-    boolean isUpdating = model.getId() != null;
-    if (isUpdating) {
-      putUpdatedObject(saved);
-      postUpdated(saved);
-    } else {
-      putPersistedObject(saved);
-      postPersisted(saved);
+                                                                 final D saved,BaseEntityRepository<T> repository,Mapper<T, D> mapper) {
+    try {
+
+      T model = mapper.toModel(toSave);
+      boolean isUpdating = model.getId() != null;
+      if (isUpdating) {
+        putUpdatedObject(saved);
+        postUpdated(saved);
+      } else {
+        putPersistedObject(saved);
+        postPersisted(saved);
+      }
+      return saved;
+    } finally {
+      getContext().clear();
     }
-    return saved;
   }
 
   /**
    * Depois de excluir
    *
-   * @param <T>        Tipo da entidade
-   * @param <D>        Tipo do DTO
-   * @param entity     Entidade excluída
-   * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link Mapper}
+   * @param <D>    Tipo do DTO
+   * @param entity Entidade excluída
    * @return {@link DTO} que foi excluído
    */
-  public <T extends BaseEntity, D extends DTO<?>> D logAfterDelete(final D entity,
-                                                                   BaseEntityRepository<T> repository,
-                                                                   Mapper<T, D> mapper) {
-    postDeleted(entity);
-    return entity;
+  public <T extends  BaseEntity,D extends DTO<?>> D logAfterDelete(final D entity, BaseEntityRepository<T> repository, Mapper<T, D> mapper) {
+    try {
+      postDeleted(entity);
+      return entity;
+    } finally {
+      getContext().clear();
+    }
   }
 
   /**
    * Antes de excluir
    *
-   * @param <T>        Tipo da entidade
-   * @param <D>        Tipo do DTO
-   * @param id         identificador
-   * @param repository {@link BaseEntityRepository}
-   * @param mapper     {@link Mapper}
+   * @param <T> Tipo da entidade
+   * @param <D> Tipo do DTO
+   * @param id  identificador
    * @return {@link DTO} que será excluído
    */
-  public <T extends BaseEntity, D extends DTO<?>> D logBeforeDelete(final Long id,
-                                                                    BaseEntityRepository<T> repository,
-                                                                    Mapper<T, D> mapper) {
-    T model = repository.findById(id).orElse(null);
-    D dto = mapper.toDTO(model);
-    putDeleteObject(dto);
-    preDelete(dto);
-    return dto;
+  public <T extends BaseEntity, D extends DTO<?>> D logBeforeDelete(final Long id,BaseEntityRepository<T> repository,Mapper<T, D> mapper) {
+    try {
+      T model = repository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id));
+      D dto = mapper.toDTO(model);
+      putDeleteObject(dto);
+      preDelete(dto);
+      return dto;
+    } finally {
+      getContext().clear();
+    }
   }
 
   /**

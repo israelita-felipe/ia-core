@@ -10,6 +10,7 @@ import com.ia.core.service.usecase.CrudUseCase;
  * definido no caso de uso Manter-GrupoContato.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface GrupoContatoUseCase
   extends CrudUseCase<GrupoContatoDTO> {

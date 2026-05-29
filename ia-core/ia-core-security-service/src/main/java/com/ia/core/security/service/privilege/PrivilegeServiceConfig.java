@@ -1,7 +1,7 @@
 package com.ia.core.security.service.privilege;
 
 import com.ia.core.security.model.privilege.Privilege;
-import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -29,7 +29,7 @@ import java.util.List;
 
 @Component
 public class PrivilegeServiceConfig
-  extends DefaultSecuredBaseServiceConfig<Privilege, PrivilegeDTO> {
+  extends CrudSecuredBaseServiceConfig<Privilege, PrivilegeDTO> {
   @Getter
   private final UserPrivilegeMapper userPrivilegeMapper;
 

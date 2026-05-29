@@ -46,7 +46,7 @@ Entidades base e utilitários compartilhados:
 Serviços de integração com modelos de linguagem:
 - `ChatService` - Comunicação com LLMs
 - `TemplateService` - Gerenciamento de templates
-- `ComandoSistemaService` - Comandos de sistema
+- `PromptService` - Prompts de catálogo LLM
 
 ### ia-core-quartz-service
 Gerenciamento de agendamento:

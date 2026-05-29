@@ -12,6 +12,7 @@ import com.ia.core.service.usecase.CrudUseCase;
  * caso de uso Manter-Mensagem.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface MensagemUseCase
   extends CrudUseCase<MensagemDTO> {

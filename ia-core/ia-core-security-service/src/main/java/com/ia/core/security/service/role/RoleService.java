@@ -3,7 +3,7 @@ package com.ia.core.security.service.role;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
 import com.ia.core.security.model.role.Role;
-import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.security.service.CrudSecuredBaseService;
 import com.ia.core.security.service.model.role.RoleDTO;
 import com.ia.core.security.service.model.role.RoleTranslator;
 import com.ia.core.security.service.model.role.RoleUseCase;
@@ -11,6 +11,8 @@ import com.ia.core.security.service.model.user.UserRoleDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RoleService
-  extends DefaultSecuredBaseService<Role, RoleDTO>
+  extends CrudSecuredBaseService<Role, RoleDTO>
   implements RoleUseCase {
 
   /**
@@ -70,7 +72,17 @@ public class RoleService
    * @param requestDTO {@link SearchRequest}
    * @return {@link Page} de dados do tipo <T>
    */
-  public Page<UserRoleDTO> findAllUserRoles(SearchRequestDTO requestDTO) {
+  @Tool(description = "Lista todos os usuários associados a roles com paginação. " +
+                     "Retorna uma página contendo UserRoleDTO com informações sobre usuários e suas roles. " +
+                     "Suporta filtros e paginação para controlar o conjunto de resultados. " +
+                     "Verifica permissões de listagem antes de executar a busca. " +
+                     "Útil para visualizar quais usuários possuem quais roles no sistema.")
+  public Page<UserRoleDTO> findAllUserRoles(
+          @ToolParam(description = "DTO de requisição de busca contendo filtros, paginação (page, size) e ordenação. " +
+                                   "page (Integer, opcional, padrão 0), size (Integer, opcional, padrão 10), " +
+                                   "filters (List<FilterRequestDTO>, opcional, filtros para refinar busca). " +
+                                   "Se não houver filtros, retorna todos os usuários com roles.",
+                      required = false) SearchRequestDTO requestDTO) {
     if (canList(requestDTO)) {
       SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
       request.setFilters(request.getFilters().stream()

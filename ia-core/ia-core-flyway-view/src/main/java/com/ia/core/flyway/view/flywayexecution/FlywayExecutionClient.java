@@ -2,8 +2,6 @@ package com.ia.core.flyway.view.flywayexecution;
 
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.model.filter.SearchRequest;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,19 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
  * do banco de dados.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see DefaultBaseClient
  */
 @FeignClient(name = FlywayExecutionClient.NOME,
              url = FlywayExecutionClient.URL)
-/**
- * Classe que representa o cliente de comunicação para flyway execution.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionClient
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
 public interface FlywayExecutionClient
   extends DefaultBaseClient<FlywayExecutionDTO> {
 

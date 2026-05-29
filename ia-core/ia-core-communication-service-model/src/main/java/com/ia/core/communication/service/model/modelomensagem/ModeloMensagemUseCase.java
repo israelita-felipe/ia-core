@@ -12,6 +12,7 @@ import java.util.Map;
  * definido no caso de uso Manter-ModeloMensagem.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface ModeloMensagemUseCase
   extends CrudUseCase<ModeloMensagemDTO> {

@@ -21,22 +21,14 @@ import java.time.LocalDateTime;
  * @author Israel Araújo
  * @since 1.0.0
  */
-/**
- * Classe que representa a entidade de domínio flyway execution.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecution
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
 @SuperBuilder(toBuilder = true)
 @Getter
 @Setter
+@ToString(callSuper = false)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class FlywayExecution
   extends BaseEntity {
   /**

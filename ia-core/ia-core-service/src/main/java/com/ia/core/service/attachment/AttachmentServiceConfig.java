@@ -1,7 +1,7 @@
 package com.ia.core.service.attachment;
 
 import com.ia.core.model.attachment.Attachment;
-import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
+import com.ia.core.service.CrudBaseService.CrudBaseServiceConfig;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Configuração para o serviço de anexos.
  *
- * <p>Esta classe estende {@link DefaultBaseServiceConfig} para fornecer
+ * <p>Esta classe estende {@link CrudBaseServiceConfig} para fornecer
  * as dependências necessárias ao {@link AttachmentService}.
  *
  * <p><b>Por quê usar AttachmentServiceConfig?</b></p>
@@ -28,11 +28,11 @@ import java.util.List;
  * @param <T> Tipo da entidade {@link Attachment}
  * @param <D> Tipo do DTO {@link AttachmentDTO}
  * @see AttachmentService
- * @see DefaultBaseServiceConfig
+ * @see CrudBaseServiceConfig
  * @since 1.0.0
  */
 public class AttachmentServiceConfig<T extends Attachment, D extends AttachmentDTO<T>>
-  extends DefaultBaseServiceConfig<T, D> {
+  extends CrudBaseServiceConfig<T, D> {
 
   /**
    * Construtor da configuração do serviço de anexos.

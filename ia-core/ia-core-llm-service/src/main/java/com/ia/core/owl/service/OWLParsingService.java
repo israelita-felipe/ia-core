@@ -13,9 +13,9 @@ import java.util.Set;
  * <p>
  * Define operações para parsing de expressões Manchester, carga de axiomas
  * e conversão entre formatos OWL e DTOs.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface OWLParsingService {
 

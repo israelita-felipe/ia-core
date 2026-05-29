@@ -12,8 +12,12 @@ import java.util.Map;
 
 /**
  * SearchRequest para ModeloMensagem.
+ * <p>
+ * Define os filtros disponíveis para pesquisa de modelos de mensagens,
+ * incluindo filtros por nome, descrição, tipo de canal e status ativo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 class ModeloMensagemSearchRequest extends SearchRequestDTO {
 

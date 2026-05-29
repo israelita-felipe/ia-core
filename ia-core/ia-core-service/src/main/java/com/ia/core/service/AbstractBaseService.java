@@ -12,7 +12,6 @@ import com.ia.core.service.mapper.Mapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,6 @@ import org.springframework.context.ApplicationEventPublisher;
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
  */
-@RequiredArgsConstructor
 @Slf4j
 public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>>
   implements BaseService<T, D>, HasRepository<T>, HasMapper<T, D>,
@@ -42,13 +40,12 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
   private final AbstractBaseServiceConfig<T, D> config;
 
   /**
-   * Execução pós-inicialização do serviço. Responsabilidade: Inicialização e
-   * validação da configuração.
+   * Construtor com validação imediata para falha rápida.
    */
-  @PostConstruct
-  public void baseServiceInit() {
-    log.info("{} inicializado", this.getClass());
+  public AbstractBaseService(AbstractBaseServiceConfig<T, D> config) {
+    this.config = config;
     validateConfiguration();
+    log.info("{} inicializado", this.getClass().getSimpleName());
   }
 
   /**
@@ -110,7 +107,6 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
   /**
    * Obtém o mapper de transformação de entidade para DTO.
    *
-   * @param <M> Tipo do Mapper
    * @return {@link Mapper}
    */
   @Override
@@ -133,7 +129,6 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
   /**
    * Obtém o repositório de persistência de entidades.
    *
-   * @param <R> Tipo do Repositório.
    * @return {@link BaseEntityRepository}
    */
   @Override
@@ -236,6 +231,7 @@ public abstract class AbstractBaseService<T extends BaseEntity, D extends DTO<?>
    * @param <T> {@link BaseEntity}
    * @param <D> {@link DTO}
    */
+
   @RequiredArgsConstructor
   @Slf4j
   public static class AbstractBaseServiceConfig<T extends BaseEntity, D extends DTO<?>> {

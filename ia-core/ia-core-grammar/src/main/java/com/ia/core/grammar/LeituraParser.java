@@ -15,13 +15,13 @@ import java.util.List;
 @SuppressWarnings({ "all", "warnings", "unchecked", "unused", "cast",
     "CheckReturnValue", "this-escape" })
 /**
- * Classe que representa leitura parser no sistema.
+ * Parser ANTLR para gramática de leitura bíblica.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LeituraParser
- * dentro do sistema.
+ * Classe gerada automaticamente pelo ANTLR 4.13.2 a partir do arquivo Leitura.g4.
+ * Responsável por fazer o parsing de referências bíblicas no formato livro, capítulo e versículos.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 public class LeituraParser
   extends Parser {

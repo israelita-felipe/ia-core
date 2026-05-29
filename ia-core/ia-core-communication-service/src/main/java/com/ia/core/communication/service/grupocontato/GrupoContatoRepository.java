@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
  * utilizando JPQL para consultas específicas.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Repository

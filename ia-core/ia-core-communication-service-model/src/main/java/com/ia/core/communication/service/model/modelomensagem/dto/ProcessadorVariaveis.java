@@ -21,6 +21,9 @@ import java.util.regex.Matcher;
  * String processed = processar(template, contexto);
  * </pre>
  * </p>
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Component

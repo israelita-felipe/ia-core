@@ -3,13 +3,13 @@ package com.ia.core.flyway.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 /**
- * Classe que representa as configurações para core flyway.
+ * Configuração central do Flyway para o sistema.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a CoreFlywayConfiguration
- * dentro do sistema.
+ * Responsável por configurar a estratégia de migração do Flyway, incluindo
+ * validação, reparo automático e inicialização de baseline quando necessário.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Slf4j

@@ -1,5 +1,6 @@
 package com.ia.core.llm;
 
+import com.ia.core.llm.service.config.LLMAutoConfiguration;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
@@ -8,15 +9,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 /**
- * Classe de configuração para l l m.
+ * Classe de configuração para módulo LLM.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LLMConfiguration
- * dentro do sistema.
+ * Configura beans para integração com modelos de linguagem, incluindo
+ * RestClient, OllamaApi e VectorStore.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
-public class LLMConfiguration {
+public class LLMConfiguration extends LLMAutoConfiguration {
 
   @Bean
   static RestClient.Builder restClientBuilder() {

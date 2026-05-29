@@ -1,23 +1,81 @@
+ia-core:
+  llm:
+    enabled: true
+    security:
+      protected-paths:
+        - /mcp/**
+        - /.well-known/agent-card.json
+    agent:
+      orchestrator-id: ia-core-orchestrator
+      tool-scan-packages:
+        - com.ia.core.llm.service.tool
+      enabled: true
+      max-sub-agent-turns: 10
+      # SubagentResolver usa banco de dados (entidade Agente)
+      subagent-resolver:
+        enabled: true
+        type: database # database (padrão ia-core) ou yaml (padrão original)
+      # Built-in tools
+      built-in-tools:
+        web-search:
+          enabled: true
+      # A2A protocol
+      a2a:
+        enabled: true
+        server-url: ${A2A_SERVER_URL:http://localhost:8080}
+        agent-id: ia-core-llm-agent
+      # Multi-model routing (configurado via entidade Agente)
+      multi-model:
+        enabled: true
+        default-model: ${OLLAMA_CHAT_MODEL:llama3.2-vision}
+    skill:
+      progressive-disclosure: true
+    ferramenta:
+      discovery:
+        enabled: true
+        scan-packages:
+          - com.ia.core.llm.service.tool
+        refresh-on-startup: true
+    audit:
+      enabled: true
+      table: LLM_AI_INTERACTION_LOG
+
+# Brave Search API Key para WebSearchTool
+brave:
+  api:
+    key: ${BRAVE_API_KEY:}
+
 spring:
   ai:
     model:
       chat: ollama
       embedding: ollama
     ollama:
-      base-url: http://localhost:11434
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
       chat:
         options:
-          model: llama3.2-vision
+          model: ${OLLAMA_CHAT_MODEL:llama3.2-vision}
+          temperature: 0.3
       embedding:
-        model: llama3.2-vision
+        options:
+          model: ${OLLAMA_EMBEDDING_MODEL:llama3.2-vision}
     mcp:
       server:
-        port: 8081
+        enabled: true
+        name: ia-core-llm
+        version: 1.0.0
+        sse-endpoint: /mcp/sse
         path: /mcp
+        agent-card:
+          enabled: true
+          path: /.well-known/agent-card.json
       tools:
         usecase-scan:
           enabled: true
           base-package: com.ia
+    agent:
+      enabled: true
+      max-sub-agent-turns: 10
   http:
     client:
       read-timeout: 600000

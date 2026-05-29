@@ -15,6 +15,7 @@ import com.ia.core.service.validators.ValidatorScope;
  * Garante que apenas canais suportados sejam utilizados para envio de mensagens.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ValidatorScope
 public class MensagemCanalValidoRule implements BusinessRule<MensagemDTO> {

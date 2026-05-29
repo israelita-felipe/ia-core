@@ -1,8 +1,6 @@
 package com.ia.core.communication.view.grupocontato;
 
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -13,6 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * Fornece operações CRUD padrão herdadas de DefaultBaseClient.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see DefaultBaseClient
  */
 

@@ -8,18 +8,20 @@ import java.time.LocalDateTime;
 
 /**
  * Listener para eventos de mensagens.
- * Implementa o padrão Observer para processar eventos de webhook.
+ * <p>
+ * Implementa o padrão Observer para processar eventos de webhook e atualizar
+ * o status das mensagens baseado em notificações externas.
+ * <p>
+ * Eventos suportados:
+ * <ul>
+ *   <li>Mensagem enviada</li>
+ *   <li>Mensagem entregue</li>
+ *   <li>Mensagem lida</li>
+ *   <li>Falha no envio</li>
+ * </ul>
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o listener para eventos de webhook event.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a WebhookEventListener
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Slf4j
 @Component

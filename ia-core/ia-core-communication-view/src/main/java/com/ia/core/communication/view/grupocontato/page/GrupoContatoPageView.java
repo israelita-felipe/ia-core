@@ -14,13 +14,13 @@ import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
 import java.util.Collection;
 import java.util.List;
 /**
- * Classe que representa a interface visual para grupo contato page.
+ * Página principal para visualização de GrupoContato.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoPageView
- * dentro do sistema.
+ * Responsável por gerenciar a interface visual da página de grupo de contato,
+ * incluindo criação de formulários e listas.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class GrupoContatoPageView extends PageView<GrupoContatoDTO> {

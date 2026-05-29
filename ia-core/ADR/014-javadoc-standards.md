@@ -453,8 +453,8 @@ private EstadoPessoa estado = EstadoPessoa.ATIVO;
 ### 13. O Que Fazer ✅
 
 - ✅ Documente a **interface pública**, não a implementação
-- ✅ Use **voz ativa**: "Busca uma pessoa" vs "Uma pessoa é buscada"
-- ✅ Seja **específico**: "email da pessoa" vs "o email"
+- ✅ Use **voz ativa**: "Busca uma pessoa" em vez de "Uma pessoa é buscada"
+- ✅ Seja **específico**: "email da pessoa" em vez de "o email"
 - ✅ Documente **comportamento especial** e casos extremos
 - ✅ Use **exemplos de código** para APIs complexas
 - ✅ Mantenha documentação **sincronizada com o código**
@@ -463,6 +463,8 @@ private EstadoPessoa estado = EstadoPessoa.ATIVO;
 - ✅ Documente **exceções específicas** que o método lança
 - ✅ Use `{@link }` para **referências cruzadas** para outras classes/métodos
 - ✅ Verifique **links** em {@link} - IDE alertarão se estiverem quebrados
+- ✅ Documente apenas **exceções verificadas** (checked exceptions) em @throws
+- ✅ Para getters/setters triviais, siga **ADR-001** (documentação opcional)
 
 ### 14. O Que Evitar ❌
 
@@ -474,6 +476,10 @@ private EstadoPessoa estado = EstadoPessoa.ATIVO;
 - ❌ Não misture **HTML inline** com markdown no Javadoc
 - ❌ Não assuma que leitor conhece **contexto da classe**: seja auto-descritivo
 - ❌ Não ignore **dados genéricos**: explique os tipos de `Optional<?>`, `List<?>`, etc.
+- ❌ Não documente getters/setters triviais desnecessariamente (veja ADR-001)
+- ❌ Não use "Este método..." ou "A classe..." nas descrições
+- ❌ Não gere @throws para RuntimeException a menos que seja parte do contrato
+- ❌ Não gere @see para classes que não existem no projeto
 
 ### 15. Uso de Links e Referências Cruzadas
 
@@ -741,9 +747,9 @@ Este padrão integra-se com:
    - Documentação oficial completa da ferramenta Javadoc
    - Tags suportadas e sintaxe
 
-2. **The Javadoc Guide** (Oracle)
-   - URL: https://www.oracle.com/technical-resources/articles/javase/javadoc-tool.html
-   - Como escrever Javadoc correto
+2. **Oracle - How to Write Doc Comments for the Javadoc Tool**
+   - URL: https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html
+   - Guia oficial "How to Write Doc Comments for the Javadoc Tool"
 
 3. **Java SE API Specification**
    - URL: https://docs.oracle.com/javase/11/docs/api/
@@ -768,9 +774,9 @@ Este padrão integra-se com:
    - Guia prático e completo
    - Exemplos de uso
 
-7. **Java Coding Standard - HowToWriteDocComments**
+7. **Oracle - How to Write Doc Comments for the Javadoc Tool**
    - URL: https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html
-   - Guia oficial "How to Write Doc Comments for the Javadoc Tool"
+   - Guia oficial de como escrever comentários de documentação para Javadoc
 
 8. **Effective Java - Item 56: Document all Exposed API Elements**
    - URL: https://books.google.com/books/about/Effective_Java.html

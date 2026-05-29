@@ -15,10 +15,12 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 /**
- * Serviço especializado para processamento de imagens. Responsabilidade única:
- * operações de binarização, compressão e redimensionamento.
+ * Serviço especializado para processamento de imagens.
+ * <p>
+ * Responsabilidade única: operações de binarização, compressão e redimensionamento.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Service

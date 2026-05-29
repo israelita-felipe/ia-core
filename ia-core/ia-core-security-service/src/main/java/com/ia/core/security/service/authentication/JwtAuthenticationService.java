@@ -26,21 +26,71 @@ public interface JwtAuthenticationService
   extends AuthenticationService<AuthenticationRequest> {
 
   default JwtAuthenticationResponseDTO generateToken(UserDTO user) {
-    return JwtAuthenticationResponseDTO.builder()
-        .token(JwtManager.get()
+    String accessToken = JwtManager.get()
             .generateToken(user.getUserCode(), user.getUserName(),
                            getExpirationTime(),
                            user.getAllPrivileges().stream()
                                .map(PrivilegeDTO::getName)
                                .collect(Collectors.toUnmodifiableSet()),
-                           new JWTPrivilegeContext(user.getAllContexts())))
+                           new JWTPrivilegeContext(user.getAllContexts()));
+
+    String refreshToken = JwtManager.get()
+            .generateRefreshToken(user.getUserCode(), user.getUserName(),
+                                  getRefreshExpirationTime());
+
+    return JwtAuthenticationResponseDTO.builder()
+        .token(accessToken)
+        .refreshToken(refreshToken)
         .build();
   }
 
+    default AuthenticationResponse refreshToken(AuthenticationRequest request)
+        throws InvalidPasswordException, UserNotFountException{
+        String token = request.getRefreshToken();
+        if (token == null || token.isEmpty()) {
+            throw new InvalidPasswordException("Refresh token não informado");
+        }
+
+        // Validate the refresh token
+        if (!JwtManager.get().validateRefreshToken(token)) {
+            throw new InvalidPasswordException("Refresh token inválido ou expirado");
+        }
+
+        // Extract user code from refresh token
+        String userCode = JwtManager.get().getUserCodeFromJWT(token);
+        if (userCode == null) {
+            throw new InvalidPasswordException("Não foi possível extrair usuário do refresh token");
+        }
+
+        // Load user details
+        UserDTO user = getUser(new AuthenticationRequest(userCode, null));
+        if (user == null) {
+            throw new UserNotFountException(userCode);
+        }
+
+        // Generate new access token (keep the same refresh token)
+        String accessToken = JwtManager.get()
+            .generateToken(user.getUserCode(), user.getUserName(),
+                           getExpirationTime(),
+                           user.getAllPrivileges().stream()
+                               .map(PrivilegeDTO::getName)
+                               .collect(Collectors.toUnmodifiableSet()),
+                           new JWTPrivilegeContext(user.getAllContexts()));
+
+    return JwtAuthenticationResponseDTO.builder()
+        .token(accessToken)
+        .refreshToken(token)
+        .build();
+  }
   /**
    * @return
    */
   long getExpirationTime();
+
+  /**
+   * @return
+   */
+  long getRefreshExpirationTime();
 
   UserDTO getUser(AuthenticationRequest request)
     throws UserNotFountException;

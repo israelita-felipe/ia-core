@@ -4,6 +4,7 @@ import com.ia.core.model.BaseEntity;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
 import com.ia.core.service.FindBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -38,7 +39,13 @@ import java.util.Set;
 public interface FindSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
   extends BaseSecuredService<T, D>, FindBaseService<T, D> {
 
-  /**
+    @TransactionalReadOnly
+    @Override
+    default D find(Long id) {
+        return FindBaseService.super.find(id);
+    }
+
+    /**
    * Verifica se o usuário atual possui autorização para ler a entidade especificada.
    * <p>
    * Delega ao gerenciador de autorizações a verificação de permissão de leitura

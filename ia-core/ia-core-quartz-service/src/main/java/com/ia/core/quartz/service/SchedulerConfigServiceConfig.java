@@ -2,7 +2,7 @@ package com.ia.core.quartz.service;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfig;
 import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigDTO;
-import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -29,7 +29,7 @@ import java.util.List;
 @Component
 public class SchedulerConfigServiceConfig
   extends
-  DefaultSecuredBaseServiceConfig<SchedulerConfig, SchedulerConfigDTO> {
+    CrudSecuredBaseServiceConfig<SchedulerConfig, SchedulerConfigDTO> {
   @Getter
   private final Scheduler quartzScheduler;
   /** Prefixo das triggers */

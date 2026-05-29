@@ -23,13 +23,13 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import java.util.Collection;
 import java.util.List;
 /**
- * Classe que representa a interface visual para modelo mensagem page.
+ * Página principal para visualização de ModeloMensagem.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemPageView
- * dentro do sistema.
+ * Responsável por gerenciar a interface visual da página de modelo de mensagem,
+ * incluindo criação de formulários, listas e ações de envio para grupos e contatos.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ModeloMensagemPageView extends PageView<ModeloMensagemDTO> {

@@ -6,18 +6,12 @@ import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
 /**
- * {@link Mapper} de {@link Axioma} para {@link AxiomaDTO}
+ * Mapper MapStruct para conversão entre {@link Axioma} e {@link AxiomaDTO}.
+ * <p>
+ * Utiliza o MapStruct para geração automática de implementação de mapeamento.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o mapeamento de dados para axioma.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a AxiomaMapper
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Mapper(componentModel = "spring")
 public interface AxiomaMapper

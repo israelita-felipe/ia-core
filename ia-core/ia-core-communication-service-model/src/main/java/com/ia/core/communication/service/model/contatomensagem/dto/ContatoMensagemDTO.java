@@ -21,8 +21,12 @@ import java.util.Set;
 
 /**
  * DTO para a entidade ContatoMensagem.
+ * <p>
+ * Representa os dados de transferência para contatos de mensagens,
+ * incluindo informações de grupo, telefone e nome.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)

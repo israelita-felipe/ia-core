@@ -5,6 +5,8 @@ import com.ia.core.model.projection.EntityProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Repositório base da camada de serviço.
@@ -31,5 +33,30 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface BaseEntityRepository<T extends BaseEntity>
   extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
+
+    /**
+     * Registra uma sincronização de transação que será executada após o commit.
+     *
+     * @param afterCommit ação a ser executada após o commit da transação.
+     */
+    default void registerTransactionSynchronization(Runnable afterCommit) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                    TransactionSynchronizationManager
+                        .registerSynchronization(new TransactionSynchronization() {
+                            @Override
+                            public void afterCommit() {
+                                afterCommit.run();
+
+                            }
+                        });
+                } else {
+                    afterCommit.run();
+                }
+            }
+        });
+    }
 
 }

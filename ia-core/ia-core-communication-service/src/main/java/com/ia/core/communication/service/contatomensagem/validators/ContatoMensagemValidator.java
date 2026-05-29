@@ -11,6 +11,7 @@ import com.ia.core.service.validators.ValidatorScope;
  * Implementa as regras de validação específicas para o domínio de contatos de mensagens.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ValidatorScope
 public class ContatoMensagemValidator extends ServiceValidator<ContatoMensagemDTO> {

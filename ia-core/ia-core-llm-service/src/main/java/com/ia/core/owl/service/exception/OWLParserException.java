@@ -3,6 +3,9 @@ package com.ia.core.owl.service.exception;
 /**
  * Exceção lançada quando ocorrem erros durante o parsing de expressões
  * Manchester OWL Syntax.
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 public class OWLParserException
   extends Exception {

@@ -10,13 +10,13 @@ import com.ia.core.view.components.page.viewModel.PageViewModel;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 /**
- * Classe que representa o modelo de dados para a view de modelo mensagem page.
+ * ViewModel para a página de ModeloMensagem.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemPageViewModel
- * dentro do sistema.
+ * Responsável por gerenciar os dados e operações da página de modelo de mensagem,
+ * incluindo criação de objetos, busca e configuração de formulários.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @UIScope

@@ -8,6 +8,8 @@
 
 O projeto precisa de uma forma flexível de implementar filtros e consultas dinâmicas sem criar métodos de repository específicos para cada combinação de filtros.
 
+**Importante**: Este ADR se aplica aos módulos do ia-core, que funcionam como bibliotecas/framework e não podem compor uma aplicação por si só. Esses módulos são base/framework para construção de outras aplicações, padronizando o desenvolvimento e abstraindo padrões de desenvolvimento. Uma aplicação real é composta pela combinação de múltiplos módulos ia-core mais código específico do domínio da aplicação.
+
 ## Decisão
 
 Usar **Specification Pattern** (JPA Criteria API) com operadores predefinidos.
@@ -57,24 +59,24 @@ Usar **Specification Pattern** (JPA Criteria API) com operadores predefinidos.
 ```java
 public class SearchSpecification<T> implements Specification<T> {
     private final SearchRequest request;
-    
+
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
                                  CriteriaBuilder cb) {
         Predicate predicate = cb.equal(cb.literal(Boolean.TRUE),
                                        request.isDisjunction());
-        
+
         for (FilterRequest filter : this.request.getFilters()) {
             predicate = filter.getOperator().build(root, cb, filter, predicate,
                                                    request.isDisjunction());
         }
-        
+
         // Ordenação
         List<Order> orders = new ArrayList<>();
         for (SortRequest sort : this.request.getSorts()) {
             orders.add(sort.getDirection().build(root, cb, sort));
         }
-        
+
         query.orderBy(orders);
         return predicate;
     }

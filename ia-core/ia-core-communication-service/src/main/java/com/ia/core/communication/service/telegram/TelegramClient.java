@@ -1,7 +1,5 @@
 package com.ia.core.communication.service.telegram;
 
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +11,9 @@ import java.util.Map;
  * <p>
  * Use este cliente para enviar mensagens via Telegram.
  * O CircuitBreaker pode ser habilitado via configuration.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see <a href="https://core.telegram.org/bots/api">Telegram Bot API</a>
  */
 

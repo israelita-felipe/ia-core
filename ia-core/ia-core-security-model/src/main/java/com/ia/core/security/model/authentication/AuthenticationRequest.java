@@ -27,4 +27,14 @@ public class AuthenticationRequest
   implements Serializable {
   private String codUsuario;
   private String senha;
+  private String refreshToken;
+
+    public AuthenticationRequest(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public AuthenticationRequest(String codUsuario, String senha) {
+        this.codUsuario = codUsuario;
+        this.senha = senha;
+    }
 }

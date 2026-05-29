@@ -10,9 +10,12 @@ import java.util.function.Supplier;
 
 /**
  * Componente de sidebar que exibe as variáveis disponíveis para edição de templates.
+ * <p>
  * Permite que o usuário selecione variáveis para inserir no template de mensagem.
+ * Exibe badges clicáveis para cada variável disponível.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class VariableSidebarComponent extends FlexLayout {
 

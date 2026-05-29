@@ -9,16 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * @author Israel Araújo
- */
-/**
- * Classe que representa o objeto de transferência de dados para chat request.
+ * DTO para requisição de chat.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ChatRequestDTO
- * dentro do sistema.
+ * Contém o prompt opcional, texto da requisição e validações.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -27,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 public class ChatRequestDTO
   implements DTO<String> {
 
-  private Long comandoSistemaID;
+  private Long promptId;
 
   @NotNull(message = "{validation.chat.request.required}")
   @Size(min = 1, max = 5000, message = "{validation.chat.request.size}")

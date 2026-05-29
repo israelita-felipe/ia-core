@@ -25,14 +25,18 @@ public class LibRecurOccurrenceCalculator
 
   private static final Logger log = LoggerFactory
       .getLogger(LibRecurOccurrenceCalculator.class);
-  private static LibRecurOccurrenceCalculator INSTANCE = null;
+  private static volatile LibRecurOccurrenceCalculator INSTANCE = null;
 
   /**
    * @return {@link #INSTANCE}
    */
   protected static LibRecurOccurrenceCalculator get() {
     if (INSTANCE == null) {
-      INSTANCE = new LibRecurOccurrenceCalculator();
+      synchronized (LibRecurOccurrenceCalculator.class) {
+        if (INSTANCE == null) {
+          INSTANCE = new LibRecurOccurrenceCalculator();
+        }
+      }
     }
     return INSTANCE;
   }

@@ -1,8 +1,8 @@
 package com.ia.core.security.view.functionality;
 
 import com.ia.core.security.model.functionality.Functionality;
-import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.security.service.model.functionality.FunctionalityMapper;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.view.privilege.PrivilegeManager;
@@ -25,13 +25,20 @@ public class DefaultViewFunctionalityManager
    */
   private final PrivilegeManager privilegeService;
 
+  /** Mapper de funcionalidade */
+  private final FunctionalityMapper functionalityMapper;
+
   /**
+   * @param privilegeService
    * @param hasFunctionalities
+   * @param functionalityMapper
    */
   public DefaultViewFunctionalityManager(PrivilegeManager privilegeService,
-                                         Collection<HasFunctionality> hasFunctionalities) {
+                                         Collection<HasFunctionality> hasFunctionalities,
+                                         FunctionalityMapper functionalityMapper) {
     super();
     this.privilegeService = privilegeService;
+    this.functionalityMapper = functionalityMapper;
     registryFunctionalities(hasFunctionalities);
   }
 
@@ -43,7 +50,7 @@ public class DefaultViewFunctionalityManager
             .type(functionality.getType()).name(functionality.getName())
             .values(functionality.getValues()).build());
       } catch (ValidationException e) {
-        log.error(e.getLocalizedMessage(), e);
+        log.error("Validation error saving privilege: {}", e.getLocalizedMessage(), e);
       }
     }
   }
@@ -51,25 +58,8 @@ public class DefaultViewFunctionalityManager
   @Override
   public Set<Functionality> getFunctionalities() {
     return this.privilegeService.findAll(PrivilegeDTO.getSearchRequest())
-        .map(privilege -> {
-          return new Functionality() {
-
-            @Override
-            public Set<String> getValues() {
-              return privilege.getValues();
-            }
-
-            @Override
-            public PrivilegeType getType() {
-              return privilege.getType();
-            }
-
-            @Override
-            public String getName() {
-              return privilege.getName();
-            }
-          };
-        }).stream().collect(Collectors.toUnmodifiableSet());
+        .map(functionalityMapper::toFunctionality)
+        .stream().collect(Collectors.toUnmodifiableSet());
   }
 
   public void registryFunctionalities(Collection<HasFunctionality> services) {

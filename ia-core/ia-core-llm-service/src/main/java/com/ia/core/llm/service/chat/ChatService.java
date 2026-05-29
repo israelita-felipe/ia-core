@@ -1,29 +1,28 @@
 package com.ia.core.llm.service.chat;
 
 import com.google.gson.Gson;
-import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
+import com.ia.core.llm.model.prompt.FinalidadePromptEnum;
 import com.ia.core.llm.service.template.PromptTemplateService;
-import com.ia.core.llm.service.template.PromptTemplateServiceImpl;
 import com.ia.core.llm.service.vector.VectorStoreOperations;
-import com.ia.core.llm.service.vector.VectorStoreOperationsImpl;
-import com.ia.core.llm.service.vector.VectorStoreService;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 /**
  * Serviço principal de Chat que orquestra as operações de chat.
+ * <p>
  * Responsável pela coordenação entre os serviços especializados.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
+@Service
 @RequiredArgsConstructor
 public class ChatService {
 
@@ -38,20 +37,6 @@ public class ChatService {
 
   /** Serviço de Sessão de Chat */
   private final ChatSessionService chatSessionService;
-
-  /**
-   * Construtor para subclasses que passam VectorStoreService diretamente.
-   * Mantém compatibilidade retroativa.
-   *
-   * @param chatModel modelo de chat
-   * @param vectorStoreService serviço de vector store
-   */
-  protected ChatService(ChatModel chatModel, VectorStoreService vectorStoreService) {
-    this(chatModel,
-        new VectorStoreOperationsImpl(vectorStoreService),
-        new PromptTemplateServiceImpl(),
-        new ChatSessionServiceImpl());
-  }
 
   /**
    * Realiza uma pergunta simples ao modelo.
@@ -78,7 +63,7 @@ public class ChatService {
    * @return resposta do modelo
    */
   protected String ask(String document, String text, String systemTemplate,
-      FinalidadeComandoEnum finalidade, boolean exigeContexto, Map<String, Object> params) {
+      FinalidadePromptEnum finalidade, boolean exigeContexto, Map<String, Object> params) {
     Prompt prompt = promptTemplateService.createSystemPrompt(
         document, text, systemTemplate, finalidade, params);
     CallResponseSpec response = call(prompt);

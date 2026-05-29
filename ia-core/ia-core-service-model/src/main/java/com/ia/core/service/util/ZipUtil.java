@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.zip.Deflater;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -24,6 +25,7 @@ public class ZipUtil {
    */
   public static byte[] unzip(String base64Dto)
     throws IOException {
+    Objects.requireNonNull(base64Dto, "Conteúdo base64 não pode ser null");
     ByteArrayInputStream input = new ByteArrayInputStream(Base64
         .getDecoder().decode(base64Dto));
     GZIPInputStream zipInput = new GZIPInputStream(input);
@@ -40,6 +42,7 @@ public class ZipUtil {
    */
   public static String unZipBase64(String base64Dto)
     throws IOException {
+    Objects.requireNonNull(base64Dto, "Conteúdo base64 não pode ser null");
     return Base64.getEncoder().encodeToString(unzip(base64Dto));
   }
 
@@ -52,6 +55,7 @@ public class ZipUtil {
    */
   public static byte[] zip(String base64Dto)
     throws IOException {
+    Objects.requireNonNull(base64Dto, "Conteúdo base64 não pode ser null");
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     GZIPOutputStream zipOut = new GZIPOutputStream(out) {
       {
@@ -74,6 +78,7 @@ public class ZipUtil {
    */
   public static String zipBase64(String base64Dto)
     throws IOException {
+    Objects.requireNonNull(base64Dto, "Conteúdo base64 não pode ser null");
     return Base64.getEncoder().encodeToString(zip(base64Dto));
   }
 }

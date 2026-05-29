@@ -14,9 +14,11 @@ import java.util.List;
 
 /**
  * Serviço especializado para extração de texto de imagens usando LLM.
+ * <p>
  * Responsabilidade única: extração e processamento de texto via modelo de linguagem.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Service

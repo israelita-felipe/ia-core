@@ -7,18 +7,13 @@ import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
 /**
- * {@link Mapper} de {@link ContatoMensagem} para {@link ContatoMensagemDTO}
+ * Mapper de {@link ContatoMensagem} para {@link ContatoMensagemDTO}.
+ * <p>
+ * Realiza o mapeamento entre a entidade de contato de mensagem e o DTO
+ * correspondente, utilizando MapStruct para conversão automática.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o mapeamento de dados para contato mensagem.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemMapper
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Mapper(componentModel = "spring",uses = {GrupoContatoMapper.class})
 public interface ContatoMensagemMapper

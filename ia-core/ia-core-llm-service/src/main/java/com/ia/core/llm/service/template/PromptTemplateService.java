@@ -1,6 +1,6 @@
 package com.ia.core.llm.service.template;
 
-import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
+import com.ia.core.llm.model.prompt.FinalidadePromptEnum;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -9,9 +9,11 @@ import java.util.Map;
 
 /**
  * Interface para manipulação de Prompt Templates.
+ * <p>
  * Abstração para criação e manipulação de templates de prompt.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface PromptTemplateService {
 
@@ -35,7 +37,7 @@ public interface PromptTemplateService {
    * @return prompt criado
    */
   Prompt createSystemPrompt(String document, String text, String systemTemplate,
-      FinalidadeComandoEnum finalidade, Map<String, Object> params);
+      FinalidadePromptEnum finalidade, Map<String, Object> params);
 
   /**
    * Cria uma mensagem a partir de um template de sistema.

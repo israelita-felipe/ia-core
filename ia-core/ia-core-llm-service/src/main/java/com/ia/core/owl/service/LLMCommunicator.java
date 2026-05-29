@@ -13,12 +13,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 /**
- * Enumeração que representa os serviços de negócio para l l m communicator.
+ * Serviço de comunicação com modelos de linguagem (LLM).
  * <p>
- * Define os valores possíveis para LLMCommunicator no sistema.
+ * Responsável por enviar prompts para o modelo de linguagem e processar as
+ * respostas. Suporta diferentes estratégias de comunicação e validação de respostas.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Slf4j

@@ -40,7 +40,8 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
    @Resilient(ResilienceProfile.DATABASE)
    default D find(Long id) {
     if (canFind(id)) {
-      return toDTO(getRepository().findById(id).orElse(null));
+      return toDTO(getRepository().findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id)));
     }
     return null;
   }

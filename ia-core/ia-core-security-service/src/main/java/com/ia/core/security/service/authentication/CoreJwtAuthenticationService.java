@@ -15,6 +15,8 @@ import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -38,7 +40,6 @@ public class CoreJwtAuthenticationService
 
   private final UserRepository userRepository;
   private final PrivilegeRepository privilegeRepository;
-
   private final BaseEntityMapper<User, UserDTO> mapper;
 
   @Override
@@ -46,20 +47,22 @@ public class CoreJwtAuthenticationService
     return TimeUnit.HOURS.toMillis(1);
   }
 
-  @TransactionalReadOnly
   @Override
-  public UserDTO getUser(AuthenticationRequest request)
-    throws UserNotFountException {
-    UserDTO userDto = null;
-    User user = userRepository.findByUserCode(request.getCodUsuario());
-    if (user != null) {
-      userDto = mapper.toDTO(user);
-    }
-    if (userDto == null) {
-      throw new UserNotFountException(request.getCodUsuario());
-    }
-    return userDto;
+  public long getRefreshExpirationTime() {
+    // Refresh tokens should have a longer expiration time (e.g., 7 days)
+    return TimeUnit.DAYS.toMillis(7);
   }
+
+    @TransactionalReadOnly
+    @Override
+    public UserDTO getUser(AuthenticationRequest request)
+      throws UserNotFountException {
+      Objects.requireNonNull(request, "Request não pode ser null");
+      Objects.requireNonNull(request.getCodUsuario(), "Código de usuário não pode ser null");
+      return userRepository.findByUserCode(request.getCodUsuario())
+        .map(mapper::toDTO)
+        .orElseThrow(() -> new UserNotFountException(request.getCodUsuario()));
+    }
 
   @Override
   public boolean initializeSecurity() {
@@ -67,9 +70,12 @@ public class CoreJwtAuthenticationService
   }
 
   @TransactionalWrite
-  @Override
-  public UserDTO createFirstUser(AuthenticationRequest request)
-    throws ServiceException {
+    @Override
+    public UserDTO createFirstUser(AuthenticationRequest request)
+      throws ServiceException {
+    Objects.requireNonNull(request, "Request não pode ser null");
+    Objects.requireNonNull(request.getCodUsuario(), "Código de usuário não pode ser null");
+    Objects.requireNonNull(request.getSenha(), "Senha não pode ser null");
     if (!initializeSecurity()) {
       throw new ServiceException("Security já foi inicializado");
     }
@@ -78,13 +84,10 @@ public class CoreJwtAuthenticationService
         .userCode(request.getCodUsuario()).userName(request.getCodUsuario())
         .password(request.getSenha()).build();
     Set<UserPrivilege> privileges = privilegeRepository.findAll().stream()
-        .map(privilege -> {
-          return UserPrivilege.builder().user(user).privilege(privilege)
-              .operations(Stream.of(OperationEnum.values()).map(op -> {
-                return PrivilegeOperation.builder().operation(op).build();
-              }).collect(Collectors.toSet())).build();
-        }).collect(Collectors.toSet());
+        .map(privilege -> UserPrivilege.builder().user(user).privilege(privilege)
+            .operations(Stream.of(OperationEnum.values()).map(op -> PrivilegeOperation.builder().operation(op).build()).collect(Collectors.toSet())).build()).collect(Collectors.toSet());
     user.setPrivileges(privileges);
     return mapper.toDTO(userRepository.save(user));
   }
+
 }

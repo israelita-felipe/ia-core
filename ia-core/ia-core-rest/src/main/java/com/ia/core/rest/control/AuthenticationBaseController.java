@@ -73,7 +73,7 @@ public interface AuthenticationBaseController {
         .ok(getAuthenticationService().initializeSecurity());
   }
 
-  AuthenticationService<AuthenticationRequest> getAuthenticationService();
+    AuthenticationService<AuthenticationRequest> getAuthenticationService();
 
   PasswordEncoder getPasswordEncoder();
 

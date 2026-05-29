@@ -9,9 +9,9 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
  * <p>
  * Exibe as colunas: versão, descrição, tipo, script, usuário, data,
  * tempo de execução e status (sucesso/falha).
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class FlywayExecutionListView extends ListView<FlywayExecutionDTO> {
 

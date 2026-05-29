@@ -18,6 +18,7 @@ import java.util.Optional;
  * JPQL para consultas específicas.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Repository

@@ -21,8 +21,12 @@ import java.util.Set;
 
 /**
  * DTO para a entidade GrupoContato.
+ * <p>
+ * Representa os dados de transferência para grupos de contatos,
+ * incluindo nome, descrição e status ativo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)

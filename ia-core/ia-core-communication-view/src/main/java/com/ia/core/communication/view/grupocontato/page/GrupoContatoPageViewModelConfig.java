@@ -9,13 +9,13 @@ import com.ia.core.view.manager.DefaultBaseManager;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 /**
- * Classe que representa as configurações para grupo contato page view model.
+ * Configuração do ViewModel para a página de GrupoContato.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoPageViewModelConfig
- * dentro do sistema.
+ * Responsável por fornecer as dependências necessárias para o ViewModel da página,
+ * incluindo o GrupoContatoManager.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @UIScope

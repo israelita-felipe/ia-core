@@ -44,12 +44,19 @@ public class EnumUtils {
   @SuppressWarnings("unchecked")
   public static <T extends Enum> T deserialize(String text)
     throws ClassNotFoundException {
+    Objects.requireNonNull(text, "Texto para desserialização não pode ser null");
     String[] splitted = text.split(SEPARATOR);
+    if (splitted.length != 2) {
+      throw new IllegalArgumentException(
+          "Formato inválido. Esperado: 'pacote.Classe#VALOR', recebido: " + text);
+    }
     var enumType = Class.forName(splitted[0]);
     return (T) Stream.of(enumType.getEnumConstants())
         .filter(enumItem -> Objects.equals(splitted[1],
                                            ((Enum<?>) enumItem).name()))
-        .findFirst().orElse(null);
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(
+            "Valor de enum não encontrado: " + splitted[1] + " para classe: " + splitted[0]));
   }
 
   /**

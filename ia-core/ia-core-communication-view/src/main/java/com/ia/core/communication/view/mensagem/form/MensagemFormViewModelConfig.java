@@ -8,8 +8,12 @@ import lombok.Getter;
 
 /**
  * Configuração do ViewModel para o formulário de Mensagens.
+ * <p>
+ * Responsável por fornecer as dependências necessárias para o ViewModel,
+ * incluindo MensagemManager e ProcessadorVariaveis.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class MensagemFormViewModelConfig
   extends FormViewModelConfig<MensagemDTO> {

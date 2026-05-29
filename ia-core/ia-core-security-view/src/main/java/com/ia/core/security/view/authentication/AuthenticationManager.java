@@ -21,6 +21,10 @@ public interface AuthenticationManager {
     return getAuthenticationClient().createFirstUser(request);
   }
 
+  default JwtAuthenticationResponseDTO refreshAccessToken(AuthenticationRequest request) {
+    return getAuthenticationClient().refreshToken(request);
+  }
+
   default Boolean initializeSecurity() {
     return getAuthenticationClient().initializeSecurity();
   }
@@ -33,6 +37,11 @@ public interface AuthenticationManager {
   default void createFirstUser(AuthenticationRequest request,
                               AuthenticationDetails details) {
     details.setAuthentication(createFirstUser(request));
+  }
+
+  default void refreshAccessToken(AuthenticationRequest request,
+                                 AuthenticationDetails details) {
+    details.setAuthentication(refreshAccessToken(request));
   }
 
   AuthenticationBaseClient getAuthenticationClient();

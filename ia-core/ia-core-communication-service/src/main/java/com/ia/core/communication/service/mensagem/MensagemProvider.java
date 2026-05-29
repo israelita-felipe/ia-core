@@ -4,8 +4,12 @@ import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 
 /**
  * Interface para provedores de mensagem.
+ * <p>
+ * Define o contrato para implementações de envio de mensagens através
+ * de diferentes canais de comunicação.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface MensagemProvider {
 

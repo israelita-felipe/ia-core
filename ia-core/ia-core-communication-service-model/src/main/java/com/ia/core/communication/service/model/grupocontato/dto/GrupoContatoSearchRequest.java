@@ -12,8 +12,12 @@ import java.util.Map;
 
 /**
  * SearchRequest para GrupoContato.
+ * <p>
+ * Define os filtros disponíveis para pesquisa de grupos de contatos,
+ * incluindo filtros por nome, descrição e status ativo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 class GrupoContatoSearchRequest extends SearchRequestDTO {
 

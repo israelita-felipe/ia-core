@@ -9,9 +9,12 @@ import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * FormView para entidade GrupoContato.
- * Segue o padrão de implementação com métodos separados para criação de campos.
+ * <p>
+ * Segue o padrão de implementação com métodos separados para criação de campos,
+ * incluindo nome, descrição e status ativo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class GrupoContatoFormView extends FormView<GrupoContatoDTO> {
 

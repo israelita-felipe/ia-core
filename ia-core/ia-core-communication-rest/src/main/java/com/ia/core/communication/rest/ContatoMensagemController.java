@@ -13,26 +13,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST Controller para operações de contatos de mensagens.
+ * <p>
+ * Fornece endpoints REST para gerenciamento de contatos individuais
+ * associados a grupos de contatos para envio de mensagens.
+ * <p>
+ * Principais responsabilidades:
+ * <ul>
+ *   <li>Gerenciamento completo de contatos de mensagem via CRUD</li>
+ *   <li>Associação de contatos a grupos de contatos</li>
+ *   <li>Armazenamento de informações de contato (telefone, nome)</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @Tag(name = "ContatoMensagem",
      description = "Gerenciamento de contatos de mensagens")
-/**
- * Classe que representa os endpoints REST para gerenciamento de contato mensagem.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemController
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
 @RestController
 @RequestMapping("/api/${api.version}/contato/mensagem")
 public class ContatoMensagemController
   extends DefaultBaseController<ContatoMensagem, ContatoMensagemDTO> {
 
+  /**
+   * Construtor com dependência do serviço de contatos de mensagem.
+   *
+   * @param contatoMensagemService serviço de contatos de mensagem (não pode ser nulo)
+   */
   public ContatoMensagemController(ContatoMensagemService contatoMensagemService) {
     super(contatoMensagemService);
   }

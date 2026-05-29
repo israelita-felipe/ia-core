@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 
 /**
  * Estratégia de envio para WhatsApp.
+ * <p>
+ * Implementa a estratégia específica para envio de mensagens através
+ * do canal WhatsApp, validando os requisitos específicos deste canal
+ * e processando o resultado do envio.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa os serviços de negócio para estrategia whats app.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EstrategiaWhatsApp
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Slf4j
 @Component

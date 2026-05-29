@@ -4,7 +4,7 @@ import com.ia.core.communication.model.contato.GrupoContato;
 import com.ia.core.communication.service.model.grupocontato.GrupoContatoUseCase;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO;
 import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoTranslator;
-import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.security.service.CrudSecuredBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class GrupoContatoService
-  extends DefaultSecuredBaseService<GrupoContato, GrupoContatoDTO>
+  extends CrudSecuredBaseService<GrupoContato, GrupoContatoDTO>
   implements GrupoContatoUseCase {
 
   public GrupoContatoService(GrupoContatoServiceConfig config) {

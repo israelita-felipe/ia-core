@@ -11,6 +11,7 @@ import com.ia.core.service.validators.ValidatorScope;
  * Implementa as regras de validação específicas para o domínio de grupos de contatos.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ValidatorScope
 public class GrupoContatoValidator extends ServiceValidator<GrupoContatoDTO> {

@@ -1,17 +1,15 @@
 package com.ia.core.service.attachment;
 
 import com.ia.core.model.attachment.Attachment;
-import com.ia.core.service.DefaultBaseService;
+import com.ia.core.service.CrudBaseService;
 import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.attachment.dto.AttachmentDTO;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.exception.ServiceException;
-import com.ia.core.service.mapper.BaseEntityMapper;
-import com.ia.core.service.mapper.SearchRequestMapper;
-import com.ia.core.service.repository.BaseEntityRepository;
-import com.ia.core.service.translator.Translator;
 import com.ia.core.service.util.ZipUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +18,7 @@ import java.nio.file.Files;
 /**
  * Serviço para manipulação de anexos/arquivos.
  *
- * <p>Este serviço estende {@link DefaultBaseService} para fornecer operações
+ * <p>Este serviço estende {@link CrudBaseService} para fornecer operações
  * CRUD de anexos, incluindo armazenamento em disco, compactação e
  * descompactação de arquivos.
  *
@@ -40,13 +38,13 @@ import java.nio.file.Files;
  * @author Israel Araújo
  * @param <T> Tipo da entidade {@link Attachment}
  * @param <D> Tipo do {@link AttachmentDTO}
- * @see DefaultBaseService
+ * @see CrudBaseService
  * @see AttachmentDTO
  * @since 1.0.0
  */
 @Slf4j
 public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
-  extends DefaultBaseService<T, D> {
+  extends CrudBaseService<T, D> {
 
   /** Diretório padrão para armazenamento de anexos. */
   public static final String ATTACHMENT_DIR = System.getProperty("user.dir")
@@ -74,8 +72,11 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       super.delete(id);
       boolean deleted = getFile(id).delete();
       log.debug("Arquivo deletado: {}", deleted);
-    } catch (Exception e) {
+    } catch (ServiceException e) {
       log.error("Erro ao deletar anexo com id: {}", id, e);
+      ex.add(e);
+    } catch (SecurityException e) {
+      log.error("Erro de segurança ao deletar arquivo com id: {}", id, e);
       ex.add(e);
     }
     throwIfHasErrors(ex);
@@ -132,12 +133,15 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @param dto DTO a ser carregado com o conteúdo do arquivo
    * @return DTO com conteúdo carregado
    */
-  public D load(D dto) {
+  public D load(
+           D dto) {
+    Objects.requireNonNull(dto, "DTO não pode ser null");
+    Objects.requireNonNull(dto.getId(), "ID do DTO não pode ser null");
     log.debug("Carregando conteúdo do anexo com id: {}", dto.getId());
     try {
       dto.setContent(Files.readString(getFile(dto.getId()).toPath()));
       log.debug("Conteúdo do anexo carregado com sucesso");
-    } catch (Exception e) {
+    } catch (java.io.IOException e) {
       log.error("Erro ao carregar conteúdo do anexo com id: {}", dto.getId(), e);
     }
     return dto;
@@ -154,22 +158,42 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       saved = super.save(toSave);
       if (toSave.hasContent()) {
         Long id = saved.getId();
+        if (id == null) {
+          throw new ServiceException("ID do anexo salvo não pode ser null");
+        }
         log.debug("Escrevendo conteúdo do anexo no disco, id: {}", id);
         try (FileWriter fw = new FileWriter(getFile(id))) {
           fw.write(toSave.getContent());
         }
         log.info("Anexo salvo com sucesso no disco, id: {}", id);
       }
-    } catch (Exception e) {
+    } catch (ServiceException e) {
       if (saved != null) {
         Long id = saved.getId();
-        // se existir arquivo salvo e for um arquivo novo deleta o arquivo.
-        // Evita deletar quando ocorre erro em atualização.
-        if (exists(id) && toSave.getId() == null) {
+        // Se for um novo registro (toSave.getId() == null) e o arquivo foi criado, deleta o arquivo.
+        // Evita deletar quando ocorre erro em atualização de registro existente.
+        if (id != null && toSave.getId() == null && exists(id)) {
           try {
             log.debug("Rollback: deletando arquivo criado com erro, id: {}", id);
             delete(saved.getId());
-          } catch (Exception e2) {
+          } catch (ServiceException e2) {
+            log.error("Erro ao fazer rollback do arquivo, id: {}", id, e2);
+            ex.add(e2);
+          }
+        }
+      }
+      log.error("Erro ao salvar anexo: {}", toSave.getFilename(), e);
+      ex.add(e);
+    } catch (java.io.IOException e) {
+      if (saved != null) {
+        Long id = saved.getId();
+        // Se for um novo registro (toSave.getId() == null) e o arquivo foi criado, deleta o arquivo.
+        // Evita deletar quando ocorre erro em atualização de registro existente.
+        if (id != null && toSave.getId() == null && exists(id)) {
+          try {
+            log.debug("Rollback: deletando arquivo criado com erro, id: {}", id);
+            delete(saved.getId());
+          } catch (ServiceException e2) {
             log.error("Erro ao fazer rollback do arquivo, id: {}", id, e2);
             ex.add(e2);
           }
@@ -189,7 +213,8 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @return conteúdo descompactado ou null se o DTO não tem conteúdo
    * @throws ServiceException caso ocorra erro ao descompactar o arquivo
    */
-  public String unZip(D dto)
+    public String unZip(
+           D dto)
     throws ServiceException {
     try {
       if (!dto.hasContent()) {
@@ -198,7 +223,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       }
       log.debug("Descompactando conteúdo do anexo");
       return ZipUtil.unZipBase64(dto.getContent());
-    } catch (Exception e) {
+    } catch (java.io.IOException e) {
       log.error("Erro ao descompactar conteúdo do anexo", e);
       ServiceException serviceException = new ServiceException();
       serviceException.add(e);
@@ -213,12 +238,14 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @return String contendo o arquivo compactado e em base64
    * @throws ServiceException caso ocorra alguma exceção
    */
-  public String zip(D dto)
+
+  public String zip(
+           D dto)
     throws ServiceException {
     try {
       log.debug("Compactando conteúdo do anexo");
       return ZipUtil.zipBase64(dto.getContent());
-    } catch (Exception e) {
+    } catch (java.io.IOException e) {
       log.error("Erro ao compactar conteúdo do anexo", e);
       ServiceException serviceException = new ServiceException();
       serviceException.add(e);

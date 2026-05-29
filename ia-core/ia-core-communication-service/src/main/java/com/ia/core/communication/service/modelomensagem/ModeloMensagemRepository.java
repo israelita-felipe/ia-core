@@ -20,6 +20,7 @@ import java.util.List;
  * utilizando JPQL para consultas específicas.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Repository

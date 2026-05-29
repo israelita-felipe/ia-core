@@ -27,8 +27,7 @@ feign:
       intencao: tipo/intencao
       patrocinio: tipo/patrocinio
     intencao: intencao
-    comando:
-      sistema: llm/comando/sistema
+    prompt: llm/prompt
     conta:
       bancaria: conta/bancaria
       contabil: conta/contabil

@@ -16,6 +16,7 @@ import java.util.Map;
  * delegando chamadas ao cliente Feign.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see ModeloMensagemUseCase
  */
 

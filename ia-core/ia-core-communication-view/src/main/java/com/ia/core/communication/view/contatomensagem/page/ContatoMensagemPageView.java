@@ -17,8 +17,12 @@ import java.util.List;
 
 /**
  * Página principal para visualização de ContatoMensagem.
+ * <p>
+ * Responsável por gerenciar a interface visual da página de contato de mensagem,
+ * incluindo criação de formulários e listas.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class ContatoMensagemPageView
   extends PageView<ContatoMensagemDTO> {

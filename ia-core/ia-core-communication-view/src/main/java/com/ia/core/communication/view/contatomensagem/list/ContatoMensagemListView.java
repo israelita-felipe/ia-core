@@ -4,13 +4,13 @@ import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensag
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 /**
- * Classe que representa a interface visual para contato mensagem list.
+ * Interface visual para lista de contatos de mensagens.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemListView
- * dentro do sistema.
+ * Responsável por gerenciar a exição de contatos de mensagens em formato de lista,
+ * incluindo configuração de colunas para telefone e nome.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ContatoMensagemListView extends ListView<ContatoMensagemDTO> {

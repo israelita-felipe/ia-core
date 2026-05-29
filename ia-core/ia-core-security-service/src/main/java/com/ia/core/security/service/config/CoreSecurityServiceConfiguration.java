@@ -5,6 +5,7 @@ import com.ia.core.security.service.authentication.AuthenticationService;
 import com.ia.core.security.service.authentication.CoreJwtAuthenticationService;
 import com.ia.core.security.service.functionality.DefaultFunctionalityManager;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.security.service.model.functionality.FunctionalityMapper;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.user.UserDTO;
 import com.ia.core.security.service.privilege.PrivilegeRepository;
@@ -41,9 +42,10 @@ public abstract class CoreSecurityServiceConfiguration {
 
   @Bean
   static FunctionalityManager defaultFunctionalityManager(PrivilegeRepository repository,
-                                                          Collection<HasFunctionality> hasFunctionalities) {
+                                                          Collection<HasFunctionality> hasFunctionalities,
+                                                          FunctionalityMapper functionalityMapper) {
     log.info("INICIALIZANDO FUNCTIONALITY MANAGER");
-    return new DefaultFunctionalityManager(repository, hasFunctionalities);
+    return new DefaultFunctionalityManager(repository, hasFunctionalities, functionalityMapper);
   }
 
 }

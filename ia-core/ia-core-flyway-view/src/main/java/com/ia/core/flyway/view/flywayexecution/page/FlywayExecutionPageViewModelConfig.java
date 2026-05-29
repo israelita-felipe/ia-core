@@ -9,8 +9,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Configuração do ViewModel para a página de execuções do Flyway.
+ * <p>
+ * Responsável por fornecer as dependências necessárias para o ViewModel da página.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @Getter

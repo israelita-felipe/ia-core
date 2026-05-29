@@ -1,0 +1,37 @@
+# --- Perfil lógico do módulo Communication com MCP ---
+ia-core:
+  llm:
+    enabled: true
+    security:
+      protected-paths:
+        - /mcp/**
+        - /.well-known/agent-card.json
+    agent:
+      orchestrator-id: ia-core-orchestrator
+      tool-scan-packages:
+        - com.ia.core.communication.service
+    skill:
+      progressive-disclosure: true
+    ferramenta:
+      discovery:
+        enabled: true
+        scan-packages:
+          - com.ia.core.communication.service
+        refresh-on-startup: true
+
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: ia-core-communication
+        version: 1.0.0
+        sse-endpoint: /mcp/sse
+        path: /mcp
+        agent-card:
+          enabled: true
+          path: /.well-known/agent-card.json
+      tools:
+        usecase-scan:
+          enabled: true
+          base_package: com.ia.core.communication.service

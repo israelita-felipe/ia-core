@@ -11,16 +11,13 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
- *
- */
-/**
- * Provedor de core bidirectional short form.
+ * Provedor bidirecional de formas curtas para entidades OWL.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a CoreBidirectionalShortFormProvider
- * dentro do sistema.
+ * Estende o BidirectionalShortFormProviderAdapter para fornecer funcionalidade
+ * de conversão entre formas curtas e IRIs completas, com suporte a prefixos.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class CoreBidirectionalShortFormProvider

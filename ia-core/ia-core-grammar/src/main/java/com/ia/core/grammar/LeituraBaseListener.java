@@ -6,18 +6,14 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link LeituraListener}, which
- * can be extended to create a listener which only needs to handle a subset of
- * the available methods.
- */
-/**
- * Classe que representa o listener para eventos de leitura base.
+ * Implementação base vazia do {@link LeituraListener}.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LeituraBaseListener
- * dentro do sistema.
+ * Classe gerada automaticamente pelo ANTLR 4.13.2 a partir do arquivo Leitura.g4.
+ * Fornece implementações vazias de todos os métodos do listener, permitindo
+ * que subclasses implementem apenas os métodos necessários.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 @SuppressWarnings("CheckReturnValue")
 public class LeituraBaseListener

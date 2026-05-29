@@ -4,3 +4,25 @@ spring:
       mode: never
       schema-locations:
       - classpath*:security-schema.sql
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: ia-core-security
+        version: 1.0.0
+        sse-endpoint: /mcp/sse
+        path: /mcp
+        agent-card:
+          enabled: true
+          path: /.well-known/agent-card.json
+      tools:
+        usecase-scan:
+          enabled: true
+          base-package: com.ia.core.security.service
+
+ia-core:
+  security:
+    enabled: true
+    agent:
+      tool-scan-packages:
+        - com.ia.core.security.service.tool

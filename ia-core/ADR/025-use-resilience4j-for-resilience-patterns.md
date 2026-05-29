@@ -17,6 +17,8 @@ O projeto precisa lidar com cenários de falha como:
 - Recuperação automática
 - Fallback para operações críticas
 
+**Importante**: Este ADR se aplica ao módulo `ia-core-resilience4j`, que funciona como biblioteca/framework e não pode compor uma aplicação por si só. Este módulo é base/framework para construção de outras aplicações, padronizando o desenvolvimento e abstraindo padrões de resiliência. Uma aplicação real é composta pela combinação de múltiplos módulos ia-core mais código específico do domínio da aplicação.
+
 ## Decisão
 
 Usar **Resilience4j** como biblioteca de padrões de resiliência, integrado ao Spring Boot via **ia-core-resilience4j** — um módulo reutilizável que fornece anotações declarativas (`@Resilient`) e perfis de resiliência (`ResilienceProfile`) para aplicação consistente de padrões de resiliência em toda a aplicação.

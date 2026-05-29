@@ -15,10 +15,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 /**
- * Serviço para manipulação de ontologias OWL
+ * Serviço para manipulação de ontologias OWL.
+ * <p>
+ * Implementação unificada que combina as operações de CoreOWLService,
+ * OWLOntologyManagementService e OWLParsingService para fornecer uma interface
+ * completa para manipulação de ontologias OWL.
  *
  * @author Israel Araújo
- * @version 1.0.0
+ * @since 1.0.0
  */
 public class DefaultOwlService
   implements CoreOWLService, OWLOntologyManagementService, OWLParsingService,
@@ -174,10 +178,18 @@ public class DefaultOwlService
                                           .detectInconsistencies(),
                                       new ArrayList<>(), 0);
 
-    } catch (Exception e) {
+    } catch (org.semanticweb.owlapi.reasoner.InconsistentOntologyException e) {
       return new AnaliseInferenciaDTO(false, Arrays.asList(String
           .format("Expressão: %s\nErro: %s", new ArrayList<>(),
                   e.getLocalizedMessage())), new ArrayList<>(), 0);
+    } catch (org.semanticweb.owlapi.reasoner.ReasonerInterruptedException e) {
+      return new AnaliseInferenciaDTO(false, Arrays.asList(String
+          .format("Expressão: %s\nErro: %s", new ArrayList<>(),
+                  e.getLocalizedMessage())), new ArrayList<>(), 0);
+    } catch (OWLParserException e) {
+        return new AnaliseInferenciaDTO(false, Arrays.asList(String
+            .format("Expressão: %s\nErro: %s", new ArrayList<>(),
+                e.getLocalizedMessage())), new ArrayList<>(), 0);
     }
   }
 
@@ -264,7 +276,9 @@ public class DefaultOwlService
       manager.saveOntology(tempOntology, createDocumentFormat(), baos);
       manager.clearOntologies();
       return criarAxioma(baos.toString());
-    } catch (Exception e) {
+    } catch (OWLOntologyStorageException e) {
+      throw new OWLParserException(e.getLocalizedMessage(), e);
+    } catch (org.semanticweb.owlapi.model.OWLOntologyCreationException e) {
       throw new OWLParserException(e.getLocalizedMessage(), e);
     }
   }
@@ -283,7 +297,11 @@ public class DefaultOwlService
       addAxioms(() -> Arrays.asList(axioma));
       checkInferrences();
       hasAxiomas.getAxiomas().add(axioma);
-    } catch (Exception e) {
+    } catch (OWLParserException e) {
+      axioma.setConsistente(false);
+      throw new IllegalArgumentException("AxiomaDTO inválido: "
+          + e.getMessage(), e);
+    } catch (OWLOntologyCreationException e) {
       axioma.setConsistente(false);
       throw new IllegalArgumentException("AxiomaDTO inválido: "
           + e.getMessage(), e);

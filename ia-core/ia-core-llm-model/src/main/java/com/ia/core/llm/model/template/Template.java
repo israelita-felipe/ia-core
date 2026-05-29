@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe que representa um template para questionamento com o modelo de
- * linguagem
+ * Entidade que representa um template para questionamento com modelo de linguagem.
+ * <p>
+ * Define o conteúdo do prompt a ser enviado ao LLM, incluindo parâmetros
+ * configuráveis e flag de exigência de contexto.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Entity

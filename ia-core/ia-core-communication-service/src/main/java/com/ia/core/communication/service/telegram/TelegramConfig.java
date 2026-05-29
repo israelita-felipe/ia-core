@@ -8,8 +8,12 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configurações para integração com Telegram.
+ * <p>
+ * Define as propriedades de configuração para integração com a API
+ * do Telegram Bot, incluindo token do bot, chat ID e timeouts.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @RequiredArgsConstructor

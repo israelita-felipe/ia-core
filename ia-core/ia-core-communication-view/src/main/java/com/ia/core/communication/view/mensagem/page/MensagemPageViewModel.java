@@ -13,17 +13,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * ViewModel para a página de Mensagens.
+ * <p>
+ * Responsável por gerenciar os dados e operações da página de mensagem,
+ * incluindo criação de objetos, busca e configuração de formulários.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o modelo de dados para a view de mensagem page.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a MensagemPageViewModel
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @UIScope
 @Component

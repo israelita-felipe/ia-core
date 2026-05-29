@@ -18,19 +18,26 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 /**
- * Base class for integration tests of Quartz Repository layer. Uses H2
- * in-memory database for fast testing. Features: - Automatic transaction
- * rollback after each test - EntityManager injection for manual operations -
- * Test profile activation Usage:
+ * Classe base para testes de integração da camada de Repository.
+ * <p>
+ * Utiliza banco de dados em memória H2 para testes rápidos.
+ * Características:
+ * - Rollback automático de transação após cada teste
+ * - Injeção de EntityManager para operações manuais
+ * - Ativação de perfil de teste
+ *
+ * <p>
+ * Uso:
  *
  * <pre>
  * {@code @ActiveProfiles("test")}
  * class MyQuartzRepositoryIT extends AbstractRepositoryIT {
- *     // Your test methods
+ *     // Seus métodos de teste
  * }
  * </pre>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration

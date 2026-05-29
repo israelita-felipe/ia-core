@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.4</version>
+		<version>4.0.6</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<packaging>pom</packaging>
@@ -34,6 +34,7 @@
 		<cron-utils.version>9.2.1</cron-utils.version>
 		<apache.poi.version>5.5.0</apache.poi.version>
 		<resilience4j.version>2.2.0</resilience4j.version>
+		<log4j.version>2.25.4</log4j.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -231,6 +232,23 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.owasp</groupId>
+					<artifactId>dependency-check-maven</artifactId>
+					<version>10.0.4</version>
+					<configuration>
+						<format>HTML</format>
+						<format>XML</format>
+						<failBuildOnCVSS>7</failBuildOnCVSS>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -257,6 +275,7 @@
         <module>ia-core-llm-service-model</module>
         <module>ia-core-llm-model</module>
         <module>ia-core-llm-service</module>
+        <module>ia-core-llm-rest</module>
         <module>ia-core-llm-view</module>
         <module>ia-core-quartz</module>
         <module>ia-core-quartz-service-model</module>

@@ -8,9 +8,13 @@ import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 /**
- * Serviço para manipulação de ontologias
+ * Serviço para manipulação de ontologias OWL.
+ * <p>
+ * Define operações básicas para análise de inferências, adição de axiomas
+ * e criação de formatos de documento OWL.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface CoreOWLService {
 

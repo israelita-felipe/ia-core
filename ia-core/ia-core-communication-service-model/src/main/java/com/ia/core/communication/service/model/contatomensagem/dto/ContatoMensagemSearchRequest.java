@@ -12,8 +12,12 @@ import java.util.Map;
 
 /**
  * SearchRequest para ContatoMensagem.
+ * <p>
+ * Define os filtros disponíveis para pesquisa de contatos de mensagens,
+ * incluindo filtros por telefone e nome.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 class ContatoMensagemSearchRequest extends SearchRequestDTO {
 

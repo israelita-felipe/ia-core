@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  * valores reais durante o envio de mensagens.</p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public enum VariavelTemplate implements Variavel {

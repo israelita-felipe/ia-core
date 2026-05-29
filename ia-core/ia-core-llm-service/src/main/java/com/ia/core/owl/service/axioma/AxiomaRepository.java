@@ -5,11 +5,10 @@ import com.ia.core.service.repository.BaseEntityRepository;
 /**
  * Repositório para acesso a dados de axioma.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a AxiomaRepository
- * dentro do sistema.
+ * Fornece métodos específicos para buscar e manipular axiomas OWL no banco de dados.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface AxiomaRepository
   extends BaseEntityRepository<Axioma> {

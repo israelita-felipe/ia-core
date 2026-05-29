@@ -4,19 +4,18 @@ import com.ia.core.communication.model.mensagem.Mensagem;
 import com.ia.core.communication.service.mensagem.MensagemService;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemRequestDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.rest.control.DefaultBaseController;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +26,18 @@ import org.springframework.web.bind.annotation.*;
  * REST Controller para operações de mensagens.
  * <p>
  * Fornece endpoints REST para gerenciamento de mensagens de comunicação,
- * incluindo envio individual e em massa.
+ * incluindo envio individual, em massa e em lote.
+ * <p>
+ * Principais responsabilidades:
+ * <ul>
+ *   <li>Envio de mensagens individuais</li>
+ *   <li>Envio de mensagens em massa</li>
+ *   <li>Envio em lote usando modelos de mensagem</li>
+ *   <li>Gerenciamento completo de mensagens via CRUD</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @Tag(name = "Mensagem",
@@ -42,7 +50,7 @@ public class MensagemController
   /**
    * Construtor com dependência do serviço de mensagens.
    *
-   * @param mensagemService serviço de mensagens
+   * @param mensagemService serviço de mensagens (não pode ser nulo)
    */
   public MensagemController(MensagemService mensagemService) {
     super(mensagemService);
@@ -55,8 +63,11 @@ public class MensagemController
 
     /**
      * Envia uma mensagem individual.
+     * <p>
+     * Este endpoint processa o envio de uma mensagem para um destinatário
+     * específico através do canal selecionado.
      *
-     * @param dto     dados da mensagem
+     * @param dto dados da mensagem (não pode ser nulo)
      * @param request requisição HTTP
      * @return mensagem enviada com status
      */
@@ -93,8 +104,11 @@ public class MensagemController
 
     /**
      * Envia mensagens em massa.
+     * <p>
+     * Este endpoint processa o envio de múltiplas mensagens de uma só vez,
+     * permitindo comunicação com múltiplos destinatários simultaneamente.
      *
-     * @param dto     dados da requisição de envio em massa
+     * @param dto dados da requisição de envio em massa (não pode ser nulo)
      * @param request requisição HTTP
      * @return resposta vazia indicando sucesso
      */
@@ -123,10 +137,15 @@ public class MensagemController
 
     /**
      * Envia mensagens em lote para todos os contatos de um GrupoContato usando um modelo de mensagem.
+     * <p>
+     * Este endpoint utiliza um modelo de mensagem pré-definido para enviar
+     * mensagens para todos os contatos de um grupo específico. Suporta
+     * tratamento de falhas parciais no envio.
      *
-     * @param modeloId ID do modelo de mensagem a ser usado
-     * @param grupoId  ID do grupo de contatos
+     * @param modeloId ID do modelo de mensagem a ser usado (não pode ser nulo)
+     * @param grupoId ID do grupo de contatos (não pode ser nulo)
      * @return resposta indicando sucesso ou falhas parciais
+     * @throws DataAccessException em caso de erro de acesso aos dados
      */
     @Operation(
         summary = "Envia mensagens em lote",
@@ -164,10 +183,14 @@ public class MensagemController
                 return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(resultado);
             }
             return ResponseEntity.ok(resultado);
-        } catch (Exception e) {
-            log.error("Erro ao processar envio em lote: {}", e.getMessage());
+        } catch (DataAccessException e) {
+            log.error("Erro de acesso aos dados ao processar envio em lote: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao processar envio em lote: " + e.getMessage());
+                    .body("Erro interno ao processar o envio");
+        } catch (Exception e) {
+            log.error("Erro inesperado ao processar envio em lote: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro interno ao processar o envio");
         }
     }
 }

@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 
 /**
  * Estratégia de envio para SMS.
+ * <p>
+ * Implementa a estratégia específica para envio de mensagens através
+ * do canal SMS, validando os requisitos específicos deste canal
+ * e processando o resultado do envio.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa os serviços de negócio para estrategia sms.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EstrategiaSms
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Slf4j
 @Component

@@ -1,7 +1,7 @@
 package com.ia.core.llm.support;
 
-import com.ia.core.llm.model.comando.ComandoSistema;
-import com.ia.core.llm.model.comando.FinalidadeComandoEnum;
+import com.ia.core.llm.model.prompt.FinalidadePromptEnum;
+import com.ia.core.llm.model.prompt.Prompt;
 import com.ia.core.llm.model.template.Template;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +22,9 @@ import java.util.UUID;
  * Usage:
  * <pre>
  * {@code
- * ComandoSistema comando = testDataFactory.criarComandoSistema()
- *     .comTitulo("Test Command")
- *     .comFinalidade(FinalidadeComandoEnum.RESPOSTA_TEXTUAL)
+ * Prompt prompt = testDataFactory.criarPrompt()
+ *     .titulo("Test Prompt")
+ *     .finalidade(FinalidadePromptEnum.RESPOSTA_TEXTUAL)
  *     .build();
  * }
  * </pre>
@@ -53,28 +53,28 @@ public class TestDataFactory {
             .build();
     }
 
-    // ========== ComandoSistema Builders ==========
+    // ========== Prompt Builders ==========
 
-    public ComandoSistemaBuilder criarComandoSistema() {
-        return new ComandoSistemaBuilder(++counter);
+    public PromptBuilder criarPrompt() {
+        return new PromptBuilder(++counter);
     }
 
-    public ComandoSistema criarComandoSistema(Long id) {
-        return new ComandoSistemaBuilder(id.intValue()).build();
+    public Prompt criarPrompt(Long id) {
+        return new PromptBuilder(id.intValue()).build();
     }
 
-    public ComandoSistema criarComandoSistema(Long id, FinalidadeComandoEnum finalidade) {
-        return new ComandoSistemaBuilder(id.intValue())
+    public Prompt criarPrompt(Long id, FinalidadePromptEnum finalidade) {
+        return new PromptBuilder(id.intValue())
             .finalidade(finalidade)
             .build();
     }
 
-    public List<ComandoSistema> criarListaComandos(int quantidade) {
-        List<ComandoSistema> comandos = new ArrayList<>();
+    public List<Prompt> criarListaPrompts(int quantidade) {
+        List<Prompt> prompts = new ArrayList<>();
         for (int i = 0; i < quantidade; i++) {
-            comandos.add(criarComandoSistema().build());
+            prompts.add(criarPrompt().build());
         }
-        return comandos;
+        return prompts;
     }
 
     // ========== Template Builder ==========
@@ -115,52 +115,46 @@ public class TestDataFactory {
         }
     }
 
-    // ========== ComandoSistema Builder ==========
+    // ========== Prompt Builder ==========
 
-    public static class ComandoSistemaBuilder {
+    public static class PromptBuilder {
         private final int id;
         private String titulo;
-        private String comando;
-        private FinalidadeComandoEnum finalidade;
+        private String entrada;
+        private FinalidadePromptEnum finalidade;
         private Template template;
-        private boolean ativo = true;
 
-        public ComandoSistemaBuilder(int id) {
+        public PromptBuilder(int id) {
             this.id = id;
-            this.titulo = "Comando " + id;
-            this.comando = "Conteúdo do comando " + id;
-            this.finalidade = FinalidadeComandoEnum.RESPOSTA_TEXTUAL;
+            this.titulo = "Prompt " + id;
+            this.entrada = "Entrada do prompt " + id;
+            this.finalidade = FinalidadePromptEnum.RESPOSTA_TEXTUAL;
         }
 
-        public ComandoSistemaBuilder titulo(String titulo) {
+        public PromptBuilder titulo(String titulo) {
             this.titulo = titulo;
             return this;
         }
 
-        public ComandoSistemaBuilder comando(String comando) {
-            this.comando = comando;
+        public PromptBuilder entrada(String entrada) {
+            this.entrada = entrada;
             return this;
         }
 
-        public ComandoSistemaBuilder finalidade(FinalidadeComandoEnum finalidade) {
+        public PromptBuilder finalidade(FinalidadePromptEnum finalidade) {
             this.finalidade = finalidade;
             return this;
         }
 
-        public ComandoSistemaBuilder template(Template template) {
+        public PromptBuilder template(Template template) {
             this.template = template;
             return this;
         }
 
-        public ComandoSistemaBuilder ativo(boolean ativo) {
-            this.ativo = ativo;
-            return this;
-        }
-
-        public ComandoSistema build() {
-            return ComandoSistema.builder()
+        public Prompt build() {
+            return Prompt.builder()
                 .titulo(titulo)
-                .comando(comando)
+                .entrada(entrada)
                 .finalidade(finalidade)
                 .template(template)
                 .build();
@@ -178,13 +172,4 @@ public class TestDataFactory {
         return UUID.randomUUID().toString();
     }
 
-    /**
-     * Generates a unique test name based on counter.
-     *
-     * @param prefix the prefix for the name
-     * @return unique test name
-     */
-    public String uniqueName(String prefix) {
-        return prefix + " " + ++counter + " " + System.currentTimeMillis();
-    }
 }

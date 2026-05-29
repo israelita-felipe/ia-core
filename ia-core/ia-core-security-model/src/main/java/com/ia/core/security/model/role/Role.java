@@ -49,6 +49,7 @@ public class Role
                                               referencedColumnName = "id"),
              uniqueConstraints = @UniqueConstraint(columnNames = {
                  "user_id", "role_id" }))
+  @Builder.Default
   private Collection<User> users = new HashSet<>();
 
   /**

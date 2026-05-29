@@ -58,19 +58,19 @@ public class ErrorResponse {
    * Lista de detalhes de erro (para erros de validação).
    */
   @Builder.Default
-  private final List<ErrorDetail> details;
+  private final List<ErrorDetail> details = null;
 
   /**
    * Mapa de erros de campo (para validação de DTOs).
    */
   @Builder.Default
-  private final Map<String, Set<String>> fieldErrors;
+  private final Map<String, Set<String>> fieldErrors = null;
 
   /**
    * Exceção original (apenas em ambiente de desenvolvimento).
    */
   @Builder.Default
-  private final String exception;
+  private final String exception = null;
 
   /**
    * Detalhe individual de erro.

@@ -7,17 +7,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 /**
  * Configuração para serviço de E-mail.
+ * <p>
+ * Define as propriedades de configuração para envio de e-mails,
+ * incluindo servidor SMTP, porta, credenciais e timeouts.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa as configurações para email.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EmailConfig
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Data
 @ConfigurationProperties(prefix = "email")

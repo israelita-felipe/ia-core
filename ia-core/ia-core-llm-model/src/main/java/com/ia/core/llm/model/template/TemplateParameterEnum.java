@@ -6,10 +6,13 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Enumerador que lista os parâmetros de um template que são padrão de sistema e
- * podem ser utilizados para inserção nos templates.
+ * Enumerador que lista os parâmetros de sistema padrão para templates.
+ * <p>
+ * Define parâmetros que podem ser utilizados para inserção nos templates,
+ * como documento e contexto.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public enum TemplateParameterEnum {
 

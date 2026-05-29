@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.model.modelomensagem.dto;
 
 /**
- * Translator constants for ModeloMensagem (Message Template) DTO.
+ * Constantes de tradução para ModeloMensagemDTO.
  * <p>
- * Contains constants for i18n keys, validation messages, and field names
- * used throughout the ModeloMensagem DTO processing pipeline.
+ * Contém constantes para chaves i18n, mensagens de validação e nomes de campos
+ * utilizados no pipeline de processamento do DTO de ModeloMensagem.
  *
  * @author Israel Araújo
  * @since 1.0.0

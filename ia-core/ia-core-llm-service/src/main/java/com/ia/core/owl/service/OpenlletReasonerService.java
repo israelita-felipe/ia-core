@@ -24,35 +24,9 @@ import java.util.stream.Collectors;
  * <li>Classificar a hierarquia de classes</li>
  * <li>Recuperar subclasses e instâncias</li>
  * </ul>
- * </p>
- * <p>
- * <b>Exemplo de uso:</b>
- *
- * <pre>{@code
- * OwlManchesterParser parser = new OwlManchesterParser("ex",
- *                                                      "http://example.com/ontology#");
- * OpenlletReasonerService reasonerService = new OpenlletReasonerService(parser);
- * reasonerService.loadOntology(axiomas);
- *
- * if (reasonerService.isConsistent()) {
- *   List<AxiomaDTO> inferredAxioms = reasonerService.performInferences();
- * } else {
- *   List<String> inconsistencies = reasonerService.detectInconsistencies();
- * }
- * }</pre>
- * </p>
  *
  * @author Israel Araújo
- * @version 1.0
- */
-/**
- * Serviço de negócio para gerenciamento de openllet reasoner.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a OpenlletReasonerService
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 
 public class OpenlletReasonerService

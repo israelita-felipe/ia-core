@@ -8,6 +8,8 @@
 
 O projeto precisa de uma forma de notificar outras partes do sistema sobre operações CRUD sem criar dependências diretas entre serviços (evitando dependências circulares).
 
+**Importante**: Este ADR se aplica aos módulos do ia-core, que funcionam como bibliotecas/framework e não podem compor uma aplicação por si só. Esses módulos são base/framework para construção de outras aplicações, padronizando o desenvolvimento e abstraindo padrões de desenvolvimento. Uma aplicação real é composta pela combinação de múltiplos módulos ia-core mais código específico do domínio da aplicação.
+
 ## Decisão
 
 Usar **Domain Events** com Spring `ApplicationEventPublisher` e publicação automática via callbacks.

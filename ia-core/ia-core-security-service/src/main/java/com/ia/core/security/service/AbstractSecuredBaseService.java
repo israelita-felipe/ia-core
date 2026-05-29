@@ -127,6 +127,7 @@ public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends
    * @param <T> {@link BaseEntity}
    * @param <D> {@link DTO}
    */
+
   public static class AbstractSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>
     extends AbstractBaseServiceConfig<T, D> {
 

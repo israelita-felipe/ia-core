@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,7 +66,7 @@ class ResilienceExecutionChainBuilderTest {
     private ProceedingJoinPoint joinPoint;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         builder = new ResilienceExecutionChainBuilder(
                 metricsCollector,
@@ -106,7 +107,7 @@ class ResilienceExecutionChainBuilderTest {
         Object externalContext = new Object();
         when(contextPropagator.executeWithContext(any(), any()))
                 .thenAnswer(invocation -> {
-                    Supplier<?> supplier = invocation.getArgument(1);
+                    ResilienceAspect.ResilienceAspectContext.ContextSupplier<?> supplier = invocation.getArgument(1);
                     return supplier.get();
                 });
         when(rateLimiterHandler.execute(any(), any()))
@@ -146,7 +147,7 @@ class ResilienceExecutionChainBuilderTest {
         when(joinPoint.proceed()).thenAnswer(invocation -> "SUCCESS");
 
         // Act
-        Supplier<Object> chain = builder.build(context, joinPoint, externalContext);
+        Supplier<Object> chain = builder.build(context, joinPoint);
         Object result = chain.get();
 
         // Assert
@@ -232,11 +233,11 @@ class ResilienceExecutionChainBuilderTest {
 
         when(contextPropagator.executeWithContext(any(), any()))
                 .thenAnswer(invocation -> {
-                    Supplier<?> supplier = invocation.getArgument(1);
+                    ResilienceAspect.ResilienceAspectContext.ContextSupplier<?> supplier = invocation.getArgument(1);
                     return supplier.get();
                 });
 
-        when(metricsCollector.executeWithMetrics(any(), any(), any()))
+        when(metricsCollector.executeWithMetrics(any(), any(), any(Callable.class)))
                 .thenAnswer(invocation -> {
                     java.util.concurrent.Callable<?> callable = invocation.getArgument(2);
                     try {
@@ -249,7 +250,7 @@ class ResilienceExecutionChainBuilderTest {
         when(joinPoint.proceed()).thenAnswer(invocation -> "SUCCESS");
 
         // Act
-        Supplier<Object> chain = builder.build(context, joinPoint, new Object());
+        Supplier<Object> chain = builder.build(context, joinPoint);
         chain.get();
 
         // Assert

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
  * delegando chamadas ao cliente Feign.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see ContatoMensagemUseCase
  */
 

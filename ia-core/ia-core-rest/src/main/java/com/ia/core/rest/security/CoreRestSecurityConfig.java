@@ -3,6 +3,7 @@ package com.ia.core.rest.security;
 import com.ia.core.rest.filter.CoreJwtAuthenticationFilter;
 import com.ia.core.rest.filter.OncePerRequestAuthenticationFilter;
 import com.ia.core.security.model.authentication.JwtCoreManager;
+import com.ia.core.security.service.authentication.JwtAuthenticationService;
 import com.ia.core.security.service.authorization.CoreAuthorizationManager;
 import com.ia.core.security.service.authorization.JWTPrivilegeContext;
 import com.ia.core.security.service.config.CoreSecurityServiceConfiguration;
@@ -89,6 +90,30 @@ public abstract class CoreRestSecurityConfig
    * e injeção de dependência específica.
    */
   public static final String PUBLIC_CHAIN_BEAN_NAME = "filter.chain.public";
+
+  /**
+   * Nome do bean para a cadeia de filtros MCP. Utilizado para qualificação
+   * e injeção de dependência específica.
+   */
+  public static final String MCP_CHAIN_BEAN_NAME = "filter.chain.mcp";
+
+  /**
+   * Caminho da UI do Swagger.
+   */
+  @Value("${swagger.ui-path:/swagger-ui.html}")
+  private String swaggerUiPath;
+
+  /**
+   * Caminho dos API docs do Swagger.
+   */
+  @Value("${swagger.api-docs-path:/v3/api-docs/**}")
+  private String swaggerApiDocsPath;
+
+  /**
+   * Caminho do arquivo YAML dos API docs do Swagger.
+   */
+  @Value("${swagger.api-docs-yaml:/v3/api-docs.yaml}")
+  private String swaggerApiDocsYaml;
 
   /**
    * Mensagem de log para inicialização do ponto de entrada de autenticação.
@@ -180,6 +205,12 @@ public abstract class CoreRestSecurityConfig
    * ordem de prioridade 3 para requisições que requerem autenticação.
    */
   private final SecurityFilterChain securityFilterChain;
+
+  /**
+   * Cadeia de filtros específica para endpoints MCP. Configurada com ordem
+   * de prioridade 4 para requisições MCP que requerem autenticação JWT.
+   */
+  private final SecurityFilterChain mcpFilterChain;
 
   /**
    * Serviço para registro de operações de segurança. Responsável pelo log de
@@ -303,7 +334,7 @@ public abstract class CoreRestSecurityConfig
   @Bean(name = SECURITY_FILTER_CHAIN_BEAN_NAME)
   @Order(3)
   static SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                 UserDetailsService userDetailsService)
+                                                 UserDetailsService userDetailsService,JwtAuthenticationService jwtAuthenticationService)
     throws Exception {
     http.securityMatcher("/**")
         .csrf(csrf -> csrf.disable())
@@ -349,14 +380,46 @@ public abstract class CoreRestSecurityConfig
   @Bean(name = PUBLIC_CHAIN_BEAN_NAME)
   @Order(2)
   static SecurityFilterChain securityPublicFilterChain(HttpSecurity http,
-                                                       @Value(PUBLIC_ENDPOINT_PATTERN) String authorizationPattern)
+                                                       @Value(PUBLIC_ENDPOINT_PATTERN) String authorizationPattern,
+                                                       @Value("${swagger.ui-path:/swagger-ui.html}") String swaggerUiPath,
+                                                       @Value("${swagger.api-docs-path:/v3/api-docs/**}") String swaggerApiDocsPath,
+                                                       @Value("${swagger.api-docs-yaml:/v3/api-docs.yaml}") String swaggerApiDocsYaml)
     throws Exception {
     http.securityMatcher(authorizationPattern, "/actuator/**",
-                         "/swagger-ui/**", "/v3/api-docs/**",
-                         "/v3/api-docs.yaml", "/swagger-ui.html")
+                         "/swagger-ui/**", swaggerApiDocsPath,
+                         swaggerApiDocsYaml, swaggerUiPath)
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests((requests) -> requests.anyRequest()
             .permitAll());
+    return http.build();
+  }
+
+  /**
+   * Configura a cadeia de filtros para endpoints MCP (Model Context Protocol).
+   * Protege os endpoints MCP com autenticação JWT.
+   *
+   * @param http               configuração de segurança HTTP
+   * @param userDetailsService serviço de detalhes do usuário
+   * @return SecurityFilterChain cadeia de filtros MCP configurada
+   * @throws Exception se a configuração falhar
+   */
+  @Bean(name = MCP_CHAIN_BEAN_NAME)
+  @Order(4)
+  static SecurityFilterChain securityMcpFilterChain(HttpSecurity http,
+                                                     UserDetailsService userDetailsService,
+                                                     JwtAuthenticationService jwtAuthenticationService)
+    throws Exception {
+    http.securityMatcher("/mcp/**", "/.well-known/agent-card.json")
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(authorize -> authorize.anyRequest()
+            .authenticated())
+        .exceptionHandling(handling -> handling
+            .authenticationEntryPoint(authenticationEntryPoint()))
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .httpBasic(Customizer.withDefaults())
+        .addFilterBefore(authenticationFilter(userDetailsService),
+                         UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 
@@ -382,6 +445,7 @@ public abstract class CoreRestSecurityConfig
    * @param authenticationManager gerenciador de autenticação
    * @param loginFilterChain      cadeia de filtros de login
    * @param securityFilterChain   cadeia de filtros de segurança
+   * @param mcpFilterChain        cadeia de filtros MCP
    * @param logOperationService   serviço de operações de log
    */
   public CoreRestSecurityConfig(CoreSecurityAuthorizationManager authorizationManager,
@@ -390,6 +454,7 @@ public abstract class CoreRestSecurityConfig
                                 AuthenticationManager authenticationManager,
                                 @Qualifier(LOGIN_FILTER_CHAIN_BEAN_NAME) SecurityFilterChain loginFilterChain,
                                 @Qualifier(SECURITY_FILTER_CHAIN_BEAN_NAME) SecurityFilterChain securityFilterChain,
+                                @Qualifier(MCP_CHAIN_BEAN_NAME) SecurityFilterChain mcpFilterChain,
                                 LogOperationService logOperationService) {
     super();
     this.authorizationManager = authorizationManager;
@@ -398,6 +463,7 @@ public abstract class CoreRestSecurityConfig
     this.authenticationManager = authenticationManager;
     this.loginFilterChain = loginFilterChain;
     this.securityFilterChain = securityFilterChain;
+    this.mcpFilterChain = mcpFilterChain;
     this.logOperationService = logOperationService;
   }
 
@@ -518,6 +584,16 @@ public abstract class CoreRestSecurityConfig
   }
 
   /**
+   * Método de configuração específico para cadeia de filtros MCP. Pode ser
+   * sobrescrito por classes filhas para customização.
+   *
+   * @param mcpFilterChain cadeia de filtros MCP a ser configurada
+   */
+  public void configureMcp(SecurityFilterChain mcpFilterChain) {
+    // Implementação pode ser fornecida por classes filhas
+  }
+
+  /**
    * Inicializa a configuração de segurança após a construção do bean. Configura
    * todos os componentes de segurança através dos métodos configure.
    */
@@ -530,6 +606,7 @@ public abstract class CoreRestSecurityConfig
     configure(authenticationManager);
     configure(securityFilterChain);
     configureLogin(loginFilterChain);
+    configureMcp(mcpFilterChain);
     configure(logOperationService);
   }
 

@@ -4,16 +4,13 @@ import com.ia.core.owl.service.model.TransformacaoResultDTO;
 import org.springframework.ai.chat.model.ChatModel;
 
 /**
- *
- */
-/**
- * Serviço de negócio para gerenciamento de core o w l transformation.
+ * Serviço para transformação de descrições em linguagem natural para axiomas OWL.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a CoreOWLTransformationService
- * dentro do sistema.
+ * Utiliza modelos de linguagem para converter descrições textuais em axiomas
+ * OWL 2 DL usando Manchester Syntax.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public interface CoreOWLTransformationService {

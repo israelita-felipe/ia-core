@@ -13,8 +13,12 @@ import java.util.List;
 
 /**
  * ViewModel para o formulário de Mensagens.
+ * <p>
+ * Responsável por gerenciar os dados e operações do formulário de mensagem,
+ * incluindo processamento de variáveis e fornecimento de variáveis disponíveis.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class MensagemFormViewModel
   extends FormViewModel<MensagemDTO> {

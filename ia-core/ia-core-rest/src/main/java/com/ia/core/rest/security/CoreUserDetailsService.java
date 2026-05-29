@@ -65,10 +65,7 @@ public class CoreUserDetailsService
   @Override
   public UserDetails loadUserByUsername(String username)
     throws UsernameNotFoundException {
-    User user = repository.findByUserCode(username);
-    if (user == null) {
-      throw new UsernameNotFoundException(username);
-    }
+    User user = repository.findByUserCode(username).orElseThrow(()->new UsernameNotFoundException(username));
     UserDetails userDetails = new org.springframework.security.core.userdetails.User(user
         .getUserCode(), user.getPassword(), user.isEnabled(),
                                                                                      user.isAccountNotExpired(),

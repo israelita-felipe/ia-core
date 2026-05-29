@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
  * @author Israel Araújo
  */
 @RequiredArgsConstructor
+@RestController
 public class CoreJwtAuthenticationFilter
   extends OncePerRequestAuthenticationFilter {
 
@@ -23,12 +25,15 @@ public class CoreJwtAuthenticationFilter
 
   private static final String AUTHORIZATION_HEADER = "Authorization";
 
+  private static final String REFRESH_TOKEN_HEADER = "X-Refresh-Token";
+
   private final UserDetailsService userDetailService;
 
   @Override
   public Authentication getAuthentication(HttpServletRequest request)
     throws UserNotFountException {
     String token = getTokenFromRequest(request);
+    token = token ==null?getRefreshTokenFromRequest(request):token;
     UsernamePasswordAuthenticationToken userDetailsFromToken = getUserDetailsFromToken(token);
     userDetailsFromToken.setDetails(new WebAuthenticationDetails(request));
     return userDetailsFromToken;
@@ -47,6 +52,17 @@ public class CoreJwtAuthenticationFilter
     }
     return null;
   }
+    String getRefreshTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader(REFRESH_TOKEN_HEADER);
+        if (Objects.nonNull(bearerToken)) {
+            if (bearerToken.startsWith(BEARER_HEADER)) {
+                return bearerToken.substring(BEARER_HEADER.length(),
+                    bearerToken.length());
+            }
+            return bearerToken;
+        }
+        return null;
+    }
 
   /**
    * @param userCode

@@ -9,17 +9,12 @@ import java.time.LocalDateTime;
 
 /**
  * Resultado do envio de mensagem.
+ * <p>
+ * Encapsula o resultado de uma operação de envio de mensagem, incluindo
+ * status de sucesso/erro, ID da mensagem e timestamp da operação.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa os serviços de negócio para resultado envio.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ResultadoEnvio
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Data
 @Builder

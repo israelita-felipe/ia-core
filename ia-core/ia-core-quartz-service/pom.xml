@@ -11,7 +11,7 @@
 	<artifactId>ia-core-quartz-service</artifactId>
 	<name>ia-core-quartz-service</name>
 	<description>Serviços do Quartz</description>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>
@@ -36,14 +36,25 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+    <dependency>
+      <groupId>com.ia</groupId>
+      <artifactId>ia-core-llm-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+		<dependency>
+			<groupId>com.ia.core</groupId>
+			<artifactId>ia-core-resilience4j</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>com.ia</groupId>
 			<artifactId>ia-core-integration-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -66,18 +77,18 @@
 						<!-- See
 						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 						<!-- Classpath elements to supply as annotation
-						processor path. If 
+						processor path. If
 							specified, the compiler -->
 						<!-- will detect annotation processors only in those
-						classpath elements. 
+						classpath elements.
 							If omitted, the -->
 						<!-- default classpath is used to detect annotation
-						processors. The 
+						processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
 						<!-- According to this documentation, the provided
-						dependency processor 
+						dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

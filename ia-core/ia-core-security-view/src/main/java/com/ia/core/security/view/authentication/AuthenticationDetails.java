@@ -38,6 +38,14 @@ public class AuthenticationDetails {
     service.createFirstUser(request, this);
   }
 
+  public void refreshAccessToken() {
+    if (authentication.getRefreshToken() == null || authentication.getRefreshToken().isEmpty()) {
+      throw new IllegalStateException("Refresh token not available");
+    }
+    AuthenticationRequest request = new AuthenticationRequest(authentication.getRefreshToken());
+    service.refreshAccessToken(request, this);
+  }
+
   public boolean initializeSecurity() {
     return service.initializeSecurity();
   }
@@ -94,8 +102,16 @@ public class AuthenticationDetails {
     return null;
   }
 
+  public String getRefreshToken() {
+    return authentication.getRefreshToken();
+  }
+
   public boolean isAuthenticated() {
     return authentication != null;
+  }
+
+  public boolean hasRefreshToken() {
+    return authentication.getRefreshToken() != null && !authentication.getRefreshToken().isEmpty();
   }
 
   /**
@@ -106,6 +122,13 @@ public class AuthenticationDetails {
     UserDTO user = createUser();
     UsernamePasswordAuthenticationToken authenticated = createAuthenticationToken(user);
     setAuthenticationOnSecurityContext(authenticated);
+  }
+
+  /**
+   * @param refreshToken atualiza {@link #refreshToken}.
+   */
+  public void setRefreshToken(String refreshToken) {
+    this.authentication.setRefreshToken(refreshToken);
   }
 
   /**

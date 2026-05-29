@@ -2,14 +2,14 @@ package com.ia.core.llm.service.chat;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 
 /**
  * Implementação de ChatSessionService.
+ * <p>
  * Gerencia sessões de chat usando ConcurrentHashMap para thread-safety.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class ChatSessionServiceImpl implements ChatSessionService {
 

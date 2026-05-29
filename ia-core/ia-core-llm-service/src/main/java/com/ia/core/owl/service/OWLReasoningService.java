@@ -15,9 +15,9 @@ import java.util.Set;
  * <p>
  * Define operações para verificação de consistência, inferências e detecção
  * de inconsistências em ontologias OWL.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface OWLReasoningService {
 

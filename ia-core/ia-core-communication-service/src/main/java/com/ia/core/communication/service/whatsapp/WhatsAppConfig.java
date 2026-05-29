@@ -8,8 +8,12 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuração do WhatsApp Business API.
+ * <p>
+ * Define as propriedades de configuração para integração com a API
+ * do WhatsApp Business, incluindo credenciais, URLs e timeouts.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @RequiredArgsConstructor

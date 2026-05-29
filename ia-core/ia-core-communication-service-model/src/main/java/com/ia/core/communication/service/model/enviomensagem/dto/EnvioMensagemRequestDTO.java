@@ -1,13 +1,13 @@
 package com.ia.core.communication.service.model.enviomensagem.dto;
 
 import com.ia.core.communication.model.mensagem.TipoCanal;
-import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemTranslator;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,17 +17,13 @@ import java.util.Map;
 
 /**
  * DTO para requisição de envio de mensagem em massa.
+ * <p>
+ * Representa os dados de transferência para envio de mensagens,
+ * incluindo tipo de canal, corpo da mensagem, modelo, parâmetros de template,
+ * telefones e grupos de contatos.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o objeto de transferência de dados para envio mensagem request.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EnvioMensagemRequestDTO
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -49,6 +45,7 @@ public class EnvioMensagemRequestDTO implements HasVariavel {
 
   private List<Long> gruposContatoIds;
 
+  @Builder.Default
   private Boolean agendado = false;
 
   private java.time.LocalDateTime dataAgendamento;

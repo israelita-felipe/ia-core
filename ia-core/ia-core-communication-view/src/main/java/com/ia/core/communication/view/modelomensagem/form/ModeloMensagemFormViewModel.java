@@ -10,13 +10,13 @@ import lombok.Getter;
 import java.util.Collections;
 import java.util.List;
 /**
- * Classe que representa o modelo de dados para a view de modelo mensagem form.
+ * Modelo de dados para a view de formulário de modelo de mensagem.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemFormViewModel
- * dentro do sistema.
+ * Responsável por gerenciar os dados e operações do formulário de modelo de mensagem,
+ * incluindo integração com o ModeloMensagemManager e fornecimento de variáveis disponíveis.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ModeloMensagemFormViewModel extends FormViewModel<ModeloMensagemDTO> {

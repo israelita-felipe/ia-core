@@ -84,7 +84,8 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
     D dto = null;
     if (canDelete(id)) {
       try {
-        dto = toDTO(getRepository().findById(id).orElse(null));
+        dto = toDTO(getRepository().findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id)));
         getRepository().deleteById(id);
         afterDelete(id, dto);
       } catch (Exception e) {

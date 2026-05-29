@@ -14,6 +14,8 @@ O projeto ia-core-apps precisa de uma estratégia para testes de interface gráf
 
 O módulo `biblia-test` já possui testes unitários, mas faltam testes de interface que validem o comportamento das Views Vaadin.
 
+**Importante**: Este ADR se aplica aos módulos do ia-core, que funcionam como bibliotecas/framework e não podem compor uma aplicação por si só. Esses módulos são base/framework para construção de outras aplicações, padronizando o desenvolvimento e abstraindo padrões de desenvolvimento. Uma aplicação real é composta pela combinação de múltiplos módulos ia-core mais código específico do domínio da aplicação.
+
 ## Decisões
 
 ### 1. Framework de Testes E2E
@@ -55,18 +57,18 @@ ia-core-view/
 
 ```java
 public class ViewNavigator {
-    
+
     /**
      * Navega para uma rota específica
      * @param route rota Vaadin (ex: "pessoa", "evento")
      */
     public void navigateTo(String route);
-    
+
     /**
      * Verifica se a view atual corresponde à rota esperada
      */
     public boolean isAt(String expectedRoute);
-    
+
     /**
      * Aguarda carregamento completo da view
      */
@@ -80,28 +82,28 @@ public class ViewNavigator {
 
 ```java
 public class PessoaPageObject extends AbstractPageObject {
-    
+
     public PessoaPageObject(VaadinRobot robot) {
         super(robot);
     }
-    
+
     public void open() {
         navigateTo("pessoa");
     }
-    
+
     public void clickNovo() {
         robot.click("btn-novo");
     }
-    
+
     public void fillForm(PessoaDTO dto) {
         robot.fill("field-nome", dto.getNome());
         robot.fill("field-cpf", dto.getCpf());
     }
-    
+
     public void save() {
         robot.click("btn-salvar");
     }
-    
+
     public boolean hasError() {
         return robot.hasElement("error-message");
     }
@@ -115,7 +117,7 @@ public class PessoaPageObject extends AbstractPageObject {
 ```java
 @Configuration
 public class TestBenchConfig {
-    
+
     @Bean
     public WebDriver webDriver() {
         ChromeOptions options = new ChromeOptions();

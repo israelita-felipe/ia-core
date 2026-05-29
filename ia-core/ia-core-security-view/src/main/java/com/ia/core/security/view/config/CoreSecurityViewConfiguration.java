@@ -1,6 +1,7 @@
 package com.ia.core.security.view.config;
 
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.security.service.model.functionality.FunctionalityMapper;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.model.privilege.PrivilegeDTO;
 import com.ia.core.security.service.model.user.UserDTO;
@@ -85,12 +86,14 @@ public abstract class CoreSecurityViewConfiguration {
    *
    * @param service            {@link PrivilegeManager}
    * @param hasFunctionalities Lista de funcionalidades {@link HasFunctionality}
+   * @param functionalityMapper {@link FunctionalityMapper}
    * @return {@link FunctionalityManager}
    */
   @Bean
   static FunctionalityManager functionalityManager(PrivilegeManager service,
-                                                   List<HasFunctionality> hasFunctionalities) {
-    return new DefaultViewFunctionalityManager(service, hasFunctionalities);
+                                                   List<HasFunctionality> hasFunctionalities,
+                                                   FunctionalityMapper functionalityMapper) {
+    return new DefaultViewFunctionalityManager(service, hasFunctionalities, functionalityMapper);
   }
 
   /**

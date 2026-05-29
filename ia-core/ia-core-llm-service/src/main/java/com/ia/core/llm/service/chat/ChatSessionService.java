@@ -1,13 +1,12 @@
 package com.ia.core.llm.service.chat;
 
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
-
 /**
  * Interface para gerenciamento de sessões de chat.
+ * <p>
  * Responsável por gerenciar o estado e histórico de conversas.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface ChatSessionService {
 

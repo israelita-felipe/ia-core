@@ -12,8 +12,13 @@ import java.util.Map;
 
 /**
  * SearchRequest para Mensagem.
+ * <p>
+ * Define os filtros disponíveis para pesquisa de mensagens,
+ * incluindo filtros por telefone destinatário, nome destinatário,
+ * tipo de canal, status da mensagem e ID externo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 class MensagemSearchRequest extends SearchRequestDTO {
 

@@ -4,9 +4,11 @@ import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvi
 
 /**
  * Interface para operações de Vector Store.
+ * <p>
  * Abstração para isolamento de acesso ao vector store.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface VectorStoreOperations {
 

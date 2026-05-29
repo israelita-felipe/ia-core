@@ -2,6 +2,8 @@
 
 Este diretório contém os **Architectural Decision Records** do projeto, documentando as principais decisões de arquitetura tomadas durante o desenvolvimento.
 
+**Importante**: Os ADRs documentam decisões aplicadas aos módulos do **ia-core**, que funcionam como bibliotecas/framework e não podem compor uma aplicação por si só. Esses módulos são base/framework para construção de outras aplicações, padronizando o desenvolvimento e abstraindo padrões de desenvolvimento. Uma aplicação real é composta pela combinação de múltiplos módulos ia-core mais código específico do domínio da aplicação.
+
 ## Índice de ADRs
 
 ### Padrões de Desenvolvimento (001-099)
@@ -35,6 +37,7 @@ Este diretório contém os **Architectural Decision Records** do projeto, docume
 | ADR-024 | [Versionamento de API via URL](024-use-api-versioning-via-url-path.md) | ✅ Aceito | Versionamento explícito |
 | ADR-025 | [Usar Resilience4j](025-use-resilience4j-for-resilience-patterns.md) | ✅ Aceito | Circuit breaker, retry, rate limiter |
 | ADR-028 | [Usar JWT para Autenticação](028-use-jwt-for-stateless-authentication.md) | ✅ Aceito | Autenticação stateless |
+| ADR-048 | [Embarcar IA com MCP, Skills e Spring AI](048-embed-ai-mcp-skills-spring-ai.md) | 🔄 Proposto | Spring AI 2.0, MCP, tool calling, skills e orquestração |
 
 ### Qualidade e Metodologia (300-599)
 
@@ -120,4 +123,4 @@ Para revisar, crie um novo ADR referenciando o anterior.
 
 ---
 
-**Última Atualização:** 2026-05-06
+**Última Atualização:** 2026-05-25

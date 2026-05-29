@@ -1,6 +1,42 @@
+# --- Perfil lógico do módulo Quartz com MCP ---
+ia-core:
+  llm:
+    enabled: true
+    security:
+      protected-paths:
+        - /mcp/**
+        - /.well-known/agent-card.json
+    agent:
+      orchestrator-id: ia-core-orchestrator
+      tool-scan-packages:
+        - com.ia.core.quartz.service
+    skill:
+      progressive-disclosure: true
+    ferramenta:
+      discovery:
+        enabled: true
+        scan-packages:
+          - com.ia.core.quartz.service
+        refresh-on-startup: true
+
 spring:
   quartz:
     job-store-type: jdbc
     jdbc:
       initialize-schema: always # Use 'embedded' for H2 or 'never' in production
     overwrite-existing-jobs: true
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: ia-core-quartz
+        version: 1.0.0
+        sse-endpoint: /mcp/sse
+        path: /mcp
+        agent-card:
+          enabled: true
+          path: /.well-known/agent-card.json
+      tools:
+        usecase-scan:
+          enabled: true
+          base_package: com.ia.core.quartz.service

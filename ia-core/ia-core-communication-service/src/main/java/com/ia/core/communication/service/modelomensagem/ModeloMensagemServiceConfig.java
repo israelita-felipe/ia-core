@@ -6,7 +6,7 @@ import com.ia.core.communication.service.contatomensagem.ContatoMensagemReposito
 import com.ia.core.communication.service.mensagem.MensagemService;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.communication.service.model.modelomensagem.dto.ProcessadorVariaveis;
-import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -22,23 +22,19 @@ import java.util.List;
 
 /**
  * Configuração de injeção de dependência para ModeloMensagemService.
+ * <p>
+ * Centraliza todas as dependências necessárias para o funcionamento
+ * do serviço de modelos de mensagem, incluindo repositórios, processador
+ * de variáveis e serviços de segurança.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa as configurações para modelo mensagem service.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemServiceConfig
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Getter
 @Component
 public class ModeloMensagemServiceConfig
   extends
-  DefaultSecuredBaseServiceConfig<ModeloMensagem, ModeloMensagemDTO> {
+    CrudSecuredBaseServiceConfig<ModeloMensagem, ModeloMensagemDTO> {
 
   private final MensagemService mensagemService;
   private final ContatoMensagemRepository contatoMensagemRepository;

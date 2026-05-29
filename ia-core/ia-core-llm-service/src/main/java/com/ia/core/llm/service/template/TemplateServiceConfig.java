@@ -2,7 +2,7 @@ package com.ia.core.llm.service.template;
 
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
+import com.ia.core.service.CrudBaseService.CrudBaseServiceConfig;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Classe de configuração para template service.
+ * Configuração de injeção de dependência para TemplateService.
  * <p>
- * Responsável por gerenciar as dependências e configurações do TemplateService.
+ * Fornece as dependências necessárias para o serviço de templates.
  *
  * @author Israel Araújo
- * @since 1.0
+ * @since 1.0.0
  */
 @Component
 public class TemplateServiceConfig
-  extends DefaultBaseServiceConfig<Template, TemplateDTO> {
+  extends CrudBaseServiceConfig<Template, TemplateDTO> {
 
   /**
    * Construtor da configuração do serviço de template.

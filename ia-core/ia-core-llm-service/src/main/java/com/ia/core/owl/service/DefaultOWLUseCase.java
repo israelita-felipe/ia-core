@@ -16,6 +16,7 @@ import java.util.Set;
  * de ontologias OWL.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface DefaultOWLUseCase {
 

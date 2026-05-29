@@ -14,9 +14,13 @@ import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Formulário de Mensagens.
- * Segue o padrão de implementação com métodos separados para criação de campos.
+ * <p>
+ * Segue o padrão de implementação com métodos separados para criação de campos,
+ * incluindo telefone destinatário, nome destinatário, corpo da mensagem,
+ * tipo de canal e status. Inclui sidebar auxiliar para inserção de variáveis.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class MensagemFormView extends FormView<MensagemDTO> {
 

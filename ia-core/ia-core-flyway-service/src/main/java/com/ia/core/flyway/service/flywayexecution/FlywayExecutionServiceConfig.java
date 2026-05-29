@@ -2,7 +2,7 @@ package com.ia.core.flyway.service.flywayexecution;
 
 import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
-import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -18,13 +18,13 @@ import java.util.List;
  * Configuração de injeção de dependência para FlywayExecutionService.
  * <p>
  * Extende DefaultSecuredBaseServiceConfig para seguir os padrões do ia-core.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class FlywayExecutionServiceConfig
   extends
-  DefaultSecuredBaseServiceConfig<FlywayExecution, FlywayExecutionDTO> {
+    CrudSecuredBaseServiceConfig<FlywayExecution, FlywayExecutionDTO> {
 
   /**
    * @param repository             repositório da entidade

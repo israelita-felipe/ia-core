@@ -17,8 +17,12 @@ import java.util.List;
 
 /**
  * Página principal para visualização de Mensagens.
+ * <p>
+ * Responsável por gerenciar a interface visual da página de mensagem,
+ * incluindo criação de formulários, listas e ação de envio de mensagem.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class MensagemPageView
   extends PageView<MensagemDTO> {

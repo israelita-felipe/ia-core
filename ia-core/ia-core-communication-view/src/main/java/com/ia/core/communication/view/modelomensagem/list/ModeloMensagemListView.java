@@ -4,13 +4,13 @@ import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagem
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 /**
- * Classe que representa a interface visual para modelo mensagem list.
+ * Interface visual para lista de modelos de mensagens.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemListView
- * dentro do sistema.
+ * Responsável por gerenciar a exibição de modelos de mensagens em formato de lista,
+ * incluindo configuração de colunas para nome, descrição, tipo de canal e status ativo.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ModeloMensagemListView extends ListView<ModeloMensagemDTO> {

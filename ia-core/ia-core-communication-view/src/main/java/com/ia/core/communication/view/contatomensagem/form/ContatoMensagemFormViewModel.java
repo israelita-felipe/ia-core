@@ -5,13 +5,13 @@ import com.ia.core.communication.view.contatomensagem.ContatoMensagemManager;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import lombok.Getter;
 /**
- * Classe que representa o modelo de dados para a view de contato mensagem form.
+ * Modelo de dados para a view de formulário de contato de mensagem.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ContatoMensagemFormViewModel
- * dentro do sistema.
+ * Responsável por gerenciar os dados e operações do formulário de contato de mensagem,
+ * incluindo integração com o ContatoMensagemManager.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ContatoMensagemFormViewModel extends FormViewModel<ContatoMensagemDTO> {

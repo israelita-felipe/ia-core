@@ -52,4 +52,19 @@ public interface FunctionalityManager {
 
   Set<Functionality> getFunctionalities();
 
+        /**
+         * Combines functionalities from multiple suppliers.
+         *
+         * @param suppliers stream of suppliers providing sets of functionalities
+         * @return combined set of functionalities
+         */
+
+
+    public static Set<Functionality> combine(java.util.function.Supplier<Set<Functionality>>... suppliers) {
+        Set<Functionality> result = new HashSet<>();
+        for (java.util.function.Supplier<Set<Functionality>> supplier : suppliers) {
+            result.addAll(supplier.get());
+        }
+        return result;
+    }
 }

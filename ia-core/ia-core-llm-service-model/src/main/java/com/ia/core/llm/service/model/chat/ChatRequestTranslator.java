@@ -21,7 +21,7 @@ public final class ChatRequestTranslator {
      */
     public static final class HELP {
         public static final String CHAT_REQUEST = "chat.request.help";
-        public static final String COMANDO_SISTEMA_ID = "chat.request.help.comando.sistema.id";
+        public static final String PROMPT_ID = "chat.request.help.prompt.id";
         public static final String REQUEST = "chat.request.help.request";
         public static final String TEXT = "chat.request.help.text";
     }
@@ -35,7 +35,7 @@ public final class ChatRequestTranslator {
      * Field name constants
      */
     public static final String CHAT_REQUEST = "chat.request";
-    public static final String COMANDO_SISTEMA_ID = "chat.request.comando.sistema.id";
+    public static final String PROMPT_ID = "chat.request.prompt.id";
     public static final String REQUEST = "chat.request.request";
     public static final String TEXT = "chat.request.text";
 
@@ -51,7 +51,7 @@ public final class ChatRequestTranslator {
      * Business rule message keys
      */
     public static final class RULE {
-        public static final String COMANDO_INVALIDO = "chat.request.rule.comando.invalido";
+        public static final String PROMPT_INVALIDO = "chat.request.rule.prompt.invalido";
         public static final String CONTEXTO_OBRIGATORIO = "chat.request.rule.contexto.obrigatorio";
     }
 

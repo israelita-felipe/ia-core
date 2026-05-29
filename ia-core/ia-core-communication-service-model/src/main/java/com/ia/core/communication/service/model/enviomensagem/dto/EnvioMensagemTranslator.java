@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.model.enviomensagem.dto;
 
 /**
- * Translator constants for EnvioMensagem (Message Sending) DTO.
+ * Constantes de tradução para EnvioMensagemDTO.
  * <p>
- * Contains constants for i18n keys, validation messages, and field names
- * used throughout the EnvioMensagem DTO processing pipeline.
+ * Contém constantes para chaves i18n, mensagens de validação e nomes de campos
+ * utilizados no pipeline de processamento do DTO de EnvioMensagem.
  *
  * @author Israel Araújo
  * @since 1.0.0

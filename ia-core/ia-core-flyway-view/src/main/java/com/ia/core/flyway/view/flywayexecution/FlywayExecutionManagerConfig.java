@@ -8,8 +8,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * Configuração de injeção de dependência para FlywayExecutionManager.
+ * <p>
+ * Fornece as dependências necessárias para o manager, incluindo o cliente
+ * Feign e o gerenciador de autorizações.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Getter
 @Component

@@ -3,8 +3,6 @@ package com.ia.core.communication.view.mensagem;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemRequestDTO;
 import com.ia.core.communication.service.model.enviomensagem.dto.EnvioMensagemResponseDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * Cliente Feign para operações de Mensagem.
  * <p>
- * Define os endpoints disponíveis para o caso de uso de Mensagem.
+ * Define os endpoints disponíveis para o caso de uso de Mensagem,
+ * incluindo envio individual e envio em massa.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @FeignClient(name = MensagemClient.NOME, url = MensagemClient.URL)

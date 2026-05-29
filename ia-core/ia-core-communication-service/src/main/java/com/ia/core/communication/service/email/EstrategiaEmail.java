@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 
 /**
  * Estratégia de envio para E-mail.
+ * <p>
+ * Implementa a estratégia específica para envio de mensagens através
+ * do canal E-mail, validando os requisitos específicos deste canal
+ * e processando o resultado do envio.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa os serviços de negócio para estrategia email.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EstrategiaEmail
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Slf4j
 @Component

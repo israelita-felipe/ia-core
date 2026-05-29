@@ -5,13 +5,13 @@ import com.ia.core.communication.view.modelomensagem.ModeloMensagemManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import lombok.Getter;
 /**
- * Classe que representa as configurações para modelo mensagem form view model.
+ * Configurações para o ViewModel do formulário de modelo de mensagem.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemFormViewModelConfig
- * dentro do sistema.
+ * Responsável por fornecer as dependências necessárias para o ViewModel,
+ * incluindo o ModeloMensagemManager.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class ModeloMensagemFormViewModelConfig extends FormViewModelConfig<ModeloMensagemDTO> {

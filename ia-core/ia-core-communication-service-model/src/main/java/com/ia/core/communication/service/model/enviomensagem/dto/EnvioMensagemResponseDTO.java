@@ -10,17 +10,12 @@ import java.util.List;
 
 /**
  * DTO para resposta de envio de mensagem em massa.
+ * <p>
+ * Representa os dados de transferência para resposta de envio de mensagens,
+ * incluindo total de enviados, total de falhas, mensagens de falha, data e status geral.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa o objeto de transferência de dados para envio mensagem response.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a EnvioMensagemResponseDTO
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @Data
 @Builder
@@ -46,6 +41,16 @@ public class EnvioMensagemResponseDTO {
     return EnvioMensagemResponseDTO.builder()
         .totalEnviados(enviados)
         .totalFalhas(falhas)
+        .mensagensFalhas(falhasList)
+        .dataEnvio(LocalDateTime.now())
+        .statusGeral("PARCIAL")
+        .build();
+  }
+
+  public static EnvioMensagemResponseDTO comFalhas(int enviados, List<String> falhasList) {
+    return EnvioMensagemResponseDTO.builder()
+        .totalEnviados(enviados)
+        .totalFalhas(falhasList.size())
         .mensagensFalhas(falhasList)
         .dataEnvio(LocalDateTime.now())
         .statusGeral("PARCIAL")

@@ -5,9 +5,14 @@ import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 
 /**
- * Lista de Mensagens.
+ * Interface visual para lista de mensagens.
+ * <p>
+ * Responsável por gerenciar a exibição de mensagens em formato de lista,
+ * incluindo configuração de colunas para telefone destinatário, nome destinatário,
+ * tipo de canal, status da mensagem e data de envio.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class MensagemListView
   extends ListView<MensagemDTO> {

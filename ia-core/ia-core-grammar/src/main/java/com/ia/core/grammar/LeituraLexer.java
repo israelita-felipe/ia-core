@@ -11,13 +11,13 @@ import org.antlr.v4.runtime.dfa.DFA;
 @SuppressWarnings({ "all", "warnings", "unchecked", "unused", "cast",
     "CheckReturnValue", "this-escape" })
 /**
- * Classe que representa leitura lexer no sistema.
+ * Lexer ANTLR para gramática de leitura bíblica.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LeituraLexer
- * dentro do sistema.
+ * Classe gerada automaticamente pelo ANTLR 4.13.2 a partir do arquivo Leitura.g4.
+ * Responsável por fazer a análise léxica de referências bíblicas.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 public class LeituraLexer
   extends Lexer {

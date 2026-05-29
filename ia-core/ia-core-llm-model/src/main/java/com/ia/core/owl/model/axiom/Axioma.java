@@ -10,13 +10,13 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Classe que representa a entidade de domínio axioma.
+ * Entidade de domínio que representa um axioma OWL.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a Axioma
- * dentro do sistema.
+ * Responsável por gerenciar axiomas da ontologia, incluindo URI, versão,
+ * prefixo, expressão e flags de consistência, inferência e atividade.
  *
  * @author Israel Araújo
- * @since 1.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = Axioma.TABLE_NAME, schema = Axioma.SCHEMA_NAME)
@@ -57,14 +57,17 @@ public class Axioma
 
   /** Flag indicativa de consistência */
   @Column(name = "consistente", nullable = false, length = 1)
+  @Builder.Default
   private Boolean consistente = true;
 
   /** Flag indicativa de inferência */
   @Column(name = "inferido", nullable = false, length = 1)
+  @Builder.Default
   private Boolean inferido = false;
 
   /** Flag indicativa de atividade */
   @Column(name = "ativo", nullable = false, length = 1)
+  @Builder.Default
   private Boolean ativo = true;
 
 }

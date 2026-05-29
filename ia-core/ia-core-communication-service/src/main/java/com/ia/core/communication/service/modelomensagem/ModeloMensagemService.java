@@ -4,7 +4,7 @@ import com.ia.core.communication.model.mensagem.ModeloMensagem;
 import com.ia.core.communication.service.model.modelomensagem.ModeloMensagemUseCase;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemTranslator;
-import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.security.service.CrudSecuredBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensag
 @Slf4j
 @Service
 public class ModeloMensagemService
-  extends DefaultSecuredBaseService<ModeloMensagem, ModeloMensagemDTO>
+  extends CrudSecuredBaseService<ModeloMensagem, ModeloMensagemDTO>
   implements ModeloMensagemUseCase {
 
   public ModeloMensagemService(ModeloMensagemServiceConfig config) {

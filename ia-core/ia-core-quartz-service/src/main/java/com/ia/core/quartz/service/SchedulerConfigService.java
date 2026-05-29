@@ -12,17 +12,18 @@ import com.ia.core.quartz.service.model.scheduler.dto.SchedulerConfigTranslator;
 import com.ia.core.quartz.service.model.scheduler.dto.triggers.SchedulerConfigTriggerDTO;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
-import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.security.service.CrudSecuredBaseService;
 import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.exception.ServiceException;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class SchedulerConfigService
-  extends DefaultSecuredBaseService<SchedulerConfig, SchedulerConfigDTO>
+  extends CrudSecuredBaseService<SchedulerConfig, SchedulerConfigDTO>
   implements SchedulerUseCase, QuartzJobUseCase {
 
   /**
@@ -62,17 +63,7 @@ public class SchedulerConfigService
     super(config);
   }
 
-  /**
-   * Inicializa o serviço após construção do bean. Configura listeners e agenda
-   * jobs ativos.
-   */
-  @PostConstruct
-  @Override
-  public void baseServiceInit() {
-    super.baseServiceInit();
-    // criarListeners();
-    // agendarJobs();
-  }
+
 
   /**
    * Cria e registra os listeners para jobs e triggers no scheduler Quartz.
@@ -395,6 +386,11 @@ public class SchedulerConfigService
    * @return lista de jobs ativos
    */
   @Override
+  @Tool(description = "Busca todas as configurações de scheduler ativas no sistema. " +
+             "Retorna uma lista de configurações de agendamento que estão atualmente habilitadas para execução. " +
+             "Cada configuração inclui informações sobre o job, periodicidade, triggers e estado atual. " +
+             "Útil para visualizar quais jobs estão programados para execução automática.")
+  @Resilient(ResilienceProfile.DATABASE)
   public List<SchedulerConfigDTO> findAtivos() {
     return findAllActive(true);
   }
@@ -628,6 +624,12 @@ public class SchedulerConfigService
   // ========================================================================
 
   @Override
+  @Tool(description = "Lista todos os jobs registrados no scheduler Quartz, independentemente do grupo. " +
+             "Retorna uma lista completa de jobs com informações detalhadas incluindo nome, grupo, " +
+             "classe do job, estado atual, próxima execução e dados do job. " +
+             "Útil para auditoria, monitoramento e diagnóstico do sistema de agendamento. " +
+             "Inclui jobs de todos os grupos configurados no scheduler.")
+  @Resilient(ResilienceProfile.DATABASE)
   public List<QuartzJobDTO> findAllJobs() {
     List<QuartzJobDTO> jobs = new ArrayList<>();
     try {
@@ -659,7 +661,17 @@ public class SchedulerConfigService
   }
 
   @Override
-  public QuartzJobDTO findJob(String jobName, String jobGroup) {
+  @Tool(description = "Busca um job específico no scheduler Quartz pelo nome e grupo. " +
+             "Retorna informações detalhadas do job incluindo estado atual, próxima execução, " +
+             "classe do job, durabilidade e dados associados. " +
+             "Útil para inspecionar configurações específicas de agendamento e diagnosticar problemas. " +
+             "Retorna null se o job não for encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public QuartzJobDTO findJob(
+          @ToolParam(description = "Nome único do job a ser buscado no scheduler (String, obrigatório). " +
+                          "Identifica o job dentro do grupo especificado.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job a ser buscado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence.", required = true) String jobGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -676,7 +688,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean pauseJob(String jobName, String jobGroup) {
+  @Tool(description = "Pausa um job específico no scheduler Quartz, interrompendo temporariamente sua execução agendada. " +
+             "O job permanece registrado no scheduler mas não será disparado até ser retomado. " +
+             "Útil para manutenções ou quando necessário interromper temporariamente um processo automatizado. " +
+             "Retorna true se o job foi pausado com sucesso, false se o job não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean pauseJob(
+          @ToolParam(description = "Nome único do job a ser pausado no scheduler (String, obrigatório). " +
+                          "Geralmente corresponde ao ID da configuração do scheduler.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job a ser pausado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence para organização.", required = true) String jobGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -697,7 +718,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean resumeJob(String jobName, String jobGroup) {
+  @Tool(description = "Retoma a execução de um job previamente pausado no scheduler Quartz. " +
+             "Restaura o agendamento normal do job, permitindo que seja disparado novamente conforme sua periodicidade. " +
+             "Útil para reativar processos automatizados após manutenção ou interrupção temporária. " +
+             "Retorna true se o job foi retomado com sucesso, false se o job não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean resumeJob(
+          @ToolParam(description = "Nome único do job a ser retomado no scheduler (String, obrigatório). " +
+                          "Deve corresponder a um job previamente pausado.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job a ser retomado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence.", required = true) String jobGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -718,7 +748,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean deleteJob(String jobName, String jobGroup) {
+  @Tool(description = "Remove permanentemente um job do scheduler Quartz, incluindo todos os seus triggers associados. " +
+             "Esta operação é irreversível e cancela todas as execuções futuras do job. " +
+             "Útil para limpar jobs obsoletos ou incorretamente configurados. " +
+             "Retorna true se o job foi removido com sucesso, false se o job não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean deleteJob(
+          @ToolParam(description = "Nome único do job a ser removido do scheduler (String, obrigatório). " +
+                          "Identifica o job que deve ser excluído permanentemente.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job a ser removido (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence.", required = true) String jobGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -741,7 +780,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean triggerJob(String jobName, String jobGroup) {
+  @Tool(description = "Dispara imediatamente a execução de um job no scheduler Quartz, ignorando seu agendamento normal. " +
+             "Força a execução única do job independentemente de sua periodicidade configurada. " +
+             "Útil para testes, execuções manuais ou quando necessário antecipar uma tarefa. " +
+             "Não afeta o agendamento futuro do job. Retorna true se o job foi disparado com sucesso, false se o job não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean triggerJob(
+          @ToolParam(description = "Nome único do job a ser disparado no scheduler (String, obrigatório). " +
+                          "Identifica o job que deve ser executado imediatamente.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job a ser disparado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence.", required = true) String jobGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
@@ -762,8 +810,17 @@ public class SchedulerConfigService
   }
 
   @Override
-  public List<QuartzJobTriggerDTO> findTriggersOfJob(String jobName,
-                                                     String jobGroup) {
+  @Tool(description = "Busca todos os triggers associados a um job específico no scheduler Quartz. " +
+             "Retorna uma lista de triggers com informações detalhadas incluindo estado, " +
+             "próxima execução, execução anterior, prioridade e instruções de misfire. " +
+             "Útil para entender o agendamento e histórico de execução de um job. " +
+             "Um job pode ter múltiplos triggers com diferentes periodicidades.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public List<QuartzJobTriggerDTO> findTriggersOfJob(
+          @ToolParam(description = "Nome único do job para buscar os triggers (String, obrigatório). " +
+                          "Identifica o job cujos triggers devem ser listados.", required = true) String jobName,
+          @ToolParam(description = "Grupo do job para buscar os triggers (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o job pertence.", required = true) String jobGroup) {
     List<QuartzJobTriggerDTO> triggers = new ArrayList<>();
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
@@ -786,6 +843,12 @@ public class SchedulerConfigService
   }
 
   @Override
+  @Tool(description = "Lista todos os jobs que estão atualmente em execução no scheduler Quartz. " +
+             "Retorna informações sobre cada instância em execução incluindo ID da instância, " +
+             "tempo de disparo, tempo agendado, dados do job e se está em recuperação. " +
+             "Útil para monitoramento em tempo real, diagnóstico de problemas de performance " +
+             "e verificação se jobs estão travados ou demorando mais que o esperado.")
+  @Resilient(ResilienceProfile.DATABASE)
   public List<QuartzJobInstanceDTO> findCurrentlyExecutingJobs() {
     List<QuartzJobInstanceDTO> instances = new ArrayList<>();
     try {
@@ -806,7 +869,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean pauseTrigger(String triggerName, String triggerGroup) {
+  @Tool(description = "Pausa um trigger específico no scheduler Quartz, interrompendo temporariamente seu disparo. " +
+             "O trigger permanece registrado mas não disparará o job até ser retomado. " +
+             "Útil para interromper temporariamente um agendamento específico sem afetar outros triggers do mesmo job. " +
+             "Retorna true se o trigger foi pausado com sucesso, false se o trigger não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean pauseTrigger(
+          @ToolParam(description = "Nome único do trigger a ser pausado no scheduler (String, obrigatório). " +
+                          "Identifica o trigger que deve ser interrompido temporariamente.", required = true) String triggerName,
+          @ToolParam(description = "Grupo do trigger a ser pausado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o trigger pertence.", required = true) String triggerGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       TriggerKey triggerKey = TriggerKey.triggerKey(triggerName,
@@ -825,7 +897,16 @@ public class SchedulerConfigService
   }
 
   @Override
-  public boolean resumeTrigger(String triggerName, String triggerGroup) {
+  @Tool(description = "Retoma a execução de um trigger previamente pausado no scheduler Quartz. " +
+             "Restaura o agendamento normal do trigger, permitindo que dispare o job novamente conforme sua periodicidade. " +
+             "Útil para reativar um agendamento específico após manutenção ou interrupção temporária. " +
+             "Retorna true se o trigger foi retomado com sucesso, false se o trigger não foi encontrado.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public boolean resumeTrigger(
+          @ToolParam(description = "Nome único do trigger a ser retomado no scheduler (String, obrigatório). " +
+                          "Deve corresponder a um trigger previamente pausado.", required = true) String triggerName,
+          @ToolParam(description = "Grupo do trigger a ser retomado (String, obrigatório). " +
+                          "Define o grupo lógico ao qual o trigger pertence.", required = true) String triggerGroup) {
     try {
       Scheduler scheduler = getConfig().getQuartzScheduler();
       TriggerKey triggerKey = TriggerKey.triggerKey(triggerName,

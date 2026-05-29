@@ -17,13 +17,18 @@ import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemTranslator;
 import com.ia.core.communication.service.model.modelomensagem.dto.ProcessadorVariaveis;
 import com.ia.core.communication.service.modelomensagem.ModeloMensagemRepository;
-import com.ia.core.security.service.DefaultSecuredBaseService;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
+import com.ia.core.security.service.CrudSecuredBaseService;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -37,7 +42,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class MensagemService
-  extends DefaultSecuredBaseService<Mensagem, MensagemDTO>
+  extends CrudSecuredBaseService<Mensagem, MensagemDTO>
   implements MensagemUseCase {
 
     /**
@@ -80,7 +85,15 @@ public class MensagemService
   }
 
   @Override
-  public MensagemDTO enviar(MensagemDTO dto) {
+  @Tool(description = "Envia uma mensagem através do canal especificado (Email, SMS, WhatsApp, Telegram). " +
+             "Processa a mensagem através da estratégia de envio apropriada para o tipo de canal. " +
+             "Salva a mensagem no banco de dados antes do envio e atualiza o status após o envio. " +
+             "Útil para envio de mensagens individuais com rastreamento de status. " +
+             "Retorna a mensagem com status atualizado (PENDENTE, ENVIADA ou FALHA).")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public MensagemDTO enviar(
+          @ToolParam(description = "Dados da mensagem a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui tipoCanal (EMAIL, SMS, WHATSAPP, TELEGRAM), telefoneDestinatario e corpoMensagem.", required = true) MensagemDTO dto) {
     log.info("Enviando mensagem via {} para {}", dto.getTipoCanal(),
              dto.getTelefoneDestinatario());
 
@@ -101,16 +114,42 @@ public class MensagemService
       log.error("Erro ao enviar mensagem: {}", e.getMessage());
       saved.setStatusMensagem(StatusMensagem.FALHA);
       saved.setMotivoFalha(e.getMessage());
+      saved = save(saved);
     }
     return saved;
   }
 
   @Override
-  public EnvioMensagemResponseDTO enviarEmMassa(EnvioMensagemRequestDTO request) {
-    log.info("Enviando {} mensagens em massa",
-             request.getTelefones().size());
-    // Implementação do envio em massa
-    return EnvioMensagemResponseDTO.sucesso(request.getTelefones().size());
+  @Tool(description = "Envia mensagens em massa para uma lista de destinatários através do canal especificado. " +
+             "Processa cada mensagem individualmente e retorna um resumo do envio com total de mensagens e detalhes de falhas. " +
+             "Útil para campanhas de comunicação, notificações em lote e broadcasts. " +
+             "Retorna resposta com quantidade de envios bem-sucedidos e lista de falhas se houver.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public EnvioMensagemResponseDTO enviarEmMassa(
+          @ToolParam(description = "Dados do envio em massa (EnvioMensagemRequestDTO, obrigatório). " +
+                          "Inclui tipoCanal, corpoMensagem e lista de telefones dos destinatários.", required = true) EnvioMensagemRequestDTO request) {
+    Objects.requireNonNull(request, "Request não pode ser null");
+    Objects.requireNonNull(request.getTelefones(), "Lista de telefones não pode ser null");
+    log.info("Enviando {} mensagens em massa", request.getTelefones().size());
+    List<String> falhas = new ArrayList<>();
+
+    for (String telefone : request.getTelefones()) {
+      try {
+        MensagemDTO mensagemDTO = new MensagemDTO();
+        mensagemDTO.setTipoCanal(request.getTipoCanal());
+        mensagemDTO.setTelefoneDestinatario(telefone);
+        mensagemDTO.setCorpoMensagem(request.getCorpoMensagem());
+        this.enviar(mensagemDTO);
+      } catch (Exception e) {
+        falhas.add("Telefone " + telefone + ": " + e.getMessage());
+      }
+    }
+
+    if (falhas.isEmpty()) {
+      return EnvioMensagemResponseDTO.sucesso(request.getTelefones().size());
+    } else {
+      return EnvioMensagemResponseDTO.comFalhas(request.getTelefones().size() - falhas.size(), falhas);
+    }
   }
 
   public Optional<Mensagem> findByIdExterno(String idExterno) {
@@ -128,14 +167,30 @@ public class MensagemService
      * @param grupoId grupo contendo contatos e modelo de mensagem
      * @return mensagem de sucesso ou detalhes das falhas
      */
-  public String enviarBatch(Long modeloId, Long grupoId) {
+  @Tool(description = "Envia mensagens em lote para todos os contatos de um grupo usando um modelo de mensagem. " +
+             "Processa variáveis do modelo para cada contato individualmente, permitindo personalização. " +
+             "Útil para campanhas personalizadas, newsletters e comunicações direcionadas. " +
+             "Retorna mensagem de sucesso ou lista de falhas por contato.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public String enviarBatch(
+          @ToolParam(description = "ID do modelo de mensagem a ser usado (Long, obrigatório). " +
+                          "Identifica o template com variáveis a serem processadas.", required = true) Long modeloId,
+          @ToolParam(description = "ID do grupo de contatos (Long, obrigatório). " +
+                          "Identifica o grupo contendo os destinatários.", required = true) Long grupoId) {
+    Objects.requireNonNull(modeloId, "Modelo ID não pode ser null");
+    Objects.requireNonNull(grupoId, "Grupo ID não pode ser null");
     ModeloMensagem modeloMensagem = getModeloMensagemRepository().findById(modeloId)
         .orElseThrow(() -> new ServiceException("Modelo de mensagem não encontrado"));
     GrupoContato grupo = getGrupoContatoRepository().findById(grupoId)
         .orElseThrow(() -> new ServiceException("Grupo não encontrado"));
     List<String> falhas = new ArrayList<>();
 
-    for (ContatoMensagem contato : grupo.getContatos()) {
+    List<ContatoMensagem> contatos = grupo.getContatos();
+    if (contatos == null || contatos.isEmpty()) {
+      return "Batch enviado com sucesso (nenhum contato no grupo)";
+    }
+
+    for (ContatoMensagem contato : contatos) {
       try {
         // Converter entidade para DTO (que implementa HasVariavel)
         ContatoMensagemDTO contatoDTO = getContatoMensagemMapper().toDTO(contato);

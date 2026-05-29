@@ -2,8 +2,8 @@ package com.ia.core.security.service.functionality;
 
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.model.privilege.Privilege;
-import com.ia.core.security.model.privilege.PrivilegeType;
 import com.ia.core.security.service.model.functionality.FunctionalityManager;
+import com.ia.core.security.service.model.functionality.FunctionalityMapper;
 import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.security.service.privilege.PrivilegeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,20 @@ public class DefaultFunctionalityManager
   /** Serviço de privilégios */
   private final PrivilegeRepository privilegeRepository;
 
+  /** Mapper de funcionalidade */
+  private final FunctionalityMapper functionalityMapper;
+
   /**
+   * @param privilegeService
    * @param services
+   * @param functionalityMapper
    */
   public DefaultFunctionalityManager(PrivilegeRepository privilegeService,
-                                     Collection<HasFunctionality> services) {
+                                     Collection<HasFunctionality> services,
+                                     FunctionalityMapper functionalityMapper) {
     super();
     this.privilegeRepository = privilegeService;
+    this.functionalityMapper = functionalityMapper;
     registryFunctionalities(services);
   }
 
@@ -39,33 +46,17 @@ public class DefaultFunctionalityManager
         privilegeRepository.save(Privilege.builder()
             .name(functionality.getName()).type(functionality.getType())
             .values(functionality.getValues()).build());
-      } catch (Exception e) {
-        log.error(e.getLocalizedMessage(), e);
+      } catch (org.springframework.dao.DataAccessException e) {
+        log.error("Failed to save privilege: {}", e.getLocalizedMessage(), e);
       }
     }
   }
 
   @Override
   public Set<Functionality> getFunctionalities() {
-    return this.privilegeRepository.findAll().stream().map(privilege -> {
-      return new Functionality() {
-
-        @Override
-        public Set<String> getValues() {
-          return privilege.getValues();
-        }
-
-        @Override
-        public PrivilegeType getType() {
-          return privilege.getType();
-        }
-
-        @Override
-        public String getName() {
-          return privilege.getName();
-        }
-      };
-    }).collect(Collectors.toUnmodifiableSet());
+    return this.privilegeRepository.findAll().stream()
+        .map(functionalityMapper::toFunctionality)
+        .collect(Collectors.toUnmodifiableSet());
   }
 
   /**

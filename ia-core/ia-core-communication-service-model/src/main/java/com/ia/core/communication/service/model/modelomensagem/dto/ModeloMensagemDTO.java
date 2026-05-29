@@ -19,8 +19,12 @@ import java.util.Set;
 
 /**
  * DTO para a entidade ModeloMensagem.
+ * <p>
+ * Representa os dados de transferência para modelos de mensagens,
+ * incluindo nome, descrição, corpo do modelo com variáveis e tipo de canal.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)

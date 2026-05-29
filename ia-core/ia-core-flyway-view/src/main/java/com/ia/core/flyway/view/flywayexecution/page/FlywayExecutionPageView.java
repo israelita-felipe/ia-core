@@ -17,9 +17,9 @@ import java.util.List;
  * <p>
  * Esta página exibe uma lista de todas as migrações do Flyway, com suporte para
  * filtrar por execuções bem-sucedidas ou falhadas.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class FlywayExecutionPageView
   extends PageView<FlywayExecutionDTO> {

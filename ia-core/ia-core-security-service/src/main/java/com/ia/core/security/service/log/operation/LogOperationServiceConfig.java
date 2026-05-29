@@ -2,7 +2,7 @@ package com.ia.core.security.service.log.operation;
 
 import com.ia.core.security.model.log.operation.LogOperation;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
-import com.ia.core.service.DefaultBaseService.DefaultBaseServiceConfig;
+import com.ia.core.service.CrudBaseService.CrudBaseServiceConfig;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -24,7 +24,7 @@ import java.util.List;
 
 @Component
 public class LogOperationServiceConfig
-  extends DefaultBaseServiceConfig<LogOperation, LogOperationDTO> {
+  extends CrudBaseServiceConfig<LogOperation, LogOperationDTO> {
 
   /**
    * @param repository

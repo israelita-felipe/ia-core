@@ -2,7 +2,7 @@ package com.ia.core.llm.view.chat;
 
 import com.ia.core.llm.service.model.chat.ChatRequestTranslator;
 import com.ia.core.llm.service.model.chat.ChatTranslator;
-import com.ia.core.llm.service.model.comando.ComandoSistemaDTO;
+import com.ia.core.llm.service.model.prompt.PromptDTO;
 import com.ia.core.view.components.dialog.DialogHeaderBar;
 import com.ia.core.view.components.properties.*;
 import com.ia.core.view.properties.HasErrorHandle;
@@ -44,7 +44,7 @@ public class ChatDialog
   private TextArea responseField;
   private TextArea askField;
   private FlexLayout askLayout;
-  private ComboBox<ComandoSistemaDTO> finalidadeField;
+  private ComboBox<PromptDTO> promptField;
   @Getter
   private Binder<ChatDialogViewModel> binder;
 
@@ -69,15 +69,15 @@ public class ChatDialog
     createAskLayout();
     bind(binder -> {
       binder
-          .forField(createFinalidadeField($(ChatRequestTranslator.REQUEST),
-                                          $(ChatRequestTranslator.HELP.REQUEST),
-                                          DataProviderFactory
-                                              .createBaseDataProviderFromManager(getViewModel()
-                                                  .getConfig()
-                                                  .getComandoSistemaService(), ComandoSistemaDTO.propertyFilters()),
-                                          ComandoSistemaDTO::getTitulo))
-          .withConverter(createComandoSistemaDTOToUUIDConverter())
-          .bind(parseProperty("comandoSistemaID"));
+          .forField(createPromptField($(ChatRequestTranslator.REQUEST),
+                                      $(ChatRequestTranslator.HELP.REQUEST),
+                                      DataProviderFactory
+                                          .createBaseDataProviderFromManager(getViewModel()
+                                              .getConfig()
+                                              .getPromptService(), PromptDTO.propertyFilters()),
+                                      PromptDTO::getTitulo))
+          .withConverter(createPromptDTOToIdConverter())
+          .bind(parseProperty("promptId"));
     });
     bind("request", createAskField($(ChatRequestTranslator.REQUEST),
                                    $(ChatRequestTranslator.HELP.REQUEST)));
@@ -124,14 +124,13 @@ public class ChatDialog
   /**
    * @return
    */
-  protected Converter<ComandoSistemaDTO, Long> createComandoSistemaDTOToUUIDConverter() {
-    return new Converter<ComandoSistemaDTO, Long>() {
+  protected Converter<PromptDTO, Long> createPromptDTOToIdConverter() {
+    return new Converter<PromptDTO, Long>() {
 
-      private static final InheritableThreadLocal<ComandoSistemaDTO> ctx = new InheritableThreadLocal<>();
+      private static final InheritableThreadLocal<PromptDTO> ctx = new InheritableThreadLocal<>();
 
       @Override
-      public Result<Long> convertToModel(ComandoSistemaDTO value,
-                                         ValueContext context) {
+      public Result<Long> convertToModel(PromptDTO value, ValueContext context) {
         ctx.set(value);
         if (value == null) {
           return Result.ok(null);
@@ -140,17 +139,16 @@ public class ChatDialog
       }
 
       @Override
-      public ComandoSistemaDTO convertToPresentation(Long value,
-                                                     ValueContext context) {
+      public PromptDTO convertToPresentation(Long value, ValueContext context) {
         if (value == null) {
           return null;
         }
-        ComandoSistemaDTO comandoSistemaDTO = ctx.get();
-        if (comandoSistemaDTO == null) {
+        PromptDTO promptDTO = ctx.get();
+        if (promptDTO == null) {
           return null;
         }
-        if (Objects.equals(value, comandoSistemaDTO.getId())) {
-          return comandoSistemaDTO;
+        if (Objects.equals(value, promptDTO.getId())) {
+          return promptDTO;
         }
         return null;
       }
@@ -164,15 +162,14 @@ public class ChatDialog
    * @param object
    * @return
    */
-  private ComboBox<ComandoSistemaDTO> createFinalidadeField(String label,
-                                                            String help,
-                                                            DataProvider<ComandoSistemaDTO, String> dataProvider,
-                                                            ItemLabelGenerator<ComandoSistemaDTO> labelGenerator) {
-    finalidadeField = createComboBox(label, help, dataProvider,
-                                     labelGenerator);
-    askLayout.add(finalidadeField);
-    finalidadeField.setVisible(false);
-    return finalidadeField;
+  private ComboBox<PromptDTO> createPromptField(String label,
+                                                String help,
+                                                DataProvider<PromptDTO, String> dataProvider,
+                                                ItemLabelGenerator<PromptDTO> labelGenerator) {
+    promptField = createComboBox(label, help, dataProvider, labelGenerator);
+    askLayout.add(promptField);
+    promptField.setVisible(false);
+    return promptField;
   }
 
   /**
@@ -215,8 +212,8 @@ public class ChatDialog
       var value = onChange.getValue();
       this.askField.clear();
       this.askField.setVisible(!value);
-      this.finalidadeField.clear();
-      this.finalidadeField.setVisible(value);
+      this.promptField.clear();
+      this.promptField.setVisible(value);
     });
     getFooter().add(field);
     return field;

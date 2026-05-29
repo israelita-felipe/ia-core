@@ -14,6 +14,7 @@ import com.ia.core.service.validators.ValidatorScope;
  * Garante que o telefone tenha o formato correto e a quantidade de dígitos adequada.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ValidatorScope
 public class ContatoTelefoneValidoRule implements BusinessRule<ContatoMensagemDTO> {

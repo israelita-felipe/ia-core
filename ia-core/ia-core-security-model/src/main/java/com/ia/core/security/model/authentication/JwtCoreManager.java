@@ -4,13 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
+
 /**
  * Gerenciador de jwt core.
  * <p>
@@ -23,7 +24,10 @@ import java.util.Objects;
 public class JwtCoreManager
   implements JwtManager {
 
-  private static final String SECRET = "hvIRaPetw4yPjt65kITgF45T6UJ21ss7ppYhBnff55Tttredc9tty";
+  private static volatile SecretKey signingKey;
+
+  @Value("${jwt.secret}")
+  private String secret = "hvIRaPetw4yPjt65kITgF45T6UJ21ss7ppYhBnff55Tttredc9tty";
   private static final String CLAIM_FUNCTIONALITIES_KEY = "claim.functionalities";
   private static final String CLAIM_USER_NAME_KEY = "claim.userName";
   private static final String CLAIM_FUNCTIONALITIES_CONTEXT = "claim.functionalities.context";
@@ -97,6 +101,24 @@ public class JwtCoreManager
     return token;
   }
 
+  @Override
+  public String generateRefreshToken(String userCode, String userName, long expiration) {
+    Objects.requireNonNull(userCode, "userCode não pode ser null");
+    Objects.requireNonNull(userName, "userName não pode ser null");
+
+    Date currentDate = new Date();
+    Date expirationDate = new Date(currentDate.getTime() + expiration);
+
+    String token = Jwts.builder()
+        .claim(getClaimUserCodeKey(), userName)
+        .subject(userCode)
+        .issuedAt(currentDate)
+        .expiration(expirationDate)
+        .signWith(getKey(getSecret()))
+        .compact();
+    return token;
+  }
+
   /**
    * @return {@link #claimFunctionalitiesContext}
    */
@@ -150,16 +172,19 @@ public class JwtCoreManager
   }
 
   public SecretKey getKey(String secret) {
+      if(signingKey!=null){
+          return signingKey;
+      }
     byte[] bytes = Decoders.BASE64.decode(secret);
-    return Keys.hmacShaKeyFor(bytes);
+    return signingKey = Keys.hmacShaKeyFor(bytes);
   }
 
-  /**
-   * @return {@link #secret}
-   */
-  public String getSecret() {
-    return Encoders.BASE64.encode(SECRET.getBytes());
-  }
+    /**
+     * @return {@link #secret}
+     */
+    public String getSecret() {
+      return secret;
+    }
 
   @Override
   public String getUserCodeFromJWT(String token) {
@@ -185,22 +210,39 @@ public class JwtCoreManager
         .get(getClaimUserCodeKey(), String.class);
   }
 
-  @Override
-  public boolean validateToken(String token) {
-    if (token == null) {
-      return false;
-    }
+   @Override
+   public boolean validateToken(String token) {
+     if (token == null) {
+       return false;
+     }
 
-    try {
-      Jwts.parser()
-          .verifyWith(getKey(getSecret()))
-          .build()
-          .parseSignedClaims(token);
-      return true;
-    } catch (Exception e) {
-      // Log da exceção em produção (não exponha detalhes ao cliente)
-      // logger.warn("Token validation failed: {}", e.getMessage());
-      return false;
-    }
+     try {
+       Jwts.parser()
+           .verifyWith(getKey(getSecret()))
+           .build()
+           .parseSignedClaims(token);
+       return true;
+     } catch (io.jsonwebtoken.security.SignatureException e) {
+       // Assinatura inválida
+       return false;
+     } catch (io.jsonwebtoken.MalformedJwtException e) {
+       // Token malformado
+       return false;
+     } catch (io.jsonwebtoken.ExpiredJwtException e) {
+       // Token expirado
+       return false;
+     } catch (io.jsonwebtoken.UnsupportedJwtException e) {
+       // Token não suportado
+       return false;
+     } catch (io.jsonwebtoken.JwtException e) {
+       // Outras exceções JWT
+       return false;
+     }
+   }
+
+  @Override
+  public boolean validateRefreshToken(String token) {
+    // Refresh tokens use the same validation logic as access tokens
+    return validateToken(token);
   }
 }

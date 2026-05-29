@@ -16,21 +16,9 @@ import java.util.Objects;
  * <p>
  * Esta classe utiliza um ChatModel para converter texto em linguagem natural em
  * axiomas OWL válidos usando Manchester Syntax, seguindo as regras do OWL 2 DL.
- * </p>
- * <p>
- * <b>Exemplo de uso:</b>
- *
- * <pre>{@code
- * ChatModel chatModel = ...;
- * OwlTransformationService service = new OwlTransformationService(chatModel, vectorStore, owlService);
- * TransformacaoResult result = service.transformarParaOWL(
- *     "Pessoas são seres humanos. João é uma pessoa.",
- *     "ex", "http://example.com/ontology#");
- * }</pre>
- * </p>
  *
  * @author Israel Araújo
- * @version 1.0
+ * @since 1.0.0
  */
 public class OwlTransformationService
   implements CoreOWLTransformationService, OwlTransformationUseCase {

@@ -11,9 +11,9 @@ import org.semanticweb.owlapi.model.*;
  * <p>
  * Define operações para criação, manipulação, salvamento e análise de ontologias
  * OWL, incluindo integração com serviços de parsing e raciocínio.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface OWLOntologyManagementService {
 

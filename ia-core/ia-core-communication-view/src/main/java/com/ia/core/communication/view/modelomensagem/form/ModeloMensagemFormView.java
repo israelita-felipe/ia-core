@@ -13,9 +13,13 @@ import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Formulário de Modelo de Mensagem.
- * Segue o padrão de implementação com métodos separados para criação de campos.
+ * <p>
+ * Segue o padrão de implementação com métodos separados para criação de campos,
+ * incluindo nome, descrição, corpo do modelo, tipo de canal e status ativo.
+ * Inclui sidebar auxiliar para inserção de variáveis no corpo do modelo.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public class ModeloMensagemFormView extends FormView<ModeloMensagemDTO> {
   private TextField nomeField;

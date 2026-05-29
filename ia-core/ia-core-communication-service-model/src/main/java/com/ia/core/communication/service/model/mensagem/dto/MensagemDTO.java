@@ -6,17 +6,13 @@ import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
-import com.ia.core.communication.service.model.mensagem.dto.MensagemTranslator;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -25,10 +21,16 @@ import java.util.Set;
 
 /**
  * DTO para a entidade Mensagem.
+ * <p>
+ * Representa os dados de transferência para mensagens de comunicação,
+ * incluindo telefone destinatário, nome destinatário, corpo da mensagem,
+ * tipo de canal, status, datas de envio/entrega/leitura e motivo de falha.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor

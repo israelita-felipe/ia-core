@@ -12,6 +12,7 @@ import com.ia.core.service.validators.ValidatorScope;
  * incluindo validações de negócio via BusinessRules.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @ValidatorScope
 public class MensagemValidator extends ServiceValidator<MensagemDTO> {

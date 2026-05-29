@@ -1,7 +1,5 @@
 package com.ia.core.communication.service.whatsapp;
 
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,10 +12,10 @@ import java.util.Map;
  * <p>
  * Use este cliente para enviar mensagens via WhatsApp.
  * O CircuitBreaker pode ser habilitado via configuration.
- * </p>
  *
  * @author Israel Araújo
- * @see <a href="https://developers.facebook.com/docs/whatsapp</a>
+ * @since 1.0.0
+ * @see <a href="https://developers.facebook.com/docs/whatsapp">WhatsApp Business API</a>
  */
 
 @FeignClient(name = "whatsAppClient", url = "${whatsapp.api.url:https://graph.facebook.com/v18.0}")

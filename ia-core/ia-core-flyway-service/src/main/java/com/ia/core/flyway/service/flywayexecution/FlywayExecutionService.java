@@ -5,6 +5,8 @@ import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionUseCase;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionTranslator;
 import com.ia.core.model.filter.FieldType;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.security.model.functionality.Functionality;
 import com.ia.core.security.service.CountSecuredBaseService;
 import com.ia.core.security.service.FindSecuredBaseService;
@@ -21,6 +23,8 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.data.domain.Page;
 
 import java.util.HashMap;
@@ -34,9 +38,9 @@ import java.util.Set;
  * Este serviço fornece métodos para consultar o histórico de execuções de
  * migrações do banco de dados. Os dados são somente leitura pois são
  * gerenciados automaticamente pelo Flyway.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see FlywayExecutionUseCase
  */
 @Slf4j
@@ -99,17 +103,38 @@ public class FlywayExecutionService
   }
 
   @Override
-  public int count(SearchRequestDTO requestDTO) {
+  @Tool(description = "Conta o total de execuções de migrações do Flyway baseado em critérios de busca. " +
+             "Retorna o número total de execuções que correspondem aos filtros aplicados. " +
+             "Útil para estatísticas de migrations, métricas de volume de alterações e relatórios de auditoria.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public int count(
+          @ToolParam(description = "Critérios de busca para contar as execuções (SearchRequestDTO, obrigatório). " +
+                          "Inclui filtros opcionais por campos da execução para refinar a contagem.", required = true) SearchRequestDTO requestDTO) {
     return CountSecuredBaseService.super.count(requestDTO);
   }
 
   @Override
-  public FlywayExecutionDTO find(Long id) {
+  @Tool(description = "Busca uma execução de migração do Flyway pelo ID. " +
+             "Retorna informações detalhadas da execução incluindo versão, descrição, tipo de migração, " +
+             "tempo de execução, data de execução, status de sucesso e mensagem de erro se houver. " +
+             "Útil para inspecionar detalhes específicos de uma migração e diagnosticar problemas.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public FlywayExecutionDTO find(
+          @ToolParam(description = "ID único da execução de migração a ser buscada (Long, obrigatório). " +
+                          "Identifica a execução específica no histórico do Flyway.", required = true) Long id) {
     return FindSecuredBaseService.super.find(id);
   }
 
   @Override
-  public Page<FlywayExecutionDTO> findAll(SearchRequestDTO requestDTO) {
+  @Tool(description = "Lista todas as execuções de migrações do Flyway com paginação e filtros. " +
+             "Retorna uma página de execuções incluindo informações sobre versão, descrição, tipo de migração, " +
+             "tempo de execução, data de execução e status de sucesso. " +
+             "Útil para auditoria completa de migrations, análise de histórico de alterações no banco de dados " +
+             "e monitoramento de saúde do sistema de migração.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public Page<FlywayExecutionDTO> findAll(
+          @ToolParam(description = "Critérios de busca e paginação (SearchRequestDTO, obrigatório). " +
+                          "Inclui paginação (page, size, sort) e filtros opcionais por campos da execução.", required = true) SearchRequestDTO requestDTO) {
     return ListSecuredBaseService.super.findAll(requestDTO);
   }
 
@@ -142,7 +167,16 @@ public class FlywayExecutionService
   }
 
   @Override
-  public Page<FlywayExecutionDTO> listSuccessful(SearchRequestDTO request) {
+  @Tool(description = "Lista todas as execuções de migrações do Flyway que foram bem-sucedidas. " +
+             "Retorna uma página de execuções com sucesso, incluindo informações sobre versão, " +
+             "descrição, tipo de migração, tempo de execução e data de execução. " +
+             "Útil para auditoria de migrations, verificação de histórico de alterações no banco de dados " +
+             "e diagnóstico de problemas de migração. Filtra automaticamente por success = true.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public Page<FlywayExecutionDTO> listSuccessful(
+          @ToolParam(description = "Critérios de busca para filtrar as execuções (SearchRequestDTO, obrigatório). " +
+                          "Inclui paginação (page, size, sort) e filtros adicionais. " +
+                          "O filtro success=true é aplicado automaticamente.", required = true) SearchRequestDTO request) {
     request.getContext()
         .add(FilterRequestDTO.builder().fieldType(FieldType.BOOLEAN)
             .key("success").operator(OperatorDTO.EQUAL).value(Boolean.TRUE)
@@ -151,7 +185,16 @@ public class FlywayExecutionService
   }
 
   @Override
-  public Page<FlywayExecutionDTO> listFailed(SearchRequestDTO request) {
+  @Tool(description = "Lista todas as execuções de migrações do Flyway que falharam. " +
+             "Retorna uma página de execuções com erro, incluindo informações sobre versão, " +
+             "descrição, tipo de migração, tempo de execução, data de execução e mensagem de erro. " +
+             "Útil para identificar migrations problemáticas, diagnosticar falhas de migração " +
+             "e priorizar correções. Filtra automaticamente por success = false.")
+  @Resilient(ResilienceProfile.DATABASE)
+  public Page<FlywayExecutionDTO> listFailed(
+          @ToolParam(description = "Critérios de busca para filtrar as execuções (SearchRequestDTO, obrigatório). " +
+                          "Inclui paginação (page, size, sort) e filtros adicionais. " +
+                          "O filtro success=false é aplicado automaticamente.", required = true) SearchRequestDTO request) {
     request.getContext()
         .add(FilterRequestDTO.builder().fieldType(FieldType.BOOLEAN)
             .key("success").operator(OperatorDTO.EQUAL).value(Boolean.FALSE)

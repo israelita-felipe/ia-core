@@ -3,15 +3,29 @@ package com.ia.core.communication.service.sms;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 /**
- * Serviço para envio de mensagens SMS. Implementa a interface MensagemProvider
- * para integração com estratégias de envio.
+ * Serviço para envio de mensagens SMS.
+ * <p>
+ * Implementa a interface MensagemProvider para envio de mensagens
+ * através do canal SMS. Suporta múltiplos providers como Twilio.
+ * <p>
+ * Principais funcionalidades:
+ * <ul>
+ *   <li>Envio de SMS via Twilio</li>
+ *   <li>Validação de webhooks</li>
+ *   <li>Tratamento de erros de envio</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +41,15 @@ public class SmsService
    * @param mensagem mensagem a ser enviada
    * @return resultado do envio
    */
-  public ResultadoEnvio enviarSms(MensagemDTO mensagem) {
+  @Tool(description = "Envia uma mensagem SMS para um destinatário usando o provedor configurado (ex: Twilio). " +
+             "Utiliza o campo telefoneDestinatario como número de telefone e corpoMensagem como conteúdo da mensagem. " +
+             "Suporta múltiplos providers de SMS configurados no sistema. " +
+             "Útil para notificações urgentes, alertas de segurança e comunicações de alta prioridade. " +
+             "Retorna resultado do envio com ID da mensagem ou detalhes da falha.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public ResultadoEnvio enviarSms(
+          @ToolParam(description = "Dados da mensagem SMS a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui telefoneDestinatario (número de telefone) e corpoMensagem (conteúdo da mensagem).", required = true) MensagemDTO mensagem) {
     log.info("Enviando SMS para {}", mensagem.getTelefoneDestinatario());
 
     try {

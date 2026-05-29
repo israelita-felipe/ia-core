@@ -1,10 +1,10 @@
 package com.ia.core.communication.service.model.grupocontato.dto;
 
 /**
- * Translator constants for GrupoContato (Contact Group) DTO.
+ * Constantes de tradução para GrupoContatoDTO.
  * <p>
- * Contains constants for i18n keys, validation messages, and field names
- * used throughout the GrupoContato DTO processing pipeline.
+ * Contém constantes para chaves i18n, mensagens de validação e nomes de campos
+ * utilizados no pipeline de processamento do DTO de GrupoContato.
  *
  * @author Israel Araújo
  * @since 1.0.0

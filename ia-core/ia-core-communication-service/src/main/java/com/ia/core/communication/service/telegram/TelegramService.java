@@ -3,21 +3,33 @@ package com.ia.core.communication.service.telegram;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 /**
- * Serviço para interação com a API do Telegram. Implementa a interface
- * MensagemProvider para integração com estratégias de envio.
+ * Serviço para interação com a API do Telegram.
  * <p>
- * Este serviço agora usa Feign Client em vez de RestTemplate para maior
+ * Implementa a interface MensagemProvider para envio de mensagens
+ * através do canal Telegram. Utiliza Feign Client para maior
  * resiliência e integração com Resilience4j.
- * </p>
+ * <p>
+ * Principais funcionalidades:
+ * <ul>
+ *   <li>Envio de mensagens de texto</li>
+ *   <li>Envio de mensagens em formato HTML</li>
+ *   <li>Validação de webhooks</li>
+ *   <li>Tratamento de erros de envio</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @Component
@@ -32,7 +44,15 @@ public class TelegramService implements MensagemProvider {
     return enviarTelegram(mensagem);
   }
 
-  public ResultadoEnvio enviarTelegram(MensagemDTO mensagem) {
+  @Tool(description = "Envia uma mensagem de texto via Telegram Bot API para um destinatário específico. " +
+             "Utiliza o campo telefoneDestinatario como chat_id do Telegram e corpoMensagem como conteúdo da mensagem. " +
+             "Suporta modo de parseamento configurável (texto ou HTML). " +
+             "Útil para notificações, alertas e interações com usuários via Telegram. " +
+             "Retorna resultado do envio com message_id ou detalhes da falha.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public ResultadoEnvio enviarTelegram(
+          @ToolParam(description = "Dados da mensagem Telegram a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui telefoneDestinatario (chat_id) e corpoMensagem (conteúdo da mensagem).", required = true) MensagemDTO mensagem) {
     try {
       // Determina o chat_id - usa o campo telefoneDestinatario como chat_id do
       // Telegram
@@ -75,7 +95,15 @@ public class TelegramService implements MensagemProvider {
     }
   }
 
-  public ResultadoEnvio enviarTelegramHtml(MensagemDTO mensagem) {
+  @Tool(description = "Envia uma mensagem em formato HTML via Telegram Bot API para um destinatário específico. " +
+             "Suporta formatação HTML rica no corpo da mensagem (negrito, itálico, links, etc.). " +
+             "Utiliza o campo telefoneDestinatario como chat_id do Telegram e corpoMensagem como conteúdo HTML. " +
+             "Útil para mensagens formatadas, newsletters e comunicações com estilo via Telegram. " +
+             "Retorna resultado do envio com message_id ou detalhes da falha.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public ResultadoEnvio enviarTelegramHtml(
+          @ToolParam(description = "Dados da mensagem HTML Telegram a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui telefoneDestinatario (chat_id) e corpoMensagem (conteúdo HTML).", required = true) MensagemDTO mensagem) {
     try {
       String chatId = mensagem.getTelefoneDestinatario() != null
           ? mensagem.getTelefoneDestinatario()
@@ -118,7 +146,14 @@ public class TelegramService implements MensagemProvider {
    * @param mensagem mensagem a ser enviada
    * @return resultado do envio
    */
-  public ResultadoEnvio enviarParaChatDefault(MensagemDTO mensagem) {
+  @Tool(description = "Envia uma mensagem via Telegram para o chat padrão configurado no sistema. " +
+             "Não requer especificar o chat_id pois utiliza o valor padrão da configuração. " +
+             "Útil para notificações de sistema, alertas de monitoramento e broadcasts para canais fixos. " +
+             "Retorna resultado do envio com message_id ou detalhes da falha.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public ResultadoEnvio enviarParaChatDefault(
+          @ToolParam(description = "Dados da mensagem Telegram a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui corpoMensagem (conteúdo da mensagem). O chat_id será o padrão configurado.", required = true) MensagemDTO mensagem) {
     mensagem.setTelefoneDestinatario(telegramConfig.getChatId());
     return enviarTelegram(mensagem);
   }

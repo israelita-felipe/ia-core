@@ -9,6 +9,7 @@ import java.util.Map;
  * Usada para padronizar a extração de variáveis de diferentes objetos DTO.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface HasVariavel {
 

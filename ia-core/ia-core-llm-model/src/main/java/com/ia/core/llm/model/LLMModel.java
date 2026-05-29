@@ -1,13 +1,13 @@
 package com.ia.core.llm.model;
 
 /**
- * Classe utilitária que contém constantes de configuração para o modelo LLM.
+ * Classe utilitária com constantes de configuração para o modelo LLM.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LLMModel
- * dentro do sistema.
+ * Contém constantes para prefixo de tabelas e nome do schema utilizado
+ * pelo módulo de Large Language Model.
  *
  * @author Israel Araújo
- * @since 1.0
+ * @since 1.0.0
  */
 public final class LLMModel {
 

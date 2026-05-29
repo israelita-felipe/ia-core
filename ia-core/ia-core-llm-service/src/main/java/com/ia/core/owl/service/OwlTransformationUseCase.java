@@ -8,6 +8,7 @@ import org.springframework.ai.chat.model.ChatModel;
  * em axiomas OWL 2 DL usando modelos de linguagem.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface OwlTransformationUseCase {
 

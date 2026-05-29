@@ -5,13 +5,13 @@ import com.ia.core.communication.view.grupocontato.GrupoContatoManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import lombok.Getter;
 /**
- * Classe que representa as configurações para grupo contato form view model.
+ * Configurações para o ViewModel do formulário de grupo de contato.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a GrupoContatoFormViewModelConfig
- * dentro do sistema.
+ * Responsável por fornecer as dependências necessárias para o ViewModel,
+ * incluindo o GrupoContatoManager.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 public class GrupoContatoFormViewModelConfig extends FormViewModelConfig<GrupoContatoDTO> {

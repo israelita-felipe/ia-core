@@ -14,17 +14,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * Configuração do ViewModel para a página de ModeloMensagem.
+ * <p>
+ * Responsável por fornecer as dependências necessárias para o ViewModel da página,
+ * incluindo ModeloMensagemManager, GrupoContatoManager e ContatoMensagemManager.
  *
  * @author Israel Araújo
- */
-/**
- * Classe que representa as configurações para modelo mensagem page view model.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemPageViewModelConfig
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
+ * @since 1.0.0
  */
 @UIScope
 @Component

@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
  * Define as operações específicas do domínio de execuções de migrations do
  * Flyway. Como a tabela flyway_schema_history é gerenciada automaticamente pelo
  * Flyway, esta interface fornece apenas operações de leitura.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 public interface FlywayExecutionUseCase
   extends ReadOnlyUseCase<FlywayExecutionDTO> {

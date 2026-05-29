@@ -1,7 +1,7 @@
 package com.ia.core.security.service.user;
 
 import com.ia.core.security.model.user.User;
-import com.ia.core.security.service.DefaultSecuredBaseService.DefaultSecuredBaseServiceConfig;
+import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -29,7 +29,7 @@ import java.util.List;
 
 @Component
 public class UserServiceConfig
-  extends DefaultSecuredBaseServiceConfig<User, UserDTO> {
+  extends CrudSecuredBaseServiceConfig<User, UserDTO> {
 
   @Getter
   private final UserPasswordEncoder passwordEncoder;

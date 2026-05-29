@@ -1,8 +1,6 @@
 package com.ia.core.communication.view.modelomensagem;
 
 import com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,21 +12,13 @@ import java.util.Map;
 /**
  * Cliente Feign para operações de ModeloMensagem.
  * <p>
- * Define os endpoints disponíveis para o caso de uso de Modelo de Mensagem.
+ * Define os endpoints disponíveis para o caso de uso de Modelo de Mensagem,
+ * incluindo aplicação de template e envio para grupos e contatos.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
-@FeignClient(name = ModeloMensagemClient.NOME,
-             url = ModeloMensagemClient.URL)
-/**
- * Classe que representa o cliente de comunicação para modelo mensagem.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ModeloMensagemClient
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
+@FeignClient(name = ModeloMensagemClient.NOME, url = ModeloMensagemClient.URL)
 public interface ModeloMensagemClient
   extends DefaultBaseClient<ModeloMensagemDTO> {
 

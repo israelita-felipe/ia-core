@@ -22,6 +22,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springaicommunity</groupId>
+			<artifactId>spring-ai-agent-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springaicommunity</groupId>
+			<artifactId>spring-ai-agent-utils-a2a</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
@@ -42,18 +50,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
-		 <!-- Selenium WebDriver -->
-    <dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-    </dependency>
-    
-    <!-- WebDriver Manager para gerenciar automaticamente os drivers -->
-    <dependency>
-        <groupId>io.github.bonigarcia</groupId>
-        <artifactId>webdrivermanager</artifactId>
-        <version>5.6.0</version>
-    </dependency>
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>owlapi-distribution</artifactId>
@@ -69,7 +65,7 @@
 			<artifactId>openllet-explanation</artifactId>
 			<version>${openllet.version}</version>
 		</dependency>
-		
+
 		<!-- HSQLDB for file-based embedded database tests -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -84,6 +80,13 @@
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
 				<version>${spring-ai.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springaicommunity</groupId>
+				<artifactId>spring-ai-agent-utils-bom</artifactId>
+				<version>0.7.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -111,18 +114,18 @@
 						<!-- See
 						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 						<!-- Classpath elements to supply as annotation
-						processor path. If 
+						processor path. If
 							specified, the compiler -->
 						<!-- will detect annotation processors only in those
-						classpath elements. 
+						classpath elements.
 							If omitted, the -->
 						<!-- default classpath is used to detect annotation
-						processors. The 
+						processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
 						<!-- According to this documentation, the provided
-						dependency processor 
+						dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

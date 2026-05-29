@@ -25,6 +25,8 @@ public interface JwtManager {
                            Collection<String> functionalities,
                            Context<T> context);
 
+  String generateRefreshToken(String userCode, String userName, long expiration);
+
   /**
    * @param token
    * @return
@@ -39,7 +41,7 @@ public interface JwtManager {
    */
   <T> T getFunctionalitiesContextFromJWT(String token, Class<T> type);
 
-  /**
+    /**
    * @param token
    * @return
    */
@@ -52,6 +54,8 @@ public interface JwtManager {
   String getUserNameFromJWT(String token);
 
   boolean validateToken(String token);
+
+  boolean validateRefreshToken(String token);
 
   /**
    * Contexto associado a um token JWT.

@@ -16,22 +16,13 @@ import org.springframework.stereotype.Service;
 /**
  * Manager para operações de FlywayExecution.
  * <p>
- * Implementa o caso de uso para gerenciamento deexecuções de migrations do
+ * Implementa o caso de uso para gerenciamento de execuções de migrations do
  * Flyway na camada de visualização. Atua como proxy para as operações do
  * serviço, delegando chamadas ao cliente Feign.
- * </p>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see FlywayExecutionUseCase
- */
-/**
- * Classe que representa o gerenciamento de flyway execution.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a FlywayExecutionManager
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
  */
 @Slf4j
 @Service

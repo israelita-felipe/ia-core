@@ -46,10 +46,13 @@ public class User
   @Column(name = "enabled", length = 1, nullable = false)
   private boolean enabled;
   @Column(name = "account_not_expired", length = 1, nullable = false)
+  @Builder.Default
   protected boolean accountNotExpired = true;
   @Column(name = "account_not_locked", length = 1, nullable = false)
+  @Builder.Default
   protected boolean accountNotLocked = false;
   @Column(name = "credentials_not_expired", length = 1, nullable = false)
+  @Builder.Default
   protected boolean credentialsNotExpired = true;
 
   @Default

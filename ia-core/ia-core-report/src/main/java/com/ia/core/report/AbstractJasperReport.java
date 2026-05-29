@@ -10,6 +10,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 /**
  * Enumeração que representa os valores possíveis para abstract jasper report.
  * <p>
@@ -119,7 +121,11 @@ public abstract class AbstractJasperReport<T> {
 
   public JasperReport report(String reportPath)
     throws JRException {
-    return report(getClass().getClassLoader()
-        .getResourceAsStream(reportPath));
+    Objects.requireNonNull(reportPath, "Caminho do relatório não pode ser null");
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream(reportPath);
+    if (inputStream == null) {
+      throw new JRException("Relatório não encontrado no caminho: " + reportPath);
+    }
+    return report(inputStream);
   }
 }

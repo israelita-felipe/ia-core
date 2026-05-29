@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
  * Feign e o gerenciador de autorizações.
  *
  * @author Israel Araújo
+ * @since 1.0.0
  * @see ContatoMensagemManager
  */
 

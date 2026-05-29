@@ -12,7 +12,13 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 
 /**
+ * Serviço para gerenciamento de Vector Store.
+ * <p>
+ * Responsável por operações de armazenamento vetorial, incluindo criação de
+ * advisors para perguntas e respostas e aprendizado de novos textos.
+ *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 @Service

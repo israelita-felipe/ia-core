@@ -1,0 +1,38 @@
+# --- Perfil lógico do módulo View com MCP ---
+ia-core:
+  view:
+    llm:
+      enabled: true
+      security:
+        protected-paths:
+          - /mcp/**
+          - /.well-known/agent-card.json
+      agent:
+        orchestrator-id: ia-core-view-orchestrator
+        tool-scan-packages:
+          - com.ia.core.view.manager
+        enabled: true
+        max-sub-agent-turns: 10
+      ferramenta:
+        discovery:
+          enabled: true
+          scan-packages:
+            - com.ia.core.view.manager
+          refresh-on-startup: true
+
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: ia-core-view
+        version: 1.0.0
+        sse-endpoint: /mcp/sse
+        path: /mcp
+        agent-card:
+          enabled: true
+          path: /.well-known/agent-card.json
+      tools:
+        usecase-scan:
+          enabled: true
+          base_package: com.ia.core.view.manager

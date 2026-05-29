@@ -4,8 +4,12 @@ import com.ia.core.communication.model.mensagem.StatusMensagem;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,11 +19,19 @@ import java.util.Map;
 /**
  * Serviço para interação com a API do WhatsApp Business.
  * <p>
- * Este serviço agora usa Feign Client em vez de RestTemplate para maior
+ * Implementa a interface MensagemProvider para envio de mensagens
+ * através do canal WhatsApp. Utiliza Feign Client para maior
  * resiliência e integração com Resilience4j.
- * </p>
+ * <p>
+ * Principais funcionalidades:
+ * <ul>
+ *   <li>Envio de mensagens de texto</li>
+ *   <li>Validação de webhooks</li>
+ *   <li>Tratamento de erros de envio</li>
+ * </ul>
  *
  * @author Israel Araújo
+ * @since 1.0.0
  */
 @Slf4j
 @Component
@@ -44,7 +56,15 @@ public class WhatsAppService implements MensagemProvider {
    * @param mensagem Entidade Mensagem a ser enviada
    * @return Mensagem atualizada com o status
    */
-  public MensagemDTO enviarMensagem(MensagemDTO mensagem) {
+  @Tool(description = "Envia uma mensagem de texto via WhatsApp Business API para um destinatário específico. " +
+             "Utiliza o campo telefoneDestinatario como número de WhatsApp e corpoMensagem como conteúdo da mensagem. " +
+             "Integra-se com a API do WhatsApp Business através de Feign Client com resiliência. " +
+             "Útil para comunicações diretas, notificações e interações com usuários via WhatsApp. " +
+             "Retorna mensagem atualizada com status de envio e ID externo da mensagem.")
+  @Resilient(ResilienceProfile.EXTERNAL_API)
+  public MensagemDTO enviarMensagem(
+          @ToolParam(description = "Dados da mensagem WhatsApp a ser enviada (MensagemDTO, obrigatório). " +
+                          "Inclui telefoneDestinatario (número de WhatsApp) e corpoMensagem (conteúdo da mensagem).", required = true) MensagemDTO mensagem) {
     try {
       // Cria o request
       Map<String, String> textMessage = new HashMap<>();
