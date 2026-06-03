@@ -385,7 +385,7 @@ public abstract class CoreRestSecurityConfig
                                                        @Value("${swagger.api-docs-path:/v3/api-docs/**}") String swaggerApiDocsPath,
                                                        @Value("${swagger.api-docs-yaml:/v3/api-docs.yaml}") String swaggerApiDocsYaml)
     throws Exception {
-    http.securityMatcher(authorizationPattern, "/actuator/**",
+    http.securityMatcher(authorizationPattern,
                          "/swagger-ui/**", swaggerApiDocsPath,
                          swaggerApiDocsYaml, swaggerUiPath)
         .csrf(csrf -> csrf.disable())

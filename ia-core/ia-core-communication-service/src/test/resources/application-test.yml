@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 465
-    username: israelita.felipe@gmail.com
-    password: @si1056la
+    username: ${MAIL_USERNAME:test@example.com}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -40,11 +40,11 @@ spring:
 email:
   host: smtp.gmail.com
   port: 465
-  username: israelita.felipe@gmail.com
-  password: @si1056la
+  username: ${MAIL_USERNAME:test@example.com}
+  password: ${MAIL_PASSWORD:}
   auth: true
   starttls: false
-  fromAddress: israelita.felipe@gmail.com
+  fromAddress: ${MAIL_FROM_ADDRESS:test@example.com}
   fromName: Sistema de Comunicação
   timeout: 30000
 

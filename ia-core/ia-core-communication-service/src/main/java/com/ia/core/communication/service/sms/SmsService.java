@@ -62,7 +62,7 @@ public class SmsService
         return ResultadoEnvio.falha("Provider não suportado: " + provider);
       }
     } catch (Exception e) {
-      log.error("Erro ao enviar SMS: {}", e.getMessage());
+      log.error("Erro ao enviar SMS: {}", e.getMessage(), e);
       return ResultadoEnvio.falha(e.getMessage());
     }
   }
