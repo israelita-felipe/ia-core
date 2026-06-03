@@ -4,6 +4,11 @@
 
 O caso de uso "Interface Agente Conversacional" permite que usuários interajam com o sistema através de linguagem natural, digitando comandos em um campo de texto que são processados por agentes de IA. Os agentes analisam a intenção do usuário, selecionam as ferramentas apropriadas e executam ações no sistema, com confirmação humana quando necessário. Esta interface representa uma evolução dos chatbots tradicionais para sistemas de agentes autônomos capazes de realizar ações complexas através de ferramentas.
 
+A partir da arquitetura de **Agentes Guiados por Ontologias** (CDU-Agentes-Guiados-por-Ontologias), esta interface suporta dois modos adicionais de operação neuro-simbólica:
+
+1. **Conversação com Validação Ontológica:** Durante a conversação, uma ontologia OWL 2 DL é construída incrementalmente e confrontada com as respostas do LLM para garantir consistência formal via raciocinador (Openllet).
+2. **Construção Autônoma de Ontologias:** Um agente especialista recebe corpus em linguagem natural e produz uma ontologia OWL 2 DL completa, utilizando tools especializadas para cada construtor OWL e ciclos iterativos LLM-Reasoner para auto-correção.
+
 **Padrão ia-core vs spring-ai-agent-utils original:**
 
 O sistema adapta o padrão do spring-ai-agent-utils para usar banco de dados em vez de arquivos YAML:
@@ -14,8 +19,9 @@ O sistema adapta o padrão do spring-ai-agent-utils para usar banco de dados em 
 | Configuração de skills | Arquivos `.md` com YAML frontmatter | Entidade `Skill` em banco de dados |
 | Configuração de ferramentas | Arquivos `.md` com YAML frontmatter | Entidade `Ferramenta` em banco de dados |
 | Multi-model routing | Configuração YAML | Configuração via propriedades do `Agente` |
-| Built-in tools | FileSystemTools, ShellTools, GrepTool, GlobTool | Apenas `WebSearchTool` (busca na internet via BraveWebSearchTool) |
+| Built-in tools | FileSystemTools, ShellTools, GrepTool, GlobTool | `WebSearchTool` (BraveWebSearchTool) + Tools OWL 2 DL |
 | A2A protocol | Opcional | **Implementado** |
+| Validação ontológica | Não disponível | **Ciclos LLM-Reasoner** com Openllet |
 
 **Arquitetura de encapsulamento:**
 
@@ -27,7 +33,11 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 |------|------------|
 | Usuário Final | Digita comandos em linguagem natural e interage com agentes |
 | Agente de IA | Processa comandos, seleciona ferramentas e executa ações |
+| Agente Conversacional Ontológico | Constrói ontologia incremental durante conversação e valida respostas contra axiomas formais |
+| Agente Construtor de Ontologias | Agente autônomo que converte corpus em linguagem natural para ontologias OWL 2 DL completas |
 | Sistema de Ferramentas | Fornece capacidades funcionais para execução de ações |
+| Sistema de Tools OWL 2 DL | Ferramentas especializadas por construtor OWL (SubClassOf, EquivalentClasses, etc.) |
+| Raciocinador (Openllet) | Verifica consistência formal de axiomas OWL 2 DL |
 | Administrador | Configura habilidades, ferramentas e permissões dos agentes |
 
 ## 3. Fluxo Principal
@@ -97,6 +107,86 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 6. Sistema agrega resultados dos sub-agentes.
 7. Agente principal retorna resposta consolidada ao usuário.
 
+### 3.7. Fluxo: Conversação com Validação Ontológica (Neuro-Simbólico)
+
+1. Usuário inicia sessão conversacional com domínio ontológico (ex.: "Vamos modelar o domínio de animais").
+2. Sistema cria `ConversationContext` com ontologia vazia e IRI do domínio.
+3. Usuário digita afirmação em linguagem natural: "Todo cachorro é um mamífero".
+4. Agente Conversacional Ontológico extrai axioma candidato via tool especializada (`SubClassOfTool`).
+5. Tool constrói prompt especializado com contexto ontológico atual.
+6. LLM gera axioma em Manchester Syntax: `SubClassOf(:Cachorro :Mamifero)`.
+7. Sistema valida sintaxe do axioma gerado.
+8. Sistema verifica consistência com ontologia existente via `OpenlletReasonerService`.
+9. Se consistente: axioma é adicionado à ontologia da conversa.
+10. Se inconsistente: `InconsistencyExplainer` traduz erro em linguagem natural, LLM recebe feedback e auto-corrige (ciclo LLM-Reasoner, máx. 3-5 iterações).
+11. Ontologia da conversa é atualizada incrementalmente.
+12. Nas interações subsequentes, o agente valida respostas do LLM contra os axiomas acumulados.
+13. Sistema garante que toda resposta final respeita formalmente os axiomas descobertos.
+
+**Exemplo detalhado:**
+```
+Usuário: "Todo cachorro é um mamífero"
+  → Agente extrai: SubClassOf(:Cachorro :Mamifero)
+  → Reasoner valida: ✓ Consistente
+  → Ontologia atualizada
+
+Usuário: "Qual é a característica de um mamífero?"
+  → Agente gera resposta draft: "Mamíferos têm pelos e amamentam"
+  → Validador: verifica consistência com axiomas existentes
+  → Resposta validada e retornada
+```
+
+### 3.8. Fluxo: Construção Autônoma de Ontologia (Agente Construtor)
+
+1. Usuário submete corpus/requisitos em linguagem natural (ex.: "Sistema de gestão de biblioteca. Livros têm autores, ISBN, Data de Publicação...").
+2. Sistema cria job assíncrono com `OntologyBuildRequest`.
+3. Agente Construtor analisa corpus e extrai elementos principais (classes, propriedades).
+4. Para cada elemento, agente seleciona tool OWL 2 DL especializada:
+   - `SubClassOfTool` para hierarquias
+   - `ObjectPropertyDomainTool` para relacionamentos
+   - `DataPropertyRangeTool` para restrições de tipos
+   - `MaxCardinalityTool` para cardinalidades
+   - `OneOfTool` para enumerações
+5. Cada tool gera axiomas candidatos via LLM com prompt especializado.
+6. Raciocinador (Openllet) valida consistência global:
+   - Consistência geral da ontologia
+   - Ausência de conflitos de cardinalidade
+   - Satisfatibilidade de classes
+7. Se inconsistências detectadas: ciclo LLM-Reasoner para auto-correção.
+8. Processo itera até convergência ou limite de iterações.
+9. Sistema retorna `OntologyBuildResult` com ontologia final, estatísticas e métricas.
+
+**Exemplo detalhado:**
+```
+Corpus: "Sistema de gestão de biblioteca.
+  Livros têm autores, ISBN, Data de Publicação.
+  Usuários podem alugar livros.
+  Um livro pode ter no máximo 5 cópias disponíveis."
+
+  → Classes extraídas: :Livro, :Autor, :Usuario, :Aluguel
+  → Propriedades: :temAutor, :temISBN, :dataPublicacao, :podeAlugar, :copia
+  → Axiomas gerados:
+    SubClassOf(:Livro :Publicacao)
+    ObjectPropertyDomain(:temAutor :Livro)
+    DataPropertyRange(:dataPublicacao xsd:gYear)
+    ObjectMaxCardinality(5 :temCopia :Livro)
+    EquivalentClasses(:EstadoLivro OneOf(:Disponivel :Indisponivel))
+  → Reasoner: ✓ Consistente
+  → Ontologia final produzida
+```
+
+### 3.9. Fluxo: Execução Direta de Tool OWL 2 DL
+
+1. Usuário ou agente solicita execução de uma tool específica (ex.: `SubClassOfTool`).
+2. Sistema recebe descrição em linguagem natural e contexto ontológico.
+3. Tool constrói prompt especializado com template, contexto e exemplos.
+4. LLM processa e retorna axioma em Manchester Syntax.
+5. Sistema parseia resposta e valida sintaxe.
+6. Raciocinador verifica consistência do axioma com ontologia existente.
+7. Se consistente: retorna axioma validado.
+8. Se inconsistente: executa ciclo LLM-Reasoner (feedback → reformulação → revalidação).
+9. Retorna `ToolResult` com axioma, status, iterações usadas e feedback.
+
 ## 4. Fluxos Alternativos
 
 ### 4.1. Ação Requer Confirmação
@@ -149,6 +239,31 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 5. Se fallback disponível, prossegue com agente local.
 6. Se não, solicita intervenção do usuário.
 
+### 4.7. Inconsistência Ontológica Detectada (Ciclo LLM-Reasoner)
+
+1. Durante conversação ontológica, agente gera axioma candidato.
+2. Raciocinador (Openllet) detecta inconsistência com ontologia existente.
+3. `InconsistencyExplainer` traduz erro técnico em linguagem natural (ex.: "A classe Cachorro é inconsistente porque você disse que Cachorro é um Mamífero, mas agora está dizendo que Cachorro não é um Mamífero").
+4. Sistema informa ao LLM quais axiomas conflitam e sugere correções.
+5. LLM reformula axioma e reenvia para validação.
+6. Loop repete até convergência (máx. 3-5 iterações).
+7. Se sem solução após limite de iterações: axioma é rejeitado e usuário é informado.
+
+### 4.8. Falha no Parsing de Axioma OWL
+
+1. LLM retorna resposta em formato inesperado (não Manchester Syntax válida).
+2. Sistema detecta erro de parsing.
+3. Sistema resubmete prompt com instruções mais específicas de formato.
+4. Se falha persiste após 3 tentativas, retorna erro com explicação ao usuário/agente.
+
+### 4.9. Classe Insatisfatível Detectada
+
+1. Raciocinador identifica classe insatisfatível na ontologia.
+2. Sistema lista axiomas que causam insatisfatibilidade.
+3. `InconsistencyExplainer` gera explicação em linguagem natural.
+4. Sistema sugere remoção ou modificação de axiomas conflitantes.
+5. Usuário ou agente decide ação corretiva.
+
 ## 5. Fluxos de Navegação (Mestre-Detalhe)
 
 ### 5.1. Visualizar Histórico de Conversações
@@ -162,7 +277,7 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 ### 5.2. Gerenciar Ferramentas Disponíveis
 
 1. A partir da configuração, administrador acessa "Ferramentas".
-2. Sistema exibe catálogo de ferramentas.
+2. Sistema exibe catálogo de ferramentas (incluindo Tools OWL 2 DL).
 3. Administrador ativa/desativa ferramentas.
 4. Administrador configura permissões por ferramenta.
 5. Sistema aplica configurações.
@@ -202,6 +317,28 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 5. Sistema testa conexão.
 6. Sistema salva configuração.
 
+### 5.7. Visualizar Ontologia da Conversa
+
+1. Durante ou após sessão conversacional ontológica, usuário acessa "Ontologia".
+2. Sistema exibe ontologia OWL 2 DL construída incrementalmente.
+3. Visualizador mostra hierarquia de classes, propriedades e axiomas.
+4. Usuário pode exportar ontologia em formatos: Manchester Syntax, Turtle, RDF/XML, OWL/XML.
+5. Sistema exibe estatísticas: total de classes, propriedades, axiomas, iterações de validação.
+
+### 5.8. Acompanhar Progresso de Construção de Ontologia
+
+1. Após submeter corpus ao Agente Construtor, usuário acessa "Progresso".
+2. Sistema exibe status do job: fase atual (EXTRACTION, GENERATION, VALIDATION, REFINEMENT), progresso (%), contagem de axiomas.
+3. Usuário pode cancelar job em execução.
+4. Ao finalizar, sistema exibe ontologia resultante com métricas.
+
+### 5.9. Gerenciar Tools OWL 2 DL
+
+1. A partir da configuração, administrador acessa "Tools OWL 2 DL".
+2. Sistema exibe catálogo de tools por categoria: ClassExpression, ObjectProperty, DataProperty, Individual, Annotation.
+3. Cada tool mostra: nome do construtor, descrição, Manchester Syntax, exemplos de uso.
+4. Administrador pode visualizar documentação detalhada de cada tool.
+
 ## 6. Regras de Negócio
 
 | Regra | Descrição |
@@ -217,11 +354,20 @@ O `AgentOrchestratorService` delega toda operação de chat ao `ChatApplicationS
 | RN009 | Timeout padrão de 30 segundos para respostas do agente |
 | RN010 | Usuário pode intervir e cancelar ações em qualquer momento |
 | RN011 | Configurações de agentes, skills e ferramentas são armazenadas em banco de dados (não YAML) |
-| RN012 | Built-in tools incluem apenas WebSearchTool (busca na internet via BraveWebSearchTool do spring-ai-agent-utils) |
+| RN012 | Built-in tools incluem WebSearchTool (BraveWebSearchTool) e Tools OWL 2 DL |
 | RN013 | Protocolo A2A é suportado para orquestração remota de agentes |
 | RN014 | AgentOrchestratorService delega a ChatApplicationService (encapsulamento) |
 | RN015 | Multi-model routing é configurado via propriedades da entidade Agente |
 | RN016 | Sistema deve tentar fallback para agente local em caso de falha A2A |
+| RN017 | Axiomas gerados pelo LLM devem ser validados pelo raciocinador (Openllet) antes de serem aceites na ontologia |
+| RN018 | Ciclo LLM-Reasoner tem limite máximo de 3-5 iterações para evitar loops infinitos |
+| RN019 | Cada tool OWL 2 DL é responsável por um único tipo de construtor (SubClassOf, EquivalentClasses, etc.) |
+| RN020 | Tools OWL 2 DL são registradas como `Ferramenta` no banco de dados com `tipo = TOOL_SPRING` e `descobertaAutomatica = true` |
+| RN021 | Ontologia construída na conversação é incremental — cada turno pode adicionar novos axiomas |
+| RN022 | Inconsistências ontológicas devem ser explicadas em linguagem natural ao usuário via `InconsistencyExplainer` |
+| RN023 | Agentes ontológicos utilizam `OpenlletReasonerService` (OWL 2 DL) para verificação formal |
+| RN024 | Construção autônoma de ontologia é executada como job assíncrono com acompanhamento de progresso |
+| RN025 | Templates de prompt para tools OWL são persistidos como entidade `Template` no banco de dados |
 
 ## 7. Estrutura de Dados
 
@@ -230,10 +376,13 @@ erDiagram
     AGENT_SESSION ||--o{ AGENT_MESSAGE : contem
     AGENT_SESSION ||--o{ TOOL_EXECUTION : executa
     AGENT_SESSION ||--|| AGENTE : usa
+    AGENT_SESSION ||--o| CONVERSATION_CONTEXT : possui
     TOOL_EXECUTION ||--|| FERRAMENTA : utiliza
     AGENTE ||--o{ SKILL : possui
     AGENTE ||--o{ FERRAMENTA : autoriza
     SKILL ||--o{ FERRAMENTA : possui
+    CONVERSATION_CONTEXT ||--o{ AXIOMA : acumula
+    ONTOLOGY_BUILD_JOB ||--o{ AXIOMA : produz
 
     AGENT_SESSION {
         long id PK
@@ -292,10 +441,44 @@ erDiagram
         long id PK
         string titulo
         string descricao
-        enum tipo
+        enum tipo "AGENTE_ESPECIALISTA, TOOL_SPRING, RECURSO_MCP"
         string identificador
         string moduloOrigem
         bool ativo
+        bool descobertaAutomatica
+    }
+
+    CONVERSATION_CONTEXT {
+        string sessionId PK
+        string domain
+        string ontologyIRI
+        text ontologyContent "OWL Manchester Syntax"
+        int axiomCount
+        int turnCount
+        boolean consistent
+    }
+
+    AXIOMA {
+        long id PK
+        string tipo "SubClassOf, EquivalentClasses, etc."
+        string manchesterSyntax
+        string descricaoNatural
+        boolean validado
+        int iteracoesValidacao
+        string feedbackRaciocinador
+    }
+
+    ONTOLOGY_BUILD_JOB {
+        string jobId PK
+        string domain
+        text corpus
+        string status "QUEUED, RUNNING, COMPLETED, FAILED"
+        int progress "0..100"
+        string currentPhase "EXTRACTION, GENERATION, VALIDATION, REFINEMENT"
+        int axiomCount
+        int iterationCount
+        int maxIterations
+        text ontologyResult
     }
 ```
 
@@ -366,6 +549,49 @@ erDiagram
 | POST | `/api/v1/agent/a2a/disconnect` | Desconecta de servidor A2A |
 | GET | `/api/v1/agent/a2a/agents` | Lista agentes remotos disponíveis |
 
+### 8.7. Interface REST - Agente Conversacional Ontológico
+
+| Método | Endpoint | Descrição |
+|--------|----------|------------|
+| POST | `/api/v1/agentes/conversacional/sessoes` | Cria sessão conversacional com domínio ontológico |
+| POST | `/api/v1/agentes/conversacional/{sessionId}/mensagens` | Envia mensagem com extração e validação de axiomas |
+| GET | `/api/v1/agentes/conversacional/{sessionId}/ontologia` | Recupera ontologia atual da conversa (Manchester/Turtle) |
+| GET | `/api/v1/agentes/conversacional/{sessionId}/historico` | Histórico de conversa com axiomas extraídos |
+| DELETE | `/api/v1/agentes/conversacional/{sessionId}` | Encerra sessão conversacional |
+
+### 8.8. Interface REST - Agente Construtor de Ontologias
+
+| Método | Endpoint | Descrição |
+|--------|----------|------------|
+| POST | `/api/v1/agentes/construtor/jobs` | Inicia construção de ontologia a partir de corpus |
+| GET | `/api/v1/agentes/construtor/jobs/{jobId}/progress` | Status e progresso do job |
+| GET | `/api/v1/agentes/construtor/jobs/{jobId}/resultado` | Recupera ontologia final (se completo) |
+| POST | `/api/v1/agentes/construtor/jobs/{jobId}/cancelar` | Cancela job em execução |
+
+### 8.9. Interface REST - Tools OWL 2 DL
+
+| Método | Endpoint | Descrição |
+|--------|----------|------------|
+| GET | `/api/v1/ferramentas/lista` | Lista todas as tools OWL 2 DL disponíveis |
+| GET | `/api/v1/ferramentas/{id}/documentacao` | Documentação completa de uma tool (Manchester Syntax, exemplos) |
+| POST | `/api/v1/ferramentas/{id}/executar` | Executa tool com validação ontológica |
+
+### 8.10. Interface REST - Validação Ontológica
+
+| Método | Endpoint | Descrição |
+|--------|----------|------------|
+| POST | `/api/v1/validacao/verificar-consistencia` | Valida consistência de axioma ou ontologia via Openllet |
+| POST | `/api/v1/validacao/explicar-inconsistencia` | Explicação em linguagem natural de inconsistência |
+
+### 8.11. Interface REST - Ontologias
+
+| Método | Endpoint | Descrição |
+|--------|----------|------------|
+| POST | `/api/v1/ontologias/importar` | Importa ontologia (arquivo ou URI) |
+| GET | `/api/v1/ontologias/{id}/axiomas` | Lista axiomas de ontologia (paginado, filtrável por tipo) |
+| POST | `/api/v1/ontologias/{id}/exportar` | Exporta ontologia (Manchester Syntax, Turtle, RDF/XML, OWL/XML) |
+| DELETE | `/api/v1/ontologias/{id}` | Remove ontologia |
+
 ## 9. Padrões de Interface Modernos
 
 ### 9.1. Transparência de Capacidades
@@ -392,6 +618,18 @@ erDiagram
 - Dashboard de execução de ferramentas
 - Logs detalhados de cada ação
 - Indicadores de progresso para ações longas
+
+### 9.6. Visualização de Ontologia
+- Visualizador de hierarquia de classes e propriedades OWL
+- Visualizador de axiomas com Manchester Syntax
+- Indicadores de consistência em tempo real (verde = consistente, vermelho = inconsistente)
+- Exportação em múltiplos formatos (Manchester Syntax, Turtle, RDF/XML, OWL/XML)
+
+### 9.7. Feedback de Validação Ontológica
+- Dialog de explicação de inconsistências em linguagem natural
+- Visualização de axiomas conflitantes
+- Sugestões de correção automáticas do LLM
+- Indicador de iterações do ciclo LLM-Reasoner
 
 ## 10. Exemplos de Interação
 
@@ -429,3 +667,110 @@ Agente: "Qual livro você deseja editar?
 Usuário: "2"
 Agente: "O que deseja editar em Êxodo?"
 ```
+
+### 10.4. Exemplo de Conversação com Validação Ontológica
+```
+Usuário: "Vamos modelar o domínio de animais"
+Agente: "Sessão ontológica criada para domínio 'animais'. Ontologia vazia iniciada."
+
+Usuário: "Todo cachorro é um mamífero"
+Agente: "Axioma extraído: SubClassOf(:Cachorro :Mamifero)
+Validação: ✓ Consistente
+Ontologia atualizada (1 axioma)."
+
+Usuário: "Todo gato também é mamífero"
+Agente: "Axioma extraído: SubClassOf(:Gato :Mamifero)
+Validação: ✓ Consistente
+Ontologia atualizada (2 axiomas)."
+
+Usuário: "Cachorro e gato são mutuamente exclusivos"
+Agente: "Axioma extraído: DisjointClasses(:Cachorro :Gato)
+Validação: ✓ Consistente
+Ontologia atualizada (3 axiomas)."
+
+Usuário: "Um cão-gato é ao mesmo tempo cachorro e gato"
+Agente: "Axioma extraído: EquivalentClasses(:CaoGato ObjectIntersectionOf(:Cachorro :Gato))
+Validação: ✗ Inconsistente
+Explicação: A classe CaoGato seria insatisfatível porque Cachorro e Gato foram declarados
+como mutuamente exclusivos (DisjointClasses). Um indivíduo não pode ser ambos ao mesmo tempo.
+Sugestão: Remova DisjointClasses(:Cachorro :Gato) ou redefina CaoGato como subclasse de
+apenas um deles."
+```
+
+### 10.5. Exemplo de Construção Autônoma de Ontologia
+```
+Usuário: "Construa uma ontologia a partir do seguinte:
+Sistema de gestão de biblioteca.
+Livros têm autores, ISBN.
+Usuários podem alugar livros.
+Um livro pode ter no máximo 5 cópias."
+
+Agente: "Job de construção iniciado. ID: abc-123
+Fase: EXTRACTION... extraídas 4 classes, 4 propriedades.
+Fase: GENERATION... 8 axiomas candidatos gerados.
+Fase: VALIDATION... verificando consistência...
+Fase: REFINEMENT... 1 axioma ajustado após feedback do raciocinador.
+
+Resultado final:
+- Classes: 4 (Livro, Autor, Usuario, Aluguel)
+- Propriedades: 4 (temAutor, temISBN, podeAlugar, temCopia)
+- Axiomas: 8
+- Iterações de validação: 2
+- Consistência: ✓
+
+Ontologia disponível para download em Manchester Syntax, Turtle ou RDF/XML."
+```
+
+## 11. Componentes da Arquitetura Neuro-Simbólica
+
+### 11.1. Tools OWL 2 DL
+
+Cada construtor OWL 2 DL possui uma tool LLM especializada (interface `OWLTool`, classe abstrata `AbstractOWLTool`) que:
+1. Recebe descrição em linguagem natural
+2. Constrói prompt especializado com contexto ontológico
+3. Consulta LLM via `LLMCommunicator` (Spring AI)
+4. Valida sintaxe do axioma gerado
+5. Verifica consistência via raciocinador
+6. Retorna axioma validado ou executa ciclo de feedback
+
+**Categorias de Tools:**
+
+| Categoria | Tools | Exemplo de Uso |
+|-----------|-------|----------------|
+| ClassExpression | `SubClassOfTool`, `EquivalentClassesTool`, `DisjointClassesTool`, `SomeValuesFromTool`, `AllValuesFromTool`, `MinCardinalityTool`, `MaxCardinalityTool`, `OneOfTool` | "X é um tipo de Y", "X tem no máximo N Y" |
+| ObjectProperty | `ObjectPropertyDomainTool`, `ObjectPropertyRangeTool`, `InverseObjectPropertiesTool`, `TransitiveObjectPropertyTool`, `SymmetricObjectPropertyTool`, `FunctionalObjectPropertyTool` | "Domínio da propriedade", "Propriedade transitiva" |
+| DataProperty | `DataPropertyDomainTool`, `DataPropertyRangeTool`, `FunctionalDataPropertyTool` | "Tipo de dado (xsd:integer, xsd:string)" |
+| Individual | `ClassAssertionTool`, `ObjectPropertyAssertionTool`, `DataPropertyAssertionTool`, `SameIndividualTool`, `DifferentIndividualsTool` | "John é uma Pessoa", "Tom e Jerry são diferentes" |
+| Annotation | `AnnotationAssertionTool` | Adição de metadados e documentação |
+
+### 11.2. Ciclo LLM-Reasoner (LLMReasonerLoop)
+
+Núcleo da abordagem neuro-simbólica:
+
+```
+LLM gera axiomas candidatos
+    → Reasoner (Openllet) valida consistência
+    → Se inconsistente: Reasoner explica conflito
+    → InconsistencyExplainer traduz em linguagem natural
+    → LLM recebe feedback e auto-corrige
+    → Loop retorna ao passo 1 (máx. 3-5 iterações)
+    → Resultado: axioma consistente ou rejeição com explicação
+```
+
+### 11.3. Integração com Stack Existente
+
+```
+Tool OWL 2 DL (gerar axioma)
+    → CoreOWLService.criarAxioma() → OWL API → OWLDataFactory
+    → OpenlletReasonerService.checkConsistency() → Openllet DL Reasoning
+    → LLMCommunicator.sendPrompt() → ChatModel (Spring AI) → LLM Provider
+```
+
+## 12. Referências
+
+- **CDU-Agentes-Guiados-por-Ontologias.md** — Especificação completa da arquitetura neuro-simbólica com OWL 2 DL e LLMs
+- **ADR-048** — Embed AI MCP Skills Spring AI (arquitetura base dos módulos ia-core-llm-*)
+- **CDU Manter-OWL** — Gerenciamento de ontologias OWL
+- **CDU Manter-LLM** — Gerenciamento de LLM, chat, templates, prompts
+- **spring-ai-agent-utils** — Framework base para orquestração multi-agente
+- **OWL API + Openllet** — Stack Java para manipulação e raciocínio OWL 2 DL
