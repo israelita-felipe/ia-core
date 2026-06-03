@@ -33,6 +33,8 @@ public final class TemplateTranslator {
     public static final class VALIDATION {
         public static final String TITULO_NOT_BLANK = "template.validation.titulo.not.blank";
         public static final String TITULO_SIZE = "template.validation.titulo.size";
+        public static final String IDENTIFICADOR_NOT_BLANK = "template.validation.identificador.not.blank";
+        public static final String IDENTIFICADOR_SIZE = "template.validation.identificador.size";
         public static final String CONTEUDO_NOT_BLANK = "template.validation.conteudo.not.blank";
         public static final String CONTEUDO_SIZE = "template.validation.conteudo.size";
     }

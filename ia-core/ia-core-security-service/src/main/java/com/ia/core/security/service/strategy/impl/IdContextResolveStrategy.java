@@ -88,8 +88,9 @@ public class IdContextResolveStrategy
 
       return new HashSet<>(fromJson).contains(userContextValue);
     } catch (Exception e) {
-      log.error("Erro ao validar correspondência de contexto de ID", e);
-      return false;
+      log.error("Erro ao validar correspondência de contexto de ID: serviceContext={}, userContext={}",
+                serviceContextValue, userContextValue, e);
+      throw new RuntimeException("Falha ao validar contexto de segurança", e);
     }
   }
 

@@ -6,10 +6,11 @@ import com.ia.core.llm.service.model.agente.AgenteDTO;
 import com.ia.core.llm.service.model.agente.AgenteUseCase;
 import com.ia.core.llm.service.resolver.FerramentaResolver;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class AgenteService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public Optional<AgenteDTO> findByIdentificador(String identificador) {
     log.debug("Buscando agente por identificador: {}", identificador);
     return agenteRepository.findByIdentificador(identificador)
@@ -53,7 +54,7 @@ public class AgenteService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public List<AgenteDTO> listAtivos() {
     log.debug("Listando agentes ativos");
     return agenteRepository.findByAtivoTrue().stream()
@@ -65,7 +66,7 @@ public class AgenteService
   }
 
   @Override
-  @Transactional
+  @TransactionalWrite
   public AgenteDTO save(AgenteDTO dto) throws ServiceException {
     log.debug("Salvando agente: identificador={}, titulo={}", dto.getIdentificador(), dto.getTitulo());
     AgenteDTO saved = super.save(dto);

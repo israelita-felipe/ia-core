@@ -66,6 +66,10 @@ public class AxiomaDTO
     return toBuilder().build();
   }
 
+  public String getManchesterSyntax() {
+    return expressao;
+  }
+
   public static final class CAMPOS
     extends AbstractBaseEntityDTO.CAMPOS {
     public static final String URI = "uri";

@@ -10,7 +10,9 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Agente especialista para orquestração multi-agente.
@@ -100,6 +102,21 @@ public class Agente
    */
   @Column(name = "modulo_origem", length = 200)
   private String moduloOrigem;
+
+  /**
+   * Metadados genéricos armazenados como mapa chave-valor.
+   * Permite armazenar especificidades de diferentes tipos de agentes
+   * sem criar campos específicos na tabela.
+   */
+  @ElementCollection
+  @CollectionTable(
+      name = "AGENTE_METADADOS",
+      schema = SCHEMA_NAME,
+      joinColumns = @JoinColumn(name = "agente_id"))
+  @MapKeyColumn(name = "chave")
+  @Column(name = "valor")
+  @Default
+  private Map<String, String> metadados = new HashMap<>();
 
   public static final String FERRAMENTA_JOIN_TABLE = LLMModel.TABLE_PREFIX + "AGENTE_FERRAMENTA";
 

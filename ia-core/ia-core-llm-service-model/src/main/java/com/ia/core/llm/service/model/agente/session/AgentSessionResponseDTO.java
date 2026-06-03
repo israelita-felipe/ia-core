@@ -1,4 +1,4 @@
-package com.ia.core.llm.service.model.agent;
+package com.ia.core.llm.service.model.agente.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

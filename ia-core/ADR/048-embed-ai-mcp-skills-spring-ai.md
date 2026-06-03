@@ -496,7 +496,48 @@ ia-core:
 | `XxxService` | `ia-core-llm-service` | In-process: JPA, `ChatService`, MCP, orquestrador |
 | `XxxManager` + `XxxClient` (Feign) | `ia-core-llm-view` | Remoto: HTTP para API exposta pela app hospedeira |
 
-**Novos contratos e UI:**
+## Standardization Patterns
+
+Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
+
+### RFCs Relevantes
+
+| RFC | Título | Aplicação |
+|-----|--------|-----------|
+| **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos de código e recursos |
+| **RFC 5646** | Tags for Identifying Languages | Tags de idioma para prompts e respostas multilíngue |
+| **RFC 5988** | Web Linking | Semântica de links para recursos AI e MCP |
+
+### Padrões de Mercado
+
+| Padrão | Fonte | Aplicação |
+|--------|-------|-----------|
+| **Spring AI 2.0** | Spring Framework | Framework principal para integração AI |
+| **MCP Protocol** | Model Context Protocol | Protocolo para comunicação com modelos de IA |
+| **OpenAI API** | OpenAI | Interface para modelos de linguagem |
+| **LangChain4j** | LangChain4j | Framework alternativo (não usado neste projeto) |
+| **REST API Guidelines** | REST API | Endpoints REST para integração AI |
+
+### Boas Práticas Adotadas
+
+1. **Spring AI puro**: Exclusivamente Spring AI 2.0.0-M1, sem SDKs de fornecedor.
+2. **Type-safety**: Classes `*Translator` e `*UseCase` garantem refactoring seguro.
+3. **Modularidade**: Cada módulo é independente e pode ser usado separadamente.
+4. **Segurança**: Integração com `ia-core-security-service` para autenticação JWT.
+5. **Descoberta dinâmica**: Ferramentas descobertas automaticamente via `@Tool` e MCP.
+6. **Persistência**: Skills e ferramentas armazenadas em banco de dados.
+7. **Versionamento**: Skills e agentes seguem padrão de versionamento (ADR-026).
+8. **Testes**: Testes unitários e de integração para todas as camadas.
+
+### Compatibilidade com ADRs Relacionados
+
+- **ADR-003**: Classes `*Translator` seguem convenções de nomenclatura e padrões de keys.
+- **ADR-010**: Nomenclatura de classes, métodos e pacotes segue padrões do projeto.
+- **ADR-017**: Migrações para tabelas de AI/MCP seguem convenções de versionamento.
+- **ADR-047**: UTF-8 e tags de idioma para prompts e respostas multilíngue.
+- **ADR-050**: Diretrizes gerais de padronização do projeto.
+
+## Novos contratos e UI:
 
 | UseCase (`service-model`) | Service (`llm-service`) | View |
 |---------------------------|-------------------------|------|
@@ -575,6 +616,304 @@ com.ia.core.llm.rest/
 ### ADR-048-09 — Observabilidade
 
 `LLM_AI_INTERACTION_LOG`, Micrometer, Resilience4j (ADR-025).
+
+**Logging e Monitoramento (ADR-013):**
+
+Baseado no ADR-013, usar Correlation ID para rastreamento de requisições de IA e métricas com Micrometer.
+
+**Correlation ID em Interações de IA:**
+```java
+@Service
+@Slf4j
+public class AgentOrchestratorService {
+
+  public String orchestrarAgente(Long agenteId, String mensagem) {
+    String correlationId = MDC.get("correlationId");
+    log.info("Iniciando orquestração de agente - correlationId: {}, agenteId: {}",
+        correlationId, agenteId);
+
+    try {
+      String resposta = chatClient.prompt()
+          .user(mensagem)
+          .call()
+          .content();
+
+      log.info("Orquestração concluída com sucesso - correlationId: {}", correlationId);
+      return resposta;
+    } catch (Exception e) {
+      log.error("Erro na orquestração de agente - correlationId: {}", correlationId, e);
+      throw new LlmOrchestrationException("Erro na orquestração de agente", e);
+    }
+  }
+}
+```
+
+**Métricas de IA com Micrometer:**
+```java
+@Component
+public class LlmMetrics {
+
+  private final Counter llmRequestCounter;
+  private final Timer llmResponseTimer;
+
+  public LlmMetrics(MeterRegistry registry) {
+    this.llmRequestCounter = Counter.builder("llm_requests_total")
+        .description("Total de requisições LLM")
+        .tag("type", "agent")
+        .register(registry);
+
+    this.llmResponseTimer = Timer.builder("llm_response_time")
+        .description("Tempo de resposta LLM")
+        .publishPercentiles(0.5, 0.95, 0.99)
+        .register(registry);
+  }
+
+  public void recordRequest(String type) {
+    llmRequestCounter.increment(Tag.of("type", type));
+  }
+
+  public void recordResponseTime(long duration) {
+    llmResponseTimer.record(duration, TimeUnit.MILLISECONDS);
+  }
+}
+```
+
+---
+
+### ADR-048-10 — Chat Memory Patterns
+
+Baseado no padrão de desenvolvimento IA, usar Chat Memory para manter contexto de conversações.
+
+**JdbcChatMemoryRepository (Camada Service):**
+
+```java
+@Configuration
+public class ChatMemoryConfig {
+
+  @Bean
+  public ChatMemory chatMemory(JdbcChatMemoryRepository chatMemoryRepository) {
+    return MessageWindowChatMemory.builder()
+        .chatMemoryRepository(chatMemoryRepository)
+        .maxMessages(50)
+        .build();
+  }
+
+  @Bean
+  public MessageChatMemoryAdvisor messageChatMemoryAdvisor(ChatMemory chatMemory) {
+    return MessageChatMemoryAdvisor.builder()
+        .chatMemory(chatMemory)
+        .defaultChatMemoryAdvisorRequestText("Responda à pergunta do usuário usando o contexto da conversa.")
+        .build();
+  }
+}
+```
+
+**ViewChatMemoryManager (Camada View - In-Memory):**
+
+```java
+@Component
+public class ViewChatMemoryManager {
+
+  private final Map<String, ChatMemory> sessionMemories = new ConcurrentHashMap<>();
+
+  public ChatMemory getOrCreateSession(String sessionId) {
+    return sessionMemories.computeIfAbsent(sessionId, id ->
+        MessageWindowChatMemory.builder()
+            .maxMessages(50)
+            .build());
+  }
+
+  public void clearSession(String sessionId) {
+    sessionMemories.remove(sessionId);
+  }
+
+  public List<String> getSessionHistory(String sessionId) {
+    ChatMemory chatMemory = getOrCreateSession(sessionId);
+    // Retorna histórico da sessão
+  }
+}
+```
+
+**Integração com Vaadin:**
+```java
+@Route("pessoa/form")
+public class PessoaFormView extends VerticalLayout {
+
+  private final ViewChatMemoryManager chatMemoryManager;
+  private String chatSessionId;
+
+  @PostConstruct
+  public void init() {
+    chatSessionId = UUID.randomUUID().toString();
+    chatMemoryManager.getOrCreateSession(chatSessionId);
+  }
+
+  private void enviarParaAgente(String mensagem) {
+    ChatMemory chatMemory = chatMemoryManager.getOrCreateSession(chatSessionId);
+    // Usar chatMemory com ChatClient
+  }
+}
+```
+
+---
+
+**Domain Events para Comunicação Desacoplada (ADR-005):**
+```java
+@Component
+public class LlmInteractionEventListener {
+
+  @EventListener
+  public void handleLlmInteractionEvent(BaseServiceEvent<LlmInteractionDTO> event) {
+    if (event.getEventType() == CrudOperationType.CREATED) {
+      log.info("Nova interação com IA registrada: {}", event.getDto().getId());
+      // Notificar sistemas externos, atualizar métricas, etc.
+    }
+  }
+}
+```
+
+**Exception Handling para IA (ADR-011):**
+```java
+public class LlmModelNotFoundException extends DomainException {
+  public LlmModelNotFoundException(String model) {
+    super(String.format("Modelo LLM não encontrado: %s", model));
+  }
+}
+
+@Service
+public class AgentOrchestratorService {
+
+  public String orchestrarAgente(Long agenteId, String mensagem) {
+    AgenteDTO agente = agenteService.buscarPorId(agenteId)
+        .orElseThrow(() -> new LlmModelNotFoundException("Agente não encontrado"));
+    // ...
+  }
+}
+```
+
+**Business Rule Chain para Validações de IA (ADR-018):**
+```java
+public class AgentAtivoRule implements BusinessRule<AgenteDTO> {
+
+  @Override
+  public String getCode() {
+    return "AGENTE_001";
+  }
+
+  @Override
+  public String getName() {
+    return "Agente deve estar ativo";
+  }
+
+  @Override
+  public void validate(AgenteDTO dto, ValidationResult result) {
+    if (!dto.getAtivo()) {
+      result.addError("ativo", translator.get(AGENTE_INATIVO));
+    }
+  }
+}
+
+// Compondo cadeia de regras
+BusinessRuleChain<AgenteDTO> chain = BusinessRuleChain.<AgenteDTO>create()
+    .addRule(new AgentAtivoRule())
+    .addRule(new AgentModelValidoRule())
+    .addRule(new AgentToolsRule());
+
+chain.validate(agenteDTO);
+```
+
+**HasVersion para Versionamento de Entidades (ADR-026), BaseEntity já possui Version:**
+```java
+@Entity
+@Table(name = "LLM_AGENTE")
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Agente extends BaseEntity{
+
+  // outros campos...
+}
+```
+
+**TSID para Identidade de Entidades (ADR-015), BaseEntity já possui TSID:**
+```java
+@Entity
+@Table(name = "LLM_AGENTE")
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Agente extends BaseEntity {
+
+  // outros campos...
+}
+```
+
+**SuperBuilder para Entidades JPA (ADR-020):**
+```java
+@Entity
+@Table(name = "LLM_AGENTE")
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Agente extends BaseEntity {
+
+  private String identificador;
+  private String titulo;
+  private String descricao;
+  @Lob
+  private String instrucoes;
+  private String modelo;
+  private Boolean ativo;
+  private String moduloOrigem;
+
+  @ManyToMany
+  @JoinTable(
+    name = "LLM_AGENTE_FERRAMENTA",
+    joinColumns = @JoinColumn(name = "agente_id"),
+    inverseJoinColumns = @JoinColumn(name = "ferramenta_id")
+  )
+  private Set<Ferramenta> ferramentas = new HashSet<>();
+}
+```
+
+**Flyway para Migrations de Banco de Dados (ADR-017):**
+```sql
+-- V10022025110000__create_llm_tables.sql
+CREATE TABLE llm_agente (
+    id BIGSERIAL PRIMARY KEY,
+    identificador VARCHAR(255) NOT NULL UNIQUE,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    instrucoes TEXT,
+    modelo VARCHAR(100),
+    ativo BOOLEAN DEFAULT TRUE,
+    modulo_origem VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT DEFAULT 0
+);
+
+CREATE TABLE llm_ferramenta (
+    id BIGSERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL UNIQUE,
+    descricao TEXT,
+    tipo VARCHAR(50) NOT NULL,
+    identificador VARCHAR(255) NOT NULL UNIQUE,
+    modulo_origem VARCHAR(255),
+    ativo BOOLEAN DEFAULT TRUE,
+    descoberta_automatica BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE llm_agente_ferramenta (
+    agente_id BIGINT NOT NULL,
+    ferramenta_id BIGINT NOT NULL,
+    PRIMARY KEY (agente_id, ferramenta_id),
+    FOREIGN KEY (agente_id) REFERENCES llm_agente(id),
+    FOREIGN KEY (ferramenta_id) REFERENCES llm_ferramenta(id)
+);
+```
 
 ---
 
@@ -749,29 +1088,45 @@ resilience4j:
 
 ## Status de implementação
 
-Entregue na base de código:
+Estado honesto em **2026-06-02** (revisão alinhada ao CDU *Agentes Guiados por Ontologias* e compilação Maven).
 
-- Entidades `Prompt`, `Skill`, `Ferramenta`, `Agente`, `AiInteractionLog` + Flyway `V10022025110000`
-- Serviços `PromptService`, `SkillService`, `FerramentaService`, `FerramentaDiscoveryService`, `AgenteService`, `AgentSessionService`, `ChatApplicationService`
-- MCP: `application-llm-service.yml`, `LlmAgentCardController`, `LLMSecurityAutoConfiguration`
-- REST: `ia-core-llm-rest` com `A2AController`, `WebSearchController`, `WebSearchTool` (BraveWebSearchTool)
-- View: pacotes `prompt`, `skill`, `ferramenta`, `agente` (Feign managers/clients)
-- Transform: `ImageProcessingService`, `TextExtractionService` (binarização Otsu, extração de texto de imagens)
-- Vector: `VectorStoreService` (RAG com Vector Store)
-- Audit: `AiInteractionAuditService` (auditoria de interações LLM)
-- Agent: `IaCoreSubagentResolver` (SPI para integração com spring-ai-agent-utils), `AgentOrchestratorService`, `AgentSessionService`
-- Tool: `LlmToolCatalog` (catálogo de ferramentas), `WebSearchTool` (BraveWebSearchTool em ia-core-llm-rest)
-- A2A: Suporte ao protocolo Agent-to-Agent com dependência `spring-ai-agent-utils-a2a`
+### Implementado (núcleo ADR-048)
 
-✅ Concluído (integração spring-ai-agent-utils com padrão ia-core):
-- Entidade `Agente` em banco de dados (substitui configuração YAML)
-- `AgenteService` e `IaCoreSubagentResolver` (SPI para integração com spring-ai-agent-utils)
-- `WebSearchTool` (built-in tool para busca na internet via BraveWebSearchTool do spring-ai-agent-utils)
-- Suporte A2A (Agent-to-Agent protocol) com dependência `spring-ai-agent-utils-a2a`
-- Refatoração `AgentOrchestratorService` para delegar a `ChatApplicationService` (encapsulamento)
-- Configuração YAML adaptada para banco de dados (`subagent-resolver.type: database`)
-- Módulo `ia-core-llm-rest` com controllers REST específicos LLM
-- Unificação de pastas `agent` e `agente`
+| Área | Estado |
+|------|--------|
+| Domínio `Prompt`, `Skill`, `Ferramenta`, `Agente`, `Template`, `ChatSession`, `AgentSession`, `AiInteractionLog` | ✅ `ia-core-llm-model` + Flyway |
+| UseCases + serviços | ✅ `PromptService`, `SkillService` (`listMetadata`, `loadForActivation`), `FerramentaService` (`syncFromDiscovery`, `listAvailable`), `FerramentaDiscoveryService`, `AgenteService`, `AgentSessionService`, `ChatService`, `ChatApplicationService` |
+| Orquestração | ✅ `AgentOrchestratorService` → `ChatApplicationService`; `IaCoreSubagentResolver` |
+| REST catálogo LLM | ✅ `PromptController`, `SkillController` (+ `/metadata`, `/{id}/activation`), `FerramentaController` (+ `/sync-discovery`, `/available`), `AgenteController`, `AgentSessionController`, `TemplateController`, `ChatSessionController`, `LlmAgentCardController`, `A2AController`, `WebSearchController` |
+| REST OWL (CDU) | ✅ `OwlFerramentasController` (`/api/v1/llm/owl/ferramentas`), `AgenteConversacionalController`, `AgenteConstrutorController`, `ValidacaoController`, `OntologiasController` |
+| View dual hosting | ✅ Managers/Clients Feign para `prompt`, `skill`, `ferramenta`, `agente`, `agent`, `chat`, `template`; descoberta `@Tool` na view (`FerramentaDiscoveryService` view — apenas log) |
+| Auditoria / tools | ✅ `AiInteractionAuditService`, `LlmToolCatalog`; `WebSearchTool` em `ia-core-llm-rest` |
+| YAML | ✅ `application-llm-service.yml` com blocos `ia-core.llm`, `spring.ai.mcp`, `spring.ai.agent` |
+
+### Parcial
+
+| Área | Lacuna |
+|------|--------|
+| MCP servidor / RF-01, RF-09 | YAML presente; **sem** starter MCP explícito no POM de `ia-core-llm-service`; agent-card via `LlmAgentCardController` em **rest**, não auto-config Spring AI MCP |
+| Segurança JWT RF-03 | **`LLMSecurityAutoConfiguration` não existe**; `ia-core-llm-service` **não** declara `ia-core-security-service` nem `spring-boot-starter-security` (decisão ADR-048-03 pendente na camada serviço) |
+| `AgentSessionUseCase` RF-04 | `run`/`confirm` básicos; confirmação humana e integração plena spring-ai-agent-utils **simplificadas** |
+| Agentes OWL ↔ `AgenteDTO` | `AgenteConversacionalOntologiaService` / `AgenteConstrutorOntologiaService` **não** persistidos como `Agente`; `initializeDefaultAgents()` com TODO |
+| Descoberta RF-12 | Service reconcilia BD; view só enumera `@Tool` em Managers (sem persistir) |
+| `ChatUseCase` | Inexistente; `ChatManager` na view sem contrato dedicado em `service-model` |
+| Transform / Vector | Referenciados em histórico do ADR; **não** verificados como módulos estáveis nesta revisão |
+| Integração OWL tools ↔ `FerramentaDTO` | Tools OWL em pacote `com.ia.core.owl`; catálogo `Ferramenta` separado; auto-registo Template/Ferramenta por tool **parcial** (CDU §6.3) |
+
+### Não implementado / removido
+
+- `ComandoSistema` / `PromptComando` — **removidos**; apenas `Prompt`
+- `LLMSecurityAutoConfiguration` — **não presente** no código atual
+- CI conformance MCP (roadmap fase 6)
+- Chat Memory JDBC (ADR-048-10) — não verificado nesta revisão
+
+### Conflito de rotas resolvido (2026-06-02)
+
+- Catálogo domínio **`Ferramenta`**: `/api/v1/llm/ferramentas` (`FerramentaController`)
+- Tools OWL 2 DL: `/api/v1/llm/owl/ferramentas` (`OwlFerramentasController`, antes `FerramentasController`)
 
 ## CDUs Relacionados
 

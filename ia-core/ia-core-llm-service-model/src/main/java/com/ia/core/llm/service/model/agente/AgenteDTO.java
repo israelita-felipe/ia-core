@@ -8,14 +8,15 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * DTO para transferência de dados de Agente.
@@ -92,6 +93,13 @@ public class AgenteDTO
   @Size(max = 200)
   private String moduloOrigem;
 
+  /**
+   * Mapa de metadados genéricos para armazenar especificidades
+   * de diferentes tipos de agentes sem criar campos específicos.
+   */
+  @Default
+  private Map<String, String> metadados = new HashMap<>();
+
   @Override
   public AgenteDTO cloneObject() {
     log.debug("Clonando AgenteDTO: identificador={}", identificador);
@@ -99,6 +107,7 @@ public class AgenteDTO
         .id(null)
         .version(HasVersion.DEFAULT_VERSION)
         .ferramentas(new ArrayList<>(ferramentas))
+        .metadados(new HashMap<>(metadados))
         .build();
   }
 }

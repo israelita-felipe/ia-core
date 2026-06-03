@@ -1,5 +1,6 @@
-package com.ia.core.llm.service.model.agent;
+package com.ia.core.llm.service.model.agente.session;
 
+import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 
 import java.util.List;

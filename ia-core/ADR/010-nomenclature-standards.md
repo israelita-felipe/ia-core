@@ -139,6 +139,48 @@ public class EventoTranslator {
 - Team Lead
 - Architect
 
+## Padrões de Padronização (Standardization)
+
+Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
+
+### RFCs Relevantes
+
+| RFC | Título | Aplicação neste ADR |
+|-----|--------|---------------------|
+| **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos de código e recursos |
+| **RFC 5646** | Tags for Identifying Languages | Tags de locale para nomenclatura de arquivos (ex: `messages_en.properties`) |
+| **RFC 5988** | Web Linking | Nomenclatura de endpoints REST com verbos HTTP adequados |
+
+### Padrões de Mercado
+
+| Padrão | Fonte | Aplicação |
+|--------|-------|-----------|
+| **Java Package Naming** | Oracle | Nomes de pacotes em lowercase, sem underscores |
+| **Java Class Naming** | Oracle | PascalCase para classes, interfaces, enums |
+| **Java Method Naming** | Oracle | camelCase para métodos, parâmetros |
+| **Java Constant Naming** | Oracle | UPPER_SNAKE_CASE para constantes |
+| **Spring Boot Conventions** | Spring | Nomenclatura de beans, controllers, services |
+| **REST API Naming** | REST API Guidelines | Nomes de endpoints em lowercase, verbos HTTP |
+
+### Boas Práticas Adotadas
+
+1. **Consistência total**: Todos os módulos seguem exatamente as mesmas convenções.
+2. **Prefixos de módulo**: Classes de domínio usam prefixo do módulo (ex: `Pessoa` em `biblia-model`, `Evento` em `biblia-service`).
+3. **Sufixos semânticos**: Sufixos indicam claramente o propósito (DTO, Service, Repository, etc.).
+4. **Nomes descritivos**: Nomes devem ser auto-explicativos e evitar abreviações não óbvias.
+5. **Hierarquia clara**: Pacotes seguem hierarquia lógica (model → service → repository → controller).
+6. **Evitar palavras redundantes**: Não usar `Manager` quando `Service` é mais adequado.
+7. **Testes seguem padrões**: Classes de teste seguem mesmas convenções com sufixo `Test` ou `Tests`.
+8. **Interfaces seguem convenções**: Interfaces usam prefixo `I` ou sufixo `able` quando apropriado.
+
+### Compatibilidade com ADRs Relacionados
+
+- **ADR-003**: Classes `*Translator` seguem convenções de nomenclatura e padrões de keys.
+- **ADR-017**: Nomes de migrations seguem convenções de versionamento e descrição.
+- **ADR-047**: UTF-8 em todos os arquivos de código e recursos.
+- **ADR-048**: Classes de AI/MCP seguem convenções de nomenclatura do Spring AI.
+- **ADR-050**: Diretrizes gerais de padronização do projeto.
+
 ## Referências
 
 1. **Google Java Style Guide**

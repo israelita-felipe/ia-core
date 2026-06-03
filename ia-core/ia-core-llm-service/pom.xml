@@ -65,7 +65,16 @@
 			<artifactId>openllet-explanation</artifactId>
 			<version>${openllet.version}</version>
 		</dependency>
-
+    <!-- Selenium dependencies for MiracleScraperService -->
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.bonigarcia</groupId>
+      <artifactId>webdrivermanager</artifactId>
+      <version>5.9.2</version>
+    </dependency>
 		<!-- HSQLDB for file-based embedded database tests -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>

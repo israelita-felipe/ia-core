@@ -13,6 +13,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>
+			<artifactId>ia-core-view</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ia.core</groupId>
 			<artifactId>ia-core-security-view</artifactId>
 			<version>${project.version}</version>
 		</dependency>

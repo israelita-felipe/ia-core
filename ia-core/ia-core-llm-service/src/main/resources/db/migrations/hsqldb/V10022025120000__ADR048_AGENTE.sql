@@ -36,5 +36,6 @@ CREATE TABLE IF NOT EXISTS LARGE_LANGUAGE_MODEL.LLM_AGENTE_SKILL (
 
 -- Inserir agente padrão (llm.core)
 INSERT INTO LARGE_LANGUAGE_MODEL.LLM_AGENTE (id, version, created_at, updated_at, created_by, updated_by, identificador, titulo, descricao, instrucoes, modelo, ativo, modulo_origem)
-VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system', 'llm.core', 'LLM Core Agent', 'Agente principal para orquestração de capacidades LLM', 'Você é um agente especialista em processamento de linguagem natural e orquestração de ferramentas. Sua função é analisar solicitações do usuário, selecionar as ferramentas apropriadas e executar ações no sistema. Sempre forneça respostas claras e concisas.', 'llama3.2-vision', TRUE, 'ia-core-llm-service')
+SELECT 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system', 'llm.core', 'LLM Core Agent', 'Agente principal para orquestração de capacidades LLM', 'Você é um agente especialista em processamento de linguagem natural e orquestração de ferramentas. Sua função é analisar solicitações do usuário, selecionar as ferramentas apropriadas e executar ações no sistema. Sempre forneça respostas claras e concisas.', 'llama3.2-vision', TRUE, 'ia-core-llm-service'
+FROM (VALUES(0)) AS dummy
 WHERE NOT EXISTS (SELECT 1 FROM LARGE_LANGUAGE_MODEL.LLM_AGENTE WHERE identificador = 'llm.core');

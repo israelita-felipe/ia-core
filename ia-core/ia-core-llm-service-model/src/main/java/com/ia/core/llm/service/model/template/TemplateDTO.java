@@ -54,6 +54,13 @@ public class TemplateDTO
   private String titulo;
 
   /**
+   * Identificador único do template
+   */
+  @NotNull(message = TemplateTranslator.VALIDATION.IDENTIFICADOR_NOT_BLANK)
+  @Size(max = 255, message = TemplateTranslator.VALIDATION.IDENTIFICADOR_SIZE)
+  private String identificador;
+
+  /**
    * Conteúdo do template
    */
   @NotNull(message = TemplateTranslator.VALIDATION.CONTEUDO_NOT_BLANK)

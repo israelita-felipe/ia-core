@@ -1,8 +1,8 @@
-package com.ia.core.llm.view.agent;
+package com.ia.core.llm.view.agente.session;
 
-import com.ia.core.llm.service.model.agent.AgentConfirmationDTO;
-import com.ia.core.llm.service.model.agent.AgentSessionRequestDTO;
-import com.ia.core.llm.service.model.agent.AgentSessionResponseDTO;
+import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
+import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
+import com.ia.core.llm.service.model.agente.session.AgentSessionResponseDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;

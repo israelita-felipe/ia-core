@@ -48,14 +48,17 @@ public abstract class OncePerRequestAuthenticationFilter
         log.info("Autenticação falhou para o usuário {}", e.getUserCode());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.addHeader(HEADER_INVALID_TOKEN, "Usuário não localizado");
+        return;
       } catch (ExpiredJwtException e) {
         log.info("Autenticação falhou, token expirado");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.addHeader(HEADER_INVALID_TOKEN, "Token expirado");
+        return;
       } catch (Exception e) {
         log.error(e.getLocalizedMessage(), e);
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.addHeader("x-error", e.getLocalizedMessage());
+        return;
       }
     }
     filterChain.doFilter(request, response);

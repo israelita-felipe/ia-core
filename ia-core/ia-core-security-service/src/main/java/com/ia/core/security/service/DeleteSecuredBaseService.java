@@ -58,7 +58,7 @@ public interface DeleteSecuredBaseService<T extends BaseEntity, D extends DTO<?>
       getLogOperationService().logAfterDelete(dto, getRepository(),
                                               getMapper());
     } catch (Exception e) {
-      ex.add(ex);
+      ex.add(e);
     }
     throwIfHasErrors(ex);
   }

@@ -64,7 +64,7 @@ public class WebSearchTool {
       return results;
     } catch (Exception e) {
       log.error("Erro durante busca na internet: query={}", query, e);
-      return "Erro durante busca na internet: " + e.getMessage();
+      throw new RuntimeException("Erro durante busca na internet: " + e.getMessage(), e);
     }
   }
 }
