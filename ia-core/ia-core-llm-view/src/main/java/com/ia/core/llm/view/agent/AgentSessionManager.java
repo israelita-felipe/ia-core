@@ -4,7 +4,7 @@ import com.ia.core.llm.service.model.agent.AgentConfirmationDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionRequestDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionResponseDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionUseCase;
-import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class AgentSessionManager
   }
 
   @Override
-  public List<SkillMetadataDTO> listAvailableSkills() {
-    return client.listAvailableSkills();
+  public List<FerramentaMetadataDTO> listAvailableFerramentas() {
+    return client.listAvailableFerramentas();
   }
 }

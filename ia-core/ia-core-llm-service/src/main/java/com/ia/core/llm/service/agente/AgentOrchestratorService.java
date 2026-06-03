@@ -7,9 +7,9 @@ import com.ia.core.llm.service.model.agent.AgentConfirmationDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionRequestDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionResponseDTO;
 import com.ia.core.llm.service.model.chat.ChatRequestDTO;
-import com.ia.core.llm.service.model.skill.SkillActivationDTO;
-import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
-import com.ia.core.llm.service.model.skill.SkillUseCase;
+import com.ia.core.llm.service.model.ferramenta.FerramentaActivationDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Serviço de orquestração de agentes.
  * <p>
  * Responsável por orquestrar a execução de sessões de agentes, gerenciando
- * confirmações pendentes e integração com skills e chat.
+ * confirmações pendentes e integração com ferramentas e chat.
  * <p>
  * **Padrão de encapsulamento:** Este serviço delega todas as operações de chat
  * ao {@link ChatApplicationService}, que encapsula a implementação do spring-ai-agent-utils.
@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class AgentOrchestratorService {
 
-  private final SkillUseCase skillUseCase;
+  private final FerramentaUseCase ferramentaUseCase;
   private final ChatApplicationService chatApplicationService;
   private final LlmModuleProperties properties;
   private final AiInteractionAuditService auditService;
@@ -45,13 +45,13 @@ public class AgentOrchestratorService {
 
   public AgentSessionResponseDTO run(AgentSessionRequestDTO request) {
     String sessionId = request.getSessionId() != null ? request.getSessionId() : UUID.randomUUID().toString();
-    String systemPrompt = buildSystemPrompt(request.getSkillId());
+    String systemPrompt = buildSystemPrompt(request.getFerramentaId());
     ChatRequestDTO chatRequest = ChatRequestDTO.builder()
         .request(request.getUserMessage())
         .text(request.getUserMessage())
         .build();
     String response = chatApplicationService.ask(chatRequest, systemPrompt);
-    auditService.record(request.getUserMessage(), null, null, response, request.getSkillId());
+    auditService.record(request.getUserMessage(), null, null, response, request.getFerramentaId());
     if (requiresConfirmation(response)) {
       pendingSessions.put(sessionId, new PendingSession(request, response));
       return AgentSessionResponseDTO.builder()
@@ -88,28 +88,28 @@ public class AgentOrchestratorService {
         .userMessage(confirmation.getUserMessage() != null
             ? confirmation.getUserMessage()
             : pending.request().getUserMessage())
-        .skillId(pending.request().getSkillId())
+        .ferramentaId(pending.request().getFerramentaId())
         .build());
   }
 
-  public List<SkillMetadataDTO> listAvailableSkills() {
-    return skillUseCase.listMetadata();
+  public List<FerramentaMetadataDTO> listAvailableFerramentas() {
+    return ferramentaUseCase.listMetadata();
   }
 
-  private String buildSystemPrompt(Long skillId) {
-    if (skillId == null) {
+  private String buildSystemPrompt(Long ferramentaId) {
+    if (ferramentaId == null) {
       return "Você é o orquestrador " + properties.getAgent().getOrchestratorId()
           + ". Delegue tarefas às ferramentas disponíveis quando necessário.";
     }
-    SkillActivationDTO skill = skillUseCase.loadForActivation(skillId);
+    FerramentaActivationDTO ferramenta = ferramentaUseCase.loadForActivation(ferramentaId);
     StringBuilder sb = new StringBuilder();
-    sb.append("# Skill: ").append(skill.getTitulo()).append("\n\n");
-    if (skill.getInstrucoes() != null) {
-      sb.append(skill.getInstrucoes()).append("\n\n");
+    sb.append("# Ferramenta: ").append(ferramenta.getTitulo()).append("\n\n");
+    if (ferramenta.getInstrucoes() != null) {
+      sb.append(ferramenta.getInstrucoes()).append("\n\n");
     }
-    if (skill.getFerramentas() != null && !skill.getFerramentas().isEmpty()) {
+    if (ferramenta.getSubFerramentas() != null && !ferramenta.getSubFerramentas().isEmpty()) {
       sb.append("Ferramentas autorizadas:\n");
-      skill.getFerramentas().forEach(f ->
+      ferramenta.getSubFerramentas().forEach(f ->
           sb.append("- ").append(f.getIdentificador()).append(": ").append(f.getDescricao()).append("\n"));
     }
     return sb.toString();

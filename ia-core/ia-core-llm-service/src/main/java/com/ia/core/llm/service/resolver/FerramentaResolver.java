@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Utilitário compartilhado para resolver entidades {@link Ferramenta} a partir de DTOs.
  * <p>
- * Centraliza a lógica de resolução que antes estava duplicada em
- * {@code AgenteService} e {@code SkillService}.
+ * Centraliza a lógica de resolução utilizada por
+ * {@code AgenteService} e {@code FerramentaService}.
  *
  * @author Israel Araújo
  * @since 1.0.0

@@ -12,5 +12,6 @@ package com.ia.core.llm.model.ferramenta;
 public enum TipoFerramentaEnum {
   AGENTE_ESPECIALISTA,
   TOOL_SPRING,
-  RECURSO_MCP
+  RECURSO_MCP,
+  SKILL
 }

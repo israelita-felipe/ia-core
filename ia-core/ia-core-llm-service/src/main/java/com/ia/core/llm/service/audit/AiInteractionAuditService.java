@@ -26,7 +26,7 @@ public class AiInteractionAuditService {
   private final LlmModuleProperties properties;
 
   @Transactional
-  public void record(String userPrompt, String toolCalls, String reasoning, String response, Long skillId) {
+  public void record(String userPrompt, String toolCalls, String reasoning, String response, Long ferramentaId) {
     if (!properties.getAudit().isEnabled()) {
       return;
     }
@@ -36,9 +36,9 @@ public class AiInteractionAuditService {
         .toolCalls(toolCalls)
         .llmReasoning(reasoning)
         .respostaFinal(response)
-        .skillId(skillId)
+        .ferramentaId(ferramentaId)
         .build();
     repository.save(entry);
-    log.debug("Interação AI auditada skillId={}", skillId);
+    log.debug("Interação AI auditada ferramentaId={}", ferramentaId);
   }
 }

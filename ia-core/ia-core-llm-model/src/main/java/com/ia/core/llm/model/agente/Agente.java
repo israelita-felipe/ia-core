@@ -2,7 +2,6 @@ package com.ia.core.llm.model.agente;
 
 import com.ia.core.llm.model.LLMModel;
 import com.ia.core.llm.model.ferramenta.Ferramenta;
-import com.ia.core.llm.model.skill.Skill;
 import com.ia.core.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -77,6 +76,7 @@ public class Agente
   /**
    * Lista de ferramentas autorizadas para este agente.
    * O orquestrador restringe invocações apenas às ferramentas desta lista.
+   * Inclui tanto ferramentas atômicas quanto skills (tipo=SKILL).
    */
   @Default
   @ManyToMany(fetch = FetchType.LAZY)
@@ -101,20 +101,7 @@ public class Agente
   @Column(name = "modulo_origem", length = 200)
   private String moduloOrigem;
 
-  /**
-   * Skills que este agente pode orquestrar.
-   */
-  @Default
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = Agente.SKILL_JOIN_TABLE,
-      schema = SCHEMA_NAME,
-      joinColumns = @JoinColumn(name = "agente_id"),
-      inverseJoinColumns = @JoinColumn(name = "skill_id"))
-  private List<Skill> skills = new ArrayList<>();
-
   public static final String FERRAMENTA_JOIN_TABLE = LLMModel.TABLE_PREFIX + "AGENTE_FERRAMENTA";
-  public static final String SKILL_JOIN_TABLE = LLMModel.TABLE_PREFIX + "AGENTE_SKILL";
 
   /**
    * Adiciona uma ferramenta à lista de ferramentas autorizadas.
@@ -136,27 +123,5 @@ public class Agente
   public void removerFerramenta(Ferramenta ferramenta) {
     log.debug("Removendo ferramenta {} do agente {}", ferramenta.getIdentificador(), this.identificador);
     this.ferramentas.remove(ferramenta);
-  }
-
-  /**
-   * Adiciona uma skill à lista de skills.
-   *
-   * @param skill skill a ser adicionada
-   */
-  public void adicionarSkill(Skill skill) {
-    log.debug("Adicionando skill {} ao agente {}", skill.getTitulo(), this.identificador);
-    if (!this.skills.contains(skill)) {
-      this.skills.add(skill);
-    }
-  }
-
-  /**
-   * Remove uma skill da lista de skills.
-   *
-   * @param skill skill a ser removida
-   */
-  public void removerSkill(Skill skill) {
-    log.debug("Removendo skill {} do agente {}", skill.getTitulo(), this.identificador);
-    this.skills.remove(skill);
   }
 }

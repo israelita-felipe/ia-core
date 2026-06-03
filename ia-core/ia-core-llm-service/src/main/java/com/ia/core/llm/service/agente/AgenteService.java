@@ -2,11 +2,9 @@ package com.ia.core.llm.service.agente;
 
 import com.ia.core.llm.model.agente.Agente;
 import com.ia.core.llm.model.ferramenta.Ferramenta;
-import com.ia.core.llm.model.skill.Skill;
 import com.ia.core.llm.service.model.agente.AgenteDTO;
 import com.ia.core.llm.service.model.agente.AgenteUseCase;
 import com.ia.core.llm.service.resolver.FerramentaResolver;
-import com.ia.core.llm.service.resolver.SkillResolver;
 import com.ia.core.service.CrudBaseService;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +18,8 @@ import java.util.stream.Collectors;
 /**
  * Serviço para gerenciamento de agentes especialistas.
  * <p>
- * Implementa operações CRUD para agentes utilizados na orquestração multi-agente,
- * seguindo o padrão ia-core para integração com spring-ai-agent-utils.
+ * Implementa operações CRUD para agentes utilizados na orquestração multi-agente.
+ * Ferramentas (incluindo skills de tipo=SKILL) são resolvidas via FerramentaResolver.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -34,16 +32,13 @@ public class AgenteService
 
   private final AgenteRepository agenteRepository;
   private final FerramentaResolver ferramentaResolver;
-  private final SkillResolver skillResolver;
 
   public AgenteService(AgenteServiceConfig config,
-                      AgenteRepository agenteRepository,
-                      FerramentaResolver ferramentaResolver,
-                      SkillResolver skillResolver) {
+                       AgenteRepository agenteRepository,
+                       FerramentaResolver ferramentaResolver) {
     super(config);
     this.agenteRepository = agenteRepository;
     this.ferramentaResolver = ferramentaResolver;
-    this.skillResolver = skillResolver;
   }
 
   @Override
@@ -74,28 +69,13 @@ public class AgenteService
   public AgenteDTO save(AgenteDTO dto) throws ServiceException {
     log.debug("Salvando agente: identificador={}, titulo={}", dto.getIdentificador(), dto.getTitulo());
     AgenteDTO saved = super.save(dto);
-
-    // Salvar relacionamento com ferramentas
-    if (dto.getFerramentas() != null && !dto.getFerramentas().isEmpty()) {
-      Agente agente = agenteRepository.findById(saved.getId())
-          .orElseThrow(() -> new ServiceException("Agente não encontrado após save"));
-      List<Ferramenta> ferramentas = ferramentaResolver.resolve(dto.getFerramentas());
-      agente.setFerramentas(ferramentas);
-      log.debug("Adicionadas {} ferramentas ao agente {}", ferramentas.size(), agente.getIdentificador());
-    }
-
-    // Salvar relacionamento com skills
-    if (dto.getSkills() != null && !dto.getSkills().isEmpty()) {
-      Agente agente = agenteRepository.findById(saved.getId())
-          .orElseThrow(() -> new ServiceException("Agente não encontrado após save"));
-      List<Skill> skills = skillResolver.resolve(dto.getSkills());
-      agente.setSkills(skills);
-      log.debug("Adicionadas {} skills ao agente {}", skills.size(), agente.getIdentificador());
-    }
-
     Agente agente = agenteRepository.findById(saved.getId())
         .orElseThrow(() -> new ServiceException("Agente não encontrado após save"));
+
+    List<Ferramenta> ferramentas = ferramentaResolver.resolve(dto.getFerramentas());
+    agente.setFerramentas(ferramentas);
+
+    agenteRepository.save(agente);
     return getMapper().toDTO(agente);
   }
-
 }

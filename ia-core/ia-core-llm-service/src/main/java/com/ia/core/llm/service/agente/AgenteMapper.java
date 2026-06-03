@@ -3,7 +3,6 @@ package com.ia.core.llm.service.agente;
 import com.ia.core.llm.model.agente.Agente;
 import com.ia.core.llm.service.ferramenta.FerramentaMapper;
 import com.ia.core.llm.service.model.agente.AgenteDTO;
-import com.ia.core.llm.service.skill.SkillMapper;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
@@ -15,7 +14,7 @@ import org.mapstruct.Mapper;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@Mapper(componentModel = "spring", uses = { FerramentaMapper.class, SkillMapper.class })
+@Mapper(componentModel = "spring", uses = { FerramentaMapper.class })
 public interface AgenteMapper
   extends BaseEntityMapper<Agente, AgenteDTO> {
 }

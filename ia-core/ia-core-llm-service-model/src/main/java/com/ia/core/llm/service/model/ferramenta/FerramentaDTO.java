@@ -2,6 +2,7 @@ package com.ia.core.llm.service.model.ferramenta;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.model.ferramenta.TipoFerramentaEnum;
+import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -11,12 +12,15 @@ import lombok.*;
 import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
  * DTO para Ferramenta.
  * <p>
- * Representa uma ferramenta que pode ser utilizada por agentes de IA.
+ * Representa qualquer capacidade que pode ser utilizada por agentes de IA,
+ * incluindo ferramentas atômicas e skills (capacidades compostas).
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -59,8 +63,16 @@ public class FerramentaDTO
   @Default
   private boolean descobertaAutomatica = false;
 
+  private String instrucoes;
+
+  private TemplateDTO template;
+
+  @Default
+  private List<FerramentaDTO> subFerramentas = new ArrayList<>();
+
   @Override
   public FerramentaDTO cloneObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION).build();
+    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
+        .subFerramentas(new ArrayList<>(subFerramentas)).build();
   }
 }

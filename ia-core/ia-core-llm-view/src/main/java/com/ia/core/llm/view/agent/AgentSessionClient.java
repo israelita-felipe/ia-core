@@ -3,7 +3,7 @@ package com.ia.core.llm.view.agent;
 import com.ia.core.llm.service.model.agent.AgentConfirmationDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionRequestDTO;
 import com.ia.core.llm.service.model.agent.AgentSessionResponseDTO;
-import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public interface AgentSessionClient {
   @Resilient(ResilienceProfile.LLM_SERVICE)
   AgentSessionResponseDTO confirm(@RequestBody @Valid AgentConfirmationDTO confirmation);
 
-  @GetMapping("/skills")
+  @GetMapping("/ferramentas")
   @Resilient(ResilienceProfile.LLM_SERVICE)
-  List<SkillMetadataDTO> listAvailableSkills();
+  List<FerramentaMetadataDTO> listAvailableFerramentas();
 }

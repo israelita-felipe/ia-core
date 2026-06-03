@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * DTO para requisição de sessão de agente.
  * <p>
- * Contém a mensagem do usuário, skill opcional e identificador de sessão.
+ * Contém a mensagem do usuário, ferramenta opcional e identificador de sessão.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -25,7 +25,7 @@ public class AgentSessionRequestDTO
   @NotBlank
   private String userMessage;
 
-  private Long skillId;
+  private Long ferramentaId;
 
   private String sessionId;
 
@@ -33,7 +33,7 @@ public class AgentSessionRequestDTO
   public AgentSessionRequestDTO cloneObject() {
     return AgentSessionRequestDTO.builder()
         .userMessage(userMessage)
-        .skillId(skillId)
+        .ferramentaId(ferramentaId)
         .sessionId(sessionId)
         .build();
   }

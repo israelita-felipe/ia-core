@@ -2,7 +2,6 @@ package com.ia.core.llm.service.model.agente;
 
 import com.ia.core.llm.model.agente.Agente;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
-import com.ia.core.llm.service.model.skill.SkillDTO;
 import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -76,6 +75,7 @@ public class AgenteDTO
 
   /**
    * Lista de ferramentas autorizadas para este agente.
+   * Inclui tanto ferramentas atômicas quanto skills (tipo=SKILL).
    */
   @Default
   private List<FerramentaDTO> ferramentas = new ArrayList<>();
@@ -92,12 +92,6 @@ public class AgenteDTO
   @Size(max = 200)
   private String moduloOrigem;
 
-  /**
-   * Skills que este agente pode orquestrar.
-   */
-  @Default
-  private List<SkillDTO> skills = new ArrayList<>();
-
   @Override
   public AgenteDTO cloneObject() {
     log.debug("Clonando AgenteDTO: identificador={}", identificador);
@@ -105,7 +99,6 @@ public class AgenteDTO
         .id(null)
         .version(HasVersion.DEFAULT_VERSION)
         .ferramentas(new ArrayList<>(ferramentas))
-        .skills(new ArrayList<>(skills))
         .build();
   }
 }

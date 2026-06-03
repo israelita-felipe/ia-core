@@ -2,6 +2,7 @@ package com.ia.core.llm.service.ferramenta;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
+import com.ia.core.llm.service.template.TemplateMapper;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import org.mapstruct.Mapper;
 
@@ -13,7 +14,7 @@ import org.mapstruct.Mapper;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { TemplateMapper.class })
 public interface FerramentaMapper
   extends BaseEntityMapper<Ferramenta, FerramentaDTO> {
 }
