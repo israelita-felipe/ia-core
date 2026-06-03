@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  */
 public interface UserPasswordEncoder {
 
-  final String SECRET_KEY = "5s6ad4f&%$#.";
+  final String SECRET_KEY = System.getenv().getOrDefault("USER_ENCRYPTION_KEY", "CHANGE_ME_IN_PRODUCTION");
   final String ALGORITHM = "AES/CBC/PKCS5Padding";
   static final byte[] iv = new byte[] { 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
       1, 1, 0, 0 };

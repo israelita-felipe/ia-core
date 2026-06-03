@@ -135,9 +135,37 @@ public class TelegramService implements MensagemProvider {
 
   @Override
   public boolean validarWebhook(String payload, String signature) {
-    // Implementação básica - em produção usar HMAC validation
-    log.debug("Validando webhook Telegram");
-    return payload != null && !payload.isBlank();
+    if (payload == null || payload.isBlank() || signature == null || signature.isBlank()) {
+      log.warn("Webhook Telegram rejeitado: payload ou signature ausente");
+      return false;
+    }
+
+    try {
+      String secretToken = telegramConfig.getBotToken();
+      if (secretToken == null || secretToken.isBlank()) {
+        log.error("Bot token não configurado para validação de webhook");
+        return false;
+      }
+
+      javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA256");
+      javax.crypto.spec.SecretKeySpec keySpec = new javax.crypto.spec.SecretKeySpec(
+          secretToken.getBytes(java.nio.charset.StandardCharsets.UTF_8), "HmacSHA256");
+      mac.init(keySpec);
+      byte[] hmacBytes = mac.doFinal(payload.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+      String computedSignature = java.util.HexFormat.of().formatHex(hmacBytes);
+
+      boolean valid = java.security.MessageDigest.isEqual(
+          computedSignature.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+          signature.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+
+      if (!valid) {
+        log.warn("Webhook Telegram rejeitado: assinatura inválida");
+      }
+      return valid;
+    } catch (Exception e) {
+      log.error("Erro ao validar webhook Telegram: {}", e.getMessage());
+      return false;
+    }
   }
 
   /**

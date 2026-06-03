@@ -133,10 +133,10 @@ public class UserService
     throws ServiceException {
     ServiceException ex = new ServiceException();
     try {
-      log.info("Reset de password: {}", reset);
+      log.info("Reset de password para userCode: {}", reset.getUserCode());
       String newPassword = UserPasswordEncoder
           .generateDefaultSecureRandomPassword();
-      log.info("New password: {}", newPassword);
+      log.debug("Password reset executado com sucesso para userCode: {}", reset.getUserCode());
       SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
       searchRequest.getFilters()
           .add(FilterRequestDTO.builder().key("userCode")
