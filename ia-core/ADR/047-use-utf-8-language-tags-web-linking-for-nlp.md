@@ -16,8 +16,49 @@ Isso garantirá:
 - Correta manipulação de caracteres Unicode em processamento de texto
 - Identificação padronizada de idiomas para recursos multilíngues
 - Semântica de links para recursos web relacionados a linguística
+## Standardization Patterns
+
+Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
+
+### RFCs Relevantes
+
+| RFC | Título | Aplicação |
+|-----|--------|-----------|
+| **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos de código e recursos |
+| **RFC 5646** | Tags for Identifying Languages | Tags de idioma para recursos multilíngues |
+| **RFC 5988** | Web Linking | Semântica de links para recursos web linguísticos |
+
+### Padrões de Mercado
+
+| Padrão | Fonte | Aplicação |
+|--------|-------|-----------|
+| **UTF-8 Encoding** | Oracle JDK | Todos arquivos fonte e recursos |
+| **Language Tag Format** | IETF BCP 47 | Tags como `pt-BR`, `en-US` |
+| **MessageFormat** | Oracle JDK | Formatação de mensagens parametrizadas |
+| **Unicode CLDR** | Unicode Consortium | Dados de localização (números, datas) |
+| **REST Linking** | RFC 5988 | Cabeçalhos Link com `rel` apropriado |
+
+### Boas Práticas Adotadas
+
+1. **UTF-8 obrigatório**: Todos arquivos devem usar UTF-8; configurar `file.encoding=UTF-8` no IDE.
+2. **Tags de idioma**: Seguir BCP 47 (ex: `pt-BR`, `en-US`); usar `Locale.forLanguageTag`.
+3. **Web Linking**: Utilizar cabeçalhos `Link` com `rel` como `self`, `next`, `prev`, `first`, `last`.
+4. **Mensagens parametrizadas**: Usar `MessageFormat` para pluralização e parâmetros.
+5. **Fallback de locale**: Sempre fornecer `messages.properties` como padrão.
+6. **Validação de tags**: Validar tags de idioma antes de uso.
+7. **Consistência de chave**: Nomenclatura de chaves de tradução segue padrão `<modulo>.<categoria>.<chave>`.
+8. **Teste de idioma**: Testes unitários validam mensagens em todos os locales suportados.
+
+### Compatibilidade com ADRs Relacionados
+
+- **ADR-003**: Classes `*Translator` e chaves de properties seguem convenções de nomenclatura.
+- **ADR-010**: Nomenclatura de pacotes e classes segue padrões do projeto.
+- **ADR-017**: Migrações seguem convenções de versionamento e descrição.
+- **ADR-048**: Classes AI/MCP seguem convenções de nomenclatura do Spring AI.
+- **ADR-050**: Diretrizes gerais de padronização do projeto.
 
 ## Consequences
+
 ### Positivos
 - Suporte completo a Unicode e idiomas internacionais
 - Interoperabilidade com sistemas de linguagem padrão

@@ -3,15 +3,14 @@ package com.ia.core.llm.service.agente;
 import com.ia.core.llm.model.agente.Agente;
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.model.skill.Skill;
-import com.ia.core.llm.service.ferramenta.FerramentaRepository;
 import com.ia.core.llm.service.model.agente.AgenteDTO;
 import com.ia.core.llm.service.model.agente.AgenteUseCase;
-import com.ia.core.llm.service.skill.SkillRepository;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,21 +33,14 @@ public class AgenteService
   implements AgenteUseCase {
 
   private final AgenteRepository agenteRepository;
-  private final FerramentaRepository ferramentaRepository;
-  private final SkillRepository skillRepository;
 
-  public AgenteService(AgenteServiceConfig config,
-                      AgenteRepository agenteRepository,
-                      FerramentaRepository ferramentaRepository,
-                      SkillRepository skillRepository) {
+  public AgenteService(AgenteServiceConfig config) {
     super(config);
-    this.agenteRepository = agenteRepository;
-    this.ferramentaRepository = ferramentaRepository;
-    this.skillRepository = skillRepository;
+    this.agenteRepository = (AgenteRepository) config.getRepository();
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public Optional<AgenteDTO> findByIdentificador(String identificador) {
     log.debug("Buscando agente por identificador: {}", identificador);
     return agenteRepository.findByIdentificador(identificador)
@@ -59,7 +51,7 @@ public class AgenteService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public List<AgenteDTO> listAtivos() {
     log.debug("Listando agentes ativos");
     return agenteRepository.findByAtivoTrue().stream()
@@ -71,7 +63,7 @@ public class AgenteService
   }
 
   @Override
-  @Transactional
+  @TransactionalWrite
   public AgenteDTO save(AgenteDTO dto) throws ServiceException {
     log.debug("Salvando agente: identificador={}, titulo={}", dto.getIdentificador(), dto.getTitulo());
     AgenteDTO saved = super.save(dto);
@@ -109,9 +101,9 @@ public class AgenteService
     List<Ferramenta> result = new ArrayList<>();
     for (com.ia.core.llm.service.model.ferramenta.FerramentaDTO f : ferramentaDtos) {
       if (f.getId() != null) {
-        ferramentaRepository.findById(f.getId()).ifPresent(result::add);
+        getConfig().getFerramentaRepository().findById(f.getId()).ifPresent(result::add);
       } else if (f.getIdentificador() != null) {
-        ferramentaRepository.findByIdentificador(f.getIdentificador()).ifPresent(result::add);
+        getConfig().getFerramentaRepository().findByIdentificador(f.getIdentificador()).ifPresent(result::add);
       }
     }
     return result;
@@ -127,9 +119,14 @@ public class AgenteService
     List<Skill> result = new ArrayList<>();
     for (com.ia.core.llm.service.model.skill.SkillDTO s : skillDtos) {
       if (s.getId() != null) {
-        skillRepository.findById(s.getId()).ifPresent(result::add);
+        getConfig().getSkillRepository().findById(s.getId()).ifPresent(result::add);
       }
     }
     return result;
+  }
+
+  @Override
+  public AgenteServiceConfig getConfig() {
+    return (AgenteServiceConfig) super.getConfig();
   }
 }

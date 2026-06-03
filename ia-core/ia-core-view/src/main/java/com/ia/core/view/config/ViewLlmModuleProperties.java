@@ -33,7 +33,7 @@ public class ViewLlmModuleProperties {
   @Data
   public static class Agent {
     private String orchestratorId = "ia-core-view-orchestrator";
-    private List<String> toolScanPackages = new ArrayList<>(List.of("com.ia.core.view.manager"));
+    private List<String> toolScanPackages = new ArrayList<>(List.of("com.ia"));
     private boolean enabled = true;
     private int maxSubAgentTurns = 10;
   }
@@ -45,7 +45,7 @@ public class ViewLlmModuleProperties {
     @Data
     public static class Discovery {
       private boolean enabled = true;
-      private List<String> scanPackages = new ArrayList<>(List.of("com.ia.core.view.manager"));
+      private List<String> scanPackages = new ArrayList<>(List.of("com.ia"));
       private boolean refreshOnStartup = true;
     }
   }

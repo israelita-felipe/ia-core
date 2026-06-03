@@ -1,8 +1,8 @@
-package com.ia.core.llm.view.agent.dialog;
+package com.ia.core.llm.view.agente.dialog;
 
-import com.ia.core.llm.service.model.agent.AgentConfirmationDTO;
-import com.ia.core.llm.service.model.agent.AgentSessionResponseDTO;
-import com.ia.core.llm.service.model.agent.AgentSessionRequestDTO;
+import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
+import com.ia.core.llm.service.model.agente.session.AgentSessionResponseDTO;
+import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 
 public class AgentDialogViewModel

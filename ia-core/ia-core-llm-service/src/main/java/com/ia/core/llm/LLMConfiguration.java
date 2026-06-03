@@ -8,6 +8,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
+
 /**
  * Classe de configuração para módulo LLM.
  * <p>

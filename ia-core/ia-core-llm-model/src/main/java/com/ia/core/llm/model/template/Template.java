@@ -45,6 +45,12 @@ public class Template
   private String titulo;
 
   /**
+   * Identificador único do template
+   */
+  @Column(name = "identificador", unique = true, nullable = false, length = 255)
+  private String identificador;
+
+  /**
    * Conteúdo do template
    */
   @Lob

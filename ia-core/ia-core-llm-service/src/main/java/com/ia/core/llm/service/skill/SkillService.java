@@ -2,17 +2,17 @@ package com.ia.core.llm.service.skill;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.model.skill.Skill;
-import com.ia.core.llm.service.ferramenta.FerramentaRepository;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
 import com.ia.core.llm.service.model.skill.SkillActivationDTO;
 import com.ia.core.llm.service.model.skill.SkillDTO;
 import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
 import com.ia.core.llm.service.model.skill.SkillUseCase;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
+import com.ia.core.service.annotations.TransactionalWrite;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +34,14 @@ public class SkillService
   implements SkillUseCase {
 
   private final SkillRepository skillRepository;
-  private final FerramentaRepository ferramentaRepository;
 
-  public SkillService(SkillServiceConfig config,
-                      SkillRepository skillRepository,
-                      FerramentaRepository ferramentaRepository) {
+  public SkillService(SkillServiceConfig config) {
     super(config);
-    this.skillRepository = skillRepository;
-    this.ferramentaRepository = ferramentaRepository;
+    this.skillRepository = (SkillRepository) config.getRepository();
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public List<SkillMetadataDTO> listMetadata() {
     return skillRepository.findByAtivoTrue().stream()
         .map(skill -> SkillMetadataDTO.builder()
@@ -59,7 +55,7 @@ public class SkillService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
   public SkillActivationDTO loadForActivation(Long id) {
     Skill skill = skillRepository.findById(id)
         .orElseThrow(() -> new ServiceException("Skill não encontrada: " + id));
@@ -75,7 +71,7 @@ public class SkillService
   }
 
   @Override
-  @Transactional
+  @TransactionalWrite
   public SkillDTO save(SkillDTO dto) throws ServiceException {
     SkillDTO saved = super.save(dto);
     if (dto.getFerramentas() != null && !dto.getFerramentas().isEmpty()) {
@@ -93,11 +89,16 @@ public class SkillService
     List<Ferramenta> result = new ArrayList<>();
     for (FerramentaDTO f : ferramentaDtos) {
       if (f.getId() != null) {
-        ferramentaRepository.findById(f.getId()).ifPresent(result::add);
+        getConfig().getFerramentaRepository().findById(f.getId()).ifPresent(result::add);
       } else if (f.getIdentificador() != null) {
-        ferramentaRepository.findByIdentificador(f.getIdentificador()).ifPresent(result::add);
+        getConfig().getFerramentaRepository().findByIdentificador(f.getIdentificador()).ifPresent(result::add);
       }
     }
     return result;
+  }
+
+  @Override
+  public SkillServiceConfig getConfig() {
+    return (SkillServiceConfig) super.getConfig();
   }
 }

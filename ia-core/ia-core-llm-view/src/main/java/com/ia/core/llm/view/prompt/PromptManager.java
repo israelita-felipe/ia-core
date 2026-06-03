@@ -4,7 +4,7 @@ import com.ia.core.llm.service.model.prompt.PromptDTO;
 import com.ia.core.llm.service.model.prompt.PromptUseCase;
 import com.ia.core.view.manager.DefaultBaseManager;
 /**
- * Gerenciador de comando sistema.
+ * Gerenciador de prompts de catálogo.
  * <p>
  * Responsável por gerenciar as funcionalidades relacionadas a PromptManager
  * dentro do sistema.

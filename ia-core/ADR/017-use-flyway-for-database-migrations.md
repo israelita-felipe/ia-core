@@ -51,11 +51,11 @@ Exemplo: `V20240315_1430__Create_pessoa_table.sql`
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-maven-plugin</artifactId>
     <version>10.4.1</version>
-    <configuration>        
+    <configuration>
         <locations>
             <location>classpath:db/migration</location>
         </locations>
-        <baselineOnMigrate>true</baselineOnMigrate>        
+        <baselineOnMigrate>true</baselineOnMigrate>
     </configuration>
 </plugin>
 ```
@@ -159,6 +159,78 @@ mvn flyway:validate
 
 - Team Lead
 - Architect
+
+## Padrões de Padronização (Standardization)
+
+Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
+
+### RFCs Relevantes
+
+| RFC | Título | Aplicação neste ADR |
+|-----|--------|---------------------|
+| **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos SQL |
+| **RFC 5646** | Tags for Identifying Languages | Tags de locale para migrações multilíngue quando aplicável |
+| **RFC 5988** | Web Linking | Links de documentação para migrações complexas |
+
+### Padrões de Mercado
+
+| Padrão | Fonte | Aplicação |
+|--------|-------|-----------|
+| **Flyway Conventions** | Flyway | Nomenclatura, estrutura e organização de migrations |
+| **SQL Best Practices** | ANSI SQL | Padrões de escrita de SQL para portabilidade |
+| **Database Migration Patterns** | Martin Fowler | Padrões de migração segura e reversível |
+| **Version Control Best Practices** | Git | Controle de versão para migrations |
+
+### Boas Práticas Adotadas
+
+1. **UTF-8 obrigatório**: Todos arquivos `.sql` devem usar UTF-8 com BOM quando necessário.
+2. **Nomes descritivos**: Descrições devem ser claras e no imperativo (ex: "Add_user_table").
+3. **Atomicidade**: Cada migration deve ser atômica - ou completa ou falha completamente.
+4. **Idempotência**: Migrações devem ser seguras para rodar múltiplas vezes.
+5. **Documentação**: Comentários explicam o propósito e mudanças significativas.
+6. **Rollback planejado**: Migrações críticas devem ter reversão documentada.
+7. **Performance**: Índices criados após dados populados para evitar locks.
+8. **Segurança**: Sem `DROP TABLE` sem backup prévio; usar `soft deletes` quando possível.
+9. **Testes**: Migrações devem ser testadas em ambiente de staging antes de produção.
+10. **Versionamento**: Versões seguem formato `YYYYMMDD_HHMMSS` para ordenação cronológica.
+
+### Padrões de Código SQL
+
+```sql
+-- Comentários no início explicando o propósito
+-- V20240315_1430__Create_pessoa_table.sql
+-- Cria tabela de pessoas com campos básicos e constraints
+-- Autor: Team Lead
+-- Dependências: V20240315_1400__Create_base_entity.sql
+
+-- Uso de schema qualificado para evitar ambiguidade
+CREATE TABLE biblia.pessoa (
+    id BIGINT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) UNIQUE,
+    data_nascimento DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_pessoa PRIMARY KEY (id),
+    CONSTRAINT fk_pessoa_base FOREIGN KEY (id) REFERENCES biblia.base_entity(id)
+);
+
+-- Índices criados após dados populados
+CREATE INDEX idx_pessoa_nome ON biblia.pessoa(nome);
+CREATE INDEX idx_pessoa_cpf ON biblia.pessoa(cpf);
+
+-- Comentários explicando constraints
+-- Constraint para evitar CPFs duplicados
+-- Constraint para garantir que nome não seja nulo
+```
+
+### Compatibilidade com ADRs Relacionados
+
+- **ADR-003**: UTF-8 em todos os arquivos SQL e properties.
+- **ADR-010**: Nomes de tabelas e colunas seguem convenções de nomenclatura.
+- **ADR-047**: UTF-8 e tags de idioma para migrações multilíngue.
+- **ADR-048**: Migrações para tabelas de AI/MCP seguem padrões do projeto.
+- **ADR-050**: Diretrizes gerais de padronização do projeto.
 
 ## Referências
 
