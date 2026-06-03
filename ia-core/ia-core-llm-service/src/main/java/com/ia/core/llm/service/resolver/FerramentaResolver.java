@@ -3,6 +3,7 @@ package com.ia.core.llm.service.resolver;
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.service.ferramenta.FerramentaRepository;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author Israel Araújo
  * @since 1.0.0
  */
+@Slf4j
 @Component
 public class FerramentaResolver {
 
@@ -40,11 +42,17 @@ public class FerramentaResolver {
     }
     List<Ferramenta> result = new ArrayList<>();
     for (FerramentaDTO f : ferramentaDtos) {
+      if (f == null) {
+        continue;
+      }
       if (f.getId() != null) {
-        ferramentaRepository.findById(f.getId()).ifPresent(result::add);
+        ferramentaRepository.findById(f.getId())
+            .ifPresentOrElse(result::add,
+                () -> log.warn("Ferramenta não encontrada por id: {}", f.getId()));
       } else if (f.getIdentificador() != null) {
         ferramentaRepository.findByIdentificador(f.getIdentificador())
-            .ifPresent(result::add);
+            .ifPresentOrElse(result::add,
+                () -> log.warn("Ferramenta não encontrada por identificador: {}", f.getIdentificador()));
       }
     }
     return result;

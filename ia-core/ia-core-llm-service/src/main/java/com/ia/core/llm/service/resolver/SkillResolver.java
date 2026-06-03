@@ -3,6 +3,7 @@ package com.ia.core.llm.service.resolver;
 import com.ia.core.llm.model.skill.Skill;
 import com.ia.core.llm.service.skill.SkillRepository;
 import com.ia.core.llm.service.model.skill.SkillDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Israel Araújo
  * @since 1.0.0
  */
+@Slf4j
 @Component
 public class SkillResolver {
 
@@ -39,8 +41,13 @@ public class SkillResolver {
     }
     List<Skill> result = new ArrayList<>();
     for (SkillDTO s : skillDtos) {
+      if (s == null) {
+        continue;
+      }
       if (s.getId() != null) {
-        skillRepository.findById(s.getId()).ifPresent(result::add);
+        skillRepository.findById(s.getId())
+            .ifPresentOrElse(result::add,
+                () -> log.warn("Skill não encontrada por id: {}", s.getId()));
       }
     }
     return result;
