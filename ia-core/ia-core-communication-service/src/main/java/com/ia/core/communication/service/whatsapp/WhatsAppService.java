@@ -46,6 +46,8 @@ public class WhatsAppService implements MensagemProvider {
       mensagem = enviarMensagem(mensagem);
       return ResultadoEnvio.sucesso(mensagem.getIdExterno());
     } catch (Exception e) {
+      log.error("Erro ao enviar mensagem WhatsApp para {}: {}",
+                mensagem.getTelefoneDestinatario(), e.getMessage(), e);
       return ResultadoEnvio.falha(e.getLocalizedMessage());
     }
   }
