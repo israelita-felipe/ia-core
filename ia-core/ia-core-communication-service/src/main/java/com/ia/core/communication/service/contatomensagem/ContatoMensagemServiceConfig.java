@@ -2,7 +2,7 @@ package com.ia.core.communication.service.contatomensagem;
 
 import com.ia.core.communication.model.contato.ContatoMensagem;
 import com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO;
-import com.ia.core.security.service.CrudSecuredBaseService.CrudSecuredBaseServiceConfig;
+import com.ia.core.security.service.DefaultCrudSecuredBaseServiceConfig;
 import com.ia.core.security.service.SecurityContextService;
 import com.ia.core.security.service.log.operation.LogOperationService;
 import com.ia.core.security.service.model.authorization.CoreSecurityAuthorizationManager;
@@ -18,10 +18,6 @@ import java.util.List;
 
 /**
  * Configuração de injeção de dependência para ContatoMensagemService.
- * <p>
- * Centraliza todas as dependências necessárias para o funcionamento
- * do serviço de contatos de mensagem, incluindo repositório, mapper,
- * validadores e serviços de segurança.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -30,7 +26,7 @@ import java.util.List;
 @Component
 public class ContatoMensagemServiceConfig
   extends
-    CrudSecuredBaseServiceConfig<ContatoMensagem, ContatoMensagemDTO> {
+    DefaultCrudSecuredBaseServiceConfig<ContatoMensagem, ContatoMensagemDTO> {
 
   public ContatoMensagemServiceConfig(BaseEntityRepository<ContatoMensagem> repository,
                                       BaseEntityMapper<ContatoMensagem, ContatoMensagemDTO> mapper,

@@ -2,12 +2,11 @@ package com.ia.core.llm.service.skill;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.model.skill.Skill;
-import com.ia.core.llm.service.ferramenta.FerramentaRepository;
-import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
 import com.ia.core.llm.service.model.skill.SkillActivationDTO;
 import com.ia.core.llm.service.model.skill.SkillDTO;
 import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
 import com.ia.core.llm.service.model.skill.SkillUseCase;
+import com.ia.core.llm.service.resolver.FerramentaResolver;
 import com.ia.core.service.CrudBaseService;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,14 @@ public class SkillService
   implements SkillUseCase {
 
   private final SkillRepository skillRepository;
-  private final FerramentaRepository ferramentaRepository;
+  private final FerramentaResolver ferramentaResolver;
 
   public SkillService(SkillServiceConfig config,
                       SkillRepository skillRepository,
-                      FerramentaRepository ferramentaRepository) {
+                      FerramentaResolver ferramentaResolver) {
     super(config);
     this.skillRepository = skillRepository;
-    this.ferramentaRepository = ferramentaRepository;
+    this.ferramentaResolver = ferramentaResolver;
   }
 
   @Override
@@ -81,7 +80,7 @@ public class SkillService
     if (dto.getFerramentas() != null && !dto.getFerramentas().isEmpty()) {
       Skill skill = skillRepository.findById(saved.getId())
           .orElseThrow(() -> new ServiceException("Skill não encontrada após save"));
-      List<Ferramenta> ferramentas = resolveFerramentas(dto.getFerramentas());
+      List<Ferramenta> ferramentas = ferramentaResolver.resolve(dto.getFerramentas());
       skill.setFerramentas(ferramentas);
       skillRepository.save(skill);
       return getMapper().toDTO(skill);
@@ -89,15 +88,4 @@ public class SkillService
     return saved;
   }
 
-  private List<Ferramenta> resolveFerramentas(List<FerramentaDTO> ferramentaDtos) {
-    List<Ferramenta> result = new ArrayList<>();
-    for (FerramentaDTO f : ferramentaDtos) {
-      if (f.getId() != null) {
-        ferramentaRepository.findById(f.getId()).ifPresent(result::add);
-      } else if (f.getIdentificador() != null) {
-        ferramentaRepository.findByIdentificador(f.getIdentificador()).ifPresent(result::add);
-      }
-    }
-    return result;
-  }
 }

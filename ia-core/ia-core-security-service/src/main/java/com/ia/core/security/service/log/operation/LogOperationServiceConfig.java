@@ -2,7 +2,7 @@ package com.ia.core.security.service.log.operation;
 
 import com.ia.core.security.model.log.operation.LogOperation;
 import com.ia.core.security.service.model.log.operation.LogOperationDTO;
-import com.ia.core.service.CrudBaseService.CrudBaseServiceConfig;
+import com.ia.core.service.DefaultCrudBaseServiceConfig;
 import com.ia.core.service.mapper.BaseEntityMapper;
 import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
@@ -13,27 +13,15 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Classe que representa as configurações para log operation service.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LogOperationServiceConfig
- * dentro do sistema.
+ * Configuração de injeção de dependência para LogOperationService.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
-
 @Component
 public class LogOperationServiceConfig
-  extends CrudBaseServiceConfig<LogOperation, LogOperationDTO> {
+  extends DefaultCrudBaseServiceConfig<LogOperation, LogOperationDTO> {
 
-  /**
-   * @param repository
-   * @param mapper
-   * @param searchRequestMapper
-   * @param translator
-   * @param authorizationManager
-   * @param logOperationService
-   */
   public LogOperationServiceConfig(BaseEntityRepository<LogOperation> repository,
                                    BaseEntityMapper<LogOperation, LogOperationDTO> mapper,
                                    SearchRequestMapper searchRequestMapper,
@@ -41,5 +29,4 @@ public class LogOperationServiceConfig
                                    List<IServiceValidator<LogOperationDTO>> validators) {
     super(repository, mapper, searchRequestMapper, translator, validators);
   }
-
 }
