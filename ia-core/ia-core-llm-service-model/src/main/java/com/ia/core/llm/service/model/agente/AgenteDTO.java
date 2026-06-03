@@ -2,7 +2,6 @@ package com.ia.core.llm.service.model.agente;
 
 import com.ia.core.llm.model.agente.Agente;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
-import com.ia.core.llm.service.model.skill.SkillDTO;
 import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
@@ -77,6 +76,7 @@ public class AgenteDTO
 
   /**
    * Lista de ferramentas autorizadas para este agente.
+   * Inclui tanto ferramentas atômicas quanto skills (tipo=SKILL).
    */
   @Default
   private List<FerramentaDTO> ferramentas = new ArrayList<>();
@@ -94,15 +94,8 @@ public class AgenteDTO
   private String moduloOrigem;
 
   /**
-   * Skills que este agente pode orquestrar.
-   */
-  @Default
-  private List<SkillDTO> skills = new ArrayList<>();
-
-  /**
    * Mapa de metadados genéricos para armazenar especificidades
    * de diferentes tipos de agentes sem criar campos específicos.
-   * Segue padrão de flexibilidade conforme ADR-010 (Nomenclatura Standards).
    */
   @Default
   private Map<String, String> metadados = new HashMap<>();
@@ -114,7 +107,6 @@ public class AgenteDTO
         .id(null)
         .version(HasVersion.DEFAULT_VERSION)
         .ferramentas(new ArrayList<>(ferramentas))
-        .skills(new ArrayList<>(skills))
         .metadados(new HashMap<>(metadados))
         .build();
   }

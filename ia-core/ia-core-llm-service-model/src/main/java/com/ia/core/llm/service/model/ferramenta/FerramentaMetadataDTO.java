@@ -1,5 +1,6 @@
-package com.ia.core.llm.service.model.skill;
+package com.ia.core.llm.service.model.ferramenta;
 
+import com.ia.core.llm.model.ferramenta.TipoFerramentaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillMetadataDTO {
+public class FerramentaMetadataDTO {
   private Long id;
   private String titulo;
   private String descricao;
-  private int ferramentaCount;
+  private TipoFerramentaEnum tipo;
+  private int subFerramentaCount;
   private boolean ativo;
 }

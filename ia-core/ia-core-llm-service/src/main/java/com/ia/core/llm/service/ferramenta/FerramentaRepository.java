@@ -1,6 +1,7 @@
 package com.ia.core.llm.service.ferramenta;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
+import com.ia.core.llm.model.ferramenta.TipoFerramentaEnum;
 import com.ia.core.service.repository.BaseEntityRepository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface FerramentaRepository
   Optional<Ferramenta> findByIdentificador(String identificador);
 
   List<Ferramenta> findByAtivoTrue();
+
+  List<Ferramenta> findByAtivoTrueAndTipo(TipoFerramentaEnum tipo);
 }

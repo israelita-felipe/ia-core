@@ -1,6 +1,5 @@
-package com.ia.core.llm.service.model.skill;
+package com.ia.core.llm.service.model.ferramenta;
 
-import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +13,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillActivationDTO {
+public class FerramentaActivationDTO {
   private Long id;
   private String titulo;
   private String descricao;
   private String instrucoes;
   private TemplateDTO template;
   @Builder.Default
-  private List<FerramentaDTO> ferramentas = new ArrayList<>();
+  private List<FerramentaDTO> subFerramentas = new ArrayList<>();
 }

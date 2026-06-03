@@ -22,7 +22,6 @@ public class LlmModuleProperties {
   private boolean enabled = true;
   private Security security = new Security();
   private Agent agent = new Agent();
-  private Skill skill = new Skill();
   private Ferramenta ferramenta = new Ferramenta();
   private Audit audit = new Audit();
 
@@ -40,12 +39,8 @@ public class LlmModuleProperties {
   }
 
   @Data
-  public static class Skill {
-    private boolean progressiveDisclosure = true;
-  }
-
-  @Data
   public static class Ferramenta {
+    private boolean progressiveDisclosure = true;
     private Discovery discovery = new Discovery();
 
     @Data

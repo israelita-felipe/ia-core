@@ -17,6 +17,9 @@ public final class FerramentaTranslator {
   public static final String DESCRICAO = "ferramenta.descricao";
   public static final String TIPO = "ferramenta.tipo";
   public static final String IDENTIFICADOR = "ferramenta.identificador";
+  public static final String INSTRUCOES = "ferramenta.instrucoes";
+  public static final String SUB_FERRAMENTAS = "ferramenta.subFerramentas";
+  public static final String ATIVO = "ferramenta.ativo";
 
   public static final class VALIDATION {
     public static final String TITULO_REQUIRED = "validation.ferramenta.titulo.required";

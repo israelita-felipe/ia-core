@@ -4,7 +4,7 @@ import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
 import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
 import com.ia.core.llm.service.model.agente.session.AgentSessionResponseDTO;
 import com.ia.core.llm.service.model.agente.session.AgentSessionUseCase;
-import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Serviço para gerenciamento de sessões de agentes.
  * <p>
  * Implementa o caso de uso para execução de sessões de agentes, incluindo
- * confirmações e listagem de skills disponíveis.
+ * confirmações e listagem de ferramentas disponíveis.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -37,7 +37,7 @@ public class AgentSessionService
   }
 
   @Override
-  public List<SkillMetadataDTO> listAvailableSkills() {
-    return agentOrchestratorService.listAvailableSkills();
+  public List<FerramentaMetadataDTO> listAvailableFerramentas() {
+    return agentOrchestratorService.listAvailableFerramentas();
   }
 }

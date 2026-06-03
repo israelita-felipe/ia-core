@@ -54,6 +54,6 @@ public class AiInteractionLog
   @Column(name = "resposta_final")
   private String respostaFinal;
 
-  @Column(name = "skill_id")
-  private Long skillId;
+  @Column(name = "ferramenta_id")
+  private Long ferramentaId;
 }

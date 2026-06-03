@@ -1,20 +1,29 @@
 package com.ia.core.llm.service.ferramenta;
 
 import com.ia.core.llm.model.ferramenta.Ferramenta;
+import com.ia.core.llm.model.ferramenta.TipoFerramentaEnum;
+import com.ia.core.llm.service.model.ferramenta.FerramentaActivationDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaUseCase;
+import com.ia.core.llm.service.resolver.FerramentaResolver;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Serviço para gerenciamento de ferramentas.
  * <p>
  * Implementa operações CRUD para ferramentas utilizadas por agentes de IA,
- * incluindo sincronização automática e listagem de ferramentas disponíveis.
+ * incluindo sincronização automática, listagem de ferramentas disponíveis,
+ * e operações de skills (ferramentas compostas com tipo=SKILL).
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -25,8 +34,14 @@ public class FerramentaService
   extends CrudBaseService<Ferramenta, FerramentaDTO>
   implements FerramentaUseCase {
 
-  public FerramentaService(FerramentaServiceConfig config) {
+  private final FerramentaRepository ferramentaRepository;
+  private final FerramentaResolver ferramentaResolver;
+
+  public FerramentaService(FerramentaServiceConfig config,
+                           FerramentaResolver ferramentaResolver) {
     super(config);
+    this.ferramentaRepository = config.getRepository();
+    this.ferramentaResolver = ferramentaResolver;
   }
 
   @Override
@@ -43,19 +58,60 @@ public class FerramentaService
   @Override
   @Tool(description = "Lista todas as ferramentas disponíveis e ativas no sistema. " +
                      "Retorna uma lista de DTOs contendo informações sobre cada ferramenta: " +
-                     "título, descrição, tipo (AGENTE_ESPECIALISTA, TOOL_SPRING, RECURSO_MCP), " +
+                     "título, descrição, tipo (AGENTE_ESPECIALISTA, TOOL_SPRING, RECURSO_MCP, SKILL), " +
                      "identificador, módulo de origem e status de ativação. Apenas ferramentas " +
-                     "com campo ativo=true são retornadas. Útil para associação a skills " +
-                     "e para visualização do catálogo de capacidades disponíveis para o orquestrador.")
+                     "com campo ativo=true são retornadas.")
   public List<FerramentaDTO> listAvailable() {
-    return getMapper().toDTOList(getRepository().findByAtivoTrue());
+    return getMapper().toDTOList(ferramentaRepository.findByAtivoTrue());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<FerramentaMetadataDTO> listMetadata() {
+    return ferramentaRepository.findByAtivoTrueAndTipo(TipoFerramentaEnum.SKILL).stream()
+        .map(ferramenta -> FerramentaMetadataDTO.builder()
+            .id(ferramenta.getId())
+            .titulo(ferramenta.getTitulo())
+            .descricao(ferramenta.getDescricao())
+            .tipo(ferramenta.getTipo())
+            .subFerramentaCount(ferramenta.getSubFerramentas() == null ? 0 : ferramenta.getSubFerramentas().size())
+            .ativo(ferramenta.isAtivo())
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public FerramentaActivationDTO loadForActivation(Long id) {
+    Ferramenta ferramenta = ferramentaRepository.findById(id)
+        .orElseThrow(() -> new ServiceException("Ferramenta não encontrada: " + id));
+    FerramentaDTO dto = getMapper().toDTO(ferramenta);
+    return FerramentaActivationDTO.builder()
+        .id(dto.getId())
+        .titulo(dto.getTitulo())
+        .descricao(dto.getDescricao())
+        .instrucoes(ferramenta.getInstrucoes())
+        .template(dto.getTemplate())
+        .subFerramentas(dto.getSubFerramentas() == null ? new ArrayList<>() : dto.getSubFerramentas())
+        .build();
+  }
+
+  @Override
+  @Transactional
+  public FerramentaDTO save(FerramentaDTO dto) throws ServiceException {
+    FerramentaDTO saved = super.save(dto);
+    if (dto.getSubFerramentas() != null && !dto.getSubFerramentas().isEmpty()) {
+      Ferramenta ferramenta = ferramentaRepository.findById(saved.getId())
+          .orElseThrow(() -> new ServiceException("Ferramenta não encontrada após save"));
+      List<Ferramenta> subFerramentas = ferramentaResolver.resolve(dto.getSubFerramentas());
+      ferramenta.setSubFerramentas(subFerramentas);
+      ferramentaRepository.save(ferramenta);
+      return getMapper().toDTO(ferramenta);
+    }
+    return saved;
   }
 
   public FerramentaServiceConfig getConfig() {
     return (FerramentaServiceConfig) super.getConfig();
-  }
-
-  public FerramentaRepository getRepository() {
-    return getConfig().getRepository();
   }
 }
