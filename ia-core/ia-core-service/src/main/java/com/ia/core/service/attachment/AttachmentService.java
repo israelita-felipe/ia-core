@@ -134,7 +134,8 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @return DTO com conteúdo carregado
    */
   public D load(
-           D dto) {
+           D dto)
+    throws ServiceException {
     Objects.requireNonNull(dto, "DTO não pode ser null");
     Objects.requireNonNull(dto.getId(), "ID do DTO não pode ser null");
     log.debug("Carregando conteúdo do anexo com id: {}", dto.getId());
@@ -143,6 +144,9 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
       log.debug("Conteúdo do anexo carregado com sucesso");
     } catch (java.io.IOException e) {
       log.error("Erro ao carregar conteúdo do anexo com id: {}", dto.getId(), e);
+      ServiceException serviceException = new ServiceException();
+      serviceException.add(e);
+      throw serviceException;
     }
     return dto;
   }

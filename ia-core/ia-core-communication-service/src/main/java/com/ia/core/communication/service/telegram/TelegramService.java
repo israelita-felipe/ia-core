@@ -90,7 +90,7 @@ public class TelegramService implements MensagemProvider {
       return ResultadoEnvio.falha("Erro ao enviar mensagem Telegram");
 
     } catch (Exception e) {
-      log.error("Erro ao enviar mensagem Telegram: {}", e.getMessage());
+      log.error("Erro ao enviar mensagem Telegram: {}", e.getMessage(), e);
       return ResultadoEnvio.falha(e.getMessage());
     }
   }
@@ -128,7 +128,7 @@ public class TelegramService implements MensagemProvider {
 
     } catch (Exception e) {
       log.error("Erro ao enviar mensagem HTML Telegram: {}",
-                e.getMessage());
+                e.getMessage(), e);
       return ResultadoEnvio.falha(e.getMessage());
     }
   }

@@ -80,7 +80,7 @@ public class EmailService
       return ResultadoEnvio.sucesso(messageId);
 
     } catch (org.springframework.mail.MailException e) {
-      log.error("Erro ao enviar e-mail: {}", e.getMessage());
+      log.error("Erro ao enviar e-mail: {}", e.getMessage(), e);
       return ResultadoEnvio.falha(e.getMessage());
     }
   }
@@ -126,11 +126,11 @@ public class EmailService
       return ResultadoEnvio.sucesso(messageId);
 
     } catch (org.springframework.mail.MailException e) {
-      log.error("Erro ao enviar e-mail HTML: {}", e.getMessage());
+      log.error("Erro ao enviar e-mail HTML: {}", e.getMessage(), e);
       return ResultadoEnvio.falha(e.getMessage());
-    }catch (MessagingException e) {
-        log.error("Erro ao enviar e-mail HTML: {}", e.getMessage());
-        return ResultadoEnvio.falha(e.getMessage());
+    } catch (MessagingException e) {
+      log.error("Erro ao enviar e-mail HTML: {}", e.getMessage(), e);
+      return ResultadoEnvio.falha(e.getMessage());
     }
   }
 
@@ -163,7 +163,7 @@ public class EmailService
       mensagem.setDataEnvio(java.time.LocalDateTime.now());
 
     } catch (org.springframework.mail.MailException e) {
-      log.error("Erro ao enviar e-mail: {}", e.getMessage());
+      log.error("Erro ao enviar e-mail: {}", e.getMessage(), e);
       mensagem.setStatusMensagem(StatusMensagem.FALHA);
       mensagem.setMotivoFalha(e.getMessage());
     }

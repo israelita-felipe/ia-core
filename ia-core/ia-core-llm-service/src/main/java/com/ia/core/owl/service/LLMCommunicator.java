@@ -80,11 +80,12 @@ public class LLMCommunicator {
         }
       }
 
+      log.warn("ChatClient retornou resposta nula ou vazia para prompt");
       return null;
 
     } catch (Exception e) {
-      log.error("ChatClient falhou: {}", e.getMessage());
-      return null;
+      log.error("ChatClient falhou: {}", e.getMessage(), e);
+      throw new RuntimeException("Falha na comunicação com o modelo LLM", e);
     }
   }
 
@@ -109,11 +110,12 @@ public class LLMCommunicator {
         }
       }
 
+      log.warn("ChatClient retornou resposta nula ou vazia para prompt com media");
       return null;
 
     } catch (Exception e) {
-      log.error("ChatClient falhou: {}", e.getMessage());
-      return null;
+      log.error("ChatClient falhou: {}", e.getMessage(), e);
+      throw new RuntimeException("Falha na comunicação com o modelo LLM", e);
     }
   }
 
