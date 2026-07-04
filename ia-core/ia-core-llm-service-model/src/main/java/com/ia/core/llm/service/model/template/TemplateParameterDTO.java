@@ -3,7 +3,6 @@ package com.ia.core.llm.service.model.template;
 import com.ia.core.llm.model.template.TemplateParameter;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
-import com.ia.core.llm.service.model.template.TemplateParameterTranslator;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -48,6 +47,11 @@ public class TemplateParameterDTO
   private String nome;
 
   @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
+
+  @Override
   public TemplateParameterDTO cloneObject() {
     return toBuilder().build();
   }
@@ -55,5 +59,18 @@ public class TemplateParameterDTO
   @Override
   public TemplateParameterDTO copyObject() {
     return (TemplateParameterDTO) super.copyObject();
+  }
+
+  /**
+   * Constantes de campos para referência type-safe.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String NOME = "nome";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(NOME, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

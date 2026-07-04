@@ -23,15 +23,15 @@ Usar **JWT (JSON Web Tokens)** para autenticação, com tokens de acesso e refre
 
 ```
 1. Login
-   Client → POST /api/v1/auth/login → Server
+   Client → POST /api/${api.version}/auth/login → Server
    Server → Gera JWT (access) + JWT (refresh) → Client
 
 2. Access Token (curto)
-   Client → GET /api/v1/pessoas (com Bearer JWT) → Server
+   Client → GET /api/${api.version}/pessoas (com Bearer JWT) → Server
    Server → Valida token → Decodifica → Permite/Nega → Response
 
 3. Refresh Token (longo)
-   Client → POST /api/v1/auth/refresh → Server
+   Client → POST /api/${api.version}/auth/refresh → Server
    Server → Valida refresh → Gera novos tokens → Response
 ```
 
@@ -62,16 +62,16 @@ Usar **JWT (JSON Web Tokens)** para autenticação, com tokens de acesso e refre
 ```java
 @Configuration
 public class JwtConfig {
-    
+
     @Value("${jwt.secret}")
     private String secret;
-    
+
     @Value("${jwt.access-token-validity:3600000}") // 1 hora
     private long accessTokenValidity;
-    
+
     @Value("${jwt.refresh-token-validity:86400000}") // 24 horas
     private long refreshTokenValidity;
-    
+
     @Bean
     public JwtParser jwtParser() {
         return Jwts.parser()
@@ -100,11 +100,11 @@ public class JwtConfig {
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    
+
     private final JwtParser jwtParser;
     @Value("${jwt.secret}")
     private String secret;
-    
+
     public String generateAccessToken(User user) {
         return Jwts.builder()
             .subject(user.getId().toString())
@@ -115,7 +115,7 @@ public class JwtService {
             .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
             .compact();
     }
-    
+
     public String generateRefreshToken(User user) {
         return Jwts.builder()
             .subject(user.getId().toString())
@@ -124,7 +124,7 @@ public class JwtService {
             .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
             .compact();
     }
-    
+
     public boolean validateToken(String token) {
         try {
             jwtParser.parseSignedClaims(token);
@@ -141,38 +141,38 @@ public class JwtService {
 ```java
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) {
-        
+
         String authHeader = request.getHeader("Authorization");
-        
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            
+
             if (jwtService.validateToken(token)) {
                 Claims claims = jwtService.parseToken(token);
-                
+
                 UserPrincipal principal = new UserPrincipal(
                     Long.parseLong(claims.getSubject()),
                     claims.get("username", String.class),
                     claims.get("roles", List.class)
                 );
-                
-                UsernamePasswordAuthenticationToken auth = 
+
+                UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
-                        principal, null, 
+                        principal, null,
                         AuthorityUtils.createAuthorityList(
                             (List<String>)claims.get("roles")
                         )
                     );
-                
+
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-        
+
         filterChain.doFilter(request, response);
     }
 }
@@ -211,6 +211,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 - Team Lead
 - Architect
 
+## Padrões de Padronização (Standardization)
+
+Este ADR adere aos seguintes padrões técnicos:
+
+- **RFC 7519** — JSON Web Token (JWT): estrutura de claims, serialização e validação básica.
+- **RFC 6750** — The OAuth 2.0 Authorization Framework: Bearer Token Usage: envio de access tokens no cabeçalho `Authorization: Bearer <token>`.
+- **RFC 6749** — OAuth 2.0 Authorization Framework: fluxo de refresh token para renovação de credenciais.
+- **RFC 9068** — JWT Profile for OAuth 2.0 Access Tokens: usar como referência quando o access token JWT for consumido por APIs OAuth 2.0.
+
+### Compatibilidade com ADRs Relacionados
+
+- **ADR-042**: fluxo de refresh token conforme OAuth 2.0.
+- **ADR-043**: padronização de JWT e claims essenciais.
+- **ADR-052**: ADRs devem usar linguagem normativa RFC 2119/RFC 8174 e indicar referências técnicas vigentes.
+
 ## Referências
 
 1. **JWT.io**
@@ -221,7 +236,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
    - URL: https://datatracker.ietf.org/doc/html/rfc7519
    - Especificação oficial
 
-3. **Baeldung - JWT Tutorial**
+3. **RFC 6750 - OAuth 2.0 Bearer Token Usage**
+   - URL: https://datatracker.ietf.org/doc/html/rfc6750
+   - Uso de bearer tokens em requisições HTTP
+
+4. **RFC 6749 - OAuth 2.0 Authorization Framework**
+   - URL: https://datatracker.ietf.org/doc/html/rfc6749
+   - Fluxo de refresh token e autorização OAuth 2.0
+
+5. **RFC 9068 - JWT Profile for OAuth 2.0 Access Tokens**
+   - URL: https://datatracker.ietf.org/doc/html/rfc9068
+   - Perfil recomendado para access tokens JWT em APIs OAuth 2.0
+
+6. **Baeldung - JWT Tutorial**
    - URL: https://www.baeldung.com/spring-security-jwt
    - Tutorial completo
 

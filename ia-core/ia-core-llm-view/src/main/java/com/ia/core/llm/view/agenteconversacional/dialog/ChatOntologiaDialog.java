@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.agenteconversacional.dialog;
 
-import com.ia.core.llm.service.model.agente.ContextoConversacao;
+import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
 import com.ia.core.llm.service.model.agente.RespostaAgente;
 import com.ia.core.llm.view.agenteconversacional.AgenteConversacionalManager;
 import com.vaadin.flow.component.button.Button;
@@ -28,7 +28,7 @@ public class ChatOntologiaDialog extends Dialog {
   private TextField mensagemField;
   private Pre respostaPre;
   private Pre axiomasPre;
-  private ContextoConversacao contextoAtual;
+  private ContextConversacaoDTO contextoAtual;
 
   public ChatOntologiaDialog(AgenteConversacionalManager manager) {
     this.manager = manager;
@@ -61,7 +61,7 @@ public class ChatOntologiaDialog extends Dialog {
     setSizeFull();
   }
 
-  public void setContexto(ContextoConversacao contexto) {
+  public void setContexto(ContextConversacaoDTO contexto) {
     this.contextoAtual = contexto;
   }
 

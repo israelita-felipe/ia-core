@@ -1,15 +1,14 @@
 package com.ia.core.llm.service.agente;
 
-import com.ia.core.llm.service.audit.AiInteractionAuditService;
 import com.ia.core.llm.service.chat.ChatApplicationService;
 import com.ia.core.llm.service.config.LlmModuleProperties;
-import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
-import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
-import com.ia.core.llm.service.model.agente.session.AgentSessionResponseDTO;
 import com.ia.core.llm.service.model.chat.ChatRequestDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaActivationDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaUseCase;
+import com.ia.core.llm.service.model.session.AgentConfirmationDTO;
+import com.ia.core.llm.service.model.session.AgentSessionRequestDTO;
+import com.ia.core.llm.service.model.session.AgentSessionResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,6 @@ public class AgentOrchestratorService {
   private final FerramentaUseCase ferramentaUseCase;
   private final ChatApplicationService chatApplicationService;
   private final LlmModuleProperties properties;
-  private final AiInteractionAuditService auditService;
 
   private final Map<String, PendingSession> pendingSessions = new ConcurrentHashMap<>();
 
@@ -51,7 +49,6 @@ public class AgentOrchestratorService {
         .text(request.getUserMessage())
         .build();
     String response = chatApplicationService.ask(chatRequest, systemPrompt);
-    auditService.record(request.getUserMessage(), null, null, response, request.getFerramentaId());
     if (requiresConfirmation(response)) {
       pendingSessions.put(sessionId, new PendingSession(request, response));
       return AgentSessionResponseDTO.builder()

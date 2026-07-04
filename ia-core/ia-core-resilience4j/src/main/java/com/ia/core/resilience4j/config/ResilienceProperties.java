@@ -35,6 +35,33 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "resilience4j")
 public class ResilienceProperties {
 
+    // Default values for Retry configuration
+    private static final int DEFAULT_RETRY_MAX_ATTEMPTS = 3;
+    private static final long DEFAULT_RETRY_INITIAL_WAIT_MS = 1000;
+    private static final double DEFAULT_RETRY_BACKOFF_MULTIPLIER = 2.0;
+    private static final long DEFAULT_RETRY_MAX_WAIT_MS = 10000;
+
+    // Default values for CircuitBreaker configuration
+    private static final int DEFAULT_CIRCUIT_BREAKER_FAILURE_RATE_THRESHOLD = 50;
+    private static final long DEFAULT_CIRCUIT_BREAKER_WAIT_DURATION_MS = 30000;
+    private static final int DEFAULT_CIRCUIT_BREAKER_SLIDING_WINDOW_SIZE = 10;
+    private static final int DEFAULT_CIRCUIT_BREAKER_MINIMUM_CALLS = 5;
+    private static final int DEFAULT_CIRCUIT_BREAKER_PERMITTED_CALLS_HALF_OPEN = 3;
+    private static final long DEFAULT_CIRCUIT_BREAKER_SLOW_CALL_DURATION_MS = 5000;
+    private static final int DEFAULT_CIRCUIT_BREAKER_SLOW_CALL_RATE_THRESHOLD = 100;
+
+    // Default values for Bulkhead configuration
+    private static final int DEFAULT_BULKHEAD_MAX_CONCURRENT_CALLS = 10;
+    private static final long DEFAULT_BULKHEAD_MAX_WAIT_DURATION_MS = 0;
+
+    // Default values for RateLimiter configuration
+    private static final int DEFAULT_RATE_LIMITER_LIMIT_FOR_PERIOD = 50;
+    private static final long DEFAULT_RATE_LIMITER_REFRESH_PERIOD_MS = 1000;
+    private static final long DEFAULT_RATE_LIMITER_TIMEOUT_MS = 2000;
+
+    // Default values for Timeout configuration
+    private static final long DEFAULT_TIMEOUT_DURATION_MS = 10000;
+
     /** Default global configurations */
     private Global global = new Global();
 
@@ -68,10 +95,10 @@ public class ResilienceProperties {
     @Getter
     @Setter
     public static class Retry {
-        private int maxAttempts = 3;
-        private long initialWaitMs = 1000;
-        private double backoffMultiplier = 2.0;
-        private long maxWaitMs = 10000;
+        private int maxAttempts = DEFAULT_RETRY_MAX_ATTEMPTS;
+        private long initialWaitMs = DEFAULT_RETRY_INITIAL_WAIT_MS;
+        private double backoffMultiplier = DEFAULT_RETRY_BACKOFF_MULTIPLIER;
+        private long maxWaitMs = DEFAULT_RETRY_MAX_WAIT_MS;
         private boolean exponentialBackoff = true;
         private Class<? extends Throwable>[] retryExceptions = new Class[]{
                 java.io.IOException.class,
@@ -82,13 +109,13 @@ public class ResilienceProperties {
     @Getter
     @Setter
     public static class CircuitBreaker {
-        private int failureRateThreshold = 50;
-        private long waitDurationInOpenStateMs = 30000;
-        private int slidingWindowSize = 10;
-        private int minimumNumberOfCalls = 5;
-        private int permittedCallsInHalfOpen = 3;
-        private long slowCallDurationThresholdMs = 5000;
-        private int slowCallRateThreshold = 100;
+        private int failureRateThreshold = DEFAULT_CIRCUIT_BREAKER_FAILURE_RATE_THRESHOLD;
+        private long waitDurationInOpenStateMs = DEFAULT_CIRCUIT_BREAKER_WAIT_DURATION_MS;
+        private int slidingWindowSize = DEFAULT_CIRCUIT_BREAKER_SLIDING_WINDOW_SIZE;
+        private int minimumNumberOfCalls = DEFAULT_CIRCUIT_BREAKER_MINIMUM_CALLS;
+        private int permittedCallsInHalfOpen = DEFAULT_CIRCUIT_BREAKER_PERMITTED_CALLS_HALF_OPEN;
+        private long slowCallDurationThresholdMs = DEFAULT_CIRCUIT_BREAKER_SLOW_CALL_DURATION_MS;
+        private int slowCallRateThreshold = DEFAULT_CIRCUIT_BREAKER_SLOW_CALL_RATE_THRESHOLD;
         private boolean automaticTransitionFromOpenToHalfOpen = true;
         private Class<? extends Throwable>[] recordExceptions = new Class[]{
                 java.io.IOException.class,
@@ -99,22 +126,22 @@ public class ResilienceProperties {
     @Getter
     @Setter
     public static class Bulkhead {
-        private int maxConcurrentCalls = 10;
-        private long maxWaitDurationMs = 0;
+        private int maxConcurrentCalls = DEFAULT_BULKHEAD_MAX_CONCURRENT_CALLS;
+        private long maxWaitDurationMs = DEFAULT_BULKHEAD_MAX_WAIT_DURATION_MS;
     }
 
     @Getter
     @Setter
     public static class RateLimiter {
-        private int limitForPeriod = 50;
-        private long limitRefreshPeriodMs = 1000;
-        private long timeoutDurationMs = 2000;
+        private int limitForPeriod = DEFAULT_RATE_LIMITER_LIMIT_FOR_PERIOD;
+        private long limitRefreshPeriodMs = DEFAULT_RATE_LIMITER_REFRESH_PERIOD_MS;
+        private long timeoutDurationMs = DEFAULT_RATE_LIMITER_TIMEOUT_MS;
     }
 
     @Getter
     @Setter
     public static class Timeout {
-        private long durationMs = 10000;
+        private long durationMs = DEFAULT_TIMEOUT_DURATION_MS;
         private boolean cancelRunningFuture = true;
     }
 

@@ -161,7 +161,7 @@ public interface UserMapper {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/${api.version}/users")
 public class UserController {
 
     @Autowired

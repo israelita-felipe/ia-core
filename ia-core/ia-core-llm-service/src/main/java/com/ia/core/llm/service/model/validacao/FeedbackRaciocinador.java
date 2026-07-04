@@ -16,6 +16,7 @@ public class FeedbackRaciocinador {
   private boolean axiomaValido;
   private String explicacao;
   private String erroConsistencia;
+  private String descricaoCorrigida;
   private int iteracaoAtual;
   private int maxIteracoes;
 }

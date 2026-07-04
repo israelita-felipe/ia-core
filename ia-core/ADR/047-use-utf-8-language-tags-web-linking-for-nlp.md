@@ -10,7 +10,7 @@ Os módulos de processamento de linguagem natural (NLP) e gramática precisam li
 Vamos utilizar os seguintes RFCs para os módulos NLP/Linguagem:
 - RFC 3629: UTF-8, um formato de transformação de caracteres ISO 10646
 - RFC 5646: Tags para Identificação de Idiomas
-- RFC 5988: Web Linking
+- RFC 8288: Web Linking, que substitui RFC 5988
 
 Isso garantirá:
 - Correta manipulação de caracteres Unicode em processamento de texto
@@ -26,7 +26,7 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 |-----|--------|-----------|
 | **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos de código e recursos |
 | **RFC 5646** | Tags for Identifying Languages | Tags de idioma para recursos multilíngues |
-| **RFC 5988** | Web Linking | Semântica de links para recursos web linguísticos |
+| **RFC 8288** | Web Linking | Semântica de links para recursos web linguísticos; substitui RFC 5988 |
 
 ### Padrões de Mercado
 
@@ -36,7 +36,7 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 | **Language Tag Format** | IETF BCP 47 | Tags como `pt-BR`, `en-US` |
 | **MessageFormat** | Oracle JDK | Formatação de mensagens parametrizadas |
 | **Unicode CLDR** | Unicode Consortium | Dados de localização (números, datas) |
-| **REST Linking** | RFC 5988 | Cabeçalhos Link com `rel` apropriado |
+| **REST Linking** | RFC 8288 | Cabeçalhos Link com `rel` apropriado |
 
 ### Boas Práticas Adotadas
 
@@ -54,8 +54,8 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 - **ADR-003**: Classes `*Translator` e chaves de properties seguem convenções de nomenclatura.
 - **ADR-010**: Nomenclatura de pacotes e classes segue padrões do projeto.
 - **ADR-017**: Migrações seguem convenções de versionamento e descrição.
-- **ADR-048**: Classes AI/MCP seguem convenções de nomenclatura do Spring AI.
 - **ADR-050**: Diretrizes gerais de padronização do projeto.
+- **ADR-052**: Linguagem normativa e formato MADR para ADRs.
 
 ## Consequences
 
@@ -73,14 +73,15 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 ## Implementation Plan
 1. Garantir que todos os módulos NLP utilizem UTF-8 como encoding padrão
 2. Implementar validação e uso de tags de idioma conforme RFC 5646
-3. Utilizar cabeçalhos Link e relações de link conforme RFC 5988 quando aplicável
+3. Utilizar cabeçalhos Link e relações de link conforme RFC 8288 quando aplicável
 4. Assegurar que processadores de texto lidem corretamente com sequências Unicode
 5. Implementar detecção de idioma quando necessário usando bibliotecas estabelecidas
 6. Suporte a internacionalização (i18n) e localização (l10n) em recursos linguísticos
+7. Tratar RFC 5988 como referência histórica/obsoleta quando aparecer em documentação legada
 
 ## Related Documents
 - REFACTORING.md (seção 8 sobre padrões RFC relevantes)
 - RFC 3629: UTF-8, a transformation format of ISO 10646
 - RFC 5646: Tags for Identifying Languages
-- RFC 5988: Web Linking
+- RFC 8288: Web Linking
 - ADR 003: Use Translator for I18n (existente)

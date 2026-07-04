@@ -1,62 +1,59 @@
 package com.ia.core.owl.service.tool.individual;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas NegativeObjectPropertyAssertion.
+ * Tool para criação de asserção negativa de propriedade de objeto OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owl*service para criar asserções negativas de propriedade de objeto
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa asserção negativa de propriedade de objeto (¬R(a, b)).
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class NegativeObjectPropertyAssertionTool extends AbstractOWLTool {
+public class NegativeObjectPropertyAssertionTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "NegativeObjectPropertyAssertion";
-
-  public NegativeObjectPropertyAssertionTool(ChatModel chatModel,
-                                             LLMCommunicator llmCommunicator,
-                                             DefaultOwlService owlService,
-                                             TemplateService templateService,
-                                             FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public NegativeObjectPropertyAssertionTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma asserção negativa de propriedade de objeto na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param individual1 Primeiro indivíduo
+   * @param property Propriedade de objeto
+   * @param individual2 Segundo indivíduo
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma asserção negativa de propriedade de objeto OWL 2 DL na ontologia da sessão. " +
+                     "Representa asserção negativa de propriedade de objeto (¬R(a, b)). " +
+                     "Exemplo: João não tem filho Maria → NegativeObjectPropertyAssertion(:temFilho :João :Maria).")
+  public String createNegativeObjectPropertyAssertion(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeiro indivíduo", required = true) String individual1,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Segundo indivíduo", required = true) String individual2) {
 
-  @Override
-  public String getDescription() { return "Declara negação de propriedade de objeto"; }
+    log.debug("Criando NegativeObjectPropertyAssertion: ¬{} {} {}", property, individual1, individual2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas NegativeObjectPropertyAssertion.
-      Construtor: NegativeObjectPropertyAssertion
-      Descrição: Declara que um indivíduo NÃO tem uma propriedade com outro indivíduo.
-      Sintaxe Manchester: NegativeObjectPropertyAssertion(<propriedade> <individuo1> <individuo2>)
-      Exemplos:
-      - "João não tem filho Maria" → NegativeObjectPropertyAssertion(:temFilho :Joao :Maria)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "NegativeObjectPropertyAssertion: " + property + " " + individual1 + " " + individual2;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owl*service
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("João não tem filho Maria", "Pedro não é casado com Ana");
+    log.debug("Resultado da criação de NegativeObjectPropertyAssertion: {}", result);
+    return result;
   }
 }

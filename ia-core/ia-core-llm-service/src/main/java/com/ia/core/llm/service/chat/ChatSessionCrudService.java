@@ -33,20 +33,23 @@ public class ChatSessionCrudService
   extends CrudBaseService<ChatSession, ChatSessionDTO>
   implements ChatSessionUseCase {
 
-  private final ChatSessionRepository chatSessionRepository;
   private final AgenteRepository agenteRepository;
 
   public ChatSessionCrudService(ChatSessionServiceConfig config) {
     super(config);
-    this.chatSessionRepository = (ChatSessionRepository) config.getRepository();
     this.agenteRepository = config.getAgenteRepository();
+  }
+
+  @Override
+  public ChatSessionRepository getRepository() {
+    return (ChatSessionRepository) super.getRepository();
   }
 
   @Override
   @TransactionalReadOnly
   public Optional<ChatSessionDTO> findBySessionId(String sessionId) {
     log.debug("Buscando sessão de chat por session ID: {}", sessionId);
-    return chatSessionRepository.findBySessionId(sessionId)
+    return getRepository().findBySessionId(sessionId)
         .map(session -> {
           log.debug("Sessão encontrada: {}", session.getSessionId());
           return getMapper().toDTO(session);
@@ -57,7 +60,7 @@ public class ChatSessionCrudService
   @TransactionalReadOnly
   public List<ChatSessionDTO> listAtivasByUsuario(String usuarioId) {
     log.debug("Listando sessões ativas do usuário: {}", usuarioId);
-    return chatSessionRepository.findByUsuarioIdAndStatus(usuarioId, ChatSessionStatus.ATIVA).stream()
+    return getRepository().findByUsuarioIdAndStatus(usuarioId, ChatSessionStatus.ATIVA).stream()
         .map(session -> {
           log.debug("Sessão ativa encontrada: {}", session.getSessionId());
           return getMapper().toDTO(session);
@@ -82,7 +85,7 @@ public class ChatSessionCrudService
         .usuarioId(usuarioId)
         .build();
 
-    ChatSession saved = chatSessionRepository.save(session);
+    ChatSession saved = getRepository().save(session);
     log.debug("Sessão iniciada com sucesso: sessionId={}", saved.getSessionId());
 
     return getMapper().toDTO(saved);
@@ -93,13 +96,13 @@ public class ChatSessionCrudService
   public ChatSessionDTO encerrarSessao(String sessionId) {
     log.debug("Encerrando sessão de chat: sessionId={}", sessionId);
 
-    ChatSession session = chatSessionRepository.findBySessionId(sessionId)
+    ChatSession session = getRepository().findBySessionId(sessionId)
         .orElseThrow(() -> new ServiceException("Sessão não encontrada"));
 
     session.setDataFim(LocalDateTime.now());
     session.setStatus(ChatSessionStatus.ENCERRADA);
 
-    ChatSession saved = chatSessionRepository.save(session);
+    ChatSession saved = getRepository().save(session);
     log.debug("Sessão encerrada com sucesso: sessionId={}", saved.getSessionId());
 
     return getMapper().toDTO(saved);

@@ -2,6 +2,7 @@ package com.ia.core.llm.model.chat;
 
 import com.ia.core.llm.model.LLMModel;
 import com.ia.core.llm.model.agente.Agente;
+import com.ia.core.llm.model.agente.ContextoConversacao;
 import com.ia.core.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * <p>
  * Representa uma conversação interativa entre um usuário e um agente,
  * mantendo o contexto da conversa através de chat memory.
+ * Integrado com ContextoConversacao para gerenciamento de ontologia de contexto.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -80,6 +82,15 @@ public class ChatSession
    */
   @Column(name = "usuario_id", length = 100)
   private String usuarioId;
+
+  /**
+   * Contexto de conversação associado à sessão (ontologia incremental).
+   * <p>
+   * Integrado de ContextoConversacao para gerenciamento de contexto e ontologia.
+   */
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "contexto_conversacao_id")
+  private ContextoConversacao contextoConversacao;
 
   /**
    * Status da sessão de chat.

@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.dialog;
 
-import com.ia.core.llm.service.model.validacao.ExplicacaoInconsistencia;
+import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistencia;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;

@@ -81,4 +81,38 @@ public class FlywayExecutionDTO extends AbstractBaseEntityDTO<FlywayExecution> {
 		return toBuilder().build();
 	}
 
+	/**
+	 * Inner class com constantes para nomes dos campos.
+	 */
+	public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+		public static final String MIGRATION_VERSION = "migrationVersion";
+		public static final String DESCRIPTION = "description";
+		public static final String TYPE = "type";
+		public static final String SCRIPT = "script";
+		public static final String CHECKSUM = "checksum";
+		public static final String INSTALLED_BY = "installedBy";
+		public static final String INSTALLED_ON = "installedOn";
+		public static final String EXECUTION_TIME = "executionTime";
+		public static final String SUCCESS = "success";
+
+		/**
+		 * Retorna todos os valores das constantes de campos.
+		 *
+		 * @return Set com todos os valores das constantes
+		 */
+		public static java.util.Set<String> values() {
+			java.util.Set<String> values = AbstractBaseEntityDTO.CAMPOS.values();
+			values.add(MIGRATION_VERSION);
+			values.add(DESCRIPTION);
+			values.add(TYPE);
+			values.add(SCRIPT);
+			values.add(CHECKSUM);
+			values.add(INSTALLED_BY);
+			values.add(INSTALLED_ON);
+			values.add(EXECUTION_TIME);
+			values.add(SUCCESS);
+			return values;
+		}
+	}
+
 }

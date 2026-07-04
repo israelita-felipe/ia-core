@@ -20,6 +20,8 @@ import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.ListView;
 import com.ia.core.view.components.page.viewModel.IPageViewModel;
 import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
+import com.ia.core.view.components.properties.HasHelp;
+import com.ia.core.view.help.HelpOnlineComponent;
 import com.ia.core.view.properties.HasTabSheetCreator;
 import com.ia.core.view.utils.DataProviderFactory;
 import com.ia.core.view.utils.ReportUtils;
@@ -50,7 +52,7 @@ import java.util.*;
  */
 public abstract class PageView<T extends Serializable>
   extends VerticalLayout
-  implements IPageView<T>, HasTabSheetCreator {
+  implements IPageView<T>, HasTabSheetCreator, HasHelp {
   /** Serial UID */
   private static final long serialVersionUID = -777141442460268806L;
 
@@ -198,6 +200,12 @@ public abstract class PageView<T extends Serializable>
                                      });
     actionButton.setTooltipText(action.getLabel());
     actionButton.getStyle().set("margin", "2px");
+
+    // Adiciona help ao botão se disponível
+    if (action.getHelpDescription() != null) {
+      setHelp(actionButton, action.getHelpDescription());
+    }
+
     return actionButton;
   }
 
@@ -322,7 +330,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createDeleteAction() {
     return PageAction.<T> builder().icon(VaadinIcon.TRASH)
-        .enableFunction(this::canDelete).action(this::delete).build();
+        .enableFunction(this::canDelete).action(this::delete)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_DELETE, $(getViewModel().getType())))
+        .build();
   }
 
   /**
@@ -330,7 +340,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createEditAction() {
     return PageAction.<T> builder().icon(VaadinIcon.PENCIL)
-        .enableFunction(this::canEdit).action(this::edit).build();
+        .enableFunction(this::canEdit).action(this::edit)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_EDIT, $(getViewModel().getType())))
+        .build();
   }
 
   /**
@@ -338,7 +350,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createCopyAction() {
     return PageAction.<T> builder().icon(VaadinIcon.COPY)
-        .enableFunction(this::canCopy).action(this::copy).build();
+        .enableFunction(this::canCopy).action(this::copy)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_COPY, $(getViewModel().getType())))
+        .build();
   }
 
   @Override
@@ -451,6 +465,7 @@ public abstract class PageView<T extends Serializable>
     return PageAction.<T> builder().icon(VaadinIcon.FILTER)
         .enableFunction(object -> true)
         .group(CoreApplicationTranslator.FILTER).action(this::showFilter)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_FILTER))
         .build();
   }
 
@@ -466,6 +481,7 @@ public abstract class PageView<T extends Serializable>
     wrapper.setPadding(false);
     wrapper.setMargin(false);
     wrapper.setSizeFull();
+    add(new HelpOnlineComponent(this));
     add(wrapper);
   }
 
@@ -489,7 +505,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createNewAction() {
     return PageAction.<T> builder().icon(VaadinIcon.PLUS_CIRCLE)
-        .enableFunction(object -> canInsert()).action(this::create).build();
+        .enableFunction(object -> canInsert()).action(this::create)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_NEW, $(getViewModel().getType())))
+        .build();
   }
 
   /**
@@ -506,7 +524,9 @@ public abstract class PageView<T extends Serializable>
    */
   public PageAction<T> createViewAction() {
     return PageAction.<T> builder().icon(VaadinIcon.EYE)
-        .enableFunction(this::canView).action(this::view).build();
+        .enableFunction(this::canView).action(this::view)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_VIEW, $(getViewModel().getType())))
+        .build();
   }
 
   /**
@@ -515,7 +535,9 @@ public abstract class PageView<T extends Serializable>
   public PageAction<T> createPrintAction() {
     return PageAction.<T> builder().icon(VaadinIcon.PRINT)
         .group(CoreApplicationTranslator.REPORTS)
-        .enableFunction(object -> canPrint()).action(this::print).build();
+        .enableFunction(object -> canPrint()).action(this::print)
+        .helpDescription($(CoreApplicationTranslator.HELP.PAGE_PRINT, $(getViewModel().getType())))
+        .build();
   }
 
   /**
@@ -745,6 +767,59 @@ public abstract class PageView<T extends Serializable>
     } catch (Exception e) {
       handleError(e);
     }
+  }
+
+  @Override
+  public String getHelpTitle() {
+    return $(CoreApplicationTranslator.VIEW.PAGE_LISTING, $(getViewModel().getType()));
+  }
+
+  @Override
+  public String getHelpDescription() {
+    Class<T> type = getViewModel().getType();
+    String typeName = $(type);
+    String actionsDescription = buildActionsDescription();
+    return String.format(
+        "Página de listagem de %s. %s",
+        typeName,
+        actionsDescription
+    );
+  }
+
+  /**
+   * Constrói descrição das ações disponíveis na página.
+   *
+   * @return descrição das ações
+   */
+  private String buildActionsDescription() {
+    StringBuilder sb = new StringBuilder("Operações disponíveis: ");
+    if (isNewButtonVisible()) {
+      sb.append("Novo, ");
+    }
+    if (isEditButtonVisible()) {
+      sb.append("Editar, ");
+    }
+    if (isCopyButtonVisible()) {
+      sb.append("Copiar, ");
+    }
+    if (isViewButtonVisible()) {
+      sb.append("Visualizar, ");
+    }
+    if (isDeleteButtonVisible()) {
+      sb.append("Excluir, ");
+    }
+    if (isPrintButtonVisible()) {
+      sb.append("Imprimir, ");
+    }
+    if (isFilterButtonVisible()) {
+      sb.append("Filtrar, ");
+    }
+    // Remove última vírgula e espaço
+    if (sb.length() > 2) {
+      sb.setLength(sb.length() - 2);
+    }
+    sb.append(".");
+    return sb.toString();
   }
 
 }

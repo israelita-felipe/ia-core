@@ -19,6 +19,7 @@
 		<java.version>21</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<lombok.version>1.18.30</lombok.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
 		<vaadin.version>25.1.5</vaadin.version>
@@ -35,6 +36,9 @@
 		<apache.poi.version>5.5.0</apache.poi.version>
 		<resilience4j.version>2.2.0</resilience4j.version>
 		<log4j.version>2.25.4</log4j.version>
+		<springdoc.version>2.7.0</springdoc.version>
+		<testcontainers.version>1.19.3</testcontainers.version>
+		<mockito.version>5.11.0</mockito.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -60,6 +64,11 @@
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-jackson</artifactId>
 				<version>${jjwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+				<version>${springdoc.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -251,6 +260,19 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>${argLine}</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	<repositories>
 		<repository>
@@ -261,36 +283,35 @@
 	</repositories>
     <modules>
         <module>ia-core-model</module>
+        <module>ia-core-service-model</module>
         <module>ia-core-service</module>
         <module>ia-core-rest</module>
         <module>ia-core-view</module>
         <module>ia-core-grammar</module>
         <module>ia-core-nlp</module>
         <module>ia-core-security-model</module>
-        <module>ia-core-security-service</module>
-        <module>ia-core-service-model</module>
-        <module>ia-core-security-view</module>
         <module>ia-core-security-service-model</module>
+        <module>ia-core-security-service</module>
+        <module>ia-core-security-view</module>
         <module>ia-core-report</module>
-        <module>ia-core-llm-service-model</module>
         <module>ia-core-llm-model</module>
+        <module>ia-core-llm-service-model</module>
         <module>ia-core-llm-service</module>
         <module>ia-core-llm-rest</module>
         <module>ia-core-llm-view</module>
-        <module>ia-core-quartz</module>
+        <module>ia-core-quartz-model</module>
         <module>ia-core-quartz-service-model</module>
         <module>ia-core-quartz-service</module>
         <module>ia-core-quartz-view</module>
-        <module>ia-core-integration-test</module>
-        <module>ia-core-security-test</module>
+        <module>ia-core-test</module>
         <module>ia-core-communication-model</module>
-        <module>ia-core-communication-rest</module>
-        <module>ia-core-communication-service</module>
         <module>ia-core-communication-service-model</module>
+        <module>ia-core-communication-service</module>
+        <module>ia-core-communication-rest</module>
         <module>ia-core-communication-view</module>
         <module>ia-core-flyway-model</module>
-        <module>ia-core-flyway-service</module>
         <module>ia-core-flyway-service-model</module>
+        <module>ia-core-flyway-service</module>
         <module>ia-core-flyway-view</module>
         <module>ia-core-resilience4j</module>
     </modules>

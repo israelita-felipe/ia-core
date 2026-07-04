@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -60,10 +61,9 @@ public class ResilienceExecutionChainBuilder {
             ResilienceMetricsCollector resilienceMetricsCollector,
             ResilienceAspect.ResilienceAspectContext contextPropagator,
             List<ResilienceStrategyHandler<?>> handlers) {
-        this.resilienceMetricsCollector = resilienceMetricsCollector;
-        this.contextPropagator = contextPropagator;
-        // RateLimiter → Bulkhead → CircuitBreaker → Retry → TimeLimiter
-        this.handlers.addAll(handlers);
+        this.resilienceMetricsCollector = Objects.requireNonNull(resilienceMetricsCollector, "resilienceMetricsCollector must not be null");
+        this.contextPropagator = Objects.requireNonNull(contextPropagator, "contextPropagator must not be null");
+        this.handlers.addAll(Objects.requireNonNull(handlers, "handlers must not be null"));
     }
 
     /**

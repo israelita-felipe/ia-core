@@ -99,16 +99,7 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
     ServiceException ex = new ServiceException();
     D saved = null;
     try {
-      validate(toSave);
-      T model = toModel(toSave);
-      model = synchronize(model);
-      boolean isUpdate = model.getId() != null;
-      if (isUpdate && !canUpdate(toSave)) {
-        return null;
-      } else if (!isUpdate && !canCreate(toSave)) {
-        return null;
-      }
-      saved = toDTO(getRepository().save(model));
+      saved = validateAndPrepareOperation(toSave, ex);
       if (saved != null) {
         CrudOperationType operationType = determineOperationType(toSave,
                                                                  saved);
@@ -119,6 +110,33 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
     }
     throwIfHasErrors(ex);
     return saved;
+  }
+
+  /**
+   * Valida e prepara a operação de save.
+   *
+   * <p>Este método centraliza a lógica de validação, conversão, sincronização
+   * e verificação de permissões para criar ou atualizar.
+   *
+   * @param toSave DTO a ser salvo
+   * @param ex ServiceException para acumular erros
+   * @return DTO salvo ou null se a operação não for permitida
+   * @throws ServiceException em caso de erro durante validação ou preparação
+   */
+  private D validateAndPrepareOperation(D toSave, ServiceException ex)
+    throws ServiceException {
+    validate(toSave);
+    T model = toModel(toSave);
+    model = synchronize(model);
+    boolean isUpdate = model.getId() != null;
+
+    if (isUpdate && !canUpdate(toSave)) {
+      return null;
+    } else if (!isUpdate && !canCreate(toSave)) {
+      return null;
+    }
+
+    return toDTO(getRepository().save(model));
   }
 
   /**

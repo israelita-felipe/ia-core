@@ -4,6 +4,24 @@
 
 Módulo base para a camada de apresentação usando Vaadin. Fornece componentes e padrões reutilizáveis para construir interfaces web modernas, responsivas e baseadas em MVVM (Model-View-ViewModel).
 
+### Módulo de Help Online
+
+Este módulo fornece um sistema de ajuda contextual para componentes Vaadin:
+
+- **HasHelp**: Interface para componentes que possuem ajuda contextual
+- **HelpOnlineComponent**: Componente Vaadin para exibição de ajuda online via diálogo
+- **FlexmarkHelpRenderer**: Renderizador seguro de Markdown para HTML (com OWASP sanitizer)
+- **HelpDialogViewFactory**: Fábrica de diálogos com header (sem toolbar)
+- **HelpScreenshotComponent**: Componente utilitário para captura de screenshots via html2canvas
+
+**Status:** v1.0.2 ✅ (2026-07-03)
+- 66+ testes passando
+- Renderização Markdown segura (OWASP sanitizer)
+- Captura de screenshots recursiva
+- Interação com mouse (mouseover/mouseout)
+- Diálogo limpo, foco no conteúdo
+- Acessibilidade WCAG 2.2 (role="dialog", aria-label, aria-expanded)
+
 ## 🏗️ Estrutura
 
 ```
@@ -68,142 +86,196 @@ Utilizado por:
 - **Observer Pattern**: Data binding bidirecional via Vaadin Binder
 - **Template Method**: Classe base para formulários
 
+## 📚 Referências
+
+### ADRs Relacionados
+
+- [ADR-055: Help Content Pattern](ADR/055-use-help-content-pattern.md) - Padrão de ajuda online em Vaadin
+- [ADR-056: Padrão de Customização de Componentes Vaadin](ADR/056-use-vaadin-component-customization-pattern.md) - CSS puro modular e responsivo
+- [ADR-057: WCAG 2.2 para Acessibilidade](ADR/057-use-wcag-2-2-for-accessibility.md) - Acessibilidade em aplicações Vaadin
+
+### CDU Relacionado
+
+- [CDU045: Apresentar Ajuda Online](CDU/CDU045-Apresentar-Ajuda-Online/README.md) - Caso de uso completo do sistema de ajuda
+
+## 📁 Arquivos Modificados/Criados
+
+### Help Online (v1.0.2)
+
+| Arquivo | Tipo | Descrição |
+|---------|------|-----------|
+| `src/main/java/com/ia/core/view/components/properties/HasHelp.java` | Criado | Interface para componentes com ajuda contextual |
+| `src/main/java/com/ia/core/view/help/HelpOnlineComponent.java` | Criado | Componente Vaadin para exibição de ajuda via diálogo |
+| `src/main/java/com/ia/core/view/help/FlexmarkHelpRenderer.java` | Criado | Renderizador seguro de Markdown para HTML |
+| `src/main/java/com/ia/core/view/help/dialog/HelpDialogViewFactory.java` | Criado | Fábrica de diálogos com header (sem toolbar) |
+| `src/main/java/com/ia/core/view/help/HelpScreenshotComponent.java` | Criado | Captura de screenshots via html2canvas |
+| `src/main/resources/META-INF/resources/themes/core/scroll-styles.css` | Criado | Scrollbar oculta mas funcional |
+| `src/main/resources/META-INF/resources/themes/core/responsive-styles.css` | Criado | Estilos responsivos mobile-first |
+| `src/main/resources/META-INF/resources/themes/core/component-styles.css` | Criado | Design system de componentes |
+| `src/test/java/com/ia/core/view/help/e2e/HelpOnlineAccessibilityE2eTest.java` | Criado | Testes E2E de acessibilidade WCAG 2.2 |
+
 ## 🚀 Como Usar
 
 ### Criar um Formulário Base
 
+### Usar o Sistema de Help Online
+
+#### 1. Helper Text em Campos (Texto Curto Sempre Visível)
+
 ```java
-@Path("")
-@Route("minha-entidade")
-public class MinhaEntidadeForm extends FormView<MinhaEntidade> {
+TextField nomeField = new TextField("Nome");
+nomeField.setHelperText("Digite o nome completo do autor");
+```
 
-    private final TextField nome = new TextField("Nome");
-    private final TextField email = new TextField("Email");
-    private final Button salvar = new Button("Salvar");
-    private final Button cancelar = new Button("Cancelar");
+#### 2. Help Online em Views (Conteúdo Detalhado em Diálogo)
 
-    private final MinhaEntidadeService service;
+```java
+@Route("autores")
+public class AutorView extends VerticalLayout implements HasHelp {
 
-    public MinhaEntidadeForm(MinhaEntidadeService service) {
-        this.service = service;
-        initLayout();
-    }
+    private TextField nomeField;
+    private TextField emailField;
 
-    private void initLayout() {
-        // Configurar campos
-        nome.setRequired(true);
-        email.setRequired(true);
+    public AutorView() {
+        nomeField = new TextField("Nome");
+        emailField = new TextField("Email");
 
-        // Configurar listener para salvar
-        salvar.addClickListener(e -> salvar());
-        cancelar.addClickListener(e -> cancelar());
+        // Configurar helper text inline usando HasHelp
+        setHelp(nomeField, "Nome completo do autor (mínimo 3 caracteres)");
+        setHelp(emailField, "Email de contato do autor (opcional)");
 
-        // Layout
-        HorizontalLayout botoes = new HorizontalLayout(salvar, cancelar);
-        VerticalLayout layout = new VerticalLayout(nome, email, botoes);
-        add(layout);
-    }
+        add(nomeField, emailField);
 
-    private void salvar() {
-        MinhaEntidade entidade = binder.getBean();
-        if (binder.writeBeanIfValid(entidade)) {
-            service.save(entidade);
-            Notification.show("Salvo com sucesso!");
-            limparFormulario();
-        }
-    }
-
-    private void cancelar() {
-        limparFormulario();
+        // Adicionar botão de ajuda no cabeçalho
+        HelpOnlineComponent helpButton = new HelpOnlineComponent(this);
+        Header header = new Header("Autores", helpButton);
+        add(header);
     }
 
     @Override
-    public void setBean(MinhaEntidade bean) {
-        binder.setBean(bean);
+    public String getHelpTitle() {
+        return "Gestão de Autores";
+    }
+
+    @Override
+    public String getHelpDescription() {
+        return "Tela para cadastro e gerenciamento de autores de livros. " +
+               "Permite criar, editar e excluir autores do catálogo.";
+    }
+
+    @Override
+    public Map<Component, Component> getHelpFields() {
+        // Retorna mapa de componentes configurados com setHelp()
+        return super.getHelpFields();
     }
 }
 ```
 
-### Criar uma Grade de Dados
+#### 3. Help Online para Componentes Específicos
 
 ```java
-@Route("minha-entidade/lista")
-public class MinhaEntidadeGrid extends VerticalLayout {
+TextField emailField = new TextField("Email");
+emailField.setHelperText("Digite um email válido");
 
-    private final Grid<MinhaEntidade> grid = new Grid<>(MinhaEntidade.class, false);
-    private final MinhaEntidadeService service;
+// Adicionar help online específico para o campo
+HelpOnlineComponent fieldHelp = new HelpOnlineComponent(
+    new HasHelp() {
+        @Override
+        public String getHelpTitle() {
+            return "Email";
+        }
 
-    public MinhaEntidadeGrid(MinhaEntidadeService service) {
-        this.service = service;
-        initGrid();
+        @Override
+        public String getHelpDescription() {
+            return "O email deve estar no formato usuario@dominio.com. " +
+                   "Será usado para notificações e recuperação de senha.";
+        }
+
+        @Override
+        public Map<Component, Component> getHelpFields() {
+            return Map.of(); // Vazio pois não há campos filhos
+        }
+    }
+);
+add(emailField, fieldHelp);
+```
+
+#### 4. Help Online em FormView (Integração Automática)
+
+```java
+@Route("minha-entidade")
+public class MinhaEntidadeForm extends FormView<MinhaEntidade> implements HasHelp {
+
+    private TextField nomeField;
+    private TextField emailField;
+
+    public MinhaEntidadeForm(MinhaEntidadeService service) {
+        super(new MinhaEntidadeViewModel(service));
+
+        nomeField = createTextField("Nome", "Nome completo");
+        emailField = createTextField("Email", "Email de contato");
+
+        // Configurar helper text usando HasHelp
+        setHelp(nomeField, "Nome completo (mínimo 3 caracteres)");
+        setHelp(emailField, "Email no formato usuario@dominio.com");
+
+        add(nomeField, emailField);
     }
 
-    private void initGrid() {
-        // Adicionar colunas
-        grid.addColumn(MinhaEntidade::getId).setHeader("ID");
-        grid.addColumn(MinhaEntidade::getNome).setHeader("Nome");
-        grid.addColumn(MinhaEntidade::getEmail).setHeader("Email");
-
-        // Ações customizadas
-        grid.addColumn(createComponentColumn()).setHeader("Ações");
-
-        // Configurar fonte de dados com paginação
-        GridListDataView<MinhaEntidade> dataView = grid.setItems(
-            query -> service.findAll(
-                PageRequest.of(
-                    query.getOffset() / query.getLimit(),
-                    query.getLimit()
-                )
-            ).stream()
-        );
-
-        grid.setHeight("100%");
-        add(grid);
+    @Override
+    public String getHelpTitle() {
+        return "Formulário de Entidade";
     }
 
-    private static ComponentColumn<MinhaEntidade> createComponentColumn() {
-        return new ComponentColumn<>(item -> {
-            Button editar = new Button("Editar");
-            Button deletar = new Button("Deletar");
-            return new HorizontalLayout(editar, deletar);
-        });
+    @Override
+    public String getHelpDescription() {
+        return "Formulário para cadastro e edição de entidades. " +
+               "Todos os campos marcados com * são obrigatórios.";
+    }
+
+    @Override
+    public Map<Component, Component> getHelpFields() {
+        // Retorna automaticamente os campos configurados com setHelp()
+        return super.getHelpFields();
     }
 }
 ```
 
-### Criar um Diálogo Customizado
+**Nota**: O botão de ajuda é adicionado automaticamente pelo construtor de `FormView`, não é necessário adicioná-lo manualmente.
+
+## 🔧 Implementação Técnica do getHelpFields()
+
+O método `getHelpFields()` da interface `HasHelp` percorre **recursivamente** a árvore de elementos DOM do view para encontrar componentes com ajuda configurada via slot "helper".
+
+### Como funciona:
+
+1. **Percorrida Recursiva**: O método inicia no elemento raiz e visita todos os filhos aninhados
+2. **Detecção de Slot**: Procura por elementos com atributo `slot="helper"`
+3. **Mapeamento**: Cria um mapa onde a chave é o componente pai e o valor é o componente de ajuda
+
+### Importante:
+
+- **Componentes devem estar adicionados ao view** (via `add()`) para serem encontrados
+- O método funciona com `FormView` que adiciona componentes ao `layout` interno
+- Retorna `Map<Component, Component>` vazio se não houver componentes com ajuda
+
+### Exemplo de uso:
 
 ```java
-public class ConfirmacaoDialog extends Dialog {
+// Em um FormView, os campos são adicionados automaticamente ao layout
+public class MeuForm extends FormView<MinhaEntidade> implements HasHelp {
+    private TextField nomeField;
 
-    public ConfirmacaoDialog(String titulo, String mensagem,
-                            Runnable onConfirm) {
-        this.setHeaderTitle(titulo);
-
-        Paragraph texto = new Paragraph(mensagem);
-        Button confirmar = new Button("Confirmar", event -> {
-            onConfirm.run();
-            this.close();
-        });
-        Button cancelar = new Button("Cancelar", event -> this.close());
-
-        HorizontalLayout botoes = new HorizontalLayout(confirmar, cancelar);
-        add(texto, botoes);
+    public MeuForm() {
+        super(viewModel);
+        nomeField = createTextField("Nome", "Nome completo");
+        setHelp(nomeField, "Digite o nome completo");
+        // O campo já está adicionado ao layout via createTextField
     }
-}
-```
 
-### Usar um Componente em uma View
-
-```java
-@Route("minha-pagina")
-public class MinhaPage extends VerticalLayout {
-
-    public MinhaPage(MinhaEntidadeForm form, MinhaEntidadeGrid grid) {
-        HorizontalLayout container = new HorizontalLayout(form, grid);
-        container.setFlexGrow(1, form);
-        container.setFlexGrow(1, grid);
-        add(container);
+    @Override
+    public Map<Component, Component> getHelpFields() {
+        return super.getHelpFields(); // Retorna automaticamente o mapa
     }
 }
 ```
@@ -311,5 +383,3 @@ Ao adicionar novos componentes:
 - [Vaadin Documentation](https://vaadin.com/docs/latest)
 - [Vaadin Components](https://vaadin.com/components)
 - [Spring Vaadin Integration](https://spring.io/projects/spring-vaadin)
-
-

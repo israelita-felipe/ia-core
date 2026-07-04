@@ -5,12 +5,14 @@ import com.ia.core.view.components.properties.HasTranslator;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.server.ErrorEvent;
 import com.vaadin.flow.server.VaadinSession;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Fábrica para visualização de exceções
  *
  * @author Israel Araújo
  */
+@Slf4j
 public class ExceptionViewFactory
   implements HasTranslator {
   /** Instância singleton */
@@ -28,18 +30,13 @@ public class ExceptionViewFactory
     return instance;
   }
 
-  /**
-   * Captura um erro
-   *
-   * @param erro {@link Throwable} a ser mostrado o erro.
-   */
-  public static void showError(Throwable erro) {
-    erro.printStackTrace();
-    VaadinSession.getCurrent().getErrorHandler()
-        .error(new ErrorEvent(erro));
-    ConfirmDialog dialogo = get().criarDialogo(getErrors(erro));
-    dialogo.open();
-  }
+    public static void showError(Throwable erro) {
+        log.error("Erro ao mostrar exceção", erro);
+        VaadinSession.getCurrent().getErrorHandler()
+            .error(new ErrorEvent(erro));
+        ConfirmDialog dialogo = get().criarDialogo(getErrors(erro));
+        dialogo.open();
+    }
 
   /**
    * Captura os erros de forma profunda

@@ -21,6 +21,14 @@ public class AgenteConversacionalTranslator {
   public static final String CONSISTENTE = "agenteConversacional.consistente";
   public static final String INCONSISTENCIAS_CORRIGIDAS = "agenteConversacional.inconsistenciasCorrigidas";
 
+  public static final class HELP {
+    public static final String SESSION_ID = "agenteConversacional.help.sessionId";
+    public static final String USER_ID = "agenteConversacional.help.userId";
+    public static final String DOMINIO = "agenteConversacional.help.dominio";
+    public static final String ONTOLOGIA = "agenteConversacional.help.ontologia";
+    public static final String HISTORICO = "agenteConversacional.help.historico";
+  }
+
   public static final class VALIDATION {
     public static final String DOMAIN_REQUIRED = "agenteConversacional.validation.domain.required";
     public static final String USER_ID_REQUIRED = "agenteConversacional.validation.userId.required";

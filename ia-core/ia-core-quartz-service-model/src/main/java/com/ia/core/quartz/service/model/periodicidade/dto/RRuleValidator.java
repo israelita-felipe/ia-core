@@ -116,8 +116,14 @@ public final class RRuleValidator {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita MO, TU, WE, TH, FR, SA, SU ou+n/-n (ex: 2MO, -1FR)
-    return value.matches("(?i)^(([+-]?\\d+)?(MO|TU|WE|TH|FR|SA|SU)(,[+-]?\\d+)?(MO|TU|WE|TH|FR|SA|SU))*$");
+    // Aceita MO, TU, WE, TH, FR, SA, SU ou+n/-n (ex: 2MO, -1FR) separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("(?i)^([+-]?\\d+)?(MO|TU|WE|TH|FR|SA|SU)$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidByMonthDay(String value) {
@@ -140,8 +146,14 @@ public final class RRuleValidator {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de -366 a 366 (exceto 0)
-    return value.matches("^-?(?:[1-9]|[1-9]\\d|[1-2]\\d{2}|3[0-6][0-6])$");
+    // Aceita números de -366 a 366 (exceto 0) separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^-?(?:[1-9]|[1-9]\\d|[1-2]\\d{2}|3[0-6][0-6])$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidDayOfWeek(String value) {
@@ -153,40 +165,70 @@ public final class RRuleValidator {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de -366 a 366 (exceto 0)
-    return value.matches("^-?(?:[1-9]|[1-9]\\d|[1-2]\\d{2}|3[0-6][0-6])$");
+    // Aceita números de -366 a 366 (exceto 0) separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^-?(?:[1-9]|[1-9]\\d|[1-2]\\d{2}|3[0-6][0-6])$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidByWeekNo(String value) {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de -53 a 53 (exceto 0)
-    return value.matches("^-?(?:[1-9]|[1-4]\\d|5[0-3])$");
+    // Aceita números de -53 a 53 (exceto 0) separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^-?(?:[1-9]|[1-4]\\d|5[0-3])$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidByHour(String value) {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de 0 a 23
-    return value.matches("^(?:[0-9]|1\\d|2[0-3])$");
+    // Aceita números de 0 a 23 separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^(?:[0-9]|1\\d|2[0-3])$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidByMinute(String value) {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de 0 a 59
-    return value.matches("^(?:[0-9]|[1-5]\\d)$");
+    // Aceita números de 0 a 59 separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^(?:[0-9]|[1-5]\\d)$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidBySecond(String value) {
     if (value == null || value.isBlank()) {
       return false;
     }
-    // Aceita números de 0 a 59
-    return value.matches("^(?:[0-9]|[1-5]\\d)$");
+    // Aceita números de 0 a 59 separados por vírgula
+    String[] parts = value.split(",");
+    for (String part : parts) {
+      if (!part.trim().matches("^(?:[0-9]|[1-5]\\d)$")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean isValidUntil(String value) {

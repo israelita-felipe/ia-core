@@ -13,6 +13,9 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@FeignClient(name = "ia-core-llm-rest", url = "${ia-core.rest.url}")
+@FeignClient(name = AgenteConstrutorClient.NOME, url = AgenteConstrutorClient.URL)
 public interface AgenteConstrutorClient extends DefaultBaseClient<ResultadoConstrucaoOntologia> {
+
+  String NOME = "agente-construtor";
+  String URL = "${feign.host}/api/${api.version}/${feign.url.agente-construtor}";
 }

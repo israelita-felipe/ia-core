@@ -20,6 +20,15 @@ public class AgenteConstrutorTranslator {
   public static final String USE_ALL_CONSTRUCTORS = "agenteConstrutor.useAllConstructors";
   public static final String LANGUAGE = "agenteConstrutor.language";
 
+  public static final class HELP {
+    public static final String DOMAIN = "agenteConstrutor.help.domain";
+    public static final String CORPUS = "agenteConstrutor.help.corpus";
+    public static final String TARGET_IRI = "agenteConstrutor.help.targetIri";
+    public static final String TARGET_NAME = "agenteConstrutor.help.targetName";
+    public static final String DESIRED_CONSTRUCTORS = "agenteConstrutor.help.desiredConstructors";
+    public static final String MAX_ITERATIONS = "agenteConstrutor.help.maxIterations";
+  }
+
   public static final class VALIDATION {
     public static final String DOMAIN_REQUIRED = "agenteConstrutor.validation.domain.required";
     public static final String CORPUS_REQUIRED = "agenteConstrutor.validation.corpus.required";

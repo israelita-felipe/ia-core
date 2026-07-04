@@ -1,62 +1,75 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas ReflexiveObjectProperty.
+ * Tool para criação de propriedade de objeto reflexiva OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades de objeto reflexivas
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedade de objeto reflexiva (Ref(R)).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * ReflexiveObjectProperty é um axioma que especifica que uma propriedade de objeto é reflexiva.
+ * Todo indivíduo x deve estar relacionado consigo mesmo pela propriedade R(x, x). Permite modelar relacionamentos de auto-relação.
+ * <p>
+ * <b>Sintaxe Manchester:</b> ReflexiveObjectProperty(:Propriedade)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>conhece é reflexiva (todos se conhecem):
+ *       ReflexiveObjectProperty(:conhece)</li>
+ *   <li>éRelacionadoCom é reflexiva:
+ *       ReflexiveObjectProperty(:éRelacionadoCom)</li>
+ *   <li>temMesmoEstado é reflexiva:
+ *       ReflexiveObjectProperty(:temMesmoEstado)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class ReflexiveObjectPropertyTool extends AbstractOWLTool {
+public class ReflexiveObjectPropertyTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "ReflexiveObjectProperty";
-
-  public ReflexiveObjectPropertyTool(ChatModel chatModel,
-                                   LLMCommunicator llmCommunicator,
-                                   DefaultOwlService owlService,
-                                   TemplateService templateService,
-                                   FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ReflexiveObjectPropertyTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma propriedade de objeto reflexiva na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property Propriedade de objeto
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma propriedade de objeto reflexiva OWL 2 DL na ontologia da sessão. " +
+                     "Representa propriedade de objeto reflexiva (Ref(R)). " +
+                     "Especifica que todo indivíduo deve estar relacionado consigo mesmo pela propriedade. " +
+                     "Exemplos: " +
+                     "1) conhece é reflexiva (todos se conhecem) → ReflexiveObjectProperty(:conhece). " +
+                     "2) éRelacionadoCom é reflexiva → ReflexiveObjectProperty(:éRelacionadoCom). " +
+                     "3) temMesmoEstado é reflexiva → ReflexiveObjectProperty(:temMesmoEstado).")
+  public String createReflexiveObjectProperty(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property) {
 
-  @Override
-  public String getDescription() { return "Declara propriedade de objeto reflexiva"; }
+    log.debug("Criando ReflexiveObjectProperty: Ref({})", property);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ReflexiveObjectProperty.
-      Construtor: ReflexiveObjectProperty
-      Descrição: Declara que a propriedade é reflexiva (todo indivíduo se relaciona consigo mesmo).
-      Sintaxe Manchester: ReflexiveObjectProperty(<propriedade>)
-      Exemplos:
-      - "conhece é reflexiva" → ReflexiveObjectProperty(:conhece)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "ReflexiveObjectProperty: " + property;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("conhece é reflexiva", "temRelacaoConsigoMesmo é reflexiva");
+    log.debug("Resultado da criação de ReflexiveObjectProperty: {}", result);
+    return result;
   }
 }

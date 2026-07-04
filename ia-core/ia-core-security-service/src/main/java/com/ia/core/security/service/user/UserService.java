@@ -16,6 +16,8 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author Israel Araújo
  */
@@ -34,7 +36,7 @@ public class UserService
    * @param logOperationService
    */
   public UserService(UserServiceConfig config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 
   @Override
@@ -61,7 +63,9 @@ public class UserService
    * Altera a senha do usuário
    *
    * @param change {@link UserPasswordChangeDTO}
-   * @throws ServiceException caso ocorra alguma exceção
+   * @throws UserNotFountException se o usuário não for encontrado
+   * @throws InvalidPasswordException se a senha antiga estiver incorreta
+   * @throws ServiceException caso ocorra algum erro durante o processo
    */
   @TransactionalWrite
   @Tool(description = "Altera a senha de um usuário existente no sistema após validar a senha atual. " +
@@ -77,33 +81,32 @@ public class UserService
                                    "A senha antiga será validada antes da alteração. " +
                                    "A nova senha deve seguir as políticas de segurança do sistema.",
                       required = true) UserPasswordChangeDTO change)
-    throws ServiceException {
-    ServiceException ex = new ServiceException();
-    try {
-      SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
-      searchRequest.getFilters()
-          .add(FilterRequestDTO.builder().key("userCode")
-              .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
-              .value(change.getUserCode()).build());
-      UserDTO user = findAll(searchRequest)
-          .stream()
-          .findFirst()
-          .orElseThrow(() -> new UserNotFountException(change.getUserCode()));
+    throws UserNotFountException, InvalidPasswordException, ServiceException {
+    Objects.requireNonNull(change, "UserPasswordChangeDTO não pode ser null");
+    Objects.requireNonNull(change.getUserCode(), "Código de usuário não pode ser null");
+    Objects.requireNonNull(change.getOldPassword(), "Senha antiga não pode ser null");
+    Objects.requireNonNull(change.getNewPassword(), "Nova senha não pode ser null");
 
-      String decryptedOldPassword = UserPasswordEncoder
-          .decrypt(change.getOldPassword(), change.getUserCode());
-      if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
-                                                   user.getPassword())) {
-        user.setPassword(UserPasswordEncoder
-            .decrypt(change.getNewPassword(), change.getUserCode()));
-        save(user);
-      } else {
-        throw new InvalidPasswordException(change.getUserCode());
-      }
-    } catch (UserNotFountException | InvalidPasswordException e) {
-      ex.add(e);
+    SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
+    searchRequest.getFilters()
+        .add(FilterRequestDTO.builder().key("userCode")
+            .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
+            .value(change.getUserCode()).build());
+    UserDTO user = findAll(searchRequest)
+        .stream()
+        .findFirst()
+        .orElseThrow(() -> new UserNotFountException(change.getUserCode()));
+
+    String decryptedOldPassword = UserPasswordEncoder
+        .decrypt(change.getOldPassword(), change.getUserCode());
+    if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
+                                                 user.getPassword())) {
+      user.setPassword(UserPasswordEncoder
+          .decrypt(change.getNewPassword(), change.getUserCode()));
+      save(user);
+    } else {
+      throw new InvalidPasswordException(change.getUserCode());
     }
-    throwIfHasErrors(ex);
   }
 
   @Override
@@ -115,7 +118,8 @@ public class UserService
    * Reseta a senha do usuário
    *
    * @param reset {@link UserPasswordResetDTO}
-   * @throws ServiceException caso ocorra alguma exceção
+   * @throws UserNotFountException se o usuário não for encontrado
+   * @throws ServiceException caso ocorra algum erro durante o processo
    */
   @TransactionalWrite
   @Tool(description = "Reseta a senha de um usuário gerando uma nova senha segura aleatória. " +
@@ -130,28 +134,27 @@ public class UserService
                                    "A nova senha será gerada automaticamente pelo sistema de forma segura e aleatória. " +
                                    "Não é necessário fornecer a nova senha.",
                       required = true) UserPasswordResetDTO reset)
-    throws ServiceException {
-    ServiceException ex = new ServiceException();
-    try {
-      log.info("Reset de password para userCode: {}", reset.getUserCode());
-      String newPassword = UserPasswordEncoder
-          .generateDefaultSecureRandomPassword();
-      log.debug("Password reset executado com sucesso para userCode: {}", reset.getUserCode());
-      SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
-      searchRequest.getFilters()
-          .add(FilterRequestDTO.builder().key("userCode")
-              .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
-              .value(reset.getUserCode()).build());
-      UserDTO user = findAll(searchRequest)
-          .stream()
-          .findFirst()
-          .orElseThrow(() -> new UserNotFountException(reset.getUserCode()));
-      user.setPassword(getConfig().getPasswordEncoder()
-          .encode(newPassword));
-      save(user);
-    } catch (UserNotFountException | InvalidPasswordException e) {
-      ex.add(e);
-    }
-    throwIfHasErrors(ex);
+    throws UserNotFountException, ServiceException {
+    Objects.requireNonNull(reset, "UserPasswordResetDTO não pode ser null");
+    Objects.requireNonNull(reset.getUserCode(), "Código de usuário não pode ser null");
+
+    log.info("Reset de password para userCode: {}", reset.getUserCode());
+    String newPassword = UserPasswordEncoder
+        .generateDefaultSecureRandomPassword();
+    log.debug("Password reset executado com sucesso para userCode: {}", reset.getUserCode());
+
+    SearchRequestDTO searchRequest = UserDTO.getSearchRequest();
+    searchRequest.getFilters()
+        .add(FilterRequestDTO.builder().key("userCode")
+            .operator(OperatorDTO.EQUAL).fieldType(FieldType.STRING)
+            .value(reset.getUserCode()).build());
+    UserDTO user = findAll(searchRequest)
+        .stream()
+        .findFirst()
+        .orElseThrow(() -> new UserNotFountException(reset.getUserCode()));
+
+    user.setPassword(getConfig().getPasswordEncoder()
+        .encode(newPassword));
+    save(user);
   }
 }

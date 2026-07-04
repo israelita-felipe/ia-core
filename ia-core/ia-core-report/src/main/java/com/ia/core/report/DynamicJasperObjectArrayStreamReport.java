@@ -17,20 +17,34 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- *
- */
-/**
- * Classe responsável por dynamic jasper object array stream report.
+ * Relatório dinâmico para impressão de dados em array de objetos.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a DynamicJasperObjectArrayStreamReport
- * dentro do sistema.
+ * Gera relatórios JasperReports dinamicamente a partir de um stream de arrays de objetos.
+ * Cria automaticamente campos, bandas e elementos baseados nos cabeçalhos fornecidos.
+ * Suporta exportação para PDF e XLS através da classe pai.
+ * </p>
  *
  * @author IA
  * @since 1.0
  */
-
 public class DynamicJasperObjectArrayStreamReport
   extends AbstractJasperReport<Supplier<Stream<Object[]>>> {
+
+  private static final String COLUMN_PREFIX = "COLUNA_";
+  private static final float BORDER_WIDTH_THIN = 0.5f;
+  private static final float BORDER_WIDTH_THICK = 1f;
+  private static final float TITLE_FONT_SIZE = 14f;
+  private static final int HEADER_COLOR_RGB = 200;
+  private static final int DEFAULT_SPACING = 0;
+  private static final int DEFAULT_HEIGHT = 20;
+  private static final int HEADER_HEIGHT_EXTRA = 10;
+  private static final int PAGE_WIDTH = 595;
+  private static final int PAGE_HEIGHT = 842;
+  private static final int LEFT_MARGIN = 20;
+  private static final int RIGHT_MARGIN = 20;
+  private static final int TOP_MARGIN = 30;
+  private static final int BOTTOM_MARGIN = 30;
+  private static final int COLUMN_WIDTH = 555;
 
   private final String[] cabecalhos;
 
@@ -55,7 +69,7 @@ public class DynamicJasperObjectArrayStreamReport
       for (int coluna = 0; coluna < cabecalhos.length; coluna++) {
         Object valor = (coluna < linha.length) ? (linha[coluna] != null ? linha[coluna]
             .toString() : "") : "";
-        registro.put("COLUNA_" + coluna, valor);
+        registro.put(COLUMN_PREFIX + coluna, valor);
       }
       registros.add(registro);
     });
@@ -85,7 +99,7 @@ public class DynamicJasperObjectArrayStreamReport
     throws JRException {
     for (int i = 0; i < numColunas; i++) {
       JRDesignField campo = new JRDesignField();
-      campo.setName("COLUNA_" + i);
+      campo.setName(COLUMN_PREFIX + i);
       campo.setValueClass(Object.class);
       jasperDesign.addField(campo);
     }
@@ -105,18 +119,12 @@ public class DynamicJasperObjectArrayStreamReport
     createDetails(jasperDesign, cabecalhos, larguraColuna, posicaoX);
   }
 
-  /**
-   * @return
-   */
   public int getSpacing() {
-    return 0;
+    return DEFAULT_SPACING;
   }
 
-  /**
-   * @return
-   */
   public int getDefaultHeight() {
-    return 20;
+    return DEFAULT_HEIGHT;
   }
 
   /**
@@ -168,12 +176,12 @@ public class DynamicJasperObjectArrayStreamReport
 
     // Expressão para buscar o campo correspondente
     JRDesignExpression expressao = new JRDesignExpression();
-    expressao.setText("$F{COLUNA_" + index + "}");
+    expressao.setText("$F{" + COLUMN_PREFIX + index + "}");
     elementoDetalhe.setExpression(expressao);
 
     // Adicionar borda
-    elementoDetalhe.getLineBox().getTopPen().setLineWidth(0.5f);
-    elementoDetalhe.getLineBox().getBottomPen().setLineWidth(0.5f);
+    elementoDetalhe.getLineBox().getTopPen().setLineWidth(BORDER_WIDTH_THIN);
+    elementoDetalhe.getLineBox().getBottomPen().setLineWidth(BORDER_WIDTH_THIN);
 
     band.addElement(elementoDetalhe);
   }
@@ -192,16 +200,16 @@ public class DynamicJasperObjectArrayStreamReport
     elementoCabecalho.setX(x);
     elementoCabecalho.setY(0);
     elementoCabecalho.setWidth(columnWidth);
-    elementoCabecalho.setHeight(getDefaultHeight() + 10);
+    elementoCabecalho.setHeight(getDefaultHeight() + HEADER_HEIGHT_EXTRA);
     elementoCabecalho.setText(cabecalhos[index]);
     elementoCabecalho.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
     elementoCabecalho.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
-    elementoCabecalho.setBackcolor(new Color(200, 200, 200)); // Cinza claro
+    elementoCabecalho.setBackcolor(new Color(HEADER_COLOR_RGB, HEADER_COLOR_RGB, HEADER_COLOR_RGB));
     elementoCabecalho.setMode(ModeEnum.OPAQUE);
 
     // Adicionar borda
-    elementoCabecalho.getLineBox().getTopPen().setLineWidth(1f);
-    elementoCabecalho.getLineBox().getBottomPen().setLineWidth(1f);
+    elementoCabecalho.getLineBox().getTopPen().setLineWidth(BORDER_WIDTH_THICK);
+    elementoCabecalho.getLineBox().getBottomPen().setLineWidth(BORDER_WIDTH_THICK);
 
     band.addElement(elementoCabecalho);
   }
@@ -231,20 +239,15 @@ public class DynamicJasperObjectArrayStreamReport
     elementoTitulo.setVerticalTextAlign(VerticalTextAlignEnum.MIDDLE);
     elementoTitulo.setBold(true);
     elementoTitulo.setText(getTitle());
-    elementoTitulo.setFontSize(14f);
+    elementoTitulo.setFontSize(TITLE_FONT_SIZE);
     elementoTitulo.setX(x);
     elementoTitulo.setY(0);
     elementoTitulo.setWidth(getColumnWidth());
-    elementoTitulo.setHeight(getDefaultHeight() + 10);
+    elementoTitulo.setHeight(getDefaultHeight() + HEADER_HEIGHT_EXTRA);
 
     band.addElement(elementoTitulo);
   }
 
-  /**
-   * @param jasperDesign
-   * @param lineHeight
-   * @return
-   */
   public JRDesignBand createDetailsBand(JasperDesign jasperDesign) {
     JRDesignBand bandaDetalhe = new JRDesignBand();
     bandaDetalhe.setHeight(getDefaultHeight());
@@ -253,25 +256,16 @@ public class DynamicJasperObjectArrayStreamReport
     return bandaDetalhe;
   }
 
-  /**
-   * @param jasperDesign
-   * @param lineHeight
-   * @return
-   */
   public JRDesignBand createHeaderBand(JasperDesign jasperDesign) {
     JRDesignBand bandaCabecalho = new JRDesignBand();
-    bandaCabecalho.setHeight(getDefaultHeight() + 10);
+    bandaCabecalho.setHeight(getDefaultHeight() + HEADER_HEIGHT_EXTRA);
     jasperDesign.setColumnHeader(bandaCabecalho);
     return bandaCabecalho;
   }
 
-  /**
-   * @param lineHeight
-   * @return
-   */
   public JRDesignBand createTitleBand(final int lineHeight) {
     JRDesignBand bandaTitulo = new JRDesignBand();
-    bandaTitulo.setHeight(lineHeight + 10);
+    bandaTitulo.setHeight(lineHeight + HEADER_HEIGHT_EXTRA);
     return bandaTitulo;
   }
 
@@ -285,59 +279,37 @@ public class DynamicJasperObjectArrayStreamReport
     jasperDesign.setRightMargin(getRightMargin());
     jasperDesign.setTopMargin(getTopMargin());
     jasperDesign.setBottomMargin(getBottomMargin());
-    jasperDesign.setColumnWidth(getColumnWidth()); // Largura disponível após
-                                                   // margens
+    jasperDesign.setColumnWidth(getColumnWidth());
 
     return jasperDesign;
   }
 
-  /**
-   * @return
-   */
   public int getColumnWidth() {
-    return 555;
+    return COLUMN_WIDTH;
   }
 
-  /**
-   * @return
-   */
   public int getBottomMargin() {
-    return 30;
+    return BOTTOM_MARGIN;
   }
 
-  /**
-   * @return
-   */
   public int getTopMargin() {
-    return 30;
+    return TOP_MARGIN;
   }
 
-  /**
-   * @return
-   */
   public int getRightMargin() {
-    return 20;
+    return RIGHT_MARGIN;
   }
 
-  /**
-   * @return
-   */
   public int getLeftMargin() {
-    return 20;
+    return LEFT_MARGIN;
   }
 
-  /**
-   * @return
-   */
   public int getPageHeight() {
-    return 842;
+    return PAGE_HEIGHT;
   }
 
-  /**
-   * @return
-   */
   public int getPageWidth() {
-    return 595;
+    return PAGE_WIDTH;
   }
 
   @Override

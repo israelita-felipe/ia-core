@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 /**
@@ -43,7 +44,7 @@ public class RoleService
    * @param logOperationService
    */
   public RoleService(RoleServiceConfig config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 
   @Override
@@ -83,6 +84,7 @@ public class RoleService
                                    "filters (List<FilterRequestDTO>, opcional, filtros para refinar busca). " +
                                    "Se não houver filtros, retorna todos os usuários com roles.",
                       required = false) SearchRequestDTO requestDTO) {
+    Objects.requireNonNull(requestDTO, "requestDTO não pode ser null");
     if (canList(requestDTO)) {
       SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
       request.setFilters(request.getFilters().stream()

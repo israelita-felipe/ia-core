@@ -315,7 +315,7 @@ public class JobExecutionListener implements JobListener {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/scheduler/jobs")
+@RequestMapping("/api/${api.version}/scheduler/jobs")
 public class JobSchedulerController {
 
     @Autowired

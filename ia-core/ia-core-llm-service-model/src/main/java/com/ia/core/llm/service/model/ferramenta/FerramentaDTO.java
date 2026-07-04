@@ -21,6 +21,7 @@ import java.util.Set;
  * <p>
  * Representa qualquer capacidade que pode ser utilizada por agentes de IA,
  * incluindo ferramentas atômicas e skills (capacidades compostas).
+ * Implementa FerramentaDiscoverable para descoberta automática unificada.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -31,7 +32,8 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class FerramentaDTO
-  extends AbstractBaseEntityDTO<Ferramenta> {
+  extends AbstractBaseEntityDTO<Ferramenta>
+  implements FerramentaDiscoverable {
 
   public static SearchRequestDTO getSearchRequest() {
     return new FerramentaSearchRequest();
@@ -42,7 +44,7 @@ public class FerramentaDTO
   }
 
   @NotNull(message = FerramentaTranslator.VALIDATION.TITULO_REQUIRED)
-  @Size(min = 2, max = 200)
+  @Size(min = 2, max = 200, message = FerramentaTranslator.VALIDATION.TITULO_SIZE)
   private String titulo;
 
   @Size(max = 1000)
@@ -52,7 +54,7 @@ public class FerramentaDTO
   private TipoFerramentaEnum tipo;
 
   @NotNull(message = FerramentaTranslator.VALIDATION.IDENTIFICADOR_REQUIRED)
-  @Size(max = 255)
+  @Size(max = 255, message = FerramentaTranslator.VALIDATION.IDENTIFICADOR_SIZE)
   private String identificador;
 
   private String moduloOrigem;
@@ -71,8 +73,36 @@ public class FerramentaDTO
   private List<FerramentaDTO> subFerramentas = new ArrayList<>();
 
   @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
+
+  @Override
   public FerramentaDTO cloneObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
         .subFerramentas(new ArrayList<>(subFerramentas)).build();
+  }
+
+  /**
+   * Constantes de campos para referência type-safe.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String TITULO = "titulo";
+    public static final String DESCRICAO = "descricao";
+    public static final String TIPO = "tipo";
+    public static final String IDENTIFICADOR = "identificador";
+    public static final String MODULO_ORIGEM = "moduloOrigem";
+    public static final String ATIVO = "ativo";
+    public static final String DESCOBERTA_AUTOMATICA = "descobertaAutomatica";
+    public static final String INSTRUCOES = "instrucoes";
+    public static final String TEMPLATE = "template";
+    public static final String SUB_FERRAMENTAS = "subFerramentas";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(TITULO, DESCRICAO, TIPO, IDENTIFICADOR, MODULO_ORIGEM, ATIVO,
+          DESCOBERTA_AUTOMATICA, INSTRUCOES, TEMPLATE, SUB_FERRAMENTAS, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

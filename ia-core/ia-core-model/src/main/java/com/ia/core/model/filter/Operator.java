@@ -237,8 +237,6 @@ public enum Operator {
       return combinePredicate(newPredicate, predicate, disjunction, cb);
     }
   };
-  /**
-   * Operador de menor ou igual.
 
   /**
    * Constrói o predicado JPA para este operador.

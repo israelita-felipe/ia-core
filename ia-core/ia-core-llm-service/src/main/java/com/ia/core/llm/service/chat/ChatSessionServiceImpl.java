@@ -1,6 +1,5 @@
 package com.ia.core.llm.service.chat;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,8 +19,7 @@ public class ChatSessionServiceImpl implements ChatSessionService {
   }
 
   @Override
-  public String createSession() {
-    String sessionId = UUID.randomUUID().toString();
+  public String createSession(String sessionId) {
     activeSessions.put(sessionId, true);
     return sessionId;
   }

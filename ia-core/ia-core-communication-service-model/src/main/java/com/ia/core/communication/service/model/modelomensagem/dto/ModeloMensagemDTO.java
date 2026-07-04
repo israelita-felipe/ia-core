@@ -101,7 +101,7 @@ public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> imp
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
     public static final String NOME = "nome";
     public static final String DESCRICAO = "descricao";
     public static final String CORPO_MODELO = "corpoModelo";
@@ -109,7 +109,7 @@ public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> imp
     public static final String ATIVO = "ativo";
 
     public static Set<String> values() {
-      return Set.of(NOME, DESCRICAO, CORPO_MODELO, TIPO_CANAL, ATIVO);
+      return Set.of(ID, VERSION, NOME, DESCRICAO, CORPO_MODELO, TIPO_CANAL, ATIVO);
     }
   }
 }

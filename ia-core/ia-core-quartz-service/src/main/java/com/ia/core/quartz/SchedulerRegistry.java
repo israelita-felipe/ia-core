@@ -1,9 +1,11 @@
 package com.ia.core.quartz;
 
-import com.ia.core.quartz.service.SchedulerConfigService;
+import com.ia.core.quartz.service.SchedulerJobManagementService;
+import com.ia.core.quartz.service.SchedulerListenerService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Scheduler;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +16,8 @@ import org.springframework.stereotype.Component;
  *
  * @author Israel Araújo
  * @since 1.0
- * @see SchedulerConfigService
+ * @see SchedulerJobManagementService
+ * @see SchedulerListenerService
  */
 @Slf4j
 @Component
@@ -22,9 +25,19 @@ import org.springframework.stereotype.Component;
 public class SchedulerRegistry {
 
   /**
-   * Serviço de configuração do scheduler.
+   * Serviço de gerenciamento de jobs.
    */
-  private final SchedulerConfigService service;
+  private final SchedulerJobManagementService jobManagementService;
+
+  /**
+   * Serviço de listeners do scheduler.
+   */
+  private final SchedulerListenerService listenerService;
+
+  /**
+   * Instância do scheduler Quartz.
+   */
+  private final Scheduler scheduler;
 
   /**
    * Registra listeners e agenda jobs na inicialização.
@@ -32,8 +45,8 @@ public class SchedulerRegistry {
   @PostConstruct
   public void registry() {
     log.info("Registrando schedulers do Quartz");
-    service.criarListeners();
-    service.agendarJobs();
+    listenerService.criarListeners(scheduler);
+    jobManagementService.iniciarJobs();
     log.info("Schedulers do Quartz registrados com sucesso");
   }
 }

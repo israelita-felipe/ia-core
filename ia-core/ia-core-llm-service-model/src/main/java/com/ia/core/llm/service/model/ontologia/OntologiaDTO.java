@@ -1,6 +1,7 @@
 package com.ia.core.llm.service.model.ontologia;
 
-import com.ia.core.model.BaseEntity;
+import com.ia.core.llm.model.ontologia.Ontologia;
+import com.ia.core.llm.model.ontologia.OntologyFormat;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
@@ -14,8 +15,6 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * DTO para representar uma ontologia OWL.
@@ -31,20 +30,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class OntologiaDTO extends AbstractBaseEntityDTO<BaseEntity> {
+public class OntologiaDTO extends AbstractBaseEntityDTO<Ontologia> {
 
   /**
    * IRI (Internationalized Resource Identifier) da ontologia.
    */
-  @NotBlank(message = "O IRI da ontologia é obrigatório")
-  @Size(max = 500)
+  @NotBlank(message = OntologiaTranslator.VALIDATION.IRI_REQUIRED)
+  @Size(max = 500, message = OntologiaTranslator.VALIDATION.IRI_SIZE)
   private String iri;
 
   /**
    * Nome da ontologia.
    */
-  @NotBlank(message = "O nome da ontologia é obrigatório")
-  @Size(max = 200)
+  @NotBlank(message = OntologiaTranslator.VALIDATION.NOME_REQUIRED)
+  @Size(max = 200, message = OntologiaTranslator.VALIDATION.NOME_SIZE)
   private String nome;
 
   /**
@@ -74,8 +73,7 @@ public class OntologiaDTO extends AbstractBaseEntityDTO<BaseEntity> {
   /**
    * Formato da ontologia (OWL, RDF, Turtle, Manchester).
    */
-  @Size(max = 20)
-  private String formato;
+  private OntologyFormat formato;
 
   /**
    * Conteúdo da ontologia em formato serializado.
@@ -104,18 +102,15 @@ public class OntologiaDTO extends AbstractBaseEntityDTO<BaseEntity> {
    */
   private EstatisticasOntologiaDTO estatisticas;
 
-  /**
-   * Lista de axiomas da ontologia (opcional, para visualização).
-   */
-  @Default
-  private List<String> axiomas = new ArrayList<>();
+  @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
 
   @Override
   public OntologiaDTO cloneObject() {
     log.debug("Clonando OntologiaDTO: iri={}", iri);
-    return toBuilder()
-        .axiomas(new ArrayList<>(axiomas))
-        .build();
+    return toBuilder().build();
   }
 
   /**
@@ -135,13 +130,13 @@ public class OntologiaDTO extends AbstractBaseEntityDTO<BaseEntity> {
     public static final String ULTIMA_MODIFICACAO = "ultimaModificacao";
     public static final String DATA_CRIACAO = "dataCriacao";
     public static final String ESTATISTICAS = "estatisticas";
-    public static final String AXIOMAS = "axiomas";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
     public static java.util.Set<String> values() {
       return java.util.Set.of(
           IRI, NOME, DESCRICAO, VERSAO, PREFIXO, NAMESPACE, FORMATO,
           CONTEUDO, CONSISTENTE, ULTIMA_MODIFICACAO, DATA_CRIACAO,
-          ESTATISTICAS, AXIOMAS
+          ESTATISTICAS, PROPERTY_CHANGE_SUPPORT
       );
     }
   }

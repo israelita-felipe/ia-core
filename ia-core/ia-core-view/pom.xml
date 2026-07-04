@@ -114,6 +114,25 @@
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Spring Boot Test for E2E tests with LocalServerPort -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring Boot Autoconfigure for E2E test application -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- ia-core-test for base test classes -->
+		<dependency>
+			<groupId>com.ia</groupId>
+			<artifactId>ia-core-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-dev</artifactId>
@@ -126,18 +145,30 @@
       <artifactId>vaadin-card-flow</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<!-- Spring AI for MCP support in View layer -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-model-ollama</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springaicommunity</groupId>
-			<artifactId>spring-ai-agent-utils</artifactId>
-		</dependency>
+	<dependency>
+		<groupId>org.springaicommunity</groupId>
+		<artifactId>spring-ai-agent-utils</artifactId>
+	</dependency>
+	<!-- Markdown rendering with flexmark -->
+	<dependency>
+		<groupId>com.vladsch.flexmark</groupId>
+		<artifactId>flexmark-all</artifactId>
+		<version>0.64.0</version>
+	</dependency>
+	<!-- OWASP HTML Sanitizer for XSS protection -->
+	<dependency>
+		<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+		<artifactId>owasp-java-html-sanitizer</artifactId>
+		<version>20240325.1</version>
+	</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

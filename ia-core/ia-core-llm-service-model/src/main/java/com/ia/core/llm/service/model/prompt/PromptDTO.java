@@ -52,7 +52,28 @@ public class PromptDTO
   private TemplateDTO template;
 
   @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
+
+  @Override
   public PromptDTO cloneObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION).build();
+  }
+
+  /**
+   * Constantes de campos para referência type-safe.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String FINALIDADE = "finalidade";
+    public static final String TITULO = "titulo";
+    public static final String ENTRADA = "entrada";
+    public static final String TEMPLATE = "template";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(FINALIDADE, TITULO, ENTRADA, TEMPLATE, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

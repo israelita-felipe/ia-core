@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * DTO para requisição de envio de mensagem em massa.
@@ -56,5 +57,22 @@ public class EnvioMensagemRequestDTO implements HasVariavel {
         VariavelTemplate.TIPO_CANAL, tipoCanal,
         VariavelTemplate.CORPO_MENSAGEM, corpoMensagem
     );
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String TIPO_CANAL = "tipoCanal";
+    public static final String CORPO_MENSAGEM = "corpoMensagem";
+    public static final String MODELO_MENSAGEM_ID = "modeloMensagemId";
+    public static final String PARAMETROS_TEMPLATE = "parametrosTemplate";
+    public static final String TELEFONES = "telefones";
+    public static final String GRUPOS_CONTATO_IDS = "gruposContatoIds";
+    public static final String AGENDADO = "agendado";
+    public static final String DATA_AGENDAMENTO = "dataAgendamento";
+
+    public static Set<String> values() {
+      return Set.of(TIPO_CANAL, CORPO_MENSAGEM, MODELO_MENSAGEM_ID, PARAMETROS_TEMPLATE,
+                     TELEFONES, GRUPOS_CONTATO_IDS, AGENDADO, DATA_AGENDAMENTO);
+    }
   }
 }

@@ -33,8 +33,6 @@ import java.io.Serializable;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-// @JsonIgnoreProperties(ignoreUnknown = true)
-// @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class SortRequest
   implements Serializable {
   /**

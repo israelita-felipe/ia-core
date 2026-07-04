@@ -2,7 +2,6 @@ package com.ia.core.llm.view.agente;
 
 import com.ia.core.llm.service.model.agente.AgenteDTO;
 import com.ia.core.view.client.DefaultBaseClient;
-import org.springframework.cloud.openfeign.FeignClient;
 
 /**
  * Client Feign para acesso remoto ao serviço de agentes.
@@ -13,7 +12,6 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@FeignClient(name = AgenteClient.NOME, url = AgenteClient.URL)
 public interface AgenteClient
   extends DefaultBaseClient<AgenteDTO> {
 

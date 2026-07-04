@@ -7,6 +7,7 @@
 		<artifactId>ia-core</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<groupId>com.ia.core</groupId>
 	<artifactId>ia-core-quartz-view</artifactId>
 	<name>ia-core-quartz-view</name>
 	<description>Interface gráfica para o quartz</description>

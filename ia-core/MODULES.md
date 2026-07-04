@@ -70,7 +70,7 @@
 ## 🔄 Fluxo Completo de Requisição
 
 ```
-HTTP Request (GET /api/v1/users/1)
+HTTP Request (GET /api/${api.version}/users/1)
          │
          ▼
 REST Controller (ia-core-rest)
@@ -132,7 +132,7 @@ JSON Response ◄───────────────────
 | Scheduling | ia-core-quartz | Quartz Scheduler |
 | Communication | ia-core-communication | Spring Mail, SMS APIs |
 | Resilience | ia-core-resilience4j | Resilience4j |
-| Testing | ia-core-integration-test | JUnit, TestContainers |
+| Testing | ia-core-test | JUnit, TestContainers |
 
 ## 📦 Dependência Mínima para Começar
 
@@ -211,7 +211,7 @@ ia-core-nlp ← ia-core-service
 ia-core-grammar ← (standalone)
 ia-core-report ← (standalone, parametrizado)
 ia-core-resilience4j ← (standalone, via AOP)
-ia-core-integration-test ← todos (test scope)
+ia-core-test ← todos (test scope)
 ```
 
 ## 🔐 Segurança

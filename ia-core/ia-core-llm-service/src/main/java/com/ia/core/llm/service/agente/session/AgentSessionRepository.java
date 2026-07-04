@@ -1,7 +1,7 @@
 package com.ia.core.llm.service.agente.session;
 
-import com.ia.core.llm.model.agente.session.AgentSession;
-import com.ia.core.llm.model.agente.session.AgentSession.AgentSessionStatus;
+import com.ia.core.llm.model.session.AgentSession;
+import com.ia.core.llm.model.session.AgentSession.AgentSessionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

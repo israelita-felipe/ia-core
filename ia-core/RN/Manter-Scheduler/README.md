@@ -1,110 +1,80 @@
 # Regras de Negócio - Módulo Scheduler (Quartz)
 
 ## Visão Geral
-Este documento define as regras de negócio para o módulo de Agendamento (Quartz) do ia-core-apps.
+Este documento define as regras de negócio implementadas no módulo de Agendamento (Quartz) do ia-core-apps, especificamente para as entidades SchedulerConfig e SchedulerConfigTrigger do ia-core-quartz-model.
 
-## Entidades
+## Referência
+- **CDU**: CDU014-Manter-Scheduler
+- **Service**: ia-core-quartz-service
+- **Módulo**: ia-core-quartz-model
 
-### SchedulerConfig
-Configuração de agendamento de tarefas (jobs) no Quartz.
+## Regras de Negócio
 
-#### Regras Implementadas
-*Nenhuma regra implementada atualmente - necessário implementar*
-
-#### Regras a Implementar
-
-##### SCH_001 - SchedulerJobClassValidaRule
-- **Nome**: Scheduler Job Class Válida
-- **Descrição**: Verifica se a classe de job especificada existe e implementa a interface correta
+### SCH_001 - SchedulerPeriodicidadeRFC5545Rule
+- **Nome**: Scheduler Periodicidade RFC5545
+- **Descrição**: Garante que a periodicidade siga o padrão RFC5545
 - **Critérios**:
-  - Classe deve existir no classpath
-  - Deve implementar a interface `Job` do Quartz
-  - Deve ter construtor sem argumentos
+  - Periodicidade deve ser válida segundo RFC5545
+  - RRULE é usado para definição de recorrências
 - **Severidade**: ERRO
+- **Referência CDU**: RN001
 
-##### SCH_002 - SchedulerNomeUnicoRule
-- **Nome**: Scheduler Nome Único
-- **Descrição**: Garante que o nome do job seja único no sistema
+### SCH_002 - SchedulerDataInicioObrigatoriaRule
+- **Nome**: Scheduler Data Início Obrigatória
+- **Descrição**: Garante que a data de início seja informada
 - **Critérios**:
-  - Nome do job não pode ser duplicado
-  - Comparação case-insensitive
+  - Data de início é obrigatória
+  - Data de início deve ser válida
 - **Severidade**: ERRO
+- **Referência CDU**: RN002
 
-##### SCH_003 - SchedulerPeriodicidadeValidaRule
-- **Nome**: Scheduler Periodicidade Válida
-- **Descrição**: Valida os parâmetros de periodicidade do agendamento
+### SCH_003 - SchedulerJobImplementadoRule
+- **Nome**: Scheduler Job Implementado
+- **Descrição**: Garante que o job esteja implementado no sistema
 - **Critérios**:
-  - Para periodicidade DIARIA: hora válida (0-23)
-  - Para periodicidade SEMANAL: dia da semana válido (1-7)
-  - Para periodicidade MENSAL: dia do mês válido (1-31)
-  - Data de início não pode ser anterior à data atual
+  - Job deve existir no classpath
+  - Job deve ter construtor padrão
 - **Severidade**: ERRO
+- **Referência CDU**: RN003
 
-##### SCH_004 - SchedulerDataFuturaRule
-- **Nome**: Scheduler Data Futura
-- **Descrição**: Garante que a data de início seja válida
+### SCH_004 - SchedulerExecucoesFalhasRegistradasRule
+- **Nome**: Scheduler Execuções Falhas Registradas
+- **Descrição**: Garante que execuções falhadas sejam registradas
 - **Critérios**:
-  - Data de início deve ser futura ou atual
-  - Data fim deve ser maior que data início (se especificada)
-- **Severidade**: ERRO
-
-##### SCH_005 - SchedulerJobAtivoRule
-- **Nome**: Scheduler Job Ativo
-- **Descrição**: Controla ativação/desativação de jobs
-- **Critérios**:
-  - Não pode desativar job em execução
-  - Ao ativar, agenda imediatamente se data início for anterior à atual
-- **Severidade**: AVISO
-
-##### SCH_006 - SchedulerOverlapRule
-- **Nome**: Scheduler Execução Simultânea
-- **Descrição**: Controla se job pode ter execuções sobrepostas
-- **Critérios**:
-  - Se `allowConcurrent` = false, não inicia nova execução se anterior ainda estiver em andamento
-  - Implementar via configuração `JobConcurrentExecutionDisallowed`
-- **Severidade**: AVISO
-
-### Periodicidade
-Definição de periodicidade para execução de jobs.
-
-#### Regras a Implementar
-
-##### PER_001 - PeriodicidadeIntervaloMinimoRule
-- **Nome**: Periodicidade Intervalo Mínimo
-- **Descrição**: Garante intervalo mínimo entre execuções
-- **Critérios**:
-  - Intervalo mínimo de 1 minuto para agendamentos repetitiveis
-  - Para jobs de longa duração, sugerir intervalo maior
-- **Severidade**: AVISO
-
-##### PER_002 - PeriodicidadeHoraValidaRule
-- **Nome**: Periodicidade Hora Válida
-- **Descrição**: Valida hora para execução de jobs diários
-- **Critérios**:
-  - Hora deve estar no formato HH:mm válido
-  - Parafusos de horário de verão devem ser considerados
-- **Severidade**: ERRO
+  - Falhas são registradas no histórico
+  - Erros são logados para análise
+- **Severidade**: INFO
+- **Referência CDU**: RN004
 
 ## Padrão de Implementação
 
 As regras de negócio devem seguir o padrão `BusinessRule<T>`:
 
 ```java
+@ValidatorScope
 public class SchedulerJobClassValidaRule implements BusinessRule<SchedulerConfigDTO> {
+    private static final String CODE = "SCH_001";
+    private final Translator translator;
+
     @Override
     public String getCode() {
-        return "SCH_001";
+        return CODE;
     }
 
     @Override
     public void validate(SchedulerConfigDTO config, ValidationResult result) {
-        // Implementação
+        if (config.getJobClassName() == null || config.getJobClassName().trim().isEmpty()) {
+            result.addError("jobClassName",
+                translator.getMessage("scheduler.jobClassName.obrigatorio"));
+        }
     }
 }
 ```
 
 ## Referências
 
-- Documentação do Quartz: https://www.quartz-scheduler.org/documentation/
-- Periodicidade RFC5545: `docs/PERIODICIDADE_RFC5545_USO.md`
-- Service Base: `com.ia.core.service.rules.BusinessRule`
+- **CDU**: Manter-Quartz (CDU011)
+- **CDU**: Manter-Scheduler (CDU014)
+- **ADR-054**: Usar RN para Documentação de Regras de Negócio
+- **Documentação do Quartz**: https://www.quartz-scheduler.org/documentation/
+- **Service Base**: `com.ia.core.service.rules.BusinessRule`

@@ -15,6 +15,7 @@ import org.quartz.Scheduler;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Classe que representa as configurações para scheduler config service.
@@ -58,7 +59,7 @@ public class SchedulerConfigServiceConfig
     super(repository, mapper, searchRequestMapper, translator,
           authorizationManager, securityContextService, logOperationService,
           validators);
-    this.quartzScheduler = quartzScheduler;
+    this.quartzScheduler = Objects.requireNonNull(quartzScheduler, "quartzScheduler não pode ser null");
   }
 
   @Override

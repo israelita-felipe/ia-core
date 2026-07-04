@@ -3,110 +3,114 @@
 ## Visão Geral
 Este documento define as regras de negócio implementadas no módulo de Comunicação do ia-core-apps.
 
+## Referência
+- **CDU**: CDU003-Manter-Communication
+- **Service**: ia-core-communication-service
+- **Módulo**: ia-core-communication-model, ia-core-communication-service
+
 ## Entidades
-
-### ContatoMensagem
-Representa um contato para envio de mensagens.
-
-#### Regras Implementadas
-
-##### CTR_001 - ContatoTelefoneValidoRule
-- **Nome**: Contato Telefone Válido
-- **Descrição**: Garante que o telefone do contato tenha o formato correto e quantidade de dígitos adequada
-- **Critérios**:
-  - Telefone é obrigatório
-  - Deve conter entre 10 e 20 dígitos (após remoção de caracteres não numéricos)
-- **Severidade**: ERRO
-- **Localização**: `ia-core-communication-service/src/main/java/com/ia/core/communication/service/contatomensagem/rules/ContatoTelefoneValidoRule.java`
 
 ### Mensagem
 Representa uma mensagem a ser enviada para um destinatário.
 
 #### Regras Implementadas
 
-##### MSG_001 - MensagemCanalValidoRule
-- **Nome**: Mensagem Canal Válido
-- **Descrição**: Verifica se o canal de envio da mensagem é válido
+##### COM_001 - TituloMensagemValidoRule
+- **Nome**: Título da Mensagem Válido
+- **Descrição**: Garante que o título da mensagem seja válido
 - **Critérios**:
-  - Canal deve ser um dos tipos válidos (WHATSAPP, SMS, EMAIL, TELEGRAM, WEBHOOK)
+  - Título é obrigatório
+  - Deve ter entre 3 e 200 caracteres
 - **Severidade**: ERRO
-- **Localização**: `ia-core-communication-service/src/main/java/com/ia/core/communication/service/mensagem/rules/MensagemCanalValidoRule.java`
+- **Referência CDU**: RN001
 
-#### Regras a Implementar
-
-##### MSG_002 - MensagemDestinatarioObrigatorioRule
-- **Nome**: Mensagem Destinatário Obrigatório
-- **Descrição**: Garante que a mensagem tenha um destinatário definido
+##### COM_002 - ConteudoMensagemValidoRule
+- **Nome**: Conteúdo da Mensagem Válido
+- **Descrição**: Garante que o conteúdo da mensagem não seja vazio
 - **Critérios**:
-  - Telefone do destinatário é obrigatório para canais SMS e WhatsApp
-  - E-mail do destinatário é obrigatório para canal EMAIL
+  - Conteúdo não pode estar vazio ou em branco
 - **Severidade**: ERRO
+- **Referência CDU**: RN002
 
-##### MSG_003 - MensagemCorpoObrigatorioRule
-- **Nome**: Mensagem Corpo Obrigatório
-- **Descrição**: Garante que a mensagem tenha conteúdo
+##### COM_003 - TipoCanalValidoRule
+- **Nome**: Tipo de Canal Válido
+- **Descrição**: Verifica se o tipo de canal da mensagem é válido
 - **Critérios**:
-  - Corpo da mensagem não pode estar vazio ou em branco
-  - Tamanho mínimo de 1 caractere
-  - Tamanho máximo de 5000 caracteres
+  - Canal deve ser um dos tipos válidos (EMAIL, TELEFONE, WHATSAPP)
 - **Severidade**: ERRO
-
-##### MSG_004 - AgendamentoValidoRule
-- **Nome**: Agendamento de Mensagem Válido
-- **Descrição**: Valida data/hora de agendamento de mensagens
-- **Critérios**:
-  - Data de agendamento deve ser futura
-  - Não permite agendamento com mais de 1 ano de antecedência
-- **Severidade**: ERRO
-
-### GrupoContato
-Representa um grupo de contatos para envio de mensagens.
-
-#### Regras a Implementar
-
-##### GRP_001 - GrupoNomeUnicoRule
-- **Nome**: Grupo Nome Único
-- **Descrição**: Garante que o nome do grupo seja único por organização
-- **Critérios**:
-  - Nome do grupo não pode ser duplicado
-  - Comparação case-insensitive
-- **Severidade**: ERRO
-
-##### GRP_002 - GrupoContatoMinimoRule
-- **Nome**: Grupo Contato Mínimo
-- **Descrição**: Garante que o grupo tenha no mínimo um contato
-- **Critérios**:
-  - Grupo deve ter pelo menos 1 contato associado
-- **Severidade**: AVISO
+- **Referência CDU**: RN003
 
 ### ModeloMensagem
 Modelo de mensagem pré-definido para reutilização.
 
-#### Regras a Implementar
+#### Regras Implementadas
 
-##### MDL_001 - ModeloNomeUnicoRule
-- **Nome**: Modelo Nome Único
-- **Descrição**: Garante que o nome do modelo seja único
-- **Critérios**:
-  - Nome do modelo não pode ser duplicado por tipo de canal
-- **Severidade**: ERRO
-
-##### MDL_002 - ModeloVariavelValidaRule
-- **Nome**: Modelo Variável Válida
-- **Descrição**: Valida variáveis utilizadas no corpo do modelo
+##### COM_004 - VariavelModeloFormatadaRule
+- **Nome**: Variável do Modelo Formatada
+- **Descrição**: Valida que variáveis do modelo sigam o formato correto
 - **Critérios**:
   - Variáveis devem seguir o padrão {{nome_variavel}}
-  - Variáveis declaradas no cabeçalho devem ser utilizadas no corpo
 - **Severidade**: ERRO
+- **Referência CDU**: RN005
+
+### GrupoContato
+Representa um grupo de contatos para envio de mensagens.
+
+#### Regras Implementadas
+
+##### COM_005 - GrupoContatoMinimoRule
+- **Nome**: Grupo Contato Mínimo
+- **Descrição**: Garante que o grupo tenha no mínimo um contato associado
+- **Critérios**:
+  - Grupo deve ter pelo menos 1 contato associado
+- **Severidade**: AVISO
+- **Referência CDU**: RN004
+
+### EnvioMensagem
+Representa o envio de mensagens.
+
+#### Regras Implementadas
+
+##### COM_006 - EnvioAssincronoRule
+- **Nome**: Envio Assíncrono
+- **Descrição**: Garante que o envio de mensagens seja assíncrono
+- **Critérios**:
+  - O envio de mensagens é realizado de forma assíncrona
+  - Sistema retorna imediatamente após enfileirar
+- **Severidade**: INFO
+- **Referência CDU**: RN006
+
+##### COM_007 - HistoricoEnvioMantidoRule
+- **Nome**: Histórico de Envio Mantido
+- **Descrição**: Garante que o histórico de envios seja mantido
+- **Critérios**:
+  - Cada envio é registrado no histórico
+  - Total de enviados e falhas são contabilizados
+- **Severidade**: INFO
+- **Referência CDU**: RN007
+
+### ContatoMensagem
+Representa um contato para envio de mensagens.
+
+#### Regras Implementadas
+
+##### COM_008 - TelefoneContatoValidoRule
+- **Nome**: Telefone do Contato Válido
+- **Descrição**: Garante que o telefone do contato tenha o formato correto
+- **Critérios**:
+  - Telefone é obrigatório para canais SMS e WhatsApp
+  - Deve conter entre 10 e 20 dígitos
+- **Severidade**: ERRO
+- **Referência CDU**: (regra implícita)
 
 ## Validadores
 
 Cada entidade possui um validador específico que orquestra as regras:
 
-- `ContatoMensagemValidator` - Orquestra regras de ContatoMensagem
 - `MensagemValidator` - Orquestra regras de Mensagem
-- `GrupoContatoValidator` - Orquestra regras de GrupoContato
 - `ModeloMensagemValidator` - Orquestra regras de ModeloMensagem
+- `GrupoContatoValidator` - Orquestra regras de GrupoContato
+- `ContatoMensagemValidator` - Orquestra regras de ContatoMensagem
 
 ## Padrão de Implementação
 
@@ -114,9 +118,11 @@ As regras de negócio seguem o padrão `BusinessRule<T>` do módulo ia-core-serv
 
 ```java
 public class MinhaRegra implements BusinessRule<MeuDTO> {
+    private static final String CODE = "COM_001";
+    
     @Override
     public String getCode() {
-        return "COD_001";
+        return CODE;
     }
 
     @Override
@@ -138,6 +144,6 @@ public class MinhaRegra implements BusinessRule<MeuDTO> {
 
 ## Referências
 
-- ADR 005 - Use Domain Events
-- ADR 011 - Exception Handling Patterns
+- ADR-053: Usar CDU para Documentação de Casos de Uso
+- ADR-011: Exception Handling Patterns
 - Service Base: `com.ia.core.service.rules.BusinessRule`

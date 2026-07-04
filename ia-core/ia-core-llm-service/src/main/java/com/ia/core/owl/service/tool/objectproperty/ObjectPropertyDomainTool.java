@@ -1,80 +1,77 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas ObjectPropertyDomain.
+ * Tool para criação de domínio de propriedade de objeto OWL 2 DL.
  * <p>
- * Exemplo: "A propriedade temPai se aplica a Pessoa" → ObjectPropertyDomain(:temPai :Pessoa)
+ * Extende OwlConstructorTool e usa owlService para criar domínios de propriedades de objeto
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa domínio de propriedade de objeto (Domain(R) ⊆ C).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * ObjectPropertyDomain é um axioma que especifica que se uma propriedade de objeto R relaciona um indivíduo x a algum indivíduo,
+ * então x deve ser uma instância da classe C. Restringe o domínio da propriedade a uma classe específica.
+ * <p>
+ * <b>Sintaxe Manchester:</b> ObjectPropertyDomain(:Propriedade :Classe)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>temFilho é uma propriedade entre pessoas:
+ *       ObjectPropertyDomain(:temFilho :Pessoa)</li>
+ *   <li>conhece é uma propriedade social entre agentes:
+ *       ObjectPropertyDomain(:conhece :Agente)</li>
+ *   <li>parteDe é uma propriedade mereológica entre objetos:
+ *       ObjectPropertyDomain(:parteDe :Objeto)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class ObjectPropertyDomainTool extends AbstractOWLTool {
+public class ObjectPropertyDomainTool extends OwlConstructorTool {
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-
-      Sua tarefa é converter descrições em linguagem natural em axiomas ObjectPropertyDomain.
-
-      Construtor: ObjectPropertyDomain
-      Descrição: Declara o domínio de uma propriedade de objeto (a classe a que a propriedade se aplica).
-      Sintaxe Manchester: ObjectPropertyDomain(<propriedade> <classe>)
-
-      Exemplos:
-      - "A propriedade temPai se aplica a Pessoa" → ObjectPropertyDomain(:temPai :Pessoa)
-      - "temFilho é uma propriedade de Pessoa" → ObjectPropertyDomain(:temFilho :Pessoa)
-      - "escreveLivro tem como domínio Autor" → ObjectPropertyDomain(:escreveLivro :Autor)
-
-      Contexto ontológico atual:
-      {context}
-
-      Descrição a converter:
-      {description}
-
-      Retorne APENAS o axioma em sintaxe Manchester, sem explicações adicionais.
-      """;
-
-  public ObjectPropertyDomainTool(ChatModel chatModel,
-                                  LLMCommunicator llmCommunicator,
-                                  DefaultOwlService owlService,
-                                  TemplateService templateService,
-                                  FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ObjectPropertyDomainTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+  /**
+   * Cria um domínio de propriedade de objeto na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property Propriedade de objeto
+   * @param domain Classe domínio
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um domínio de propriedade de objeto OWL 2 DL na ontologia da sessão. " +
+                     "Representa domínio de propriedade de objeto (Domain(R) ⊆ C). " +
+                     "Especifica que se uma propriedade relaciona um indivíduo x a algum indivíduo, então x deve ser uma instância da classe especificada. " +
+                     "Exemplos: " +
+                     "1) temFilho é uma propriedade entre pessoas → ObjectPropertyDomain(:temFilho :Pessoa). " +
+                     "2) conhece é uma propriedade social entre agentes → ObjectPropertyDomain(:conhece :Agente). " +
+                     "3) parteDe é uma propriedade mereológica entre objetos → ObjectPropertyDomain(:parteDe :Objeto).")
+  public String createObjectPropertyDomain(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Classe domínio", required = true) String domain) {
 
-  @Override
-  public String getConstructorName() {
-    return "ObjectPropertyDomain";
-  }
+    log.debug("Criando ObjectPropertyDomain: Domain({}) ⊆ {}", property, domain);
 
-  @Override
-  public String getDescription() {
-    return "Declara o domínio de uma propriedade de objeto";
-  }
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "ObjectPropertyDomain: " + property + " " + domain;
 
-  @Override
-  public List<String> getExamples() {
-    return List.of(
-        "A propriedade temPai se aplica a Pessoa",
-        "temFilho é uma propriedade de Pessoa",
-        "escreveLivro tem como domínio Autor"
-    );
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectPropertyDomain: {}", result);
+    return result;
   }
 }

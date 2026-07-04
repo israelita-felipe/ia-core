@@ -1,54 +1,81 @@
-# Skills - Módulos de IA
+# Regras de Negócio - Módulo Skills
 
 ## Visão Geral
-Skills são módulos especializados encapsulando funcionalidades de IA e serviços reutilizáveis entre projetos.
+Este documento define as regras de negócio para o módulo Skills do ia-core-apps.
 
----
+## Referência
+- **CDU**: CDU016-Manter-Skill
+- **Service**: ia-core-llm-service
+- **Módulo**: ia-core-llm-model
+
+## Entidades
+
+### Skill
+Representa uma habilidade especializada de um agente LLM.
+
+#### Regras Implementadas
+
+##### SKL_001 - SkillIdentificadorUnicoRule
+- **Nome**: Skill Identificador Único
+- **Descrição**: Garante que o identificador da skill seja único no sistema
+- **Critérios**:
+  - Identificador é obrigatório
+  - Deve seguir o padrão: modulo.nome_skill
+- **Severidade**: ERRO
+- **Referência CDU**: RN001
+
+##### SKL_002 - SkillEmUsoNaoPodeSerExcluidaRule
+- **Nome**: Skill em Uso Não Pode Ser Excluída
+- **Descrição**: Impede a exclusão de skills associadas a agentes
+- **Critérios**:
+  - Skill não pode ser excluída se associada a agentes
+  - Sistema lista agentes dependentes
+- **Severidade**: ERRO
+- **Referência CDU**: RN004
 
 ## Skills Identificadas
 
-### ia-core-llm-service
-- **Pacote**: `com.ia.core.llm.service`
-- **Objetivo**: Orquestrar operações de chat comLLM, vector store e templates
-- **Contrato principal**: `ChatService`
+| Módulo | Descrição |
+|--------|-----------|
+| ia-core-llm-service | Orquestrar operações de chat com LLM |
+| ia-core-nlp-service | Processamento de linguagem natural |
+| ia-core-communication-service | Envio de mensagens via múltiplos canais |
+| ia-core-quartz-service | Agendamento de jobs com suporte a periodicidade RFC5545 |
 
-**Exemplo de uso** (código real):
+## Padrão de Implementação
+
+As regras de negócio seguem o padrão `BusinessRule<T>` do módulo ia-core-service:
+
 ```java
-protected String ask(String document, String text, String systemTemplate,
-    FinalidadeComandoEnum finalidade, boolean exigeContexto, Map<String, Object> params) {
-  Prompt prompt = promptTemplateService.createSystemPrompt(
-      document, text, systemTemplate, finalidade, params);
-  CallResponseSpec response = call(prompt);
-  // ...
+public class SkillIdentificadorUnicoRule implements BusinessRule<SkillDTO> {
+    private static final String CODE = "SKL_001";
+    
+    @Override
+    public String getCode() {
+        return CODE;
+    }
+
+    @Override
+    public String getName() {
+        return "Skill Identificador Único";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Garante que o identificador da skill seja único";
+    }
+
+    @Override
+    public void validate(SkillDTO entity, ValidationResult result) {
+        if (entity.getIdentificador() == null || entity.getIdentificador().trim().isEmpty()) {
+            result.addError("identificador", "Identificador é obrigatório");
+        }
+    }
 }
 ```
 
-### ia-core-nlp-service
-- **Pacote**: `com.ia.core.nlp.service`
-- **Objetivo**: Processamento de linguagem natural para texto bíblico
+## Referências
 
-### ia-core-communication-service
-- **Pacote**: `com.ia.core.communication.service`
-- **Objetivo**: Envio de mensagens via múltiplos canais
-
-### ia-core-quartz-service
-- **Pacote**: `com.ia.core.quartz.service`
-- **Objetivo**: Agendamento de jobs com suporte a periodicidade RFC5545
-
----
-
-## Estrutura de Uma Skill
-
-Cada skill segue:
-```
-ia-core-{skill}/
-├── pom.xml
-├── ia-core-{skill}-model/      # DTOs
-├── ia-core-{skill}-service/    # Implementação
-└── ia-core-{skill}-view/       # UI Vaadin
-```
-
----
-
-## Referência
-- Código: `ia-core/ia-core-llm-service/`
+- ADR-053: Usar CDU para Documentação de Casos de Uso
+- ADR-011: Exception Handling Patterns
+- Service Base: `com.ia.core.service.rules.BusinessRule`

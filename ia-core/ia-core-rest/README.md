@@ -68,7 +68,7 @@ Utilizado por:
 
 ```java
 @RestController
-@RequestMapping("/api/v1/minhas-entidades")
+@RequestMapping("/api/${api.version}/minhas-entidades")
 @Tag(name = "Minha Entidade", description = "Operações de Minha Entidade")
 public class MinhaEntidadeController {
 
@@ -232,7 +232,7 @@ public class MinhaEntidadeControllerTest {
 
         when(service.findById(1L)).thenReturn(Optional.of(entidade));
 
-        mockMvc.perform(get("/api/v1/minhas-entidades/1"))
+        mockMvc.perform(get("/api/${api.version}/minhas-entidades/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.nome").value("Teste"));
     }
@@ -261,11 +261,11 @@ springdoc:
 
 | Método | Caminho | Descrição |
 |--------|---------|-----------|
-| `POST` | `/api/v1/recurso` | Cria novo |
-| `GET` | `/api/v1/recurso/{id}` | Busca por ID |
-| `GET` | `/api/v1/recurso` | Lista com paginação |
-| `PUT` | `/api/v1/recurso/{id}` | Atualiza |
-| `DELETE` | `/api/v1/recurso/{id}` | Deleta |
+| `POST` | `/api/${api.version}/recurso` | Cria novo |
+| `GET` | `/api/${api.version}/recurso/{id}` | Busca por ID |
+| `GET` | `/api/${api.version}/recurso` | Lista com paginação |
+| `PUT` | `/api/${api.version}/recurso/{id}` | Atualiza |
+| `DELETE` | `/api/${api.version}/recurso/{id}` | Deleta |
 | `GET` | `/swagger-ui.html` | Documentação Swagger |
 
 ## 🤝 Contribuição

@@ -1,10 +1,10 @@
 package com.ia.core.llm.rest.web;
 
-import com.ia.core.llm.service.agente.AgentSessionService;
-import com.ia.core.llm.service.model.agente.actions.AgentConfirmationDTO;
-import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
-import com.ia.core.llm.service.model.agente.session.AgentSessionResponseDTO;
-import com.ia.core.llm.service.model.skill.SkillMetadataDTO;
+import com.ia.core.llm.service.agente.AgentOrchestratorService;
+import com.ia.core.llm.service.model.session.AgentConfirmationDTO;
+import com.ia.core.llm.service.model.session.AgentSessionRequestDTO;
+import com.ia.core.llm.service.model.session.AgentSessionResponseDTO;
+import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,20 +15,21 @@ import java.util.List;
  * Controller REST para gerenciamento de sessões de agente.
  * <p>
  * Expõe endpoints para execução e confirmação de sessões de orquestração multi-agente.
+ * Usa AgentOrchestratorService diretamente (removido AgentSessionService wrapper).
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/llm/agente/sessao")
+@RequestMapping("/api/${api.version}/llm/agente/sessao")
 @Tag(name = "AgentSession", description = "Gerenciamento de sessões de orquestração multi-agente")
 public class AgentSessionController {
 
-  private final AgentSessionService agentSessionService;
+  private final AgentOrchestratorService agentOrchestratorService;
 
-  public AgentSessionController(AgentSessionService agentSessionService) {
-    this.agentSessionService = agentSessionService;
+  public AgentSessionController(AgentOrchestratorService agentOrchestratorService) {
+    this.agentOrchestratorService = agentOrchestratorService;
   }
 
   /**
@@ -40,7 +41,7 @@ public class AgentSessionController {
   @PostMapping("/run")
   public AgentSessionResponseDTO run(@RequestBody AgentSessionRequestDTO request) {
     log.debug("Executando requisição em sessão de agente: sessionId={}", request.getSessionId());
-    return agentSessionService.run(request);
+    return agentOrchestratorService.run(request);
   }
 
   /**
@@ -52,17 +53,17 @@ public class AgentSessionController {
   @PostMapping("/confirm")
   public AgentSessionResponseDTO confirm(@RequestBody AgentConfirmationDTO confirmation) {
     log.debug("Confirmando ação em sessão de agente: sessionId={}", confirmation.getSessionId());
-    return agentSessionService.confirm(confirmation);
+    return agentOrchestratorService.confirm(confirmation);
   }
 
   /**
-   * Lista todas as skills disponíveis para ativação.
+   * Lista todas as ferramentas disponíveis.
    *
-   * @return lista de metadados de skills
+   * @return lista de metadados de ferramentas
    */
-  @GetMapping("/skills")
-  public List<SkillMetadataDTO> listAvailableSkills() {
-    log.debug("Listando skills disponíveis para ativação");
-    return agentSessionService.listAvailableSkills();
+  @GetMapping("/ferramentas")
+  public List<FerramentaMetadataDTO> listAvailableFerramentas() {
+    log.debug("Listando ferramentas disponíveis");
+    return agentOrchestratorService.listAvailableFerramentas();
   }
 }

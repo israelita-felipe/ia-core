@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/llm/ontologias")
+@RequestMapping("/api/${api.version}/llm/ontologias")
 @Tag(name = "Ontologias", description = "Gerenciamento de ontologias")
 public class OntologiasController {
 

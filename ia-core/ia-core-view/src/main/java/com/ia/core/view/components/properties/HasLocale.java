@@ -14,8 +14,8 @@ public interface HasLocale
   extends HasI18NProvider {
 
   /**
-   * @return {@link Locale}
-   */
+    * @return {@link Locale}
+    */
 
   default Locale getLocale() {
     UI currentUi = UI.getCurrent();

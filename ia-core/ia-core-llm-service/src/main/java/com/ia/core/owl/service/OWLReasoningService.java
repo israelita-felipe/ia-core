@@ -1,8 +1,8 @@
 package com.ia.core.owl.service;
 
-import com.ia.core.owl.service.exception.OWLParserException;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.InferredAxiomGenerator;
@@ -14,7 +14,7 @@ import java.util.Set;
  * Interface para serviços de raciocínio OWL.
  * <p>
  * Define operações para verificação de consistência, inferências e detecção
- * de inconsistências em ontologias OWL.
+ * de inconsistências em ontologias OWL usando OWLOntology.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -46,13 +46,12 @@ public interface OWLReasoningService {
    * original mas foram inferidos pelo reasoner.
    * </p>
    *
+   * @param ontology the ontology to perform inferences on
    * @return conjunto de axiomas inferidos
-   * @throws OWLParserException se ocorrer erro no parsing
    * @throws IllegalStateException se a ontologia não estiver carregada ou for
    *                               inconsistente
    */
-  Set<OWLAxiom> performInferences()
-    throws OWLParserException;
+  Set<OWLAxiom> performInferences(OWLOntology ontology);
 
   /**
    * Detecta e retorna uma lista de inconsistências na ontologia.
@@ -65,10 +64,11 @@ public interface OWLReasoningService {
    * </ul>
    * </p>
    *
+   * @param ontology the ontology to check for inconsistencies
    * @return lista de mensagens descrevendo as inconsistências encontradas
    * @throws IllegalStateException se nenhuma ontologia estiver carregada
    */
-  List<String> detectInconsistencies();
+  List<String> detectInconsistencies(OWLOntology ontology);
 
   /**
    * Classifica a ontologia, computando a hierarquia completa de classes.
@@ -95,8 +95,10 @@ public interface OWLReasoningService {
 
   /**
    * Reinicializa o reasoner com a ontologia atual.
+   *
+   * @param ontology the ontology to load into the reasoner
    */
-  void refreshReasoner();
+  void refreshReasoner(OWLOntology ontology);
 
   /**
    * Retorna os tipos de inferências configurados.

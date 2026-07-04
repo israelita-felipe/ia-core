@@ -41,6 +41,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- ia-core-test for base test classes -->
+        <dependency>
+            <groupId>com.ia</groupId>
+            <artifactId>ia-core-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
   <build>

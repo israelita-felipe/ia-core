@@ -23,71 +23,175 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author Israel Araújo
- */
-/**
- * Classe que representa os serviços de negócio para core jwt authentication.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a CoreJwtAuthenticationService
- * dentro do sistema.
+ * Serviço de autenticação JWT para o core.
  *
- * @author IA
- * @since 1.0
+ * <p>Responsável por gerenciar a autenticação de usuários através de tokens JWT,
+ * incluindo geração de tokens, validação de credenciais e inicialização de segurança.
+ *
+ * <p><b>Por quê usar CoreJwtAuthenticationService?</b></p>
+ * <ul>
+ *   <li>Gerencia tokens de acesso e refresh com tempos de expiração configuráveis</li>
+ *   <li>Valida credidenciais de usuários no sistema</li>
+ *   <li>Inicializa o primeiro usuário administrador do sistema</li>
+ *   <li>Concede todos os privilégios ao primeiro usuário criado</li>
+ * </ul>
+ *
+ * <p><b>Exemplo de uso:</b></p>
+ * {@code
+ * AuthenticationRequest request = new AuthenticationRequest("admin", "password");
+ * UserDTO user = authenticationService.getUser(request);
+ * }
+ *
+ * @author Israel Araújo
+ * @see JwtAuthenticationService
+ * @see AuthenticationRequest
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class CoreJwtAuthenticationService
   implements JwtAuthenticationService {
 
+  /**
+   * Tempo de expiração do token de acesso em horas.
+   */
+  private static final int TOKEN_EXPIRATION_HOURS = 1;
+
+  /**
+   * Tempo de expiração do token de refresh em dias.
+   */
+  private static final int REFRESH_TOKEN_EXPIRATION_DAYS = 7;
+
   private final UserRepository userRepository;
   private final PrivilegeRepository privilegeRepository;
   private final BaseEntityMapper<User, UserDTO> mapper;
 
+  /**
+   * Obtém o tempo de expiração do token de acesso em milissegundos.
+   *
+   * @return Tempo de expiração em milissegundos
+   */
   @Override
   public long getExpirationTime() {
-    return TimeUnit.HOURS.toMillis(1);
+    return TimeUnit.HOURS.toMillis(TOKEN_EXPIRATION_HOURS);
   }
 
+  /**
+   * Obtém o tempo de expiração do token de refresh em milissegundos.
+   *
+   * <p>Os tokens de refresh têm um tempo de expiração maior que os tokens de acesso
+   * para permitir que os usuários permaneçam autenticados por períodos mais longos.
+   *
+   * @return Tempo de expiração em milissegundos
+   */
   @Override
   public long getRefreshExpirationTime() {
-    // Refresh tokens should have a longer expiration time (e.g., 7 days)
-    return TimeUnit.DAYS.toMillis(7);
+    return TimeUnit.DAYS.toMillis(REFRESH_TOKEN_EXPIRATION_DAYS);
   }
 
-    @TransactionalReadOnly
-    @Override
-    public UserDTO getUser(AuthenticationRequest request)
-      throws UserNotFountException {
-      Objects.requireNonNull(request, "Request não pode ser null");
-      Objects.requireNonNull(request.getCodUsuario(), "Código de usuário não pode ser null");
-      return userRepository.findByUserCode(request.getCodUsuario())
-        .map(mapper::toDTO)
-        .orElseThrow(() -> new UserNotFountException(request.getCodUsuario()));
-    }
+  /**
+   * Obtém um usuário pelo código de usuário.
+   *
+   * <p>Valida se o request e o código de usuário não são nulos antes de buscar.
+   *
+   * @param request Requisição de autenticação contendo o código do usuário
+   * @return DTO do usuário encontrado
+   * @throws UserNotFountException se o usuário não for encontrado
+   * @throws NullPointerException se request ou codUsuario forem nulos
+   */
+  @TransactionalReadOnly
+  @Override
+  public UserDTO getUser(AuthenticationRequest request)
+    throws UserNotFountException {
+    Objects.requireNonNull(request, "Request não pode ser null");
+    Objects.requireNonNull(request.getCodUsuario(), "Código de usuário não pode ser null");
+    return userRepository.findByUserCode(request.getCodUsuario())
+      .map(mapper::toDTO)
+      .orElseThrow(() -> new UserNotFountException(request.getCodUsuario()));
+  }
 
+  /**
+   * Verifica se a segurança do sistema já foi inicializada.
+   *
+   * <p>A segurança é considerada inicializada quando existe pelo menos um usuário no sistema.
+   *
+   * @return {@code true} se não houver usuários no sistema, {@code false} caso contrário
+   */
   @Override
   public boolean initializeSecurity() {
     return userRepository.count() == 0l;
   }
 
+  /**
+   * Cria o primeiro usuário administrador do sistema.
+   *
+   * <p>Este método só pode ser chamado quando o sistema ainda não foi inicializado
+   * (não existem usuários). O primeiro usuário criado recebe todos os privilégios
+   * disponíveis no sistema com todas as operações.
+   *
+   * @param request Requisição de autenticação contendo código de usuário e senha
+   * @return DTO do usuário criado
+   * @throws ServiceException se a segurança já foi inicializada
+   * @throws NullPointerException se request, codUsuario ou senha forem nulos
+   */
   @TransactionalWrite
-    @Override
-    public UserDTO createFirstUser(AuthenticationRequest request)
-      throws ServiceException {
+  @Override
+  public UserDTO createFirstUser(AuthenticationRequest request)
+    throws ServiceException {
     Objects.requireNonNull(request, "Request não pode ser null");
     Objects.requireNonNull(request.getCodUsuario(), "Código de usuário não pode ser null");
     Objects.requireNonNull(request.getSenha(), "Senha não pode ser null");
     if (!initializeSecurity()) {
       throw new ServiceException("Security já foi inicializado");
     }
-    User user = User.builder().accountNotExpired(true)
-        .accountNotLocked(true).credentialsNotExpired(true).enabled(true)
-        .userCode(request.getCodUsuario()).userName(request.getCodUsuario())
-        .password(request.getSenha()).build();
-    Set<UserPrivilege> privileges = privilegeRepository.findAll().stream()
-        .map(privilege -> UserPrivilege.builder().user(user).privilege(privilege)
-            .operations(Stream.of(OperationEnum.values()).map(op -> PrivilegeOperation.builder().operation(op).build()).collect(Collectors.toSet())).build()).collect(Collectors.toSet());
-    user.setPrivileges(privileges);
+    User user = buildUserWithPrivileges(request);
     return mapper.toDTO(userRepository.save(user));
+  }
+
+  /**
+   * Constrói um usuário com todos os privilégios disponíveis no sistema.
+   *
+   * <p>O usuário criado recebe todos os privilégios existentes com todas as
+   * operações habilitadas. Isso é necessário para o primeiro usuário administrador.
+   *
+   * @param request Requisição de autenticação contendo código de usuário e senha
+   * @return Usuário configurado com todos os privilégios
+   */
+  private User buildUserWithPrivileges(AuthenticationRequest request) {
+    User user = User.builder()
+        .accountNotExpired(true)
+        .accountNotLocked(true)
+        .credentialsNotExpired(true)
+        .enabled(true)
+        .userCode(request.getCodUsuario())
+        .userName(request.getCodUsuario())
+        .password(request.getSenha())
+        .build();
+
+    Set<UserPrivilege> privileges = privilegeRepository.findAll().stream()
+        .map(privilege -> buildUserPrivilegeWithAllOperations(user, privilege))
+        .collect(Collectors.toSet());
+
+    user.setPrivileges(privileges);
+    return user;
+  }
+
+  /**
+   * Constrói um UserPrivilege com todas as operações habilitadas.
+   *
+   * @param user Usuário ao qual o privilégio será associado
+   * @param privilege Privilégio base do sistema
+   * @return UserPrivilege configurado com todas as operações
+   */
+  private UserPrivilege buildUserPrivilegeWithAllOperations(User user, com.ia.core.security.model.privilege.Privilege privilege) {
+    Set<PrivilegeOperation> operations = Stream.of(OperationEnum.values())
+        .map(op -> PrivilegeOperation.builder().operation(op).build())
+        .collect(Collectors.toSet());
+
+    return UserPrivilege.builder()
+        .user(user)
+        .privilege(privilege)
+        .operations(operations)
+        .build();
   }
 
 }

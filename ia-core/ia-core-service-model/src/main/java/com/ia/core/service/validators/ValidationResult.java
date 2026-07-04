@@ -4,41 +4,35 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Interface representing the result of a validation operation.
+ * Interface que define o contrato para resultado de validação.
  * <p>
- * Provides methods to:
+ * Fornece métodos para:
  * </p>
  * <ul>
- *   <li>Check if there are any errors</li>
- *   <li>Get all errors ordered by severity</li>
- *   <li>Get errors grouped by field</li>
- *   <li>Get errors filtered by severity</li>
+ *   <li>Verificar se há erros de validação</li>
+ *   <li>Obter todos os erros ordenados por severidade</li>
+ *   <li>Obter erros agrupados por campo</li>
+ *   <li>Obter erros filtrados por severidade</li>
  * </ul>
  * <p>
- * The errors are automatically ordered by severity (ERROR > WARNING > INFO)
- * when retrieved through the appropriate methods.
+ * Os erros são automaticamente ordenados por severidade (ERROR > WARNING > INFO)
+ * quando recuperados através dos métodos apropriados.
  * </p>
  *
- * <h2>Usage Example</h2>
+ * <h2>Exemplo de Uso</h2>
  * <pre>
  * ValidationResult result = validator.validate(myObject);
  * if (result.hasErrors()) {
- *   // Get all errors ordered by severity
+ *   // Obter todos os erros ordenados por severidade
  *   List<ValidationError> allErrors = result.getErrors();
  *
- *   // Get errors for a specific field
+ *   // Obter erros para um campo específico
  *   List<ValidationError> fieldErrors = result.getErrorsByField("email");
  *
- *   // Get only errors (not warnings or info)
+ *   // Obter apenas erros (não warnings ou info)
  *   List<ValidationError> errors = result.getErrorsBySeverity(Severity.ERROR);
  * }
  * </pre>
- */
-/**
- * Interface que define o contrato para validation result.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ValidationResult
- * dentro do sistema.
  *
  * @author IA
  * @since 1.0

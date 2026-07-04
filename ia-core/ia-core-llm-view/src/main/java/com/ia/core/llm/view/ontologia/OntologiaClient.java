@@ -12,6 +12,9 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@FeignClient(name = "ia-core-llm-rest", url = "${ia-core.rest.url}")
+@FeignClient(name = OntologiaClient.NOME, url = OntologiaClient.URL)
 public interface OntologiaClient extends DefaultBaseClient<OntologiaDTO> {
+
+  String NOME = "ontologia";
+  String URL = "${feign.host}/api/${api.version}/${feign.url.ontologia}";
 }

@@ -15,7 +15,7 @@ public interface ChatSessionService {
    *
    * @return identificador da sessão
    */
-  String createSession();
+  String createSession(String sessionId);
 
   /**
    * Finaliza uma sessão de chat.

@@ -1,62 +1,75 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas FunctionalObjectProperty.
+ * Tool para criação de propriedade de objeto funcional OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades de objeto funcionais
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedade de objeto funcional (Func(R)).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * FunctionalObjectProperty é um axioma que especifica que uma propriedade de objeto é funcional.
+ * Cada indivíduo x pode estar relacionado a no máximo um indivíduo y pela propriedade R(x, y). Permite modelar relacionamentos de cardinalidade máxima 1.
+ * <p>
+ * <b>Sintaxe Manchester:</b> FunctionalObjectProperty(:Propriedade)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>temMae é funcional (cada pessoa tem no máximo uma mãe):
+ *       FunctionalObjectProperty(:temMae)</li>
+ *   <li>temPaiBiologico é funcional:
+ *       FunctionalObjectProperty(:temPaiBiologico)</li>
+ *   <li>temEsposa é funcional (monogamia):
+ *       FunctionalObjectProperty(:temEsposa)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class FunctionalObjectPropertyTool extends AbstractOWLTool {
+public class FunctionalObjectPropertyTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "FunctionalObjectProperty";
-
-  public FunctionalObjectPropertyTool(ChatModel chatModel,
-                                      LLMCommunicator llmCommunicator,
-                                      DefaultOwlService owlService,
-                                      TemplateService templateService,
-                                      FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public FunctionalObjectPropertyTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma propriedade de objeto funcional na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property Propriedade de objeto
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma propriedade de objeto funcional OWL 2 DL na ontologia da sessão. " +
+                     "Representa propriedade de objeto funcional (Func(R)). " +
+                     "Especifica que cada indivíduo pode estar relacionado a no máximo um indivíduo pela propriedade. " +
+                     "Exemplos: " +
+                     "1) temMae é funcional (cada pessoa tem no máximo uma mãe) → FunctionalObjectProperty(:temMae). " +
+                     "2) temPaiBiologico é funcional → FunctionalObjectProperty(:temPaiBiologico). " +
+                     "3) temEsposa é funcional (monogamia) → FunctionalObjectProperty(:temEsposa).")
+  public String createFunctionalObjectProperty(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property) {
 
-  @Override
-  public String getDescription() { return "Gera axiomas FunctionalObjectProperty para definir propriedades funcionais"; }
+    log.debug("Criando FunctionalObjectProperty: Func({})", property);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas FunctionalObjectProperty.
-      Construtor: FunctionalObjectProperty
-      Descrição: Declara que uma propriedade de objeto é funcional.
-      Sintaxe Manchester: FunctionalObjectProperty(<propriedade>)
-      Exemplos:
-      - "temMae é funcional" → FunctionalObjectProperty(:temMae)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "FunctionalObjectProperty: " + property;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("temMae é funcional", "temPai é funcional", "temEsposa é funcional");
+    log.debug("Resultado da criação de FunctionalObjectProperty: {}", result);
+    return result;
   }
 }

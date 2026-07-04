@@ -122,5 +122,6 @@ public class SchedulerConfigDTO
     extends AbstractBaseEntityDTO.CAMPOS {
     public static final String PERIODICIDADE = "periodicidade";
     public static final String JOB_CLASS_NAME = "jobClassName";
+    public static final String TRIGGERS = "triggers";
   }
 }

@@ -59,7 +59,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
    * @param config configuração do serviço de anexos
    */
   public AttachmentService(AttachmentServiceConfig<T, D> config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 
   @TransactionalWrite
@@ -220,6 +220,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
     public String unZip(
            D dto)
     throws ServiceException {
+    Objects.requireNonNull(dto, "DTO não pode ser null");
     try {
       if (!dto.hasContent()) {
         log.debug("DTO sem conteúdo para descompactar");
@@ -246,6 +247,7 @@ public class AttachmentService<T extends Attachment, D extends AttachmentDTO<T>>
   public String zip(
            D dto)
     throws ServiceException {
+    Objects.requireNonNull(dto, "DTO não pode ser null");
     try {
       log.debug("Compactando conteúdo do anexo");
       return ZipUtil.zipBase64(dto.getContent());

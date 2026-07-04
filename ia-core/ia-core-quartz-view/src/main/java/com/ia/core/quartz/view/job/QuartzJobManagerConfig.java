@@ -16,11 +16,11 @@ public class QuartzJobManagerConfig
   extends DefaultSecuredViewBaseMangerConfig<QuartzJobDTO> {
 
   /**
-   * Construtor com as dependências necessárias.
-   *
-   * @param client               Cliente
-   * @param authorizationManager Gerenciador de autorização
-   */
+    * Construtor com as dependências necessárias.
+    *
+    * @param client               Cliente
+    * @param authorizationManager Gerenciador de autorização
+    */
   public QuartzJobManagerConfig(QuartzJobClient client,
                                 CoreSecurityAuthorizationManager authorizationManager) {
     super(client, authorizationManager);

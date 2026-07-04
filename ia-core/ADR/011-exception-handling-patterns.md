@@ -88,7 +88,7 @@ public static final String ERROR_INTERNAL = "error.internal";
   "status": 400,
   "errorCode": "VALIDATION_ERROR",
   "message": "Erro(s) de validação",
-  "path": "/api/v1/users",
+  "path": "/api/${api.version}/users",
   "traceId": "a1b2c3d4-e5f6-7890",
   "details": [...],
   "fieldErrors": {...}
@@ -96,7 +96,7 @@ public static final String ERROR_INTERNAL = "error.internal";
 ```
 
 **Justificativa:**
-- Conformidade com RFC 7807 (Problem Details for HTTP APIs)
+- Conformidade com RFC 9457 (Problem Details for HTTP APIs), que substitui RFC 7807
 - Estrutura consistente para todos os erros
 - Campo traceId para correlação de logs
 - Suporte a validação detalhada de campos
@@ -302,9 +302,19 @@ throw new ValidationException("email", email, "Email já cadastrado");
 throw new BusinessException("DUPLICATE_EMAIL", "Email já cadastrado");
 ```
 
+## Padrões de Padronização (Standardization)
+
+Este ADR adere aos seguintes padrões técnicos:
+
+- **RFC 9110** — HTTP Semantics: mapeamento de exceções para status HTTP.
+- **RFC 9457** — Problem Details for HTTP APIs: formato recomendado para respostas de erro; substitui RFC 7807.
+- **RFC 2119/RFC 8174** — linguagem normativa para definir requisitos obrigatórios, recomendados e opcionais em documentação de API.
+
 ## Referências
 
-- [RFC 7807 - Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807)
+- [RFC 9457 - Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc9457)
+- [RFC 9110 - HTTP Semantics](https://datatracker.ietf.org/doc/html/rfc9110)
+- [RFC 7807 - Problem Details for HTTP APIs (legado)](https://datatracker.ietf.org/doc/html/rfc7807)
 - [Spring Exception Handling](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-exceptionhandlers)
 
 ## Referências Adicionais

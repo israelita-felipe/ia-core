@@ -1,7 +1,6 @@
 package com.ia.core.owl.service.validation;
 
-import com.ia.core.llm.service.model.validacao.ExplicacaoInconsistencia;
-import com.ia.core.owl.service.OpenlletReasonerService;
+import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistencia;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +19,7 @@ import java.util.List;
 @Service
 public class ExplicadorInconsistencia {
 
-  private final OpenlletReasonerService reasonerService;
-
-  public ExplicadorInconsistencia(OpenlletReasonerService reasonerService) {
-    this.reasonerService = reasonerService;
+  public ExplicadorInconsistencia() {
   }
 
   /**

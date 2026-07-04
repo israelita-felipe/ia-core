@@ -9,15 +9,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
 /**
+ * Filtro de autenticação JWT para APIs REST. Processa tokens JWT nas requisições
+ * e estabelece o contexto de segurança.
+ * <p>
+ * Este filtro é aplicado apenas a endpoints que requerem autenticação. Endpoints
+ * de autenticação (como /authentication/**) são automaticamente ignorados.
+ * </p>
+ *
  * @author Israel Araújo
  */
 @RequiredArgsConstructor
-@RestController
 public class CoreJwtAuthenticationFilter
   extends OncePerRequestAuthenticationFilter {
 

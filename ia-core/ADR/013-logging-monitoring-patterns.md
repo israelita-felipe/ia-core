@@ -39,7 +39,7 @@ Decisões anteriores (ADR-001 a ADR-012) estabeleceram padrões para mapeamento,
 ```java
 @Component
 public class CorrelationIdFilter extends OncePerRequestFilter {
-    
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -58,13 +58,13 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
 **Padrão de saída:**
 ```
 2024-02-10 10:30:00.123 [main] INFO  c.i.c.service.ExemploService - Inicialização completa
-2024-02-10 10:30:01.456 [http-nio-8080-exec-1] DEBUG c.i.c.controller.ExemploController - GET /api/v1/exemplo/123
+2024-02-10 10:30:01.456 [http-nio-8080-exec-1] DEBUG c.i.c.controller.ExemploController - GET /api/${api.version}/exemplo/123
 2024-02-10 10:30:01.789 [http-nio-8080-exec-1] INFO  c.i.c.service.ExemploService - Busca realizada id=123
 ```
 
 **Com Correlation ID:**
 ```
-2024-02-10 10:30:01.456 [http-nio-8080-exec-1] [a1b2c3d4e5f6] DEBUG c.i.c.controller.ExemploController - GET /api/v1/exemplo/123
+2024-02-10 10:30:01.456 [http-nio-8080-exec-1] [a1b2c3d4e5f6] DEBUG c.i.c.controller.ExemploController - GET /api/${api.version}/exemplo/123
 ```
 
 **Justificativa:**
@@ -251,9 +251,9 @@ Response (header x-correlation-id)
 
 ```xml
 <configuration>
-    <property name="LOG_PATTERN" 
+    <property name="LOG_PATTERN"
         value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
-    <property name="CORRELATION_PATTERN" 
+    <property name="CORRELATION_PATTERN"
         value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{correlationId}] %-5level %logger{36} - %msg%n"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -286,13 +286,13 @@ public class ExemploService {
 
     public ExemploDTO buscarPorId(String id) {
         log.debug("Buscando entidade com id: {}", id);
-        
+
         Exemplo entidade = repository.findById(id)
             .orElseThrow(() -> {
                 log.warn("Entidade não encontrada com id: {}", id);
                 return new ResourceNotFoundException("Exemplo", id);
             });
-        
+
         log.info("Entidade encontrada com sucesso id: {}", id);
         return mapper.toDTO(entidade);
     }

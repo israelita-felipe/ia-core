@@ -1,0 +1,660 @@
+===== REFERÊNCIAS PARA CRIAÇÃO DE CASOS DE TESTE, DDD, CASOS DE USO E SPRING BOOT =====
+===== Total de referências: 160 =====
+
+
+================== 1. TÉCNICAS CLÁSSICAS DE CRIAÇÃO DE CASOS DE TESTE (ISTQB) ==================
+
+Referência 1 - ISTQB Foundation Level Syllabus - 4.2 Black-Box Test Techniques
+URL: https://astqb.org/4-2-black-box-test-techniques/
+Descrição: Documento oficial do ISTQB que detalha as principais técnicas de caixa-preta: Partição de Equivalência, Análise de Valor Limite, Teste de Tabela de Decisão e Teste de Transição de Estado.
+
+Referência 2 - ISTQB Foundation Level Syllabus - 4.1 Test Techniques Overview
+URL: https://astqb.org/4-1-test-techniques-overview/
+Descrição: Visão geral da classificação das técnicas de teste em caixa-preta, caixa-branca e baseadas em experiência, com referências para normas ISO.
+
+Referência 3 - Equivalence Partitioning & Boundary Value Analysis (UIO)
+URL: https://www.uio.no/studier/emner/matnat/ifi/INF3121/v18/forelesningsvideoer/chapte-4-part-2-slides.pdf#4#4
+Descrição: Técnicas fundamentais para derivar casos de teste a partir de partições de dados e suas fronteiras, com alto poder de detecção de defeitos.
+
+Referência 4 - Decision Table Testing (UIO)
+URL: https://www.uio.no/studier/emner/matnat/ifi/INF3121/v18/forelesningsvideoer/chapte-4-part-2-slides.pdf#4#4
+Descrição: Abordagem para testar combinações de condições lógicas e suas saídas, ideal para regras de negócio complexas.
+
+Referência 5 - State Transition Testing (UIO)
+URL: https://www.uio.no/studier/emner/matnat/ifi/INF3121/v18/forelesningsvideoer/chapte-4-part-2-slides.pdf#4#4
+Descrição: Técnica baseada em diagramas de estados para validar o comportamento do sistema conforme seu ciclo de vida.
+
+Referência 6 - Use Case Testing (testRigor)
+URL: https://testrigor.com/
+Descrição: Guia prático sobre testes de caso de uso, incluindo definições, exemplos, e como derivar casos de teste dos fluxos de usuário.
+
+Referência 7 - Use Case Testing (Virtuoso QA)
+URL: https://www.virtuosoqa.com/
+Descrição: Explicação do teste de caso de uso como técnica de caixa-preta, com exemplos para Ambientes Ágeis e melhores práticas.
+
+Referência 8 - Use Case Testing (Microsoft Learn)
+URL: https://learn.microsoft.com/
+Descrição: Metodologia para testar aplicações usando casos de uso, com seus benefícios e limitações, e um roteiro prático para o time de QA.
+
+Referência 9 - Essential Software Testing: A Use-Case Approach (Routledge)
+URL: https://www.routledge.com/Essential-Software-Testing-A-Use-Case-Approach/Fournier/p/book/9780429114854
+Descrição: Guia abrangente sobre como determinar o que testar, como testar e como construir e rastrear testes a partir de casos de uso.
+
+Referência 10 - ISTQB FL(v4)_CH4 - Test Design (MindMeister)
+URL: https://www.mindmeister.com/zh/3237815931/istqb-foundation
+Descrição: Mapa mental com os principais conceitos de design de casos de teste baseados no currículo do ISTQB Foundation Level v4.
+
+Referência 11 - ISTQB Foundation Course - Specification Based Techniques
+URL: https://www.ii.uib.no/
+Descrição: Material didático do curso ISTQB Foundation sobre técnicas baseadas em especificação (caixa-preta) e um pouco de teste baseado em experiência.
+
+Referência 12 - Black Box Test Design Technique - OMG
+URL: https://www.omg.org/
+Descrição: Definição formal de técnicas de design de teste de caixa-preta segundo o padrão ISTQB, incluindo a execução de transições de estado válidas e inválidas.
+
+Referência 13 - Test Design Techniques - 2024 (Wiley)
+URL: https://novel-coronavirus.onlinelibrary.wiley.com
+Descrição: Livro online que aborda técnicas de design de teste baseadas em especificações e modelos.
+
+Referência 14 - An Analysis of Use Case Based Testing Approaches (CNKI)
+URL: https://scholar.oversea.cnki.net
+Descrição: Análise de abordagens de teste baseadas em casos de uso com base em uma taxonomia de defeitos.
+
+Referência 15 - Use Case Test (UCT) - TMAP
+URL: https://www.tmap.net/
+Descrição: Metodologia de teste focada na cobertura das interações entre o usuário e o sistema, usando checklist como técnica básica.
+
+
+================== 2. DOMAIN-DRIVEN DESIGN (DDD) E TESTES ==================
+
+Referência 16 - DDD Reference (Eric Evans)
+URL: https://domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf
+Descrição: Referência concisa aos conceitos fundamentais do DDD, criada pelo próprio Eric Evans. Essencial para entender o vocabulário do domínio.
+
+Referência 17 - Domain-Driven Design (Martin Fowler)
+URL: https://martinfowler.com/bliki/DomainDrivenDesign.html
+Descrição: Definição e explicação do DDD por Martin Fowler, um dos principais pensadores sobre arquitetura de software.
+
+Referência 18 - Domain-driven design needn't be hard (ThoughtWorks)
+URL: https://www.thoughtworks.com/insights/blog/domain-driven-design-neednt-be-hard-heres-how-start
+Descrição: Artigo da ThoughtWorks que oferece um ponto de partida prático e menos intimidador para começar com DDD.
+
+Referência 19 - DDD Starter Modelling Process
+URL: https://github.com/ddd-crew/ddd-starter-modelling-process
+Descrição: Um processo guiado e colaborativo para começar a modelar um domínio, ideal para times que estão iniciando com DDD.
+
+Referência 20 - What is DDD? (Eric Evans)
+URL: https://www.youtube.com/watch?v=pMuiVlnGqjk
+Descrição: Vídeo introdutório de Eric Evans sobre os conceitos centrais do Domain-Driven Design.
+
+Referência 21 - Tackling Complexity in the Heart of Software (Eric Evans)
+URL: https://www.youtube.com/watch?v=dnUFEg68ESM
+Descrição: Palestra fundamental de Eric Evans sobre como o DDD ajuda a gerenciar a complexidade no núcleo do software.
+
+Referência 22 - Free DDD Learning Resources
+URL: https://github.com/xidus/free-ddd-learning-resources
+Descrição: Uma coleção massiva e organizada de recursos gratuitos para aprender DDD, incluindo ebooks, artigos, vídeos e estudos de caso.
+
+Referência 23 - Free DDD Learning Resources (Fork)
+URL: https://github.com/Krishnamurtyp/free-ddd-learning-resources
+Descrição: Um fork da coleção anterior, também repleto de recursos gratuitos e bem categorizados sobre DDD.
+
+Referência 24 - Domain-Driven Design with Java (Book Code)
+URL: https://github.com/o-s-expert/domain-driven-design-java-book
+Descrição: Código-fonte do livro que ensina DDD com Java, incluindo um capítulo inteiro sobre como testar e validar aplicações DDD.
+
+Referência 25 - Domain-driven Design with Java (BPB Publications)
+URL: https://github.com/bpbpublications/Domain-driven-Design-with-Java
+Descrição: Outro repositório com exemplos práticos do livro "Domain-driven Design with Java", focado em testes e uso de ferramentas como ArchUnit.
+
+Referência 26 - Hands-on Domain-Driven Design with Java (Packt)
+URL: https://github.com/PacktPublishing/-Hands-on-Domain-Driven-Design-with-Java
+Descrição: Código-fonte do livro da Packt, com capítulos dedicados à implementação tática de DDD e testes de validação com ArchUnit e JMolecules.
+
+Referência 27 - How/what to mock in BDD (Martin Fowler)
+URL: https://browse.library.kiwix.org/content/stackoverflow.com_en_all_nopic_2022-07/questions/10402130/how-what-to-mock-in-bdd
+Descrição: Postagem clássica de Martin Fowler discutindo as diferenças entre TDD clássico (uso de objetos reais) e mockista (preferência por mocks).
+
+Referência 28 - Combining DDD and TDD (JAOO)
+URL: https://jaoo.dk
+Descrição: Palestra que demonstra como combinar DDD e TDD para escrever código focado no domínio sem se preocupar com infraestrutura.
+
+Referência 29 - Comparing BDD, TDD, and DDD
+URL: https://www.cs.uic.edu/~i440/Grad%20Papers/440%20Fall%202024/Papers/Srinath%20Ganesh_Comparative%20Study%20of%20BDD,%20TDD%20and%20DDD.pdf#1#1
+Descrição: Estudo comparativo sistemático de três metodologias proeminentes: BDD, TDD e DDD.
+
+Referência 30 - Event Storming (Alberto Brandolini)
+URL: https://www.youtube.com/watch?v=fGm62ra_mQ8
+Descrição: Palestra sobre Event Storming, uma técnica colaborativa fundamental para explorar domínios complexos.
+
+Referência 31 - Event Storming Cheatsheet
+URL: https://github.com/hendisantika/event-storming-cheatsheet
+Descrição: Um guia de referência rápida ("cola") para planejar e facilitar workshops de Event Storming.
+
+Referência 32 - Patterns, Principles, and Practices of DDD (O'Reilly)
+URL: https://www.oreilly.com/library/view/patterns-principles-and/9781118714706/c10.xhtml#c10_2
+Descrição: Livro da O'Reilly que explica o papel central dos Domain Events na compreensão e modelagem de um domínio de problema.
+
+Referência 33 - Event-Storming-Modelle testgetrieben implementieren
+URL: https://www.informatik-aktuell.de/entwicklung/methoden/event-storming-modelle-testgetrieben-implementieren.html#top
+Descrição: Artigo que descreve como implementar modelos criados em Event Storming de forma test-driven usando padrões de BDD.
+
+Referência 34 - Domain Storytelling
+URL: https://openpracticelibrary.com/practice/domain-storytelling/
+Descrição: Uma técnica de modelagem colaborativa que conta histórias sobre o domínio, complementar ao Event Storming.
+
+Referência 35 - Testing DDD Building Blocks (DDD Europe 2026)
+URL: https://2026.dddeurope.com/
+Descrição: Palestra que explora estratégias de teste multicamadas específicas para DDD: unitários, integração, contratos e testes de aceitação.
+
+Referência 36 - A Domain-Driven Design Simulator for Business Logic-Rich Microservice Systems (arXiv)
+URL: https://browse-export.arxiv.org
+Descrição: Artigo que introduz um simulador de microsserviços DDD que isola a lógica de negócio da infraestrutura, validado por testes de concorrência de múltiplos agregados.
+
+Referência 37 - A Study of Test Techniques for Integration with Domain Driven Design
+URL: https://www.infona.pl
+Descrição: Estudo exploratório sobre técnicas ágeis de teste (TDD e BDD) para integração com DDD, com exemplo usando framework Apache Isis.
+
+Referência 38 - Automating Domain-Driven Design: A Prompting Framework (arXiv)
+URL: https://arxiv.org/
+Descrição: Artigo que introduz um framework de prompts para automatizar atividades centrais do DDD através de interações estruturadas com LLMs.
+
+Referência 39 - Round-trip Engineering for Tactical DDD (arXiv 2026)
+URL: https://export.arxiv.org
+Descrição: Proposta de engenharia de ida-e-volta para DDD tático, com mecanismo de verificação de restrições em tempo real que previne violações arquiteturais durante a modelagem.
+
+Referência 40 - LLM-based Domain Model Generation from Test Cases
+URL: https://repositorio.ufpe.br
+Descrição: Estudo que propõe uma abordagem baseada em LLM para gerar modelos de domínio a partir de casos de teste escritos em linguagem natural.
+
+Referência 41 - Automated Assessment of Conformance to ADDs on DDD and APIs
+URL: https://eprints.cs.univie.ac.at
+Descrição: Abordagem para automação da avaliação de conformidade com Decisões de Design Arquitetural na inter-relação de DDD e APIs.
+
+Referência 42 - DDD-based Software Development Activities Overview
+URL: https://personales.upv.es
+Descrição: Breve visão geral das atividades de desenvolvimento de software baseadas em DDD e sua classificação em um processo de desenvolvimento bem conhecido.
+
+Referência 43 - How do you test and refactor your domain-driven design code?
+URL: https://www.linkedin.com/
+Descrição: Guia prático sobre como testar o modelo de domínio com frameworks como JUnit, TestNG ou Spock em Java.
+
+Referência 44 - What are the best ways to test and validate your domain model?
+URL: https://www.linkedin.com/
+Descrição: Melhores práticas para testar e validar modelo de domínio usando princípios DDD: linguagem ubíqua, contextos delimitados e padrões de modelagem.
+
+Referência 45 - How do you test different types of value objects in DDD?
+URL: https://www.linkedin.com/
+Descrição: Estratégias de teste para Value Objects em DDD, incluindo definição de contratos e validação de comportamento e comparação.
+
+Referência 46 - Implementing DDD for Automatic Test Case Generation (CNKI)
+URL: https://scholar.oversea.cnki.net
+Descrição: Pesquisa que descreve a implementação do conceito de Development Driven by Defects (DDD) para geração automática de casos de teste.
+
+Referência 47 - Component Testing with DDD (EuroSTAR)
+URL: https://conference.eurostarsoftwaretesting.com
+Descrição: Apresentação sobre como o DDD ajudou uma equipe a redescobrir Testes de Componente para alcançar estabilidade e cobertura.
+
+Referência 48 - Testing DDD Building Blocks: A Multi-Layered Strategy
+URL: https://2026.dddeurope.com
+Descrição: Estratégia de teste multicamadas para DDD, explorando escopos de teste específicos para agregados, módulos e contextos delimitados.
+
+Referência 49 - DDD, CQRS, and Event Sourcing Testing
+URL: https://phpunit.expert
+Descrição: Artigo que revela como alinhar testes com a linguagem do domínio e adaptar o framework de teste à arquitetura DDD/CQRS/Event Sourcing.
+
+Referência 50 - Specification Pattern in DDD
+URL: https://pub.dev
+Descrição: Documentação sobre o padrão Specifications no contexto de DDD, permitindo recombinar regras de negócio usando lógica booleana.
+
+
+================== 3. ARQUITETURA HEXAGONAL E CASOS DE USO COM SPRING BOOT ==================
+
+Referência 51 - Hexagonal Architecture with DDD Example
+URL: https://github.com/jsyang-dev/hexagonal-example
+Descrição: Exemplo prático de aplicação Spring Boot demonstrando Arquitetura Hexagonal (Ports & Adapters) com DDD, incluindo testes de domínio e aceitação.
+
+Referência 52 - Clean Architecture, DDD & CQRS (.NET)
+URL: https://github.com/mohd2sh/CleanArchitecture-DDD-CQRS
+Descrição: Aplicação em .NET que demonstra Arquitetura Limpa, DDD e CQRS, com testes automatizados de arquitetura e integração. Ótima referência independente de linguagem.
+
+Referência 53 - Clean Architecture API Sample
+URL: https://github.com/alex289/cleanarchitecture
+Descrição: Projeto de exemplo de uma API construída com princípios de Arquitetura Limpa, Onion Architecture e MediatR.
+
+Referência 54 - Modular Monolith with DDD and Spring Modulith
+URL: https://github.com/ahmedmaksoud/modular-monolith
+Descrição: Exemplo de monólito modular construído com Spring Boot e DDD, demonstrando como manter a modularidade e testabilidade em um único deploy.
+
+Referência 55 - Spring Boot DDD Bank Example
+URL: https://github.com/hendisantika/springboot-ddd-bank
+Descrição: Aplicação bancária simples que aplica princípios de DDD com Spring Data JPA, mostrando uma camada de domínio rica e independente.
+
+Referência 56 - Clean Architecture for Android (Book)
+URL: https://reference-global.com
+Descrição: Livro que ensina a construir aplicações Android testáveis e escaláveis com Arquitetura Limpa.
+
+Referência 57 - Clean Architecture Use Case Testing (Perlego)
+URL: https://www.perlego.com
+Descrição: Livro que detalha como realizar testes de classe e testes de ponta a ponta para aplicações com Arquitetura Limpa.
+
+Referência 58 - Microservice Starter with DDD and Hexagonal
+URL: https://github.com/adam-crowther/microservice-starter
+Descrição: Template de microsserviços com Java, Spring Boot, DDD e Arquitetura Hexagonal, demonstrando testes com Spock, Cucumber, TestContainers e JaCoCo.
+
+Referência 59 - Clean Architecture Snippets (Konsist)
+URL: https://docs.konsist.lemonappdev.com
+Descrição: Documentação sobre como garantir que toda classe UseCase tenha um teste correspondente usando Konsist.
+
+Referência 60 - Clean Architecture (Java Example)
+URL: https://github.com/Simonehk/clean-architecture-example
+Descrição: Exemplo de arquitetura limpa em Java, mostrando como testar um caso de uso em isolamento (sem GUI, sem DB) e testes de integração com partes lentas.
+
+Referência 61 - Testing Interactor methods in Clean Architecture
+URL: https://browse.library.kiwix.org
+Descrição: Discussão sobre como testar métodos Interactor (casos de uso) que fazem mais de uma coisa, mockando todas as dependências.
+
+Referência 62 - Clean Architecture with DDD and Spring Boot (Kotlin)
+URL: https://github.com/awakelife93/kotlin-clean-architecture-multimodule
+Descrição: Template multi-módulo com Spring Boot e Kotlin seguindo Arquitetura Hexagonal e DDD, focado em testabilidade e observabilidade.
+
+Referência 63 - DDD/CQRS/Event Sourcing with Spring Boot Example
+URL: https://github.com/fuinorg/ddd-cqrs-4-java-example
+Descrição: Exemplo de microsserviços Java com DDD, CQRS e Event Sourcing implementados com Quarkus e Spring Boot.
+
+Referência 64 - Why Clean Architecture makes debugging easier (Sentry)
+URL: https://sentry-blog.sentry.dev
+Descrição: Artigo explicando como a Clean Architecture enfatiza testabilidade para que cada parte da lógica central possa ser coberta por testes.
+
+Referência 65 - Error Management in Use Cases with Clean Architecture (Educative)
+URL: https://www.educative.io
+Descrição: Guia sobre implementação de gerenciamento de erros e validação de requisições em casos de uso dentro da Clean Architecture.
+
+Referência 66 - Garuda - Clean Architecture in Mobile Applications
+URL: https://garuda.kemdiktisaintek.go.id
+Descrição: Estudo de caso de aplicação da Clean Architecture em aplicações mobile, com testes de caixa-preta validando 10 casos de teste.
+
+Referência 67 - Implementing Use Cases in Clean Architecture with Python (Educative)
+URL: https://www.educative.io
+Descrição: Exploração de implementação de casos de uso que encapsulam lógica de negócio em Clean Architecture com Python, incluindo testes com mocking e pytest.
+
+Referência 68 - go-from-template (Clean Architecture)
+URL: https://pkg.go.dev
+Descrição: Template de projeto Go seguindo princípios de Clean Architecture para desenvolvimento de APIs.
+
+Referência 69 - On testing in DDD (Towards Dev)
+URL: https://towardsdev.com
+Descrição: Artigo que aborda os desafios específicos de testar código rico em DDD (alta complexidade de arrange) e oferece padrões como Test-Arranger para resolvê-los.
+
+Referência 70 - Integrating DDD with Spring Boot (Book Chapter)
+URL: https://github.com/o-s-expert/domain-driven-design-java-book/blob/main/chapter-09
+Descrição: Capítulo do livro "Domain-Driven Design with Java" focado na integração de DDD com Spring, abordando testes.
+
+
+================== 4. PRÁTICAS DE TESTE COM SPRING BOOT ==================
+
+Referência 71 - Spring Boot Testing Best Practices (Symflower)
+URL: https://symflower.com/en/company/blog/2023/best-practices-for-spring-boot-testing/
+Descrição: Guia abrangente de boas práticas para testar aplicações Spring Boot, cobrindo testes unitários, de integração e uso de slices como @WebMvcTest.
+
+Referência 72 - Spring Boot Testing Best Practices (tsecurity.de)
+URL: https://tsecurity.de/
+Descrição: Postagem que explora as melhores práticas para testes, incluindo testes unitários, de integração e uso de MockMvc, com exemplos de código.
+
+Referência 73 - Testing in Spring Boot with JUnit and Mockito (Dev.to)
+URL: https://dev.to/
+Descrição: Guia prático para iniciantes que explica o uso de JUnit 5, Mockito e MockMvc para testar controllers e services.
+
+Referência 74 - Testing with @SpringBootTest (Spring Docs)
+URL: https://docs.spring.io
+Descrição: Documentação oficial sobre a anotação @SpringBootTest, usada para carregar o contexto completo da aplicação em testes de integração.
+
+Referência 75 - Testing with @WebMvcTest (Spring Docs)
+URL: https://docs.spring.io
+Descrição: Documentação oficial sobre @WebMvcTest, um "slice" de teste focado apenas na camada Web (controllers), que auto-configura a infraestrutura Spring MVC.
+
+Referência 76 - Testing with @DataJpaTest (Baeldung)
+URL: https://www.baeldung.com
+Descrição: Tutorial do Baeldung sobre o uso de @DataJpaTest para testar repositórios JPA de forma isolada, com transações e rollback automáticos.
+
+Referência 77 - Testing REST APIs with MockMvc (Spring Guides)
+URL: https://spring.io
+Descrição: Guia oficial do Spring que ensina a usar MockMvc para testar a camada web de uma aplicação, simulando requisições HTTP sem subir o servidor.
+
+Referência 78 - Testing CORS in Spring Boot (Baeldung)
+URL: https://www.baeldung.com
+Descrição: Tutorial sobre como escrever testes eficazes para verificar a configuração de CORS usando MockMvc.
+
+Referência 79 - A Guide to RestTestClient (Baeldung)
+URL: https://www.baeldung.com
+Descrição: Guia sobre o RestTestClient, uma adição moderna ao Spring Framework 7.0 que simplifica o teste de integração REST.
+
+Referência 80 - Testing Spring Boot Applications (Manning)
+URL: https://livebook.manning.com
+Descrição: Capítulo de livro da Manning que discute as ferramentas de teste oferecidas pelo Spring e Spring Boot, e como elas se destacam na criação de casos de teste complexos.
+
+Referência 81 - Test Auto-configuration Annotations (Spring Docs)
+URL: https://docs.spring.vmware.com
+Descrição: Apêndice da documentação do Spring que lista e explica todas as anotações de auto-configuração para testes (@...Test).
+
+Referência 82 - Spring Boot Support (Symflower Docs)
+URL: https://docs.symflower.com
+Descrição: Documentação sobre como a ferramenta Symflower gera testes para Spring Boot, incluindo slices como @SpringBootTest e uso de @MockBean.
+
+Referência 83 - Java Testing Toolbox
+URL: https://github.com/rieckpil/java-testing-toolbox
+Descrição: Um repositório que explora o ecossistema de testes Java através de exemplos práticos, incluindo ferramentas para Spring Boot.
+
+Referência 84 - Spring Boot Testing Insights
+URL: https://github.com/adrianbaertschi/spring-boot-testing-insights
+Descrição: Repositório com insights e exemplos sobre testes em Spring Boot, incluindo uso de MockMvc e referências a outros guias.
+
+Referência 85 - Spring Boot 3.2.5 Testing Demo
+URL: https://github.com/HenryXiloj/demo-testing-spring-boot-3.2.5-java21
+Descrição: Projeto de demonstração que abrange testes em diferentes camadas (repositório, serviço, controlador) em uma aplicação Spring Boot com MySQL.
+
+Referência 86 - Slice Tests (Spring Docs)
+URL: https://docs.spring.io
+Descrição: Documentação oficial sobre testes de slice, que funcionam restringindo a varredura de componentes do Spring a um conjunto limitado baseado em seu tipo.
+
+Referência 87 - User Configuration and Slicing
+URL: https://rwinch.github.io
+Descrição: Guia sobre configuração de usuário e slicing de testes, explicando como slices de teste excluem classes @Configuration da varredura.
+
+Referência 88 - Custom test slice with Spring Boot (Spring Blog)
+URL: https://spring.io
+Descrição: Artigo do blog oficial do Spring sobre como criar slices de teste customizados com Spring Boot 1.4+.
+
+Referência 89 - Mastering Testing Efficiency in Spring Boot (Zalando)
+URL: https://engineering.zalando.com
+Descrição: Artigo do time de engenharia da Zalando sobre otimização de testes e slicing em Spring Boot.
+
+Referência 90 - Unit Testing Spring Boot Applications 101
+URL: https://www.jug.ch
+Descrição: Guia introdutório sobre testes unitários em aplicações Spring Boot, incluindo conceitos de isolamento e confiança.
+
+Referência 91 - Testing Spring Boot Applications Demystified (JUG Barcelona)
+URL: https://files.speakerdeck.com
+Descrição: Apresentação abordando testes unitários com Spring Boot, fornecendo colaboradores via injeção de dependência e testando apenas a API pública.
+
+Referência 92 - Testing Spring Boot Applications Demystified (JUG HH 2025)
+URL: https://speakerdeck.com
+Descrição: Apresentação demonstrando o excelente suporte a testes do Spring Boot, com abordagem pragmática de nomenclatura de testes.
+
+Referência 93 - Testing Spring Boot Applications Demystified (CERN JUG)
+URL: https://indico.cern.ch
+Descrição: Palestra abordando estratégias de testes unitários a práticas de testes de integração e estratégias organizacionais.
+
+Referência 94 - Spring Boot Testing Best Practices (2025) - Mockito Migration
+URL: https://www.51testing.com
+Descrição: Artigo sobre os cinco maiores equívocos nos testes Spring Boot, incluindo a pirâmide de testes e por que depender apenas de @SpringBootTest a subverte.
+
+Referência 95 - Spring Boot Test Slicing Reference (Agent Skill)
+URL: https://agentskills.so
+Descrição: Referência que fornece uma matriz de decisão e comparação de diferentes "slices" de teste no Spring Boot.
+
+Referência 96 - spring boot: como construir testes de slice parametrizados customizados
+URL: https://cloud.tencent.cn
+Descrição: Tutorial sobre construção de anotações de teste de slice customizadas em Spring Boot.
+
+Referência 97 - Testing a Spring Boot REST API with Testcontainers (Docker Docs)
+URL: https://docs.docker.com
+Descrição: Guia oficial da Docker para criar uma API REST Spring Boot com Spring Data JPA e PostgreSQL e testá-la com Testcontainers e REST Assured.
+
+Referência 98 - Testcontainers with Spring Boot and PostgreSQL (GitHub)
+URL: https://github.com/LucasKonrath/testcontainers-poc
+Descrição: Projeto demonstrando como usar Testcontainers com Spring Boot e PostgreSQL para testes de integração com banco de dados real.
+
+Referência 99 - Testcontainers (Spring Docs)
+URL: https://docs.spring.io
+Descrição: Documentação oficial do Spring sobre o uso de Testcontainers, incluindo exemplos de gerenciamento de ciclo de vida de containers.
+
+Referência 100 - Testcontainers with Spring Boot PostgreSQL (GitHub)
+URL: https://github.com/hendisantika/spring-boot-test-container-postgresql
+Descrição: Projeto demonstrando a integração de Spring Boot com Testcontainers para testes de banco de dados PostgreSQL.
+
+Referência 101 - WireMock with Spring Boot Example
+URL: https://github.com/wiremock/wiremock-examples
+Descrição: Exemplo de uso do WireMock para simular serviços externos em testes de integração com Spring Boot 3.x.
+
+Referência 102 - WireMock Testcontainers Practice
+URL: https://github.com/etrandafir93/wiremock-testcontainers-practice
+Descrição: Projeto mostrando como usar Testcontainers para iniciar um container Docker com um serviço REST API para fins de teste.
+
+Referência 103 - Java Testcontainers Local Development Demo
+URL: https://github.com/GannaChernyshova/java-testcontainers-local-development
+Descrição: Projeto de demonstração para desenvolvimento local e testes com Docker e Testcontainers.
+
+Referência 104 - How to Test Spring Boot Controllers with @WebMvcTest
+URL: https://www.linkedin.com
+Descrição: Postagem explicando as três ferramentas poderosas para testar apenas a camada web em Spring Boot: @WebMvcTest, @MockBean e MockHttpServletRequestBuilder.
+
+Referência 105 - Analysis of testing approaches for multi-module Spring Boot services
+URL: https://www.ijsr.net
+Descrição: Análise de abordagens para testar serviços multi-módulo baseados em Spring Boot, identificando aspectos-chave sobre eficiência de estratégias e ferramentas.
+
+Referência 106 - Spring Boot Testing Support (Xray Docs)
+URL: https://docs.getxray.app
+Descrição: Documentação sobre como usar as facilidades de teste integradas do Spring Boot com Xray para geração e execução de testes.
+
+Referência 107 - Testing Spring Boot Applications (Philipp Riecks)
+URL: https://gi.de
+Descrição: Apresentação da JUGM com insights práticos e melhores práticas para testar aplicações Spring Boot efetivamente.
+
+Referência 108 - Java Spring Boot Best Practice (Continue.dev)
+URL: https://www.continue.dev
+Descrição: Repositório de melhores práticas para Spring Boot, incluindo sempre escrever testes unitários para métodos públicos com JUnit 5, usar Mockito para mockar dependências e seguir padrão AAA.
+
+Referência 109 - Spring Debugger Plugin (JetBrains)
+URL: https://blog.jetbrains.com
+Descrição: Artigo do blog da JetBrains sobre o plugin Spring Debugger, que registra automaticamente conexões DataSource a bancos iniciados por Testcontainers.
+
+Referência 110 - ArchUnit for DDD Architectural Testing
+URL: https://github.com/o-s-expert/domain-driven-design-java-book
+Descrição: Exemplo de uso da ferramenta ArchUnit para validar a integridade arquitetural e aplicar regras de DDD através de testes.
+
+Referência 111 - JMolecules for DDD Validation
+URL: https://github.com/o-s-expert/domain-driven-design-java-book
+Descrição: Uso da biblioteca JMolecules para manter a integridade arquitetural e validar as regras de DDD em testes.
+
+Referência 112 - Cucumber BDD for Domain Logic Testing
+URL: https://github.com/adam-crowther/microservice-starter
+Descrição: Exemplo de uso de Cucumber para escrever testes BDD que validam a lógica de negócio em um projeto de microsserviços.
+
+Referência 113 - Online Retail Order Processing with Testcontainers
+URL: https://github.com/Samira1462/testcontainers-with-spring-boot-postgres
+Descrição: Projeto Spring Boot com API RESTful para gerenciamento de pedidos de varejo, demonstrando uso de Testcontainers para testes de integração.
+
+Referência 114 - testsmith-ai: LLM Test Case Generation CLI
+URL: https://pypi.org
+Descrição: CLI que gera casos de teste QA a partir de texto, documentos e designs Figma usando LLMs (Anthropic Claude ou Google Gemini).
+
+Referência 115 - Java Testing Toolbox (Extended)
+URL: https://github.com/rieckpil/java-testing-toolbox
+Descrição: Toolbox abrangente explorando o ecossistema de testes Java através de exemplos práticos.
+
+Referência 116 - TDD DDD Demo Java
+URL: https://github.com/alfredorueda/tdd-ddd-demo-java
+Descrição: Demo de aplicação de TDD na implementação de um sistema CRUD simples com refatoração gradual em direção aos padrões táticos de DDD.
+
+
+================== 5. TÉCNICAS AVANÇADAS, FERRAMENTAS DE TESTE E ARXIV ==================
+
+Referência 117 - LLMCFG-TGen: LLM-Generated Control Flow Graphs for Test Cases (arXiv 2025)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Abordagem end-to-end que gera automaticamente casos de teste a partir de descrições NL de caso de uso usando grafos de fluxo de controle gerados por LLM.
+
+Referência 118 - UMTG: NLP-based Acceptance Test Generation from Use Cases (arXiv 2019)
+URL: https://export.arxiv.org
+Descrição: Abordagem que suporta a geração de casos de teste de aceitação executáveis e em nível de sistema a partir de especificações de requisitos em linguagem natural.
+
+Referência 119 - FeedbackLLM: Multi-Agentic Test Case Generator (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework inovador de geração de casos de teste agnóstico a linguagem baseado em dois estágios, evolução de prompts e feedback de cobertura.
+
+Referência 120 - E-Test: Ever-Improving Test Suites with LLMs (arXiv 2025)
+URL: https://browse-export.arxiv.org
+Descrição: Abordagem que reduz a lacuna entre o espaço de execução explorado pelo teste e as execuções pós-teste, aumentando o suite com novos casos.
+
+Referência 121 - TestMap: Evidence Infrastructure for LLM-Assisted Test Generation (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Infraestrutura baseada em evidências para geração de testes assistida por foundation models, focada em observabilidade, repetibilidade e comparabilidade.
+
+Referência 122 - Prompt-Based REST API Test Amplification (arXiv 2026)
+URL: https://export.arxiv.org
+Descrição: Relato de experiência industrial sobre uso de LLMs para amplificação de testes REST API, mostrando aumento de cobertura e revelação de anomalias.
+
+Referência 123 - Hybrid Concolic Testing with LLMs (arXiv 2026)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Combinação de teste concolic com LLMs para exploração guiada de caminhos na geração de testes.
+
+Referência 124 - Test vs Mutant: Adversarial LLM Agents for Unit Test Generation (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Agentes LLM adversarial para geração robusta de testes unitários, superando métodos existentes em até 63% nos benchmarks Defects4J.
+
+Referência 125 - Log-based Business-aware REST API Testing (LoBREST - arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Técnica de teste de API REST baseada em logs históricos de requisição para exercitar funcionalidades sensíveis ao negócio de forma eficaz.
+
+Referência 126 - Call-Chain-Aware LLM Test Generation (CAT - arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Abordagem que incorpora contexto de cadeia de chamadas e dependências em prompts através de análise estática dedicada para geração de testes.
+
+Referência 127 - SPARK: LLM-Based Test Code Fault Localization (arXiv 2026)
+URL: https://export.arxiv.org
+Descrição: Framework para localização de falhas em código de teste usando LLMs com anotação de padrões semelhantes via conhecimento de recuperação.
+
+Referência 128 - GenAI-based test case generation in SDV platform (arXiv 2025)
+URL: https://browse-export.arxiv.org
+Descrição: Abordagem GenAI para geração automatizada de casos de teste, traduzindo requisitos em linguagem natural em casos de teste Gherkin estruturados.
+
+Referência 129 - Automated Web App Testing with LLMs and Screen Transition Graphs (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Sistema automatizado para geração de casos de teste para navegação em sites e preenchimento de formulários usando LLMs e grafos de transição de tela.
+
+Referência 130 - Sakura: Complex Tests from Natural Language Descriptions (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework agente para gerar casos de teste estruturalmente complexos a partir de descrições em linguagem natural da intenção do desenvolvedor.
+
+Referência 131 - MIST: LLM Test Generation for DBMS with Monte Carlo Tree Search (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework de geração de testes para sistemas de gerenciamento de banco de dados usando LLMs combinado com busca Monte Carlo Tree.
+
+Referência 132 - StateGen: Automated Test Generation for Sequential API Calls (arXiv 2025)
+URL: https://browse-export.arxiv.org
+Descrição: Framework automatizado para gerar tarefas diversas de codificação envolvendo interações sequenciais de API, construindo benchmark StateEval com 120 casos verificáveis.
+
+Referência 133 - AutoODD: LLM-Agent Framework for Automated Test Generation (arXiv)
+URL: https://browse-export.arxiv.org
+Descrição: Framework centrado em LLM-Agent para geração automatizada de casos de teste semanticamente relevantes em modelos especializados.
+
+Referência 134 - AI5GTest: AI-Driven Specification-Aware Testing (arXiv 2025)
+URL: https://browse-export.arxiv.org
+Descrição: Framework cooperativo com três LLMs (Gen-LLM, Val-LLM e Debug-LLM) para teste e validação automatizada de componentes 5G O-RAN.
+
+Referência 135 - LoBREST: Log-based Business-aware REST API Testing (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework de teste de API REST consciente de regras de negócio, que utiliza logs históricos para criar casos que testam cenários complexos.
+
+Referência 136 - Model-based Testing of Distributed Systems (arXiv)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Discussão sobre geração eficiente de suites de teste para sistemas distribuídos escritos no modelo ator usando model checking.
+
+Referência 137 - BayesFLo: Bayesian fault localization (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework Bayesiano inovador para localização de falhas em sistemas de software complexos usando dados de teste.
+
+Referência 138 - Bayesian Fault Localization Framework (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Framework Bayesiano flexível para identificar combinações causadoras de falhas durante o teste de sistemas complexos.
+
+Referência 139 - Using LLMs for Black-Box Testing of FMU Simulations (arXiv 2026)
+URL: https://browse-export.arxiv.org
+Descrição: Abordagem humana-no-loop para teste de caixa-preta de unidades funcionais mockup (FMUs) usando LLMs para definição de cenários de teste.
+
+Referência 140 - Automated Test Generation from Use Case Spec (IEEE)
+URL: https://ieeexplore.ieee.org
+Descrição: Método para gerar cenários e dados de teste automaticamente a partir de especificações de caso de uso escritas em FRSL.
+
+Referência 141 - Test Case Generation with ChatGPT (KCI)
+URL: https://www.kci.go.kr
+Descrição: Avaliação experimental do potencial do ChatGPT para automatizar a geração de casos de teste a partir de estruturas de informação de casos de uso.
+
+Referência 142 - Acceptance Test Generation with LLMs (IEEE)
+URL: https://ieeexplore.ieee.org
+Descrição: Exploração do uso de LLMs para gerar testes de aceitação executáveis para aplicações web através de processo em duas etapas.
+
+Referência 143 - Automated Test Generation with Ensemble LLMs and RAG (IEEE)
+URL: https://ieeexplore.ieee.org
+Descrição: Framework que combina LLMs com ensemble direcional parcialmente ponderado e RAG para geração automatizada de casos de teste.
+
+Referência 144 - Test Wars: SBST vs Symbolic Execution vs LLM (arXiv 2025)
+URL: https://export.arxiv.org
+Descrição: Estudo comparativo extensivo de três ferramentas: EvoSuite (SBST), Kex (execução simbólica) e TestSpark (LLM-based).
+
+Referência 145 - Boosting Rust Unit Test Coverage with LLMs (arXiv 2025)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Apresenta PALM, uma abordagem que alavanca LLMs para aumentar cobertura de testes unitários em Rust através de análise híbrida de programa.
+
+Referência 146 - Unit Testing Past vs Present: LLMs Impact (Harvard ADS)
+URL: https://ui.adsabs.harvard.edu
+Descrição: Estudo investigando se suporte LLM melhora a eficácia de detecção de defeitos durante testes unitários.
+
+Referência 147 - Harden and Catch for Just-in-Time Assured LLM Testing (arXiv 2025)
+URL: https://export.arxiv.org
+Descrição: Desafios de pesquisa abertos para assegurar testes de software baseados em LLM just-in-time.
+
+Referência 148 - Black-Box Test Code Fault Localization Driven by LLMs (Harvard ADS)
+URL: https://ui.adsabs.harvard.edu
+Descrição: Abordagem LLM-driven completamente estática para localização de falhas em código de teste de sistema sem executar o caso de teste.
+
+Referência 149 - Adaptive Test Generation with Qgrams (arXiv)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Framework para teste adaptativo randomizado que substitui cálculos de distância pairwise por agregação compacta de execuções passadas.
+
+Referência 150 - Automating System Test Case Classification and Prioritization (arXiv)
+URL: https://ar5iv.labs.arxiv.org
+Descrição: Abordagem automatizada para classificar e priorizar casos de teste de sistema no contexto de desenvolvimento orientado a casos de uso.
+
+Referência 151 - Test-First Protocol from Use Cases (UGM Journal)
+URL: https://journal.ugm.ac.id
+Descrição: Estudo que explora um protocolo estruturado e test-first para transformar especificações de casos de uso em cenários de teste orientados por cobertura.
+
+
+================== 6. REGRAS DE NEGÓCIO - DEFINIÇÃO E GESTÃO ==================
+
+Referência 152 - Business Rules Manifesto
+URL: https://businessrulesgroup.org/brmanifesto.htm
+Descrição: Manifesto que define 10 princípios fundamentais para regras de negócio, incluindo que regras são requisitos primários, devem ser separadas de processos, expressas declarativamente, e gerenciadas como ativos de negócio.
+
+Referência 153 - BABOK Guide - Business Rules Analysis
+URL: https://www.iiba.org/knowledgehub/business-analysis-body-of-knowledge-babok-guide/10-techniques/10-9-business-rules-analysis/
+Descrição: Documento oficial do IIBA que detalha a técnica de análise de regras de negócio, incluindo captura, expressão clara, validação com stakeholders, refinamento e organização de regras para gerenciamento efetivo.
+
+Referência 154 - Agile Modeling - Business Rules
+URL: https://agilemodeling.com/artifacts/businessrule.htm
+Descrição: Guia prático sobre modelagem ágil de regras de negócio, abordando coesão, separação de processos, e princípios do Business Rule Approach de Ronald Ross para expressão clara e gerenciamento de regras.
+
+Referência 155 - Business Rules Community - What Is a Business Rule?
+URL: https://www.brcommunity.com/articles.php?id=b525
+Descrição: Artigo de Ronald Ross explicando os fundamentos de regras de negócio, incluindo categorias de regras definicionais e comportamentais, e a importância de vocabulário de negócio estruturado para expressão de regras.
+
+Referência 156 - BREX: Business Rule Extraction Benchmark (arXiv 2025)
+URL: https://arxiv.org/html/2505.18542
+Descrição: Benchmark para modelagem de fluxo de regras de negócio com 409 documentos reais e 2.855 regras anotadas, introduzindo framework ExIde para extração de regras atômicas e raciocínio de dependências globais.
+
+Referência 157 - RuleCNL: Controlled Natural Language for Business Rules (arXiv 2014)
+URL: https://ar5iv.labs.arxiv.org/html/1406.2096
+Descrição: Linguagem natural controlada (CNL) para especificação de regras de negócio, com alinhamento ao vocabulário de negócio e mapeamento automático para o padrão SBVR (Semantics of Business Vocabulary and Business Rules).
+
+Referência 158 - DeepRule: Automated Business Rule Generation (arXiv 2025)
+URL: https://arxiv.org/abs/2512.03607v1
+Descrição: Framework integrado para geração automatizada de regras de negócio em otimização de sortimento e preços de varejo, usando LLMs para parsing semântico, otimização com restrições e síntese de estratégias interpretáveis.
+
+Referência 159 - Rule Module Inheritance with Modification Restrictions (arXiv 2018)
+URL: https://ar5iv.labs.arxiv.org/html/1808.08634
+Descrição: Abordagem para herança de módulos de regras com restrições de modificação, permitindo reutilização e adaptação de conjuntos de regras em diferentes contextos enquanto controla a proliferação de variações.
+
+Referência 160 - SBVR-based Business Rule Creation for Legacy Programs (ACM 2019)
+URL: https://dl.acm.org/doi/10.1145/3299771.3299786
+Descrição: Método que combina análise de programa e conhecimento de domínio para criar descrições de regras de TI usando proveniência de variáveis, gerando automaticamente regras SBVR a partir de código legado.

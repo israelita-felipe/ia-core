@@ -1,7 +1,6 @@
 package com.ia.core.owl.service;
 
 import com.ia.core.owl.service.model.TransformacaoResultDTO;
-import org.springframework.ai.chat.model.ChatModel;
 
 /**
  * Interface de Use Case para transformação de descrições em linguagem natural
@@ -24,7 +23,7 @@ public interface OwlTransformationUseCase {
    *         informações de status
    * @throws IllegalArgumentException se algum parâmetro for nulo ou vazio
    */
-  TransformacaoResultDTO transformarParaOWL(String template,
+  TransformacaoResultDTO transformarParaOWL(String sessionId,String template,
                                             String descricaoNatural);
 
   /**
@@ -37,17 +36,11 @@ public interface OwlTransformationUseCase {
    *         informações de status
    * @throws IllegalArgumentException se algum parâmetro for nulo ou vazio
    */
-  TransformacaoResultDTO transformarParaOWL(String descricaoNatural);
+  TransformacaoResultDTO transformarParaOWL(String sessionId,String descricaoNatural);
 
   /**
    * @return o template padrão usado para prompts de geração de OWL.
    */
   String getPromptTemplate();
 
-  /**
-   * Retorna o ChatClient utilizado pelo serviço.
-   *
-   * @return o ChatClient instance
-   */
-  ChatModel getChatModel();
 }

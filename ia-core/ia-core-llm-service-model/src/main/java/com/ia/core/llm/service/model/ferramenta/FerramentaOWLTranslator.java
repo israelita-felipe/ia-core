@@ -15,6 +15,13 @@ public class FerramentaOWLTranslator {
   public static final String CONSTRUTOR = "ferramentaOWL.construtor";
   public static final String PARAMETROS_ADICIONAIS = "ferramentaOWL.parametrosAdicionais";
 
+  public static final class HELP {
+    public static final String DESCRICAO_NATUREZA = "ferramentaOWL.help.descricaoNatureza";
+    public static final String CONTEXTO_ONTOLOGIA = "ferramentaOWL.help.contextoOntologia";
+    public static final String CONSTRUTOR = "ferramentaOWL.help.construtor";
+    public static final String PARAMETROS_ADICIONAIS = "ferramentaOWL.help.parametrosAdicionais";
+  }
+
   public static final class VALIDATION {
     public static final String DESCRICAO_REQUIRED = "ferramentaOWL.validation.descricao.required";
   }

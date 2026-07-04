@@ -13,6 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -59,9 +60,9 @@ public class ResilienceAspect {
     public ResilienceAspect(ResilienceRegistry resilienceRegistry,
                             ResilienceTemplate resilienceTemplate,
                             ResilienceExecutionChainBuilder executionChainBuilder) {
-        this.resilienceRegistry = resilienceRegistry;
-        this.resilienceTemplate = resilienceTemplate;
-        this.executionChainBuilder = executionChainBuilder;
+        this.resilienceRegistry = Objects.requireNonNull(resilienceRegistry, "resilienceRegistry must not be null");
+        this.resilienceTemplate = Objects.requireNonNull(resilienceTemplate, "resilienceTemplate must not be null");
+        this.executionChainBuilder = Objects.requireNonNull(executionChainBuilder, "executionChainBuilder must not be null");
     }
 
     /**

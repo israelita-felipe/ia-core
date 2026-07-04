@@ -7,11 +7,12 @@ Accepted
 Os módulos de agendamento (quartz) precisam seguir padrões estabelecidos para representação e troca de dados de calendário e agendamento. Precisamos garantir conformidade com as especificações iCalendar e iTIP para interoperabilidade com sistemas de calendário padrão.
 
 ## Decision
-Vamos utilizar iCalendar (RFC 5545) e iTIP (RFC 5546) para todos os módulos de agendamento no sistema, incluindo:
+Vamos utilizar iCalendar (RFC 5545) e iTIP (RFC 5546) como especificações vigentes para todos os módulos de agendamento no sistema, incluindo:
 - Representação de eventos, tarefas e diários em formato iCalendar
 - Troca de solicitações de agendamento usando iTIP (invocações, respostas, cancelamentos)
 - Suporte a propriedades essenciais como DTSTART, DTEND, SUMMARY, DESCRIPTION, UID, etc.
 - Implementação de métodos iTIP como REQUEST, REPLY, CANCEL, ADD, etc.
+- Tratamento de RFC 2445 e RFC 2446 como referências históricas, preservando RFC 5545/RFC 5546 como padrão primário
 
 ## Consequences
 ### Positivos

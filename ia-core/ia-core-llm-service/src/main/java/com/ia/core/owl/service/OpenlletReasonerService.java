@@ -1,6 +1,5 @@
 package com.ia.core.owl.service;
 
-import com.ia.core.owl.service.exception.OWLParserException;
 import openllet.owlapi.OpenlletReasonerFactory;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.InferenceType;
@@ -55,34 +54,36 @@ public class OpenlletReasonerService
           new InferredEquivalentDataPropertiesAxiomGenerator());
   /** Reasoner Openllet */
   private OWLReasoner reasoner;
-  /** Manager */
-  private final OWLOntologyManager manager;
-  private final OWLOntology ontology;
-  private final PrefixManager prefixManager;
+  /** OWL Service for parsing OntologiaDTO to OWLOntology */
+  private final DefaultOwlService owlService;
 
   /**
    * Constrói um novo serviço de reasoner Openllet.
    *
-   * @param parser o parser Manchester OWL utilizado para criar ontologias (não
-   *               pode ser nulo)
-   * @throws IllegalArgumentException se o parser for nulo
+   * @param owlService the OWL service for parsing OntologiaDTO
    */
-  public OpenlletReasonerService(OWLOntologyManager manager,
-                                 OWLOntology ontology,
-                                 PrefixManager prefixManager) {
-    this.manager = Objects.requireNonNull(manager,
-                                          "manager cannot be null");
-    this.ontology = Objects.requireNonNull(ontology,
-                                           "ontology cannot be null");
-    this.prefixManager = Objects
-        .requireNonNull(prefixManager, "prefixManager cannot be null");
+  public OpenlletReasonerService(DefaultOwlService owlService) {
+    this.owlService = Objects.requireNonNull(owlService, "owlService cannot be null");
   }
 
   /**
-   * Inicializa o reasoner Openllet com a ontologia carregada e pré-computa
+   * Inicializa o reasoner Openllet com a ontologia OWL carregada e pré-computa
+   *
+   * @param ontology the OWL ontology to load into the reasoner
    */
   @Override
-  public void refreshReasoner() {
+  public void refreshReasoner(OWLOntology ontology) {
+    Objects.requireNonNull(ontology, "ontology cannot be null");
+    refreshReasonerWithOntology(ontology);
+  }
+
+  /**
+   * Inicializa o reasoner Openllet com a ontologia OWL carregada e pré-computa
+   *
+   * @param ontology the OWL ontology to load into the reasoner
+   */
+  private void refreshReasonerWithOntology(OWLOntology ontology) {
+    Objects.requireNonNull(ontology, "ontology cannot be null");
     OpenlletReasonerFactory reasonerFactory = OpenlletReasonerFactory
         .getInstance();
     // limpa a instância anterior
@@ -90,6 +91,7 @@ public class OpenlletReasonerService
     this.reasoner = reasonerFactory.createReasoner(ontology);
     precomputeInferences();
   }
+
 
   /**
    * Pré-computa os tipos de inferências padrão para otimizar consultas futuras.
@@ -115,7 +117,7 @@ public class OpenlletReasonerService
    */
   @Override
   public boolean isConsistent() {
-    validateOntologyLoaded();
+    validateReasonerLoaded();
     return reasoner.isConsistent();
   }
 
@@ -128,7 +130,7 @@ public class OpenlletReasonerService
    */
   @Override
   public Set<OWLClass> getUnsatisfiableClasses() {
-    validateOntologyLoaded();
+    validateReasonerLoaded();
     return reasoner.getUnsatisfiableClasses().getEntitiesMinusBottom();
   }
 
@@ -139,33 +141,35 @@ public class OpenlletReasonerService
    * original mas foram inferidos pelo reasoner.
    * </p>
    *
+   * @param ontology the ontology to perform inferences on
    * @return lista de axiomas inferidos em formato Manchester
-   * @throws OWLParserException
    * @throws IllegalStateException se a ontologia não estiver carregada ou for
    *                               inconsistente
    * @throws RuntimeException      se ocorrer erro durante a geração da
    *                               ontologia inferida
    */
   @Override
-  public Set<OWLAxiom> performInferences()
-    throws OWLParserException {
+  public Set<OWLAxiom> performInferences(OWLOntology ontology) {
     try {
+      Objects.requireNonNull(ontology, "ontology cannot be null");
+      OWLOntologyManager manager = ontology.getOWLOntologyManager();
       validateConsistentOntology();
-      OWLOntology inferredOntology = createInferredOntology();
+      OWLOntology inferredOntology = createInferredOntology(manager);
       return inferredOntology.getAxioms();
     } catch (Exception e) {
-      throw new OWLParserException(e.getLocalizedMessage(), e);
+      throw new RuntimeException(e.getLocalizedMessage(), e);
     }
   }
 
   /**
    * Cria uma ontologia contendo os axiomas inferidos pelo reasoner.
    *
+   * @param manager the ontology manager to use
    * @return ontologia com axiomas inferidos
    * @throws OWLOntologyCreationException se ocorrer erro na criação da
    *                                      ontologia
    */
-  private OWLOntology createInferredOntology()
+  private OWLOntology createInferredOntology(OWLOntologyManager manager)
     throws OWLOntologyCreationException {
     OWLOntology inferredOntology = manager.createOntology();
 
@@ -195,16 +199,18 @@ public class OpenlletReasonerService
    * </ul>
    * </p>
    *
+   * @param ontology the ontology to check for inconsistencies
    * @return lista de mensagens descrevendo as inconsistências encontradas
    * @throws IllegalStateException se nenhuma ontologia estiver carregada
    */
   @Override
-  public List<String> detectInconsistencies() {
-    validateOntologyLoaded();
+  public List<String> detectInconsistencies(OWLOntology ontology) {
+    Objects.requireNonNull(ontology, "ontology cannot be null");
+    validateReasonerLoaded();
 
     List<String> inconsistencies = new ArrayList<>();
     checkGlobalConsistency(inconsistencies);
-    checkDisjointClassViolations(inconsistencies);
+    checkDisjointClassViolations(ontology, inconsistencies);
 
     return inconsistencies;
   }
@@ -241,10 +247,11 @@ public class OpenlletReasonerService
    * * Verifica violações de classes disjuntas na ontologia e adiciona detalhes
    * à lista fornecida.
    *
+   * @param ontology the ontology to check
    * @param inconsistencies lista onde as mensagens de inconsistência serão
    *                        adicionadas
    */
-  private void checkDisjointClassViolations(List<String> inconsistencies) {
+  private void checkDisjointClassViolations(OWLOntology ontology, List<String> inconsistencies) {
     for (OWLClass cls : ontology.getClassesInSignature()) {
       checkDisjointViolationsForClass(cls, inconsistencies);
     }
@@ -323,7 +330,7 @@ public class OpenlletReasonerService
    */
   @Override
   public void classify() {
-    validateOntologyLoaded();
+    validateReasonerLoaded();
     reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
   }
 
@@ -343,13 +350,13 @@ public class OpenlletReasonerService
   }
 
   /**
-   * Valida se uma ontologia está carregada.
+   * Valida se o reasoner está carregado.
    *
-   * @throws IllegalStateException se nenhuma ontologia estiver carregada
+   * @throws IllegalStateException se nenhum reasoner estiver carregado
    */
-  private void validateOntologyLoaded() {
-    if (ontology == null || reasoner == null) {
-      throw new IllegalStateException("Ontology not loaded. Call loadOntology() first.");
+  private void validateReasonerLoaded() {
+    if (reasoner == null) {
+      throw new IllegalStateException("Reasoner not loaded. Call refreshReasoner() first.");
     }
   }
 
@@ -360,7 +367,7 @@ public class OpenlletReasonerService
    *                               for inconsistente
    */
   private void validateConsistentOntology() {
-    validateOntologyLoaded();
+    validateReasonerLoaded();
     if (!isConsistent()) {
       throw new IllegalStateException("Ontologia inconsistente - não é possível realizar inferências");
     }

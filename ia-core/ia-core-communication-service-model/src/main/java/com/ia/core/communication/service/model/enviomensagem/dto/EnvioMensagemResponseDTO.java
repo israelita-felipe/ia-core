@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DTO para resposta de envio de mensagem em massa.
@@ -55,5 +56,18 @@ public class EnvioMensagemResponseDTO {
         .dataEnvio(LocalDateTime.now())
         .statusGeral("PARCIAL")
         .build();
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String TOTAL_ENVIADOS = "totalEnviados";
+    public static final String TOTAL_FALHAS = "totalFalhas";
+    public static final String MENSAGENS_FALHAS = "mensagensFalhas";
+    public static final String DATA_ENVIO = "dataEnvio";
+    public static final String STATUS_GERAL = "statusGeral";
+
+    public static Set<String> values() {
+      return Set.of(TOTAL_ENVIADOS, TOTAL_FALHAS, MENSAGENS_FALHAS, DATA_ENVIO, STATUS_GERAL);
+    }
   }
 }

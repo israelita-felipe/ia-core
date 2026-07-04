@@ -1,62 +1,79 @@
 package com.ia.core.owl.service.tool.dataproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas DisjointDataProperties.
+ * Tool para criação de axiomas DisjointDataProperties OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades de dado disjuntas
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedades de dado mutuamente exclusivas (não podem ter valores em comum).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * DisjointDataProperties é um axioma que declara que duas ou mais propriedades de dado são
+ * mutuamente exclusivas, ou seja, não podem ter o mesmo valor literal para a mesma instância.
+ * Se uma instância x tem valor v via propriedade P, não pode ter valor v via propriedade Q.
+ * <p>
+ * <b>Sintaxe Manchester:</b> DisjointDataProperties(:Propriedade1 :Propriedade2 ...)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>idade e dataNascimento são disjuntas (uma pessoa não pode ter o mesmo valor para ambos):
+ *       DisjointDataProperties(:idade :dataNascimento)</li>
+ *   <li>salarioMensal e salarioAnual são disjuntas:
+ *       DisjointDataProperties(:salarioMensal :salarioAnual)</li>
+ *   <li>pesoKg e alturaMetros são disjuntas:
+ *       DisjointDataProperties(:pesoKg :alturaMetros)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class DisjointDataPropertiesTool extends AbstractOWLTool {
+public class DisjointDataPropertiesTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "DisjointDataProperties";
-
-  public DisjointDataPropertiesTool(ChatModel chatModel,
-                                   LLMCommunicator llmCommunicator,
-                                   DefaultOwlService owlService,
-                                   TemplateService templateService,
-                                   FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public DisjointDataPropertiesTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria um axioma DisjointDataProperties na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property1 Primeira propriedade de dado
+   * @param property2 Segunda propriedade de dado (disjunta da primeira)
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um axioma DisjointDataProperties OWL 2 DL na ontologia da sessão. " +
+                     "Declara que duas ou mais propriedades de dado são disjuntas (mutuamente exclusivas). " +
+                     "Não podem ter o mesmo valor literal para a mesma instância. " +
+                     "Exemplos: " +
+                     "1) idade e dataNascimento são disjuntas → DisjointDataProperties(:idade :dataNascimento). " +
+                     "2) salarioMensal e salarioAnual são disjuntas → DisjointDataProperties(:salarioMensal :salarioAnual). " +
+                     "3) pesoKg e alturaMetros são disjuntas → DisjointDataProperties(:pesoKg :alturaMetros). " +
+                     "Útil para definir propriedades de dado que não podem ter valores em comum.")
+  public String createDisjointDataProperties(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeira propriedade de dado", required = true) String property1,
+      @ToolParam(description = "Segunda propriedade de dado (disjunta da primeira)", required = true) String property2) {
 
-  @Override
-  public String getDescription() { return "Declara propriedades de dado disjuntas"; }
+    log.debug("Criando DisjointDataProperties: {} disjunta de {}", property1, property2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas DisjointDataProperties.
-      Construtor: DisjointDataProperties
-      Descrição: Declara que duas propriedades de dado são disjuntas.
-      Sintaxe Manchester: DisjointDataProperties(<propriedade1> <propriedade2>)
-      Exemplos:
-      - "idade e dataNascimento são disjuntas" → DisjointDataProperties(:idade :dataNascimento)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "DisjointDataProperties(" + property1 + " " + property2 + ")";
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("idade e dataNascimento são disjuntas", "salario e bonus são disjuntas");
+    log.debug("Resultado da criação de DisjointDataProperties: {}", result);
+    return result;
   }
 }

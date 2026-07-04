@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Set;
+
 /**
  * DTO para requisição de chat.
  * <p>
@@ -25,15 +27,29 @@ public class ChatRequestDTO
 
   private Long promptId;
 
-  @NotNull(message = "{validation.chat.request.required}")
-  @Size(min = 1, max = 5000, message = "{validation.chat.request.size}")
+  @NotNull(message = ChatTranslator.VALIDATION.CHAT_NOT_BLANK)
+  @Size(min = 1, max = 5000, message = ChatTranslator.VALIDATION.CHAT_NOT_BLANK)
   private String request;
 
   private String text;
 
+  private String sessionId;
+
   @Override
   public ChatRequestDTO cloneObject() {
     return toBuilder().build();
+  }
+
+  public static class CAMPOS {
+    public static final String PROMPT_ID = "promptId";
+    public static final String REQUEST = "request";
+    public static final String TEXT = "text";
+    public static final String SESSION_ID = "sessionId";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(PROMPT_ID, REQUEST, TEXT, SESSION_ID, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 
 }

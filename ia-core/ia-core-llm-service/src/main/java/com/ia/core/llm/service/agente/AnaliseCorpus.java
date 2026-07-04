@@ -1,8 +1,9 @@
 package com.ia.core.llm.service.agente;
 
-import com.ia.core.owl.service.LLMCommunicator;
+import com.ia.core.llm.service.chat.ChatService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,18 +26,15 @@ import java.util.regex.Pattern;
 @Service
 public class AnaliseCorpus {
 
-  private final ChatModel chatModel;
-  private final LLMCommunicator llmCommunicator;
+  private final ChatService chatService;
   private final ExtratorEntidadesRelacoes extrator;
 
   private static final Pattern FRASE_PATTERN = Pattern.compile("[.!?]+\\s*");
   private static final Pattern PALAVRA_PATTERN = Pattern.compile("\\b[a-zA-ZÀ-ÿ]{3,}\\b");
 
-  public AnaliseCorpus(ChatModel chatModel,
-                      LLMCommunicator llmCommunicator,
+  public AnaliseCorpus(ChatService chatService,
                       ExtratorEntidadesRelacoes extrator) {
-    this.chatModel = chatModel;
-    this.llmCommunicator = llmCommunicator;
+    this.chatService = chatService;
     this.extrator = extrator;
   }
 
@@ -46,7 +44,11 @@ public class AnaliseCorpus {
    * @param corpus texto do corpus
    * @return mapa com elementos extraídos
    */
-  public Map<String, List<String>> analisarCorpus(String corpus) {
+  @Tool(description = "Analisa um corpus de texto e extrai elementos ontológicos (classes, propriedades, indivíduos, relações). " +
+                     "Divide o texto em sentenças e usa o ExtratorEntidadesRelacoes para identificar elementos em cada sentença. " +
+                     "Remove duplicatas e retorna um mapa com listas de elementos únicos.")
+  public Map<String, List<String>> analisarCorpus(@ToolParam(description = "Texto do corpus a ser analisado") String corpus,
+                                                 @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     log.info("Iniciando análise de corpus: tamanho={} caracteres", corpus.length());
 
     Map<String, List<String>> elementos = new TreeMap<>();
@@ -64,10 +66,10 @@ public class AnaliseCorpus {
     for (String sentenca : sentencas) {
       if (sentenca.length() < 10) continue; // Ignora sentenças muito curtas
 
-      todasClasses.addAll(extrator.extrairClasses(sentenca));
-      todasPropriedades.addAll(extrator.extrairPropriedadesObjeto(sentenca));
-      todosIndividuos.addAll(extrator.extrairIndividuos(sentenca));
-      todasRelacoes.addAll(extrator.extrairRelacoes(sentenca));
+      todasClasses.addAll(extrator.extrairClasses(sentenca, sessionId));
+      todasPropriedades.addAll(extrator.extrairPropriedadesObjeto(sentenca, sessionId));
+      todosIndividuos.addAll(extrator.extrairIndividuos(sentenca, sessionId));
+      todasRelacoes.addAll(extrator.extrairRelacoes(sentenca, sessionId));
     }
 
     // Remove duplicatas
@@ -91,7 +93,11 @@ public class AnaliseCorpus {
    * @param corpus texto do corpus
    * @return mapa com elementos extraídos pelo LLM
    */
-  public Map<String, List<String>> analisarCorpusComLLM(String corpus) {
+  @Tool(description = "Analisa um corpus de texto usando LLM para extração profunda de elementos ontológicos. " +
+                     "Usa o ChatService para enviar um prompt especializado ao LLM que identifica classes, propriedades, indivíduos e relações. " +
+                     "Retorna um mapa JSON com os elementos extraídos.")
+  public Map<String, List<String>> analisarCorpusComLLM(@ToolParam(description = "Texto do corpus a ser analisado pelo LLM") String corpus,
+                                                        @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     log.info("Iniciando análise de corpus com LLM");
 
     String prompt = String.format("""
@@ -118,7 +124,7 @@ public class AnaliseCorpus {
     Map<String, List<String>> elementos = new TreeMap<>();
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
 
       // Parse simplificado do JSON (na implementação completa, usaria biblioteca JSON)
       parseRespostaLLM(resposta, elementos);
@@ -142,7 +148,11 @@ public class AnaliseCorpus {
    * @param corpus texto do corpus
    * @return domínio identificado
    */
-  public String identificarDominio(String corpus) {
+  @Tool(description = "Identifica o domínio principal de um corpus de texto usando LLM. " +
+                     "Analisa o conteúdo e retorna uma única palavra representando o domínio (ex: biologia, medicina, finanças). " +
+                     "Útil para categorizar ontologias por domínio de conhecimento.")
+  public String identificarDominio(@ToolParam(description = "Texto do corpus para identificar o domínio") String corpus,
+                                 @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     String prompt = String.format("""
         Você é um especialista em análise de texto.
         Identifique o domínio principal do seguinte texto.
@@ -154,7 +164,7 @@ public class AnaliseCorpus {
         """, corpus.length() > 2000 ? corpus.substring(0, 2000) : corpus);
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
       String dominio = resposta.trim().split("\n")[0];
       log.debug("Domínio identificado: {}", dominio);
       return dominio;
@@ -170,7 +180,10 @@ public class AnaliseCorpus {
    * @param corpus texto do corpus
    * @return mapa com estatísticas
    */
-  public Map<String, Object> calcularEstatisticas(String corpus) {
+  @Tool(description = "Calcula estatísticas detalhadas de um corpus de texto. " +
+                     "Retorna métricas como total de caracteres, sentenças, palavras, média de palavras por sentença e vocabulário único. " +
+                     "Útil para entender a complexidade e tamanho do corpus antes da análise ontológica.")
+  public Map<String, Object> calcularEstatisticas(@ToolParam(description = "Texto do corpus para calcular estatísticas") String corpus) {
     Map<String, Object> stats = new TreeMap<>();
 
     List<String> sentencas = dividirEmSentencas(corpus);
@@ -231,38 +244,77 @@ public class AnaliseCorpus {
    * Parse simplificado da resposta JSON do LLM.
    */
   private void parseRespostaLLM(String resposta, Map<String, List<String>> elementos) {
-    // Parse simplificado - na implementação completa usaria Jackson/Gson
-    String[] linhas = resposta.split("\n");
-    List<String> classes = new ArrayList<>();
-    List<String> propriedades = new ArrayList<>();
-    List<String> individuos = new ArrayList<>();
-    List<String> relacoes = new ArrayList<>();
+    try {
+      // Extrai o JSON da resposta (pode estar entre ```json e ```)
+      String jsonStr = resposta;
+      if (resposta.contains("```json")) {
+        jsonStr = resposta.substring(resposta.indexOf("```json") + 7, resposta.lastIndexOf("```"));
+      } else if (resposta.contains("```")) {
+        jsonStr = resposta.substring(resposta.indexOf("```") + 3, resposta.lastIndexOf("```"));
+      }
+      jsonStr = jsonStr.trim();
 
-    String chaveAtual = null;
-    for (String linha : linhas) {
-      linha = linha.trim();
-      if (linha.contains("\"classes\":")) {
-        chaveAtual = "classes";
-      } else if (linha.contains("\"propriedades\":")) {
-        chaveAtual = "propriedades";
-      } else if (linha.contains("\"individuos\":")) {
-        chaveAtual = "individuos";
-      } else if (linha.contains("\"relacoes\":")) {
-        chaveAtual = "relacoes";
-      } else if (linha.startsWith("\"") && linha.endsWith("\",")) {
-        String valor = linha.substring(1, linha.length() - 2);
-        switch (chaveAtual) {
-          case "classes" -> classes.add(valor);
-          case "propriedades" -> propriedades.add(valor);
-          case "individuos" -> individuos.add(valor);
-          case "relacoes" -> relacoes.add(valor);
+      // Parse manual do JSON (simplificado para evitar dependência de Jackson/Gson)
+      List<String> classes = extrairArray(jsonStr, "classes");
+      List<String> propriedades = extrairArray(jsonStr, "propriedades");
+      List<String> individuos = extrairArray(jsonStr, "individuos");
+      List<String> relacoes = extrairArray(jsonStr, "relacoes");
+
+      elementos.put("classes", classes);
+      elementos.put("propriedades", propriedades);
+      elementos.put("individuos", individuos);
+      elementos.put("relacoes", relacoes);
+
+      log.debug("Parse JSON concluído: classes={}, propriedades={}, individuos={}, relacoes={}",
+               classes.size(), propriedades.size(), individuos.size(), relacoes.size());
+
+    } catch (Exception e) {
+      log.warn("Erro ao parsear resposta JSON do LLM: {}", e.getMessage());
+      // Em caso de erro, inicializa listas vazias
+      elementos.put("classes", new ArrayList<>());
+      elementos.put("propriedades", new ArrayList<>());
+      elementos.put("individuos", new ArrayList<>());
+      elementos.put("relacoes", new ArrayList<>());
+    }
+  }
+
+  /**
+   * Extrai um array JSON manualmente.
+   */
+  private List<String> extrairArray(String json, String chave) {
+    List<String> valores = new ArrayList<>();
+    String pattern = "\"" + chave + "\"\\s*:\\s*\\[";
+    int startIdx = json.indexOf(pattern);
+    if (startIdx == -1) {
+      return valores;
+    }
+
+    int arrayStart = startIdx + pattern.length();
+    int bracketCount = 0;
+    StringBuilder currentValue = new StringBuilder();
+    boolean inString = false;
+
+    for (int i = arrayStart; i < json.length(); i++) {
+      char c = json.charAt(i);
+
+      if (c == '"' && (i == 0 || json.charAt(i - 1) != '\\')) {
+        inString = !inString;
+        if (!inString && currentValue.length() > 0) {
+          valores.add(currentValue.toString());
+          currentValue = new StringBuilder();
+        }
+      } else if (inString) {
+        currentValue.append(c);
+      } else if (c == '[') {
+        bracketCount++;
+      } else if (c == ']') {
+        bracketCount--;
+        if (bracketCount == 0) {
+          break;
         }
       }
     }
 
-    elementos.put("classes", classes);
-    elementos.put("propriedades", propriedades);
-    elementos.put("individuos", individuos);
-    elementos.put("relacoes", relacoes);
+    return valores;
   }
 }

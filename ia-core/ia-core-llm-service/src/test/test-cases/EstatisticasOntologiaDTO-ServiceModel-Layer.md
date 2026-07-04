@@ -1,0 +1,7 @@
+# Test Case: EstatisticasOntologiaDTO - ServiceModel Layer
+
+## Aderência a ADRs
+
+### Matriz de conformidade
+
+### Referências ADR

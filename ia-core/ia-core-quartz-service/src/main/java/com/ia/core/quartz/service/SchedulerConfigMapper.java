@@ -19,7 +19,7 @@ import org.mapstruct.Mapper;
  * @author IA
  * @since 1.0
  */
-@Mapper(componentModel = "spring", uses = { PeriodicidadeMapper.class })
+@Mapper(componentModel = "spring", uses = { PeriodicidadeMapper.class, SchedulerConfigTriggerMapper.class })
 public interface SchedulerConfigMapper
   extends BaseEntityMapper<SchedulerConfig, SchedulerConfigDTO> {
 

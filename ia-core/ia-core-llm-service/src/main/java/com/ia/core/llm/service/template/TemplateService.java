@@ -5,9 +5,9 @@ import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.service.model.template.TemplateUseCase;
 import com.ia.core.service.CrudBaseService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -20,13 +20,12 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Slf4j
-@Service
 public class TemplateService
   extends CrudBaseService<Template, TemplateDTO>
   implements TemplateUseCase {
 
   public TemplateService(TemplateServiceConfig config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 
   /**
@@ -36,17 +35,18 @@ public class TemplateService
    * @return DTO do template
    */
   public Optional<TemplateDTO> loadById(String templateId) {
+    Objects.requireNonNull(templateId, "templateId não pode ser null");
     log.debug("Carregando template por ID: {}", templateId);
     return getRepository().findByIdentificador(templateId)
         .map(getMapper()::toDTO);
   }
 
-    @Override
-    public TemplateRepository getRepository() {
-        return super.getRepository();
-    }
+  @Override
+  public TemplateRepository getRepository() {
+    return (TemplateRepository) super.getRepository();
+  }
 
-    /**
+  /**
    * Processa um template substituindo os parâmetros pelos valores fornecidos.
    *
    * @param template DTO do template
@@ -54,7 +54,8 @@ public class TemplateService
    * @return template processado com os parâmetros substituídos
    */
   public String processTemplate(TemplateDTO template, Map<String, Object> params) {
-    if (template == null || template.getConteudo() == null) {
+    Objects.requireNonNull(template, "template não pode ser null");
+    if (template.getConteudo() == null) {
       return "";
     }
 

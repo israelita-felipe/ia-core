@@ -6,8 +6,6 @@ import com.ia.core.llm.service.template.TemplateService;
 import com.ia.core.rest.control.DefaultBaseController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller REST para gerenciamento de templates.
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  */
 @Slf4j
-@RestController
-@RequestMapping("/api/v1/llm/templates")
 @Tag(name = "Template", description = "Gerenciamento de templates de prompt")
 public class TemplateController
   extends DefaultBaseController<Template,TemplateDTO> {

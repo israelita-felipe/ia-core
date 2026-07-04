@@ -1,14 +1,19 @@
 package com.ia.core.llm.service.template;
 
 import com.ia.core.llm.model.prompt.FinalidadePromptEnum;
+import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.model.template.TemplateParameterEnum;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementação de PromptTemplateService.
@@ -18,7 +23,12 @@ import java.util.Map;
  * @author Israel Araújo
  * @since 1.0.0
  */
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class PromptTemplateServiceImpl implements PromptTemplateService {
+
+  private final TemplateRepository templateRepository;
 
   @Override
   public Prompt createSimplePrompt(String document, String text) {
@@ -55,5 +65,22 @@ public class PromptTemplateServiceImpl implements PromptTemplateService {
   @Override
   public PromptTemplate createPromptTemplate(String templateString) {
     return new PromptTemplate(templateString);
+  }
+
+  @Override
+  public String processTemplate(String templateId, Map<String, Object> params) {
+    String templateContent = getTemplateById(templateId);
+    PromptTemplate promptTemplate = new PromptTemplate(templateContent);
+    return promptTemplate.render(params);
+  }
+
+  @Override
+  public String getTemplateById(String templateId) {
+    Optional<Template> template = templateRepository.findByIdentificador(templateId);
+    if (template.isEmpty()) {
+      log.warn("Template não encontrado: {}", templateId);
+      throw new IllegalArgumentException("Template não encontrado: " + templateId);
+    }
+    return template.get().getConteudo();
   }
 }

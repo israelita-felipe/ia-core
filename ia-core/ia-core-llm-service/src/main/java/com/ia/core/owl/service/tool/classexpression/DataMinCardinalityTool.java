@@ -1,62 +1,112 @@
 package com.ia.core.owl.service.tool.classexpression;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas DataMinCardinality.
+ * Tool para criação de cardinalidade mínima de dado OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar cardinalidades mínimas de dado
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa cardinalidade mínima não qualificada sobre dados (≥ n U).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * DataMinCardinality é um construtor de restrição de classe que indica que instâncias da classe
+ * devem ter pelo menos n valores de uma propriedade de dado. É uma restrição de cardinalidade
+ * que garante um número mínimo de valores de dados.
+ * <p>
+ * <b>Sintaxe Manchester:</b> SubClassOf(:Classe DataMinCardinality(n :Propriedade))
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>Usuário com e-mail tem pelo menos 1 e-mail:
+ *       SubClassOf(:UsuarioComEmail DataMinCardinality(1 :temEmail))</li>
+ *   <li>Pessoa contatável possui no mínimo 2 números de telefone:
+ *       EquivalentTo(:PessoaContatavel ObjectIntersectionOf(:Pessoa DataMinCardinality(2 :temTelefone)))</li>
+ *   <li>Candidato a emprego forneceu pelo menos 3 referências:
+ *       SubClassOf(:CandidatoComReferencias DataMinCardinality(3 :temReferencia))</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class DataMinCardinalityTool extends AbstractOWLTool {
+public class DataMinCardinalityTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "DataMinCardinality";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas DataMinCardinality.
-      Construtor: DataMinCardinality
-      Descrição: Declara que uma propriedade de dado tem pelo menos N valores.
-      Sintaxe Manchester: DataMinCardinality(<n> <propriedade> <tipo_dado>)
-      Exemplos:
-      - "Pessoa tem pelo menos 1 nome" → SubClassOf(:Pessoa DataMinCardinality(1 :temNome xsd:string))
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public DataMinCardinalityTool(ChatModel chatModel,
-                                 LLMCommunicator llmCommunicator,
-                                 DefaultOwlService owlService,
-                                 TemplateService templateService,
-                                 FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public DataMinCardinalityTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+  /**
+   * Cria uma cardinalidade mínima não qualificada de dado na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade mínima (n)
+   * @param property Propriedade de dado
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade mínima não qualificada de dado OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade mínima não qualificada sobre dados (≥ n U). " +
+                     "Indica que instâncias da classe devem ter pelo menos n valores de uma propriedade de dado. " +
+                     "Exemplos: " +
+                     "1) Usuário com e-mail tem pelo menos 1 e-mail → SubClassOf(:UsuarioComEmail DataMinCardinality(1 :temEmail)). " +
+                     "2) Pessoa contatável possui no mínimo 2 números de telefone → EquivalentTo(:PessoaContatavel ObjectIntersectionOf(:Pessoa DataMinCardinality(2 :temTelefone))). " +
+                     "3) Candidato a emprego forneceu pelo menos 3 referências → SubClassOf(:CandidatoComReferencias DataMinCardinality(3 :temReferencia)).")
+  public String createDataMinCardinality(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade mínima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de dado", required = true) String property) {
+
+    log.debug("Criando DataMinCardinality: {} ≥ {} {}", className, cardinality, property);
+
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " DataMinCardinality(" + cardinality + " " + property + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de DataMinCardinality: {}", result);
+    return result;
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma cardinalidade mínima qualificada de dado na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade mínima (n)
+   * @param property Propriedade de dado
+   * @param datatype Tipo de dado alvo da restrição
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade mínima qualificada de dado OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade mínima qualificada sobre dados (≥ n U.DR). " +
+                     "Exemplo: Pessoa tem pelo menos 1 nome que é string → SubClassOf(:Pessoa DataMinCardinality(1 :temNome xsd:string)).")
+  public String createDataMinCardinalityQualified(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade mínima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de dado", required = true) String property,
+      @ToolParam(description = "Tipo de dado alvo da restrição", required = true) String datatype) {
 
-  @Override
-  public String getDescription() { return "Declara cardinalidade mínima para propriedade de dado"; }
+    log.debug("Criando DataMinCardinality qualificado: {} ≥ {} {}.{}", className, cardinality, property, datatype);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("Pessoa tem pelo menos 1 nome", "Produto tem pelo menos 1 preço");
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " DataMinCardinality(" + cardinality + " " + property + " " + datatype + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de DataMinCardinality qualificado: {}", result);
+    return result;
   }
 }

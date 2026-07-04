@@ -2,6 +2,8 @@ package com.ia.core.view.config;
 
 import com.ia.core.view.exception.CoreErrorHandler;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
 import com.vaadin.flow.server.startup.VaadinAppShellInitializer;
@@ -12,6 +14,8 @@ import com.vaadin.flow.server.startup.VaadinAppShellInitializer;
  * @author Israel Araújo
  */
 
+@NpmPackage(value = "html2canvas", version = "1.4.1")
+@JsModule("./js/screenshot-connector.js")
 public abstract class AppShellInitializer
   extends VaadinAppShellInitializer
   implements VaadinServiceInitListener {

@@ -55,4 +55,21 @@ public interface PromptTemplateService {
    * @return prompt template
    */
   PromptTemplate createPromptTemplate(String templateString);
+
+  /**
+   * Processa um template do banco de dados com parâmetros.
+   *
+   * @param templateId identificador do template no banco
+   * @param params mapa de parâmetros para substituição no template
+   * @return texto do template processado com parâmetros substituídos
+   */
+  String processTemplate(String templateId, Map<String, Object> params);
+
+  /**
+   * Recupera um template do banco de dados pelo identificador.
+   *
+   * @param templateId identificador do template no banco
+   * @return texto do template original
+   */
+  String getTemplateById(String templateId);
 }

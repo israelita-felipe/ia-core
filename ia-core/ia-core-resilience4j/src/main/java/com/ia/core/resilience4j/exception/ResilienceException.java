@@ -10,18 +10,21 @@ package com.ia.core.resilience4j.exception;
  * @since 1.0.0
  */
 public class ResilienceException extends RuntimeException {
+
+    private static final String DEFAULT_ERROR_CODE = "RESILIENCE_ERROR";
+
     private final String errorCode;
     private final boolean retryable;
 
     public ResilienceException(String message) {
         super(message);
-        this.errorCode = "RESILIENCE_ERROR";
+        this.errorCode = DEFAULT_ERROR_CODE;
         this.retryable = true;
     }
 
     public ResilienceException(String message, Throwable cause) {
         super(message, cause);
-        this.errorCode = "RESILIENCE_ERROR";
+        this.errorCode = DEFAULT_ERROR_CODE;
         this.retryable = true;
     }
 

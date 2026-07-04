@@ -51,9 +51,9 @@ public class TextExtractionService {
    * @return texto extraído das imagens
    * @throws IOException se houver erro no processamento
    */
-  public String extractText(byte[]... images) throws IOException {
+  public String extractText(String sessionId,byte[]... images) throws IOException {
     List<Media> media = prepareImages(images);
-    return llmCommunicator.sendPrompt(chatModel, extractTextPrompt(), media);
+    return llmCommunicator.sendPrompt(extractTextPrompt(), media, sessionId).content();
   }
 
   /**

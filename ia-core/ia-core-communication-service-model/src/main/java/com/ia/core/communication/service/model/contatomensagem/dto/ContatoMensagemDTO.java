@@ -89,9 +89,13 @@ public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> i
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
     public static final String GRUPO_CONTATO = "grupoContato";
     public static final String TELEFONE = "telefone";
     public static final String NOME = "nome";
+
+    public static Set<String> values() {
+      return Set.of(ID, VERSION, GRUPO_CONTATO, TELEFONE, NOME);
+    }
   }
 }

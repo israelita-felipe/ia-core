@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.agente.dialog;
 
-import com.ia.core.llm.service.model.agente.session.AgentSessionRequestDTO;
+import com.ia.core.llm.service.model.session.AgentSessionRequestDTO;
 import com.ia.core.llm.view.agente.session.AgentSessionManager;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import lombok.Getter;

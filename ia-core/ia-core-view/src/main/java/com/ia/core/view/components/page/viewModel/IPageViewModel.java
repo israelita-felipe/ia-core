@@ -51,6 +51,9 @@ public interface IPageViewModel<T extends Serializable>
     /** Grupo da ação */
     @Default
     private String group = CoreApplicationTranslator.DEFAULT_ACTION;
+    /** Descrição de ajuda */
+    @Default
+    private String helpDescription = null;
   }
 
   /**

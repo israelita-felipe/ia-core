@@ -37,4 +37,15 @@ public final class PromptTranslator {
     public static final String ENTRADA_SIZE = "validation.prompt.entrada.size";
     public static final String TEMPLATE_REQUIRED = "validation.prompt.template.required";
   }
+
+  public static final class ERROR {
+    public static final String NOT_FOUND = "prompt.error.notfound";
+    public static final String DUPLICATE = "prompt.error.duplicate";
+  }
+
+  public static final class MESSAGE {
+    public static final String CREATED = "prompt.message.created";
+    public static final String UPDATED = "prompt.message.updated";
+    public static final String DELETED = "prompt.message.deleted";
+  }
 }

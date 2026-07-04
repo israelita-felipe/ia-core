@@ -1,23 +1,40 @@
-/* Track */
+/* ============================================
+   Transparent Vertical Scrollbars
+   Preserving Vaadin Original Styling
+   ============================================ */
+
+/* Make vertical scrollbar transparent for WebKit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
 ::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 5px grey;
+    background: transparent;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-	background: var(--lumo-primary-color);
+    background: transparent;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-	background: var(--lumo-primary-color);
+/* Make vertical scrollbar transparent for Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+/* Smooth scrolling for better UX */
+html {
+    scroll-behavior: smooth;
 }
 
 /* Scroll para FormLayout dentro de FormView */
 vaadin-form-layout {
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 form-view custom-field > vaadin-form-layout {
     overflow-y: auto;
+    overflow-x: hidden;
 }

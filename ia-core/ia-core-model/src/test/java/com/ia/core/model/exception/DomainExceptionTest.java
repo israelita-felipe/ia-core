@@ -41,7 +41,7 @@ class DomainExceptionTest {
         @Test
         @DisplayName("Deve ser uma RuntimeException")
         void deveSerRuntimeException() {
-            BusinessException ex = new BusinessException("test");
+            BusinessException ex = new BusinessException("com/ia/test");
             assertThat(ex).isInstanceOf(RuntimeException.class);
             assertThat(ex).isInstanceOf(DomainException.class);
         }
@@ -102,7 +102,7 @@ class DomainExceptionTest {
         @Test
         @DisplayName("Deve gerar código de erro automaticamente para BusinessException")
         void deveGerarCodigoAutomaticamente() {
-            DomainException ex = new BusinessException("test") {};
+            DomainException ex = new BusinessException("com/ia/test") {};
             assertThat(ex.getErrorCode()).isNotNull();
         }
     }

@@ -14,15 +14,15 @@ A API REST do projeto precisa evoluir sem quebrar clientes existentes. É necess
 
 ## Decisão
 
-Usar **versionamento via URL path** (`/api/v1/...`), o método mais explícito e widely accepted.
+Usar **versionamento via URL path** (`/api/${api.version}/...`), o método mais explícito e widely accepted.
 
 ## Detalhes
 
 ### Estrutura de URLs
 
 ```
-/api/v1/pessoas
-/api/v1/eventos
+/api/${api.version}/pessoas
+/api/${api.version}/eventos
 /api/v2/pessoas  (nova versão com campos adicionais)
 ```
 
@@ -71,7 +71,7 @@ public class PersonaControllerV2 extends ListBaseController<Pessoa, PessoaDTO> {
 ```java
 @Configuration
 public class ApiVersioningConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ApiVersionInterceptor());
@@ -80,12 +80,12 @@ public class ApiVersioningConfig implements WebMvcConfigurer {
 
 @Component
 public class ApiVersionInterceptor implements HandlerInterceptor {
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                           HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                           HttpServletResponse response,
                            Object handler) {
-        
+
         String requestURI = request.getRequestURI();
         if (requestURI.contains("/api/v")) {
             String version = extractVersion(requestURI);
@@ -93,7 +93,7 @@ public class ApiVersionInterceptor implements HandlerInterceptor {
         }
         return true;
     }
-    
+
     private String extractVersion(String uri) {
         Pattern pattern = Pattern.compile("/api/v(\\d+)");
         Matcher matcher = pattern.matcher(uri);
@@ -111,14 +111,14 @@ info:
   version: '1.0'
   description: |
     ## Versões Disponíveis
-    
+
     | Versão | Status | Descrição |
     |--------|--------|-----------|
     | v1 | ✅ Ativa | Versão inicial |
     | v2 | 🔄 Beta | Novos campos |
 
 paths:
-  /api/v1/pessoas:
+  /api/${api.version}/pessoas:
     get:
       summary: Listar pessoas (v1)
   /api/v2/pessoas:
@@ -156,7 +156,7 @@ paths:
 
 ✅ **COMPLETO**
 
-- Estrutura `/api/v1/` implementada
+- Estrutura `/api/${api.version}/` implementada
 - v1 ativa, v2 em desenvolvimento
 
 ## Data

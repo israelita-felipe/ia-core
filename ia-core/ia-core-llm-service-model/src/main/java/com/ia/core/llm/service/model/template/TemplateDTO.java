@@ -18,15 +18,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Israel Araújo
- */
-/**
  * Classe que representa o objeto de transferência de dados para template.
  * <p>
  * Responsável por gerenciar as funcionalidades relacionadas a TemplateDTO
  * dentro do sistema.
  *
- * @author IA
+ * @author Israel Araújo
  * @since 1.0
  * @see TemplateTranslator
  */
@@ -80,6 +77,11 @@ public class TemplateDTO
   private List<TemplateParameterDTO> parametros = new ArrayList<>();
 
   @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
+
+  @Override
   public TemplateDTO cloneObject() {
     return toBuilder().parametros(new ArrayList<>(parametros.stream()
         .map(TemplateParameterDTO::cloneObject).toList())).build();
@@ -89,5 +91,22 @@ public class TemplateDTO
   public TemplateDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION).parametros(new ArrayList<>(parametros.stream()
         .map(TemplateParameterDTO::copyObject).toList())).build();
+  }
+
+  /**
+   * Constantes de campos para referência type-safe.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String TITULO = "titulo";
+    public static final String IDENTIFICADOR = "identificador";
+    public static final String CONTEUDO = "conteudo";
+    public static final String EXIGE_CONTEXTO = "exigeContexto";
+    public static final String PARAMETROS = "parametros";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(TITULO, IDENTIFICADOR, CONTEUDO, EXIGE_CONTEXTO, PARAMETROS, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

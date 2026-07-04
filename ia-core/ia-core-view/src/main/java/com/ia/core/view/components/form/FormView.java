@@ -1,7 +1,10 @@
 package com.ia.core.view.components.form;
 
+import com.ia.core.service.translator.CoreApplicationTranslator;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.properties.HasColorPickerCreator;
+import com.ia.core.view.components.properties.HasHelp;
+import com.ia.core.view.help.HelpOnlineComponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Tag;
@@ -27,7 +30,7 @@ public abstract class FormView<T extends Serializable>
   extends CustomField<T>
   implements IFormView<T>,
   com.ia.core.view.components.properties.HasDateTimeCreator,
-  HasColorPickerCreator, ThemableLayout {
+  HasColorPickerCreator, ThemableLayout, HasHelp {
   /** Serial UID */
   private static final long serialVersionUID = -4513191796912403800L;
 
@@ -45,6 +48,7 @@ public abstract class FormView<T extends Serializable>
   public FormView(IFormViewModel<T> viewModel) {
     this.binder = createBinder(viewModel);
     setId(createId());
+    super.add(new HelpOnlineComponent(this));
     super.add(layout);
     setSizeFull();
     createLayout();
@@ -215,6 +219,19 @@ public abstract class FormView<T extends Serializable>
   @Override
   public String getModelPrefix() {
     return getViewModel().getModelPrefix();
+  }
+
+  @Override
+  public String getHelpTitle() {
+    return $(CoreApplicationTranslator.VIEW.FORM_EDITING, $(getViewModel().getModel().getClass()));
+  }
+
+  @Override
+  public String getHelpDescription() {
+    return String.format(
+        "Formulário para edição de %s. Preencha os campos conforme necessário.",
+        $(getViewModel().getModel().getClass())
+    );
   }
 
 }

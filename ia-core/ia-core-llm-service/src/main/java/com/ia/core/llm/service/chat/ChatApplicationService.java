@@ -39,19 +39,20 @@ public class ChatApplicationService {
       return "";
     }
     Long promptId = dto.getPromptId();
+    String sessionId = dto.getSessionId() != null ? dto.getSessionId() : "default";
     if (promptId != null) {
       promptRepository.findById(promptId).ifPresent(prompt -> {
         if (prompt.getTemplate() != null) {
           String system = systemPromptOverride != null ? systemPromptOverride : prompt.getTemplate().getConteudo();
           chatService.ask("", text, system, prompt.getFinalidade(), prompt.getTemplate().isExigeContexto(),
-              Collections.emptyMap());
+              Collections.emptyMap(), sessionId);
         }
       });
     }
     if (systemPromptOverride != null) {
       return chatService.ask("", text, systemPromptOverride, FinalidadePromptEnum.RESPOSTA_TEXTUAL, false,
-          Map.of());
+          Map.of(), sessionId);
     }
-    return chatService.ask("", text);
+    return chatService.ask("", text, sessionId);
   }
 }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/llm/chat/sessao")
+@RequestMapping("/api/${api.version}/llm/chat/sessao")
 @Tag(name = "ChatSession", description = "Gerenciamento de sessões de chat com agentes LLM")
 public class ChatSessionController
   extends DefaultBaseController<ChatSession,ChatSessionDTO> {

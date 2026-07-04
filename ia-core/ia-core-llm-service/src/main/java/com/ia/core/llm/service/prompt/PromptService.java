@@ -7,6 +7,8 @@ import com.ia.core.service.CrudBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * Serviço para gerenciamento de prompts de catálogo.
  * <p>
@@ -23,6 +25,6 @@ public class PromptService
   implements PromptUseCase {
 
   public PromptService(PromptServiceConfig config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 }

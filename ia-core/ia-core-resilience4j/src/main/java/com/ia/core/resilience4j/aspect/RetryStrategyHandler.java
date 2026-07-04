@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -50,7 +51,7 @@ public class RetryStrategyHandler implements ResilienceStrategyHandler<Retry> {
      */
     @Override
     public Retry resolve(ResilienceContext context) {
-        ResilienceProfile profile = context.getProfile();
+        ResilienceProfile profile = Objects.requireNonNull(context, "context must not be null").getProfile();
         com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-retry";
@@ -91,7 +92,7 @@ public class RetryStrategyHandler implements ResilienceStrategyHandler<Retry> {
      */
     @Override
     public Object execute(ResilienceContext context, Supplier<Object> next){
-        Retry retry = resolve(context);
-        return retry.executeSupplier(next);
+        Retry retry = resolve(Objects.requireNonNull(context, "context must not be null"));
+        return retry.executeSupplier(Objects.requireNonNull(next, "next must not be null"));
     }
 }

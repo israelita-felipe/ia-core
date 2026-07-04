@@ -1,62 +1,80 @@
 package com.ia.core.owl.service.tool.classexpression;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas ObjectSomeValuesFrom.
+ * Tool para criação de restrição existencial OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar restrições existenciais
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa restrição existencial (∃R.C) sobre propriedade de objeto.
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * ObjectSomeValuesFrom é um construtor de restrição de classe que indica que existe pelo menos um
+ * valor de uma propriedade de objeto para instâncias da classe que pertence a uma classe especificada.
+ * É uma restrição existencial (∃) que garante que pelo menos um valor satisfaz a condição.
+ * <p>
+ * <b>Sintaxe Manchester:</b> SubClassOf(:Classe ObjectSomeValuesFrom(:Propriedade :ClasseAlvo))
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>Pai tem algum filho que é Pessoa:
+ *       SubClassOf(:Pai ObjectSomeValuesFrom(:temFilho :Pessoa))</li>
+ *   <li>Departamento tem algum funcionário que é Gerente:
+ *       SubClassOf(:Departamento ObjectSomeValuesFrom(:temFuncionario :Gerente))</li>
+ *   <li>Empresa tem algum cliente que é VIP:
+ *       SubClassOf(:Empresa ObjectSomeValuesFrom(:temCliente :VIP))</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class ObjectSomeValuesFromTool extends AbstractOWLTool {
+public class ObjectSomeValuesFromTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "ObjectSomeValuesFrom";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ObjectSomeValuesFrom.
-      Construtor: ObjectSomeValuesFrom
-      Descrição: Declara que existe pelo menos um valor para a propriedade.
-      Sintaxe Manchester: ObjectSomeValuesFrom(<propriedade> <classe>)
-      Exemplos:
-      - "Pai tem algum filho que é Pessoa" → SubClassOf(:Pai ObjectSomeValuesFrom(:temFilho :Pessoa))
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public ObjectSomeValuesFromTool(ChatModel chatModel,
-                                  LLMCommunicator llmCommunicator,
-                                  DefaultOwlService owlService,
-                                  TemplateService templateService,
-                                  FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ObjectSomeValuesFromTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+  /**
+   * Cria uma restrição existencial na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param property Propriedade de objeto
+   * @param targetClass Classe alvo da restrição
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma restrição existencial OWL 2 DL na ontologia da sessão. " +
+                     "Representa restrição existencial (∃R.C) sobre propriedade de objeto. " +
+                     "Indica que existe pelo menos um valor de uma propriedade de objeto para instâncias da classe que pertence a uma classe especificada. " +
+                     "Exemplos: " +
+                     "1) Pai tem algum filho que é Pessoa → SubClassOf(:Pai ObjectSomeValuesFrom(:temFilho :Pessoa)). " +
+                     "2) Departamento tem algum funcionário que é Gerente → SubClassOf(:Departamento ObjectSomeValuesFrom(:temFuncionario :Gerente)). " +
+                     "3) Empresa tem algum cliente que é VIP → SubClassOf(:Empresa ObjectSomeValuesFrom(:temCliente :VIP)).")
+  public String createObjectSomeValuesFrom(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Classe alvo da restrição", required = true) String targetClass) {
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+    log.debug("Criando ObjectSomeValuesFrom: {} ∃{}.{}", className, property, targetClass);
 
-  @Override
-  public String getDescription() { return "Declara restrição existencial sobre propriedade de objeto"; }
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " ObjectSomeValuesFrom(" + property + " " + targetClass + ")";
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("Pai tem algum filho que é Pessoa", "Estudante tem algum curso");
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectSomeValuesFrom: {}", result);
+    return result;
   }
 }

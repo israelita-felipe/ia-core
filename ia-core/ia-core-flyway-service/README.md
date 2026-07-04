@@ -291,7 +291,7 @@ public class FlywayServiceImpl implements FlywayService {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/flyway")
+@RequestMapping("/api/${api.version}/flyway")
 @PreAuthorize("hasRole('ADMIN')")
 public class FlywayController {
 

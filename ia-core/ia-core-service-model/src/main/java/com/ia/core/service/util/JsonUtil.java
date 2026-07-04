@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -333,8 +332,7 @@ public static class LocalDateTimeTypeAdapter
                                      JsonDeserializationContext context)
       throws JsonParseException {
       try {
-        return ZonedDateTime.parse(json.getAsString(), formatter)
-            .toLocalDateTime();
+        return LocalDateTime.parse(json.getAsString(), formatter);
       } catch (Exception e) {
         throw new JsonParseException("Erro ao desserializar LocalDateTime: "
             + json.getAsString(), e);
@@ -379,15 +377,15 @@ public static class LocalDateTimeTypeAdapter
   }
 
   /**
-   * Adaptador para serialização e desserialização de LocalTime. Utiliza o
-   * formato: HH:mm:ss.SSS'Z'
-   */
-  public static class LocalTimeTypeAdapter
-    implements JsonDeserializer<LocalTime>, JsonSerializer<LocalTime> {
+    * Adaptador para serialização e desserialização de LocalTime. Utiliza o
+    * formato ISO: HH:mm:ss.SSS
+    */
+   public static class LocalTimeTypeAdapter
+     implements JsonDeserializer<LocalTime>, JsonSerializer<LocalTime> {
 
-    private static final String TIME_FORMAT = "HH:mm:ss.SSS'Z'";
-    private final DateTimeFormatter formatter = DateTimeFormatter
-        .ofPattern(TIME_FORMAT);
+     private static final String TIME_FORMAT = "HH:mm:ss.SSS";
+     private final DateTimeFormatter formatter = DateTimeFormatter
+         .ofPattern(TIME_FORMAT);
 
     @Override
     public LocalTime deserialize(JsonElement json, Type type,

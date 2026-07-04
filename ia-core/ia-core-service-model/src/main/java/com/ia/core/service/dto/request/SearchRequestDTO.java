@@ -114,7 +114,7 @@ public class SearchRequestDTO
   /**
    * Filtros de propriedade
    *
-   * @return Consjunto de filtros
+   * @return Conjunto de filtros
    */
   public Set<String> propertyFilters() {
     var avaliableFilters = getAvaliableFilters();

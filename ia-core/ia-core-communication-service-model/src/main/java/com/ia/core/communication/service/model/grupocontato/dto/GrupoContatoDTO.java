@@ -4,7 +4,6 @@ import com.ia.core.communication.model.contato.GrupoContato;
 import com.ia.core.communication.service.model.modelomensagem.dto.HasVariavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
-import com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoTranslator;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -93,13 +92,13 @@ public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> impleme
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
     public static final String NOME = "nome";
     public static final String DESCRICAO = "descricao";
     public static final String ATIVO = "ativo";
 
     public static Set<String> values() {
-      return Set.of(NOME, DESCRICAO, ATIVO);
+      return Set.of(ID, VERSION, NOME, DESCRICAO, ATIVO);
     }
   }
 }

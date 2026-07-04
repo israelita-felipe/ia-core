@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 
 /**
  * Módulo para conversão de data de hora
@@ -28,9 +30,12 @@ public class LocalDateTimeModule extends JacksonModule {
    */
   private final DateTimeFormatter dateFormatter = DateTimeUtils.DATE_FORMATTER;
   /**
-   * Formatador de tempo
+   * Formatador de tempo - flexível para aceitar ISO e formatos com/sem milissegundos
    */
-  private final DateTimeFormatter timeFormatter = DateTimeUtils.TIME_FORMATTER;
+  private final DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder()
+      .appendPattern("[HH:mm:ss.SSS['Z']HH:mm:ss.SSS][HH:mm:ss['Z']HH:mm:ss][HH:mm['Z']HH:mm]")
+      .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
+      .toFormatter();
 
   @Override
   public String getModuleName() {
@@ -88,7 +93,7 @@ public class LocalDateTimeModule extends JacksonModule {
   class LocalTimeSerializer extends ValueSerializer<LocalTime> {
     @Override
     public void serialize(LocalTime value, JsonGenerator gen, SerializationContext serializers) {
-      gen.writeString(timeFormatter.format(value));
+      gen.writeString(DateTimeUtils.TIME_FORMATTER.format(value));
     }
 
     @Override
@@ -101,7 +106,15 @@ public class LocalDateTimeModule extends JacksonModule {
     @Override
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) {
       String text = p.getText();
-      return text != null ? LocalDateTime.parse(text, dateTimeFormatter) : null;
+      if (text == null) {
+        return null;
+      }
+      try {
+        return LocalDateTime.parse(text, dateTimeFormatter);
+      } catch (Exception e) {
+        // Tenta formato ISO padrão
+        return LocalDateTime.parse(text);
+      }
     }
 
     @Override
@@ -114,7 +127,15 @@ public class LocalDateTimeModule extends JacksonModule {
     @Override
     public LocalDate deserialize(JsonParser p, DeserializationContext ctxt) {
       String text = p.getText();
-      return text != null ? LocalDate.parse(text, dateFormatter) : null;
+      if (text == null) {
+        return null;
+      }
+      try {
+        return LocalDate.parse(text, dateFormatter);
+      } catch (Exception e) {
+        // Tenta formato ISO padrão
+        return LocalDate.parse(text);
+      }
     }
 
     @Override
@@ -127,7 +148,17 @@ public class LocalDateTimeModule extends JacksonModule {
     @Override
     public LocalTime deserialize(JsonParser p, DeserializationContext ctxt) {
       String text = p.getText();
-      return text != null ? LocalTime.parse(text, timeFormatter) : null;
+      if (text == null) {
+        return null;
+      }
+      // Remove o sufixo 'Z' se presente (não é válido para LocalTime)
+      String cleanText = text.replace("'Z'", "").replace("Z", "");
+      try {
+        return LocalTime.parse(cleanText, timeFormatter);
+      } catch (Exception e) {
+        // Tenta formato ISO padrão
+        return LocalTime.parse(cleanText);
+      }
     }
 
     @Override

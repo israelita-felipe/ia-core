@@ -16,6 +16,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Interface base para serviços CRUD com controle de segurança.
+ * <p>
+ * Combina as operações de CRUD com verificação de funcionalidades
+ * e permissões de acesso. Todos os métodos são implementados
+ * como métodos default que delegam para as interfaces especializadas.
+ * </p>
+ *
+ * @param <T> Tipo da entidade JPA
+ * @param <D> Tipo do DTO de transferência
+ * @see com.ia.core.security.service.CountSecuredBaseService
+ * @see com.ia.core.security.service.DeleteSecuredBaseService
+ * @see com.ia.core.security.service.FindSecuredBaseService
+ * @see com.ia.core.security.service.ListSecuredBaseService
+ * @see com.ia.core.security.service.SaveSecuredBaseService
+ */
 public interface CrudSecuredService<T extends BaseEntity, D extends DTO<?>> extends CountSecuredBaseService<T, D>, DeleteSecuredBaseService<T, D>, FindSecuredBaseService<T, D>, ListSecuredBaseService<T, D>, SaveSecuredBaseService<T, D>, CrudService<T,D> {
 
     @Override

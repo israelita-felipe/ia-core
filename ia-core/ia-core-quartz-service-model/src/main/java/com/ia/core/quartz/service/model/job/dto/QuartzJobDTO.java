@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,6 +44,9 @@ public class QuartzJobDTO
   private LocalDateTime lastExecutionTime;
   private LocalDateTime nextExecutionTime;
   private LocalDateTime prevFireTime;
+
+  // Triggers associados
+  private List<QuartzJobTriggerDTO> triggers = new ArrayList<>();
 
   public static final SearchRequestDTO getSearchRequest() {
     return new QuartzJobSearchRequest();

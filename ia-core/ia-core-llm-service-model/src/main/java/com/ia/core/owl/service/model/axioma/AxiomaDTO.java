@@ -62,6 +62,11 @@ public class AxiomaDTO
   private Boolean ativo = true;
 
   @Override
+  public void setVersion(Long version) {
+    super.setVersion(version);
+  }
+
+  @Override
   public AxiomaDTO cloneObject() {
     return toBuilder().build();
   }

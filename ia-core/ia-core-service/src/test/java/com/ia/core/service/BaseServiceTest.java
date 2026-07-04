@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 /**
  * Classe que representa os serviços de negócio para base service test.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a BaseServiceTest
+ * Responsável por gerenciar as funcionalidades relacionadas a CoreBaseServiceTest
  * dentro do sistema.
  *
  * @author IA

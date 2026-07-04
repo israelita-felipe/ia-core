@@ -13,6 +13,23 @@ import com.ia.core.service.exception.ServiceException;
 import com.ia.core.service.usecase.CrudUseCase;
 import org.springframework.data.domain.Page;
 
+/**
+ * Interface base para serviços CRUD.
+ * <p>
+ * Combina as operações de Create, Read, Update e Delete com
+ * resiliência para operações de banco de dados. Todos os métodos
+ * são implementados como métodos default que delegam para as
+ * interfaces especializadas.
+ * </p>
+ *
+ * @param <T> Tipo da entidade JPA
+ * @param <D> Tipo do DTO de transferência
+ * @see com.ia.core.service.CountBaseService
+ * @see com.ia.core.service.DeleteBaseService
+ * @see com.ia.core.service.FindBaseService
+ * @see com.ia.core.service.ListBaseService
+ * @see com.ia.core.service.SaveBaseService
+ */
 public interface CrudService<T extends BaseEntity, D extends DTO<?>> extends HasRepository<T>, HasMapper<T, D>, HasSearchRequestMapper, HasTranslator, CountBaseService<T, D>, DeleteBaseService<T, D>, FindBaseService<T, D>, ListBaseService<T, D>, SaveBaseService<T, D>, CrudUseCase<D> {
 
     @Override

@@ -1,62 +1,112 @@
 package com.ia.core.owl.service.tool.classexpression;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas ObjectMinCardinality.
+ * Tool para criação de cardinalidade mínima OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar cardinalidades mínimas
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa cardinalidade mínima não qualificada (≥ n R).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * ObjectMinCardinality é um construtor de restrição de classe que indica que instâncias da classe
+ * devem ter pelo menos n valores de uma propriedade de objeto. É uma restrição de cardinalidade
+ * que garante um número mínimo de relacionamentos.
+ * <p>
+ * <b>Sintaxe Manchester:</b> SubClassOf(:Classe ObjectMinCardinality(n :Propriedade))
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>Pai de família grande tem pelo menos 2 filhos:
+ *       SubClassOf(:PaiFamiliaGrande ObjectMinCardinality(2 :temFilho))</li>
+ *   <li>Pessoa com múltiplos endereços possui no mínimo 3 endereços:
+ *       EquivalentTo(:PessoaMultiEndereco ObjectIntersectionOf(:Pessoa ObjectMinCardinality(3 :temEndereco)))</li>
+ *   <li>Empresa com muitos funcionários tem no mínimo 10 funcionários:
+ *       SubClassOf(:EmpresaMuitosFuncionarios ObjectMinCardinality(10 :temFuncionario))</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class ObjectMinCardinalityTool extends AbstractOWLTool {
+public class ObjectMinCardinalityTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "ObjectMinCardinality";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ObjectMinCardinality.
-      Construtor: ObjectMinCardinality
-      Descrição: Declara que uma propriedade tem pelo menos N valores.
-      Sintaxe Manchester: ObjectMinCardinality(<n> <propriedade> <classe>)
-      Exemplos:
-      - "Pessoa tem pelo menos 1 nome" → SubClassOf(:Pessoa ObjectMinCardinality(1 :temNome :Nome))
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public ObjectMinCardinalityTool(ChatModel chatModel,
-                                   LLMCommunicator llmCommunicator,
-                                   DefaultOwlService owlService,
-                                   TemplateService templateService,
-                                   FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ObjectMinCardinalityTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+  /**
+   * Cria uma cardinalidade mínima não qualificada na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade mínima (n)
+   * @param property Propriedade de objeto
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade mínima não qualificada OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade mínima não qualificada (≥ n R). " +
+                     "Indica que instâncias da classe devem ter pelo menos n valores de uma propriedade de objeto. " +
+                     "Exemplos: " +
+                     "1) Pai de família grande tem pelo menos 2 filhos → SubClassOf(:PaiFamiliaGrande ObjectMinCardinality(2 :temFilho)). " +
+                     "2) Pessoa com múltiplos endereços possui no mínimo 3 endereços → EquivalentTo(:PessoaMultiEndereco ObjectIntersectionOf(:Pessoa ObjectMinCardinality(3 :temEndereco))). " +
+                     "3) Empresa com muitos funcionários tem no mínimo 10 funcionários → SubClassOf(:EmpresaMuitosFuncionarios ObjectMinCardinality(10 :temFuncionario)).")
+  public String createObjectMinCardinality(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade mínima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property) {
+
+    log.debug("Criando ObjectMinCardinality: {} ≥ {} {}", className, cardinality, property);
+
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " ObjectMinCardinality(" + cardinality + " " + property + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectMinCardinality: {}", result);
+    return result;
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma cardinalidade mínima qualificada na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade mínima (n)
+   * @param property Propriedade de objeto
+   * @param targetClass Classe alvo da restrição
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade mínima qualificada OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade mínima qualificada (≥ n R.C). " +
+                     "Exemplo: Pessoa tem pelo menos 1 filho que é Pessoa → SubClassOf(:Pessoa ObjectMinCardinality(1 :temFilho :Pessoa)).")
+  public String createObjectMinCardinalityQualified(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade mínima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Classe alvo da restrição", required = true) String targetClass) {
 
-  @Override
-  public String getDescription() { return "Declara cardinalidade mínima para propriedade de objeto"; }
+    log.debug("Criando ObjectMinCardinality qualificado: {} ≥ {} {}.{}", className, cardinality, property, targetClass);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("Pessoa tem pelo menos 1 nome", "Estudante tem pelo menos 2 cursos");
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " ObjectMinCardinality(" + cardinality + " " + property + " " + targetClass + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectMinCardinality qualificado: {}", result);
+    return result;
   }
 }

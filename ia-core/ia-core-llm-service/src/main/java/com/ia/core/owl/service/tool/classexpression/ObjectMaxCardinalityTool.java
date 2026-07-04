@@ -1,62 +1,112 @@
 package com.ia.core.owl.service.tool.classexpression;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas ObjectMaxCardinality.
+ * Tool para criação de cardinalidade máxima OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar cardinalidades máximas
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa cardinalidade máxima não qualificada (≤ n R).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * ObjectMaxCardinality é um construtor de restrição de classe que indica que instâncias da classe
+ * devem ter no máximo n valores de uma propriedade de objeto. É uma restrição de cardinalidade
+ * que limita o número máximo de relacionamentos.
+ * <p>
+ * <b>Sintaxe Manchester:</b> SubClassOf(:Classe ObjectMaxCardinality(n :Propriedade))
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>Pessoa monogâmica tem no máximo 1 cônjuge:
+ *       SubClassOf(:PessoaMonogamica ObjectMaxCardinality(1 :temConjuge))</li>
+ *   <li>Gerente de equipe pequena gerencia no máximo 10 funcionários:
+ *       EquivalentTo(:GerenteEquipePequena ObjectIntersectionOf(:Gerente ObjectMaxCardinality(10 :gerencia)))</li>
+ *   <li>Motorista particular possui no máximo 2 carros:
+ *       SubClassOf(:MotoristaParticular ObjectMaxCardinality(2 :possuiCarro))</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class ObjectMaxCardinalityTool extends AbstractOWLTool {
+public class ObjectMaxCardinalityTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "ObjectMaxCardinality";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ObjectMaxCardinality.
-      Construtor: ObjectMaxCardinality
-      Descrição: Declara que uma propriedade tem no máximo N valores.
-      Sintaxe Manchester: ObjectMaxCardinality(<n> <propriedade> <classe>)
-      Exemplos:
-      - "Pessoa tem no máximo 5 amigos" → SubClassOf(:Pessoa ObjectMaxCardinality(5 :temAmigo :Pessoa))
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public ObjectMaxCardinalityTool(ChatModel chatModel,
-                                   LLMCommunicator llmCommunicator,
-                                   DefaultOwlService owlService,
-                                   TemplateService templateService,
-                                   FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ObjectMaxCardinalityTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+  /**
+   * Cria uma cardinalidade máxima não qualificada na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade máxima (n)
+   * @param property Propriedade de objeto
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade máxima não qualificada OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade máxima não qualificada (≤ n R). " +
+                     "Indica que instâncias da classe devem ter no máximo n valores de uma propriedade de objeto. " +
+                     "Exemplos: " +
+                     "1) Pessoa monogâmica tem no máximo 1 cônjuge → SubClassOf(:PessoaMonogamica ObjectMaxCardinality(1 :temConjuge)). " +
+                     "2) Gerente de equipe pequena gerencia no máximo 10 funcionários → EquivalentTo(:GerenteEquipePequena ObjectIntersectionOf(:Gerente ObjectMaxCardinality(10 :gerencia))). " +
+                     "3) Motorista particular possui no máximo 2 carros → SubClassOf(:MotoristaParticular ObjectMaxCardinality(2 :possuiCarro)).")
+  public String createObjectMaxCardinality(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade máxima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property) {
+
+    log.debug("Criando ObjectMaxCardinality: {} ≤ {} {}", className, cardinality, property);
+
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " ObjectMaxCardinality(" + cardinality + " " + property + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectMaxCardinality: {}", result);
+    return result;
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma cardinalidade máxima qualificada na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param cardinality Cardinalidade máxima (n)
+   * @param property Propriedade de objeto
+   * @param targetClass Classe alvo da restrição
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma cardinalidade máxima qualificada OWL 2 DL na ontologia da sessão. " +
+                     "Representa cardinalidade máxima qualificada (≤ n R.C). " +
+                     "Exemplo: Pessoa tem no máximo 5 amigos que são Pessoa → SubClassOf(:Pessoa ObjectMaxCardinality(5 :temAmigo :Pessoa)).")
+  public String createObjectMaxCardinalityQualified(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Cardinalidade máxima (n)", required = true) int cardinality,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Classe alvo da restrição", required = true) String targetClass) {
 
-  @Override
-  public String getDescription() { return "Declara cardinalidade máxima para propriedade de objeto"; }
+    log.debug("Criando ObjectMaxCardinality qualificado: {} ≤ {} {}.{}", className, cardinality, property, targetClass);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("Pessoa tem no máximo 5 amigos", "Livro tem no máximo 3 autores");
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " ObjectMaxCardinality(" + cardinality + " " + property + " " + targetClass + ")";
+
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectMaxCardinality qualificado: {}", result);
+    return result;
   }
 }

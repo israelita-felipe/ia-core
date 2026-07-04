@@ -2,7 +2,7 @@ package com.ia.core.llm.service.chat;
 
 import com.ia.core.llm.model.chat.ChatSession;
 import com.ia.core.llm.model.chat.ChatSession.ChatSessionStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ia.core.service.repository.BaseEntityRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 public interface ChatSessionRepository
-  extends JpaRepository<ChatSession, Long> {
+  extends BaseEntityRepository<ChatSession> {
 
   /**
    * Busca uma sessão pelo session ID.

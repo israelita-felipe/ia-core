@@ -1,62 +1,77 @@
 package com.ia.core.owl.service.tool.annotation;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas AnnotationPropertyRange.
+ * Tool para criação de range de propriedade de anotação OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar ranges de propriedades de anotação
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa range de propriedade de anotação (Range(AP) ⊆ DR).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * AnnotationPropertyRange é um axioma que especifica que se uma propriedade de anotação AP é usada para anotar uma entidade com um valor,
+ * então esse valor deve ser uma instância do tipo de dado DR. Restringe o range da propriedade de anotação a um tipo de dado específico.
+ * <p>
+ * <b>Sintaxe Manchester:</b> AnnotationPropertyRange(:Propriedade :TipoDado)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>autor tem range xsd:string:
+ *       AnnotationPropertyRange(:autor xsd:string)</li>
+ *   <li>dataCriacao tem range xsd:dateTime:
+ *       AnnotationPropertyRange(:dataCriacao xsd:dateTime)</li>
+ *   <li>versao tem range xsd:integer:
+ *       AnnotationPropertyRange(:versao xsd:integer)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class AnnotationPropertyRangeTool extends AbstractOWLTool {
+public class AnnotationPropertyRangeTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "AnnotationPropertyRange";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas AnnotationPropertyRange.
-      Construtor: AnnotationPropertyRange
-      Descrição: Declara o range de uma propriedade de anotação.
-      Sintaxe Manchester: AnnotationPropertyRange(<propriedade> <tipo_dado>)
-      Exemplos:
-      - "autor tem range xsd:string" → AnnotationPropertyRange(:autor xsd:string)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public AnnotationPropertyRangeTool(ChatModel chatModel,
-                                    LLMCommunicator llmCommunicator,
-                                    DefaultOwlService owlService,
-                                    TemplateService templateService,
-                                    FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public AnnotationPropertyRangeTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+  /**
+   * Cria um range de propriedade de anotação na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param annotationProperty Propriedade de anotação
+   * @param range Tipo de dado range
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um range de propriedade de anotação OWL 2 DL na ontologia da sessão. " +
+                     "Representa range de propriedade de anotação (Range(AP) ⊆ DR). " +
+                     "Especifica que se uma propriedade de anotação é usada para anotar uma entidade com um valor, então esse valor deve ser uma instância do tipo de dado especificado. " +
+                     "Exemplos: " +
+                     "1) autor tem range xsd:string → AnnotationPropertyRange(:autor xsd:string). " +
+                     "2) dataCriacao tem range xsd:dateTime → AnnotationPropertyRange(:dataCriacao xsd:dateTime). " +
+                     "3) versao tem range xsd:integer → AnnotationPropertyRange(:versao xsd:integer).")
+  public String createAnnotationPropertyRange(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Propriedade de anotação", required = true) String annotationProperty,
+      @ToolParam(description = "Tipo de dado range", required = true) String range) {
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+    log.debug("Criando AnnotationPropertyRange: Range({}) ⊆ {}", annotationProperty, range);
 
-  @Override
-  public String getDescription() { return "Declara range de propriedade de anotação"; }
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "AnnotationPropertyRange: " + annotationProperty + " " + range;
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("autor tem range xsd:string", "dataCriacao tem range xsd:dateTime");
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de AnnotationPropertyRange: {}", result);
+    return result;
   }
 }

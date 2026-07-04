@@ -18,10 +18,10 @@ ia-core-communication-rest/
 
 ## 🔑 Endpoints
 
-- `POST /api/v1/email/send` - Enviar email
-- `GET /api/v1/email/{id}` - Status de email
-- `POST /api/v1/sms/send` - Enviar SMS
-- `POST /api/v1/notifications` - Enviar notificação
+- `POST /api/${api.version}/email/send` - Enviar email
+- `GET /api/${api.version}/email/{id}` - Status de email
+- `POST /api/${api.version}/sms/send` - Enviar SMS
+- `POST /api/${api.version}/notifications` - Enviar notificação
 
 ## 🛠️ Tecnologias
 

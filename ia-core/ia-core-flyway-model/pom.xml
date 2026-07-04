@@ -25,6 +25,33 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.11</version>
+				<configuration>
+					<excludes>
+						<exclude>com/ia/core/flyway/model/**/*Builder*.class</exclude>
+						<exclude>com/ia/core/flyway/model/**/*BuilderImpl.class</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -47,18 +74,18 @@
 						<!-- See
 						https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 						<!-- Classpath elements to supply as annotation
-						processor path. If 
+						processor path. If
 							specified, the compiler -->
 						<!-- will detect annotation processors only in those
-						classpath elements. 
+						classpath elements.
 							If omitted, the -->
 						<!-- default classpath is used to detect annotation
-						processors. The 
+						processors. The
 							detection itself depends -->
 						<!-- on the configuration of annotationProcessors. -->
 						<!-- -->
 						<!-- According to this documentation, the provided
-						dependency processor 
+						dependency processor
 							is not considered! -->
 						<annotationProcessorPaths>
 							<path>

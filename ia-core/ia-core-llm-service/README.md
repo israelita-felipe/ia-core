@@ -285,7 +285,7 @@ public class PromptServiceImpl extends AbstractCrudService<Prompt, Long>
 
 ```java
 @RestController
-@RequestMapping("/api/v1/chat")
+@RequestMapping("/api/${api.version}/chat")
 public class ChatController {
 
     @Autowired

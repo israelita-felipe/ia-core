@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/llm/agentes/construtor")
+@RequestMapping("/api/${api.version}/llm/agentes/construtor")
 @Tag(name = "Agente Construtor", description = "Agente construtor de ontologias")
 public class AgenteConstrutorController {
 
@@ -31,7 +31,7 @@ public class AgenteConstrutorController {
   }
 
   @Operation(summary = "Inicia construção de ontologia")
-  @PostMapping("/jobs")
+  @PostMapping("/jobs/{sessionId}")
   public ResponseEntity<ResultadoConstrucaoOntologia> iniciarConstrucao(
       @Valid @RequestBody RequisicaoConstrucaoOntologia requisicao) {
     log.info("Iniciando construção: dominio={}", requisicao.getDomain());

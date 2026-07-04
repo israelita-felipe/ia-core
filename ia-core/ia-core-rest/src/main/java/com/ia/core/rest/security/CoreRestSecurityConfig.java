@@ -63,13 +63,13 @@ public abstract class CoreRestSecurityConfig
   /**
    * Padrão de URL para endpoints de autorização e autenticação. Utiliza
    * placeholders do Spring para versionamento da API. Exemplo:
-   * /api/v1/authentication/login
+   * /api/${api.version}/authentication/login
    */
   public static final String AUTHORIZATION_ENDPOINT_PATTERN = "/api/${api.version}/authentication/**";
 
   /**
    * Padrão de URL para endpoints públicos que não requerem autenticação.
-   * Exemplo: /api/v1/public/info
+   * Exemplo: /api/${api.version}/public/info
    */
   public static final String PUBLIC_ENDPOINT_PATTERN = "/api/${api.version}/public/**";
 

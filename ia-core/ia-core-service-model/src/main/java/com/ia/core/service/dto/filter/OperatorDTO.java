@@ -1,6 +1,5 @@
 package com.ia.core.service.dto.filter;
 
-import com.ia.core.model.filter.FilterRequest;
 import com.ia.core.model.filter.Operator;
 import com.ia.core.service.dto.DTO;
 
@@ -12,7 +11,15 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Operadores
+ * Enum de operadores de comparação para filtros.
+ * <p>
+ * Define os operadores disponíveis para construção de predicados de filtro,
+ * incluindo igualdade, diferença, comparação numérica, contém, e operações
+ * em coleções. Cada operador implementa a lógica de comparação através de
+ * reflexão para acessar os valores dos campos.
+ * </p>
+ *
+ * @author Israel Araújo
  */
 public enum OperatorDTO implements DTO<Operator> {
   /**
@@ -286,18 +293,27 @@ public enum OperatorDTO implements DTO<Operator> {
   };
 
   /**
-   * Realiza o build
+   * Constrói um predicado para o operador de filtro.
+   * <p>
+   * Utiliza reflexão para acessar o valor do campo especificado no objeto
+   * e aplica a lógica de comparação específica do operador.
+   * </p>
    *
-   * @param <T>         Tipo de dado.
-   * @param request     {@link FilterRequest}
-   * @param predicate   predicado
-   * @param disjunction Indicativo de disjunção
-   * @return {@link java.util.function.Predicate}
+   * @param <T>         Tipo de dado do predicado
+   * @param request     Requisição de filtro contendo campo e valor
+   * @param predicate   Predicado base para composição
+   * @param disjunction Indica se deve usar disjunção (OR) ou conjunção (AND)
+   * @return Predicado configurado com a lógica do operador
    */
   public abstract <T> java.util.function.Predicate<T> build(FilterRequestDTO request,
                                                             java.util.function.Predicate<T> predicate,
                                                             boolean disjunction);
 
+  /**
+   * Retorna uma cópia deste operador (enum é imutável).
+   *
+   * @return A própria instância (enums são singletons)
+   */
   @Override
   public DTO<Operator> cloneObject() {
     return this;

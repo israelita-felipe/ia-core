@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -51,7 +52,7 @@ public class CircuitBreakerStrategyHandler implements ResilienceStrategyHandler<
      */
     @Override
     public CircuitBreaker resolve(ResilienceContext context) {
-        ResilienceProfile profile = context.getProfile();
+        ResilienceProfile profile = Objects.requireNonNull(context, "context must not be null").getProfile();
         com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-cb";
@@ -96,7 +97,7 @@ public class CircuitBreakerStrategyHandler implements ResilienceStrategyHandler<
      */
     @Override
     public Object execute(ResilienceContext context, Supplier<Object> next) {
-        CircuitBreaker circuitBreaker = resolve(context);
-        return circuitBreaker.executeSupplier(next);
+        CircuitBreaker circuitBreaker = resolve(Objects.requireNonNull(context, "context must not be null"));
+        return circuitBreaker.executeSupplier(Objects.requireNonNull(next, "next must not be null"));
     }
 }

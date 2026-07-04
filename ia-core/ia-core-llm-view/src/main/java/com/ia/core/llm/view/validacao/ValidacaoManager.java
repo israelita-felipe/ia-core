@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.validacao;
 
-import com.ia.core.llm.service.model.validacao.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
 import com.ia.core.view.manager.DefaultBaseManager;
 import org.springframework.stereotype.Component;
 

@@ -11,6 +11,8 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
 /**
  * Serviço de negócio para gerenciamento de privilege.
  * <p>
@@ -35,7 +37,7 @@ public class PrivilegeService
    * @param logOperationService
    */
   public PrivilegeService(PrivilegeServiceConfig config) {
-    super(config);
+    super(Objects.requireNonNull(config, "config não pode ser null"));
   }
 
   /**
@@ -67,6 +69,7 @@ public class PrivilegeService
           @ToolParam(description = "Nome do privilégio a verificar (String, obrigatório). " +
                                    "Case-sensitive. Deve corresponder exatamente ao nome do privilégio existente.",
                       required = true) String name) {
+    Objects.requireNonNull(name, "name não pode ser null");
     return getRepository().existsByName(name);
   }
 

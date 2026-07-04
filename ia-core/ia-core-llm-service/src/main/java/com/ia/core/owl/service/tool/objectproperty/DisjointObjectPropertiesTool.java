@@ -1,62 +1,79 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas DisjointObjectProperties.
+ * Tool para criação de axiomas DisjointObjectProperties OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades disjuntas
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedades de objeto mutuamente exclusivas (não podem ter valores em comum).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * DisjointObjectProperties é um axioma que declara que duas ou mais propriedades de objeto são
+ * mutuamente exclusivas, ou seja, não podem ter o mesmo valor (instância) para o mesmo sujeito.
+ * Se uma instância x está relacionada com y via propriedade P, não pode estar relacionada com y via Q.
+ * <p>
+ * <b>Sintaxe Manchester:</b> DisjointObjectProperties(:Propriedade1 :Propriedade2 ...)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>esposa e irmã são disjuntas (uma pessoa não pode ser esposa e irmã da mesma pessoa):
+ *       DisjointObjectProperties(:esposa :irma)</li>
+ *   <li>trabalhaPara e éClienteDe são disjuntas:
+ *       DisjointObjectProperties(:trabalhaPara :eClienteDe)</li>
+ *   <li>temPai e temMãe são disjuntas:
+ *       DisjointObjectProperties(:temPai :temMae)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class DisjointObjectPropertiesTool extends AbstractOWLTool {
+public class DisjointObjectPropertiesTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "DisjointObjectProperties";
-
-  public DisjointObjectPropertiesTool(ChatModel chatModel,
-                                      LLMCommunicator llmCommunicator,
-                                      DefaultOwlService owlService,
-                                      TemplateService templateService,
-                                      FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public DisjointObjectPropertiesTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria um axioma DisjointObjectProperties na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property1 Primeira propriedade de objeto
+   * @param property2 Segunda propriedade de objeto (disjunta da primeira)
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um axioma DisjointObjectProperties OWL 2 DL na ontologia da sessão. " +
+                     "Declara que duas ou mais propriedades de objeto são disjuntas (mutuamente exclusivas). " +
+                     "Não podem ter o mesmo valor (instância) para o mesmo sujeito. " +
+                     "Exemplos: " +
+                     "1) esposa e irmã são disjuntas → DisjointObjectProperties(:esposa :irma). " +
+                     "2) trabalhaPara e éClienteDe são disjuntas → DisjointObjectProperties(:trabalhaPara :eClienteDe). " +
+                     "3) temPai e temMãe são disjuntas → DisjointObjectProperties(:temPai :temMae). " +
+                     "Útil para definir propriedades de objeto que não podem ter valores em comum.")
+  public String createDisjointObjectProperties(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeira propriedade de objeto", required = true) String property1,
+      @ToolParam(description = "Segunda propriedade de objeto (disjunta da primeira)", required = true) String property2) {
 
-  @Override
-  public String getDescription() { return "Declara propriedades de objeto disjuntas"; }
+    log.debug("Criando DisjointObjectProperties: {} disjunta de {}", property1, property2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas DisjointObjectProperties.
-      Construtor: DisjointObjectProperties
-      Descrição: Declara que duas propriedades de objeto são disjuntas.
-      Sintaxe Manchester: DisjointObjectProperties(<propriedade1> <propriedade2>)
-      Exemplos:
-      - "esposa e irmã são disjuntas" → DisjointObjectProperties(:esposa :irma)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "DisjointObjectProperties(" + property1 + " " + property2 + ")";
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("esposa e irmã são disjuntas", "pai e mãe são disjuntas");
+    log.debug("Resultado da criação de DisjointObjectProperties: {}", result);
+    return result;
   }
 }

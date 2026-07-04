@@ -123,7 +123,7 @@ public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasV
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
     public static final String TELEFONE_DESTINATARIO = "telefoneDestinatario";
     public static final String NOME_DESTINATARIO = "nomeDestinatario";
     public static final String CORPO_MENSAGEM = "corpoMensagem";
@@ -137,6 +137,7 @@ public class MensagemDTO extends AbstractBaseEntityDTO<Mensagem> implements HasV
 
     public static Set<String> values() {
       return Set.of(
+        ID, VERSION,
         TELEFONE_DESTINATARIO,
         NOME_DESTINATARIO,
         CORPO_MENSAGEM,

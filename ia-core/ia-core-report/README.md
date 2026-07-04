@@ -165,7 +165,7 @@ public class ReportServiceImpl implements ReportService {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping("/api/${api.version}/reports")
 public class ReportController {
 
     @Autowired

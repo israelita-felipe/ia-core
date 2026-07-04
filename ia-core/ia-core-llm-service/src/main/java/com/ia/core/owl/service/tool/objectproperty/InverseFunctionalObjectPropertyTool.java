@@ -1,62 +1,75 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas InverseFunctionalObjectProperty.
+ * Tool para criação de propriedade de objeto inversamente funcional OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades de objeto inversamente funcionais
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedade de objeto inversamente funcional (InvFunc(R)).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * InverseFunctionalObjectProperty é um axioma que especifica que uma propriedade de objeto é inversamente funcional.
+ * Cada indivíduo y pode estar relacionado por no máximo um indivíduo x pela propriedade R(x, y). Permite modelar relacionamentos de identidade única.
+ * <p>
+ * <b>Sintaxe Manchester:</b> InverseFunctionalObjectProperty(:Propriedade)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>temFilho é inversamente funcional (cada pessoa tem no máximo um pai biológico):
+ *       InverseFunctionalObjectProperty(:temFilho)</li>
+ *   <li>temCPF é inversamente funcional (CPF é único):
+ *       InverseFunctionalObjectProperty(:temCPF)</li>
+ *   <li>temRG é inversamente funcional (RG é único):
+ *       InverseFunctionalObjectProperty(:temRG)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class InverseFunctionalObjectPropertyTool extends AbstractOWLTool {
+public class InverseFunctionalObjectPropertyTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "InverseFunctionalObjectProperty";
-
-  public InverseFunctionalObjectPropertyTool(ChatModel chatModel,
-                                            LLMCommunicator llmCommunicator,
-                                            DefaultOwlService owlService,
-                                            TemplateService templateService,
-                                            FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public InverseFunctionalObjectPropertyTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria uma propriedade de objeto inversamente funcional na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property Propriedade de objeto
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma propriedade de objeto inversamente funcional OWL 2 DL na ontologia da sessão. " +
+                     "Representa propriedade de objeto inversamente funcional (InvFunc(R)). " +
+                     "Especifica que cada indivíduo pode estar relacionado por no máximo um indivíduo pela propriedade. " +
+                     "Exemplos: " +
+                     "1) temFilho é inversamente funcional (cada pessoa tem no máximo um pai biológico) → InverseFunctionalObjectProperty(:temFilho). " +
+                     "2) temCPF é inversamente funcional (CPF é único) → InverseFunctionalObjectProperty(:temCPF). " +
+                     "3) temRG é inversamente funcional (RG é único) → InverseFunctionalObjectProperty(:temRG).")
+  public String createInverseFunctionalObjectProperty(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property) {
 
-  @Override
-  public String getDescription() { return "Declara propriedade de objeto inversamente funcional"; }
+    log.debug("Criando InverseFunctionalObjectProperty: InvFunc({})", property);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas InverseFunctionalObjectProperty.
-      Construtor: InverseFunctionalObjectProperty
-      Descrição: Declara que a propriedade inversa é funcional (cada valor tem no máximo uma origem).
-      Sintaxe Manchester: InverseFunctionalObjectProperty(<propriedade>)
-      Exemplos:
-      - "temFilho é inversamente funcional" → InverseFunctionalObjectProperty(:temFilho)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "InverseFunctionalObjectProperty: " + property;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("temFilho é inversamente funcional", "temPai é inversamente funcional");
+    log.debug("Resultado da criação de InverseFunctionalObjectProperty: {}", result);
+    return result;
   }
 }

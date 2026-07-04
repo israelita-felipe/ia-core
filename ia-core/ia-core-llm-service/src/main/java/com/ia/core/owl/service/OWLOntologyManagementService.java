@@ -20,91 +20,50 @@ public interface OWLOntologyManagementService {
   /**
    * Analisa um hasAxiomas completo: verifica consistência e realiza inferências.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology to analyze
    * @return resultado da análise de inferências
    */
-  AnaliseInferenciaDTO checkInferrences();
-
-  /**
-   * Retorna a URI da ontologia.
-   *
-   * @return URI da ontologia
-   */
-  String getUri();
-
-  /**
-   * Retorna o prefixo da ontologia.
-   *
-   * @return prefixo da ontologia
-   */
-  String getPrefix();
-
-  /**
-   * Retorna a versão da ontologia.
-   *
-   * @return versão da ontologia
-   */
-  String getVersion();
-
-  /**
-   * Retorna o gerenciador de ontologia.
-   *
-   * @return OWLOntologyManager
-   */
-  OWLOntologyManager getManager();
-
-  /**
-   * Retorna a ontologia atual.
-   *
-   * @return a ontologia OWL
-   */
-  OWLOntology getOntology();
-
-  /**
-   * Retorna a fábrica de dados OWL.
-   *
-   * @return OWLDataFactory
-   */
-  OWLDataFactory getDataFactory();
-
-  /**
-   * Retorna o gerenciador de prefixos.
-   *
-   * @return PrefixManager
-   */
-  PrefixManager getPrefixManager();
-
-  /**
-   * Retorna o serviço de raciocínio OWL.
-   *
-   * @return OWLReasoningService
-   */
-  OWLReasoningService getReasoningService();
+  AnaliseInferenciaDTO checkInferrences(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+                                        org.semanticweb.owlapi.model.OWLOntology ontology);
 
   /**
    * Adiciona axiomas à ontologia atual.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology
    * @param hasAxiomas objeto contendo os axiomas
    * @throws OWLParserException se ocorrer erro no parsing
    * @throws OWLOntologyCreationException se ocorrer erro na criação
    */
-  void addAxioms(HasAxiomas hasAxiomas)
+  void addAxioms(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+                 org.semanticweb.owlapi.model.OWLOntology ontology,
+                 HasAxiomas hasAxiomas)
     throws OWLParserException, OWLOntologyCreationException;
 
   /**
    * Adiciona um axioma à ontologia atual.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology
    * @param hasAxiomas objeto contendo os axiomas
    * @param axioma o axioma a ser adicionado
    */
-  void addAxiom(HasAxiomas hasAxiomas, AxiomaDTO axioma);
+  void addAxiom(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+               org.semanticweb.owlapi.model.OWLOntology ontology,
+               HasAxiomas hasAxiomas,
+               AxiomaDTO axioma);
 
   /**
    * Cria um axioma DTO.
    *
    * @param expressao a expressão Manchester
+   * @param uri the ontology URI
+   * @param prefix the ontology prefix
+   * @param version the ontology version
    * @return o AxiomaDTO criado
    */
-  AxiomaDTO criarAxioma(String expressao);
+  AxiomaDTO criarAxioma(String expressao, String uri, String prefix, String version);
 
   /**
    * Cria um formato de documento OWL.

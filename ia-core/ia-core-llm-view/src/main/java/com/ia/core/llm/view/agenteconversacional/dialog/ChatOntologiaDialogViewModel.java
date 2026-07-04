@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.agenteconversacional.dialog;
 
-import com.ia.core.llm.service.model.agente.ContextoConversacao;
+import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
 import com.ia.core.llm.service.model.agente.RespostaAgente;
 import com.ia.core.llm.view.agenteconversacional.AgenteConversacionalManager;
 import com.ia.core.view.components.IViewModel;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatOntologiaDialogViewModel implements IViewModel {
 
   private final AgenteConversacionalManager manager;
-  private ContextoConversacao contextoAtual;
+  private ContextConversacaoDTO contextoAtual;
   private RespostaAgente ultimaResposta;
 
   public ChatOntologiaDialogViewModel(AgenteConversacionalManager manager) {
@@ -33,7 +33,7 @@ public class ChatOntologiaDialogViewModel implements IViewModel {
     // Na implementação completa, chamaria o serviço REST
   }
 
-  public ContextoConversacao getContextoAtual() {
+  public ContextConversacaoDTO getContextoAtual() {
     return contextoAtual;
   }
 

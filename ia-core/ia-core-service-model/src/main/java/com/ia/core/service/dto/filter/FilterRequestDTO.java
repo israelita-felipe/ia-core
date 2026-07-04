@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Filtro de uma requisição
+ * DTO para requisição de filtro.
+ * <p>
+ * Define os critérios de filtro para consultas, especificando o campo,
+ * operador, tipo de campo e valor a ser comparado.
+ * </p>
  *
  * @author Israel Araújo
  */
@@ -21,12 +25,12 @@ import lombok.experimental.SuperBuilder;
 public class FilterRequestDTO
   implements DTO<FilterRequest> {
   /**
-   * Serial UID
+   * Serial UID para serialização
    */
   private static final long serialVersionUID = -6843840428361841324L;
 
   /**
-   * Campos do filtro
+   * Constantes para nomes de campos utilizados em serialização/mapping.
    */
   @SuppressWarnings("javadoc")
   public static final class CAMPOS {
@@ -37,31 +41,36 @@ public class FilterRequestDTO
   }
 
   /**
-   * Nome do campo
+   * Nome do campo a ser filtrado
    */
   private String key;
 
   /**
-   * Operador.
+   * Operador de comparação (igual, diferente, contém, etc.)
    */
   private OperatorDTO operator;
 
   /**
-   * Tipo do campo.
+   * Tipo de dado do campo
    */
   private FieldType fieldType;
 
   /**
-   * Valor a ser comparado.
+   * Valor a ser comparado no filtro
    */
   private transient Object value;
 
   /**
-   * Negação
+   * Indica se o filtro deve ser negado (inverter o resultado)
    */
   @Default
   private boolean negate = false;
 
+  /**
+   * Cria uma cópia deste DTO.
+   *
+   * @return Nova instância de FilterRequestDTO com os mesmos valores
+   */
   @Override
   public FilterRequestDTO cloneObject() {
     return toBuilder().build();

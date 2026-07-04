@@ -100,10 +100,10 @@ public class LogOperationDetails
     });
   }
 
-  @Override
-  public LogOperationDetails cloneObject() {
-    return toBuilder().build();
-  }
+ @Override
+ public LogOperationDetails cloneObject() {
+   return toBuilder().build();
+ }
 
   public Collection<String> getAllProperties() {
     Set<String> hashSet = new HashSet<>();

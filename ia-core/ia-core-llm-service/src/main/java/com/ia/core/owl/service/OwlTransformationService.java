@@ -1,10 +1,12 @@
 package com.ia.core.owl.service;
 
+import com.ia.core.llm.model.ontologia.OntologyFormat;
+import com.ia.core.llm.service.model.ontologia.OntologiaDTO;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
 import com.ia.core.owl.service.model.TransformacaoResultDTO;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
-import org.springframework.ai.chat.model.ChatModel;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,10 +33,6 @@ public class OwlTransformationService
    * Parâmetro de uri da ontologia
    */
   private static final String PARAM_URI = "\\{uri\\}";
-  /**
-   * Modelo de chat para interagir com o modelo de linguagem.
-   */
-  private final ChatModel chatModel;
 
   /**
    * Vector store para contexto adicional (se necessário).
@@ -46,17 +44,13 @@ public class OwlTransformationService
   /**
    * Constrói um novo serviço de transformação OWL.
    *
-   * @param chatModel  o modelo de chat para criar o ChatClient (não pode ser
-   *                   nulo)
    * @param owlService o serviço OWL para validação dos axiomas (não pode ser
    *                   nulo)
    * @throws IllegalArgumentException se o chatModel for nulo
    */
-  public OwlTransformationService(ChatModel chatModel,
+  public OwlTransformationService(
                                   CoreOWLService owlService,
                                   LLMCommunicator llmCommunicator) {
-    Objects.requireNonNull(chatModel, "ChatModel cannot be null");
-    this.chatModel = chatModel;
     this.owlService = owlService;
     this.communicationService = llmCommunicator;
   }
@@ -74,7 +68,7 @@ public class OwlTransformationService
    * @throws IllegalArgumentException se algum parâmetro for nulo ou vazio
    */
   @Override
-  public TransformacaoResultDTO transformarParaOWL(String template,
+  public TransformacaoResultDTO transformarParaOWL(String sessionId,String template,
                                                    String descricaoNatural) {
     validateTransformParameters(template, descricaoNatural);
 
@@ -82,15 +76,43 @@ public class OwlTransformationService
       String processedPrompt = processPromptTemplate(template,
                                                      descricaoNatural);
 
-      String resposta = callChatModel(processedPrompt);
+      String resposta = callChatModel(processedPrompt,sessionId);
       resposta = cleanOwlResponse(resposta);
       List<AxiomaDTO> axiomas = processarRespostaLLM(resposta);
-      this.owlService.addAxioms(() -> axiomas);
-      return createSuccessResult(axiomas);
+
+      // Create OntologiaDTO with axioms
+      String conteudo = buildOntologyContent(axiomas);
+      OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+          .conteudo(conteudo)
+          .formato(OntologyFormat.MANCHESTER)
+          .iri("http://example.com/")
+          .prefixo("ex")
+          .dataCriacao(LocalDateTime.now())
+          .ultimaModificacao(LocalDateTime.now())
+          .build();
+
+      this.owlService.addAxioms(ontologiaDTO, () -> axiomas);
+      return createSuccessResult(axiomas, ontologiaDTO);
     } catch (Exception e) {
       return createErrorResult("Erro na transformação: " + e.getMessage(),
                                e);
     }
+  }
+
+  /**
+   * Builds the ontology content string from axioms.
+   *
+   * @param axiomas the list of axioms
+   * @return the ontology content string
+   */
+  private String buildOntologyContent(List<AxiomaDTO> axiomas) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Prefix: ex: <http://example.com/>\n");
+    sb.append("Ontology: <http://example.com/>\n\n");
+    for (AxiomaDTO axioma : axiomas) {
+      sb.append(axioma.getExpressao()).append("\n");
+    }
+    return sb.toString();
   }
 
   /**
@@ -143,8 +165,8 @@ public class OwlTransformationService
    * @throws IllegalArgumentException se algum parâmetro for nulo ou vazio
    */
   @Override
-  public TransformacaoResultDTO transformarParaOWL(String descricaoNatural) {
-    return transformarParaOWL(getPromptTemplate(), descricaoNatural);
+  public TransformacaoResultDTO transformarParaOWL(String sessionId,String descricaoNatural) {
+    return transformarParaOWL(sessionId,getPromptTemplate(), descricaoNatural);
   }
 
   /**
@@ -167,7 +189,7 @@ public class OwlTransformationService
 
     List<AxiomaDTO> axiomas = new ArrayList<>();
 
-    AxiomaDTO axioma = this.owlService.criarAxioma(resposta);
+    AxiomaDTO axioma = this.owlService.criarAxioma(resposta, "http://example.com/", "ex", "1.0");
     if (axioma != null) {
       axiomas.add(axioma);
     }
@@ -181,7 +203,6 @@ public class OwlTransformationService
    * @param template         o template de prompt (não pode ser nulo ou vazio)
    * @param descricaoNatural a descrição em linguagem natural (não pode ser nula
    *                         ou vazia)
-   * @param uri              a URI base (não pode ser nula ou vazia)
    * @throws IllegalArgumentException se algum parâmetro for nulo ou vazio
    */
   private void validateTransformParameters(String template,
@@ -205,7 +226,7 @@ public class OwlTransformationService
    */
   private String processPromptTemplate(String template, String descricao) {
     return template.replaceAll(PARAM_DESCRICAO, descricao)
-        .replaceAll(PARAM_URI, owlService.getUri());
+        .replaceAll(PARAM_URI, "http://example.com/");
   }
 
   /**
@@ -216,23 +237,25 @@ public class OwlTransformationService
    * @return a resposta do modelo de chat
    * @throws IllegalArgumentException se o prompt for nulo
    */
-  public String callChatModel(String promptRequest) {
+  public String callChatModel(String sessionId,String promptRequest) {
     Objects.requireNonNull(promptRequest, "Prompt não pode ser nulo");
 
     // Use o serviço híbrido
-    return communicationService.sendPrompt(getChatModel(), promptRequest);
+    return communicationService.sendPrompt(promptRequest,sessionId).content();
   }
 
   /**
    * * Cria um resultado de transformação bem-sucedido.
    *
    * @param axiomas a lista de axiomas gerados (não pode ser nula)
+   * @param ontologiaDTO the ontology DTO
    * @return o resultado da transformação
    * @throws IllegalArgumentException se axiomas for nulo
    */
-  private TransformacaoResultDTO createSuccessResult(List<AxiomaDTO> axiomas) {
+  private TransformacaoResultDTO createSuccessResult(List<AxiomaDTO> axiomas,
+                                                      OntologiaDTO ontologiaDTO) {
     try {
-      AnaliseInferenciaDTO check = owlService.checkInferrences();
+      AnaliseInferenciaDTO check = owlService.checkInferrences(ontologiaDTO);
       return new TransformacaoResultDTO(axiomas, Collections
           .emptyList(), true, "Transformação realizada com sucesso usando Spring AI",
                                         check);
@@ -261,13 +284,4 @@ public class OwlTransformationService
                                       "Falha na transformação", null);
   }
 
-  /**
-   * Retorna o ChatModel utilizado pelo serviço.
-   *
-   * @return o ChatModel instance
-   */
-  @Override
-  public ChatModel getChatModel() {
-    return chatModel;
-  }
 }

@@ -1,7 +1,5 @@
 # ADR-017: Usar Flyway para Migrações de Banco de Dados
 
-## Status
-
 ✅ Aceito
 
 ## Contexto
@@ -38,11 +36,27 @@ src/main/resources/
 |---------|-----------|---------|
 | `V` | Versionamento | `V1__`, `V2__` |
 | `R` | Reversões (undo) | `R__1_0_0__undo.sql` |
-| `U` |Updates idx | `U1__add_index.sql` |
+| `U` | Updates idx | `U1__add_index.sql` |
 
-**Padrão**: `V{VERSION}__{DESCRIPTION}.sql`
+**Padrão Global**: `V{MODULE_PREFIX}{VERSION}__{DESCRIPTION}.sql`
 
-Exemplo: `V20240315_1430__Create_pessoa_table.sql`
+Cada módulo DEVE utilizar um prefixo específico para evitar conflitos de versão entre módulos diferentes:
+
+| Módulo | Prefixo | Exemplo |
+|--------|---------|---------|
+| biblia-service | BBL | `VBBL20260101__Create_livro.sql` |
+| ia-core-quartz-service | QTZ | `VQTZ20260101__Create_job_table.sql` |
+| ia-core-security-service | SEC | `VSEC20260101__Create_user_table.sql` |
+| ia-core-llm-service | LLM | `VLLM20260101__Create_template.sql` |
+| ia-core-communication-service | COM | `VCOM20260101__Create_message_table.sql` |
+| ia-core-flyway-service | FLY | `VFLY20260101__Create_migration_log.sql` |
+
+**Formato da Versão {VERSION}**: `YYYYMMDDHHMMSS` para ordenação cronológica
+
+Exemplos:
+- `VBBL20260101143000__Create_livro.sql` (biblia-service)
+- `VQTZ20260101143000__Create_job_table.sql` (quartz-service)
+- `VSEC20260101143000__Create_user_table.sql` (security-service)
 
 ### Configuração no pom.xml
 
@@ -79,7 +93,7 @@ spring:
 ### Exemplo de Migration
 
 ```sql
--- V1__Create_base_entity.sql
+-- VBBL20240315143000__Create_base_entity.sql (biblia-service)
 CREATE TABLE base_entity (
     id BIGSERIAL PRIMARY KEY,
     version BIGINT NOT NULL DEFAULT 0,
@@ -90,7 +104,7 @@ CREATE TABLE base_entity (
     ativo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
--- V2__Create_pessoa_table.sql
+-- VBBL20240315144500__Create_pessoa_table.sql (biblia-service)
 CREATE TABLE pessoa (
     id BIGINT NOT NULL,
     nome VARCHAR(100) NOT NULL,
@@ -170,7 +184,7 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 |-----|--------|---------------------|
 | **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos SQL |
 | **RFC 5646** | Tags for Identifying Languages | Tags de locale para migrações multilíngue quando aplicável |
-| **RFC 5988** | Web Linking | Links de documentação para migrações complexas |
+| **RFC 8288** | Web Linking | Links de documentação para migrações complexas; substitui RFC 5988 |
 
 ### Padrões de Mercado
 
@@ -186,22 +200,75 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 1. **UTF-8 obrigatório**: Todos arquivos `.sql` devem usar UTF-8 com BOM quando necessário.
 2. **Nomes descritivos**: Descrições devem ser claras e no imperativo (ex: "Add_user_table").
 3. **Atomicidade**: Cada migration deve ser atômica - ou completa ou falha completamente.
-4. **Idempotência**: Migrações devem ser seguras para rodar múltiplas vezes.
+4. **Idempotência**: Migrações devem ser idempotentes - podem ser executadas múltiplas vezes sem efeitos colaterais adversos. Deve usar `CREATE TABLE IF NOT EXISTS` e verificar existência antes de criar objetos.
 5. **Documentação**: Comentários explicam o propósito e mudanças significativas.
 6. **Rollback planejado**: Migrações críticas devem ter reversão documentada.
 7. **Performance**: Índices criados após dados populados para evitar locks.
 8. **Segurança**: Sem `DROP TABLE` sem backup prévio; usar `soft deletes` quando possível.
 9. **Testes**: Migrações devem ser testadas em ambiente de staging antes de produção.
-10. **Versionamento**: Versões seguem formato `YYYYMMDD_HHMMSS` para ordenação cronológica.
+10. **Versionamento**: Versões seguem formato `YYYYMMDDHHMMSS` para ordenação cronológica, com prefixo do módulo (ex: `VBBL20240315143000`).
+
+### Idempotência em Migrations
+
+#### Definição
+
+Idempotência é uma propriedade matemática e de sistemas distribuídos onde uma operação pode ser executada múltiplas vezes sem alterar o resultado além da primeira execução. Em contexto de migrations de banco de dados, significa que scripts SQL devem produzir o mesmo estado final independentemente de quantas vezes sejam executados.
+
+#### Importância
+
+- **CI/CD**: Ambientes podem executar migrations várias vezes durante pipelines
+- **Hotfix**: Correções podem ser aplicadas após migrations já executadas
+- **Re-deploy**: Reimplantação em ambientes limpos não deve causar falhas
+- **Concorrência**: Múltiplos desenvolvedores podem aplicar migrations simultaneamente
+
+#### Estratégias para Idempotência
+
+1. **CREATE IF NOT EXISTS**:
+   ```sql
+   CREATE TABLE IF NOT EXISTS SECURITY.SEC_USER (...);
+   CREATE INDEX IF NOT EXISTS idx_sec_user_name ON SECURITY.SEC_USER(name);
+   ```
+
+2. **Verificação de Constraints**:
+   ```sql
+   -- PostgreSQL/H2
+   DO $$ BEGIN
+       IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uk_sec_user_code') THEN
+           ALTER TABLE SECURITY.SEC_USER ADD CONSTRAINT uk_sec_user_code UNIQUE (user_code);
+       END IF;
+   END $$;
+   ```
+
+3. **MERGE/INSERT ... ON CONFLICT** (PostgreSQL):
+   ```sql
+   INSERT INTO SECURITY.SEC_ROLE (id, name) 
+   VALUES (1, 'ADMIN') 
+   ON CONFLICT (id) DO NOTHING;
+   ```
+
+4. **Checagem de existência de tabelas**:
+   ```sql
+   -- H2
+   CREATE TABLE IF NOT EXISTS SECURITY.SEC_PRIVILEGE (
+       id BIGINT NOT NULL,
+       name VARCHAR(500) NOT NULL UNIQUE,
+       ...
+   );
+   ```
+
+#### Referências
+
+- Redgate: [Creating Idempotent DDL Scripts for Database Migrations](https://www.red-gate.com/hub/product-learning/flyway/creating-idempotent-ddl-scripts-for-database-migrations/)
+- Flyway Documentation: Migrations são idempotentes por natureza via tabela `flyway_schema_history`
 
 ### Padrões de Código SQL
 
 ```sql
 -- Comentários no início explicando o propósito
--- V20240315_1430__Create_pessoa_table.sql
+-- VBBL20240315143000__Create_pessoa_table.sql (biblia-service)
 -- Cria tabela de pessoas com campos básicos e constraints
 -- Autor: Team Lead
--- Dependências: V20240315_1400__Create_base_entity.sql
+-- Dependências: VBBL20240315140000__Create_base_entity.sql
 
 -- Uso de schema qualificado para evitar ambiguidade
 CREATE TABLE biblia.pessoa (
@@ -231,6 +298,7 @@ CREATE INDEX idx_pessoa_cpf ON biblia.pessoa(cpf);
 - **ADR-047**: UTF-8 e tags de idioma para migrações multilíngue.
 - **ADR-048**: Migrações para tabelas de AI/MCP seguem padrões do projeto.
 - **ADR-050**: Diretrizes gerais de padronização do projeto.
+- **ADR-052**: ADRs devem usar linguagem normativa RFC 2119/RFC 8174 e indicar referências técnicas vigentes.
 
 ## Referências
 

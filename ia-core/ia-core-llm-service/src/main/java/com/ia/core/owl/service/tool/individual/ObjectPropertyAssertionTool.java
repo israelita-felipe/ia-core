@@ -1,47 +1,59 @@
 package com.ia.core.owl.service.tool.individual;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
-import org.springframework.ai.chat.model.ChatModel;
+
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+/**
+ * Tool para criação de asserção de propriedade de objeto OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owl*service para criar asserções de propriedade de objeto
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa asserção de propriedade de objeto (R(a, b)).
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
+ */
+@Slf4j
 @Component
-public class ObjectPropertyAssertionTool extends AbstractOWLTool {
+public class ObjectPropertyAssertionTool extends OwlConstructorTool {
 
-  public ObjectPropertyAssertionTool(ChatModel chatModel, LLMCommunicator llmCommunicator, DefaultOwlService owlService,
-                                   TemplateService templateService, FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ObjectPropertyAssertionTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return "ObjectPropertyAssertion"; }
+  /**
+   * Cria uma asserção de propriedade de objeto na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param individual1 Primeiro indivíduo
+   * @param property Propriedade de objeto
+   * @param individual2 Segundo indivíduo
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma asserção de propriedade de objeto OWL 2 DL na ontologia da sessão. " +
+                     "Representa asserção de propriedade de objeto (R(a, b)). " +
+                     "Exemplo: João é pai de Maria → ObjectPropertyAssertion(:João :temPai :Maria).")
+  public String createObjectPropertyAssertion(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeiro indivíduo", required = true) String individual1,
+      @ToolParam(description = "Propriedade de objeto", required = true) String property,
+      @ToolParam(description = "Segundo indivíduo", required = true) String individual2) {
 
-  @Override
-  public String getDescription() { return "Declara uma relação entre dois indivíduos"; }
+    log.debug("Criando ObjectPropertyAssertion: {} {} {}", individual1, property, individual2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ObjectPropertyAssertion.
-      Construtor: ObjectPropertyAssertion
-      Descrição: Declara uma relação entre dois indivíduos.
-      Sintaxe Manchester: ObjectPropertyAssertion(<individuo1> <propriedade> <individuo2>)
-      Exemplos:
-      - "João é pai de Maria" → ObjectPropertyAssertion(:João :temPai :Maria)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "ObjectPropertyAssertion: " + property + " " + individual1 + " " + individual2;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+    // Usa OwlConstructorTool.createAxiom para adicionar via owl*service
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ObjectPropertyAssertion: {}", result);
+    return result;
   }
-
-  @Override
-  public List<String> getExamples() { return List.of("João é pai de Maria", "João temFilho Maria"); }
 }

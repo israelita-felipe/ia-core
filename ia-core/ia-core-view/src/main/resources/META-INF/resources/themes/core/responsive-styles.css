@@ -1,0 +1,54 @@
+/* ============================================
+   Minimal Responsive and Accessibility Enhancements
+   Preserving Vaadin Original Styling
+   ============================================ */
+
+/* Modern viewport units for mobile browsers */
+:root {
+    --vh: 1dvh;
+    --vw: 1dvw;
+}
+
+/* Smooth scrolling for better UX */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   Accessibility Enhancements (WCAG 2.2)
+   ============================================ */
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+    vaadin-app-layout,
+    vaadin-menu-bar,
+    .help-button {
+        display: none !important;
+    }
+
+    vaadin-dialog-overlay {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    * {
+        color: black !important;
+        background: white !important;
+    }
+}

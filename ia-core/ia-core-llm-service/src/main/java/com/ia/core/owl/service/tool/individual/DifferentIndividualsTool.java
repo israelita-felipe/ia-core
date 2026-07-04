@@ -1,47 +1,57 @@
 package com.ia.core.owl.service.tool.individual;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
-import org.springframework.ai.chat.model.ChatModel;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+/**
+ * Tool para criação de indivíduos diferentes OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owl*service para criar axiomas de indivíduos diferentes
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa indivíduos diferentes (a₁ ≠ a₂).
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
+ */
+@Slf4j
 @Component
-public class DifferentIndividualsTool extends AbstractOWLTool {
+public class DifferentIndividualsTool extends OwlConstructorTool {
 
-  public DifferentIndividualsTool(ChatModel chatModel, LLMCommunicator llmCommunicator, DefaultOwlService owlService,
-                               TemplateService templateService, FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public DifferentIndividualsTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return "DifferentIndividuals"; }
+  /**
+   * Cria um axioma de indivíduos diferentes na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param individual1 Primeiro indivíduo
+   * @param individual2 Segundo indivíduo
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um axioma de indivíduos diferentes OWL 2 DL na ontologia da sessão. " +
+                     "Representa indivíduos diferentes (a₁ ≠ a₂). " +
+                     "Exemplo: Tom e Jerry são diferentes → DifferentIndividuals(:Tom :Jerry).")
+  public String createDifferentIndividuals(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeiro indivíduo", required = true) String individual1,
+      @ToolParam(description = "Segundo indivíduo", required = true) String individual2) {
 
-  @Override
-  public String getDescription() { return "Declara que dois indivíduos são diferentes"; }
+    log.debug("Criando DifferentIndividuals: {} ≠ {}", individual1, individual2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas DifferentIndividuals.
-      Construtor: DifferentIndividuals
-      Descrição: Declara que dois indivíduos são diferentes.
-      Sintaxe Manchester: DifferentIndividuals(<individuo1> <individuo2>)
-      Exemplos:
-      - "Tom e Jerry são diferentes" → DifferentIndividuals(:Tom :Jerry)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "DifferentIndividuals: " + individual1 + " " + individual2;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+    // Usa OwlConstructorTool.createAxiom para adicionar via owl*service
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de DifferentIndividuals: {}", result);
+    return result;
   }
-
-  @Override
-  public List<String> getExamples() { return List.of("Tom e Jerry são diferentes", "João e Maria são diferentes"); }
 }

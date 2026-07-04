@@ -149,7 +149,7 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 |-----|--------|---------------------|
 | **RFC 3629** | UTF-8, a transformation format of ISO 10646 | Codificação obrigatória para todos os arquivos de código e recursos |
 | **RFC 5646** | Tags for Identifying Languages | Tags de locale para nomenclatura de arquivos (ex: `messages_en.properties`) |
-| **RFC 5988** | Web Linking | Nomenclatura de endpoints REST com verbos HTTP adequados |
+| **RFC 8288** | Web Linking | Links de documentação para recursos REST e migração de referências legadas de RFC 5988 |
 
 ### Padrões de Mercado
 
@@ -180,6 +180,7 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 - **ADR-047**: UTF-8 em todos os arquivos de código e recursos.
 - **ADR-048**: Classes de AI/MCP seguem convenções de nomenclatura do Spring AI.
 - **ADR-050**: Diretrizes gerais de padronização do projeto.
+- **ADR-052**: ADRs devem usar linguagem normativa RFC 2119/RFC 8174 e indicar referências técnicas vigentes.
 
 ## Referências
 

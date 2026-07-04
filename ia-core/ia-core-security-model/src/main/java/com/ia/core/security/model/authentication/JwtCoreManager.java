@@ -26,8 +26,8 @@ public class JwtCoreManager
 
   private static volatile SecretKey signingKey;
 
-  @Value("${jwt.secret}")
-  private String secret;
+  @Value("${jwt.secret:hvIRaPetw4yPjt65kITgF45T6UJ21ss7ppYhBnff55Tttredc9tty}")
+  private String secret = "hvIRaPetw4yPjt65kITgF45T6UJ21ss7ppYhBnff55Tttredc9tty";
   private static final String CLAIM_FUNCTIONALITIES_KEY = "claim.functionalities";
   private static final String CLAIM_USER_NAME_KEY = "claim.userName";
   private static final String CLAIM_FUNCTIONALITIES_CONTEXT = "claim.functionalities.context";

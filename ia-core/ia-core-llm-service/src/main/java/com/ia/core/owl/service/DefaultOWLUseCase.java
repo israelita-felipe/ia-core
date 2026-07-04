@@ -25,25 +25,36 @@ public interface DefaultOWLUseCase {
   /**
    * Analisa um hasAxiomas completo: verifica consistência e realiza inferências.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology to analyze
    * @return {@link AnaliseInferenciaDTO}
    */
-  AnaliseInferenciaDTO checkInferrences();
+  AnaliseInferenciaDTO checkInferrences(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+                                        org.semanticweb.owlapi.model.OWLOntology ontology);
 
   /**
    * Adiciona um axioma Manchester ao hasAxiomas e verifica consistência.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology
    * @param hasAxiomas {@link HasAxiomas}
    * @param axioma     {@link AxiomaDTO}
    */
-  void addAxiom(HasAxiomas hasAxiomas, AxiomaDTO axioma);
+  void addAxiom(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+               org.semanticweb.owlapi.model.OWLOntology ontology,
+               HasAxiomas hasAxiomas,
+               AxiomaDTO axioma);
 
   /**
    * Cria um axioma DTO.
    *
    * @param expressao a expressão Manchester
+   * @param uri the ontology URI
+   * @param prefix the ontology prefix
+   * @param version the ontology version
    * @return o AxiomaDTO criado
    */
-  AxiomaDTO criarAxioma(String expressao);
+  AxiomaDTO criarAxioma(String expressao, String uri, String prefix, String version);
 
   /**
    * Cria um formato de documento OWL.
@@ -53,95 +64,71 @@ public interface DefaultOWLUseCase {
   OWLDocumentFormat createDocumentFormat();
 
   /**
-   * Retorna a URI da ontologia.
-   *
-   * @return URI da ontologia
-   */
-  String getUri();
-
-  /**
    * Adiciona axiomas à ontologia atual.
    *
+   * @param manager the ontology manager
+   * @param ontology the ontology
    * @param hasAxiomas objeto contendo os axiomas
    * @throws OWLParserException           se ocorrer erro no parsing
    * @throws OWLOntologyCreationException se ocorrer erro na criação
    */
-  void addAxioms(HasAxiomas hasAxiomas)
+  void addAxioms(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+                 org.semanticweb.owlapi.model.OWLOntology ontology,
+                 HasAxiomas hasAxiomas)
     throws OWLParserException, OWLOntologyCreationException;
 
   // ===== Métodos de OWLOntologyManagementService =====
 
   /**
-   * Retorna o prefixo da ontologia.
+   * Retorna o serviço de raciocínio OWL.
    *
-   * @return prefixo da ontologia
+   * @return OWLReasoningService
    */
-  String getPrefix();
+  OWLReasoningService getReasoningService();
 
   /**
-   * Retorna a versão da ontologia.
+   * Define o serviço de raciocínio OWL.
    *
-   * @return versão da ontologia
+   * @param reasonerService the reasoning service
    */
-  String getVersion();
-
-  /**
-   * Retorna o gerenciador de ontologia.
-   *
-   * @return OWLOntologyManager
-   */
-  OWLOntologyManager getManager();
-
-  /**
-   * Retorna a ontologia atual.
-   *
-   * @return a ontologia OWL
-   */
-  OWLOntology getOntology();
-
-  /**
-   * Retorna a fábrica de dados OWL.
-   *
-   * @return OWLDataFactory
-   */
-  OWLDataFactory getDataFactory();
-
-  /**
-   * Retorna o gerenciador de prefixos.
-   *
-   * @return PrefixManager
-   */
-  PrefixManager getPrefixManager();
+  void setReasoningService(OWLReasoningService reasonerService);
 
   // ===== Métodos de OWLParsingService =====
 
   /**
    * Carrega uma ontologia a partir de axiomas.
    *
+   * @param manager the ontology manager
    * @param axiomas conjunto de axiomas OWL
    * @return a ontologia carregada
    * @throws OWLOntologyCreationException se ocorrer erro na criação
    */
-  OWLOntology loadOntologyFromAxioms(Set<OWLAxiom> axiomas)
+  OWLOntology loadOntologyFromAxioms(org.semanticweb.owlapi.model.OWLOntologyManager manager,
+                                     Set<OWLAxiom> axiomas)
     throws OWLOntologyCreationException;
 
   /**
    * Converte um axioma OWL para formato Manchester.
    *
    * @param axiom o axioma OWL a ser convertido
+   * @param uri the ontology URI
+   * @param prefix the ontology prefix
+   * @param version the ontology version
    * @return o axioma convertido para DTO
    * @throws OWLParserException se ocorrer erro na conversão
    */
-  AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom)
+  AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom, String uri, String prefix, String version)
     throws OWLParserException;
 
   /**
    * Extrai axiomas inferidos que não estavam presentes na ontologia original.
    *
+   * @param ontology the original ontology
    * @param axioms conjunto de axiomas da ontologia inferida
    * @return lista de novos axiomas inferidos
    * @throws OWLParserException se ocorrer erro no parsing
    */
-  java.util.List<AxiomaDTO> extractInferredAxioms(Set<OWLAxiom> axioms)
+  java.util.List<AxiomaDTO> extractInferredAxioms(org.semanticweb.owlapi.model.OWLOntology ontology,
+                                                  Set<OWLAxiom> axioms)
     throws OWLParserException;
 }

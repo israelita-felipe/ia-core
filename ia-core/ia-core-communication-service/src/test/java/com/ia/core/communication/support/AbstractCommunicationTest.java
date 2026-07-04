@@ -53,7 +53,7 @@ public abstract class AbstractCommunicationTest {
      * @return e-mail de teste
      */
     protected String generateTestEmail() {
-        return "test" + System.currentTimeMillis() + "@example.com";
+        return "com/ia/test" + System.currentTimeMillis() + "@example.com";
     }
 
     /**

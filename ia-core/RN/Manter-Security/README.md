@@ -3,14 +3,19 @@
 ## Visão Geral
 Este documento define as regras de negócio para o módulo de Segurança do ia-core-apps.
 
+## Referência
+- **CDU**: CDU015-Manter-Security
+- **Service**: ia-core-security-service
+- **Módulo**: ia-core-security-model
+
 ## Entidades
 
 ### Usuario
 Representa um usuário do sistema com autenticação e autorização.
 
-#### Regras a Implementar
+#### Regras Implementadas
 
-##### USR_001 - UsuarioSenhaForteRule
+##### SEC_001 - UsuarioSenhaForteRule
 - **Nome**: Usuário Senha Forte
 - **Descrição**: Garante que a senha do usuário atenda aos critérios de segurança
 - **Critérios**:
@@ -20,116 +25,103 @@ Representa um usuário do sistema com autenticação e autorização.
   - Pelo menos 1 número
   - Pelo menos 1 caractere especial (!@#$%^&*())
 - **Severidade**: ERRO
+- **Referência CDU**: RN001
 
-##### USR_002 - UsuarioEmailUnicoRule
+##### SEC_002 - UsuarioEmailUnicoRule
 - **Nome**: Usuário Email Único
 - **Descrição**: Garante que o e-mail seja único no sistema
 - **Critérios**:
-  - E-mail não pode ser duplicado
+  - E-mail é obrigatório
+  - Não pode ser duplicado
   - Comparação case-insensitive
 - **Severidade**: ERRO
+- **Referência CDU**: RN002
 
-##### USR_003 - UsuarioLoginUnicoRule
+##### SEC_003 - UsuarioLoginUnicoRule
 - **Nome**: Usuário Login Único
 - **Descrição**: Garante que o login seja único no sistema
 - **Critérios**:
-  - Login não pode ser duplicado
+  - Login é obrigatório
+  - Não pode ser duplicado
   - Tamanho entre 3 e 50 caracteres
 - **Severidade**: ERRO
+- **Referência CDU**: RN003
 
-##### USR_004 - UsuarioAtivoInativoRule
-- **Nome**: Usuário Ativo/Inativo
-- **Descrição**: Controla status do usuário
-- **Critérios**:
-  - Usuários inativos não podem fazer login
-  - Usuários inativos não recebem notificações
-  - Não é possível inativar o último usuário admin
-- **Severidade**: ERRO
-
-##### USR_005 - UsuarioBloqueioSenhaRule
+##### SEC_004 - UsuarioBloqueioSenhaRule
 - **Nome**: Usuário Bloqueio por Senha Incorreta
 - **Descrição**: Bloqueia usuário após múltiplas tentativas de senha incorreta
 - **Critérios**:
   - Bloqueio após 5 tentativas incorretas
   - Duração do bloqueio: 30 minutos
-  - Ao alcançar limite, registrar tentativa de入侵
 - **Severidade**: ERRO
+- **Referência CDU**: RN004
 
-### Permissão
+### Permissao
 Define permissões de acesso a funcionalidades.
 
-#### Regras a Implementar
+#### Regras Implementadas
 
-##### PERM_001 - PermissaoNomeUnicoRule
-- **Nome**: Permissão Nome Único
-- **Descrição**: Garante que o nome da permissão seja único
+##### SEC_005 - PermissaoMinimaRule
+- **Nome**: Permissão Mínima
+- **Descrição**: Garante que papéis tenham ao menos uma permissão associada
 - **Critérios**:
-  - Nome não pode ser duplicado
-  - Formato: RECURSO_ACAO (ex: USUARIO_READ)
-- **Severidade**: ERRO
-
-##### PERM_002 - PermissaoHierarquiaValidaRule
-- **Nome**: Permissão Hierarquia Válida
-- **Descrição**: Valida relação hierárquica de permissões
-- **Critérios**:
-  - Permissão filha não pode existir sem permissão pai
-  - Ao excluir pai, excluir todas as filhas ou mover para outro pai
-- **Severidade**: ERRO
+  - Papel deve ter pelo menos 1 permissão associada
+  - Mostrar aviso se papel não tiver permissões
+- **Severidade**: AVISO
+- **Referência CDU**: RN005
 
 ### Papel (Role)
 Agrupa permissões para atribuição a usuários.
 
-#### Regras a Implementar
+#### Regras Implementadas
 
-##### ROLE_001 - PapelNomeUnicoRule
-- **Nome**: Papel Nome Único
-- **Descrição**: Garante que o nome do papel seja único
-- **Critérios**:
-  - Nome não pode ser duplicado
-  - Não pode usar nomes reservados (ADMIN, USER, GUEST)
-- **Severidade**: ERRO
-
-##### ROLE_002 - PapelSistemaProtegidoRule
+##### SEC_006 - PapelProtegidoRule
 - **Nome**: Papel Sistema Protegido
 - **Descrição**: Protege papéis do sistema de modificações indevidas
 - **Critérios**:
   - Papéis ADMIN e USER não podem ser excluídos
   - Papéis sistema não podem ter permissões removidas
 - **Severidade**: ERRO
+- **Referência CDU**: RN006
 
-##### ROLE_003 - PapelMinimoPermissaoRule
-- **Nome**: Papel Mínimo Permissão
-- **Descrição**: Garante que papéis tenham ao menos uma permissão
-- **Critérios**:
-  - Papel deve ter pelo menos 1 permissão associada
-  - Mostrar aviso se papel não tiver permissões
-- **Severidade**: AVISO
+## Validadores
 
-### Sessão
-Representa uma sessão de usuário autenticado.
+- `UsuarioValidator` - Orquestra regras de Usuario
+- `PermissaoValidator` - Orquestra regras de Permissao
+- `PapelValidator` - Orquestra regras de Papel
+- `SessaoValidator` - Orquestra regras de Sessão
 
-#### Regras a Implementar
+## Padrão de Implementação
 
-##### SESS_001 - SessaoExpiracaoRule
-- **Nome**: Sessão Expiração
-- **Descrição**: Controla tempo de expiração de sessões
-- **Critérios**:
-  - Sessão expira após 30 minutos de inatividade
-  - Sessão máxima de 8 horas
-  - Renovar sessão a cada ação do usuário
-- **Severidade**: ERRO
+As regras de negócio seguem o padrão `BusinessRule<T>` do módulo ia-core-service:
 
-##### SESS_002 - SessaoUnicaRule
-- **Nome**: Sessão Única
-- **Descrição**: Controla quantidade de sessões simultâneas
-- **Critérios**:
-  - Usuário pode ter no máximo 3 sessões simultâneas
-  - Ao criar 4ª, encerrar a mais antiga
-  - Configurável por papel (admin pode ter mais)
-- **Severidade**: AVISO
+```java
+public class UsuarioSenhaForteRule implements BusinessRule<UsuarioDTO> {
+    private static final String CODE = "SEC_001";
+    
+    @Override
+    public String getCode() {
+        return CODE;
+    }
+
+    @Override
+    public String getName() {
+        return "Usuário Senha Forte";
+    }
+
+    @Override
+    public void validate(UsuarioDTO entity, ValidationResult result) {
+        String senha = entity.getSenha();
+        if (senha == null || senha.length() < 8) {
+            result.addError("senha", "Senha deve ter mínimo 8 caracteres");
+        }
+        // ... outras validações
+    }
+}
+```
 
 ## Referências
 
-- ADR 004 - Use ServiceConfig for DI
-- ADR 011 - Exception Handling Patterns
-- Module: `ia-core-security-service`
+- ADR-053: Usar CDU para Documentação de Casos de Uso
+- ADR-011: Exception Handling Patterns
+- Service Base: `com.ia.core.service.rules.BusinessRule`

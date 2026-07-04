@@ -1,19 +1,36 @@
 # IA Core
 
-Sistema de inteligência artificial modular para processamento de linguagem natural, integração com modelos de linguagem (LLM) e agendamento de tarefas.
+> **Framework modular Java para aplicações empresariais**
+
+Sistema de inteligência artificial modular para processamento de linguagem natural, integração com modelos de linguagem (LLM) e agendamento de tarefas. Fornece componentes reutilizáveis para desenvolvimento ágil seguindo padrões consolidados.
 
 ## 🏗️ Arquitetura
 
 O projeto segue os princípios de **Clean Architecture** com separação em camadas:
 
+```mermaid
+graph TD
+    A[ia-core-view<br/>MVVM + Vaadin] --> B[ia-core-rest<br/>REST Controllers]
+    B --> C[ia-core-service<br/>Business Logic]
+    C --> D[ia-core-model<br/>Base Entities]
+    D --> E[Spring Boot<br/>Framework]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+```
+
 ```
 ia-core/
 ├── ia-core-model/           # Entidades e modelos de domínio
-├── ia-core-service/         # Lógica de negócio
-├── ia-core-rest/           # Controllers REST
-├── ia-core-view/           # Interface MVVM
+├── ia-core-service/         # Lógica de negócio base
+├── ia-core-rest/           # Controllers REST genéricos
+├── ia-core-view/           # Interface MVVM (Vaadin)
 ├── ia-core-llm-model/      # Modelos específicos de LLM
-├── ia-core-llm-service/    # Serviços de LLM
+├── ia-core-llm-service/    # Serviços de LLM (Spring AI)
+├── ia-core-llm-rest/       # REST para LLM
 ├── ia-core-llm-view/       # View de LLM
 ├── ia-core-quartz/         # Modelo de agendamento
 ├── ia-core-quartz-service/ # Serviços de agendamento
@@ -21,119 +38,150 @@ ia-core/
 ├── ia-core-nlp/           # Processamento de linguagem natural
 ├── ia-core-grammar/       # Gramáticas ANTLR
 ├── ia-core-report/        # Relatórios Jasper
-└── ia-core-flyway/        # Migrações de banco
+├── ia-core-flyway/        # Migrações de banco
+├── ia-core-security-*     # Módulos de segurança
+└── ia-core-communication-* # Módulos de comunicação
 ```
 
 ## 🔧 Tecnologias
 
-- **Java 17+** com Spring Boot 3.x
-- **Jakarta EE** (Validação, Persistence)
-- **Spring Data JPA** com Flyway
-- **Spring AI** para integração com LLMs
-- **Quartz** para agendamento
+- **Java 21** (LTS) com Spring Boot 3.x
+- **Jakarta EE** (Validation, Persistence)
+- **Spring Data JPA** com Flyway migrations
+- **Spring AI** para integração com LLMs (OpenAI, Ollama)
+- **Quartz** para agendamento robusto
+- **Vaadin 25.x** para interfaces web
 - **Lombok** para redução de boilerplate
-- **MVVM** para interface
 
-## 📦 Módulos
+## 📦 Módulos Principais
 
-### ia-core-model
-Entidades base e utilitários compartilhados:
-- `BaseEntity` - Entidade base com auditoria
-- `TSID` - Identificadores distribuídos
-- `FilterRequest` - Filtros dinâmicos
+| Módulo | Descrição | Status |
+|--------|-----------|--------|
+| **ia-core-model** | Entidades base (`BaseEntity`), TSID, filtros | ✅ Estável |
+| **ia-core-service** | Serviços genéricos (`DefaultBaseService`) | ✅ Estável |
+| **ia-core-rest** | Controllers REST (`DefaultBaseController`) | ✅ Estável |
+| **ia-core-view** | MVVM + Vaadin Views/ViewModels | ✅ Estável |
+| **ia-core-llm-service** | Integração Spring AI | ✅ Beta |
+| **ia-core-quartz-service** | Agendamento de tarefas | ✅ Estável |
 
-### ia-core-llm-service
-Serviços de integração com modelos de linguagem:
-- `ChatService` - Comunicação com LLMs
-- `TemplateService` - Gerenciamento de templates
-- `PromptService` - Prompts de catálogo LLM
-
-### ia-core-quartz-service
-Gerenciamento de agendamento:
-- `SchedulerConfigService` - Configuração de tarefas
-- `JobSchedulerChecker` - Verificação de jobs
-
-## 🚀 Começando
+## 🚀 Quick Start
 
 ### Pré-requisitos
-- Java 17+
-- Maven 3.8+
-- Banco de dados HSQLDB, PostgreSQL ou MySQL
 
-### Build
 ```bash
-# Compilar todos os módulos
-mvn clean install
-
-# Compilar módulo específico
-mvn clean install -pl ia-core/ia-core-llm-service
+# Instalação
+Java 21+: sdk install java 21-open
+Maven 3.9+: sdk install maven
+Docker: (opcional, para bancos e LLM)
 ```
 
-### Configuração
-Arquivos de configuração estão em `src/main/resources`:
-- `application.yml` - Configuração principal
-- `application-flyway.yml` - Migrações
+### Build Rápido
+
+```bash
+# Compilar todos os módulos
+mvn clean install -DskipTests
+
+# Compilar módulo específico
+mvn clean install -pl ia-core-model -DskipTests
+```
+
+### Usando como Dependência
+
+```xml
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-service</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## 📖 Documentação
 
-- [Plano de Refatoração](PLANO_REFATORACAO_COMPLETO.md)
-- [FASE 4 - Performance](PERFORMANCE_OPTIMIZATION_PLAN.md)
-- [Status do Projeto](REFACTORING_STATUS.md)
+### ADRs (Architectural Decision Records)
+
+- **Localização**: `ADR/` - 45+ decisões arquiteturais documentadas
+- **Formato**: MADR + RFC 2119/8174 (linguagem normativa)
+- **Principais**:
+  - ADR-001: MapStruct para DTOs
+  - ADR-003: Translator Pattern (i18n)
+  - ADR-004: ServiceConfig para DI
+  - ADR-014: Javadoc Standards
+
+### CDUs (Casos de Uso)
+
+- **Localização**: `CDU/` - Documentação de fluxos de uso
+- Exemplos: Manter-Pessoa, Conversacao-Chat, GerenciamentoDTOs
+
+### RNs (Regras de Negócio)
+
+- **Localização**: `RN/` - Regras de validação e comportamento
+- Padrão: `<CODIGO>_RN001` para identificação única
 
 ## 🏛️ Padrões Aplicados
 
-### SOLID
-- **S**ingle Responsibility: Serviços com responsabilidade única
-- **O**pen/Closed: Extensível via novos módulos
-- **L**iskov Substitution: Interfaces consistentes
-- **I**nterface Segregation: DTOs específicos por operação
-- **D**ependency Inversion: Spring DI
+### Arquitetura
 
-### Clean Code
-- Nomes descritivos
-- Métodos pequenos
-- Documentação javadoc
-- Classes coesas
+| Padrão | ADR | Descrição |
+|--------|-----|-----------|
+| Service Layer | ADR-019/004 | Injeção via construtor, `@Transactional` |
+| Business Rule Chain | ADR-018 | Validações compostas |
+| Service Validator | ADR-019 | Validação dinâmica |
+| Domain Events | ADR-005 | Comunicação desacoplada |
 
-### MVVM (View)
-- `FormView` - Interface Swing/JavaFX
-- `FormViewModel` - Lógica de apresentação
-- `FormViewModelConfig` - Configuração injetável
+### Desenvolvimento
+
+| Padrão | ADR | Descrição |
+|--------|-----|-----------|
+| TSID IDs | ADR-015 | Identificadores ordenáveis |
+| SuperBuilder | ADR-020 | Builder com herança JPA |
+| ServiceConfig | ADR-004 | Configuração de injeção |
+| Specification | ADR-002 | Filtros dinâmicos |
 
 ## 🧪 Testes
 
 ```bash
-# Executar testes
+# Executar todos os testes
 mvn test
 
-# Executar testes com cobertura
-mvn test jacoco:report
+# Executar com cobertura
+mvn verify jacoco:report
+
+# Ver relatório
+open target/site/jacoco/index.html
 ```
 
-## 📝 Convenções de Commit
+**Cobertura mínima**: 75% (ver ADR-012)
+
+## 📝 Convenções
+
+### Conventional Commits
 
 ```
 feat: Nova funcionalidade
 fix: Correção de bug
 docs: Documentação
-refactor: Refatoração (sem mudança de comportamento)
-perf: Melhoria de performance
-test: Adição de testes
-chore: Tarefas de manutenção
+refactor: Refatoração
+test: Testes
+chore: Manutenção
 ```
 
-## 📄 Licença
+### Versionamento
 
-Este projeto está sob licença interna.
+- **SemVer 2.0**: MAJOR.MINOR.PATCH
+- Ver `ADR-037` para detalhes
 
 ## 🤝 Contribuição
 
 1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas mudanças (`git commit -m 'feat: adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
+2. Crie branch: `feature/nova-funcionalidade`
+3. Commit: `feat: descrição clara`
+4. Push: `git push origin feature/nova-funcionalidade`
+5. Pull Request com descrição completa
+
+## 📄 Licença
+
+Projeto interno - Uso restrito à equipe de desenvolvimento.
 
 ## 📞 Suporte
 
-Para dúvidas, consulte a [documentação](PLANO_REFATORACAO_COMPLETO.md) ou abra uma issue.
+Abrir issue ou contatar: `team-core@empresa.com`

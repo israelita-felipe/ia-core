@@ -1,0 +1,191 @@
+/* ============================================
+   Minimal Component Customizations
+   Preserving Vaadin Original Styling
+   ============================================ */
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-muted {
+    color: var(--lumo-secondary-text-color);
+}
+
+.text-primary {
+    color: var(--lumo-primary-color);
+}
+
+.text-error {
+    color: var(--lumo-error-text-color);
+}
+
+.text-success {
+    color: var(--lumo-success-text-color);
+}
+
+.font-bold {
+    font-weight: 600;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-normal {
+    font-weight: 400;
+}
+
+/* Spacing utilities */
+.mt-0 { margin-top: 0; }
+.mt-s { margin-top: var(--lumo-space-s); }
+.mt-m { margin-top: var(--lumo-space-m); }
+.mt-l { margin-top: var(--lumo-space-l); }
+.mt-xl { margin-top: var(--lumo-space-xl); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-s { margin-bottom: var(--lumo-space-s); }
+.mb-m { margin-bottom: var(--lumo-space-m); }
+.mb-l { margin-bottom: var(--lumo-space-l); }
+.mb-xl { margin-bottom: var(--lumo-space-xl); }
+
+.p-0 { padding: 0; }
+.p-s { padding: var(--lumo-space-s); }
+.p-m { padding: var(--lumo-space-m); }
+.p-l { padding: var(--lumo-space-l); }
+.p-xl { padding: var(--lumo-space-xl); }
+
+/* Flex utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-s { gap: var(--lumo-space-s); }
+.gap-m { gap: var(--lumo-space-m); }
+.gap-l { gap: var(--lumo-space-l); }
+
+/* Display utilities */
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.inline-flex { display: inline-flex; }
+
+/* Width utilities */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.max-w-full { max-width: 100%; }
+
+/* Height utilities */
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+.min-h-screen { min-height: 100dvh; }
+
+/* Overflow utilities */
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+/* Position utilities */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+
+/* Cursor utilities */
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-default { cursor: default; }
+
+/* Transition utilities */
+.transition-all { transition: all 0.2s ease; }
+.transition-colors { transition: color 0.2s ease, background-color 0.2s ease; }
+
+/* Border utilities */
+.border { border: 1px solid var(--lumo-contrast-20pct); }
+.border-t { border-top: 1px solid var(--lumo-contrast-20pct); }
+.border-b { border-bottom: 1px solid var(--lumo-contrast-20pct); }
+.border-l { border-left: 1px solid var(--lumo-contrast-20pct); }
+.border-r { border-right: 1px solid var(--lumo-contrast-20pct); }
+.border-none { border: none; }
+
+/* Rounded utilities */
+.rounded-sm { border-radius: var(--lumo-border-radius-s); }
+.rounded { border-radius: var(--lumo-border-radius-m); }
+.rounded-lg { border-radius: var(--lumo-border-radius-l); }
+.rounded-full { border-radius: 9999px; }
+
+/* ============================================
+   Help Button Accessibility (WCAG 2.2)
+   ============================================ */
+
+/* Focus indicator for keyboard navigation - WCAG 2.2 */
+.help-button:focus,
+.help-button:focus-visible {
+    outline: 2px solid var(--lumo-primary-color);
+    outline-offset: 2px;
+    outline-style: solid;
+}
+
+/* High contrast mode support - WCAG 2.2 */
+@media (prefers-contrast: high) {
+    .help-button {
+        border: 2px solid var(--lumo-contrast-80pct);
+        background-color: var(--lumo-base-color);
+    }
+
+    .help-button:focus,
+    .help-button:focus-visible {
+        outline: 3px solid var(--lumo-primary-color);
+        outline-offset: 3px;
+    }
+}
+
+/* Reduced motion support - WCAG 2.2 */
+@media (prefers-reduced-motion: reduce) {
+    .help-button,
+    .help-button::before,
+    .help-button::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Help dialog accessibility - WCAG 2.2 */
+vaadin-dialog-overlay::part(overlay) {
+    /* Ensure proper focus management */
+}
+
+vaadin-dialog-overlay::part(dialog) {
+    /* High contrast support for dialog */
+    border: 1px solid var(--lumo-contrast-50pct);
+}
+
+@media (prefers-contrast: high) {
+    vaadin-dialog-overlay::part(dialog) {
+        border: 2px solid var(--lumo-contrast-80pct);
+    }
+}
+
+/* Reduced motion for dialog - WCAG 2.2 */
+@media (prefers-reduced-motion: reduce) {
+    vaadin-dialog-overlay,
+    vaadin-dialog-overlay::part(overlay),
+    vaadin-dialog-overlay::part(dialog) {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

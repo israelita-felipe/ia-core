@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.validacao.page;
 
-import com.ia.core.llm.service.model.validacao.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
 import com.ia.core.llm.view.validacao.ValidacaoManager;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;

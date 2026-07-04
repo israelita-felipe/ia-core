@@ -1,17 +1,24 @@
 package com.ia.core.owl.service;
 
+import com.ia.core.llm.model.ontologia.OntologyFormat;
+import com.ia.core.llm.service.model.ontologia.OntologiaDTO;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
 import com.ia.core.owl.service.exception.OWLParserException;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 import com.ia.core.owl.service.model.axioma.HasAxiomas;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.ManchesterSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
 import org.semanticweb.owlapi.io.StringDocumentSource;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -24,43 +31,15 @@ import java.util.*;
  * @author Israel Araújo
  * @since 1.0.0
  */
+@Slf4j
 public class DefaultOwlService
   implements CoreOWLService, OWLOntologyManagementService, OWLParsingService,
   DefaultOWLUseCase {
 
-  @Getter
-  private final OWLReasoningService reasonerService;
-  @Getter
-  private final OWLDataFactory dataFactory;
-  @Getter
-  private final OWLOntologyManager manager;
-  @Getter
-  private final OWLOntology ontology;
+  private OWLReasoningService reasonerService;
 
-  @Getter
-  private final String uri;
-  @Getter
-  private final String prefix;
-
-  @Getter
-  private final String version;
-
-  private CoreBidirectionalShortFormProvider shortFormProvider;
-
-  public DefaultOwlService(String prefix, String uri, String version)
-    throws OWLOntologyCreationException {
-    this.uri = uri;
-    this.prefix = prefix;
-    this.version = version;
-    this.manager = createOntologyManager();
-    this.dataFactory = createDataFactory(manager);
-    this.ontology = createOntology(manager, uri, version);
-    this.shortFormProvider = createBidirectionalShorFormProvider(manager,
-                                                                 ontology,
-                                                                 prefix,
-                                                                 uri);
-    this.reasonerService = createOWLReasoner(manager, ontology,
-                                             getPrefixManager());
+  public DefaultOwlService() {
+    this.reasonerService = new OpenlletReasonerService(this);
   }
 
   /**
@@ -76,6 +55,22 @@ public class DefaultOwlService
                                                                                 String uri) {
     return new CoreBidirectionalShortFormProvider(manager, ontology
         .getImportsClosure(), createPrefixManager(prefix, uri));
+  }
+
+  /**
+   * Creates and initializes the OWL reasoning service.
+   *
+   * @param manager the ontology manager
+   * @param ontology the ontology to reason over
+   * @param prefixManager the prefix manager
+   * @return the initialized reasoning service
+   */
+  public OWLReasoningService createReasoningService(OWLOntologyManager manager,
+                                                     OWLOntology ontology,
+                                                     PrefixManager prefixManager) {
+    OWLReasoningService service = new OpenlletReasonerService(this);
+    service.refreshReasoner(ontology);
+    return service;
   }
 
   /**
@@ -107,25 +102,25 @@ public class DefaultOwlService
                                                     IRI.create(version)));
   }
 
-  public OWLReasoningService createOWLReasoner(OWLOntologyManager manager,
-                                           OWLOntology ontology,
-                                           PrefixManager prefixManager) {
-    return new OpenlletReasonerService(manager, ontology, prefixManager);
-  }
-
-  public PrefixManager getPrefixManager() {
-    return this.shortFormProvider.getPrefixManager();
-  }
-
   @Override
   public OWLReasoningService getReasoningService() {
-    return (OWLReasoningService) this.reasonerService;
+    return this.reasonerService;
+  }
+
+  /**
+   * Sets the reasoning service to use.
+   *
+   * @param reasonerService the reasoning service
+   */
+  public void setReasoningService(OWLReasoningService reasonerService) {
+    this.reasonerService = reasonerService;
   }
 
   /**
    * Carrega uma ontologia a partir de uma coleção de axiomas e inicializa o
    * reasoner.
    *
+   * @param ontologiaDTO the ontology DTO
    * @param hasAxiomas objecto que possui coleção de axiomas para construir a
    *                   ontologia (não pode ser nula)
    * @throws OWLParserException           se ocorrer erro no parsing dos axiomas
@@ -134,10 +129,20 @@ public class DefaultOwlService
    * @throws IllegalArgumentException     se a coleção de axiomas for nula
    */
   @Override
-  public void addAxioms(HasAxiomas hasAxiomas)
+  public void addAxioms(OntologiaDTO ontologiaDTO, HasAxiomas hasAxiomas)
     throws OWLParserException, OWLOntologyCreationException {
 
+    Objects.requireNonNull(ontologiaDTO, "ontologiaDTO cannot be null");
     Objects.requireNonNull(hasAxiomas, "Axiomas collection cannot be null");
+
+    // Convert OntologiaDTO to OWLOntology
+    OWLOntology ontology = parseOntology(
+        ontologiaDTO.getFormato().name(),
+        ontologiaDTO.getConteudo(),
+        ontologiaDTO.getPrefixo(),
+        ontologiaDTO.getIri()
+    );
+    OWLOntologyManager manager = ontology.getOWLOntologyManager();
 
     for (AxiomaDTO axiom : hasAxiomas.getAxiomas()) {
       StringDocumentSource source = new StringDocumentSource(axiom
@@ -152,19 +157,36 @@ public class DefaultOwlService
       manager.addAxioms(ontology, axiomsOntology.getAxioms());
     }
 
+    // Update the OntologiaDTO content with the updated ontology
+    String updatedContent = saveOntologyToString(ontology);
+    ontologiaDTO.setConteudo(updatedContent);
+    ontologiaDTO.setUltimaModificacao(LocalDateTime.now());
+
   }
 
   @Override
-  public AnaliseInferenciaDTO checkInferrences() {
+  public AnaliseInferenciaDTO checkInferrences(OntologiaDTO ontologiaDTO) {
     try {
+      Objects.requireNonNull(ontologiaDTO, "ontologiaDTO cannot be null");
+      Objects.requireNonNull(reasonerService, "reasonerService must be set before calling this method");
+
+      // Convert OntologiaDTO to OWLOntology
+      OWLOntology ontology = parseOntology(
+          ontologiaDTO.getFormato().name(),
+          ontologiaDTO.getConteudo(),
+          ontologiaDTO.getPrefixo(),
+          ontologiaDTO.getIri()
+      );
+      OWLOntologyManager manager = ontology.getOWLOntologyManager();
+
       // Carrega a ontologia no reasoner
-      reasonerService.refreshReasoner();
+      reasonerService.refreshReasoner(ontology);
 
       boolean isConsistent = reasonerService.isConsistent();
 
       if (isConsistent) {
-        List<AxiomaDTO> axiomasInferidos = extractInferredAxioms(reasonerService
-            .performInferences());
+        List<AxiomaDTO> axiomasInferidos = extractInferredAxioms(ontology, reasonerService
+            .performInferences(ontology));
         AnaliseInferenciaDTO resultado = new AnaliseInferenciaDTO(isConsistent,
                                                                   new ArrayList<>(),
                                                                   axiomasInferidos,
@@ -175,7 +197,7 @@ public class DefaultOwlService
       }
       return new AnaliseInferenciaDTO(false,
                                       reasonerService
-                                          .detectInconsistencies(),
+                                          .detectInconsistencies(ontology),
                                       new ArrayList<>(), 0);
 
     } catch (org.semanticweb.owlapi.reasoner.InconsistentOntologyException e) {
@@ -186,7 +208,7 @@ public class DefaultOwlService
       return new AnaliseInferenciaDTO(false, Arrays.asList(String
           .format("Expressão: %s\nErro: %s", new ArrayList<>(),
                   e.getLocalizedMessage())), new ArrayList<>(), 0);
-    } catch (OWLParserException e) {
+    } catch (OWLParserException | OWLOntologyCreationException e) {
         return new AnaliseInferenciaDTO(false, Arrays.asList(String
             .format("Expressão: %s\nErro: %s", new ArrayList<>(),
                 e.getLocalizedMessage())), new ArrayList<>(), 0);
@@ -197,12 +219,11 @@ public class DefaultOwlService
    * Cria um objeto AxiomaDTO com as propriedades padrão.
    *
    * @param expressao a expressão Manchester (não pode ser nula ou vazia)
-   * @param ordem     a ordem do AxiomaDTO na sequência
    * @return o AxiomaDTO configurado
    * @throws IllegalArgumentException se expressao ou tipo forem nulos
    */
   @Override
-  public AxiomaDTO criarAxioma(String expressao) {
+  public AxiomaDTO criarAxioma(String expressao, String uri, String prefix, String version) {
     Objects.requireNonNull(expressao, "Expressão não pode ser nula");
 
     AxiomaDTO dto = new AxiomaDTO();
@@ -210,9 +231,9 @@ public class DefaultOwlService
     dto.setConsistente(true);
     dto.setInferido(false);
     dto.setAtivo(true);
-    dto.setUri(getUri());
-    dto.setPrefix(getPrefix());
-    dto.setUriVersion(getVersion());
+    dto.setUri(uri);
+    dto.setPrefix(prefix);
+    dto.setUriVersion(version);
     return dto;
   }
 
@@ -224,8 +245,9 @@ public class DefaultOwlService
    * @throws OWLParserException
    */
   @Override
-  public List<AxiomaDTO> extractInferredAxioms(Set<OWLAxiom> axioms)
+  public List<AxiomaDTO> extractInferredAxioms(OWLOntology ontology, Set<OWLAxiom> axioms)
     throws OWLParserException {
+    Objects.requireNonNull(ontology, "ontology cannot be null");
     List<AxiomaDTO> inferredAxioms = new ArrayList<>();
     for (OWLAxiom axiom : axioms) {
       if (!ontology.containsAxiom(axiom)) {
@@ -247,7 +269,7 @@ public class DefaultOwlService
   private AxiomaDTO convertAndAddInferredAxiom(OWLAxiom axiom,
                                                List<AxiomaDTO> currentAxioms)
     throws OWLParserException {
-    AxiomaDTO inferredAxiom = convertOWLAxiomToDTO(axiom);
+    AxiomaDTO inferredAxiom = convertOWLAxiomToDTO(axiom, "", "", "");
     if (inferredAxiom != null) {
       inferredAxiom.setInferido(true);
       currentAxioms.add(inferredAxiom);
@@ -264,7 +286,7 @@ public class DefaultOwlService
    * @throws IllegalArgumentException se o axioma for nulo
    */
   @Override
-  public AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom)
+  public AxiomaDTO convertOWLAxiomToDTO(OWLAxiom axiom, String uri, String prefix, String version)
     throws OWLParserException {
     try {
       Objects.requireNonNull(axiom, "Axiom cannot be null");
@@ -275,7 +297,7 @@ public class DefaultOwlService
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       manager.saveOntology(tempOntology, createDocumentFormat(), baos);
       manager.clearOntologies();
-      return criarAxioma(baos.toString());
+      return criarAxioma(baos.toString(), uri, prefix, version);
     } catch (OWLOntologyStorageException e) {
       throw new OWLParserException(e.getLocalizedMessage(), e);
     } catch (org.semanticweb.owlapi.model.OWLOntologyCreationException e) {
@@ -292,10 +314,23 @@ public class DefaultOwlService
   }
 
   @Override
-  public void addAxiom(HasAxiomas hasAxiomas, AxiomaDTO axioma) {
+  public void addAxiom(OntologiaDTO ontologiaDTO, HasAxiomas hasAxiomas, AxiomaDTO axioma) {
     try {
-      addAxioms(() -> Arrays.asList(axioma));
-      checkInferrences();
+      Objects.requireNonNull(ontologiaDTO, "ontologiaDTO cannot be null");
+      Objects.requireNonNull(hasAxiomas, "hasAxiomas cannot be null");
+      Objects.requireNonNull(axioma, "axioma cannot be null");
+
+      // Convert OntologiaDTO to OWLOntology
+      OWLOntology ontology = parseOntology(
+          ontologiaDTO.getFormato().name(),
+          ontologiaDTO.getConteudo(),
+          ontologiaDTO.getPrefixo(),
+          ontologiaDTO.getIri()
+      );
+      OWLOntologyManager manager = ontology.getOWLOntologyManager();
+
+      addAxioms(ontologiaDTO, () -> Arrays.asList(axioma));
+      checkInferrences(ontologiaDTO);
       hasAxiomas.getAxiomas().add(axioma);
     } catch (OWLParserException e) {
       axioma.setConsistente(false);
@@ -309,12 +344,340 @@ public class DefaultOwlService
   }
 
   @Override
-  public OWLOntology loadOntologyFromAxioms(Set<OWLAxiom> axiomas)
+  public AxiomaDTO addAxiom(OntologiaDTO ontologiaDTO, String manchesterAxiom)
+    throws OWLParserException, OWLOntologyCreationException {
+    Objects.requireNonNull(ontologiaDTO, "ontologiaDTO cannot be null");
+    Objects.requireNonNull(manchesterAxiom, "manchesterAxiom cannot be null");
+
+    try {
+      // Create AxiomaDTO from Manchester syntax
+      AxiomaDTO axiomaDTO = criarAxioma(
+          manchesterAxiom,
+          ontologiaDTO.getIri(),
+          ontologiaDTO.getPrefixo(),
+          ontologiaDTO.getVersao() != null ? ontologiaDTO.getVersao() : "1.0"
+      );
+
+      // Add the axiom to the ontology using the existing addAxiom method
+      var hasAxiomas = new HasAxiomas() {
+        @Override
+        public List<AxiomaDTO> getAxiomas() {
+          return new ArrayList<>();
+        }
+      };
+
+      addAxiom(ontologiaDTO, hasAxiomas, axiomaDTO);
+
+      return axiomaDTO;
+    } catch (Exception e) {
+      throw new OWLParserException("Failed to add Manchester axiom: " + e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void addAxiom(OWLOntologyManager manager, OWLOntology ontology, HasAxiomas hasAxiomas, AxiomaDTO axioma) {
+    // Convert OWL API objects to DTO and call DTO-based method
+    try {
+      String content = saveOntologyToString(ontology);
+      OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+          .conteudo(content)
+          .formato(OntologyFormat.MANCHESTER)
+          .iri(ontology.getOntologyID().getOntologyIRI().toString())
+          .prefixo("ex")
+          .dataCriacao(LocalDateTime.now())
+          .ultimaModificacao(LocalDateTime.now())
+          .build();
+
+      addAxiom(ontologiaDTO, hasAxiomas, axioma);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to add axiom using OWL API objects", e);
+    }
+  }
+
+  @Override
+  public void addAxioms(OWLOntologyManager manager, OWLOntology ontology, HasAxiomas hasAxiomas)
+    throws OWLParserException, OWLOntologyCreationException {
+    // Convert OWL API objects to DTO and call DTO-based method
+    String content = saveOntologyToString(ontology);
+    OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+        .conteudo(content)
+        .formato(OntologyFormat.MANCHESTER)
+        .iri(ontology.getOntologyID().getOntologyIRI().toString())
+        .prefixo("ex")
+        .dataCriacao(LocalDateTime.now())
+        .ultimaModificacao(LocalDateTime.now())
+        .build();
+
+    addAxioms(ontologiaDTO, hasAxiomas);
+  }
+
+  @Override
+  public AnaliseInferenciaDTO checkInferrences(OWLOntologyManager manager, OWLOntology ontology) {
+    // Convert OWL API objects to DTO and call DTO-based method
+    String content = saveOntologyToString(ontology);
+    OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+        .conteudo(content)
+        .formato(OntologyFormat.MANCHESTER)
+        .iri(ontology.getOntologyID().getOntologyIRI().toString())
+        .prefixo("ex")
+        .dataCriacao(LocalDateTime.now())
+        .ultimaModificacao(LocalDateTime.now())
+        .build();
+
+    return checkInferrences(ontologiaDTO);
+  }
+
+  @Override
+  public OWLOntology loadOntologyFromAxioms(OWLOntologyManager manager, Set<OWLAxiom> axiomas)
     throws OWLOntologyCreationException {
+    Objects.requireNonNull(manager, "manager cannot be null");
     Objects.requireNonNull(axiomas, "Axiomas cannot be null");
     OWLOntology newOntology = manager.createOntology();
     manager.addAxioms(newOntology, axiomas);
     return newOntology;
+  }
+
+  private String saveOntologyToString(OWLOntology ontology) {
+    try {
+      java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+      ontology.getOWLOntologyManager().saveOntology(ontology, createDocumentFormat(), baos);
+      return baos.toString();
+    } catch (OWLOntologyStorageException e) {
+      throw new RuntimeException("Failed to save ontology to string", e);
+    }
+  }
+
+  @Override
+  public OWLOntology parseOntology(String format, String content, String prefix, String uri)
+    throws OWLParserException, OWLOntologyCreationException {
+    Objects.requireNonNull(format, "Format cannot be null");
+    Objects.requireNonNull(content, "Content cannot be null");
+    Objects.requireNonNull(prefix, "Prefix cannot be null");
+    Objects.requireNonNull(uri, "URI cannot be null");
+
+    OWLOntologyManager tempManager = OWLManager.createConcurrentOWLOntologyManager();
+    OWLDocumentFormat documentFormat = determineDocumentFormat(format);
+
+    StringDocumentSource source = new StringDocumentSource(content) {
+      @Override
+      public Optional<OWLDocumentFormat> getFormat() {
+        return Optional.of(documentFormat);
+      }
+    };
+
+    try {
+      OWLOntology parsedOntology = tempManager.loadOntologyFromOntologyDocument(source);
+
+      // Set up prefix manager for the parsed ontology
+      DefaultPrefixManager prefixManager = createPrefixManager(prefix, uri);
+      CoreBidirectionalShortFormProvider shortFormProvider =
+        new CoreBidirectionalShortFormProvider(tempManager, parsedOntology.getImportsClosure(), prefixManager);
+
+      return parsedOntology;
+    } catch (OWLOntologyCreationException e) {
+      throw new OWLParserException("Failed to parse ontology: " + e.getLocalizedMessage(), e);
+    }
+  }
+
+  private OWLDocumentFormat determineDocumentFormat(String format) throws OWLParserException {
+    String normalizedFormat = format.toUpperCase().trim();
+
+    switch (normalizedFormat) {
+      case "MANCHESTER":
+      case "MANCHESTER_SYNTAX":
+        return new ManchesterSyntaxDocumentFormat();
+      case "RDF":
+      case "RDF/XML":
+      case "RDFXML":
+        return new RDFXMLDocumentFormat();
+      case "TURTLE":
+      case "TTL":
+        return new TurtleDocumentFormat();
+      case "OWL":
+      case "OWL/XML":
+      case "OWLXML":
+        return new OWLXMLDocumentFormat();
+      default:
+        throw new OWLParserException("Unsupported ontology format: " + format);
+    }
+  }
+
+  /**
+   * Valida a consistência de um axioma individual.
+   *
+   * @param axiom axioma a validar
+   * @return resultado da validação
+   */
+  public ResultadoValidacao validarAxioma(AxiomaDTO axiom) {
+    long startTime = System.currentTimeMillis();
+    log.debug("Validando axioma: {}", axiom);
+
+    try {
+      // Create temporary OntologiaDTO for validation
+      String conteudo = "Prefix: ex: <http://example.com/>\n" +
+                       "Ontology: <http://example.com/>\n\n" +
+                       axiom.getExpressao();
+
+      OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+          .conteudo(conteudo)
+          .formato(OntologyFormat.MANCHESTER)
+          .iri("http://example.com/")
+          .prefixo("ex")
+          .dataCriacao(LocalDateTime.now())
+          .ultimaModificacao(LocalDateTime.now())
+          .build();
+
+      // Use checkInferrences to check consistency
+      var analise = checkInferrences(ontologiaDTO);
+      boolean consistente = analise.consistente();
+
+      long processingTime = System.currentTimeMillis() - startTime;
+
+      if (consistente) {
+        log.debug("Axioma consistente: {}", axiom);
+        return ResultadoValidacao.builder()
+            .consistente(true)
+            .explicacao("Axioma é consistente com a ontologia atual")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      } else {
+        log.warn("Axioma inconsistente: {}, inconsistências: {}",
+                 axiom, analise.inconsistencias());
+
+        return ResultadoValidacao.builder()
+            .consistente(false)
+            .classesInsatisfativeis(analise.inconsistencias())
+            .explicacao("Axioma causa inconsistência na ontologia")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      }
+    } catch (Exception e) {
+      long processingTime = System.currentTimeMillis() - startTime;
+      log.error("Erro ao validar axioma: {}", axiom, e);
+
+      return ResultadoValidacao.builder()
+          .consistente(false)
+          .explicacao("Erro na validação: " + e.getMessage())
+          .iteracoesUsadas(1)
+          .tempoProcessamentoMs(processingTime)
+          .build();
+    }
+  }
+
+  /**
+   * Valida a consistência de uma lista de axiomas.
+   *
+   * @param axioms lista de axiomas a validar
+   * @return resultado da validação
+   */
+  public ResultadoValidacao validarAxiomas(List<AxiomaDTO> axioms) {
+    long startTime = System.currentTimeMillis();
+    log.debug("Validando {} axiomas", axioms.size());
+
+    try {
+      // Create temporary OntologiaDTO for validation
+      StringBuilder conteudo = new StringBuilder();
+      conteudo.append("Prefix: ex: <http://example.com/>\n");
+      conteudo.append("Ontology: <http://example.com/>\n\n");
+      for (AxiomaDTO axiom : axioms) {
+        conteudo.append(axiom.getExpressao()).append("\n");
+      }
+
+      OntologiaDTO ontologiaDTO = OntologiaDTO.builder()
+          .conteudo(conteudo.toString())
+          .formato(OntologyFormat.MANCHESTER)
+          .iri("http://example.com/")
+          .prefixo("ex")
+          .dataCriacao(LocalDateTime.now())
+          .ultimaModificacao(LocalDateTime.now())
+          .build();
+
+      // Use checkInferrences to check consistency
+      var analise = checkInferrences(ontologiaDTO);
+      boolean consistente = analise.consistente();
+
+      long processingTime = System.currentTimeMillis() - startTime;
+
+      if (consistente) {
+        log.debug("Axiomas consistentes: {}", axioms.size());
+        return ResultadoValidacao.builder()
+            .consistente(true)
+            .explicacao("Todos os axiomas são consistentes com a ontologia atual")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      } else {
+        log.warn("Axiomas inconsistentes, inconsistências: {}", analise.inconsistencias());
+
+        return ResultadoValidacao.builder()
+            .consistente(false)
+            .classesInsatisfativeis(analise.inconsistencias())
+            .explicacao("Axiomas causam inconsistência na ontologia")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      }
+    } catch (Exception e) {
+      long processingTime = System.currentTimeMillis() - startTime;
+      log.error("Erro ao validar axiomas", e);
+
+      return ResultadoValidacao.builder()
+          .consistente(false)
+          .explicacao("Erro na validação: " + e.getMessage())
+          .iteracoesUsadas(1)
+          .tempoProcessamentoMs(processingTime)
+          .build();
+    }
+  }
+
+  /**
+   * Valida a consistência da ontologia atual.
+   * Nota: Este método requer uma ontologia para validar.
+   *
+   * @param ontologiaDTO ontologia DTO a ser validada
+   * @return resultado da validação
+   */
+  public ResultadoValidacao validarOntologiaAtual(OntologiaDTO ontologiaDTO) {
+    long startTime = System.currentTimeMillis();
+    log.debug("Validando ontologia atual");
+
+    try {
+      var analise = checkInferrences(ontologiaDTO);
+      boolean consistente = analise.consistente();
+      long processingTime = System.currentTimeMillis() - startTime;
+
+      if (consistente) {
+        log.debug("Ontologia atual é consistente");
+        return ResultadoValidacao.builder()
+            .consistente(true)
+            .explicacao("Ontologia é consistente")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      } else {
+        log.warn("Ontologia inconsistente, inconsistências: {}", analise.inconsistencias());
+
+        return ResultadoValidacao.builder()
+            .consistente(false)
+            .classesInsatisfativeis(analise.inconsistencias())
+            .explicacao("Ontologia contém inconsistências")
+            .iteracoesUsadas(1)
+            .tempoProcessamentoMs(processingTime)
+            .build();
+      }
+    } catch (Exception e) {
+      long processingTime = System.currentTimeMillis() - startTime;
+      log.error("Erro ao validar ontologia atual", e);
+
+      return ResultadoValidacao.builder()
+          .consistente(false)
+          .explicacao("Erro na validação: " + e.getMessage())
+          .iteracoesUsadas(1)
+          .tempoProcessamentoMs(processingTime)
+          .build();
+    }
   }
 
 }

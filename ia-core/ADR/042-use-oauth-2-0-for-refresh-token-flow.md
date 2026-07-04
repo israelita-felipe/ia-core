@@ -14,6 +14,8 @@ Vamos implementar o fluxo de refresh token conforme especificado no RFC 6749 (OA
 - Suporte a header X-Refresh-Token ou cookie para transmissão segura
 - Armazenamento seguro de refresh tokens (ex: Redis ou banco de dados)
 - Seguimento das diretrizes de segurança do OWASP para refresh tokens
+- Uso de bearer tokens conforme RFC 6750 quando o access token for enviado no cabeçalho `Authorization: Bearer <token>`
+- Uso de JWT Profile for OAuth 2.0 Access Tokens (RFC 9068) quando o access token for um JWT consumido por APIs OAuth 2.0
 
 ## Consequences
 ### Positivos
@@ -39,4 +41,8 @@ Vamos implementar o fluxo de refresh token conforme especificado no RFC 6749 (OA
 ## Related Documents
 - REFACTORING.md (itens 12 e 13 sobre refresh token)
 - RFC 6749: OAuth 2.0 Authorization Framework
+- RFC 6750: OAuth 2.0 Bearer Token Usage
+- RFC 7519: JSON Web Token (JWT)
+- RFC 9068: JWT Profile for OAuth 2.0 Access Tokens
 - OWASP Authentication Security Guidelines
+- OWASP JSON Web Token Security Cheat Sheet

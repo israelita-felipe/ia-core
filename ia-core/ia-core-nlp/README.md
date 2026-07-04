@@ -299,7 +299,7 @@ public class TextAnalysisResult {
 
 ```java
 @RestController
-@RequestMapping("/api/v1/nlp")
+@RequestMapping("/api/${api.version}/nlp")
 public class NLPController {
 
     @Autowired

@@ -1,47 +1,57 @@
 package com.ia.core.owl.service.tool.individual;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
-import org.springframework.ai.chat.model.ChatModel;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+/**
+ * Tool para criação de asserção de classe OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owl*service para criar asserções de classe
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa asserção de classe (C(a)).
+ *
+ * @author Israel Araújo
+ * @since 1.0.0
+ */
+@Slf4j
 @Component
-public class ClassAssertionTool extends AbstractOWLTool {
+public class ClassAssertionTool extends OwlConstructorTool {
 
-  public ClassAssertionTool(ChatModel chatModel, LLMCommunicator llmCommunicator, DefaultOwlService owlService,
-                           TemplateService templateService, FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public ClassAssertionTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return "ClassAssertion"; }
+  /**
+   * Cria uma asserção de classe na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param individual Indivíduo
+   * @param cls Classe
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma asserção de classe OWL 2 DL na ontologia da sessão. " +
+                     "Representa asserção de classe (C(a)). " +
+                     "Exemplo: João é uma Pessoa → ClassAssertion(:João :Pessoa).")
+  public String createClassAssertion(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Indivíduo", required = true) String individual,
+      @ToolParam(description = "Classe", required = true) String cls) {
 
-  @Override
-  public String getDescription() { return "Declara que um indivíduo é instância de uma classe"; }
+    log.debug("Criando ClassAssertion: {} ∈ {}", individual, cls);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas ClassAssertion.
-      Construtor: ClassAssertion
-      Descrição: Declara que um indivíduo é instância de uma classe.
-      Sintaxe Manchester: ClassAssertion(<individuo> <classe>)
-      Exemplos:
-      - "João é uma Pessoa" → ClassAssertion(:João :Pessoa)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "ClassAssertion: " + cls + " " + individual;
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
+    // Usa OwlConstructorTool.createAxiom para adicionar via owl*service
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de ClassAssertion: {}", result);
+    return result;
   }
-
-  @Override
-  public List<String> getExamples() { return List.of("João é uma Pessoa", "Maria é uma Pessoa"); }
 }

@@ -1,8 +1,9 @@
 package com.ia.core.llm.service.agente;
 
-import com.ia.core.owl.service.LLMCommunicator;
+import com.ia.core.llm.service.chat.ChatService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,12 +22,10 @@ import java.util.List;
 @Service
 public class ExtratorEntidadesRelacoes {
 
-  private final ChatModel chatModel;
-  private final LLMCommunicator llmCommunicator;
+  private final ChatService chatService;
 
-  public ExtratorEntidadesRelacoes(ChatModel chatModel, LLMCommunicator llmCommunicator) {
-    this.chatModel = chatModel;
-    this.llmCommunicator = llmCommunicator;
+  public ExtratorEntidadesRelacoes(ChatService chatService) {
+    this.chatService = chatService;
   }
 
   /**
@@ -35,12 +34,16 @@ public class ExtratorEntidadesRelacoes {
    * @param texto texto para análise
    * @return lista de classes encontradas
    */
-  public List<String> extrairClasses(String texto) {
+  @Tool(description = "Extrai classes OWL de um texto usando LLM. " +
+                     "Identifica conceitos principais e entidades que representam classes na ontologia. " +
+                     "Retorna uma lista de nomes de classes encontradas.")
+  public List<String> extrairClasses(@ToolParam(description = "Texto para extração de classes") String texto,
+                                    @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     List<String> classes = new ArrayList<>();
 
     // Se não encontrou com regex, usa LLM
     if (classes.isEmpty()) {
-      classes.addAll(extrairClassesComLLM(texto));
+      classes.addAll(extrairClassesComLLM(texto,sessionId));
     }
 
     return classes;
@@ -52,11 +55,15 @@ public class ExtratorEntidadesRelacoes {
    * @param texto texto para análise
    * @return lista de propriedades encontradas
    */
-  public List<String> extrairPropriedadesObjeto(String texto) {
+  @Tool(description = "Extrai propriedades de objeto OWL de um texto usando LLM. " +
+                     "Identifica relações entre classes que representam propriedades de objeto na ontologia. " +
+                     "Retorna uma lista de nomes de propriedades encontradas.")
+  public List<String> extrairPropriedadesObjeto(@ToolParam(description = "Texto para extração de propriedades") String texto,
+                                                @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     List<String> propriedades = new ArrayList<>();
 
     if (propriedades.isEmpty()) {
-      propriedades.addAll(extrairPropriedadesComLLM(texto));
+      propriedades.addAll(extrairPropriedadesComLLM(texto,sessionId));
     }
 
     return propriedades;
@@ -68,11 +75,15 @@ public class ExtratorEntidadesRelacoes {
    * @param texto texto para análise
    * @return lista de indivíduos encontrados
    */
-  public List<String> extrairIndividuos(String texto) {
+  @Tool(description = "Extrai indivíduos/instâncias OWL de um texto usando LLM. " +
+                     "Identifica entidades específicas e instâncias que representam indivíduos na ontologia. " +
+                     "Retorna uma lista de nomes de indivíduos encontrados.")
+  public List<String> extrairIndividuos(@ToolParam(description = "Texto para extração de indivíduos") String texto,
+                                      @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     List<String> individuos = new ArrayList<>();
 
     if (individuos.isEmpty()) {
-      individuos.addAll(extrairIndividuosComLLM(texto));
+      individuos.addAll(extrairIndividuosComLLM(texto,sessionId));
     }
 
     return individuos;
@@ -84,7 +95,11 @@ public class ExtratorEntidadesRelacoes {
    * @param texto texto para análise
    * @return lista de relações encontradas (formato: "entidade1:relação:entidade2")
    */
-  public List<String> extrairRelacoes(String texto) {
+  @Tool(description = "Extrai relações entre entidades de um texto usando LLM. " +
+                     "Identifica instâncias de propriedades entre indivíduos. " +
+                     "Retorna relações no formato 'entidade1:relação:entidade2'.")
+  public List<String> extrairRelacoes(@ToolParam(description = "Texto para extração de relações") String texto,
+                                     @ToolParam(description = "ID da sessão para contexto") String sessionId) {
     List<String> relacoes = new ArrayList<>();
 
     String prompt = String.format("""
@@ -99,7 +114,7 @@ public class ExtratorEntidadesRelacoes {
         """, texto);
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
       String[] linhas = resposta.split("\n");
 
       for (String linha : linhas) {
@@ -119,7 +134,7 @@ public class ExtratorEntidadesRelacoes {
   /**
    * Usa LLM para extrair classes quando regex não é suficiente.
    */
-  private List<String> extrairClassesComLLM(String texto) {
+  private List<String> extrairClassesComLLM(String texto,String sessionId) {
     List<String> classes = new ArrayList<>();
 
     String prompt = String.format("""
@@ -133,7 +148,7 @@ public class ExtratorEntidadesRelacoes {
         """, texto);
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
       String[] linhas = resposta.split("\n");
 
       for (String linha : linhas) {
@@ -152,7 +167,7 @@ public class ExtratorEntidadesRelacoes {
   /**
    * Usa LLM para extrair propriedades quando regex não é suficiente.
    */
-  private List<String> extrairPropriedadesComLLM(String texto) {
+  private List<String> extrairPropriedadesComLLM(String texto,String sessionId) {
     List<String> propriedades = new ArrayList<>();
 
     String prompt = String.format("""
@@ -166,7 +181,7 @@ public class ExtratorEntidadesRelacoes {
         """, texto);
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
       String[] linhas = resposta.split("\n");
 
       for (String linha : linhas) {
@@ -185,7 +200,7 @@ public class ExtratorEntidadesRelacoes {
   /**
    * Usa LLM para extrair indivíduos quando regex não é suficiente.
    */
-  private List<String> extrairIndividuosComLLM(String texto) {
+  private List<String> extrairIndividuosComLLM(String texto,String sessionId) {
     List<String> individuos = new ArrayList<>();
 
     String prompt = String.format("""
@@ -199,7 +214,7 @@ public class ExtratorEntidadesRelacoes {
         """, texto);
 
     try {
-      String resposta = llmCommunicator.sendPrompt(chatModel, prompt);
+      String resposta = chatService.ask("", prompt, sessionId);
       String[] linhas = resposta.split("\n");
 
       for (String linha : linhas) {

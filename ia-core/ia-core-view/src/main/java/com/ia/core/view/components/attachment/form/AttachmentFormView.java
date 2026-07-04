@@ -12,6 +12,7 @@ import com.vaadin.flow.server.streams.InMemoryUploadHandler;
 import com.vaadin.flow.server.streams.UploadHandler;
 import com.vaadin.flow.server.streams.UploadMetadata;
 
+import java.io.IOException;
 import java.util.Base64;
 
 /**
@@ -23,6 +24,15 @@ import java.util.Base64;
 @SuppressWarnings("serial")
 public class AttachmentFormView<T extends AttachmentDTO<?>>
   extends FormView<T> {
+  /** Largura padrão dos campos no formulário */
+  private static final int DEFAULT_FIELD_WIDTH = 6;
+
+  /** Nome da propriedade de arquivos no componente de upload */
+  private static final String FILES_PROPERTY = "files";
+
+  /** Representação de array vazio em string */
+  private static final String EMPTY_ARRAY = "[]";
+
   /** Campo de upload */
   private Upload upload;
 
@@ -42,7 +52,7 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    */
   public TextArea createDescricaoField(String label, String help) {
     TextArea field = createTextArea(label, help);
-    add(field, 6);
+    add(field, DEFAULT_FIELD_WIDTH);
     return field;
   }
 
@@ -76,7 +86,7 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
   public TextField createNomeField(String label, String help) {
     TextField field = createTextField(label, help);
     field.setReadOnly(true);
-    add(field, 6);
+    add(field, DEFAULT_FIELD_WIDTH);
     return field;
   }
 
@@ -88,12 +98,12 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
     this.upload = createUploadField($(AttachmentTranslator.ATTACHMENT),
                                     $(AttachmentTranslator.HELP.ATTACHMENT),
                                     receiver);
-    this.upload.getElement().addPropertyChangeListener("files",
+    this.upload.getElement().addPropertyChangeListener(FILES_PROPERTY,
                                                        listener -> {
                                                          onFileChangeListener(listener,
                                                                               receiver);
                                                        });
-    add(this.upload, 6);
+    add(this.upload, DEFAULT_FIELD_WIDTH);
   }
 
   /**
@@ -118,9 +128,9 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
    */
   protected void onFileChangeListener(PropertyChangeEvent listener,
                                       UploadHandler receiver) {
-    String value = listener.getValue() != null ? listener.getValue().toString() : "[]";
+    String value = listener.getValue() != null ? listener.getValue().toString() : EMPTY_ARRAY;
     String oldValue = listener.getOldValue() != null ? listener.getOldValue().toString() : null;
-    if ("[]".equals(value) && oldValue != null) {
+    if (EMPTY_ARRAY.equals(value) && oldValue != null) {
       onReset(listener, receiver);
     }
   }
@@ -151,17 +161,27 @@ public class AttachmentFormView<T extends AttachmentDTO<?>>
     try {
       AttachmentDTO<?> model = getViewModel().getModel();
       if (model != null) {
-        model.setSize(metadata.contentLength());
-        model.setFilename(metadata.fileName());
-        model.setMediaType(metadata.contentType());
-        model.setContent(ZipUtil
-            .zipBase64(Base64.getEncoder().encodeToString(data)));
+        processUploadedFile(model, metadata, data);
       }
     } catch (Exception e) {
       handleError(e);
     } finally {
       refreshFields();
     }
+  }
+
+  /**
+   * Processa os dados do arquivo carregado e atualiza o modelo.
+   *
+   * @param model Modelo do anexo a ser atualizado
+   * @param metadata Metadados do arquivo carregado
+   * @param data Conteúdo binário do arquivo
+   */
+  private void processUploadedFile(AttachmentDTO<?> model, UploadMetadata metadata, byte[] data) throws IOException {
+    model.setSize(metadata.contentLength());
+    model.setFilename(metadata.fileName());
+    model.setMediaType(metadata.contentType());
+    model.setContent(ZipUtil.zipBase64(Base64.getEncoder().encodeToString(data)));
   }
 
 }

@@ -1,62 +1,79 @@
 package com.ia.core.owl.service.tool.objectproperty;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas EquivalentObjectProperties.
+ * Tool para criação de axiomas EquivalentObjectProperties OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar propriedades equivalentes
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa propriedades de objeto equivalentes (sinônimos ou idênticas).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * EquivalentObjectProperties é um axioma que declara que duas propriedades de objeto têm a mesma
+ * extensão, ou seja, relacionam os mesmos pares de instâncias. É usado para definir sinônimos,
+ * propriedades idênticas ou diferentes nomes para o mesmo conceito de relação.
+ * <p>
+ * <b>Sintaxe Manchester:</b> EquivalentObjectProperties(:Propriedade1 :Propriedade2)
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>esposa e mulher são equivalentes:
+ *       EquivalentObjectProperties(:esposa :mulher)</li>
+ *   <li>trabalhaPara e éEmpregadoDe são equivalentes:
+ *       EquivalentObjectProperties(:trabalhaPara :eEmpregadoDe)</li>
+ *   <li>resideEm e moraEm representam o mesmo conceito:
+ *       EquivalentObjectProperties(:resideEm :moraEm)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class EquivalentObjectPropertiesTool extends AbstractOWLTool {
+public class EquivalentObjectPropertiesTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "EquivalentObjectProperties";
-
-  public EquivalentObjectPropertiesTool(ChatModel chatModel,
-                                        LLMCommunicator llmCommunicator,
-                                        DefaultOwlService owlService,
-                                        TemplateService templateService,
-                                        FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public EquivalentObjectPropertiesTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+  /**
+   * Cria um axioma EquivalentObjectProperties na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param property1 Primeira propriedade de objeto
+   * @param property2 Segunda propriedade de objeto (equivalente à primeira)
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria um axioma EquivalentObjectProperties OWL 2 DL na ontologia da sessão. " +
+                     "Declara que duas propriedades de objeto são equivalentes (têm a mesma extensão/relacionam os mesmos pares de instâncias). " +
+                     "É usado para definir sinônimos, propriedades idênticas ou diferentes nomes para o mesmo conceito de relação. " +
+                     "Exemplos: " +
+                     "1) esposa e mulher são equivalentes → EquivalentObjectProperties(:esposa :mulher). " +
+                     "2) trabalhaPara e éEmpregadoDe são equivalentes → EquivalentObjectProperties(:trabalhaPara :eEmpregadoDe). " +
+                     "3) resideEm e moraEm representam o mesmo conceito → EquivalentObjectProperties(:resideEm :moraEm). " +
+                     "Útil para definir sinônimos ou propriedades idênticas.")
+  public String createEquivalentObjectProperties(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Primeira propriedade de objeto", required = true) String property1,
+      @ToolParam(description = "Segunda propriedade de objeto (equivalente à primeira)", required = true) String property2) {
 
-  @Override
-  public String getDescription() { return "Declara propriedades de objeto equivalentes"; }
+    log.debug("Criando EquivalentObjectProperties: {} equivalente a {}", property1, property2);
 
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas EquivalentObjectProperties.
-      Construtor: EquivalentObjectProperties
-      Descrição: Declara que duas propriedades de objeto são equivalentes.
-      Sintaxe Manchester: EquivalentObjectProperties(<propriedade1> <propriedade2>)
-      Exemplos:
-      - "esposa e mulher são equivalentes" → EquivalentObjectProperties(:esposa :mulher)
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "EquivalentObjectProperties(" + property1 + " " + property2 + ")";
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("esposa e mulher são equivalentes", "pai e father são equivalentes");
+    log.debug("Resultado da criação de EquivalentObjectProperties: {}", result);
+    return result;
   }
 }

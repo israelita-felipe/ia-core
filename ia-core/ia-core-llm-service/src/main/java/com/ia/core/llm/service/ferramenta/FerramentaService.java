@@ -6,7 +6,6 @@ import com.ia.core.llm.service.model.ferramenta.FerramentaActivationDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaUseCase;
-import com.ia.core.llm.service.resolver.FerramentaResolver;
 import com.ia.core.service.CrudBaseService;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * Implementa operações CRUD para ferramentas utilizadas por agentes de IA,
  * incluindo sincronização automática, listagem de ferramentas disponíveis,
  * e operações de skills (ferramentas compostas com tipo=SKILL).
+ * Ferramentas são convertidas automaticamente pelo FerramentaMapper.
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -34,14 +35,23 @@ public class FerramentaService
   extends CrudBaseService<Ferramenta, FerramentaDTO>
   implements FerramentaUseCase {
 
-  private final FerramentaRepository ferramentaRepository;
-  private final FerramentaResolver ferramentaResolver;
+  public FerramentaService(FerramentaServiceConfig config) {
+    super(Objects.requireNonNull(config, "config não pode ser null"));
+  }
 
-  public FerramentaService(FerramentaServiceConfig config,
-                           FerramentaResolver ferramentaResolver) {
-    super(config);
-    this.ferramentaRepository = config.getRepository();
-    this.ferramentaResolver = ferramentaResolver;
+  @Override
+  public FerramentaRepository getRepository() {
+    return (FerramentaRepository) super.getRepository();
+  }
+
+  @Override
+  public FerramentaMapper getMapper() {
+    return (FerramentaMapper) super.getMapper();
+  }
+
+  @Override
+  public FerramentaServiceConfig getConfig() {
+    return (FerramentaServiceConfig) super.getConfig();
   }
 
   @Override
@@ -62,13 +72,13 @@ public class FerramentaService
                      "identificador, módulo de origem e status de ativação. Apenas ferramentas " +
                      "com campo ativo=true são retornadas.")
   public List<FerramentaDTO> listAvailable() {
-    return getMapper().toDTOList(ferramentaRepository.findByAtivoTrue());
+    return getMapper().toDTOList(getRepository().findByAtivoTrue());
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<FerramentaMetadataDTO> listMetadata() {
-    return ferramentaRepository.findByAtivoTrueAndTipo(TipoFerramentaEnum.SKILL).stream()
+    return getRepository().findByAtivoTrueAndTipo(TipoFerramentaEnum.SKILL).stream()
         .map(ferramenta -> FerramentaMetadataDTO.builder()
             .id(ferramenta.getId())
             .titulo(ferramenta.getTitulo())
@@ -83,7 +93,7 @@ public class FerramentaService
   @Override
   @Transactional(readOnly = true)
   public FerramentaActivationDTO loadForActivation(Long id) {
-    Ferramenta ferramenta = ferramentaRepository.findById(id)
+    Ferramenta ferramenta = getRepository().findById(id)
         .orElseThrow(() -> new ServiceException("Ferramenta não encontrada: " + id));
     FerramentaDTO dto = getMapper().toDTO(ferramenta);
     return FerramentaActivationDTO.builder()
@@ -94,24 +104,5 @@ public class FerramentaService
         .template(dto.getTemplate())
         .subFerramentas(dto.getSubFerramentas() == null ? new ArrayList<>() : dto.getSubFerramentas())
         .build();
-  }
-
-  @Override
-  @Transactional
-  public FerramentaDTO save(FerramentaDTO dto) throws ServiceException {
-    FerramentaDTO saved = super.save(dto);
-    if (dto.getSubFerramentas() != null && !dto.getSubFerramentas().isEmpty()) {
-      Ferramenta ferramenta = ferramentaRepository.findById(saved.getId())
-          .orElseThrow(() -> new ServiceException("Ferramenta não encontrada após save"));
-      List<Ferramenta> subFerramentas = ferramentaResolver.resolve(dto.getSubFerramentas());
-      ferramenta.setSubFerramentas(subFerramentas);
-      ferramentaRepository.save(ferramenta);
-      return getMapper().toDTO(ferramenta);
-    }
-    return saved;
-  }
-
-  public FerramentaServiceConfig getConfig() {
-    return (FerramentaServiceConfig) super.getConfig();
   }
 }

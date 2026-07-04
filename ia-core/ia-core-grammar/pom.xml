@@ -31,8 +31,6 @@
 								<argument>-package</argument>
 								<argument>com.ia.core.grammar</argument>
 							</arguments>
-							<outputDirectory>
-								${basedir}/src/main/java/com/ia/core/grammar</outputDirectory>
 						</configuration>
 						<goals>
 							<goal>antlr4</goal>

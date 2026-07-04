@@ -1,6 +1,7 @@
 package com.ia.core.llm.service.chat;
 
 import com.ia.core.llm.service.template.PromptTemplateServiceImpl;
+import com.ia.core.llm.service.template.TemplateRepository;
 import com.ia.core.llm.service.vector.VectorStoreOperations;
 import com.ia.core.llm.service.vector.VectorStoreOperationsImpl;
 import com.ia.core.llm.service.vector.VectorStoreService;
@@ -24,8 +25,8 @@ public class ChatServiceConfig {
   }
 
   @Bean
-  PromptTemplateServiceImpl promptTemplateService() {
-    return new PromptTemplateServiceImpl();
+  PromptTemplateServiceImpl promptTemplateService(TemplateRepository templateRepository) {
+    return new PromptTemplateServiceImpl(templateRepository);
   }
 
   @Bean

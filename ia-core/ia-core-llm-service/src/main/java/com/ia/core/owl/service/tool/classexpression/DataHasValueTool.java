@@ -1,62 +1,80 @@
 package com.ia.core.owl.service.tool.classexpression;
 
-import com.ia.core.llm.service.ferramenta.FerramentaService;
-import com.ia.core.llm.service.template.TemplateService;
-import com.ia.core.owl.service.DefaultOwlService;
-import com.ia.core.owl.service.LLMCommunicator;
-import com.ia.core.owl.service.tool.base.AbstractOWLTool;
+
+import com.ia.core.llm.service.agente.ContextoConversacaoService;
+import com.ia.core.owl.service.tool.base.OwlConstructorTool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
- * Tool para gerar axiomas DataHasValue.
+ * Tool para criação de restrição de valor específico de dado OWL 2 DL.
+ * <p>
+ * Extende OwlConstructorTool e usa owlService para criar restrições de valor de dado
+ * em Manchester OWL Syntax com validação automática de consistência.
+ * <p>
+ * Representa restrição de valor de dado específico (∃U.{v}).
+ * <p>
+ * <b>Definição Formal OWL 2 DL:</b>
+ * DataHasValue é um construtor de restrição de classe que indica que existe pelo menos um valor
+ * de uma propriedade de dado para instâncias da classe que é um valor literal específico.
+ * É uma restrição existencial que garante que a propriedade tem um valor específico.
+ * <p>
+ * <b>Sintaxe Manchester:</b> SubClassOf(:Classe DataHasValue(:Propriedade valor))
+ * <p>
+ * <b>Exemplos:</b>
+ * <ul>
+ *   <li>Família Silva é quem tem sobrenome igual a 'Silva':
+ *       EquivalentTo(:FamiliaSilva DataHasValue(:temSobrenome "Silva"))</li>
+ *   <li>Nascido em 2000 possui ano de nascimento exatamente 2000:
+ *       SubClassOf(:Nascido2000 DataHasValue(:anoNascimento 2000))</li>
+ *   <li>Portador do CPF 123.456.789-00 tem esse documento:
+ *       EquivalentTo(:PortadorCPF123 DataHasValue(:temCPF "123.456.789-00"))</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 @Slf4j
 @Component
-public class DataHasValueTool extends AbstractOWLTool {
+public class DataHasValueTool extends OwlConstructorTool {
 
-  private static final String CONSTRUCTOR_NAME = "DataHasValue";
-
-  private static final String PROMPT_TEMPLATE = """
-      Você é um especialista em ontologias OWL 2 DL.
-      Sua tarefa é converter descrições em linguagem natural em axiomas DataHasValue.
-      Construtor: DataHasValue
-      Descrição: Declara que uma propriedade de dado tem um valor específico.
-      Sintaxe Manchester: DataHasValue(<propriedade> <valor>)
-      Exemplos:
-      - "MaiorDeIdade tem idade 18" → SubClassOf(:MaiorDeIdade DataHasValue(:temIdade 18))
-      Contexto ontológico atual: {context}
-      Descrição a converter: {description}
-      Retorne APENAS o axioma em sintaxe Manchester.
-      """;
-
-  public DataHasValueTool(ChatModel chatModel,
-                         LLMCommunicator llmCommunicator,
-                         DefaultOwlService owlService,
-                         TemplateService templateService,
-                         FerramentaService ferramentaService) {
-    super(chatModel, llmCommunicator, owlService, templateService, ferramentaService);
+  public DataHasValueTool(ContextoConversacaoService contextoConversacaoService) {
+    super(contextoConversacaoService);
   }
 
-  @Override
-  public String getPromptTemplate() {
-    return PROMPT_TEMPLATE;
-  }
+  /**
+   * Cria uma restrição de valor específico de dado na ontologia da sessão.
+   *
+   * @param sessionId ID da sessão de conversação
+   * @param className Nome da classe que tem a restrição
+   * @param property Propriedade de dado
+   * @param value Valor específico (ex: 18, "texto")
+   * @return resultado da operação com feedback sobre consistência
+   */
+  @Tool(description = "Cria uma restrição de valor específico de dado OWL 2 DL na ontologia da sessão. " +
+                     "Representa restrição de valor de dado específico (∃U.{v}). " +
+                     "Indica que existe pelo menos um valor de uma propriedade de dado para instâncias da classe que é um valor literal específico. " +
+                     "Exemplos: " +
+                     "1) Família Silva é quem tem sobrenome igual a 'Silva' → EquivalentTo(:FamiliaSilva DataHasValue(:temSobrenome \"Silva\")). " +
+                     "2) Nascido em 2000 possui ano de nascimento exatamente 2000 → SubClassOf(:Nascido2000 DataHasValue(:anoNascimento 2000)). " +
+                     "3) Portador do CPF 123.456.789-00 tem esse documento → EquivalentTo(:PortadorCPF123 DataHasValue(:temCPF \"123.456.789-00\")).")
+  public String createDataHasValue(
+      @ToolParam(description = "ID da sessão de conversação", required = true) String sessionId,
+      @ToolParam(description = "Nome da classe que tem a restrição", required = true) String className,
+      @ToolParam(description = "Propriedade de dado", required = true) String property,
+      @ToolParam(description = "Valor específico (ex: 18, \"texto\")", required = true) String value) {
 
-  @Override
-  public String getConstructorName() { return CONSTRUCTOR_NAME; }
+    log.debug("Criando DataHasValue: {} ∃{}.{{{}}}", className, property, value);
 
-  @Override
-  public String getDescription() { return "Declara restrição de valor específico para propriedade de dado"; }
+    // Constrói o axioma em Manchester OWL Syntax
+    String manchesterAxiom = "SubClassOf: " + className + " DataHasValue(" + property + " " + value + ")";
 
-  @Override
-  public List<String> getExamples() {
-    return List.of("MaiorDeIdade tem idade 18", "Produto tem preço 0");
+    // Usa OwlConstructorTool.createAxiom para adicionar via owlService
+    String result = createAxiom(sessionId, manchesterAxiom);
+
+    log.debug("Resultado da criação de DataHasValue: {}", result);
+    return result;
   }
 }

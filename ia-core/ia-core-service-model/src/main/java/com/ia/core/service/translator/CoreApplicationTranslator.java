@@ -41,6 +41,38 @@ public class CoreApplicationTranslator {
   }
 
   ///////////////////////////////////////////////////////
+  /// HELP - PAGE ACTIONS
+  ///////////////////////////////////////////////////////
+
+  public static final class HELP {
+    public static final String PAGE_NEW = "help.page.new";
+    public static final String PAGE_EDIT = "help.page.edit";
+    public static final String PAGE_COPY = "help.page.copy";
+    public static final String PAGE_VIEW = "help.page.view";
+    public static final String PAGE_DELETE = "help.page.delete";
+    public static final String PAGE_PRINT = "help.page.print";
+    public static final String PAGE_FILTER = "help.page.filter";
+  }
+
+  ///////////////////////////////////////////////////////
+  /// HELP - VIEWS
+  ///////////////////////////////////////////////////////
+
+  public static final class VIEW {
+    public static final String PAGE_LISTING = "view.page.listing";
+    public static final String FORM_EDITING = "view.form.editing";
+  }
+
+  ///////////////////////////////////////////////////////
+  /// HELP - ONLINE
+  ///////////////////////////////////////////////////////
+
+  public static final class HELP_ONLINE {
+    public static final String BUTTON_ARIA_LABEL = "help.online.button.aria.label";
+    public static final String DEFAULT_TITLE = "help.online.default.title";
+  }
+
+  ///////////////////////////////////////////////////////
   /// MENSAGENS
   ///////////////////////////////////////////////////////
 

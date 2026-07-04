@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/llm/prompts")
+@RequestMapping("/api/${api.version}/llm/prompts")
 @Tag(name = "Prompt", description = "Gerenciamento de prompts de catálogo")
 public class PromptController
   extends DefaultBaseController<Prompt,PromptDTO> {

@@ -1,7 +1,6 @@
 package com.ia.core.llm.view.agenteconversacional;
 
-import com.ia.core.llm.service.model.agente.ContextoConversacao;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -13,6 +12,9 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@FeignClient(name = "ia-core-llm-rest", url = "${ia-core.rest.url}")
-public interface AgenteConversacionalClient extends DefaultBaseClient<ContextoConversacao> {
+@FeignClient(name = AgenteConversacionalClient.NOME, url = AgenteConversacionalClient.URL)
+public interface AgenteConversacionalClient extends DefaultBaseClient<ContextConversacaoDTO> {
+
+  String NOME = "agente-conversacional";
+  String URL = "${feign.host}/api/${api.version}/${feign.url.agente-conversacional}";
 }

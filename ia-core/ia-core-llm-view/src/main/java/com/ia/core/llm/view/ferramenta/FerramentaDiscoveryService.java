@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.ferramenta;
 
-import com.ia.core.view.config.ViewLlmModuleProperties;
+import com.ia.core.llm.view.ViewLlmModuleProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
