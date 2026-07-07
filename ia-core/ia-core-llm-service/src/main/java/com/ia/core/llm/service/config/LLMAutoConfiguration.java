@@ -3,6 +3,7 @@ package com.ia.core.llm.service.config;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 /**
  * Configuração automática do módulo LLM.
  * <p>

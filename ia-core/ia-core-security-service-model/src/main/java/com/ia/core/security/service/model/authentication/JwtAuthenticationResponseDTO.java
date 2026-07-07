@@ -26,4 +26,14 @@ public class JwtAuthenticationResponseDTO
   implements AuthenticationResponse {
   private String token;
   private String refreshToken;
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String TOKEN = "token";
+    public static final String REFRESH_TOKEN = "refreshToken";
+
+    public static java.util.Set<String> values() {
+      return java.util.Set.of(TOKEN, REFRESH_TOKEN);
+    }
+  }
 }

@@ -52,10 +52,10 @@ class MensagemTranslatorTest {
   @Test
   @DisplayName("Deve ter classe MESSAGE com constantes")
   void deveTerClasseMESSAGEComConstantes() {
-    assertThat(MensagemTranslator.MESSAGE.ENVIADO_SUCESSO).isNotNull();
-    assertThat(MensagemTranslator.MESSAGE.ENVIADO_EM_MASSA_SUCESSO).isNotNull();
-    assertThat(MensagemTranslator.MESSAGE.STATUS_ATUALIZADO).isNotNull();
-    assertThat(MensagemTranslator.MESSAGE.FALHA_ENVIO).isNotNull();
+    assertThat(MensagemTranslator.MESSAGE.SENT).isNotNull();
+    assertThat(MensagemTranslator.MESSAGE.SENT_BATCH).isNotNull();
+    assertThat(MensagemTranslator.MESSAGE.STATUS_UPDATED).isNotNull();
+    assertThat(MensagemTranslator.MESSAGE.SEND_FAILURE).isNotNull();
   }
 
   @Test

@@ -95,6 +95,9 @@ public interface SaveBaseService<T extends BaseEntity, D extends DTO<?>>
    @Resilient(ResilienceProfile.DATABASE)
    default D save(D toSave)
      throws ServiceException {
+    if (toSave == null) {
+      throw new IllegalArgumentException("DTO to save cannot be null");
+    }
     beforeSave(toSave);
     ServiceException ex = new ServiceException();
     D saved = null;

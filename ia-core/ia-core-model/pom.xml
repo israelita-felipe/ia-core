@@ -32,7 +32,7 @@
     </dependency>
 		<dependency>
 			<groupId>com.ia</groupId>
-			<artifactId>ia-core-test</artifactId>
+			<artifactId>ia-core-model-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

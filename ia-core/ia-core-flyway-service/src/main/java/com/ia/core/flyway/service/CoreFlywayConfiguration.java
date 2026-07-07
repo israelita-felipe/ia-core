@@ -26,7 +26,8 @@ public abstract class CoreFlywayConfiguration {
         log.info("Reparo de migração finalizado");
       }
       var info = flyway.info();
-      if (info.getInfoResult().allSchemasEmpty) {
+      var infoResult = info.getInfoResult();
+      if (infoResult != null && infoResult.allSchemasEmpty) {
         log.info("Inicializando flyway pela primeira vez");
         flyway.baseline();
         log.info("Flyway inicializado");

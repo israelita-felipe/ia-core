@@ -43,10 +43,15 @@ public class AgenteService
   @TransactionalReadOnly
   public Optional<AgenteDTO> findByIdentificador(String identificador) {
     log.debug("Buscando agente por identificador: {}", identificador);
-    return getRepository().findByIdentificador(identificador)
+    var repository = getRepository();
+    if (repository == null) {
+      return Optional.empty();
+    }
+    var mapper = getMapper();
+    return repository.findByIdentificador(identificador)
         .map(agente -> {
           log.debug("Agente encontrado: {}", agente.getTitulo());
-          return getMapper().toDTO(agente);
+          return mapper != null ? mapper.toDTO(agente) : null;
         });
   }
 
@@ -54,11 +59,17 @@ public class AgenteService
   @TransactionalReadOnly
   public List<AgenteDTO> listAtivos() {
     log.debug("Listando agentes ativos");
-    return getRepository().findByAtivoTrue().stream()
+    var repository = getRepository();
+    if (repository == null) {
+      return List.of();
+    }
+    var mapper = getMapper();
+    return repository.findByAtivoTrue().stream()
         .map(agente -> {
           log.debug("Agente ativo encontrado: {}", agente.getTitulo());
-          return getMapper().toDTO(agente);
+          return mapper != null ? mapper.toDTO(agente) : null;
         })
+        .filter(dto -> dto != null)
         .collect(Collectors.toList());
   }
 }

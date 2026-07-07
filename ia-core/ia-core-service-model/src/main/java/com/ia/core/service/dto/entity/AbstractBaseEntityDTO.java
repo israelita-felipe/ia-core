@@ -107,7 +107,7 @@ public abstract class AbstractBaseEntityDTO<T extends BaseEntity>
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS {
+  public static class CAMPOS extends AbstractDTO.CAMPOS {
     public static final String ID = "id";
     public static final String VERSION = "version";
 

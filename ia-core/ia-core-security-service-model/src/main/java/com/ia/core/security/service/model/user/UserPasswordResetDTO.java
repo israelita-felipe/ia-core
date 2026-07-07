@@ -37,4 +37,14 @@ public class UserPasswordResetDTO
                          userCodeRequester);
   }
 
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String USER_CODE = "userCode";
+    public static final String USER_CODE_REQUESTER = "userCodeRequester";
+
+    public static java.util.Set<String> values() {
+      return java.util.Set.of(USER_CODE, USER_CODE_REQUESTER);
+    }
+  }
+
 }

@@ -37,7 +37,7 @@ public class ChatSessionCrudService
 
   public ChatSessionCrudService(ChatSessionServiceConfig config) {
     super(config);
-    this.agenteRepository = config.getAgenteRepository();
+    this.agenteRepository = config != null ? config.getAgenteRepository() : null;
   }
 
   @Override
@@ -49,10 +49,15 @@ public class ChatSessionCrudService
   @TransactionalReadOnly
   public Optional<ChatSessionDTO> findBySessionId(String sessionId) {
     log.debug("Buscando sessão de chat por session ID: {}", sessionId);
-    return getRepository().findBySessionId(sessionId)
+    var repository = getRepository();
+    if (repository == null) {
+      return Optional.empty();
+    }
+    var mapper = getMapper();
+    return repository.findBySessionId(sessionId)
         .map(session -> {
           log.debug("Sessão encontrada: {}", session.getSessionId());
-          return getMapper().toDTO(session);
+          return mapper != null ? mapper.toDTO(session) : null;
         });
   }
 
@@ -60,11 +65,17 @@ public class ChatSessionCrudService
   @TransactionalReadOnly
   public List<ChatSessionDTO> listAtivasByUsuario(String usuarioId) {
     log.debug("Listando sessões ativas do usuário: {}", usuarioId);
-    return getRepository().findByUsuarioIdAndStatus(usuarioId, ChatSessionStatus.ATIVA).stream()
+    var repository = getRepository();
+    if (repository == null) {
+      return List.of();
+    }
+    var mapper = getMapper();
+    return repository.findByUsuarioIdAndStatus(usuarioId, ChatSessionStatus.ATIVA).stream()
         .map(session -> {
           log.debug("Sessão ativa encontrada: {}", session.getSessionId());
-          return getMapper().toDTO(session);
+          return mapper != null ? mapper.toDTO(session) : null;
         })
+        .filter(dto -> dto != null)
         .toList();
   }
 
@@ -73,8 +84,19 @@ public class ChatSessionCrudService
   public ChatSessionDTO iniciarSessao(Long agenteId, String usuarioId, String titulo) {
     log.debug("Iniciando sessão de chat: agenteId={}, usuarioId={}, titulo={}", agenteId, usuarioId, titulo);
 
-    Agente agente = agenteRepository.findById(agenteId)
-        .orElseThrow(() -> new ServiceException("Agente não encontrado"));
+    var repository = getRepository();
+    var mapper = getMapper();
+    if (repository == null) {
+      throw new ServiceException("Repositório não configurado");
+    }
+
+    Agente agente;
+    if (agenteRepository != null) {
+      agente = agenteRepository.findById(agenteId)
+          .orElseThrow(() -> new ServiceException("Agente não encontrado"));
+    } else {
+      throw new ServiceException("AgenteRepository não configurado");
+    }
 
     ChatSession session = ChatSession.builder()
         .sessionId(UUID.randomUUID().toString())
@@ -85,10 +107,10 @@ public class ChatSessionCrudService
         .usuarioId(usuarioId)
         .build();
 
-    ChatSession saved = getRepository().save(session);
+    ChatSession saved = repository.save(session);
     log.debug("Sessão iniciada com sucesso: sessionId={}", saved.getSessionId());
 
-    return getMapper().toDTO(saved);
+    return mapper != null ? mapper.toDTO(saved) : null;
   }
 
   @Override
@@ -96,15 +118,21 @@ public class ChatSessionCrudService
   public ChatSessionDTO encerrarSessao(String sessionId) {
     log.debug("Encerrando sessão de chat: sessionId={}", sessionId);
 
-    ChatSession session = getRepository().findBySessionId(sessionId)
+    var repository = getRepository();
+    var mapper = getMapper();
+    if (repository == null) {
+      throw new ServiceException("Repositório não configurado");
+    }
+
+    ChatSession session = repository.findBySessionId(sessionId)
         .orElseThrow(() -> new ServiceException("Sessão não encontrada"));
 
     session.setDataFim(LocalDateTime.now());
     session.setStatus(ChatSessionStatus.ENCERRADA);
 
-    ChatSession saved = getRepository().save(session);
+    ChatSession saved = repository.save(session);
     log.debug("Sessão encerrada com sucesso: sessionId={}", saved.getSessionId());
 
-    return getMapper().toDTO(saved);
+    return mapper != null ? mapper.toDTO(saved) : null;
   }
 }

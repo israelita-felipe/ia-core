@@ -52,7 +52,15 @@ public class PrivilegeService
                      "para inicialização do sistema ou operações administrativas. Útil para agentes de IA " +
                      "obterem o catálogo completo de privilégios disponíveis no sistema.")
   public List<PrivilegeDTO> findAll() {
-    return getRepository().findAll().stream().map(this::toDTO).toList();
+    var repository = getRepository();
+    if (repository == null) {
+      return List.of();
+    }
+    var entities = repository.findAll();
+    if (entities == null) {
+      return List.of();
+    }
+    return entities.stream().map(this::toDTO).toList();
   }
 
   /**

@@ -3,24 +3,17 @@ package com.ia.core.view.help;
 import com.ia.core.view.components.form.FormView;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
-import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.properties.HasHelp;
 import com.ia.core.view.CoreBaseVaadinViewTest;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.Span;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import java.util.Locale;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Testes unitários para {@link HelpOnlineComponent}.

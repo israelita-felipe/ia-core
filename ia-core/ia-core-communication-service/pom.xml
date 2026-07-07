@@ -56,11 +56,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -74,6 +69,11 @@
 			<artifactId>ia-core-resilience4j</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+    <dependency>
+      <groupId>com.ia</groupId>
+      <artifactId>ia-core-service-test</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 	</dependencies>
   <build>
     <pluginManagement>

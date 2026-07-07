@@ -41,7 +41,7 @@ public class UserRoleDTO
 
   /** Serial UID */
   /** Nome */
-  @NotNull(message = "validation.user.role.name.required")
+  @NotNull(message = "{validation.user.role.name.required}")
   private String name;
 
   @Default
@@ -49,20 +49,29 @@ public class UserRoleDTO
 
   @Override
   public UserRoleDTO cloneObject() {
-    return toBuilder().privileges(new HashSet<>(getPrivileges().stream()
-        .map(RolePrivilegeDTO::cloneObject).toList())).build();
+    return toBuilder().privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+        .filter(java.util.Objects::nonNull)
+        .map(RolePrivilegeDTO::cloneObject).toList()) : new HashSet<>()).build();
   }
 
   @Override
   public UserRoleDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .privileges(new HashSet<>(getPrivileges().stream()
-            .map(RolePrivilegeDTO::copyObject).toList()))
+        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+            .filter(java.util.Objects::nonNull)
+            .map(RolePrivilegeDTO::copyObject).toList()) : new HashSet<>())
         .build();
   }
 
   @Override
   public String toString() {
     return String.format("%s [%s]", name, privileges);
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String NAME = "name";
+    public static final String PRIVILEGES = "privileges";
   }
 }

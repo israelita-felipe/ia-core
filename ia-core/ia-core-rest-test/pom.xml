@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+		<groupId>com.ia</groupId>
+		<artifactId>ia-core</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>ia-core-rest-test</artifactId>
+	<name>ia-core-rest-test</name>
+	<description>Módulo de testes para APIs REST (MockMvc)</description>
+	<dependencies>
+		<!-- Service test for base service tests -->
+		<dependency>
+			<groupId>com.ia</groupId>
+			<artifactId>ia-core-service-test</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Spring MockMvc -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc-test</artifactId>
+    </dependency>
+	</dependencies>
+</project>

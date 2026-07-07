@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+		<groupId>com.ia</groupId>
+		<artifactId>ia-core</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>ia-core-view-test</artifactId>
+	<name>ia-core-view-test</name>
+	<description>Módulo de testes para views (Vaadin), testes de aceitação, integração e E2E</description>
+	<dependencies>
+		<!-- Service model test for DTO base tests -->
+		<dependency>
+			<groupId>com.ia</groupId>
+			<artifactId>ia-core-service-model-test</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+    <!-- Vaadin TestBench para testes E2E (ADR-039) -->
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-testbench-junit5</artifactId>
+      <version>${vaadin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+    </dependency>
+    <!-- Spring Boot Autoconfigure for E2E test application -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-testbench</artifactId>
+      <version>5.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-dev</artifactId>
+      <optional>true</optional>
+      <version>${vaadin.version}</version>
+    </dependency>
+	</dependencies>
+</project>

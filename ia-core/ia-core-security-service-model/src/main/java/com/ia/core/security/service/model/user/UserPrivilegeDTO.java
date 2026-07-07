@@ -34,7 +34,7 @@ import java.util.Set;
 public class UserPrivilegeDTO
   extends AbstractBaseEntityDTO<UserPrivilege> {
 
-  @NotNull(message = "validation.user.privilege.required")
+  @NotNull(message = "{validation.user.privilege.privilege.required}")
   private PrivilegeDTO privilege;
 
   @Default
@@ -44,8 +44,9 @@ public class UserPrivilegeDTO
   public UserPrivilegeDTO cloneObject() {
     return toBuilder()
         .privilege(privilege != null ? privilege.cloneObject() : null)
-        .operations(new HashSet<>(getOperations().stream()
-            .map(PrivilegeOperationDTO::cloneObject).toList()))
+        .operations(operations != null ? new HashSet<>(getOperations().stream()
+            .filter(java.util.Objects::nonNull)
+            .map(PrivilegeOperationDTO::cloneObject).toList()) : new HashSet<>())
         .build();
   }
 
@@ -53,8 +54,9 @@ public class UserPrivilegeDTO
   public UserPrivilegeDTO copyObject() {
     return ((UserPrivilegeDTO) super.copyObject()).toBuilder()
         .privilege(privilege != null ? privilege.copyObject() : null)
-        .operations(new HashSet<>(getOperations().stream()
-            .map(PrivilegeOperationDTO::copyObject).toList()))
+        .operations(operations != null ? new HashSet<>(getOperations().stream()
+            .filter(java.util.Objects::nonNull)
+            .map(PrivilegeOperationDTO::copyObject).toList()) : new HashSet<>())
         .build();
   }
 
@@ -62,6 +64,10 @@ public class UserPrivilegeDTO
     extends AbstractBaseEntityDTO.CAMPOS {
     public static final String PRIVILEGE = "privilege";
     public static final String OPERATIONS = "operations";
+
+    public static Set<String> values() {
+      return Set.of(PRIVILEGE, OPERATIONS);
+    }
   }
 
   /**

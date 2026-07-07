@@ -1,5 +1,6 @@
 package com.ia.core.resilience4j.aspect;
 
+import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.dto.ResilienceContext;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 import io.github.resilience4j.bulkhead.Bulkhead;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 /**
@@ -19,8 +21,8 @@ import java.util.function.Supplier;
  * <p>Princípios SOLID aplicados:</p>
  * <ul>
  *   <li><b>Single Responsibility</b>: Apenas lida com Bulkhead</li>
- *   <li><b>Open/Closed</b>: Extensível via interface ResilienceStrategyHandler</li>
- *   <li><b>Liskov Substitution</b>: Implementa ResilienceStrategyHandler<Bulkhead></li>
+ *   <li><b>Open/Closed</b>: Extensível via herança da classe abstrata</li>
+ *   <li><b>Liskov Substitution</b>: Estende AbstractResilienceStrategyHandler</li>
  *   <li><b>Interface Segregation</b>: Interface mínima necessária</li>
  *   <li><b>Dependency Inversion</b>: Depende de ResilienceContext (abstração)</li>
  * </ul>
@@ -30,7 +32,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Component
-public class BulkheadStrategyHandler implements ResilienceStrategyHandler<Bulkhead> {
+public class BulkheadStrategyHandler extends AbstractResilienceStrategyHandler<Bulkhead> {
 
     /**
      * Creates or resolves a Bulkhead instance for the given context.
@@ -46,20 +48,18 @@ public class BulkheadStrategyHandler implements ResilienceStrategyHandler<Bulkhe
      */
     @Override
     public Bulkhead resolve(ResilienceContext context) {
-        ResilienceProfile profile = context.getProfile();
-        com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
+        ProfileAnnotation data = extractProfileAndAnnotation(context);
+        ResilienceProfile profile = data.profile();
+        Resilient annotation = data.annotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-bulkhead";
 
         BulkheadConfig config = BulkheadConfig.custom()
-                .maxConcurrentCalls(
-                        annotation.bulkheadMaxConcurrent() >= 0
-                                ? annotation.bulkheadMaxConcurrent()
-                                : profile.getBulkheadMaxConcurrentCalls())
+                .maxConcurrentCalls(getIntValue(annotation.bulkheadMaxConcurrent(),
+                        profile.getBulkheadMaxConcurrentCalls()))
                 .maxWaitDuration(Duration.ofMillis(
-                        annotation.bulkheadMaxWait() >= 0
-                                ? annotation.bulkheadMaxWait()
-                                : 0))
+                        getLongValue(annotation.bulkheadMaxWait(),
+                                profile.getBulkheadMaxWaitMs())))
                 .build();
 
         log.debug("Resolved Bulkhead '{}' with maxConcurrentCalls={}",
@@ -80,6 +80,12 @@ public class BulkheadStrategyHandler implements ResilienceStrategyHandler<Bulkhe
     @Override
     public Object execute(ResilienceContext context, Supplier<Object> next) {
         Bulkhead bulkhead = resolve(context);
-        return bulkhead.executeSupplier(next);
+        try {
+            return bulkhead.executeSupplier(() ->
+                CompletableFuture.supplyAsync(next::get)
+            ).join();
+        } catch (Exception e) {
+            throw new RuntimeException("Bulkhead execution failed: " + e.getLocalizedMessage(), e);
+        }
     }
 }

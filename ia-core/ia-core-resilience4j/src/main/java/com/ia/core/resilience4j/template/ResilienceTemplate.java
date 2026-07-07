@@ -2,25 +2,27 @@ package com.ia.core.resilience4j.template;
 
 import com.ia.core.resilience4j.aspect.ResilienceFallbackHandler;
 import com.ia.core.resilience4j.dto.ResilienceContext;
-import com.ia.core.resilience4j.metrics.ResilienceMetrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
  * Template method para execução de operações resilientes.
  *
- * <p>Define o esqueleto da execução com medição de tempo e métricas,
- * delegando a lógica específica para o Supplier fornecido.</p>
+ * <p>Define o esqueleto da execução com tratamento de fallback,
+ * delegando a lógica de métricas para ResilienceMetricsCollector.</p>
  *
  * <p>Padrões aplicados:</p>
  * <ul>
  *   <li>Template Method - define o esqueleto da operação</li>
- *   <li>Strategy - delega a lógica de execução para o Supplier</li>
- *   <li>Observer - registra métricas de execução</li>
+ *   <li>Strategy - deleta a lógica de execução para o Supplier</li>
  * </ul>
+ *
+ * <p><b>Nota:</b> A coleta de métricas é feita pelo ResilienceMetricsCollector
+ * encapsulado em ResilienceExecutionChainBuilder, evitando duplicação.</p>
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -30,11 +32,13 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class ResilienceTemplate {
 
-    private final ResilienceMetrics metrics;
     private final ResilienceFallbackHandler fallbackHandler;
 
     /**
-     * Executa uma operação com timing e métricas.
+     * Executa uma operação com tratamento de fallback.
+     *
+     * <p>As métricas são coletadas pelo ResilienceMetricsCollector encapsulado
+     * na cadeia de execução, garantindo uma única coleta por execução.</p>
      *
      * @param context   o contexto de resiliência
      * @param operation a operação a ser executada
@@ -42,24 +46,22 @@ public class ResilienceTemplate {
      * @return o resultado da operação
      */
     public <T> T execute(ResilienceContext context, Supplier<T> operation) {
-        long startTime = System.currentTimeMillis();
+        Objects.requireNonNull(context, "context must not be null");
+        Objects.requireNonNull(operation, "operation must not be null");
+
         String profileName = context.getProfile().getName();
         String methodName = context.getMethod().getName();
 
         try {
             T result = operation.get();
-            long duration = System.currentTimeMillis() - startTime;
-            metrics.recordSuccess(profileName, methodName, duration);
-            log.debug("Operation {}#{} executed successfully in {}ms",
+            log.debug("Operation {}#{} executed successfully",
                 context.getMethod().getDeclaringClass().getSimpleName(),
-                methodName, duration);
+                methodName);
             return result;
         } catch (Exception e) {
-            long duration = System.currentTimeMillis() - startTime;
-            metrics.recordError(profileName, methodName, e.getClass().getSimpleName(), duration);
-            log.error("Error in operation {}#{} after {}ms: {}",
+            log.error("Error in operation {}#{}: {}",
                 context.getMethod().getDeclaringClass().getSimpleName(),
-                methodName, duration, e.getMessage());
+                methodName, e.getMessage());
             if (context.getAnnotation().fallbackEnabled()) {
                 log.debug("Executing fallback for {}#{}",
                     context.getMethod().getDeclaringClass().getSimpleName(), context.getMethod().getName());

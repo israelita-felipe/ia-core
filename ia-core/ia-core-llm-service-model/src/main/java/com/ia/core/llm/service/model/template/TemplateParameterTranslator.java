@@ -51,10 +51,18 @@ public final class TemplateParameterTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "template.parameter.error.notfound";
+        public static final String DUPLICATE = "template.parameter.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "template.parameter.message.criado.sucesso";
+        public static final String CREATED = "template.parameter.message.created";
     }
 
     /**

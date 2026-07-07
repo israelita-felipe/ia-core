@@ -1,5 +1,6 @@
 package com.ia.core.resilience4j.aspect;
 
+import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.dto.ResilienceContext;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -22,8 +23,8 @@ import java.util.function.Supplier;
  * <p>Princípios SOLID aplicados:</p>
  * <ul>
  *   <li><b>Single Responsibility</b>: Apenas lida com CircuitBreaker</li>
- *   <li><b>Open/Closed</b>: Extensível via interface ResilienceStrategyHandler</li>
- *   <li><b>Liskov Substitution</b>: Implementa ResilienceStrategyHandler<CircuitBreaker></li>
+ *   <li><b>Open/Closed</b>: Extensível via herança da classe abstrata</li>
+ *   <li><b>Liskov Substitution</b>: Estende AbstractResilienceStrategyHandler</li>
  *   <li><b>Interface Segregation</b>: Interface mínima necessária</li>
  *   <li><b>Dependency Inversion</b>: Depende de ResilienceContext (abstração)</li>
  * </ul>
@@ -33,7 +34,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Component
-public class CircuitBreakerStrategyHandler implements ResilienceStrategyHandler<CircuitBreaker> {
+public class CircuitBreakerStrategyHandler extends AbstractResilienceStrategyHandler<CircuitBreaker> {
 
     /**
      * Creates or resolves a CircuitBreaker instance for the given context.
@@ -52,28 +53,22 @@ public class CircuitBreakerStrategyHandler implements ResilienceStrategyHandler<
      */
     @Override
     public CircuitBreaker resolve(ResilienceContext context) {
-        ResilienceProfile profile = Objects.requireNonNull(context, "context must not be null").getProfile();
-        com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
+        ProfileAnnotation data = extractProfileAndAnnotation(context);
+        ResilienceProfile profile = data.profile();
+        Resilient annotation = data.annotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-cb";
 
         CircuitBreakerConfig config = CircuitBreakerConfig.custom()
-                .failureRateThreshold(
-                        annotation.circuitBreakerFailureRate() >= 0
-                                ? annotation.circuitBreakerFailureRate()
-                                : profile.getCircuitBreakerFailureRateThreshold())
+                .failureRateThreshold(getIntValue(annotation.circuitBreakerFailureRate(),
+                        profile.getCircuitBreakerFailureRateThreshold()))
                 .waitDurationInOpenState(Duration.ofMillis(
-                        annotation.circuitBreakerWaitDuration() >= 0
-                                ? annotation.circuitBreakerWaitDuration()
-                                : profile.getCircuitBreakerWaitDurationInOpenStateMs()))
-                .slidingWindowSize(
-                        annotation.circuitBreakerSlidingWindow() >= 0
-                                ? annotation.circuitBreakerSlidingWindow()
-                                : profile.getCircuitBreakerSlidingWindowSize())
-                .minimumNumberOfCalls(
-                        annotation.circuitBreakerMinCalls() >= 0
-                                ? annotation.circuitBreakerMinCalls()
-                                : profile.getCircuitBreakerMinimumNumberOfCalls())
+                        getLongValue(annotation.circuitBreakerWaitDuration(),
+                                profile.getCircuitBreakerWaitDurationInOpenStateMs())))
+                .slidingWindowSize(getIntValue(annotation.circuitBreakerSlidingWindow(),
+                        profile.getCircuitBreakerSlidingWindowSize()))
+                .minimumNumberOfCalls(getIntValue(annotation.circuitBreakerMinCalls(),
+                        profile.getCircuitBreakerMinimumNumberOfCalls()))
                 .permittedNumberOfCallsInHalfOpenState(profile.getCircuitBreakerPermittedCallsInHalfOpen())
                 .automaticTransitionFromOpenToHalfOpenEnabled(true)
                 .recordExceptions(IOException.class, TimeoutException.class)
@@ -93,11 +88,16 @@ public class CircuitBreakerStrategyHandler implements ResilienceStrategyHandler<
      * @param context o contexto de resiliência já resolvido
      * @param next o próximo passo na cadeia de execução
      * @return o resultado da execução
-     * @throws Throwable se a execução falhar
      */
     @Override
     public Object execute(ResilienceContext context, Supplier<Object> next) {
-        CircuitBreaker circuitBreaker = resolve(Objects.requireNonNull(context, "context must not be null"));
-        return circuitBreaker.executeSupplier(Objects.requireNonNull(next, "next must not be null"));
+        CircuitBreaker circuitBreaker = resolve(context);
+        try {
+            return circuitBreaker.executeSupplier(() ->
+                CompletableFuture.supplyAsync(next::get)
+            ).join();
+        } catch (Exception e) {
+            throw new RuntimeException("CircuitBreaker execution failed: " + e.getLocalizedMessage(), e);
+        }
     }
 }

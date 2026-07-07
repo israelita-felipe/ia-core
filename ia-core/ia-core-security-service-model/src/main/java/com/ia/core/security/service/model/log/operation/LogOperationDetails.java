@@ -24,7 +24,13 @@ public class LogOperationDetails
   public static Map<String, Object> getLogOperationDiffFromNewValue(Map<String, Object> oldObject,
                                                                     Map<String, Object> newObject) {
     Map<String, Object> diffFromNew = new HashMap<>();
+    if (newObject == null) {
+      return diffFromNew;
+    }
     diffFromNew.putAll(newObject);
+    if (oldObject == null) {
+      return diffFromNew;
+    }
     oldObject.entrySet().forEach(entryFromOldObject -> {
       newObject.entrySet().forEach(entryFromNewObject -> {
         if (Objects.equals(entryFromNewObject, entryFromOldObject)) {
@@ -42,7 +48,13 @@ public class LogOperationDetails
   public static Map<String, Object> getLogOperationDiffFromOldValue(Map<String, Object> oldObject,
                                                                     Map<String, Object> newObject) {
     Map<String, Object> diffFromOld = new HashMap<>();
+    if (oldObject == null) {
+      return diffFromOld;
+    }
     diffFromOld.putAll(oldObject);
+    if (newObject == null) {
+      return diffFromOld;
+    }
     newObject.entrySet().forEach(entryFromNewObject -> {
       oldObject.entrySet().forEach(entryFromOldObject -> {
         if (Objects.equals(entryFromNewObject, entryFromOldObject)) {

@@ -37,13 +37,13 @@ public class IntervaloTemporalDTO
   /**
    * Data de início. Equivalente ao componente de data do DTSTART (RFC 5545).
    */
-  @NotNull(message = "validation.periodicidade.intervaloBase.startDate.required")
+  @NotNull(message = "{periodicidade.validation.intervaloBase.startDate.required}")
   private LocalDate startDate;
 
   /**
    * Hora de início. Equivalente ao componente de hora do DTSTART (RFC 5545).
    */
-  @NotNull(message = "validation.periodicidade.intervaloBase.startTime.required")
+  @NotNull(message = "{periodicidade.validation.intervaloBase.startTime.required}")
   private LocalTime startTime;
 
   /**
@@ -176,15 +176,21 @@ public class IntervaloTemporalDTO
                            java.time.LocalTime::compareTo);
   }
 
-  /**
-   * Campos para busca/filtro
-   */
-  public static class CAMPOS {
-    public static final String START_DATE = "startDate";
-    public static final String START_TIME = "startTime";
-    public static final String END_DATE = "endDate";
-    public static final String END_TIME = "endTime";
-  }
+/**
+    * Field name constants for Vaadin binding and filters.
+    * Note: IntervaloTemporalDTO does not extend AbstractBaseEntityDTO, so these are standalone.
+    */
+   @SuppressWarnings("javadoc")
+   public static class CAMPOS {
+     public static final String START_DATE = "startDate";
+     public static final String START_TIME = "startTime";
+     public static final String END_DATE = "endDate";
+     public static final String END_TIME = "endTime";
+
+     public static Set<String> values() {
+         return Set.of(START_DATE, START_TIME, END_DATE, END_TIME);
+     }
+   }
 
   @Override
   public String toString() {

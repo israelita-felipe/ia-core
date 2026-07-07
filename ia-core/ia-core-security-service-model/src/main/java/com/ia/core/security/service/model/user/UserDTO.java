@@ -46,21 +46,21 @@ public class UserDTO
   /**
    * Nome do usuário
    */
-  @NotNull(message = "validation.user.userName.required")
-  @Size(min = 3, max = 200, message = "validation.user.userName.size")
+  @NotNull(message = "{validation.user.userName.required}")
+  @Size(min = 3, max = 200, message = "{validation.user.userName.size}")
   private String userName;
 
   /**
    * Código do usuário
    */
-  @NotNull(message = "validation.user.userCode.required")
-  @Size(min = 3, max = 50, message = "validation.user.userCode.size")
+  @NotNull(message = "{validation.user.userCode.required}")
+  @Size(min = 3, max = 50, message = "{validation.user.userCode.size}")
   private String userCode;
 
   /**
    * Senha do usuário
    */
-  @Size(min = 6, max = 100, message = "validation.user.password.size")
+  @Size(min = 6, max = 100, message = "{validation.user.password.size}")
   private String password;
   @Default
   @NotNull
@@ -86,57 +86,111 @@ public class UserDTO
   @Override
   public UserDTO cloneObject() {
     return toBuilder()
-        .privileges(new HashSet<>(getPrivileges().stream()
-            .map(UserPrivilegeDTO::cloneObject).toList()))
-        .roles(new HashSet<>(getRoles().stream()
-            .map(UserRoleDTO::cloneObject).toList()))
+        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+            .filter(Objects::nonNull)
+            .map(UserPrivilegeDTO::cloneObject).toList()) : new HashSet<>())
+        .roles(roles != null ? new HashSet<>(getRoles().stream()
+            .filter(Objects::nonNull)
+            .map(UserRoleDTO::cloneObject).toList()) : new HashSet<>())
         .build();
   }
 
   @Override
   public UserDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .privileges(new HashSet<>(getPrivileges().stream()
-            .map(UserPrivilegeDTO::copyObject).toList()))
-        .roles(new HashSet<>(getRoles().stream()
-            .map(UserRoleDTO::copyObject).toList()))
+        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+            .filter(Objects::nonNull)
+            .map(UserPrivilegeDTO::copyObject).toList()) : new HashSet<>())
+        .roles(roles != null ? new HashSet<>(getRoles().stream()
+            .filter(Objects::nonNull)
+            .map(UserRoleDTO::copyObject).toList()) : new HashSet<>())
         .build();
   }
 
   @Transient
   public Collection<PrivilegeDTO> getAllPrivileges() {
-    return Stream
-        .concat(this.privileges.stream()
-            .map(UserPrivilegeDTO::getPrivilege),
-            this.roles.stream()
-                .flatMap(role -> role.getPrivileges().stream()
-                    .map(RolePrivilegeDTO::getPrivilege)))
-        .collect(Collectors.toSet());
+    if (privileges == null && roles == null) {
+        return Collections.emptySet();
+    }
+    Stream.Builder<PrivilegeDTO> builder = Stream.builder();
+    if (privileges != null) {
+        privileges.stream()
+            .filter(Objects::nonNull)
+            .map(UserPrivilegeDTO::getPrivilege)
+            .filter(Objects::nonNull)
+            .forEach(builder::add);
+    }
+    if (roles != null) {
+        roles.stream()
+            .filter(Objects::nonNull)
+            .flatMap(role -> role.getPrivileges() != null
+                ? role.getPrivileges().stream()
+                : Stream.empty())
+            .filter(Objects::nonNull)
+            .map(RolePrivilegeDTO::getPrivilege)
+            .filter(Objects::nonNull)
+            .forEach(builder::add);
+    }
+    return builder.build().collect(Collectors.toSet());
   }
 
   @Transient
   public Collection<PrivilegeContext> getAllContexts() {
 
     Map<PrivilegeDTO, Collection<PrivilegeOperationDTO>> map = new HashMap<>();
-    this.privileges.stream().forEach(userPrivilege -> {
-      PrivilegeDTO privilege = userPrivilege.getPrivilege();
-      Collection<PrivilegeOperationDTO> values = map
-          .getOrDefault(privilege, new HashSet<>());
-      values.addAll(userPrivilege.getOperations());
-      map.put(privilege, values);
-    });
-    this.roles.stream().flatMap(role -> role.getPrivileges().stream())
-        .forEach(rolePrivilege -> {
-          PrivilegeDTO privilege = rolePrivilege.getPrivilege();
-          Collection<PrivilegeOperationDTO> values = map
-              .getOrDefault(privilege, new HashSet<>());
-          values.addAll(rolePrivilege.getOperations());
-          map.put(privilege, values);
-        });
+    if (privileges != null) {
+        privileges.stream()
+            .filter(Objects::nonNull)
+            .forEach(userPrivilege -> {
+                PrivilegeDTO privilege = userPrivilege.getPrivilege();
+                if (privilege != null) {
+                    Collection<PrivilegeOperationDTO> values = map
+                        .getOrDefault(privilege, new HashSet<>());
+                    if (userPrivilege.getOperations() != null) {
+                        values.addAll(userPrivilege.getOperations());
+                    }
+                    map.put(privilege, values);
+                }
+            });
+    }
+    if (roles != null) {
+        roles.stream()
+            .filter(Objects::nonNull)
+            .flatMap(role -> role.getPrivileges() != null
+                ? role.getPrivileges().stream()
+                : Stream.empty())
+            .filter(Objects::nonNull)
+            .forEach(rolePrivilege -> {
+                PrivilegeDTO privilege = rolePrivilege.getPrivilege();
+                if (privilege != null) {
+                    Collection<PrivilegeOperationDTO> values = map
+                        .getOrDefault(privilege, new HashSet<>());
+                    if (rolePrivilege.getOperations() != null) {
+                        values.addAll(rolePrivilege.getOperations());
+                    }
+                    map.put(privilege, values);
+                }
+            });
+    }
     return map.entrySet().stream()
         .map(entry -> new PrivilegeContext(entry.getKey(),
                                            entry.getValue()))
         .toList();
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String USER_NAME = "userName";
+    public static final String USER_CODE = "userCode";
+    public static final String PASSWORD = "password";
+    public static final String ENABLED = "enabled";
+    public static final String ACCOUNT_NOT_EXPIRED = "accountNotExpired";
+    public static final String ACCOUNT_NOT_LOCKED = "accountNotLocked";
+    public static final String CREDENTIALS_NOT_EXPIRED = "credentialsNotExpired";
+    public static final String PRIVILEGES = "privileges";
+    public static final String ROLES = "roles";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
   }
 
   @Override

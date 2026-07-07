@@ -40,12 +40,20 @@ public final class ChatTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "chat.error.notfound";
+        public static final String DUPLICATE = "chat.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "chat.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "chat.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "chat.message.deletado.sucesso";
+        public static final String CREATED = "chat.message.created";
+        public static final String UPDATED = "chat.message.updated";
+        public static final String DELETED = "chat.message.deleted";
     }
 
     /**

@@ -10,6 +10,7 @@ import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -97,8 +98,7 @@ public class LogOperationDTO
   }
 
   @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
     public static final String USER_CODE = "userCode";
     public static final String OPERATION = "operation";
     public static final String TYPE = "type";
@@ -107,5 +107,10 @@ public class LogOperationDTO
     public static final String VALUE_ID = "valueId";
     public static final String OLD_VALUE = "oldValue";
     public static final String NEW_VALUE = "newValue";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(USER_CODE, OPERATION, TYPE, DATE_TIME_OPERATION, USER_NAME, VALUE_ID, OLD_VALUE, NEW_VALUE, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

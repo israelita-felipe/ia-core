@@ -1,6 +1,8 @@
 package com.ia.core.service.attachment.dto;
 
 import com.ia.core.model.attachment.Attachment;
+import com.ia.core.service.dto.DTO;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para AttachmentDTO.
  */
 @DisplayName("AttachmentDTO Tests")
-class AttachmentDTOTest {
+class AttachmentDTOTest extends CoreDTOUnitTest<AttachmentDTO> {
 
+    @Override
+    protected Class<?> getDtoInterface() {
+        return DTO.class;
+    }
   @Test
   @DisplayName("deve ter constantes de chave definidas")
   void testKeyConstants() {

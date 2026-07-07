@@ -7,8 +7,6 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-import java.util.UUID;
-
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um
  * {@link BaseEntityRepository}
@@ -22,7 +20,7 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
   /**
    * Verifica se o objeto de id passado como parâmetro pode ser buscado
    *
-   * @param id {@link UUID}
+   * @param id {@link Long}
    * @return <code>true</code> por padrão
    */
   default boolean canFind(Long id) {
@@ -30,9 +28,9 @@ public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
   }
 
    /**
-    * Deleta um {@link DTO} pelo seu {@link UUID}.
+    * Busca um {@link DTO} pelo seu {@link Long}.
     *
-    * @param id {@link UUID} da entidade <T>
+    * @param id {@link Long} da entidade <T>
     * @return {@link DTO} da entidade <T>, ou <code>null</code> caso a mesma não
     *         exista.
     */

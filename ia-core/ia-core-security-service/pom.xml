@@ -45,12 +45,34 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		<!-- Spring AI for @Tool annotations -->
 		<dependency>
-			<groupId>com.ia</groupId>
-			<artifactId>ia-core-llm-service</artifactId>
-      <version>${project.version}</version>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-ollama</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+    <dependency>
+      <groupId>com.ia</groupId>
+      <artifactId>ia-core-service-test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>${spring-ai.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
 		<pluginManagement>
 			<plugins>

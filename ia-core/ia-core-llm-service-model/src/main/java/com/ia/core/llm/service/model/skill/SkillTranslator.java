@@ -58,19 +58,27 @@ public final class SkillTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "skill.error.notfound";
+        public static final String DUPLICATE = "skill.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "skill.message.created";
+        public static final String UPDATED = "skill.message.updated";
+        public static final String DELETED = "skill.message.deleted";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String IDENTIFICADOR_DUPLICADO = "skill.rule.identificador.duplicado";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "skill.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "skill.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "skill.message.deletado.sucesso";
     }
 
     /**

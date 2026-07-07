@@ -105,6 +105,9 @@ public class FerramentaDiscoveryService {
 
   private boolean isInScanPackages(Class<?> type, List<String> scanPackages) {
     String pkg = type.getPackageName();
+    if (scanPackages == null || scanPackages.isEmpty()) {
+      return false;
+    }
     boolean result = scanPackages.stream().anyMatch(pkg::startsWith);
     log.debug("Pacote: {} está nos pacotes de scan: {}", pkg, result);
     return result;

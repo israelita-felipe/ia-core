@@ -150,10 +150,9 @@ Este ADR adere aos seguintes padrões, RFCs e melhores práticas:
 2. **Chaves hierárquicas**: Seguir padrão `<modulo>.<categoria>.<campo>.<regra>` (ex.: `pessoa.validation.nome.size`).
 3. **Fallback de locale**: Sempre fornecer `messages.properties` (default) além de `messages_<locale>.properties`.
 4. **Imutabilidade de chaves**: Chaves de tradução nunca devem ser renomeadas após publicadas; usar `@Deprecated` e criar nova chave.
-5. **Validação com interpolação**: Usar chaves em anotações Jakarta Validation (`{pessoa.validation.nome.size}`) em vez de mensagens hardcoded.
-6. **Type-safety**: Classes `*Translator` com constantes `static final String` garantem refactoring seguro.
-7. **Nesting por categoria**: Inner classes (`HELP`, `VALIDATION`, `ERROR`, `MESSAGE`) organizam chaves por propósito.
-8. **Testes de locale**: Testes unitários devem validar mensagens em todos os locales suportados.
+5. **Type-safety**: Classes `*Translator` com constantes `static final String` garantem refactoring seguro.
+6. **Nesting por categoria**: Inner classes (`HELP`, `VALIDATION`, `ERROR`, `MESSAGE`) organizam chaves por propósito.
+7. **Testes de locale**: Testes unitários devem validar mensagens em todos os locales suportados.
 
 ### Compatibilidade com ADRs Relacionados
 

@@ -33,6 +33,24 @@ public final class PrivilegeTranslator {
     public static final class VALIDATION {
         public static final String NAME_REQUIRED = "validation.privilege.name.required";
         public static final String NAME_SIZE = "validation.privilege.name.size";
+        public static final String TYPE_REQUIRED = "validation.privilege.type.required";
+    }
+
+    /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "privilege.error.notfound";
+        public static final String DUPLICATE = "privilege.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "privilege.message.created";
+        public static final String UPDATED = "privilege.message.updated";
+        public static final String DELETED = "privilege.message.deleted";
     }
 
     /**
@@ -41,15 +59,6 @@ public final class PrivilegeTranslator {
     public static final class RULE {
         public static final String NOME_OBRIGATORIO = "privilege.rule.nome.obrigatorio";
         public static final String DUPLICADO = "privilege.rule.duplicado";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "privilege.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "privilege.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "privilege.message.deletado.sucesso";
     }
 
     /**

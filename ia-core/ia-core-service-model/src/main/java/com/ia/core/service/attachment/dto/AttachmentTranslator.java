@@ -66,12 +66,20 @@ public final class AttachmentTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "attachment.error.notfound";
+        public static final String DUPLICATE = "attachment.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String UPLOAD_SUCESSO = "attachment.message.upload.sucesso";
-        public static final String REMOVIDO_SUCESSO = "attachment.message.removido.sucesso";
-        public static final String ERRO_PROCESSAMENTO = "attachment.message.erro.processamento";
+        public static final String UPLOAD_SUCCESS = "attachment.message.upload.success";
+        public static final String REMOVED_SUCCESS = "attachment.message.removed.success";
+        public static final String PROCESSING_ERROR = "attachment.message.processing.error";
     }
 
     /**

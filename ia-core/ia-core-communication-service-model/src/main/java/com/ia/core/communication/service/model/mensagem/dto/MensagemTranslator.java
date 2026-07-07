@@ -58,13 +58,21 @@ public final class MensagemTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "mensagem.error.notfound";
+        public static final String DUPLICATE = "mensagem.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String ENVIADO_SUCESSO = "mensagem.message.enviado.sucesso";
-        public static final String ENVIADO_EM_MASSA_SUCESSO = "mensagem.message.enviado.em.massa.sucesso";
-        public static final String STATUS_ATUALIZADO = "mensagem.message.status.atualizado";
-        public static final String FALHA_ENVIO = "mensagem.message.falha.envio";
+        public static final String SENT = "mensagem.message.sent";
+        public static final String SENT_BATCH = "mensagem.message.sent.batch";
+        public static final String STATUS_UPDATED = "mensagem.message.status.updated";
+        public static final String SEND_FAILURE = "mensagem.message.send.failure";
     }
 
     /**

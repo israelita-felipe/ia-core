@@ -46,9 +46,9 @@ class EnvioMensagemTranslatorTest {
   @Test
   @DisplayName("Deve ter classe MESSAGE com constantes")
   void deveTerClasseMESSAGEComConstantes() {
-    assertThat(EnvioMensagemTranslator.MESSAGE.ENVIADO_SUCESSO).isNotNull();
-    assertThat(EnvioMensagemTranslator.MESSAGE.AGENDADO_SUCESSO).isNotNull();
-    assertThat(EnvioMensagemTranslator.MESSAGE.ERRO_ENVIO).isNotNull();
+    assertThat(EnvioMensagemTranslator.MESSAGE.SENT).isNotNull();
+    assertThat(EnvioMensagemTranslator.MESSAGE.SCHEDULED).isNotNull();
+    assertThat(EnvioMensagemTranslator.MESSAGE.SEND_ERROR).isNotNull();
   }
 
   @Test

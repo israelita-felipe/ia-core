@@ -64,8 +64,14 @@ public class DefaultViewFunctionalityManager
 
   public void registryFunctionalities(Collection<HasFunctionality> services) {
     log.info("Registrando as funcionalidades");
+    if (services == null) {
+      log.warn("Coleção de serviços é null, não há funcionalidades para registrar");
+      return;
+    }
     services.forEach(service -> {
-      service.registryFunctionalities(this);
+      if (service != null) {
+        service.registryFunctionalities(this);
+      }
     });
   }
 }

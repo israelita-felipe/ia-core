@@ -1,6 +1,6 @@
 package com.ia.core.communication.service.model.grupocontato.dto;
 
-import com.ia.core.service.dto.CoreBaseDTOUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para a classe GrupoContatoDTO.
  */
 @DisplayName("Testes de GrupoContatoDTO")
-class GrupoContatoDTOTestCore extends CoreBaseDTOUnitTest<GrupoContatoDTO> {
+class GrupoContatoDTOTestCore extends CoreDTOUnitTest<GrupoContatoDTO> {
 
   private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 

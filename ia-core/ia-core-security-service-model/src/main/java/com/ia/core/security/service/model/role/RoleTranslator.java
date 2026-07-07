@@ -35,20 +35,28 @@ public final class RoleTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "role.error.notfound";
+        public static final String DUPLICATE = "role.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "role.message.created";
+        public static final String UPDATED = "role.message.updated";
+        public static final String DELETED = "role.message.deleted";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String NOME_OBRIGATORIO = "role.rule.nome.obrigatorio";
         public static final String USUARIO_SEM_PERMISSAO = "role.rule.usuario.sem.permissao";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "role.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "role.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "role.message.deletado.sucesso";
     }
 
     /**

@@ -51,12 +51,20 @@ public final class ModeloMensagemTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "modelo.mensagem.error.notfound";
+        public static final String DUPLICATE = "modelo.mensagem.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "modelo.mensagem.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "modelo.mensagem.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "modelo.mensagem.message.deletado.sucesso";
+        public static final String CREATED = "modelo.mensagem.message.created";
+        public static final String UPDATED = "modelo.mensagem.message.updated";
+        public static final String DELETED = "modelo.mensagem.message.deleted";
     }
 
     /**

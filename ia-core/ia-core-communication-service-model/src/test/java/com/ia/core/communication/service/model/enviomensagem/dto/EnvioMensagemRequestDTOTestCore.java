@@ -3,7 +3,7 @@ package com.ia.core.communication.service.model.enviomensagem.dto;
 import com.ia.core.communication.model.mensagem.TipoCanal;
 import com.ia.core.communication.service.model.modelomensagem.dto.Variavel;
 import com.ia.core.communication.service.model.modelomensagem.dto.VariavelTemplate;
-import com.ia.core.service.dto.CoreBaseDTOUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para a classe EnvioMensagemRequestDTO.
  */
 @DisplayName("Testes de EnvioMensagemRequestDTO")
-class EnvioMensagemRequestDTOTestCore extends CoreBaseDTOUnitTest<EnvioMensagemRequestDTO> {
+class EnvioMensagemRequestDTOTestCore extends CoreDTOUnitTest<EnvioMensagemRequestDTO> {
 
   private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 

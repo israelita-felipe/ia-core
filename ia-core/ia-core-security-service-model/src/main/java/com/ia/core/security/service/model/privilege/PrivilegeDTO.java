@@ -64,8 +64,8 @@ public class PrivilegeDTO
    * <p>
    * Deve conter entre 3 e 100 caracteres e não pode ser nulo.
    */
-  @NotNull(message = "{validation.privilege.name.required}")
-  @Size(min = 3, max = 100, message = "{validation.privilege.name.size}")
+  @NotNull(message = PrivilegeTranslator.VALIDATION.NAME_REQUIRED)
+  @Size(min = 3, max = 100, message = PrivilegeTranslator.VALIDATION.NAME_SIZE)
   private String name;
 
   /**
@@ -84,7 +84,7 @@ public class PrivilegeDTO
    * O valor padrão é {@link PrivilegeType#SYSTEM}.
    */
   @Default
-  @NotNull(message = "{validation.privilege.type.required}")
+  @NotNull(message = PrivilegeTranslator.VALIDATION.TYPE_REQUIRED)
   private PrivilegeType type = PrivilegeType.SYSTEM;
 
   /**
@@ -209,6 +209,14 @@ public class PrivilegeDTO
    *
    * @return string contendo o nome do privilégio
    */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
+    public static final String VALUES = "values";
+  }
+
   @Override
   public String toString() {
     return String.format("%s", name);

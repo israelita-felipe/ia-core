@@ -51,9 +51,9 @@ public class UserManager
       throw new IllegalArgumentException("A nova senha não confere");
     }
     change.setUserCode(user.getUserCode());
-    change.setOldPassword(UserPasswordEncoder
+    change.setOldPassword(CryptUtils
         .encrypt(change.getOldPassword(), user.getUserCode()));
-    change.setNewPassword(UserPasswordEncoder.encrypt(getConfig()
+    change.setNewPassword(CryptUtils.encrypt(getConfig()
         .getPasswordEncoder().encode(change.getNewPassword()),
                                                       user.getUserCode()));
     getClient().changePassword(change);

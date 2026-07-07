@@ -1,5 +1,6 @@
 package com.ia.core.service.validators;
 
+import com.ia.core.service.translator.CoreTranslator;
 import com.ia.core.service.translator.Translator;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -26,7 +27,7 @@ public class JakartaValidator<T extends Serializable>
    * Instância singleton
    *
    * @param <T>        Tipo do objeto
-   * @param translator Tradutor
+   * @param translator Tradutor (pode ser null - usará CoreTranslator padrão)
    * @return {@link JakartaValidator}
    */
   @SuppressWarnings("unchecked")
@@ -40,10 +41,10 @@ public class JakartaValidator<T extends Serializable>
   /**
    * Construtor padrão
    *
-   * @param translator {@link Translator}
+   * @param translator {@link Translator} (pode ser null)
    */
   private JakartaValidator(Translator translator) {
-    super(translator);
+    super(translator != null ? translator : new CoreTranslator("i18n/translations"));
   }
 
   /**

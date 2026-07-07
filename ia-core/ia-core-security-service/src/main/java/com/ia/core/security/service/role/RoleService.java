@@ -53,19 +53,25 @@ public class RoleService
   }
 
   @Override
-  public Role synchronize(Role model)
-    throws ServiceException {
+    public Role synchronize(Role model)
+        throws ServiceException {
     Role role = super.synchronize(model);
-    role.getPrivileges().forEach(privilege -> {
-      privilege.setRole(role);
-      privilege.getOperations().forEach(operation -> {
-        operation.getContext().forEach(context -> {
-          context.setPrivilegeOperation(operation);
+    if (role.getPrivileges() != null) {
+        role.getPrivileges().forEach(privilege -> {
+            privilege.setRole(role);
+            if (privilege.getOperations() != null) {
+                privilege.getOperations().forEach(operation -> {
+                    if (operation.getContext() != null) {
+                        operation.getContext().forEach(context -> {
+                            context.setPrivilegeOperation(operation);
+                        });
+                    }
+                });
+            }
         });
-      });
-    });
+    }
     return role;
-  }
+    }
 
   /**
    * Deleta um {@link DTO} pelo seu {@link UUID}.

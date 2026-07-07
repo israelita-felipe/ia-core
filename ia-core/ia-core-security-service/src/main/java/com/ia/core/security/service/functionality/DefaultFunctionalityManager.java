@@ -64,8 +64,13 @@ public class DefaultFunctionalityManager
    */
   public void registryFunctionalities(Collection<HasFunctionality> services) {
     log.debug("Registrando as funcionalidades");
+    if (services == null) {
+        return;
+    }
     services.forEach(service -> {
-      service.registryFunctionalities(this);
+      if (service != null) {
+          service.registryFunctionalities(this);
+      }
     });
   }
 

@@ -52,9 +52,27 @@ public final class PeriodicidadeTranslator {
      */
     public static final class VALIDATION {
         public static final String INTERVALO_BASE_REQUIRED = "periodicidade.validation.intervaloBase.required";
+        public static final String START_DATE_REQUIRED = "periodicidade.validation.intervaloBase.startDate.required";
         public static final String START_TIME_REQUIRED = "periodicidade.validation.intervaloBase.startTime.required";
         public static final String END_TIME_REQUIRED = "periodicidade.validation.intervaloBase.endTime.required";
         public static final String FREQUENCY_REQUIRED = "periodicidade.validation.regra.frequency.required";
+    }
+
+    /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "periodicidade.error.notfound";
+        public static final String DUPLICATE = "periodicidade.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "periodicidade.message.created";
+        public static final String UPDATED = "periodicidade.message.updated";
+        public static final String DELETED = "periodicidade.message.deleted";
     }
 
     /**
@@ -64,15 +82,6 @@ public final class PeriodicidadeTranslator {
         public static final String DATA_INICIO_MAIOR_DATA_FIM = "periodicidade.rule.dataInicio.maior.dataFim";
         public static final String INTERVALO_INVALIDO = "periodicidade.rule.intervalo.invalido";
         public static final String REGRA_INVALIDA = "periodicidade.rule.regra.invalida";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "periodicidade.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "periodicidade.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "periodicidade.message.deletado.sucesso";
     }
 
     /**

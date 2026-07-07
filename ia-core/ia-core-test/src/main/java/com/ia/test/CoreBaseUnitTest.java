@@ -3,6 +3,7 @@ package com.ia.test;
 import org.instancio.Instancio;
 import org.instancio.Model;
 import org.instancio.TargetSelector;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
 /**
@@ -10,8 +11,17 @@ import org.junit.jupiter.api.DisplayName;
  * Provides common functionality and configuration for unit tests.
  * Includes fixture pattern using Instancio for automatic test data generation.
  *
+ * <p>This is an abstract base class and should not be executed as a test.
+ * Concrete test classes should extend this class and implement actual test methods.
+ *
+ * <p>Characteristics:
+ * - Instancio for automatic test data generation
+ * - No Spring context (pure unit tests)
+ * - Test layer isolation
+ *
  * @author Israel Araújo
  */
+@Disabled("Abstract base class - not a test")
 @DisplayName("Unit Test")
 public abstract class CoreBaseUnitTest {
 

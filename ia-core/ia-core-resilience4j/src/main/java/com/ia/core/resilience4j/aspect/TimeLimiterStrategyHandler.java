@@ -1,5 +1,6 @@
 package com.ia.core.resilience4j.aspect;
 
+import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.dto.ResilienceContext;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 import io.github.resilience4j.timelimiter.TimeLimiter;
@@ -20,8 +21,8 @@ import java.util.function.Supplier;
  * <p>Princípios SOLID aplicados:</p>
  * <ul>
  *   <li><b>Single Responsibility</b>: Apenas lida com TimeLimiter</li>
- *   <li><b>Open/Closed</b>: Extensível via interface ResilienceStrategyHandler</li>
- *   <li><b>Liskov Substitution</b>: Implementa ResilienceStrategyHandler<TimeLimiter></li>
+ *   <li><b>Open/Closed</b>: Extensível via herança da classe abstrata</li>
+ *   <li><b>Liskov Substitution</b>: Estende AbstractResilienceStrategyHandler</li>
  *   <li><b>Interface Segregation</b>: Interface mínima necessária</li>
  *   <li><b>Dependency Inversion</b>: Depende de ResilienceContext (abstração)</li>
  * </ul>
@@ -31,7 +32,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Component
-public class TimeLimiterStrategyHandler implements ResilienceStrategyHandler<TimeLimiter> {
+public class TimeLimiterStrategyHandler extends AbstractResilienceStrategyHandler<TimeLimiter> {
 
     /**
      * Creates or resolves a TimeLimiter instance for the given context.
@@ -47,16 +48,16 @@ public class TimeLimiterStrategyHandler implements ResilienceStrategyHandler<Tim
      */
     @Override
     public TimeLimiter resolve(ResilienceContext context) {
-        ResilienceProfile profile = context.getProfile();
-        com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
+        ProfileAnnotation data = extractProfileAndAnnotation(context);
+        ResilienceProfile profile = data.profile();
+        Resilient annotation = data.annotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-timelimiter";
 
         TimeLimiterConfig config = TimeLimiterConfig.custom()
                 .timeoutDuration(Duration.ofMillis(
-                        annotation.timeoutMs() >= 0
-                                ? annotation.timeoutMs()
-                                : profile.getRateLimiterTimeoutDurationMs()))
+                        getLongValue(annotation.timeoutMs(),
+                                profile.getTimeoutMs())))
                 .cancelRunningFuture(true)
                 .build();
 
@@ -76,6 +77,7 @@ public class TimeLimiterStrategyHandler implements ResilienceStrategyHandler<Tim
      * @return o resultado da execução
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object execute(ResilienceContext context, Supplier<Object> next) {
         TimeLimiter timeLimiter = resolve(context);
         try {
@@ -83,7 +85,7 @@ public class TimeLimiterStrategyHandler implements ResilienceStrategyHandler<Tim
                     CompletableFuture.supplyAsync(next::get)
             );
         } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage(),e);
+            throw new RuntimeException("TimeLimiter execution failed: " + e.getLocalizedMessage(), e);
         }
     }
 }

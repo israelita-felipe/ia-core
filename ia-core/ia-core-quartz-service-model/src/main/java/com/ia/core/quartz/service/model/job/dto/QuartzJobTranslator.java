@@ -43,22 +43,30 @@ public final class QuartzJobTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "quartz.job.error.notfound";
+        public static final String DUPLICATE = "quartz.job.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "quartz.job.message.created";
+        public static final String UPDATED = "quartz.job.message.updated";
+        public static final String DELETED = "quartz.job.message.deleted";
+        public static final String EXECUTED = "quartz.job.message.executed";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String JOB_JA_EXISTENTE = "quartz.rule.job.ja.existente";
         public static final String ESTADO_INVALIDO = "quartz.rule.estado.invalido";
         public static final String CLASSE_NAO_ENCONTRADA = "quartz.rule.classe.nao.encontrada";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "quartz.message.job.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "quartz.message.job.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "quartz.message.job.deletado.sucesso";
-        public static final String EXECUTADO_SUCESSO = "quartz.message.job.executado.sucesso";
     }
 
     /**

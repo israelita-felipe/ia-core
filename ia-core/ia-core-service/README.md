@@ -122,30 +122,60 @@ public class MinhaEntidadeController {
 
 ## 🧪 Testes
 
-Os testes unitários estão em `src/test/java/` e cobrem:
+Os testes estão em `src/test/java/` e cobrem:
 - Operações CRUD básicas
 - Transações
 - Validações de negócio
 - Casos de erro
 
-Exemplo de teste:
+**Tipos de Testes Aplicáveis** (conforme ADR-012):
+- **Testes Unitários**: Services, Validators, Rules, Business Logic
+- **Testes de Integração**: Repositories, Event Publishing
+- **Testes de Transação**: `@Transactional` annotations
+
+**Cobertura Mínima**: 85% (conforme ADR-012)
+
+**Base Classes de Teste Disponíveis** (conforme ADR-012):
+- `CoreServiceBase` - Para testes unitários de serviço (Mockito)
+- `CoreIntegrationBase` - Para testes de integração (TestContainers)
+
+**Execução de Testes com Cobertura**:
+```bash
+# Para testar um módulo individualmente
+mvn test jacoco:report -pl ia-core-service
+
+# Para testar todos os módulos
+mvn test jacoco:report
+
+# Verificar relatório
+# target/site/jacoco/index.html
+```
+
+Exemplo de teste usando as base classes:
 
 ```java
-@SpringBootTest
-public class MinhaEntidadeServiceTest {
+@ExtendWith(MockitoExtension.class)
+class MinhaEntidadeServiceTest extends CoreServiceBase {
 
-    @Autowired
+    @Mock
+    private MinhaEntidadeRepository repository;
+
+    @InjectMocks
     private MinhaEntidadeService service;
 
     @Test
-    public void testSave() {
-        MinhaEntidade entidade = new MinhaEntidade();
+    void deveSalvarEntidadeComSucesso() {
+        // Given
+        MinhaEntidade entidade = createFixture(MinhaEntidade.class);
         entidade.setNome("Teste");
+        when(repository.save(any())).thenReturn(entidade);
 
+        // When
         MinhaEntidade salva = service.save(entidade);
 
-        assertNotNull(salva.getId());
-        assertEquals("Teste", salva.getNome());
+        // Then
+        assertThat(salva).isNotNull();
+        assertThat(salva.getNome()).isEqualTo("Teste");
     }
 }
 ```

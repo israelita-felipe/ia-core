@@ -8,8 +8,6 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 
-import java.util.UUID;
-
 /**
  * Interface que deleta um {@link BaseEntity} por meio de um
  * {@link BaseEntityRepository}
@@ -62,7 +60,7 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
   /**
    * Verifica se um objeto pode ser excluído
    *
-   * @param id {@link UUID} do objeto a ser excluído
+   * @param id {@link Long} do objeto a ser excluído
    * @return por padrão retorna <code>true</code>
    */
   default boolean canDelete(Long id) {
@@ -70,9 +68,9 @@ public interface DeleteBaseService<T extends BaseEntity, D extends DTO<?>>
   }
 
    /**
-    * Deleta um {@link DTO} pelo seu {@link UUID}.
+    * Deleta um {@link DTO} pelo seu {@link Long}.
     *
-    * @param id {@link UUID} da entidade <T>
+    * @param id {@link Long} da entidade <T>
     * @throws ServiceException caso ocorra alguma exceção
     */
    @TransactionalWrite

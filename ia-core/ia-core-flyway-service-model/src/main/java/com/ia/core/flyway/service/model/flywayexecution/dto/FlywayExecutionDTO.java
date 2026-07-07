@@ -94,6 +94,7 @@ public class FlywayExecutionDTO extends AbstractBaseEntityDTO<FlywayExecution> {
 		public static final String INSTALLED_ON = "installedOn";
 		public static final String EXECUTION_TIME = "executionTime";
 		public static final String SUCCESS = "success";
+		public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
 		/**
 		 * Retorna todos os valores das constantes de campos.
@@ -101,17 +102,9 @@ public class FlywayExecutionDTO extends AbstractBaseEntityDTO<FlywayExecution> {
 		 * @return Set com todos os valores das constantes
 		 */
 		public static java.util.Set<String> values() {
-			java.util.Set<String> values = AbstractBaseEntityDTO.CAMPOS.values();
-			values.add(MIGRATION_VERSION);
-			values.add(DESCRIPTION);
-			values.add(TYPE);
-			values.add(SCRIPT);
-			values.add(CHECKSUM);
-			values.add(INSTALLED_BY);
-			values.add(INSTALLED_ON);
-			values.add(EXECUTION_TIME);
-			values.add(SUCCESS);
-			return values;
+			return java.util.Set.of(MIGRATION_VERSION, DESCRIPTION, TYPE, SCRIPT,
+			                       CHECKSUM, INSTALLED_BY, INSTALLED_ON, EXECUTION_TIME, SUCCESS,
+			                       PROPERTY_CHANGE_SUPPORT);
 		}
 	}
 

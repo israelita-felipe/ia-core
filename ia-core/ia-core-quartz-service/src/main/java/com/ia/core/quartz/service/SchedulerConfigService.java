@@ -160,17 +160,17 @@ public class SchedulerConfigService
       boolean isNovo = toSave.getId() == null;
       salvo = super.save(toSave);
 
-      if (isNovo && salvo.getPeriodicidade().getAtivo()) {
-        schedulingService.agendarJob(salvo);
-        log.info("Novo job agendado com ID: {}", salvo.getId());
-      } else if (!isNovo) {
-        if (salvo.getPeriodicidade().getAtivo()) {
+      if (salvo.getPeriodicidade() != null && salvo.getPeriodicidade().getAtivo()) {
+        if (isNovo) {
+          schedulingService.agendarJob(salvo);
+          log.info("Novo job agendado com ID: {}", salvo.getId());
+        } else {
           schedulingService.atualizarJob(salvo);
           log.info("Job atualizado com ID: {}", salvo.getId());
-        } else {
-          schedulingService.cancelarJob(salvo);
-          log.info("Job cancelado com ID: {}", salvo.getId());
         }
+      } else if (!isNovo) {
+        schedulingService.cancelarJob(salvo);
+        log.info("Job cancelado com ID: {}", salvo.getId());
       }
     } catch (Exception e) {
       ex.add(e);

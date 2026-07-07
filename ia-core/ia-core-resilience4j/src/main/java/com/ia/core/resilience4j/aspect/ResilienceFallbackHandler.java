@@ -44,19 +44,19 @@ public class ResilienceFallbackHandler {
         if (isCircuitBreakerOpen(throwable)) {
             log.warn("Circuit breaker open for {}#{} - rejecting call",
                 method.getDeclaringClass().getSimpleName(), method.getName());
-        throw new CircuitBreakerOpenException(profileName.getName()+"-"+method.getName()+"-circuitbreaker");
+            throw new CircuitBreakerOpenException(profileName.getName() + "-" + method.getName() + "-circuitbreaker");
         }
 
         if (isBulkheadFull(throwable)) {
             log.warn("Bulkhead full for {}#{} - rejecting call",
                 method.getDeclaringClass().getSimpleName(), method.getName());
-            throw new BulkheadFullException(profileName.getName()+"-"+method.getName()+"-bulkhead");
+            throw new BulkheadFullException(profileName.getName() + "-" + method.getName() + "-bulkhead");
         }
 
         if (isRateLimitExceeded(throwable)) {
             log.warn("Rate limit exceeded for {}#{} - rejecting call",
                 method.getDeclaringClass().getSimpleName(), method.getName());
-            throw new RateLimitExceededException(profileName.getName()+"-"+method.getName()+"-ratelimiter");
+            throw new RateLimitExceededException(profileName.getName() + "-" + method.getName() + "-ratelimiter");
         }
 
         FallbackResponse response = fallbackRegistry.executeFallback(

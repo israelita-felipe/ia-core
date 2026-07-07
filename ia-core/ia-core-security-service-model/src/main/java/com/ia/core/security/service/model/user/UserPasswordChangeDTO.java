@@ -32,4 +32,14 @@ public class UserPasswordChangeDTO
     return String.format("Change Password (%s)", userCode);
   }
 
+  /**
+   * Field name constants
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String USER_CODE = "userCode";
+    public static final String OLD_PASSWORD = "oldPassword";
+    public static final String NEW_PASSWORD = "newPassword";
+  }
+
 }

@@ -5,8 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Predicate;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("OperatorDTO")
@@ -24,10 +22,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("nome")
                 .value("João")
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -41,10 +39,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("nome")
                 .value("João%")
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.LIKE.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.LIKE.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -58,10 +56,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("nome")
                 .value("João")
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.IN.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.IN.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -75,10 +73,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("idade")
                 .value(10)
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.GREATER_THAN.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.GREATER_THAN.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -92,10 +90,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("idade")
                 .value(10)
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.GREATER_THAN_OR_EQUAL_TO.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.GREATER_THAN_OR_EQUAL_TO.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -109,10 +107,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("idade")
                 .value(10)
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.LESS_THAN.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.LESS_THAN.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -126,10 +124,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("idade")
                 .value(10)
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.LESS_THAN_OR_EQUAL_TO.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.LESS_THAN_OR_EQUAL_TO.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -143,10 +141,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("nome")
                 .value("João")
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.NOT_EQUAL.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.NOT_EQUAL.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -187,10 +185,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .value("João")
                 .negate(true)
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, false);
+            java.util.function.Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, false);
 
             // Assert
             assertThat(predicate).isNotNull();
@@ -209,10 +207,10 @@ class OperatorDTOTestCore extends CoreBaseUnitTest {
                 .key("nome")
                 .value("João")
                 .build();
-            Predicate<Object> initialPredicate = obj -> true;
+            java.util.function.Predicate<Object> initialPredicate = obj -> true;
 
             // Act
-            Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, true);
+            java.util.function.Predicate predicate = OperatorDTO.EQUAL.build(request, initialPredicate, true);
 
             // Assert
             assertThat(predicate).isNotNull();

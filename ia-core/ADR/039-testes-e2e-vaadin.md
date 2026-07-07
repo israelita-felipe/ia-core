@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposto** | **Aceito** | **Deprecado**
+**Aceito**
 
 ## Contextualização
 
@@ -35,21 +35,34 @@ O módulo `biblia-test` já possui testes unitários, mas faltam testes de inter
 
 ### 2. Testes Reutilizáveis no Framework
 
-**Decisão**: Criar classes base de teste em `ia-core-apps` para serem estendidas pelas aplicações
+**Decisão**: Usar módulo `ia-core-view-test` para classes base de teste E2E Vaadin
 
-**Estrutura Proposta**:
+**Estrutura Atual (ia-core-view-test)**:
 ```
-ia-core-view/
-├── src/test/java/com/ia/core/view/test/
-│   ├── AbstractViewTest.java        # Base para testes de View
-│   ├── AbstractFormTest.java        # Base para testes de Form
-│   ├── VaadinTestRunner.java        # Executor customizado
-│   └── components/
-│       ├── ButtonTester.java       # Wrappers para componentes comuns
-│       ├── GridTester.java
-│       ├── FormTester.java
-│       └── NavigationTester.java
+ia-core-view-test/
+├── src/main/java/com/ia/core/view/
+│   ├── CoreVaadinViewBase.java      # Base para testes de View Vaadin
+│   ├── CoreVaadinManagerBase.java   # Base para testes de Manager/Dialog
+│   └── CoreE2EBase.java           # Base para testes E2E genéricos
+└── pom.xml                        # Dependências TestBench, Selenium, WebDriverManager
 ```
+
+**Como Usar**:
+```xml
+<!-- Em módulos que precisam de testes E2E Vaadin -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-view-test</artifactId>
+    <version>${project.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+**Hierarquia de Módulos de Teste**:
+| Módulo | Depende de | Para que tipo de teste |
+|--------|-----------|----------------------|
+| `ia-core-test` | nenhum | Classes base (Instancio, JUnit 5, AssertJ, Mockito) |
+| `ia-core-view-test` | ia-core-service-model-test | Vaadin Views, Manager, E2E com TestBench/Selenium |
 
 ### 3. Abstração de Navegação
 
@@ -132,38 +145,50 @@ public class TestBenchConfig {
 
 ### Dependências Necessárias
 
+**As dependências já estão incluídas em `ia-core-view-test`**:
+- Vaadin TestBench JUnit 5
+- Selenium WebDriver
+- WebDriverManager
+
+**Para usar, adicione apenas**:
 ```xml
-<!-- Vaadin TestBench -->
 <dependency>
-    <groupId>com.vaadin</groupId>
-    <artifactId>vaadin-testbench-junit5</artifactId>
-    <version>24.8.7</version>
-    <scope>test</scope>
-</dependency>
-
-<!-- Selenium WebDriver -->
-<dependency>
-    <groupId>org.seleniumhq.selenium</groupId>
-    <artifactId>selenium-java</artifactId>
-    <version>4.20.0</version>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-view-test</artifactId>
+    <version>${project.version}</version>
     <scope>test</scope>
 </dependency>
 ```
 
-### Estrutura de Testes em biblia-test
+### Classes Base Disponíveis
 
+| Classe | Pacote | Uso |
+|--------|--------|-----|
+| `CoreVaadinViewBase` | `com.ia.core.view` | Base para testes de Views Vaadin (mockado) |
+| `CoreBaseVaadinViewTest` | `com.ia.core.view` | Base para testes de Views com ambiente mockado simples |
+| `CoreVaadinManagerBase` | `com.ia.core.view` | Base para testes de diálogos/managers |
+| `CoreE2EBase` | `com.ia.core.view` | Base para testes E2E com TestBench/Selenium |
+| `CoreBaseE2ETest` | `com.ia.core.view` | Base para E2E tests com SpringBootTest |
+| `CoreBaseE2ETest` | `com.ia.core.view` | Base para E2E tests com SpringBootTest |
+
+### Estrutura de Testes
+
+**Módulo ia-core-view-test** (base para todos os testes Vaadin E2E):
+```java
+// Em módulos de aplicação (biblia-view, gestor-igreja-view)
+class PessoaPageTest extends CoreVaadinViewBase {
+    // Testes específicos da view Pessoa
+}
 ```
-biblia-test/
+
+**Exemplo de estrutura em módulos de aplicação**:
+```
+biblia-view/
 ├── src/test/java/com/ia/biblia/
 │   ├── view/
-│   │   ├── AbstractBibliaViewTest.java
-│   │   ├── pessoa/
-│   │   │   ├── PessoaPageTest.java
-│   │   │   └── PessoaFormTest.java
-│   │   └── evento/
-│   │       └── EventoPageTest.java
+│   │   ├── PessoaPageTest.java
+│   │   └── EventoPageTest.java
 │   └── pageobjects/
-│       ├── BibliaPageObject.java
 │       ├── PessoaPageObject.java
 │       └── EventoPageObject.java
 ```
@@ -173,20 +198,25 @@ biblia-test/
 ### Positivas
 - ✅ Testes automatizados de interface gráfica
 - ✅ Detecção precoce de regressions em UI
-- ✅ Reutilização de código entre Bible e gestor-igreja
+- ✅ **Reutilização via ia-core-view-test**: Classes base compartilhadas entre todas as aplicações Vaadin
 - ✅ Integração com pipeline CI/CD
+- ✅ Integração com arquitetura de módulos de teste em camadas (ADR-012)
 
 ### Negativas
 - ⚠️ Curva de aprendizado para equipes sem experiência com TestBench
 - ⚠️ Manutenção de testes quando UI muda frequentemente
 - ⚠️ Tempo de execução maior que testes unitários
+- ⚠️ Dependência de navegador (Chrome/Chromium) para execução local
 
 ## Decisões Dependentes
 
 Este ADR complementa e depende de:
-- [ADR 012: Padrões de Teste Automatizado](./012-testing-patterns.md) - Usa JUnit 5 como base
+- [ADR 012: Padrões de Teste Automatizado](./012-testing-patterns.md) - Usa JUnit 5 como base e integra-se à arquitetura de módulos de teste em camadas
 - [ADR 008: Arquitetura MVVM com ViewModel](./008-mvvm-architecture-with-viewmodel.md) - Views testáveis
 - [ADR 010: Padrões de Nomenclatura](./010-nomenclature-standards.md) - Nomes consistentes
+
+**Arquitetura de Módulos de Teste**:
+- [TEST_MODULES_ARCHITECTURE.md](../TEST_MODULES_ARCHITECTURE.md) - Documentação da hierarquia de módulos de teste
 
 ## Referências
 

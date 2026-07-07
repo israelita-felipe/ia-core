@@ -84,5 +84,9 @@ public class AxiomaDTO
     public static final String IS_CONSISTENTE = "consistente";
     public static final String IS_INFERIDO = "inferido";
     public static final String IS_ATIVO = "ativo";
+
+    public static Set<String> values() {
+      return Set.of(URI, PREFIX, URI_VERSION, EXPRESSAO, IS_CONSISTENTE, IS_INFERIDO, IS_ATIVO);
+    }
   }
 }

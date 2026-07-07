@@ -202,23 +202,31 @@ private static final long serialVersionUID = 1L;
         .bySecond(new HashSet<>(bySecond)).build();
   }
 
-  /**
-   * Campos para busca/filtro
-   */
-  public static class CAMPOS {
-    public static final String FREQUENCY = "frequency";
-    public static final String INTERVAL_VALUE = "intervalValue";
-    public static final String BY_DAY = "byDay";
-    public static final String BY_MONTH_DAY = "byMonthDay";
-    public static final String BY_MONTH = "byMonth";
-    public static final String BY_SET_POSITION = "bySetPosition";
-    public static final String UNTIL_DATE = "untilDate";
-    public static final String COUNT_LIMIT = "countLimit";
-    public static final String WEEK_START_DAY = "weekStartDay";
-    public static final String BY_YEAR_DAY = "byYearDay";
-    public static final String BY_WEEK_NO = "byWeekNo";
-    public static final String BY_HOUR = "byHour";
-    public static final String BY_MINUTE = "byMinute";
-    public static final String BY_SECOND = "bySecond";
-  }
+/**
+    * Field name constants for Vaadin binding and filters.
+    * Note: ExclusaoRecorrenciaDTO does not extend AbstractBaseEntityDTO, so these are standalone.
+    */
+   @SuppressWarnings("javadoc")
+   public static class CAMPOS {
+     public static final String FREQUENCY = "frequency";
+     public static final String INTERVAL_VALUE = "intervalValue";
+     public static final String BY_DAY = "byDay";
+     public static final String BY_MONTH_DAY = "byMonthDay";
+     public static final String BY_MONTH = "byMonth";
+     public static final String BY_SET_POSITION = "bySetPosition";
+     public static final String UNTIL_DATE = "untilDate";
+     public static final String COUNT_LIMIT = "countLimit";
+     public static final String WEEK_START_DAY = "weekStartDay";
+     public static final String BY_YEAR_DAY = "byYearDay";
+     public static final String BY_WEEK_NO = "byWeekNo";
+     public static final String BY_HOUR = "byHour";
+     public static final String BY_MINUTE = "byMinute";
+     public static final String BY_SECOND = "bySecond";
+
+     public static Set<String> values() {
+         return Set.of(FREQUENCY, INTERVAL_VALUE, BY_DAY, BY_MONTH_DAY, BY_MONTH,
+                      BY_SET_POSITION, UNTIL_DATE, COUNT_LIMIT, WEEK_START_DAY,
+                      BY_YEAR_DAY, BY_WEEK_NO, BY_HOUR, BY_MINUTE, BY_SECOND);
+     }
+   }
 }

@@ -59,11 +59,10 @@ public class ResilienceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ResilienceTemplate resilienceTemplate(ResilienceMetrics metrics, ResilienceFallbackHandler fallbackHandler) {
-        log.info("Creating ResilienceTemplate with ResilienceMetrics: {} and ResilienceFallbackHandler: {}",
-                metrics != null ? metrics.getClass().getSimpleName() : "null",
+    public ResilienceTemplate resilienceTemplate(ResilienceFallbackHandler fallbackHandler) {
+        log.info("Creating ResilienceTemplate with ResilienceFallbackHandler: {}",
                 fallbackHandler != null ? fallbackHandler.getClass().getSimpleName() : "null");
-        return new ResilienceTemplate(metrics, fallbackHandler);
+        return new ResilienceTemplate(fallbackHandler);
     }
 
     @Bean

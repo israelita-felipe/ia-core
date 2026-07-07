@@ -96,6 +96,23 @@ Os testes unitários estão em `src/test/java/` e cobrem:
 - Especificações de filtro
 - Utilitários gerais
 
+**Tipos de Testes Aplicáveis** (conforme ADR-012):
+- **Testes Unitários**: Entidades JPA, Specifications, Utilitários
+- **Testes de Validação**: Jakarta Validation annotations
+- **Testes de Conversão**: Mappers e Converters
+
+**Cobertura Mínima**: 85% (conforme ADR-012)
+
+## 📚 ADRs Relevantes
+
+- **ADR-001**: Usar MapStruct para Mapeamento
+- **ADR-002**: Usar Specification para Filtros
+- **ADR-007**: Usar BaseEntity para Padronização
+- **ADR-010**: Padrões de Nomenclatura
+- **ADR-012**: Testing Patterns
+- **ADR-015**: Usar TSID para Identidade
+- **ADR-020**: Usar SuperBuilder para JPA
+
 ## 🤝 Contribuição
 
 Ao adicionar novas entidades base:

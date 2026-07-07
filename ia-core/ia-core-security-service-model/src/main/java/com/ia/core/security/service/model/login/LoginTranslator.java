@@ -56,12 +56,21 @@ public final class LoginTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String FAILED = "login.error.failed";
+        public static final String WRONG_PASSWORD = "login.error.wrong.password";
+        public static final String WRONG_USERNAME = "login.error.wrong.username";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String LOGIN_SUCESSO = "login.message.sucesso";
-        public static final String LOGIN_FALHA = "login.message.falha";
-        public static final String LOGOUT_SUCESSO = "login.message.logout.sucesso";
+        public static final String SUCCESS = "login.message.success";
+        public static final String FAILURE = "login.message.failure";
+        public static final String LOGOUT_SUCCESS = "login.message.logout.success";
     }
 
     /**

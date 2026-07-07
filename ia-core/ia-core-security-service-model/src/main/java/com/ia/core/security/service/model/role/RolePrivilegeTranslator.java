@@ -41,11 +41,19 @@ public final class RolePrivilegeTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "role.privilege.error.notfound";
+        public static final String DUPLICATE = "role.privilege.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "role.privilege.message.criado.sucesso";
-        public static final String DELETADO_SUCESSO = "role.privilege.message.deletado.sucesso";
+        public static final String CREATED = "role.privilege.message.created";
+        public static final String DELETED = "role.privilege.message.deleted";
     }
 
     /**

@@ -72,13 +72,30 @@ public class FerramentaService
                      "identificador, módulo de origem e status de ativação. Apenas ferramentas " +
                      "com campo ativo=true são retornadas.")
   public List<FerramentaDTO> listAvailable() {
-    return getMapper().toDTOList(getRepository().findByAtivoTrue());
+    var repository = getRepository();
+    if (repository == null) {
+      return List.of();
+    }
+    var mapper = getMapper();
+    var entities = repository.findByAtivoTrue();
+    if (entities == null || mapper == null) {
+      return List.of();
+    }
+    return mapper.toDTOList(entities);
   }
 
   @Override
   @Transactional(readOnly = true)
   public List<FerramentaMetadataDTO> listMetadata() {
-    return getRepository().findByAtivoTrueAndTipo(TipoFerramentaEnum.SKILL).stream()
+    var repository = getRepository();
+    if (repository == null) {
+      return List.of();
+    }
+    var entities = repository.findByAtivoTrueAndTipo(TipoFerramentaEnum.SKILL);
+    if (entities == null) {
+      return List.of();
+    }
+    return entities.stream()
         .map(ferramenta -> FerramentaMetadataDTO.builder()
             .id(ferramenta.getId())
             .titulo(ferramenta.getTitulo())
@@ -93,9 +110,17 @@ public class FerramentaService
   @Override
   @Transactional(readOnly = true)
   public FerramentaActivationDTO loadForActivation(Long id) {
-    Ferramenta ferramenta = getRepository().findById(id)
+    var repository = getRepository();
+    if (repository == null) {
+      throw new ServiceException("Repositório não configurado");
+    }
+    Ferramenta ferramenta = repository.findById(id)
         .orElseThrow(() -> new ServiceException("Ferramenta não encontrada: " + id));
-    FerramentaDTO dto = getMapper().toDTO(ferramenta);
+    var mapper = getMapper();
+    if (mapper == null) {
+      throw new ServiceException("Mapper não configurado");
+    }
+    FerramentaDTO dto = mapper.toDTO(ferramenta);
     return FerramentaActivationDTO.builder()
         .id(dto.getId())
         .titulo(dto.getTitulo())

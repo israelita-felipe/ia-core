@@ -52,12 +52,20 @@ public final class EnvioMensagemTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "envio.mensagem.error.notfound";
+        public static final String DUPLICATE = "envio.mensagem.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String ENVIADO_SUCESSO = "envio.mensagem.message.enviado.sucesso";
-        public static final String AGENDADO_SUCESSO = "envio.mensagem.message.agendado.sucesso";
-        public static final String ERRO_ENVIO = "envio.mensagem.message.erro.envio";
+        public static final String SENT = "envio.mensagem.message.sent";
+        public static final String SCHEDULED = "envio.mensagem.message.scheduled";
+        public static final String SEND_ERROR = "envio.mensagem.message.send.error";
     }
 
     /**

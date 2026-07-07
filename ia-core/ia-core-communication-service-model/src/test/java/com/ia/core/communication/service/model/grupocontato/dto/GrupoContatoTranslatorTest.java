@@ -38,9 +38,9 @@ class GrupoContatoTranslatorTest {
   @Test
   @DisplayName("Deve ter classe MESSAGE com constantes")
   void deveTerClasseMESSAGEComConstantes() {
-    assertThat(GrupoContatoTranslator.MESSAGE.CRIADO_SUCESSO).isNotNull();
-    assertThat(GrupoContatoTranslator.MESSAGE.ATUALIZADO_SUCESSO).isNotNull();
-    assertThat(GrupoContatoTranslator.MESSAGE.DELETADO_SUCESSO).isNotNull();
+    assertThat(GrupoContatoTranslator.MESSAGE.CREATED).isNotNull();
+    assertThat(GrupoContatoTranslator.MESSAGE.UPDATED).isNotNull();
+    assertThat(GrupoContatoTranslator.MESSAGE.DELETED).isNotNull();
   }
 
   @Test

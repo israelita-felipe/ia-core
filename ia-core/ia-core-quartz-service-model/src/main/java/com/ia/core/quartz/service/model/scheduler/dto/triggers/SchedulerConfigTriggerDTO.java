@@ -2,7 +2,6 @@ package com.ia.core.quartz.service.model.scheduler.dto.triggers;
 
 import com.ia.core.quartz.model.scheduler.SchedulerConfigTrigger;
 import com.ia.core.service.dto.AbstractDTO;
-import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -89,7 +88,7 @@ public class SchedulerConfigTriggerDTO
   }
 
   public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
+    extends AbstractDTO.CAMPOS {
 
     // Campos básicos do trigger
     public static final String TRIGGER_NAME = "triggerName";

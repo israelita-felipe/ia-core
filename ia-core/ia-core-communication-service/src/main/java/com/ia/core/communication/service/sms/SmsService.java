@@ -54,6 +54,10 @@ public class SmsService
 
     try {
       String provider = smsConfig.getProvider();
+      if (provider == null || provider.isBlank()) {
+        log.error("Provider SMS não configurado");
+        return ResultadoEnvio.falha("Provider SMS não configurado");
+      }
       switch (provider.toLowerCase()) {
       case "twilio":
         return enviarViaTwilio(mensagem);

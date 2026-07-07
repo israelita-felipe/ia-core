@@ -42,20 +42,28 @@ public final class AxiomaTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "axioma.error.notfound";
+        public static final String DUPLICATE = "axioma.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "axioma.message.created";
+        public static final String UPDATED = "axioma.message.updated";
+        public static final String DELETED = "axioma.message.deleted";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String AXIOMA_INVALIDO = "axioma.rule.axioma.invalido";
         public static final String PREFIX_NAO_ENCONTRADO = "axioma.rule.prefix.nao.encontrado";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "axioma.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "axioma.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "axioma.message.deletado.sucesso";
     }
 
     /**

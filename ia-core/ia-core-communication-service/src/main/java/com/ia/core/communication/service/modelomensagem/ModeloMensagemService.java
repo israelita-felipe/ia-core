@@ -57,9 +57,14 @@ public class ModeloMensagemService
       throw new RuntimeException("Modelo não encontrado: " + modeloId);
     }
 
-    String corpo = modelo.getCorpoModelo();
-    for (Map.Entry<String, String> entry : parametros.entrySet()) {
-      corpo = corpo.replace("{{" + entry.getKey() + "}}", entry.getValue());
+    String corpo = modelo.getCorpoModelo() != null ? modelo.getCorpoModelo() : "";
+    if (parametros != null) {
+      for (Map.Entry<String, String> entry : parametros.entrySet()) {
+        if (entry != null && entry.getKey() != null) {
+          corpo = corpo.replace("{{" + entry.getKey() + "}}",
+                               entry.getValue() != null ? entry.getValue() : "");
+        }
+      }
     }
     return corpo;
   }
@@ -89,12 +94,12 @@ public class ModeloMensagemService
 
     // Processar variáveis usando o DTO
     String conteudoProcessado = getConfig().getProcessadorVariaveis().processar(
-        modelo.getCorpoModelo(),
+        modelo.getCorpoModelo() != null ? modelo.getCorpoModelo() : "",
         contatoDTO  // Agora usa HasVariavel corretamente
     );
     MensagemDTO mensagemDTO = new MensagemDTO();
     mensagemDTO.setTipoCanal(modelo.getTipoCanal());
-    mensagemDTO.setTelefoneDestinatario(contato.getTelefone());
+    mensagemDTO.setTelefoneDestinatario(contato.getTelefone() != null ? contato.getTelefone() : "");
     mensagemDTO.setCorpoMensagem(conteudoProcessado);
     getConfig().getMensagemService().enviar(mensagemDTO);
   }

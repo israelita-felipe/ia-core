@@ -32,4 +32,11 @@ public abstract class AbstractDTO<T extends Serializable>
   @JsonIgnore
   protected transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
+  /**
+   * Inner class com constantes para nomes dos campos.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+  }
 }

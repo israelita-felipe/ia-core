@@ -20,12 +20,20 @@ ia-core-test/
 
 ## 🔑 Responsabilidades
 
-- **Base Test Class**: Setup comum para todos os testes
+- **Base Test Class**: Setup comum para todos os testes (CoreBaseUnitTest)
 - **Fixtures**: Dados de teste reutilizáveis
 - **Test Containers**: BD dockerizado para testes
 - **Custom Assertions**: Validações específicas do domínio
 - **Security Context**: Autenticação simulada
 - **DB Cleanup**: Limpeza entre testes
+
+**Base Classes Disponíveis** (conforme ADR-012):
+- `CoreBaseUnitTest` - Classe base abstrata para testes (com `@Disabled`)
+- `CoreServiceBase` - Para testes unitários de serviço (Mockito)
+- `CoreIntegrationBase` - Para testes de integração (TestContainers)
+- `CoreVaadinManagerBase` - Para testes de Vaadin Manager
+- `CoreVaadinViewBase` - Para testes de Vaadin View (componentes UI)
+- `CoreE2EBase` - Para testes end-to-end (Selenium WebDriver)
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -429,11 +437,28 @@ Ao adicionar testes de integração:
 - Use TestContainers para ambiente produção-like
 - Fixtures tornam testes mais legíveis
 - Setup/Teardown deve ser automático
+- Classes base usam `@Disabled` para não serem executadas como testes (ADR-012)
 
 ## 🔍 Referências
 
 - [Spring Test Reference](https://docs.spring.io/spring-framework/reference/testing.html)
 - [TestContainers Documentation](https://www.testcontainers.org/)
 - [REST Assured](https://rest-assured.io/)
+
+## 📚 ADRs Relevantes
+
+- **ADR-012**: Testing Patterns - Padrões de teste automatizado
+- **ADR-018**: Business Rule Chain Pattern - Validações compostáveis
+- **ADR-019**: Service Validator Pattern - Validador de serviço dinâmico
+
+## 🧪 Cobertura de Testes
+
+**Cobertura Mínima**: 85% (conforme ADR-012)
+
+Para executar com verificação de cobertura:
+```bash
+mvn test jacoco:report
+# Verificar relatório em: target/site/jacoco/index.html
+```
 
 

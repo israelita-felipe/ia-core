@@ -41,11 +41,19 @@ public final class UserRoleTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "user.role.error.notfound";
+        public static final String DUPLICATE = "user.role.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "user.role.message.criado.sucesso";
-        public static final String DELETADO_SUCESSO = "user.role.message.deletado.sucesso";
+        public static final String CREATED = "user.role.message.created";
+        public static final String DELETED = "user.role.message.deleted";
     }
 
     /**

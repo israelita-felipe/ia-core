@@ -35,6 +35,9 @@ public interface HasValidation<T extends Serializable> {
    * @return lista de registros dos validadores
    */
   default List<IServiceValidator.ValidatorRegistration> registryValidators(List<IServiceValidator<T>> validators) {
+    if (validators == null || validators.isEmpty()) {
+      return List.of();
+    }
     return validators.stream().map(validator -> {
       return validator.registry(this);
     }).toList();
@@ -57,11 +60,17 @@ public interface HasValidation<T extends Serializable> {
    */
   default void validate(T object)
     throws ServiceException {
+    if (object == null) {
+      throw new IllegalArgumentException("Object to validate cannot be null");
+    }
     if (useJakartaValidation()) {
       createJakartaValidator().validate(object);
     }
-    for (IServiceValidator<T> validator : getValidators()) {
-      validator.validate(object);
+    var validators = getValidators();
+    if (validators != null) {
+      for (IServiceValidator<T> validator : validators) {
+        validator.validate(object);
+      }
     }
   }
 }

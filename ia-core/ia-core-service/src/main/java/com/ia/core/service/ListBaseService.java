@@ -46,10 +46,14 @@ public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
    default Page<D> findAll(SearchRequestDTO requestDTO) {
     if (canList(requestDTO)) {
       SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
-      request.setFilters(request.getFilters().stream()
-          .filter(filter -> filter.getKey() != null
-              && filter.getOperator() != null)
-          .collect(Collectors.toList()));
+      request.setFilters(
+          request.getFilters() != null
+              ? request.getFilters().stream()
+                  .filter(filter -> filter.getKey() != null
+                      && filter.getOperator() != null)
+                  .collect(Collectors.toList())
+              : null
+      );
       // cria a especificação
       SearchSpecification<T> specification = new SearchSpecification<>(request);
       // cria a paginação

@@ -40,20 +40,28 @@ public final class TemplateTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "template.error.notfound";
+        public static final String DUPLICATE = "template.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String CREATED = "template.message.created";
+        public static final String UPDATED = "template.message.updated";
+        public static final String DELETED = "template.message.deleted";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String TEMPLATE_INVALIDO = "template.rule.template.invalido";
         public static final String PARAMETROS_INVALIDOS = "template.rule.parametros.invalidos";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "template.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "template.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "template.message.deletado.sucesso";
     }
 
     /**

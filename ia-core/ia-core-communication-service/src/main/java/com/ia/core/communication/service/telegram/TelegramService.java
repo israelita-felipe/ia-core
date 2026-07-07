@@ -65,7 +65,7 @@ public class TelegramService implements MensagemProvider {
 
       // Cria o request
       TelegramMessageRequest request = new TelegramMessageRequest(
-          chatId, mensagem.getCorpoMensagem(), parseMode);
+          chatId, mensagem.getCorpoMensagem() != null ? mensagem.getCorpoMensagem() : "", parseMode);
 
       // Envia via Feign Client
       Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
@@ -73,16 +73,17 @@ public class TelegramService implements MensagemProvider {
       if (response != null) {
         Boolean ok = (Boolean) response.get("ok");
         if (Boolean.TRUE.equals(ok)) {
-          Map<String, Object> result = (Map<String, Object>) response
-              .get("result");
-          Long messageId = ((Number) result.get("message_id")).longValue();
-          log.info("Mensagem Telegram enviada com sucesso para {}: message_id={}",
-                   chatId, messageId);
-          return ResultadoEnvio.sucesso(String.valueOf(messageId));
+          Map<String, Object> result = (Map<String, Object>) response.get("result");
+          if (result != null && result.get("message_id") != null) {
+            Long messageId = ((Number) result.get("message_id")).longValue();
+            log.info("Mensagem Telegram enviada com sucesso para {}: message_id={}",
+                     chatId, messageId);
+            return ResultadoEnvio.sucesso(String.valueOf(messageId));
+          }
         } else {
-          String errorDescription = (String) response.get("description");
-          log.error("Falha ao enviar mensagem Telegram: {}",
-                    errorDescription);
+          String errorDescription = response.get("description") != null
+              ? response.get("description").toString() : "Erro desconhecido";
+          log.error("Falha ao enviar mensagem Telegram: {}", errorDescription);
           return ResultadoEnvio.falha(errorDescription);
         }
       }
@@ -110,17 +111,18 @@ public class TelegramService implements MensagemProvider {
           : telegramConfig.getChatId();
 
       TelegramMessageRequest request = new TelegramMessageRequest(
-          chatId, mensagem.getCorpoMensagem(), "HTML");
+          chatId, mensagem.getCorpoMensagem() != null ? mensagem.getCorpoMensagem() : "", "HTML");
 
       Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
 
       if (response != null) {
         Boolean ok = (Boolean) response.get("ok");
         if (Boolean.TRUE.equals(ok)) {
-          Map<String, Object> result = (Map<String, Object>) response
-              .get("result");
-          Long messageId = ((Number) result.get("message_id")).longValue();
-          return ResultadoEnvio.sucesso(String.valueOf(messageId));
+          Map<String, Object> result = (Map<String, Object>) response.get("result");
+          if (result != null && result.get("message_id") != null) {
+            Long messageId = ((Number) result.get("message_id")).longValue();
+            return ResultadoEnvio.sucesso(String.valueOf(messageId));
+          }
         }
       }
 
@@ -182,7 +184,10 @@ public class TelegramService implements MensagemProvider {
   public ResultadoEnvio enviarParaChatDefault(
           @ToolParam(description = "Dados da mensagem Telegram a ser enviada (MensagemDTO, obrigatório). " +
                           "Inclui corpoMensagem (conteúdo da mensagem). O chat_id será o padrão configurado.", required = true) MensagemDTO mensagem) {
-    mensagem.setTelefoneDestinatario(telegramConfig.getChatId());
+    String defaultChatId = telegramConfig.getChatId();
+    if (defaultChatId != null) {
+      mensagem.setTelefoneDestinatario(defaultChatId);
+    }
     return enviarTelegram(mensagem);
   }
 }

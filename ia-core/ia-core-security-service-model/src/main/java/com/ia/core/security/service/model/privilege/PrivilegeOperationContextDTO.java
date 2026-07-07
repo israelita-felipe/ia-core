@@ -60,13 +60,13 @@ public class PrivilegeOperationContextDTO
 
   @Override
   public PrivilegeOperationContextDTO cloneObject() {
-    return toBuilder().values(new HashSet<>(getValues())).build();
+    return toBuilder().values(values != null ? new HashSet<>(getValues()) : new HashSet<>()).build();
   }
 
   @Override
   public PrivilegeOperationContextDTO copyObject() {
     return ((PrivilegeOperationContextDTO) super.copyObject()).toBuilder()
-        .values(new HashSet<>(getValues())).build();
+        .values(values != null ? new HashSet<>(getValues()) : new HashSet<>()).build();
   }
 
   /**
@@ -74,5 +74,12 @@ public class PrivilegeOperationContextDTO
    */
   public static SearchRequestDTO getSearchRequest() {
     return new SearchRequestDTO();
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String CONTEXT_KEY = "contextKey";
+    public static final String VALUES = "values";
   }
 }

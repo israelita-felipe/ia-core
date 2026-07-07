@@ -117,11 +117,16 @@ public class SchedulerConfigDTO
     return String.format("%s (%s)",jobClassName, periodicidade);
   }
 
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String PERIODICIDADE = "periodicidade";
-    public static final String JOB_CLASS_NAME = "jobClassName";
-    public static final String TRIGGERS = "triggers";
-  }
+@SuppressWarnings("javadoc")
+    public static class CAMPOS
+      extends AbstractBaseEntityDTO.CAMPOS {
+      public static final String PERIODICIDADE = "periodicidade";
+      public static final String JOB_CLASS_NAME = "jobClassName";
+      public static final String TRIGGERS = "triggers";
+      public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+      public static Set<String> values() {
+          return Set.of(ID, VERSION, PERIODICIDADE, JOB_CLASS_NAME, TRIGGERS, PROPERTY_CHANGE_SUPPORT);
+      }
+    }
 }

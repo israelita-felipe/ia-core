@@ -97,11 +97,11 @@ public class UserService
         .findFirst()
         .orElseThrow(() -> new UserNotFountException(change.getUserCode()));
 
-    String decryptedOldPassword = UserPasswordEncoder
+    String decryptedOldPassword = CryptUtils
         .decrypt(change.getOldPassword(), change.getUserCode());
     if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
                                                  user.getPassword())) {
-      user.setPassword(UserPasswordEncoder
+      user.setPassword(CryptUtils
           .decrypt(change.getNewPassword(), change.getUserCode()));
       save(user);
     } else {
@@ -139,7 +139,7 @@ public class UserService
     Objects.requireNonNull(reset.getUserCode(), "Código de usuário não pode ser null");
 
     log.info("Reset de password para userCode: {}", reset.getUserCode());
-    String newPassword = UserPasswordEncoder
+    String newPassword = CryptUtils
         .generateDefaultSecureRandomPassword();
     log.debug("Password reset executado com sucesso para userCode: {}", reset.getUserCode());
 

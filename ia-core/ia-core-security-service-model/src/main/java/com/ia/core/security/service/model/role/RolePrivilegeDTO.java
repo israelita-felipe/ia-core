@@ -35,7 +35,7 @@ import java.util.Set;
 public class RolePrivilegeDTO
   extends AbstractBaseEntityDTO<RolePrivilege> {
 
-  @NotNull(message = "validation.role.privilege.required")
+  @NotNull(message = "{validation.role.privilege.privilege.required}")
   private PrivilegeDTO privilege;
 
   @Default
@@ -79,8 +79,9 @@ public class RolePrivilegeDTO
   public RolePrivilegeDTO cloneObject() {
     return toBuilder()
         .privilege(privilege != null ? privilege.cloneObject() : null)
-        .operations(new HashSet<>(getOperations().stream()
-            .map(PrivilegeOperationDTO::cloneObject).toList()))
+        .operations(operations != null ? new HashSet<>(getOperations().stream()
+            .filter(java.util.Objects::nonNull)
+            .map(PrivilegeOperationDTO::cloneObject).toList()) : new HashSet<>())
         .build();
   }
 
@@ -88,8 +89,9 @@ public class RolePrivilegeDTO
   public RolePrivilegeDTO copyObject() {
     return ((RolePrivilegeDTO) super.copyObject()).toBuilder()
         .privilege(privilege != null ? privilege.copyObject() : null)
-        .operations(new HashSet<>(getOperations().stream()
-            .map(PrivilegeOperationDTO::copyObject).toList()))
+        .operations(operations != null ? new HashSet<>(getOperations().stream()
+            .filter(java.util.Objects::nonNull)
+            .map(PrivilegeOperationDTO::copyObject).toList()) : new HashSet<>())
         .build();
   }
 }

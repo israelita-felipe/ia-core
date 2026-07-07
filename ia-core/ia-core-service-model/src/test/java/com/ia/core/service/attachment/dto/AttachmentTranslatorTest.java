@@ -45,8 +45,8 @@ class AttachmentTranslatorTest {
   @Test
   @DisplayName("MESSAGE deve ter constantes definidas")
   void testMessageConstants() {
-    assertThat(AttachmentTranslator.MESSAGE.UPLOAD_SUCESSO).isEqualTo("attachment.message.upload.sucesso");
-    assertThat(AttachmentTranslator.MESSAGE.REMOVIDO_SUCESSO).isEqualTo("attachment.message.removido.sucesso");
+    assertThat(AttachmentTranslator.MESSAGE.UPLOAD_SUCCESS).isEqualTo("attachment.message.upload.success");
+    assertThat(AttachmentTranslator.MESSAGE.REMOVED_SUCCESS).isEqualTo("attachment.message.removed.success");
   }
 
   @Test
@@ -104,7 +104,7 @@ class AttachmentTranslatorTest {
   @Test
   @DisplayName("MESSAGE deve ter todas as constantes definidas")
   void testAllMessageConstants() {
-    assertThat(AttachmentTranslator.MESSAGE.ERRO_PROCESSAMENTO).isEqualTo("attachment.message.erro.processamento");
+    assertThat(AttachmentTranslator.MESSAGE.PROCESSING_ERROR).isEqualTo("attachment.message.processing.error");
   }
 
   @Test

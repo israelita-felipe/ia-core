@@ -197,16 +197,21 @@ public class PeriodicidadeDTO
     return ZoneId.of(zoneId);
   }
 
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String ATIVO = "ativo";
-    public static final String INTERVALO_BASE = "intervaloBase";
-    public static final String REGRA = "regra";
-    public static final String EXCLUSAO_RECORRENCIA = "exclusaoRecorrencia";
-    public static final String ZONE_ID = "zoneId";
-    public static final String EXCEPTION_DATES = "exceptionDates";
-    public static final String INCLUDE_DATES = "includeDates";
-  }
+@SuppressWarnings("javadoc")
+    public static class CAMPOS
+      extends AbstractBaseEntityDTO.CAMPOS {
+      public static final String ATIVO = "ativo";
+      public static final String INTERVALO_BASE = "intervaloBase";
+      public static final String REGRA = "regra";
+      public static final String EXCLUSAO_RECORRENCIA = "exclusaoRecorrencia";
+      public static final String ZONE_ID = "zoneId";
+      public static final String EXCEPTION_DATES = "exceptionDates";
+      public static final String INCLUDE_DATES = "includeDates";
+      public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+      public static Set<String> values() {
+          return Set.of(ID, VERSION, ATIVO, INTERVALO_BASE, REGRA, EXCLUSAO_RECORRENCIA, ZONE_ID, EXCEPTION_DATES, INCLUDE_DATES, PROPERTY_CHANGE_SUPPORT);
+      }
+    }
 
 }

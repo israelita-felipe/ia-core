@@ -31,6 +31,12 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		</dependency>
+    <dependency>
+      <groupId>com.ia</groupId>
+      <artifactId>ia-core-rest-test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>

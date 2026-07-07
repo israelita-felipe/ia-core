@@ -73,4 +73,20 @@ public record TransformacaoResultDTO(List<AxiomaDTO> axiomas,
                 sucesso ? "bem-sucedida" : "falhou", getNumeroAxiomas(),
                 inconsistencias.size());
   }
+
+  /**
+   * Constantes dos campos do DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String AXIOMAS = "axiomas";
+    public static final String INCONSISTENCIAS = "inconsistencias";
+    public static final String SUCESSO = "sucesso";
+    public static final String MENSAGEM = "mensagem";
+    public static final String ANALISE = "analise";
+
+    public static java.util.Set<String> values() {
+      return java.util.Set.of(AXIOMAS, INCONSISTENCIAS, SUCESSO, MENSAGEM, ANALISE);
+    }
+  }
 }

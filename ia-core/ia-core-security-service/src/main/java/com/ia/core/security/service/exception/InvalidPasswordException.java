@@ -1,6 +1,7 @@
 package com.ia.core.security.service.exception;
 
 import com.ia.core.service.exception.ServiceException;
+
 /**
  * Exceção para erros relacionados a invalid password.
  * <p>
@@ -15,10 +16,10 @@ public class InvalidPasswordException
   private final String userCode;
 
   /**
-   *
+   * @param userCode código do usuário
    */
   public InvalidPasswordException(String userCode) {
-    super();
+    super("Senha inválida para o usuário: " + userCode);
     this.userCode = userCode;
   }
 

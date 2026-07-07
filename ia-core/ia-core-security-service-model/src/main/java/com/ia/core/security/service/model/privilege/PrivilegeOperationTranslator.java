@@ -53,10 +53,18 @@ public final class PrivilegeOperationTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "privilege.operation.error.notfound";
+        public static final String DUPLICATE = "privilege.operation.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "privilege.operation.message.criado.sucesso";
+        public static final String CREATED = "privilege.operation.message.created";
     }
 
     /**

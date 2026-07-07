@@ -95,8 +95,12 @@ public class SchedulerJobManagementService {
    */
   public void cancelAllJobs() {
     try {
-      config.getQuartzScheduler().clear();
-      log.info("Todos os jobs agendados foram cancelados");
+      if (config.getQuartzScheduler() != null) {
+        config.getQuartzScheduler().clear();
+        log.info("Todos os jobs agendados foram cancelados");
+      } else {
+        log.warn("QuartzScheduler não configurado");
+      }
     } catch (SchedulerException e) {
       log.error("Erro ao cancelar todos os jobs: {}",
                 e.getLocalizedMessage(), e);
@@ -126,10 +130,11 @@ public class SchedulerJobManagementService {
    * @return Lista de DTOs filtrados
    */
   private List<SchedulerConfigDTO> findAllActive(boolean active) {
-    return config.getRepository()
-        .findAllActiveWithPeriodicidade(active).stream()
-        .map(this.config.getMapper()::toDTO)
-        .toList();
+    var entities = config.getRepository().findAllActiveWithPeriodicidade(active);
+    if (entities == null || config.getMapper() == null) {
+      return List.of();
+    }
+    return entities.stream().map(config.getMapper()::toDTO).toList();
   }
 
 }

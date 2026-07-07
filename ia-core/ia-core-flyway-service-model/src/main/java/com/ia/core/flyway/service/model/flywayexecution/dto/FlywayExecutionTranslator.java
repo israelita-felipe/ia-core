@@ -61,19 +61,27 @@ public final class FlywayExecutionTranslator {
     }
 
     /**
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "flyway.execution.error.notfound";
+        public static final String DUPLICATE = "flyway.execution.error.duplicate";
+    }
+
+    /**
+     * Success message keys
+     */
+    public static final class MESSAGE {
+        public static final String MIGRATION_APPLIED = "flyway.execution.message.migration.applied";
+        public static final String MIGRATION_FAILED = "flyway.execution.message.migration.failed";
+    }
+
+    /**
      * Business rule message keys
      */
     public static final class RULE {
         public static final String MIGRACAO_JA_APLICADA = "flyway.execution.rule.migracao.ja.aplicada";
         public static final String VERSAO_INVALIDA = "flyway.execution.rule.versao.invalida";
-    }
-
-    /**
-     * Success/error message keys
-     */
-    public static final class MESSAGE {
-        public static final String MIGRACAO_APLICADA = "flyway.execution.message.migracao.aplicada";
-        public static final String MIGRACAO_FALHOU = "flyway.execution.message.migracao.falhou";
     }
 
     /**

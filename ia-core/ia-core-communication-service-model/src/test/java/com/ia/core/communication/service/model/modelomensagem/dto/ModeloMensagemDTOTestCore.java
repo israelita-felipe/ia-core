@@ -1,7 +1,7 @@
 package com.ia.core.communication.service.model.modelomensagem.dto;
 
 import com.ia.core.communication.model.mensagem.TipoCanal;
-import com.ia.core.service.dto.CoreBaseDTOUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para a classe ModeloMensagemDTO.
  */
 @DisplayName("Testes de ModeloMensagemDTO")
-class ModeloMensagemDTOTestCore extends CoreBaseDTOUnitTest<ModeloMensagemDTO> {
+class ModeloMensagemDTOTestCore extends CoreDTOUnitTest<ModeloMensagemDTO> {
 
   private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 

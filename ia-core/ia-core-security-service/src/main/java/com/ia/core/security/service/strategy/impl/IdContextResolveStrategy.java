@@ -86,6 +86,9 @@ public class IdContextResolveStrategy
                     new TypeToken<List<String>>() {
                     }.getType());
 
+      if (fromJson == null) {
+        return false;
+      }
       return new HashSet<>(fromJson).contains(userContextValue);
     } catch (Exception e) {
       log.error("Erro ao validar correspondência de contexto de ID: serviceContext={}, userContext={}",

@@ -1,6 +1,7 @@
 package com.ia.core.service.dto.filter;
 
-import com.ia.test.CoreBaseUnitTest;
+import com.ia.core.service.dto.DTO;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("FilterRequestDTO")
-class FilterRequestDTOTestCore extends CoreBaseUnitTest {
+class FilterRequestDTOTestCore extends CoreDTOUnitTest<FilterRequestDTO> {
+
+    @Override
+    protected Class<?> getDtoInterface() {
+        return DTO.class;
+    }
 
     @Nested
     @DisplayName("construtor padrão")

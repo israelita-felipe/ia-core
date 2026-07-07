@@ -167,11 +167,16 @@ public class CoreJwtAuthenticationService
         .password(request.getSenha())
         .build();
 
-    Set<UserPrivilege> privileges = privilegeRepository.findAll().stream()
+    var privileges = privilegeRepository.findAll();
+    if (privileges == null) {
+      user.setPrivileges(Set.of());
+      return user;
+    }
+    Set<UserPrivilege> userPrivileges = privileges.stream()
         .map(privilege -> buildUserPrivilegeWithAllOperations(user, privilege))
         .collect(Collectors.toSet());
 
-    user.setPrivileges(privileges);
+    user.setPrivileges(userPrivileges);
     return user;
   }
 

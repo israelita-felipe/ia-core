@@ -76,7 +76,7 @@ public final class PeriodicidadeFormatter {
     // BYDAY
     // =============================
 
-    if (!r.getByDay().isEmpty()) {
+    if (r.getByDay() != null && !r.getByDay().isEmpty()) {
 
       sb.append(" na ");
 
@@ -92,7 +92,7 @@ public final class PeriodicidadeFormatter {
     // BYMONTH
     // =============================
 
-    if (!r.getByMonth().isEmpty()) {
+    if (r.getByMonth() != null && !r.getByMonth().isEmpty()) {
 
       sb.append(" de ");
 
@@ -267,7 +267,7 @@ public final class PeriodicidadeFormatter {
       sb.append(" (").append(r.getIntervalValue()).append(")");
     }
 
-    if (r.getBySetPosition() != null && !r.getByDay().isEmpty()) {
+    if (r.getBySetPosition() != null && r.getByDay() != null && !r.getByDay().isEmpty()) {
 
       sb.append(" • ").append(r.getBySetPosition()).append("ª ")
           .append(r.getByDay().iterator().next().name());
@@ -371,7 +371,7 @@ public final class PeriodicidadeFormatter {
     sb.append("\n");
 
     // BYMONTH
-    if (!r.getByMonth().isEmpty()) {
+    if (r.getByMonth() != null && !r.getByMonth().isEmpty()) {
       sb.append("Meses: ");
       sb.append(r.getByMonth().stream().map(PeriodicidadeFormatter::mesPT)
           .reduce((a, b) -> a + ", " + b).orElse(""));
@@ -379,7 +379,7 @@ public final class PeriodicidadeFormatter {
     }
 
     // BYMONTHDAY
-    if (!r.getByMonthDay().isEmpty()) {
+    if (r.getByMonthDay() != null && !r.getByMonthDay().isEmpty()) {
       sb.append("Dias do mes: ");
       sb.append(r.getByMonthDay().stream().sorted().map(String::valueOf)
           .reduce((a, b) -> a + ", " + b).orElse(""));
@@ -387,7 +387,7 @@ public final class PeriodicidadeFormatter {
     }
 
     // BYDAY
-    if (!r.getByDay().isEmpty()) {
+    if (r.getByDay() != null && !r.getByDay().isEmpty()) {
       sb.append("Dias da semana: ");
       if (r.getBySetPosition() != null) {
         sb.append(ordem(r.getBySetPosition())).append(" ");
@@ -405,7 +405,7 @@ public final class PeriodicidadeFormatter {
     }
 
     // BYYEARDAY
-    if (!r.getByYearDay().isEmpty()) {
+    if (r.getByYearDay() != null && !r.getByYearDay().isEmpty()) {
       sb.append("Dias do ano: ");
       sb.append(r.getByYearDay().stream().sorted().map(String::valueOf)
           .reduce((a, b) -> a + ", " + b).orElse(""));
@@ -413,7 +413,7 @@ public final class PeriodicidadeFormatter {
     }
 
     // BYWEEKNO
-    if (!r.getByWeekNo().isEmpty()) {
+    if (r.getByWeekNo() != null && !r.getByWeekNo().isEmpty()) {
       sb.append("Semanas: ");
       sb.append(r.getByWeekNo().stream().sorted().map(String::valueOf)
           .reduce((a, b) -> a + ", " + b).orElse(""));
@@ -421,20 +421,21 @@ public final class PeriodicidadeFormatter {
     }
 
     // BYHOUR, BYMINUTE, BYSECOND
-    if (!r.getByHour().isEmpty() || !r.getByMinute().isEmpty()
-        || !r.getBySecond().isEmpty()) {
+    if ((r.getByHour() != null && !r.getByHour().isEmpty())
+        || (r.getByMinute() != null && !r.getByMinute().isEmpty())
+        || (r.getBySecond() != null && !r.getBySecond().isEmpty())) {
       sb.append("Horario: ");
-      if (!r.getByHour().isEmpty()) {
+      if (r.getByHour() != null && !r.getByHour().isEmpty()) {
         sb.append("Horas: ")
             .append(r.getByHour().stream().sorted().map(String::valueOf)
                 .reduce((a, b) -> a + ", " + b).orElse(""));
       }
-      if (!r.getByMinute().isEmpty()) {
+      if (r.getByMinute() != null && !r.getByMinute().isEmpty()) {
         sb.append(" Minutos: ")
             .append(r.getByMinute().stream().sorted().map(String::valueOf)
                 .reduce((a, b) -> a + ", " + b).orElse(""));
       }
-      if (!r.getBySecond().isEmpty()) {
+      if (r.getBySecond() != null && !r.getBySecond().isEmpty()) {
         sb.append(" Segundos: ")
             .append(r.getBySecond().stream().sorted().map(String::valueOf)
                 .reduce((a, b) -> a + ", " + b).orElse(""));
@@ -463,7 +464,7 @@ public final class PeriodicidadeFormatter {
       }
       sb.append("\n");
 
-      if (!exclusao.getByDay().isEmpty()) {
+      if (exclusao.getByDay() != null && !exclusao.getByDay().isEmpty()) {
         sb.append("Exceto: ")
             .append(exclusao.getByDay().stream()
                 .map(PeriodicidadeFormatter::diaSemanaPT)

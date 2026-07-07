@@ -44,12 +44,20 @@ public final class GrupoContatoTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "grupo.contato.error.notfound";
+        public static final String DUPLICATE = "grupo.contato.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "grupo.contato.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "grupo.contato.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "grupo.contato.message.deletado.sucesso";
+        public static final String CREATED = "grupo.contato.message.created";
+        public static final String UPDATED = "grupo.contato.message.updated";
+        public static final String DELETED = "grupo.contato.message.deleted";
     }
 
     /**

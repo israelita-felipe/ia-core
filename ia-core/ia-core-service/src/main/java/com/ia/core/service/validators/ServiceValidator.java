@@ -39,10 +39,9 @@ public abstract class ServiceValidator<T extends Serializable>
    *
    * @param translator {@link Translator}
    */
-
-public ServiceValidator(Translator translator) {
+  public ServiceValidator(Translator translator) {
     super();
-    this.translator = translator;
+    this.translator = java.util.Objects.requireNonNull(translator, "Translator cannot be null");
   }
 
   /**
@@ -54,7 +53,7 @@ public ServiceValidator(Translator translator) {
   public ServiceValidator(Translator translator,
                           List<BusinessRule<T>> businessRules) {
     super();
-    this.translator = translator;
+    this.translator = java.util.Objects.requireNonNull(translator, "Translator cannot be null");
     if (businessRules != null) {
       this.businessRules.addAll(businessRules);
     }

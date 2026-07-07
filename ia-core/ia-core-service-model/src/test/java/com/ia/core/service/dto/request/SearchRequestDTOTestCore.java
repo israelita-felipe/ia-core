@@ -1,24 +1,25 @@
 package com.ia.core.service.dto.request;
 
+import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.filter.FilterProperty;
 import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
-import com.ia.test.CoreBaseUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.instancio.Select;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("SearchRequestDTO")
-class SearchRequestDTOTestCore extends CoreBaseUnitTest {
+class SearchRequestDTOTestCore extends CoreDTOUnitTest<SearchRequestDTO> {
+    @Override
+    protected Class<?> getDtoInterface() {
+        return DTO.class;
+    }
 
     @Nested
     @DisplayName("construtor padrão")

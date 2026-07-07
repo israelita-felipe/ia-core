@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+	<artifactId>ia-core-service-test</artifactId>
+	<name>ia-core-service-test</name>
+	<description>Módulo de testes para serviços, repositórios e mappers</description>
+  <dependencies>
+    <!-- Test base module -->
+    <dependency>
+      <groupId>com.ia</groupId>
+      <artifactId>ia-core-service-model-test</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- TestContainers for integration tests -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testcontainers.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${testcontainers.version}</version>
+    </dependency>
+  </dependencies>
+</project>

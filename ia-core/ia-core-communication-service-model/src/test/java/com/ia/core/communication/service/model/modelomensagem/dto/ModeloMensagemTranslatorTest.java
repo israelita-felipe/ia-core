@@ -45,9 +45,9 @@ class ModeloMensagemTranslatorTest {
   @Test
   @DisplayName("Deve ter classe MESSAGE com constantes")
   void deveTerClasseMESSAGEComConstantes() {
-    assertThat(ModeloMensagemTranslator.MESSAGE.CRIADO_SUCESSO).isNotNull();
-    assertThat(ModeloMensagemTranslator.MESSAGE.ATUALIZADO_SUCESSO).isNotNull();
-    assertThat(ModeloMensagemTranslator.MESSAGE.DELETADO_SUCESSO).isNotNull();
+    assertThat(ModeloMensagemTranslator.MESSAGE.CREATED).isNotNull();
+    assertThat(ModeloMensagemTranslator.MESSAGE.UPDATED).isNotNull();
+    assertThat(ModeloMensagemTranslator.MESSAGE.DELETED).isNotNull();
   }
 
   @Test

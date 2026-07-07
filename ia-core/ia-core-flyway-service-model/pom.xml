@@ -24,33 +24,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ia</groupId>
-			<artifactId>ia-core-test</artifactId>
+			<artifactId>ia-core-service-model-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.11</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>

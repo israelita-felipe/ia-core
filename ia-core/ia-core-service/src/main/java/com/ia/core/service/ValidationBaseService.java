@@ -19,14 +19,14 @@ public interface ValidationBaseService<T extends BaseEntity, D extends DTO<?>>
    * @param dto objeto a ser validado
    * @return <code>true</code> por padrão
    */
-  default boolean canValidade(D dto) {
+  default boolean canValidate(D dto) {
     return true;
   }
 
   @Override
   default void validate(D object)
     throws ServiceException {
-    if (canValidade(object)) {
+    if (canValidate(object)) {
       HasValidation.super.validate(object);
     }
   }

@@ -1,5 +1,7 @@
 package com.ia.core.service.dto.sort;
 
+import com.ia.core.service.dto.DTO;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,9 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para SortRequestDTO.
  */
 @DisplayName("SortRequestDTO Tests")
-class SortRequestDTOTest {
+class SortRequestDTOTest extends CoreDTOUnitTest<SortRequestDTO> {
 
-  @Nested
+    @Override
+    protected Class<?> getDtoInterface() {
+        return DTO.class;
+    }
+
+    @Nested
   @DisplayName("construtor builder")
   class Builder {
 

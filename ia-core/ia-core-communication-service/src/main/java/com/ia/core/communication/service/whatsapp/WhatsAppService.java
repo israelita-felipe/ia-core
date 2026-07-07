@@ -46,8 +46,7 @@ public class WhatsAppService implements MensagemProvider {
       mensagem = enviarMensagem(mensagem);
       return ResultadoEnvio.sucesso(mensagem.getIdExterno());
     } catch (Exception e) {
-      log.error("Erro ao enviar mensagem WhatsApp para {}: {}",
-                mensagem.getTelefoneDestinatario(), e.getMessage(), e);
+      log.error("Erro ao enviar mensagem WhatsApp: {}", e.getMessage(), e);
       return ResultadoEnvio.falha(e.getLocalizedMessage());
     }
   }
@@ -67,20 +66,26 @@ public class WhatsAppService implements MensagemProvider {
   public MensagemDTO enviarMensagem(
           @ToolParam(description = "Dados da mensagem WhatsApp a ser enviada (MensagemDTO, obrigatório). " +
                           "Inclui telefoneDestinatario (número de WhatsApp) e corpoMensagem (conteúdo da mensagem).", required = true) MensagemDTO mensagem) {
+    if (mensagem == null) {
+      log.warn("Mensagem nula recebida para envio WhatsApp");
+      return mensagem;
+    }
+
     try {
       // Cria o request
       Map<String, String> textMessage = new HashMap<>();
-      textMessage.put("body", mensagem.getCorpoMensagem());
+      textMessage.put("body", mensagem.getCorpoMensagem() != null ? mensagem.getCorpoMensagem() : "");
 
       WhatsAppMessageRequest request = new WhatsAppMessageRequest(
           "whatsapp",
-          mensagem.getTelefoneDestinatario(),
+          mensagem.getTelefoneDestinatario() != null ? mensagem.getTelefoneDestinatario() : "",
           "text",
           textMessage
       );
 
       // Envia via Feign Client com token Bearer
-      String bearerToken = "Bearer " + whatsAppConfig.getAccessToken();
+      String accessToken = whatsAppConfig.getAccessToken();
+      String bearerToken = "Bearer " + (accessToken != null ? accessToken : "");
       Map<String, Object> response = whatsAppConfig.getWhatsAppClient()
           .sendMessage(bearerToken, request);
 
@@ -93,7 +98,7 @@ public class WhatsAppService implements MensagemProvider {
           @SuppressWarnings("unchecked")
           java.util.List<Map<String, Object>> messages = (java.util.List<Map<String, Object>>) response
               .get("messages");
-          if (!messages.isEmpty()) {
+          if (messages != null && !messages.isEmpty() && messages.get(0) != null) {
             mensagem.setIdExterno((String) messages.get(0).get("id"));
           }
         }
@@ -103,8 +108,7 @@ public class WhatsAppService implements MensagemProvider {
       }
 
     } catch (Exception e) {
-      log.error("Erro ao enviar mensagem WhatsApp para {}: {}",
-                mensagem.getTelefoneDestinatario(), e.getMessage());
+      log.error("Erro ao enviar mensagem WhatsApp: {}", e.getMessage(), e);
       mensagem.setStatusMensagem(StatusMensagem.FALHA);
       mensagem.setMotivoFalha(e.getMessage());
     }

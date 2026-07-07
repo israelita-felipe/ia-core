@@ -1,6 +1,6 @@
 package com.ia.core.flyway.service.model.flywayexecution.dto;
 
-import com.ia.core.service.dto.CoreBaseDTOUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para a classe FlywayExecutionDTO.
  */
 @DisplayName("Testes de FlywayExecutionDTO")
-class FlywayExecutionDTOTestCore extends CoreBaseDTOUnitTest<FlywayExecutionDTO> {
+class FlywayExecutionDTOTestCore extends CoreDTOUnitTest<FlywayExecutionDTO> {
 
   @Override
   protected Class<?> getDtoInterface() {

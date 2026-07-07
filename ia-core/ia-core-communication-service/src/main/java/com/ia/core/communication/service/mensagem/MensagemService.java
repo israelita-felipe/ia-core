@@ -101,8 +101,14 @@ public class MensagemService
     MensagemDTO saved = save(dto);
     // Usa a factory de estratégias para enviar a mensagem
     try {
-      EstrategiaEnvio estrategia = getConfig().getEstrategiaEnvioFactory()
-          .criarEstrategia(saved.getTipoCanal());
+      var factory = getConfig().getEstrategiaEnvioFactory();
+      if (factory == null) {
+        log.error("EstrategiaEnvioFactory não configurada");
+        saved.setStatusMensagem(StatusMensagem.FALHA);
+        saved.setMotivoFalha("EstrategiaEnvioFactory não configurada");
+        return save(saved);
+      }
+      EstrategiaEnvio estrategia = factory.criarEstrategia(saved.getTipoCanal());
       saved = estrategia.executar(dto);
       saved = save(saved);
     } catch (IllegalArgumentException e) {
@@ -179,9 +185,14 @@ public class MensagemService
                           "Identifica o grupo contendo os destinatários.", required = true) Long grupoId) {
     Objects.requireNonNull(modeloId, "Modelo ID não pode ser null");
     Objects.requireNonNull(grupoId, "Grupo ID não pode ser null");
-    ModeloMensagem modeloMensagem = getModeloMensagemRepository().findById(modeloId)
+    var grupoRepo = getGrupoContatoRepository();
+    var modeloRepo = getModeloMensagemRepository();
+    if (grupoRepo == null || modeloRepo == null) {
+      return "Erros de configuração: repositórios não inicializados";
+    }
+    ModeloMensagem modeloMensagem = modeloRepo.findById(modeloId)
         .orElseThrow(() -> new ServiceException("Modelo de mensagem não encontrado"));
-    GrupoContato grupo = getGrupoContatoRepository().findById(grupoId)
+    GrupoContato grupo = grupoRepo.findById(grupoId)
         .orElseThrow(() -> new ServiceException("Grupo não encontrado"));
     List<String> falhas = new ArrayList<>();
 
@@ -190,21 +201,31 @@ public class MensagemService
       return "Batch enviado com sucesso (nenhum contato no grupo)";
     }
 
+    var mapper = getContatoMensagemMapper();
+    var processador = getProcessadorVariaveis();
+    var corpoModelo = modeloMensagem.getCorpoModelo() != null ? modeloMensagem.getCorpoModelo() : "";
+
     for (ContatoMensagem contato : contatos) {
       try {
         // Converter entidade para DTO (que implementa HasVariavel)
-        ContatoMensagemDTO contatoDTO = getContatoMensagemMapper().toDTO(contato);
+        ContatoMensagemDTO contatoDTO = mapper != null ? mapper.toDTO(contato) : null;
+        if (contatoDTO == null) {
+          falhas.add("Contato sem mapper: " + (contato != null ? contato.getTelefone() : "null"));
+          continue;
+        }
 
         // Processar variáveis usando o DTO
-        String conteudoProcessado = getProcessadorVariaveis().processar(
-            modeloMensagem.getCorpoModelo(),
-            contatoDTO  // Agora usa HasVariavel corretamente
-        );
+        String conteudoProcessado;
+        if (processador != null) {
+          conteudoProcessado = processador.processar(corpoModelo, contatoDTO);
+        } else {
+          conteudoProcessado = corpoModelo;
+        }
 
         // Criar e enviar mensagem
         MensagemDTO mensagemDTO = new MensagemDTO();
         mensagemDTO.setTipoCanal(modeloMensagem.getTipoCanal());
-        mensagemDTO.setTelefoneDestinatario(contato.getTelefone());
+        mensagemDTO.setTelefoneDestinatario(contato.getTelefone() != null ? contato.getTelefone() : "");
         mensagemDTO.setCorpoMensagem(conteudoProcessado);
         this.enviar(mensagemDTO);
       } catch (Exception e) {

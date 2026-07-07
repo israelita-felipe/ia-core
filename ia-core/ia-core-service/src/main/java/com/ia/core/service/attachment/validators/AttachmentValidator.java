@@ -26,8 +26,7 @@ public class AttachmentValidator<T extends AttachmentDTO<?>>
   @Override
   public void validate(T object, ValidationResult result) {
     if (object.getId() == null
-        && (object.getContent() == null || object.getContent().isBlank()
-            || object.getContent().isEmpty())) {
+        && (object.getContent() == null || object.getContent().isBlank())) {
 
       result.addError(new ValidationError(
           "content",

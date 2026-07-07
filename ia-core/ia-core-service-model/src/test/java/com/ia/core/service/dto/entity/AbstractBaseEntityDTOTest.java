@@ -2,6 +2,8 @@ package com.ia.core.service.dto.entity;
 
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.HasVersion;
+import com.ia.core.service.dto.DTO;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +13,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para AbstractBaseEntityDTO.
  */
 @DisplayName("AbstractBaseEntityDTO Tests")
-class AbstractBaseEntityDTOTest {
+class AbstractBaseEntityDTOTest extends CoreDTOUnitTest<AbstractBaseEntityDTO> {
 
+    @Override
+    protected Class<?> getDtoInterface() {
+        return DTO.class;
+    }
   private static class TestEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
   }
@@ -158,11 +164,14 @@ class AbstractBaseEntityDTOTest {
   void testCamposConstants() {
     assertThat(AbstractBaseEntityDTO.CAMPOS.ID).isEqualTo("id");
     assertThat(AbstractBaseEntityDTO.CAMPOS.VERSION).isEqualTo("version");
+    assertThat(AbstractBaseEntityDTO.CAMPOS.PROPERTY_CHANGE_SUPPORT).isEqualTo("propertyChangeSupport");
   }
 
   @Test
   @DisplayName("CAMPOS.values deve retornar conjunto de valores")
   void testCamposValues() {
+    // The values() method only returns local constants, but inherited constants
+    // will be collected by getAllCamposValues in the parent test
     assertThat(AbstractBaseEntityDTO.CAMPOS.values()).containsExactlyInAnyOrder("id", "version");
   }
 

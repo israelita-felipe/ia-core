@@ -48,21 +48,31 @@ public final class UserTranslator {
         public static final String CODIGO_UNICO = "user.rule.codigo.unico";
         public static final String SENHA_ATUAL_INVALIDA = "user.rule.senha.atual.invalida";
         public static final String USUARIO_ATIVO = "user.rule.usuario.ativo";
+        public static final String SENHA_MINIMA = "user.rule.senha.minima";
+        public static final String TENTATIVAS_LOGIN = "user.rule.tentativas.login";
+        public static final String BLOQUEIO_TEMPORARIO = "user.rule.bloqueio.temporario";
+        public static final String SESSAO_EXPIRADA = "user.rule.sessao.expirada";
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "user.error.notfound";
+        public static final String DUPLICATE = "user.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "user.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "user.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "user.message.deletado.sucesso";
-        public static final String SENHA_ALTERADA_SUCESSO = "user.message.senha.alterada.sucesso";
-        public static final String CONFIRMAR_ALTERACAO_SENHA = "user.message.confirmar.alteracao.senha";
-        public static final String PASSWORD_CHANGED_SUCCESS = "user.message.senha.alterada.sucesso";
-        public static final String CONFIRM_CHANGE_PASSWORD = "user.message.confirmar.alteracao.senha";
-        public static final String PASSWORD_RESET_SUCCESS = "user.message.senha.resetada.sucesso";
-        public static final String CONFIRM_RESET_PASSWORD = "user.message.confirmar.reset.senha";
+        public static final String CREATED = "user.message.created";
+        public static final String UPDATED = "user.message.updated";
+        public static final String DELETED = "user.message.deleted";
+        public static final String PASSWORD_CHANGED_SUCCESS = "user.message.password.changed.success";
+        public static final String PASSWORD_RESET_SUCCESS = "user.message.password.reset.success";
+        public static final String CONFIRM_CHANGE_PASSWORD = "user.message.confirm.change.password";
+        public static final String CONFIRM_RESET_PASSWORD = "user.message.confirm.reset.password";
     }
 
     /**

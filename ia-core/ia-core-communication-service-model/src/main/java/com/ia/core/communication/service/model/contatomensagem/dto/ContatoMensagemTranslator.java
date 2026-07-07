@@ -45,12 +45,20 @@ public final class ContatoMensagemTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "contato.mensagem.error.notfound";
+        public static final String DUPLICATE = "contato.mensagem.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "contato.mensagem.message.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "contato.mensagem.message.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "contato.mensagem.message.deletado.sucesso";
+        public static final String CREATED = "contato.mensagem.message.created";
+        public static final String UPDATED = "contato.mensagem.message.updated";
+        public static final String DELETED = "contato.mensagem.message.deleted";
     }
 
     /**

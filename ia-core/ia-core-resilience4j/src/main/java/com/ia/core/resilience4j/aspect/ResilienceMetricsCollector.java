@@ -11,12 +11,20 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 /**
  * Collects and records resilience metrics for method executions.
  *
  * <p>This class encapsulates the logic for measuring execution times and
  * recording success/failure metrics using the ResilienceMetrics service.</p>
+ *
+ * <p>Princípios SOLID aplicados:</p>
+ * <ul>
+ *   <li><b>Single Responsibility</b>: Apenas coleta métricas</li>
+ *   <li><b>Open/Closed</b>: Fechado para modificação</li>
+ *   <li><b>Dependency Inversion</b>: Depende de ResilienceMetrics (abstração)</li>
+ * </ul>
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -39,6 +47,9 @@ public class ResilienceMetricsCollector {
      */
     public <T> T executeWithMetrics(ResilienceContext context, ProceedingJoinPoint joinPoint,
                                     java.util.concurrent.Callable<T> supplier){
+        Objects.requireNonNull(context, "context must not be null");
+        Objects.requireNonNull(supplier, "supplier must not be null");
+
         Method method = context.getMethod();
         ResilienceProfile profile = context.getProfile();
         String methodName = method.getName();
@@ -53,7 +64,7 @@ public class ResilienceMetricsCollector {
             Duration duration = Duration.between(startTime, Instant.now());
             String errorType = ex.getClass().getSimpleName();
             resilienceMetrics.recordError(profile.getName(), methodName, errorType, duration.toMillis());
-            throw new RuntimeException(ex.getLocalizedMessage(),ex);
+            throw new RuntimeException(ex.getLocalizedMessage(), ex);
         }
     }
 }

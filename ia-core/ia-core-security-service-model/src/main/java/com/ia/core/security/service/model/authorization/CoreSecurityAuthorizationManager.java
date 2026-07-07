@@ -93,61 +93,91 @@ public interface CoreSecurityAuthorizationManager {
   /**
    * Checks if the user has the required permission for the given object and operation.
    * <p>
-   * Security: Authorization defaults to DENY for null objects or empty context values
-   * to prevent authorization bypass vulnerabilities.
-   * </p>
+   * Security model:
+   * <ul>
+   *   <li>object == null → CREATE operation without entity → ALLOW</li>
+   *   <li>contexto vazio → No context restrictions → ALLOW</li>
+   *   <li>contexto não vazio → Must match privilege contexts → ALLOW/DENY</li>
+   * </ul>
    *
    * @param hasContext the context holder containing privilege information
    * @param operation the operation being checked (CREATE, READ, UPDATE, DELETE)
    * @param object the object being accessed for authorization
    * @return true if user has permission, false otherwise
-   * @bugfix SECURITY: Changed null object handling from permit to deny (was authorization bypass)
-   * @bugfix SECURITY: Changed empty context handling from permit to deny (was authorization bypass)
    */
   default boolean check(HasContext hasContext, Operation operation,
                         Object object) {
+    // CREATE operations: no object to check yet
     if (object == null) {
       return true;
     }
-    Map<String, String> serviceContextValue = hasContext
-        .getContextValue(object);
+
+    // No context restrictions defined → allow access
+    Map<String, String> serviceContextValue = hasContext.getContextValue(object);
     if (serviceContextValue.isEmpty()) {
       return true;
     }
-    Collection<PrivilegeOperationDTO> userPrivileges = getCurrentContextDefinitions()
-        .definitions().getContext().stream()
-        .filter(cd -> Objects.equals(cd.getPrivilege().getName(),
-                                     hasContext.getContextName()))
-        // filtra a mesma operação
-        .filter(cd -> cd.getPrivilegeOperations().stream()
-            .map(p -> p.getOperation())
-            .anyMatch(op -> Objects.equals(operation, op)))
-        .flatMap(entry -> entry.getPrivilegeOperations().stream()).toList();
 
-    return userPrivileges.stream().allMatch(userPrivilege -> {
-      // filtra os elementos que possuem o mesmo contexto
-      Collection<PrivilegeOperationContextDTO> userContexts = userPrivilege
-          .getContext().stream()
-          .filter(c -> serviceContextValue.containsKey(c.getContextKey()))
-          .toList();
-      // se contém a propriedade de contexto
-      boolean containsContext = !userContexts.isEmpty();
-      // não contém a chave ou contém a chave e algum dos valores corresponde ao
-      // valor do contexto
-      return !containsContext || (containsContext && userContexts.stream()
-          // existe algum elemento no contexto correspondente com acesso ao
-          // valor
-          .anyMatch(userContextDefinition -> {
-            return userContextDefinition.getValues().stream()
-                .anyMatch(userContextDefinitionValue -> {
-                  String contextKey = userContextDefinition.getContextKey();
-                  return hasContext.matches(contextKey,
-                                            serviceContextValue
-                                                .get(contextKey),
-                                            userContextDefinitionValue);
-                });
-          }));
-    });
+    // Get user privileges for this functionality and operation
+    Collection<PrivilegeOperationDTO> userPrivileges = getUserPrivileges(operation, hasContext);
+
+    // Verify if all privileges have matching context
+    return userPrivileges.stream().allMatch(userPrivilege ->
+        hasMatchingContext(userPrivilege, serviceContextValue, hasContext));
+  }
+
+  /**
+   * Obtém os privilégios do usuário para a operação e funcionalidade.
+   */
+  private Collection<PrivilegeOperationDTO> getUserPrivileges(Operation operation, HasContext hasContext) {
+    return getCurrentContextDefinitions().definitions().getContext().stream()
+        .filter(context -> hasMatchingPrivilege(context, hasContext))
+        .filter(context -> hasMatchingOperation(context, operation))
+        .flatMap(context -> context.getPrivilegeOperations().stream())
+        .toList();
+  }
+
+  /**
+   * Verifica se a funcionalidade corresponde.
+   */
+  private boolean hasMatchingPrivilege(HasContextDefinitions.PrivilegeContext context, HasContext hasContext) {
+    return Objects.equals(context.getPrivilege().getName(), hasContext.getContextName());
+  }
+
+  /**
+   * Verifica se a operação corresponde às operações privilegiadas.
+   */
+  private boolean hasMatchingOperation(HasContextDefinitions.PrivilegeContext context, Operation operation) {
+    return context.getPrivilegeOperations().stream()
+        .map(PrivilegeOperationDTO::getOperation)
+        .anyMatch(op -> Objects.equals(operation, op));
+  }
+
+  /**
+   * Verifica se o privilégio do usuário tem contexto válido para acesso.
+   * Retorna true se: não há restrição de contexto OU se algum contexto corresponde.
+   */
+  private boolean hasMatchingContext(PrivilegeOperationDTO userPrivilege,
+                                     Map<String, String> serviceContextValue,
+                                     HasContext hasContext) {
+    Collection<PrivilegeOperationContextDTO> relevantContexts = userPrivilege.getContext().stream()
+        .filter(c -> serviceContextValue.containsKey(c.getContextKey()))
+        .toList();
+
+    // Sem restrição de contexto
+    if (relevantContexts.isEmpty()) {
+      return true;
+    }
+
+    // Verifica se algum contexto corresponde
+    return relevantContexts.stream().anyMatch(userContext ->
+        userContext.getValues().stream()
+            .anyMatch(userContextValue -> {
+              String contextKey = userContext.getContextKey();
+              return hasContext.matches(contextKey,
+                                        serviceContextValue.get(contextKey),
+                                        userContextValue);
+            }));
   }
 
   default void enableAll(boolean enabled) {

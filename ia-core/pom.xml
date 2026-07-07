@@ -79,11 +79,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
@@ -282,10 +277,16 @@
 		</repository>
 	</repositories>
     <modules>
+        <module>ia-core-test</module>
+        <module>ia-core-model-test</module>
         <module>ia-core-model</module>
+        <module>ia-core-service-model-test</module>
         <module>ia-core-service-model</module>
+        <module>ia-core-service-test</module>
         <module>ia-core-service</module>
+        <module>ia-core-rest-test</module>
         <module>ia-core-rest</module>
+        <module>ia-core-view-test</module>
         <module>ia-core-view</module>
         <module>ia-core-grammar</module>
         <module>ia-core-nlp</module>
@@ -303,7 +304,6 @@
         <module>ia-core-quartz-service-model</module>
         <module>ia-core-quartz-service</module>
         <module>ia-core-quartz-view</module>
-        <module>ia-core-test</module>
         <module>ia-core-communication-model</module>
         <module>ia-core-communication-service-model</module>
         <module>ia-core-communication-service</module>

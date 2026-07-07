@@ -8,6 +8,7 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 import com.ia.core.service.validators.IServiceValidator;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Israel Araújo
  * @since 1.0.0
  */
+@Component
 public class AgenteServiceConfig
   extends DefaultCrudBaseServiceConfig<Agente, AgenteDTO> {
 

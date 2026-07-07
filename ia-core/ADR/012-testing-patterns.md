@@ -149,12 +149,53 @@ class UsuarioControllerTest {
 | Integração | `IT.java` | `src/test/java` | `-Pintegration-tests` |
 | E2E | `E2ETest.java` | `src/test/java` | manual |
 
-**Módulo ia-core-test**:
-- Contém apenas classes base para testes (BaseUnitTest, BaseIntegrationTest, etc.)
-- Não contém testes de domínio específicos
-- Fornece infraestrutura reutilizável para todos os projetos
+### 6.1. Arquitetura de Módulos de Teste (Layered Test Modules)
 
-### 6.1. Classes Base de Teste (Abstract Test Base Classes)
+**Decisão**: Criar módulos de teste separados em camadas para evitar círculos de dependência
+
+**Justificativa**:
+- Classes base de teste estavam em `src/main/java` dos módulos de produção causando problemas de compilação
+- Círculo de dependência: módulos de produção dependiam de `ia-core-test`, mas `ia-core-test` precisaria depender deles para classes específicas
+- Módulos de teste em camadas permitem importar apenas o que é necessário para cada tipo de teste
+
+**Hierarquia de Módulos de Teste**:
+
+| Módulo | Packaging | Depende de | Descrição |
+|--------|-----------|-----------|-----------|
+| `ia-core-test` | jar | nenhum | Classes base para testes (Instancio, JUnit 5, AssertJ, Mockito) |
+| `ia-core-model-test` | jar | ia-core-test | Classes base para testes de modelo (CoreBaseUnitTest) |
+| `ia-core-service-model-test` | jar | ia-core-test | Classes base para testes de DTOs (CoreDTOUnitTest) |
+| `ia-core-service-test` | jar | ia-core-service-model-test | Classes base para testes de serviço, repositório, mapper (CoreServiceBase, CoreIntegrationBase) |
+| `ia-core-rest-test` | jar | ia-core-service-test | Classes base para testes de API (MockMvc) |
+| `ia-core-view-test` | jar | ia-core-service-model-test | Classes base para testes de view (Vaadin), E2E (TestBench, Selenium) |
+
+**Classes Base por Módulo**:
+
+##### ia-core-test (raiz)
+- `com.ia.test.CoreBaseUnitTest` - Base class for unit tests, provides Instancio fixture pattern
+
+##### ia-core-model-test
+- `com.ia.test.model.CoreModelUnitTest` - Delegate para CoreBaseUnitTest (backward compatibility)
+
+##### ia-core-service-model-test
+- `com.ia.test.dto.CoreDTOUnitTest` - Base class for DTO tests, extends CoreBaseUnitTest
+
+##### ia-core-service-test
+- `com.ia.test.service.CoreServiceBase` - Base for service layer unit tests (Mockito)
+- `com.ia.test.service.CoreIntegrationBase` - Base for integration tests (TestContainers PostgreSQL)
+- `com.ia.test.service.CoreAbstractRepositoryIT` - Base for repository integration tests
+
+##### ia-core-rest-test
+- Classes de teste de API (MockMvc) - *A ser implementado*
+
+##### ia-core-view-test
+- `com.ia.core.view.CoreVaadinViewBase` - Base for Vaadin view tests (mockado, sem servidor)
+- `com.ia.core.view.CoreBaseVaadinViewTest` - Base for Vaadin view tests (ambiente mockado simples)
+- `com.ia.core.view.CoreVaadinManagerBase` - Base for Vaadin manager/dialog tests
+- `com.ia.core.view.CoreE2EBase` - Base for end-to-end tests (TestBench/Selenium)
+- `com.ia.core.view.CoreBaseE2ETest` - Base for E2E tests com SpringBootTest
+
+### 6.2. Classes Base de Teste (Abstract Test Base Classes)
 
 **Decisão**: Classes base de teste devem seguir nomenclatura específica e serem sinalizadas para não serem executadas como testes
 
@@ -169,22 +210,22 @@ class UsuarioControllerTest {
 
 **Padrão Recomendado**: Usar sufixo `Base` ou `Abstract` em vez de `Test`
 
-| Tipo Atual | Nomenclatura Recomendada | Exemplo |
-|------------|-------------------------|---------|
-| CoreBaseServiceTest | CoreServiceBase | CoreServiceBase |
-| CoreBaseAPITest | CoreAPIBase | CoreAPIBase |
-| CoreBaseIntegrationTest | CoreIntegrationBase | CoreIntegrationBase |
-| CoreBaseE2ETest | CoreE2EBase | CoreE2EBase |
-| CoreBaseVaadinViewTest | CoreVaadinViewBase | CoreVaadinViewBase |
-| CoreBaseVaadinManagerTest | CoreVaadinManagerBase | CoreVaadinManagerBase |
-| AbstractBaseServiceTest | AbstractServiceBase | AbstractServiceBase |
-| BaseServiceTest | ServiceBase | ServiceBase |
+| Tipo | Nomenclatura Recomendada | Exemplo | Localização |
+|------------|-------------------------|---------|-------------|
+| Teste Unitário | `CoreBaseUnitTest` | CoreBaseUnitTest | ia-core-test |
+| Teste de DTO | `CoreDTOUnitTest` | CoreDTOUnitTest | ia-core-service-model-test |
+| Teste de Serviço | `CoreServiceBase` | CoreServiceBase | ia-core-service-test |
+| Teste de Integração | `CoreIntegrationBase` | CoreIntegrationBase | ia-core-service-test |
+| Teste de API REST | `CoreAPIBase` | CoreAPIBase | ia-core-rest-test |
+| Teste E2E | `CoreE2EBase` | CoreE2EBase | ia-core-view-test |
+| Teste Vaadin View | `CoreVaadinViewBase` | CoreVaadinViewBase | ia-core-view-test |
+| Teste Vaadin Manager | `CoreVaadinManagerBase` | CoreVaadinManagerBase | ia-core-view-test |
 
 **Regras de Nomenclatura**:
-1. **Sufixo `Base`**: Para classes base concretas que podem ser instanciadas
-2. **Sufixo `Abstract`**: Para classes abstratas que não podem ser instanciadas
-3. **Prefixo `Core`**: Para classes base compartilhadas entre múltiplos módulos (em ia-core-test)
-4. **Sem sufixo `Test`**: Para evitar que Maven Surefire tente executá-las
+1. **Sufixo `Base`**: Para classes base que fornecem infraestrutura comum
+2. **Prefixo `Core`**: Para classes base compartilhadas entre múltiplos módulos ia-core
+3. **Sem sufixo `Test`**: Para evitar que Maven Surefire tente executá-las
+4. **Anotação `@Disabled`**: Sempre adicionar para prevenir execução acidental
 
 **Sinalização de Não-Execução**:
 
@@ -272,7 +313,7 @@ public abstract class CoreServiceBase extends CoreBaseUnitTest {
 - **Manutenibilidade**: Fácil identificar onde adicionar novos testes
 - **Consistência**: Padrão uniforme em todos os módulos
 
-### 6.1. Organização de Test-Cases
+### 6.3. Organização de Test-Cases
 
 **Decisão**: Documentos de casos de teste (test-cases) devem ficar em `src/test/resources/test-cases` dentro de cada módulo de produção
 
@@ -290,6 +331,68 @@ public abstract class CoreServiceBase extends CoreBaseUnitTest {
 - Use o padrão: `<NomeDaClasse>-<Camada>-<Cenário>.md`
 - Exemplo: `FlywayExecution-Service-Layer-migracao-sucesso.md`
 - Caso o teste cubra múltiplos cenários da mesma classe e camada, use `<NomeDaClasse>-<Camada>.md`
+
+### 6.4. Guia de Migração
+
+**Decisão**: Migração dos módulos existentes para utilizar os novos módulos de teste em camadas
+
+**Para migrar os módulos existentes**:
+
+```xml
+<!-- Antes (ia-core-test genérico) -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Depois - Escolha o módulo apropriado conforme a camada -->
+```
+
+**Dependências por Tipo de Teste**:
+
+| Tipo de Teste | Módulo de Teste | Exemplo de Uso |
+|--------------|-----------------|---------------|
+| Testes Unitários Genéricos | `ia-core-model-test` | Testes de classes utilitárias |
+| Testes de DTO | `ia-core-service-model-test` | Testes que estendem CoreDTOUnitTest |
+| Testes de Serviço | `ia-core-service-test` | Testes que estendem CoreServiceBase |
+| Testes de Integração | `ia-core-service-test` | Testes que estendem CoreIntegrationBase |
+| Testes de API REST (MockMvc) | `ia-core-rest-test` | Testes de controllers |
+| Testes Vaadin View | `ia-core-view-test` | Testes que estendem CoreVaadinViewBase |
+| Testes Vaadin Manager | `ia-core-view-test` | Testes que estendem CoreVaadinManagerBase |
+| Testes E2E | `ia-core-view-test` | Testes que estendem CoreE2EBase |
+
+**Exemplo de configuração Maven para módulos de produção**:
+
+```xml
+<!-- Para módulos de modelo (ia-core-model, ia-core-*-model) -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-model-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Para módulos de service (ia-core-service, ia-core-*-service) -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-service-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Para módulos de rest (ia-core-rest, ia-core-*-rest) -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-rest-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Para módulos de view (ia-core-view, ia-core-*-view) -->
+<dependency>
+    <groupId>com.ia</groupId>
+    <artifactId>ia-core-view-test</artifactId>
+    <scope>test</scope>
+</dependency>
+```
 
 ### 7. Perfis de Teste
 
@@ -1575,12 +1678,17 @@ mvn test jacoco:report
 - ✅ Geração automática de dados de teste reduz boilerplate
 - ✅ Testes criados simultaneamente com classes previnem esquecimentos
 - ✅ Cobertura de filtros e SearchRequest previne problemas de segurança e performance
+- ✅ **Arquitetura de Módulos de Teste em Camadas**: Elimina círculos de dependência ao separar classes base por camada de teste
+- ✅ **Dependências Enxutas**: Cada módulo de produção importa apenas o módulo de teste necessário para sua camada
+- ✅ **Classes Base Especializadas**: Ia-core-view-test fornece suporte a Vaadin TestBench e Selenium para testes E2E
+- ✅ **Reusabilidade**: Classes base compartilhadas entre todos os módulos ia-core-* sem acoplamento direto
 
 ### Negativas
 - ⚠️ Curva de aprendizado inicial
 - ⚠️ Tempo adicional para escrever testes
 - ⚠️ Manutenção dos testes junto com código
 - ⚠️ Dependência adicional (Instancio) no projeto
+- ⚠️ Configuração inicial dos módulos de teste em camadas
 
 ## Implementação
 
@@ -1784,6 +1892,7 @@ Módulo de serviço contendo lógica de negócio e operações CRUD padrão.
 | 8.0 | 2026-06-18 | Adição de fluxo de desenvolvimento orientado a casos de uso e testes, critérios de tipos de testes por módulo, estrutura centralizada de CDUs e integração com README.md dos módulos. |
 | 9.0 | 2026-06-18 | Atualização da seção 19 sobre Cucumber para incluir integração com CDUs (ADR-053), exemplos de feature files e step definitions, e critérios de quando usar/não usar Cucumber. |
 | 10.0 | 2026-06-18 | Atualização da seção 16 sobre JaCoCo para incluir instruções de execução de testes por módulo individualmente, configuração detalhada do plugin e critério de aceite de que o módulo não deve ser considerado completo até atingir 85% de cobertura. |
+| 11.0 | 2026-07-15 | Atualização da seção 6 sobre arquitetura de módulos de teste em camadas (ia-core-*-test). Documentação das classes base por módulo e guia de migração. |
 
 ## Referências
 - Tomar como base o documento /referencias/testes.txt

@@ -1,5 +1,6 @@
 package com.ia.core.resilience4j.aspect;
 
+import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.dto.ResilienceContext;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
 import io.github.resilience4j.retry.Retry;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -23,8 +24,8 @@ import java.util.function.Supplier;
  * <p>Princípios SOLID aplicados:</p>
  * <ul>
  *   <li><b>Single Responsibility</b>: Apenas lida com Retry</li>
- *   <li><b>Open/Closed</b>: Extensível via interface ResilienceStrategyHandler</li>
- *   <li><b>Liskov Substitution</b>: Implementa ResilienceStrategyHandler<Retry></li>
+ *   <li><b>Open/Closed</b>: Extensível via herança da classe abstrata</li>
+ *   <li><b>Liskov Substitution</b>: Estende AbstractResilienceStrategyHandler</li>
  *   <li><b>Interface Segregation</b>: Interface mínima necessária</li>
  *   <li><b>Dependency Inversion</b>: Depende de ResilienceContext (abstração)</li>
  * </ul>
@@ -34,7 +35,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Component
-public class RetryStrategyHandler implements ResilienceStrategyHandler<Retry> {
+public class RetryStrategyHandler extends AbstractResilienceStrategyHandler<Retry> {
 
     /**
      * Creates or resolves a Retry instance for the given context.
@@ -51,28 +52,23 @@ public class RetryStrategyHandler implements ResilienceStrategyHandler<Retry> {
      */
     @Override
     public Retry resolve(ResilienceContext context) {
-        ResilienceProfile profile = Objects.requireNonNull(context, "context must not be null").getProfile();
-        com.ia.core.resilience4j.annotation.Resilient annotation = context.getAnnotation();
+        ProfileAnnotation data = extractProfileAndAnnotation(context);
+        ResilienceProfile profile = data.profile();
+        Resilient annotation = data.annotation();
 
         String name = profile.getName() + "-" + context.getMethod().getName() + "-retry";
 
         RetryConfig config = RetryConfig.custom()
-                .maxAttempts(
-                        annotation.maxRetryAttempts() >= 0
-                                ? annotation.maxRetryAttempts()
-                                : profile.getMaxRetryAttempts())
+                .maxAttempts(getIntValue(annotation.maxRetryAttempts(),
+                        profile.getMaxRetryAttempts()))
                 .waitDuration(Duration.ofMillis(
-                        annotation.retryInitialWait() >= 0
-                                ? annotation.retryInitialWait()
-                                : profile.getRetryInitialWaitMs()))
-                .intervalFunction(
-                        annotation.retryBackoffMultiplier() >= 0
-                                ? IntervalFunction.ofExponentialBackoff(
-                                        profile.getRetryInitialWaitMs(),
-                                        annotation.retryBackoffMultiplier())
-                                : IntervalFunction.ofExponentialBackoff(
-                                        profile.getRetryInitialWaitMs(),
-                                        profile.getRetryBackoffMultiplier()))
+                        getLongValue(annotation.retryInitialWait(),
+                                profile.getRetryInitialWaitMs())))
+                .intervalFunction(IntervalFunction.ofExponentialBackoff(
+                        getLongValue(annotation.retryInitialWait(),
+                                profile.getRetryInitialWaitMs()),
+                        getDoubleValue(annotation.retryBackoffMultiplier(),
+                                profile.getRetryBackoffMultiplier())))
                 .retryExceptions(IOException.class, TimeoutException.class)
                 .build();
 
@@ -91,8 +87,14 @@ public class RetryStrategyHandler implements ResilienceStrategyHandler<Retry> {
      * @return o resultado da execução
      */
     @Override
-    public Object execute(ResilienceContext context, Supplier<Object> next){
-        Retry retry = resolve(Objects.requireNonNull(context, "context must not be null"));
-        return retry.executeSupplier(Objects.requireNonNull(next, "next must not be null"));
+    public Object execute(ResilienceContext context, Supplier<Object> next) {
+        Retry retry = resolve(context);
+        try {
+            return retry.executeSupplier(() ->
+                CompletableFuture.supplyAsync(next::get)
+            ).join();
+        } catch (Exception e) {
+            throw new RuntimeException("Retry execution failed: " + e.getLocalizedMessage(), e);
+        }
     }
 }

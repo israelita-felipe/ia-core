@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.ia.core</groupId>
 	<artifactId>ia-core-service-model</artifactId>
-	<name>service-core-model</name>
+	<name>ia-core-service-model</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.ia.core</groupId>
@@ -35,14 +35,15 @@
 			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
-		<!-- Test dependencies -->
+		<!-- Test utilities for DTOs - depends on ia-core-service-model-test which provides CoreDTOUnitTest -->
 		<dependency>
 			<groupId>com.ia</groupId>
-			<artifactId>ia-core-test</artifactId>
+			<artifactId>ia-core-service-model-test</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 
-  </dependencies>
+	</dependencies>
 	<build>
 		<pluginManagement>
 			<plugins>

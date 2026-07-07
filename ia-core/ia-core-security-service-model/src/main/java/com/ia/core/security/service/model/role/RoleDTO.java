@@ -44,8 +44,8 @@ public class RoleDTO
   /**
    * Nome do papel
    */
-  @NotNull(message = "validation.role.name.required")
-  @Size(min = 3, max = 100, message = "validation.role.name.size")
+  @NotNull(message = "{validation.role.name.required}")
+  @Size(min = 3, max = 100, message = "{validation.role.name.size}")
   private String name;
 
   @Default
@@ -101,20 +101,26 @@ public class RoleDTO
   @Override
   public RoleDTO cloneObject() {
     return toBuilder()
-        .users(new HashSet<>(getUsers().stream().map(UserDTO::cloneObject)
-            .toList()))
-        .privileges(new HashSet<>(getPrivileges().stream()
-            .map(RolePrivilegeDTO::cloneObject).toList()))
+        .users(users != null ? new HashSet<>(getUsers().stream()
+            .filter(Objects::nonNull)
+            .map(UserDTO::cloneObject)
+            .toList()) : new HashSet<>())
+        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+            .filter(Objects::nonNull)
+            .map(RolePrivilegeDTO::cloneObject).toList()) : new HashSet<>())
         .build();
   }
 
   @Override
   public RoleDTO copyObject() {
     return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .users(new HashSet<>(getUsers().stream().map(UserDTO::copyObject)
-            .toList()))
-        .privileges(new HashSet<>(getPrivileges().stream()
-            .map(RolePrivilegeDTO::copyObject).toList()))
+        .users(users != null ? new HashSet<>(getUsers().stream()
+            .filter(Objects::nonNull)
+            .map(UserDTO::copyObject)
+            .toList()) : new HashSet<>())
+        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+            .filter(Objects::nonNull)
+            .map(RolePrivilegeDTO::copyObject).toList()) : new HashSet<>())
         .build();
   }
 
@@ -144,5 +150,17 @@ public class RoleDTO
   @Override
   public String toString() {
     return String.format("%s [%s]", name, privileges);
+  }
+
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+    public static final String NAME = "name";
+    public static final String USERS = "users";
+    public static final String PRIVILEGES = "privileges";
+    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+
+    public static Set<String> values() {
+      return Set.of(NAME, USERS, PRIVILEGES, PROPERTY_CHANGE_SUPPORT);
+    }
   }
 }

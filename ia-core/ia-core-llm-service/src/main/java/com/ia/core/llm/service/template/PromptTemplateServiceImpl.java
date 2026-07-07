@@ -32,6 +32,8 @@ public class PromptTemplateServiceImpl implements PromptTemplateService {
 
   @Override
   public Prompt createSimplePrompt(String document, String text) {
+    if (document == null) document = "";
+    if (text == null) text = "";
     PromptTemplate pt = new PromptTemplate("{document}\n\n{text}");
     pt.add("document", document);
     pt.add("text", text);
@@ -41,6 +43,11 @@ public class PromptTemplateServiceImpl implements PromptTemplateService {
   @Override
   public Prompt createSystemPrompt(String document, String text, String systemTemplate,
       FinalidadePromptEnum finalidade, Map<String, Object> params) {
+    if (document == null) document = "";
+    if (text == null) text = "";
+    if (systemTemplate == null) systemTemplate = "";
+    if (params == null) params = Map.of();
+
     SystemPromptTemplate promptTemplate = new SystemPromptTemplate(systemTemplate);
 
     promptTemplate.add(
@@ -58,29 +65,41 @@ public class PromptTemplateServiceImpl implements PromptTemplateService {
 
   @Override
   public Message createSystemMessage(String systemTemplate, Map<String, Object> params) {
+    if (systemTemplate == null) systemTemplate = "";
+    if (params == null) params = Map.of();
     SystemPromptTemplate promptTemplate = new SystemPromptTemplate(systemTemplate);
     return promptTemplate.createMessage(params);
   }
 
   @Override
   public PromptTemplate createPromptTemplate(String templateString) {
+    if (templateString == null) templateString = "";
     return new PromptTemplate(templateString);
   }
 
   @Override
   public String processTemplate(String templateId, Map<String, Object> params) {
     String templateContent = getTemplateById(templateId);
+    if (templateContent == null) {
+      log.warn("Template retornado é null: {}", templateId);
+      return "";
+    }
     PromptTemplate promptTemplate = new PromptTemplate(templateContent);
     return promptTemplate.render(params);
   }
 
   @Override
   public String getTemplateById(String templateId) {
+    if (templateRepository == null) {
+      log.error("TemplateRepository não configurado");
+      throw new IllegalArgumentException("TemplateRepository não configurado");
+    }
     Optional<Template> template = templateRepository.findByIdentificador(templateId);
     if (template.isEmpty()) {
       log.warn("Template não encontrado: {}", templateId);
       throw new IllegalArgumentException("Template não encontrado: " + templateId);
     }
-    return template.get().getConteudo();
+    String conteudo = template.get().getConteudo();
+    return conteudo != null ? conteudo : "";
   }
 }

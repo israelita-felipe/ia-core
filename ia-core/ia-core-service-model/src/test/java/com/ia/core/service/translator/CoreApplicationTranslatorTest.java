@@ -16,7 +16,7 @@ class CoreApplicationTranslatorTest {
   void testConstants() {
     assertThat(CoreApplicationTranslator.APPLICATION_NAME).isEqualTo("application.name");
     assertThat(CoreApplicationTranslator.DETALHAR).isEqualTo("detalhar");
-    assertThat(CoreApplicationTranslator.PESQUSIAR).isEqualTo("pesquisar");
+    assertThat(CoreApplicationTranslator.PESQUISAR).isEqualTo("pesquisar");
   }
 
   @Test
@@ -55,7 +55,7 @@ class CoreApplicationTranslatorTest {
     assertThat(CoreApplicationTranslator.INICIO).isEqualTo("inicio");
     assertThat(CoreApplicationTranslator.CANCELAR).isEqualTo("cancelar");
     assertThat(CoreApplicationTranslator.HOJE).isEqualTo("hoje");
-    assertThat(CoreApplicationTranslator.DEFAULT_ACTION).isEqualTo("action");
+    assertThat(CoreApplicationTranslator.DEFAULT_ACTION).isEqualTo("action.default");
     assertThat(CoreApplicationTranslator.FILTER).isEqualTo("filter");
     assertThat(CoreApplicationTranslator.REPORTS).isEqualTo("reports");
   }

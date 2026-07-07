@@ -37,7 +37,8 @@ public abstract class CoreAuthorizationManager
    */
   @Override
   public boolean isUpdateEnabled() {
-    return updateEnabled.get();
+    Boolean value = updateEnabled.get();
+    return value != null && value;
   }
 
   /**
@@ -53,7 +54,8 @@ public abstract class CoreAuthorizationManager
    */
   @Override
   public boolean isDeleteEnabled() {
-    return deleteEnabled.get();
+    Boolean value = deleteEnabled.get();
+    return value != null && value;
   }
 
   /**
@@ -69,7 +71,8 @@ public abstract class CoreAuthorizationManager
    */
   @Override
   public boolean isCreateEnabled() {
-    return createEnabled.get();
+    Boolean value = createEnabled.get();
+    return value != null && value;
   }
 
   /**
@@ -85,7 +88,8 @@ public abstract class CoreAuthorizationManager
    */
   @Override
   public boolean isReadEnabled() {
-    return readEnabled.get();
+    Boolean value = readEnabled.get();
+    return value != null && value;
   }
 
   /**

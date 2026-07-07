@@ -19,4 +19,18 @@ public record AnaliseInferenciaDTO(boolean consistente,
                                List<AxiomaDTO> axiomasInferidos,
                                int totalInferencias) {
 
+  /**
+   * Constantes dos campos do DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
+    public static final String CONSISTENTE = "consistente";
+    public static final String INCONSISTENCIAS = "inconsistencias";
+    public static final String AXIOMAS_INFERIDOS = "axiomasInferidos";
+    public static final String TOTAL_INFERENCIAS = "totalInferencias";
+
+    public static java.util.Set<String> values() {
+      return java.util.Set.of(CONSISTENTE, INCONSISTENCIAS, AXIOMAS_INFERIDOS, TOTAL_INFERENCIAS);
+    }
+  }
 }

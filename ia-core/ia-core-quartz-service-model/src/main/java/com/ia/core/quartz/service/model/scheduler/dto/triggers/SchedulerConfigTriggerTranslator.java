@@ -62,13 +62,21 @@ public final class SchedulerConfigTriggerTranslator {
     }
 
     /**
-     * Success/error message keys
+     * Error message keys
+     */
+    public static final class ERROR {
+        public static final String NOT_FOUND = "scheduler.trigger.error.notfound";
+        public static final String DUPLICATE = "scheduler.trigger.error.duplicate";
+    }
+
+    /**
+     * Success message keys
      */
     public static final class MESSAGE {
-        public static final String CRIADO_SUCESSO = "scheduler.message.trigger.criado.sucesso";
-        public static final String ATUALIZADO_SUCESSO = "scheduler.message.trigger.atualizado.sucesso";
-        public static final String DELETADO_SUCESSO = "scheduler.message.trigger.deletado.sucesso";
-        public static final String DISPARADO_SUCESSO = "scheduler.message.trigger.disparado.sucesso";
+        public static final String CREATED = "scheduler.trigger.message.created";
+        public static final String UPDATED = "scheduler.trigger.message.updated";
+        public static final String DELETED = "scheduler.trigger.message.deleted";
+        public static final String TRIGGERED = "scheduler.trigger.message.triggered";
     }
 
     /**

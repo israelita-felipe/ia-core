@@ -98,38 +98,11 @@
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-spring-boot3</artifactId>
 		</dependency>
-		<!-- Vaadin TestBench para testes E2E (ADR-039) -->
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-testbench-junit5</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Spring Boot Test for E2E tests with LocalServerPort -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Spring Boot Autoconfigure for E2E test application -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<!-- ia-core-test for base test classes -->
 		<dependency>
 			<groupId>com.ia</groupId>
-			<artifactId>ia-core-test</artifactId>
+			<artifactId>ia-core-view-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

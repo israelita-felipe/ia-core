@@ -1,6 +1,6 @@
 package com.ia.core.communication.service.model.enviomensagem.dto;
 
-import com.ia.core.service.dto.CoreBaseDTOUnitTest;
+import com.ia.test.dto.CoreDTOUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Testes para a classe EnvioMensagemResponseDTO.
  */
 @DisplayName("Testes de EnvioMensagemResponseDTO")
-class EnvioMensagemResponseDTOTestCore extends CoreBaseDTOUnitTest<EnvioMensagemResponseDTO> {
+class EnvioMensagemResponseDTOTestCore extends CoreDTOUnitTest<EnvioMensagemResponseDTO> {
 
   @Override
   protected Class<?> getDtoInterface() {
