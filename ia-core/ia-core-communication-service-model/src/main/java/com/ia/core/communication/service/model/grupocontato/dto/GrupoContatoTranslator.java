@@ -8,22 +8,12 @@ package com.ia.core.communication.service.model.grupocontato.dto;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.communication.service.model.grupocontato.dto.GrupoContatoDTO
+ * @see GrupoContatoDTO
  */
 public final class GrupoContatoTranslator {
 
     private GrupoContatoTranslator() {
         // Utility class
-    }
-
-    /**
-     * Help text i18n keys
-     */
-    public static final class HELP {
-        public static final String GRUPO_CONTATO = "grupo.contato.help";
-        public static final String NOME = "grupo.contato.help.nome";
-        public static final String DESCRICAO = "grupo.contato.help.descricao";
-        public static final String ATIVO = "grupo.contato.help.ativo";
     }
 
     /**
@@ -36,11 +26,13 @@ public final class GrupoContatoTranslator {
     }
 
     /**
-     * Business rule message keys
+     * Help text i18n keys
      */
-    public static final class RULE {
-        public static final String GRUPO_SEM_CONTATOS = "grupo.contato.rule.grupo.sem.contatos";
-        public static final String CONTATO_DUPLICADO = "grupo.contato.rule.contato.duplicado";
+    public static final class HELP {
+        public static final String GRUPO_CONTATO = "grupo.contato.help";
+        public static final String NOME = "grupo.contato.help.nome";
+        public static final String DESCRICAO = "grupo.contato.help.descricao";
+        public static final String ATIVO = "grupo.contato.help.ativo";
     }
 
     /**
@@ -61,6 +53,14 @@ public final class GrupoContatoTranslator {
     }
 
     /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String GRUPO_SEM_CONTATOS = "grupo.contato.rule.grupo.sem.contatos";
+        public static final String CONTATO_DUPLICADO = "grupo.contato.rule.contato.duplicado";
+    }
+
+    /**
      * Domain event message keys
      */
     public static final class EVENT {
@@ -70,15 +70,11 @@ public final class GrupoContatoTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String GRUPO_CONTATO_CLASS = GrupoContatoDTO.class.getCanonicalName();
-
-    /**
      * Field name constants
      */
     public static final String GRUPO_CONTATO = "grupo.contato";
     public static final String NOME = "grupo.contato.nome";
     public static final String DESCRICAO = "grupo.contato.descricao";
     public static final String ATIVO = "grupo.contato.ativo";
+    public static final String GRUPO_CONTATO_CLASS = GrupoContatoDTO.class.getCanonicalName();
 }

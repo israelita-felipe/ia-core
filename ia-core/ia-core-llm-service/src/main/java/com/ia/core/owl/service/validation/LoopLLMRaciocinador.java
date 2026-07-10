@@ -1,6 +1,6 @@
 package com.ia.core.owl.service.validation;
 
-import com.ia.core.llm.service.model.ontologia.FeedbackRaciocinador;
+import com.ia.core.llm.service.model.ontologia.FeedbackRaciocinadorDTO;
 import com.ia.core.owl.service.DefaultOwlService;
 import com.ia.core.owl.service.LLMCommunicator;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
@@ -42,7 +42,7 @@ public class LoopLLMRaciocinador {
    * @param erroValidacao erro de validação
    * @return feedback com axioma corrigido (se bem-sucedido)
    */
-  public FeedbackRaciocinador corrigirAxioma(String sessionId,AxiomaDTO axiomaOriginal,
+  public FeedbackRaciocinadorDTO corrigirAxioma(String sessionId,AxiomaDTO axiomaOriginal,
                                            String descricaoOriginal,
                                            String erroValidacao) {
     return corrigirAxioma(sessionId, axiomaOriginal, descricaoOriginal, erroValidacao, MAX_ITERATIONS);
@@ -57,7 +57,7 @@ public class LoopLLMRaciocinador {
    * @param maxIterações número máximo de iterações
    * @return feedback com axioma corrigido (se bem-sucedido)
    */
-  public FeedbackRaciocinador corrigirAxioma(String sessionId,AxiomaDTO axiomaOriginal,
+  public FeedbackRaciocinadorDTO corrigirAxioma(String sessionId,AxiomaDTO axiomaOriginal,
                                            String descricaoOriginal,
                                            String erroValidacao,
                                            int maxIterações) {
@@ -87,7 +87,7 @@ public class LoopLLMRaciocinador {
         // Por enquanto, assumimos sucesso se a descrição foi extraída
 
         log.info("Axioma corrigido com sucesso na iteração {}", i + 1);
-        return FeedbackRaciocinador.builder()
+        return FeedbackRaciocinadorDTO.builder()
             .axiomaValido(true)
             .axiomaCorrigido(descricaoAtual)
             .explicacao("Axioma corrigido com sucesso")
@@ -103,7 +103,7 @@ public class LoopLLMRaciocinador {
 
     // Se chegou aqui, todas as iterações falharam
     log.warn("Loop LLM-Reasoner falhou após {} iterações", maxIterações);
-    return FeedbackRaciocinador.builder()
+    return FeedbackRaciocinadorDTO.builder()
         .axiomaValido(false)
         .erroConsistencia(erroValidacao)
         .explicacao("Não foi possível corrigir o axioma após " + maxIterações + " iterações")

@@ -8,22 +8,12 @@ package com.ia.core.communication.service.model.contatomensagem.dto;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.communication.service.model.contatomensagem.dto.ContatoMensagemDTO
+ * @see ContatoMensagemDTO
  */
 public final class ContatoMensagemTranslator {
 
     private ContatoMensagemTranslator() {
         // Utility class
-    }
-
-    /**
-     * Help text i18n keys
-     */
-    public static final class HELP {
-        public static final String CONTATO_MENSAGEM = "contato.mensagem.help";
-        public static final String GRUPO_CONTATO = "contato.mensagem.help.grupo.contato";
-        public static final String TELEFONE = "contato.mensagem.help.telefone";
-        public static final String NOME = "contato.mensagem.help.nome";
     }
 
     /**
@@ -34,6 +24,16 @@ public final class ContatoMensagemTranslator {
         public static final String TELEFONE_NOT_BLANK = "contato.mensagem.validation.telefone.not.blank";
         public static final String TELEFONE_SIZE = "contato.mensagem.validation.telefone.size";
         public static final String NOME_SIZE = "contato.mensagem.validation.nome.size";
+    }
+
+    /**
+     * Help text i18n keys
+     */
+    public static final class HELP {
+        public static final String CONTATO_MENSAGEM = "contato.mensagem.help";
+        public static final String GRUPO_CONTATO = "contato.mensagem.help.grupo.contato";
+        public static final String TELEFONE = "contato.mensagem.help.telefone";
+        public static final String NOME = "contato.mensagem.help.nome";
     }
 
     /**
@@ -70,15 +70,11 @@ public final class ContatoMensagemTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String CONTATO_MENSAGEM_CLASS = ContatoMensagemDTO.class.getCanonicalName();
-
-    /**
      * Field name constants
      */
     public static final String CONTATO_MENSAGEM = "contato.mensagem";
     public static final String GRUPO_CONTATO = "contato.mensagem.grupo.contato";
     public static final String TELEFONE = "contato.mensagem.telefone";
     public static final String NOME = "contato.mensagem.nome";
+    public static final String CONTATO_MENSAGEM_CLASS = ContatoMensagemDTO.class.getCanonicalName();
 }

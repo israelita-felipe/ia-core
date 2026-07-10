@@ -6,7 +6,7 @@
 
 ## Contexto
 
-No desenvolvimento de aplicações com interfaces gráficas (Vaadin) e filtros de busca dinâmicos, é necessário referenciar os nomes dos campos de forma consistente e sem usar reflection. O projeto já utiliza uma abordagem onde DTOs possuem uma classe aninhada `CAMPOS` com constantes estáticas `String` para cada atributo.
+No desenvolvimento de aplicações com interfaces gráficas (Vaadin) e filtros de busca dinâmicos, é necessário referenciar os nomes dos campos de forma consistente e sem usar reflection. O projeto já utiliza uma abordão onde DTOs possuem uma classe aninhada `CAMPOS` com constantes estáticas `String` para cada atributo.
 
 Esta prática foi identificada na classe `AbstractBaseEntityDTO` e implementada em DTOs específicos como `PessoaDTO`. O padrão evita:
 
@@ -14,6 +14,16 @@ Esta prática foi identificada na classe `AbstractBaseEntityDTO` e implementada 
 - Strings hardcoded espalhadas pelo código
 - Inconsistências entre nomes de campos em diferentes partes do sistema
 - Dificuldades na manutenção quando campos são renomeados
+
+### Regra de Nomenclatura DTO
+
+**TODO DTO DEVE IMPLEMENTAR A INTERFACE DTO<> DIRETAMENTE OU INDIRETAMENTE E DEVE TER O SUFIXO `DTO` NO NOME DO ARQUIVO E DA CLASSE.**
+
+Esta regra aplica-se a:
+- DTOs simples: `PessoaDTO`, `EventoDTO`
+- SearchRequestDTOs: `PessoaSearchRequestDTO`, `EventoSearchRequestDTO`
+- Classes que extendem `AbstractDTO`, `AbstractBaseEntityDTO` ou `SearchRequestDTO`
+- Classes que implementam diretamente a interface `DTO<T>`
 
 ## Decisão
 

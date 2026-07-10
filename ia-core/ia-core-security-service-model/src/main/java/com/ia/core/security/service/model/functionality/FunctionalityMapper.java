@@ -9,18 +9,25 @@ import org.mapstruct.Mapper;
 import java.util.Set;
 
 /**
- * Mapper for converting between Privilege/PrivilegeDTO and Functionality.
+ * Mapper para conversão entre entidades de privilégio e funcionalidades.
+ * <p>
+ * Fornece métodos para converter objetos {@link Privilege} e {@link PrivilegeDTO}
+ * em objetos {@link Functionality} que representam funcionalidades do sistema.
  *
  * @author Israel Araújo
+ * @see Functionality
+ * @see Privilege
+ * @see PrivilegeDTO
+ * @since 1.0.0
  */
 @Mapper(componentModel = "spring")
 public interface FunctionalityMapper {
 
   /**
-   * Converts a Privilege entity to a Functionality.
+   * Converte uma entidade Privilege para Functionality.
    *
-   * @param privilege the privilege entity
-   * @return the functionality
+   * @param privilege a entidade Privilege a ser convertida
+   * @return a funcionalidade correspondente
    */
   default Functionality toFunctionality(Privilege privilege) {
     if (privilege == null) {
@@ -45,10 +52,10 @@ public interface FunctionalityMapper {
   }
 
   /**
-   * Converts a PrivilegeDTO to a Functionality.
+   * Converte um DTO Privilege para Functionality.
    *
-   * @param privilegeDTO the privilege DTO
-   * @return the functionality
+   * @param privilegeDTO o DTO Privilege a ser convertido
+   * @return a funcionalidade correspondente
    */
   default Functionality toFunctionality(PrivilegeDTO privilegeDTO) {
     if (privilegeDTO == null) {

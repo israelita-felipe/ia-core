@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 import java.time.*;
 import java.util.*;
 /**
- * Classe que representa a entidade de domínio lib recur occurrence calculator.
+ * Implementação do calculador de ocorrências usando a biblioteca libRecur.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LibRecurOccurrenceCalculator
- * dentro do sistema.
+ * Fornece cálculo de ocorrências para regras de periodicidade baseado na
+ * especificação RFC 5545 (iCalendar).
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see OccurrenceCalculator
+ * @since 1.0.0
  */
-
 public class LibRecurOccurrenceCalculator
   implements OccurrenceCalculator {
 
@@ -28,7 +28,9 @@ public class LibRecurOccurrenceCalculator
   private static volatile LibRecurOccurrenceCalculator INSTANCE = null;
 
   /**
-   * @return {@link #INSTANCE}
+   * Retorna a instância singleton do calculador.
+   *
+   * @return a instância singleton
    */
   protected static LibRecurOccurrenceCalculator get() {
     if (INSTANCE == null) {
@@ -42,7 +44,7 @@ public class LibRecurOccurrenceCalculator
   }
 
   /**
-   *
+   * Construtor privado para padrão singleton.
    */
   private LibRecurOccurrenceCalculator() {
   }
@@ -195,8 +197,10 @@ public class LibRecurOccurrenceCalculator
   }
 
   /**
-   * @param p
-   * @return
+   * Cria um comparador para ordenação de DateTimes na zona da periodicidade.
+   *
+   * @param p a periodicidade
+   * @return comparador de DateTimes
    */
   public Comparator<? super DateTime> createDateTimeComparator(PeriodicidadeDTO p) {
     return (a, b) -> DateTimeAdapter

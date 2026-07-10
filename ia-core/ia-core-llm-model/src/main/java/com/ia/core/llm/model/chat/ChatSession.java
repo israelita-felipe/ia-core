@@ -31,73 +31,64 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString(callSuper = false)
 public class ChatSession
-  extends BaseEntity {
+    extends BaseEntity {
 
-  private static final long serialVersionUID = 5644976387280082130L;
+    public static final String TABLE_NAME = LLMModel.TABLE_PREFIX + "CHAT_SESSION";
+    public static final String SCHEMA_NAME = LLMModel.SCHEMA;
+    private static final long serialVersionUID = 5644976387280082130L;
+    /**
+     * Identificador único da sessão (UUID).
+     */
+    @Column(name = "session_id", unique = true, nullable = false, length = 100)
+    private String sessionId;
 
-  public static final String TABLE_NAME = LLMModel.TABLE_PREFIX + "CHAT_SESSION";
-  public static final String SCHEMA_NAME = LLMModel.SCHEMA;
+    /**
+     * Título da sessão.
+     */
+    @Column(name = "titulo", length = 200)
+    private String titulo;
 
-  /**
-   * Identificador único da sessão (UUID).
-   */
-  @Column(name = "session_id", unique = true, nullable = false, length = 100)
-  private String sessionId;
+    /**
+     * Data e hora de início da sessão.
+     */
+    @Column(name = "data_inicio", nullable = false)
+    private LocalDateTime dataInicio;
 
-  /**
-   * Título da sessão.
-   */
-  @Column(name = "titulo", length = 200)
-  private String titulo;
+    /**
+     * Data e hora de fim da sessão.
+     */
+    @Column(name = "data_fim")
+    private LocalDateTime dataFim;
 
-  /**
-   * Data e hora de início da sessão.
-   */
-  @Column(name = "data_inicio", nullable = false)
-  private LocalDateTime dataInicio;
+    /**
+     * Status da sessão.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    @Default
+    private ChatSessionStatus status = ChatSessionStatus.ATIVA;
 
-  /**
-   * Data e hora de fim da sessão.
-   */
-  @Column(name = "data_fim")
-  private LocalDateTime dataFim;
+    /**
+     * Agente associado à sessão.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agente_id", nullable = false)
+    private Agente agente;
 
-  /**
-   * Status da sessão.
-   */
-  @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = false, length = 20)
-  @Default
-  private ChatSessionStatus status = ChatSessionStatus.ATIVA;
+    /**
+     * ID do usuário que iniciou a sessão.
+     */
+    @Column(name = "usuario_id", length = 100)
+    private String usuarioId;
 
-  /**
-   * Agente associado à sessão.
-   */
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "agente_id", nullable = false)
-  private Agente agente;
+    /**
+     * Contexto de conversação associado à sessão (ontologia incremental).
+     * <p>
+     * Integrado de ContextoConversacao para gerenciamento de contexto e ontologia.
+     */
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "contexto_conversacao_id")
+    private ContextoConversacao contextoConversacao;
 
-  /**
-   * ID do usuário que iniciou a sessão.
-   */
-  @Column(name = "usuario_id", length = 100)
-  private String usuarioId;
 
-  /**
-   * Contexto de conversação associado à sessão (ontologia incremental).
-   * <p>
-   * Integrado de ContextoConversacao para gerenciamento de contexto e ontologia.
-   */
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "contexto_conversacao_id")
-  private ContextoConversacao contextoConversacao;
-
-  /**
-   * Status da sessão de chat.
-   */
-  public enum ChatSessionStatus {
-    ATIVA,
-    ENCERRADA,
-    PAUSADA
-  }
 }

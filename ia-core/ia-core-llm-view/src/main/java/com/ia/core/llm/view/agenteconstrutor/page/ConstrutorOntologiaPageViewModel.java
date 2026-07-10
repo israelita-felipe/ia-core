@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.agenteconstrutor.page;
 
-import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologia;
-import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologia;
+import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologiaDTO;
+import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologiaDTO;
 import com.ia.core.llm.view.agenteconstrutor.AgenteConstrutorManager;
 import com.ia.core.view.components.IViewModel;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ConstrutorOntologiaPageViewModel implements IViewModel {
 
   private final AgenteConstrutorManager manager;
-  private ResultadoConstrucaoOntologia resultadoAtual;
+  private ResultadoConstrucaoOntologiaDTO resultadoAtual;
   private String jobIdAtual;
 
   public ConstrutorOntologiaPageViewModel(AgenteConstrutorManager manager) {
     this.manager = manager;
   }
 
-  public void iniciarConstrucao(RequisicaoConstrucaoOntologia requisicao) {
+  public void iniciarConstrucao(RequisicaoConstrucaoOntologiaDTO requisicao) {
     // Na implementação completa, chamaria o serviço REST
   }
 
@@ -33,7 +33,7 @@ public class ConstrutorOntologiaPageViewModel implements IViewModel {
     // Na implementação completa, chamaria o serviço REST
   }
 
-  public ResultadoConstrucaoOntologia getResultadoAtual() {
+  public ResultadoConstrucaoOntologiaDTO getResultadoAtual() {
     return resultadoAtual;
   }
 

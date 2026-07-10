@@ -8,7 +8,7 @@ package com.ia.core.llm.service.model.template;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.llm.service.model.template.TemplateParameterDTO
+ * @see TemplateParameterDTO
  */
 public final class TemplateParameterTranslator {
 
@@ -25,29 +25,11 @@ public final class TemplateParameterTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String TEMPLATE_PARAMETER_CLASS = TemplateParameterDTO.class.getCanonicalName();
-
-    /**
-     * Field name constants
-     */
-    public static final String TEMPLATE_PARAMETER = "template.parameter";
-    public static final String NOME = "template.parameter.nome";
-
-    /**
      * Validation message keys
      */
     public static final class VALIDATION {
-        public static final String NOME_REQUIRED = "validation.template.parameter.nome.required";
-        public static final String NOME_SIZE = "validation.template.parameter.nome.size";
-    }
-
-    /**
-     * Business rule message keys
-     */
-    public static final class RULE {
-        public static final String NOME_DUPLICADO = "template.parameter.rule.nome.duplicado";
+        public static final String NOME_REQUIRED = "template.parameter.validation.nome.required";
+        public static final String NOME_SIZE = "template.parameter.validation.nome.size";
     }
 
     /**
@@ -63,6 +45,15 @@ public final class TemplateParameterTranslator {
      */
     public static final class MESSAGE {
         public static final String CREATED = "template.parameter.message.created";
+        public static final String UPDATED = "template.parameter.message.updated";
+        public static final String DELETED = "template.parameter.message.deleted";
+    }
+
+    /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String NOME_DUPLICADO = "template.parameter.rule.nome.duplicado";
     }
 
     /**
@@ -70,5 +61,17 @@ public final class TemplateParameterTranslator {
      */
     public static final class EVENT {
         public static final String PARAMETRO_CRIADO = "template.parameter.event.criado";
+        public static final String PARAMETRO_ATUALIZADO = "template.parameter.event.atualizado";
     }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String TEMPLATE_PARAMETER_CLASS = TemplateParameterDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String TEMPLATE_PARAMETER = "template.parameter";
+    public static final String NOME = "template.parameter.nome";
 }

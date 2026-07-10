@@ -7,19 +7,27 @@ import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 /**
- * Enumeração que representa a entidade de domínio recurrence rule adapter.
+ * Adaptador para conversão de RecorrenciaDTO para RecurrenceRule RFC 5545.
  * <p>
- * Define os valores possíveis para RecurrenceRuleAdapter no sistema.
+ * Converte as propriedades do DTO para a string de regra de recorrência
+ * no formato RFC 5545 (iCalendar).
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see RecorrenciaDTO
+ * @since 1.0.0
  */
-
 public class RecurrenceRuleAdapter {
 
   private static final DateTimeFormatter UNTIL_FORMATTER = DateTimeFormatter
       .ofPattern("yyyyMMdd");
 
+  /**
+   * Converte o DTO de recorrência para RecurrenceRule.
+   *
+   * @param regra o DTO de recorrência
+   * @return RecurrenceRule configurado ou null se regra for inválida
+   * @throws IllegalArgumentException se o formato da regra for inválido
+   */
   public static RecurrenceRule toRecurrenceRule(RecorrenciaDTO regra) {
     if (regra == null || regra.getFrequency() == null) {
       return null;
@@ -128,6 +136,13 @@ public class RecurrenceRuleAdapter {
     }
   }
 
+  /**
+   * Converte DayOfWeek para string no formato RFC 5545.
+   *
+   * @param dow o dia da semana
+   * @return string no formato RFC (MO, TU, WE, etc.)
+   * @throws IllegalArgumentException se o dia for inválido
+   */
   private static String toWeekdayStr(DayOfWeek dow) {
     switch (dow) {
     case MONDAY:

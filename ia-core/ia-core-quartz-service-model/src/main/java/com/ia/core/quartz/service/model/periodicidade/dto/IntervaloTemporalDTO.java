@@ -16,14 +16,18 @@ import java.util.Set;
 /**
  * DTO para intervalo temporal de eventos.
  * <p>
+ * Representa um intervalo de tempo (DTSTART/DTEND) conforme especificação RFC 5545 (iCalendar).
  * Suporta modelagem de eventos com:
  * <ul>
- * <li>Data e hora separadas</li>
- * <li>Eventos que passam da meia-noite</li>
- * <li>Eventos com apenas horário (sem data)</li>
+ * <li>Data e hora separadas para início e fim</li>
+ * <li>Eventos que passam da meia-noite (endDate diferente de startDate)</li>
+ * <li>Eventos com apenas horário (sem data de fim explícita)</li>
  * </ul>
  *
  * @author Israel Araújo
+ * @see IntervaloTemporal
+ * @see PeriodicidadeDTO
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -35,15 +39,19 @@ public class IntervaloTemporalDTO
   private static final long serialVersionUID = 1L;
 
   /**
-   * Data de início. Equivalente ao componente de data do DTSTART (RFC 5545).
+   * Data de início do intervalo.
+   * <p>
+   * Equivalente ao componente de data do DTSTART (RFC 5545).
    */
-  @NotNull(message = "{periodicidade.validation.intervaloBase.startDate.required}")
+  @NotNull(message = PeriodicidadeTranslator.VALIDATION.START_DATE_REQUIRED)
   private LocalDate startDate;
 
   /**
-   * Hora de início. Equivalente ao componente de hora do DTSTART (RFC 5545).
+   * Hora de início do intervalo.
+   * <p>
+   * Equivalente ao componente de hora do DTSTART (RFC 5545).
    */
-  @NotNull(message = "{periodicidade.validation.intervaloBase.startTime.required}")
+  @NotNull(message = PeriodicidadeTranslator.VALIDATION.START_TIME_REQUIRED)
   private LocalTime startTime;
 
   /**
@@ -57,43 +65,31 @@ public class IntervaloTemporalDTO
   private LocalTime endTime;
 
   /**
-   * Request de pesquisa
+   * Retorna o request de pesquisa para este DTO.
+   *
+   * @return request de pesquisa
    */
   public static SearchRequestDTO getSearchRequest() {
     return new SearchRequestDTO();
   }
 
   /**
-   * Filtros
+   * Retorna os filtros de propriedade disponíveis para pesquisa.
+   *
+   * @return conjunto de nomes de campos para filtro
    */
   public static Set<String> propertyFilters() {
     return getSearchRequest().propertyFilters();
   }
 
   /**
-   * Construtor com data e hora.
-   */
-  public IntervaloTemporalDTO(LocalDate startDate, LocalTime startTime,
-                              LocalDate endDate, LocalTime endTime) {
-    this.startDate = startDate;
-    this.startTime = startTime;
-    this.endDate = endDate;
-    this.endTime = endTime;
-  }
-
-  /**
-   * Construtor para evento no mesmo dia.
-   */
-  public IntervaloTemporalDTO(LocalDate date, LocalTime startTime,
-                              LocalTime endTime) {
-    this.startDate = date;
-    this.startTime = startTime;
-    this.endDate = date;
-    this.endTime = endTime;
-  }
-
-  /**
-   * Verifica se há interseção com outro intervalo.
+   * Verifica se há interseção temporal com outro intervalo.
+   * <p>
+   * Compara os períodos de tempo considerando data e hora.
+   * Usa LocalTime.MIN/MAX como fallback quando horas não são especificadas.
+   *
+   * @param other o outro intervalo a ser comparado
+   * @return true se houver interseção, false caso contrário
    */
   public boolean intersects(IntervaloTemporalDTO other) {
     if (this.startDate == null || other.startDate == null) {
@@ -130,6 +126,11 @@ public class IntervaloTemporalDTO
     return true;
   }
 
+  /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto com os mesmos valores
+   */
   @Override
   public IntervaloTemporalDTO cloneObject() {
     return toBuilder().build();
@@ -176,22 +177,39 @@ public class IntervaloTemporalDTO
                            java.time.LocalTime::compareTo);
   }
 
-/**
-    * Field name constants for Vaadin binding and filters.
-    * Note: IntervaloTemporalDTO does not extend AbstractBaseEntityDTO, so these are standalone.
-    */
-   @SuppressWarnings("javadoc")
-   public static class CAMPOS {
-     public static final String START_DATE = "startDate";
-     public static final String START_TIME = "startTime";
-     public static final String END_DATE = "endDate";
-     public static final String END_TIME = "endTime";
+  /**
+   * Constantes para nomes dos campos deste DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
 
-     public static Set<String> values() {
-         return Set.of(START_DATE, START_TIME, END_DATE, END_TIME);
-     }
-   }
+    /** Data de início */
+    public static final String START_DATE = "startDate";
 
+    /** Hora de início */
+    public static final String START_TIME = "startTime";
+
+    /** Data de fim */
+    public static final String END_DATE = "endDate";
+
+    /** Hora de fim */
+    public static final String END_TIME = "endTime";
+
+    /**
+     * Retorna todos os nomes de campos deste DTO.
+     *
+     * @return conjunto de strings com os nomes dos campos
+     */
+    public static Set<String> values() {
+        return Set.of(START_DATE, START_TIME, END_DATE, END_TIME);
+    }
+  }
+
+  /**
+   * Representação textual do intervalo temporal.
+   *
+   * @return string formatada com início e fim
+   */
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
@@ -220,5 +238,4 @@ public class IntervaloTemporalDTO
     }
     return builder.toString();
   }
-
 }

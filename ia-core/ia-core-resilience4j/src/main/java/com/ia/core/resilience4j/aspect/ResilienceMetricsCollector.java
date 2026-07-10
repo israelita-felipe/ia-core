@@ -46,7 +46,7 @@ public class ResilienceMetricsCollector {
      * @return the result of the supplier execution
      */
     public <T> T executeWithMetrics(ResilienceContext context, ProceedingJoinPoint joinPoint,
-                                    java.util.concurrent.Callable<T> supplier){
+                                     java.util.concurrent.Callable<T> supplier){
         Objects.requireNonNull(context, "context must not be null");
         Objects.requireNonNull(supplier, "supplier must not be null");
 
@@ -64,7 +64,15 @@ public class ResilienceMetricsCollector {
             Duration duration = Duration.between(startTime, Instant.now());
             String errorType = ex.getClass().getSimpleName();
             resilienceMetrics.recordError(profile.getName(), methodName, errorType, duration.toMillis());
-            throw new RuntimeException(ex.getLocalizedMessage(), ex);
+            // Rethrow without wrapping to prevent nested message accumulation.
+            // The exception already has proper context from the resilience handler chain.
+            if (ex instanceof RuntimeException) {
+                throw (RuntimeException) ex;
+            }
+            if (ex instanceof Error) {
+                throw (Error) ex;
+            }
+            throw new RuntimeException(ex);
         }
     }
 }

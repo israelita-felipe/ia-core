@@ -8,6 +8,8 @@ import com.ia.core.resilience4j.exception.ResilienceException;
 import com.ia.core.resilience4j.fallback.FallbackResponse;
 import com.ia.core.resilience4j.fallback.FallbackStrategyRegistry;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,12 +33,12 @@ public class ResilienceFallbackHandler {
     private final FallbackStrategyRegistry fallbackRegistry;
 
     /**
-     * Handles fallback logic for a given context and throwable.
-     *
-     * @param context   the resilience context
-     * @param throwable the exception that triggered the fallback
-     * @return the fallback result or throws an exception
-     */
+      * Handles fallback logic for a given context and throwable.
+      *
+      * @param context   the resilience context
+      * @param throwable the exception that triggered the fallback
+      * @return the fallback result or throws an exception
+      */
     public Object handleFallback(ResilienceContext context, Throwable throwable) {
         Method method = context.getMethod();
         ResilienceProfile profileName = context.getProfile();
@@ -79,21 +81,99 @@ public class ResilienceFallbackHandler {
             false);
     }
 
+    /**
+      * Checks if the exception is caused by a CircuitBreaker being open.
+      *
+      * <p>Usa verificação de tipo em vez de análise de mensagem para maior robustez
+      * e evitar falsos positivos após as mudanças no tratamento de mensagens.</p>
+      */
     private boolean isCircuitBreakerOpen(Throwable t) {
-        return t != null && (t.getMessage() != null &&
-            t.getMessage().contains("CircuitBreaker") &&
-            t.getMessage().contains("OPEN"));
+        if (t == null) {
+            return false;
+        }
+        // Unwrap CompletionException to check the actual cause
+        t = unwrapCompletionException(t);
+        // Check for Resilience4j's CallNotPermittedException (thrown when CB is OPEN)
+        if (t instanceof CallNotPermittedException) {
+            return true;
+        }
+        // Also check in cause chain for wrapped exceptions
+        Throwable cause = t.getCause();
+        while (cause != null && cause != t) {
+            if (cause instanceof CallNotPermittedException) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
     }
 
+    /**
+      * Checks if the exception is caused by a Bulkhead being full.
+      *
+      * <p>Usa verificação de tipo em vez de análise de mensagem para maior robustez.</p>
+      * <p>Note: Uses fully qualified class name to avoid conflict with custom BulkheadFullException.</p>
+      */
     private boolean isBulkheadFull(Throwable t) {
-        return t != null && (t.getMessage() != null &&
-            t.getMessage().contains("Bulkhead") &&
-            t.getMessage().contains("full"));
+        if (t == null) {
+            return false;
+        }
+        // Unwrap CompletionException to check the actual cause
+        t = unwrapCompletionException(t);
+        // Check for Resilience4j's BulkheadFullException
+        if (t instanceof io.github.resilience4j.bulkhead.BulkheadFullException) {
+            return true;
+        }
+        // Also check in cause chain for wrapped exceptions
+        Throwable cause = t.getCause();
+        while (cause != null && cause != t) {
+            if (cause instanceof io.github.resilience4j.bulkhead.BulkheadFullException) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
     }
 
+    /**
+      * Checks if the exception is caused by RateLimiter rejecting the call.
+      *
+      * <p>Usa verificação de tipo em vez de análise de mensagem para maior robustez.</p>
+      */
     private boolean isRateLimitExceeded(Throwable t) {
-        return t != null && (t.getMessage() != null &&
-            t.getMessage().contains("RateLimiter") &&
-            t.getMessage().contains("wait"));
+        if (t == null) {
+            return false;
+        }
+        // Unwrap CompletionException to check the actual cause
+        t = unwrapCompletionException(t);
+        // Check for Resilience4j's RequestNotPermitted
+        if (t instanceof RequestNotPermitted) {
+            return true;
+        }
+        // Also check in cause chain for wrapped exceptions
+        Throwable cause = t.getCause();
+        while (cause != null && cause != t) {
+            if (cause instanceof RequestNotPermitted) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
+    /**
+      * Unwraps CompletionException to get the actual cause.
+      *
+      * <p>This method safely unwraps CompletionException without causing issues
+      * if the cause is null.</p>
+      */
+    private Throwable unwrapCompletionException(Throwable t) {
+        if (t instanceof java.util.concurrent.CompletionException) {
+            Throwable cause = t.getCause();
+            if (cause != null) {
+                return cause;
+            }
+        }
+        return t;
     }
 }

@@ -14,103 +14,280 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ * DTO para transferência de dados de trigger de configuração de scheduler.
+ * <p>
+ * Representa um trigger do Quartz contendo informações sobre agendamento,
+ * datas de execução, prioridade e estado.
+ *
  * @author Israel Araújo
+ * @see SchedulerConfigTrigger
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchedulerConfigTriggerDTO
-  extends AbstractDTO<SchedulerConfigTrigger> {
-  /** Serial UID */
-  private static final long serialVersionUID = -19560738760061623L;
+    extends AbstractDTO<SchedulerConfigTrigger> {
 
-  private String triggerName;
-  private String schedulerName;
-  private String triggerGroup;
-  private String jobName;
-  private String jobGroup;
-  private String description;
-  private LocalDateTime nextFireTime;
-  private LocalDateTime prevFireTime;
-  private Long priority;
-  private String triggerState;
-  private String triggerType;
-  private LocalDateTime startTime;
-  private LocalDateTime endTime;
-  private String calendarName;
-  private Long misFireInstr;
-  private Map<String, Object> jobData;
+    /**
+     * Serial UID
+     */
+    private static final long serialVersionUID = -19560738760061623L;
 
-  public static final SearchRequestDTO getSearchRequest() {
-    return new SchedulerConfigTriggerSearchRequest();
-  }
+    /**
+     * Nome do trigger.
+     */
+    private String triggerName;
 
-  public static Set<String> propertyFilters() {
-    return getSearchRequest().propertyFilters();
-  }
+    /**
+     * Nome do scheduler.
+     */
+    private String schedulerName;
 
-  @Override
-  public SchedulerConfigTriggerDTO cloneObject() {
-    return toBuilder().build();
-  }
+    /**
+     * Grupo do trigger.
+     */
+    private String triggerGroup;
 
-  @Override
-  public SchedulerConfigTriggerDTO copyObject() {
-    return (SchedulerConfigTriggerDTO) super.copyObject();
-  }
+    /**
+     * Nome do job associado.
+     */
+    private String jobName;
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    /**
+     * Grupo do job associado.
+     */
+    private String jobGroup;
+
+    /**
+     * Descrição do trigger.
+     */
+    private String description;
+
+    /**
+     * Próxima data de disparo.
+     */
+    private LocalDateTime nextFireTime;
+
+    /**
+     * Data do último disparo.
+     */
+    private LocalDateTime prevFireTime;
+
+    /**
+     * Prioridade do trigger.
+     */
+    private Long priority;
+
+    /**
+     * Estado do trigger.
+     */
+    private String triggerState;
+
+    /**
+     * Tipo do trigger.
+     */
+    private String triggerType;
+
+    /**
+     * Data de início do trigger.
+     */
+    private LocalDateTime startTime;
+
+    /**
+     * Data de término do trigger.
+     */
+    private LocalDateTime endTime;
+
+    /**
+     * Nome do calendário associado.
+     */
+    private String calendarName;
+
+    /**
+     * Instrução de misfire.
+     */
+    private Long misFireInstr;
+
+    /**
+     * Dados do job como mapa de propriedades.
+     */
+    private Map<String, Object> jobData;
+
+    /**
+     * Retorna o request de pesquisa para este DTO.
+     *
+     * @return request de pesquisa
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return new SchedulerConfigTriggerSearchRequestDTO();
     }
-    if (schedulerName == null && triggerName == null
-        && triggerGroup == null) {
-      return this == obj;
+
+    /**
+     * Retorna os filtros de propriedade para pesquisa.
+     *
+     * @return conjunto de filtros
+     */
+    public static Set<String> propertyFilters() {
+        return getSearchRequest().propertyFilters();
     }
-    if (!(getClass().isInstance(obj))) {
-      return false;
+
+    /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto com os mesmos valores
+   */
+    @Override
+    public SchedulerConfigTriggerDTO cloneObject() {
+        return toBuilder().build();
     }
-    SchedulerConfigTriggerDTO other = (SchedulerConfigTriggerDTO) obj;
-    return Objects.equals(schedulerName, other.schedulerName)
-        && Objects.equals(triggerName, other.triggerName)
-        && Objects.equals(triggerGroup, other.triggerGroup);
-  }
 
-  @Override
-  public int hashCode() {
-    if (schedulerName != null && triggerName != null
-        && triggerGroup != null) {
-      return Objects.hash(schedulerName, triggerName, triggerGroup);
+    /**
+   * Cria uma cópia deste objeto DTO com id e version nulos.
+   *
+   * @return cópia do objeto
+   */
+    @Override
+    public SchedulerConfigTriggerDTO copyObject() {
+        return (SchedulerConfigTriggerDTO) super.copyObject();
     }
-    return super.hashCode();
-  }
 
-  public static class CAMPOS
-    extends AbstractDTO.CAMPOS {
+    /**
+   * Verifica a igualdade entre este objeto e outro.
+   *
+   * @param obj o objeto a ser comparado
+   * @return true se os objetos forem iguais, false caso contrário
+   */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (schedulerName == null && triggerName == null
+            && triggerGroup == null) {
+            return this == obj;
+        }
+        if (!(getClass().isInstance(obj))) {
+            return false;
+        }
+        SchedulerConfigTriggerDTO other = (SchedulerConfigTriggerDTO) obj;
+        return Objects.equals(schedulerName, other.schedulerName)
+            && Objects.equals(triggerName, other.triggerName)
+            && Objects.equals(triggerGroup, other.triggerGroup);
+    }
 
-    // Campos básicos do trigger
-    public static final String TRIGGER_NAME = "triggerName";
-    public static final String SCHEDULER_NAME = "schedulerName";
-    public static final String TRIGGER_GROUP = "triggerGroup";
-    public static final String JOB_NAME = "jobName";
-    public static final String JOB_GROUP = "jobGroup";
-    public static final String DESCRIPTION = "description";
+    /**
+   * Calcula o código hash para este objeto.
+   *
+   * @return código hash calculado
+   */
+    @Override
+    public int hashCode() {
+        if (schedulerName != null && triggerName != null
+            && triggerGroup != null) {
+            return Objects.hash(schedulerName, triggerName, triggerGroup);
+        }
+        return super.hashCode();
+    }
 
-    // Campos de tempo de execução
-    public static final String NEXT_FIRE_TIME = "nextFireTime";
-    public static final String PREV_FIRE_TIME = "prevFireTime";
-    public static final String START_TIME = "startTime";
-    public static final String END_TIME = "endTime";
+    /**
+     * Constantes para nomes dos campos deste DTO.
+     */
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS
+        extends AbstractDTO.CAMPOS {
 
-    // Campos de configuração e estado
-    public static final String PRIORITY = "priority";
-    public static final String TRIGGER_STATE = "triggerState";
-    public static final String TRIGGER_TYPE = "triggerType";
-    public static final String CALENDAR_NAME = "calendarName";
-    public static final String MISFIRE_INSTR = "misFireInstr";
-    public static final String JOB_DATA = "jobData";
+        /**
+         * Nome do trigger
+         */
+        public static final String TRIGGER_NAME = "triggerName";
 
-  }
+        /**
+         * Nome do scheduler
+         */
+        public static final String SCHEDULER_NAME = "schedulerName";
+
+        /**
+         * Grupo do trigger
+         */
+        public static final String TRIGGER_GROUP = "triggerGroup";
+
+        /**
+         * Nome do job associado
+         */
+        public static final String JOB_NAME = "jobName";
+
+        /**
+         * Grupo do job associado
+         */
+        public static final String JOB_GROUP = "jobGroup";
+
+        /**
+         * Descrição do trigger
+         */
+        public static final String DESCRIPTION = "description";
+
+        /**
+         * Próxima data de disparo
+         */
+        public static final String NEXT_FIRE_TIME = "nextFireTime";
+
+        /**
+         * Data do último disparo
+         */
+        public static final String PREV_FIRE_TIME = "prevFireTime";
+
+        /**
+         * Data de início
+         */
+        public static final String START_TIME = "startTime";
+
+        /**
+         * Data de término
+         */
+        public static final String END_TIME = "endTime";
+
+        /**
+         * Prioridade do trigger
+         */
+        public static final String PRIORITY = "priority";
+
+        /**
+         * Estado do trigger
+         */
+        public static final String TRIGGER_STATE = "triggerState";
+
+        /**
+         * Tipo do trigger
+         */
+        public static final String TRIGGER_TYPE = "triggerType";
+
+        /**
+         * Nome do calendário
+         */
+        public static final String CALENDAR_NAME = "calendarName";
+
+        /**
+         * Instrução de misfire
+         */
+        public static final String MISFIRE_INSTR = "misFireInstr";
+
+        /**
+         * Dados do job
+         */
+        public static final String JOB_DATA = "jobData";
+
+        /**
+         * Retorna todos os nomes de campos deste DTO.
+         *
+         * @return conjunto de strings com os nomes dos campos
+         */
+        public static Set<String> values() {
+            return Set.of(PROPERTY_CHANGE_SUPPORT, TRIGGER_NAME, SCHEDULER_NAME,
+                TRIGGER_GROUP, JOB_NAME, JOB_GROUP, DESCRIPTION, NEXT_FIRE_TIME,
+                PREV_FIRE_TIME, START_TIME, END_TIME, PRIORITY, TRIGGER_STATE,
+                TRIGGER_TYPE, CALENDAR_NAME, MISFIRE_INSTR, JOB_DATA);
+        }
+    }
 }

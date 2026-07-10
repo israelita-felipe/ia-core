@@ -82,6 +82,7 @@ public final class TemplateTranslator {
      */
     public static final String TEMPLATE = "template";
     public static final String TITULO = "template.titulo";
+    public static final String IDENTIFICADOR = "template.identificador";
     public static final String CONTEUDO = "template.conteudo";
     public static final String EXIGE_CONTEXTO = "template.exige.contexto";
     public static final String PARAMETROS = "template.parametros";

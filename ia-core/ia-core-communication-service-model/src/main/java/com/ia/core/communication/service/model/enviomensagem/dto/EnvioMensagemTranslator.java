@@ -17,6 +17,16 @@ public final class EnvioMensagemTranslator {
     }
 
     /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String TIPO_CANAL_NOT_NULL = "envio.mensagem.validation.tipo.canal.not.null";
+        public static final String CORPO_MENSAGEM_NOT_BLANK = "envio.mensagem.validation.corpo.mensagem.not.blank";
+        public static final String MODELO_MENSAGEM_ID_NULL = "envio.mensagem.validation.modelo.mensagem.id.not.null";
+        public static final String TELEFONES_NOT_EMPTY = "envio.mensagem.validation.telefones.not.empty";
+    }
+
+    /**
      * Help text i18n keys
      */
     public static final class HELP {
@@ -29,16 +39,6 @@ public final class EnvioMensagemTranslator {
         public static final String GRUPOS_CONTATO_IDS = "envio.mensagem.help.grupos.contato.ids";
         public static final String AGENDADO = "envio.mensagem.help.agendado";
         public static final String DATA_AGENDAMENTO = "envio.mensagem.help.data.agendamento";
-    }
-
-    /**
-     * Validation message keys
-     */
-    public static final class VALIDATION {
-        public static final String TIPO_CANAL_NOT_NULL = "envio.mensagem.validation.tipo.canal.not.null";
-        public static final String CORPO_MENSAGEM_NOT_BLANK = "envio.mensagem.validation.corpo.mensagem.not.blank";
-        public static final String MODELO_MENSAGEM_ID_NULL = "envio.mensagem.validation.modelo.mensagem.id.not.null";
-        public static final String TELEFONES_NOT_EMPTY = "envio.mensagem.validation.telefones.not.empty";
     }
 
     /**
@@ -78,11 +78,6 @@ public final class EnvioMensagemTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String ENVIO_MENSAGEM_CLASS = EnvioMensagemRequestDTO.class.getCanonicalName();
-
-    /**
      * Field name constants
      */
     public static final String ENVIO_MENSAGEM = "envio.mensagem";
@@ -94,4 +89,5 @@ public final class EnvioMensagemTranslator {
     public static final String GRUPOS_CONTATO_IDS = "envio.mensagem.grupos.contato.ids";
     public static final String AGENDADO = "envio.mensagem.agendado";
     public static final String DATA_AGENDAMENTO = "envio.mensagem.data.agendamento";
+    public static final String ENVIO_MENSAGEM_CLASS = EnvioMensagemRequestDTO.class.getCanonicalName();
 }

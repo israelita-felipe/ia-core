@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.dialog;
 
-import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistencia;
+import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistenciaDTO;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -32,7 +32,7 @@ public class InconsistenciaDialog extends Dialog {
   private final H3 titulo;
   private final Span gravidadeLabel;
 
-  private ExplicacaoInconsistencia explicacaoAtual;
+  private ExplicacaoInconsistenciaDTO explicacaoAtual;
 
   public InconsistenciaDialog() {
     setSizeFull();
@@ -93,7 +93,7 @@ public class InconsistenciaDialog extends Dialog {
   /**
    * Define a explicação da inconsistência a ser exibida.
    */
-  public void setExplicacao(ExplicacaoInconsistencia explicacao) {
+  public void setExplicacao(ExplicacaoInconsistenciaDTO explicacao) {
     this.explicacaoAtual = explicacao;
 
     if (explicacao != null) {

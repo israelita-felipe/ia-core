@@ -18,13 +18,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Classe que representa o objeto de transferência de dados para exclusao recorrencia.
+ * DTO para regra de exclusão de recorrência.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ExclusaoRecorrenciaDTO
- * dentro do sistema.
+ * Representa uma regra de exclusão (EXRULE) conforme especificação RFC 5545
+ * (iCalendar). Define quais ocorrências devem ser excluídas de uma regra
+ * de recorrência existente.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see ExclusaoRecorrencia
+ * @see Frequencia
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -34,45 +37,92 @@ public class ExclusaoRecorrenciaDTO
   implements DTO<ExclusaoRecorrencia> {
 
   /** Serial UID */
+  private static final long serialVersionUID = 1L;
 
-private static final long serialVersionUID = 1L;
-
+  /**
+   * Frequência da regra de exclusão.
+   */
   private Frequencia frequency;
 
+  /**
+   * Intervalo multiplicador da exclusão.
+   */
   private Integer intervalValue;
 
+  /**
+   * Dias da semana para exclusão.
+   */
   @Default
   private Set<DayOfWeek> byDay = new HashSet<>();
 
+  /**
+   * Dias do mês para exclusão (1-31).
+   */
   @Default
   private Set<Integer> byMonthDay = new HashSet<>();
 
+  /**
+   * Meses para exclusão.
+   */
   @Default
   private Set<Month> byMonth = new HashSet<>();
 
+  /**
+   * Posição no conjunto para exclusão.
+   */
   private Integer bySetPosition;
 
+  /**
+   * Data limite da exclusão.
+   */
   private LocalDate untilDate;
 
+  /**
+   * Limite máximo de exclusões.
+   */
   private Integer countLimit;
 
+  /**
+   * Dia de início da semana.
+   */
   private DayOfWeek weekStartDay;
 
+  /**
+   * Dias do ano para exclusão (1-366).
+   */
   @Default
   private Set<Integer> byYearDay = new HashSet<>();
 
+  /**
+   * Números da semana para exclusão.
+   */
   @Default
   private Set<Integer> byWeekNo = new HashSet<>();
 
+  /**
+   * Horas do dia para exclusão.
+   */
   @Default
   private Set<Integer> byHour = new HashSet<>();
 
+  /**
+   * Minutos da hora para exclusão.
+   */
   @Default
   private Set<Integer> byMinute = new HashSet<>();
 
+  /**
+   * Segundos do minuto para exclusão.
+   */
   @Default
   private Set<Integer> bySecond = new HashSet<>();
 
+  /**
+   * Compara este objeto com outro para ordenação.
+   *
+   * @param other o objeto a ser comparado
+   * @return valor negativo, zero ou positivo se este objeto for menos, igual ou maior
+   */
   public int compareTo(ExclusaoRecorrenciaDTO other) {
     int result = Objects
         .compare(frequency, other.frequency,
@@ -190,6 +240,11 @@ private static final long serialVersionUID = 1L;
     return 0;
   }
 
+  /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto com os mesmos valores
+   */
   @Override
   public ExclusaoRecorrenciaDTO cloneObject() {
     return toBuilder().byDay(new HashSet<>(byDay))
@@ -202,31 +257,63 @@ private static final long serialVersionUID = 1L;
         .bySecond(new HashSet<>(bySecond)).build();
   }
 
-/**
-    * Field name constants for Vaadin binding and filters.
-    * Note: ExclusaoRecorrenciaDTO does not extend AbstractBaseEntityDTO, so these are standalone.
-    */
-   @SuppressWarnings("javadoc")
-   public static class CAMPOS {
-     public static final String FREQUENCY = "frequency";
-     public static final String INTERVAL_VALUE = "intervalValue";
-     public static final String BY_DAY = "byDay";
-     public static final String BY_MONTH_DAY = "byMonthDay";
-     public static final String BY_MONTH = "byMonth";
-     public static final String BY_SET_POSITION = "bySetPosition";
-     public static final String UNTIL_DATE = "untilDate";
-     public static final String COUNT_LIMIT = "countLimit";
-     public static final String WEEK_START_DAY = "weekStartDay";
-     public static final String BY_YEAR_DAY = "byYearDay";
-     public static final String BY_WEEK_NO = "byWeekNo";
-     public static final String BY_HOUR = "byHour";
-     public static final String BY_MINUTE = "byMinute";
-     public static final String BY_SECOND = "bySecond";
+  /**
+   * Constantes para nomes dos campos deste DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
 
-     public static Set<String> values() {
-         return Set.of(FREQUENCY, INTERVAL_VALUE, BY_DAY, BY_MONTH_DAY, BY_MONTH,
-                      BY_SET_POSITION, UNTIL_DATE, COUNT_LIMIT, WEEK_START_DAY,
-                      BY_YEAR_DAY, BY_WEEK_NO, BY_HOUR, BY_MINUTE, BY_SECOND);
-     }
-   }
+    /** Frequência */
+    public static final String FREQUENCY = "frequency";
+
+    /** Valor do intervalo */
+    public static final String INTERVAL_VALUE = "intervalValue";
+
+    /** Dias da semana */
+    public static final String BY_DAY = "byDay";
+
+    /** Dias do mês */
+    public static final String BY_MONTH_DAY = "byMonthDay";
+
+    /** Meses */
+    public static final String BY_MONTH = "byMonth";
+
+    /** Posição no conjunto */
+    public static final String BY_SET_POSITION = "bySetPosition";
+
+    /** Data limite */
+    public static final String UNTIL_DATE = "untilDate";
+
+    /** Limite de ocorrências */
+    public static final String COUNT_LIMIT = "countLimit";
+
+    /** Dia de início da semana */
+    public static final String WEEK_START_DAY = "weekStartDay";
+
+    /** Dias do ano */
+    public static final String BY_YEAR_DAY = "byYearDay";
+
+    /** Números da semana */
+    public static final String BY_WEEK_NO = "byWeekNo";
+
+    /** Horas */
+    public static final String BY_HOUR = "byHour";
+
+    /** Minutos */
+    public static final String BY_MINUTE = "byMinute";
+
+    /** Segundos */
+    public static final String BY_SECOND = "bySecond";
+
+    /**
+     * Retorna todos os nomes de campos deste DTO.
+     *
+     * @return conjunto de strings com os nomes dos campos
+     */
+    public static Set<String> values() {
+        return Set.of(FREQUENCY, INTERVAL_VALUE, BY_DAY, BY_MONTH_DAY, BY_MONTH,
+                     BY_SET_POSITION, UNTIL_DATE, COUNT_LIMIT, WEEK_START_DAY,
+                     BY_YEAR_DAY, BY_WEEK_NO, BY_HOUR, BY_MINUTE, BY_SECOND);
+    }
+  }
 }

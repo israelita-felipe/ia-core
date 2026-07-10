@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.validacao;
 
-import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacaoDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @since 1.0.0
  */
 @FeignClient(name = ValidacaoClient.NOME, url = ValidacaoClient.URL)
-public interface ValidacaoClient extends DefaultBaseClient<ResultadoValidacao> {
+public interface ValidacaoClient extends DefaultBaseClient<ResultadoValidacaoDTO> {
 
   String NOME = "validacao";
   String URL = "${feign.host}/api/${api.version}/${feign.url.validacao}";

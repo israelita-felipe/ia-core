@@ -3,16 +3,20 @@ package com.ia.core.llm.service.model.ferramenta;
 import com.ia.core.llm.model.ferramenta.Ferramenta;
 import com.ia.core.llm.model.ferramenta.TipoFerramentaEnum;
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder.Default;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,20 +29,35 @@ import java.util.Set;
  *
  * @author Israel Araújo
  * @since 1.0.0
+ * @see Ferramenta
+ * @see FerramentaTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class FerramentaDTO
   extends AbstractBaseEntityDTO<Ferramenta>
   implements FerramentaDiscoverable {
 
+  /** Serial UID */
+  private static final long serialVersionUID = 774920123456789123L;
+
+  /**
+   * Retorna o request de pesquisa para este DTO.
+   *
+   * @return request de pesquisa
+   */
   public static SearchRequestDTO getSearchRequest() {
-    return new FerramentaSearchRequest();
+    return new FerramentaSearchRequestDTO();
   }
 
+  /**
+   * Retorna os filtros de propriedade para pesquisa.
+   *
+   * @return conjunto de filtros
+   */
   public static Set<String> propertyFilters() {
     return getSearchRequest().propertyFilters();
   }
@@ -47,16 +66,17 @@ public class FerramentaDTO
   @Size(min = 2, max = 200, message = FerramentaTranslator.VALIDATION.TITULO_SIZE)
   private String titulo;
 
-  @Size(max = 1000)
+  @Size(max = 1000, message = FerramentaTranslator.VALIDATION.DESCRICAO_SIZE)
   private String descricao;
 
-  @NotNull
+  @NotNull(message = FerramentaTranslator.VALIDATION.TIPO_REQUIRED)
   private TipoFerramentaEnum tipo;
 
   @NotNull(message = FerramentaTranslator.VALIDATION.IDENTIFICADOR_REQUIRED)
   @Size(max = 255, message = FerramentaTranslator.VALIDATION.IDENTIFICADOR_SIZE)
   private String identificador;
 
+  @Size(max = 200, message = FerramentaTranslator.VALIDATION.MODULO_ORIGEM_SIZE)
   private String moduloOrigem;
 
   @Default
@@ -72,15 +92,26 @@ public class FerramentaDTO
   @Default
   private List<FerramentaDTO> subFerramentas = new ArrayList<>();
 
-  @Override
-  public void setVersion(Long version) {
-    super.setVersion(version);
-  }
-
+  /**
+   * Cria uma cópia superficial (clone) deste DTO.
+   *
+   * @return nova instância com os mesmos valores
+   */
   @Override
   public FerramentaDTO cloneObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .subFerramentas(new ArrayList<>(subFerramentas)).build();
+    return toBuilder()
+        .subFerramentas(new ArrayList<>(subFerramentas))
+        .build();
+  }
+
+  /**
+   * Retorna uma representação em string deste objeto.
+   *
+   * @return string contendo o título e identificador
+   */
+  @Override
+  public String toString() {
+    return String.format("FerramentaDTO{titulo=%s, identificador=%s}", titulo, identificador);
   }
 
   /**
@@ -98,11 +129,15 @@ public class FerramentaDTO
     public static final String INSTRUCOES = "instrucoes";
     public static final String TEMPLATE = "template";
     public static final String SUB_FERRAMENTAS = "subFerramentas";
-    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
     public static Set<String> values() {
-      return Set.of(TITULO, DESCRICAO, TIPO, IDENTIFICADOR, MODULO_ORIGEM, ATIVO,
-          DESCOBERTA_AUTOMATICA, INSTRUCOES, TEMPLATE, SUB_FERRAMENTAS, PROPERTY_CHANGE_SUPPORT);
+      var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+      var currentValues = Set.of(TITULO, DESCRICAO, TIPO, IDENTIFICADOR, MODULO_ORIGEM, ATIVO,
+          DESCOBERTA_AUTOMATICA, INSTRUCOES, TEMPLATE, SUB_FERRAMENTAS);
+      var allValues = new HashSet<String>();
+      allValues.addAll(baseValues);
+      allValues.addAll(currentValues);
+      return Collections.unmodifiableSet(allValues);
     }
   }
 }

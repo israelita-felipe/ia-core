@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -15,34 +16,73 @@ import java.util.Set;
  *
  * @author Israel Araújo
  * @since 1.0.0
+ * @see SessionTranslator
  */
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AgentSessionResponseDTO implements DTO<String> {
+public class AgentSessionResponseDTO implements DTO<Serializable> {
 
-  private String sessionId;
-  private String message;
-  private boolean pendingConfirmation;
+    /** Serial UID */
+    private static final long serialVersionUID = 1L;
 
-  @Override
-  public AgentSessionResponseDTO cloneObject() {
-    return AgentSessionResponseDTO.builder()
-        .sessionId(sessionId)
-        .message(message)
-        .pendingConfirmation(pendingConfirmation)
-        .build();
-  }
+    /**
+     * Identificador da sessão.
+     */
+    private String sessionId;
 
-  public static class CAMPOS {
-    public static final String SESSION_ID = "sessionId";
-    public static final String MESSAGE = "message";
-    public static final String PENDING_CONFIRMATION = "pendingConfirmation";
-    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+    /**
+     * Mensagem de resposta.
+     */
+    private String message;
 
-    public static Set<String> values() {
-      return Set.of(SESSION_ID, MESSAGE, PENDING_CONFIRMATION, PROPERTY_CHANGE_SUPPORT);
+    /**
+     * Indica se há confirmação pendente.
+     */
+    private boolean pendingConfirmation;
+
+    /**
+     * Cria uma cópia superficial (clone) deste DTO.
+     *
+     * @return nova instância com os mesmos valores
+     */
+    @Override
+    public AgentSessionResponseDTO cloneObject() {
+        return toBuilder().build();
     }
-  }
+
+    /**
+     * Retorna uma representação em string deste objeto.
+     *
+     * @return string contendo o sessionId
+     */
+    @Override
+    public String toString() {
+        return String.format("SessionResponse[sessionId=%s]", sessionId);
+    }
+
+    /**
+     * Constantes para nomes dos campos deste DTO.
+     */
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS {
+        /** Identificador da sessão */
+        public static final String SESSION_ID = "sessionId";
+
+        /** Mensagem de resposta */
+        public static final String MESSAGE = "message";
+
+        /** Flag de confirmação pendente */
+        public static final String PENDING_CONFIRMATION = "pendingConfirmation";
+
+        /**
+         * Retorna todos os nomes de campos deste DTO.
+         *
+         * @return conjunto com os nomes dos campos
+         */
+        public static Set<String> values() {
+            return Set.of(SESSION_ID, MESSAGE, PENDING_CONFIRMATION);
+        }
+    }
 }

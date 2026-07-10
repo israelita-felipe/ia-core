@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(schema = PrivilegeOperationContext.SCHEMA_NAME,
-       name = PrivilegeOperationContext.TABLE_NAME)
+    name = PrivilegeOperationContext.TABLE_NAME)
 /**
  * Classe que representa a entidade de domínio privilege operation context.
  * <p>
@@ -29,46 +29,38 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrivilegeOperationContext
-  extends BaseEntity {
-  /** Serial UID */
-  private static final long serialVersionUID = 1002971063026215644L;
-  /** NOME DA TABELA */
-  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
-      + "PRIVILEGE_OPERATION_CONTEXT";
-  /** NOME DA TABELA */
-  public static final String PRIVILEGE_OPERATION_CONTEXT_VALUE_TABLE_NAME = SecurityModel.TABLE_PREFIX
-      + "PRIVILEGE_OPERATION_CONTEXT_VALUE";
+    extends BaseEntity {
+    /**
+     * NOME DA TABELA
+     */
+    public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+        + "PRIVILEGE_OPERATION_CONTEXT";
+    /**
+     * NOME DA TABELA
+     */
+    public static final String PRIVILEGE_OPERATION_CONTEXT_VALUE_TABLE_NAME = SecurityModel.TABLE_PREFIX
+        + "PRIVILEGE_OPERATION_CONTEXT_VALUE";
+    /**
+     * NOME DO SCHEMA
+     */
+    public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
+    /**
+     * Serial UID
+     */
+    private static final long serialVersionUID = 1002971063026215644L;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "privilege_operation", referencedColumnName = "id")
+    private PrivilegeOperation privilegeOperation;
 
-  /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
+    @Column(name = "context_key")
+    private String contextKey;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "privilege_operation", referencedColumnName = "id")
-  private PrivilegeOperation privilegeOperation;
-
-  @Column(name = "context_key")
-  private String contextKey;
-
-  @Default
-  @ElementCollection(fetch = FetchType.LAZY)
-  @CollectionTable(schema = SCHEMA_NAME, name = PRIVILEGE_OPERATION_CONTEXT_VALUE_TABLE_NAME,
-                   joinColumns = @JoinColumn(name = "privilege_operation_context",
-                                             referencedColumnName = "id"))
-  @Column(name = "privilege_operation_context_value")
-  private Set<String> values = new HashSet<>();
-
-  /**
-   * Retorna o conjunto de valores de contexto.
-   * <p>
-   * <b>Security Note:</b> Retorna uma visão imutável para evitar
-   * modificações externas que possam comprometer a segurança.
-   *
-   * @bugfix SECURITY: Retorna unmodifiableSet (era coleção mutável exposta).
-   *
-   * @return conjunto imutável de valores
-   */
-  public Set<String> getValues() {
-    return java.util.Collections.unmodifiableSet(values);
-  }
+    @Default
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(schema = SCHEMA_NAME, name = PRIVILEGE_OPERATION_CONTEXT_VALUE_TABLE_NAME,
+        joinColumns = @JoinColumn(name = "privilege_operation_context",
+            referencedColumnName = "id"))
+    @Column(name = "privilege_operation_context_value")
+    private Set<String> values = new HashSet<>();
 
 }

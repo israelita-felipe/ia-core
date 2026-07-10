@@ -39,13 +39,15 @@ Estabelecer diretrizes gerais de padronização para todos os módulos do projet
   - Validação de tags antes de uso
   - Fallback para `messages.properties`
 
-### 5. Padrões de Nomenclatura (ADR-010)
+### 5. Padrões de Nomenclatura (ADR-010, ADR-040)
 - Aplicado em: Todos módulos
 - Requisitos:
   - PascalCase para classes, interfaces
   - camelCase para métodos e parâmetros
   - UPPER_SNAKE_CASE para constantes
   - Prefixos de módulo em pacotes
+  - **TODO DTO DEVE TER SUFIXO `DTO` NO NOME** - Classes implementando `DTO<T>` direta ou indiretamente
+  - SearchRequestDTOs devem usar `SearchRequestDTO` como sufixo (ex: `PessoaSearchRequestDTO`)
 
 ### 6. Migrações de Banco de Dados (ADR-017)
 - Aplicado em: ADR-017

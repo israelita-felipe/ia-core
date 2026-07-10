@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.agenteconversacional.dialog;
 
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
 import com.ia.core.llm.view.agenteconversacional.AgenteConversacionalManager;
 import com.ia.core.view.components.IViewModel;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class ChatOntologiaDialogViewModel implements IViewModel {
 
   private final AgenteConversacionalManager manager;
   private ContextConversacaoDTO contextoAtual;
-  private RespostaAgente ultimaResposta;
+  private RespostaAgenteDTO ultimaResposta;
 
   public ChatOntologiaDialogViewModel(AgenteConversacionalManager manager) {
     this.manager = manager;
@@ -37,7 +37,7 @@ public class ChatOntologiaDialogViewModel implements IViewModel {
     return contextoAtual;
   }
 
-  public RespostaAgente getUltimaResposta() {
+  public RespostaAgenteDTO getUltimaResposta() {
     return ultimaResposta;
   }
 

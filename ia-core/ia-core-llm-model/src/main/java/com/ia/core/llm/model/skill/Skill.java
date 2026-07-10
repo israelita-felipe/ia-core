@@ -9,15 +9,15 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Skill que define habilidades especializadas que um agente pode ter.
+ * Entidade que representa uma Skill (habilidade especializada).
  * <p>
- * Representa uma habilidade especializada que pode ser atribuída a um agente.
  * Skills são implementações com métodos @Tool que podem ser fornecidas ao ChatModel.
+ * Definem habilidades especializadas que um agente pode ter.
  *
  * @author Israel Araújo
  * @since 1.0.0
+ * @see SkillTipo
  */
-@Slf4j
 @Entity
 @Table(name = Skill.TABLE_NAME, schema = Skill.SCHEMA_NAME)
 @Getter
@@ -29,52 +29,59 @@ import lombok.extern.slf4j.Slf4j;
 @ToString(callSuper = false)
 public class Skill extends BaseEntity {
 
-  private static final long serialVersionUID = 1234567890123456789L;
+    /** Serial UID */
+    private static final long serialVersionUID = 1234567890123456789L;
 
-  public static final String TABLE_NAME = LLMModel.TABLE_PREFIX + "SKILL";
-  public static final String SCHEMA_NAME = LLMModel.SCHEMA;
+    /** NOME DA TABELA */
+    public static final String TABLE_NAME = LLMModel.TABLE_PREFIX + "SKILL";
 
-  /**
-   * Identificador único da skill (ex: ONTOLOGY_BUILDER, KNOWLEDGE_EXTRACTION).
-   */
-  @Column(name = "identificador", unique = true, nullable = false, length = 100)
-  private String identificador;
+    /** NOME DO SCHEMA */
+    public static final String SCHEMA_NAME = LLMModel.SCHEMA;
 
-  /**
-   * Nome apresentável da skill na UI.
-   */
-  @Column(name = "titulo", nullable = false, length = 200)
-  private String titulo;
+    /**
+     * Identificador único da skill (ex: ONTOLOGY_BUILDER, KNOWLEDGE_EXTRACTION).
+     */
+    @Column(name = "identificador", unique = true, nullable = false, length = 100)
+    private String identificador;
 
-  /**
-   * Descrição do propósito da skill.
-   */
-  @Column(name = "descricao", length = 1000)
-  private String descricao;
+    /**
+     * Nome apresentável da skill na UI.
+     */
+    @Column(name = "titulo", nullable = false, length = 200)
+    private String titulo;
 
-  /**
-   * Tipo da skill (ex: ONTOLOGY_BUILDER, KNOWLEDGE_EXTRACTION, REASONING, OUTRA).
-   */
-  @Enumerated(EnumType.STRING)
-  @Column(name = "tipo", nullable = false, length = 50)
-  private SkillTipo tipo;
+    /**
+     * Descrição do propósito da skill.
+     */
+    @Column(name = "descricao", length = 1000)
+    private String descricao;
 
-  /**
-   * Indica se a skill está disponível para uso.
-   */
-  @Default
-  @Column(name = "ativo")
-  private Boolean ativo = true;
+    /**
+     * Tipo da skill (ex: ONTOLOGY_BUILDER, KNOWLEDGE_EXTRACTION, REASONING, OUTRA).
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", nullable = false, length = 50)
+    private SkillTipo tipo;
 
-  /**
-   * Módulo ou pacote fonte.
-   * Usado para identificar a origem da skill.
-   */
-  @Column(name = "modulo_origem", length = 200)
-  private String moduloOrigem;
+    /**
+     * Indica se a skill está disponível para uso.
+     */
+    @Default
+    @Column(name = "ativo")
+    private Boolean ativo = true;
 
-  @PrePersist
-  protected void onCreate() {
-    super.generateIdIfAbsent();
-  }
+    /**
+     * Módulo ou pacote fonte.
+     * Usado para identificar a origem da skill.
+     */
+    @Column(name = "modulo_origem", length = 200)
+    private String moduloOrigem;
+
+    /**
+     * Gera ID se ausente antes de persistir.
+     */
+    @PrePersist
+    protected void onCreate() {
+        super.generateIdIfAbsent();
+    }
 }

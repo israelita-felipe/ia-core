@@ -49,7 +49,7 @@ class QuartzLayerTestCaseCoverageTest {
       "PeriodicidadeMapper",
       "PeriodicidadeRepository",
       "PeriodicidadeScheduleBuilder",
-      "PeriodicidadeSearchRequest",
+      "PeriodicidadeSearchRequestDTO",
       "PeriodicidadeTranslator",
       "PeriodicidadeTrigger",
       "QuartzClient",
@@ -59,17 +59,17 @@ class QuartzLayerTestCaseCoverageTest {
       "QuartzJobFormViewModel",
       "QuartzJobFormViewModelConfig",
       "QuartzJobInstanceDTO",
-      "QuartzJobInstanceSearchRequest",
+      "QuartzJobInstanceSearchRequestDTO",
       "QuartzJobListView",
       "QuartzJobManager",
       "QuartzJobManagerConfig",
       "QuartzJobPageView",
       "QuartzJobPageViewModel",
       "QuartzJobPageViewModelConfig",
-      "QuartzJobSearchRequest",
+      "QuartzJobSearchRequestDTO",
       "QuartzJobTranslator",
       "QuartzJobTriggerDTO",
-      "QuartzJobTriggerSearchRequest",
+      "QuartzJobTriggerSearchRequestDTO",
       "QuartzJobUseCase",
       "QuartzManager",
       "QuartzManagerConfig",
@@ -92,7 +92,7 @@ class QuartzLayerTestCaseCoverageTest {
       "SchedulerConfigPageViewModel",
       "SchedulerConfigPageViewModelConfig",
       "SchedulerConfigRepository",
-      "SchedulerConfigSearchRequest",
+      "SchedulerConfigSearchRequestDTO",
       "SchedulerConfigService",
       "SchedulerConfigServiceConfig",
       "SchedulerConfigSummary",
@@ -104,7 +104,7 @@ class QuartzLayerTestCaseCoverageTest {
       "SchedulerConfigTriggerDTO",
       "SchedulerConfigTriggerFormView",
       "SchedulerConfigTriggerListView",
-      "SchedulerConfigTriggerSearchRequest",
+      "SchedulerConfigTriggerSearchRequestDTO",
       "SchedulerConfigTriggerTranslator",
       "SchedulerRegistry",
       "SchedulerUseCase",
@@ -114,23 +114,23 @@ class QuartzLayerTestCaseCoverageTest {
       "ICalendarSerializer"
   );
 
-  private static final Set<String> DTO_AND_MODEL_CLASSES = Set.of(
-      "QuartzJobDTO",
-      "QuartzJobInstanceDTO",
-      "QuartzJobInstanceSearchRequest",
-      "QuartzJobSearchRequest",
-      "QuartzJobTriggerDTO",
-      "QuartzJobTriggerSearchRequest",
-      "IntervaloTemporalDTO",
-      "PeriodicidadeDTO",
-      "PeriodicidadeSearchRequest",
-      "ExclusaoRecorrenciaDTO",
-      "RecorrenciaDTO",
-      "SchedulerConfigDTO",
-      "SchedulerConfigSearchRequest",
-      "SchedulerConfigTriggerDTO",
-      "SchedulerConfigTriggerSearchRequest"
-  );
+private static final Set<String> DTO_AND_MODEL_CLASSES = Set.of(
+       "QuartzJobDTO",
+       "QuartzJobInstanceDTO",
+       "QuartzJobTriggerDTO",
+       "IntervaloTemporalDTO",
+       "PeriodicidadeDTO",
+       "ExclusaoRecorrenciaDTO",
+       "RecorrenciaDTO",
+       "SchedulerConfigDTO",
+       "QuartzJobInstanceSearchRequestDTO",
+       "QuartzJobSearchRequestDTO",
+       "QuartzJobTriggerSearchRequestDTO",
+       "PeriodicidadeSearchRequestDTO",
+       "SchedulerConfigSearchRequestDTO",
+       "SchedulerConfigTriggerDTO",
+       "SchedulerConfigTriggerSearchRequestDTO"
+   );
   private static final List<String> STACK_LAYERS = List.of("Model", "Repository", "Mapper", "ServiceModel", "Service", "API", "View");
 
   @Test

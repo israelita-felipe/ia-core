@@ -2,9 +2,10 @@ package com.ia.core.llm.service.agente;
 
 import com.ia.core.llm.service.chat.ChatService;
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
+import com.ia.core.llm.service.model.ontologia.EstatisticasOntologiaDTO;
 import com.ia.core.llm.service.model.ontologia.OntologiaDTO;
-import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacaoDTO;
 import com.ia.core.owl.service.DefaultOwlService;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
 import com.ia.core.owl.service.validation.LoopLLMRaciocinador;
@@ -58,17 +59,9 @@ public class AgenteConversacionalOntologiaService {
     return chatService;
   }
 
-  /**
-   * Cria uma nova sessão de conversação.
-   *
-   * @param userId ID do usuário
-   * @param dominio domínio da conversação
-   * @param sessionId ID da sessão (opcional, se não fornecido será gerado)
-   * @return contexto da conversação criado
-   */
   @Tool(description = "Cria uma nova sessão de conversação guiada por ontologia OWL. " +
-                     "Inicializa uma ontologia vazia que será construída incrementalmente durante a conversação. " +
-                     "A ontologia é validada contra axiomas formais OWL 2 DL a cada interação.")
+                      "Inicializa uma ontologia vazia que será construída incrementalmente durante a conversação. " +
+                      "A ontologia é validada contra axiomas formais OWL 2 DL a cada interação.")
   public ContextConversacaoDTO criarSessao(@ToolParam(description = "ID do usuário") String userId,
                                            @ToolParam(description = "Domínio da conversação (ex: biologia, medicina, biblioteca)") String dominio,
                                            @ToolParam(description = "ID da sessão (opcional, se não fornecido será gerado automaticamente)") String sessionId) {
@@ -101,65 +94,44 @@ public class AgenteConversacionalOntologiaService {
     return contexto;
   }
 
-  /**
-   * Cria uma nova sessão de conversação (gera sessionId automaticamente).
-   *
-   * @param userId ID do usuário
-   * @param dominio domínio da conversação
-   * @return contexto da conversação criado
-   */
   public ContextConversacaoDTO criarSessao(String userId, String dominio) {
     return criarSessao(userId, dominio, null);
   }
 
-  /**
-   * Processa uma mensagem do usuário na conversação.
-   *
-   * @param contexto contexto da conversação
-   * @param mensagem mensagem do usuário
-   * @return resposta do agente
-   */
   @Tool(description = "Processa uma mensagem do usuário na conversação guiada por ontologia. " +
-                     "Extrai axiomas OWL da mensagem, valida contra a ontologia atual, " +
-                     "corrige inconsistências usando loop LLM-Reasoner, e adiciona axiomas válidos à ontologia. " +
-                     "Retorna resposta natural do agente com status da ontologia.")
-  public RespostaAgente processarMensagem(@ToolParam(description = "Contexto da conversação com ontologia atual") ContextConversacaoDTO contexto,
-                                         @ToolParam(description = "Mensagem do usuário a ser processada") String mensagem) {
+                      "Extrai axiomas OWL da mensagem, valida contra a ontologia atual, " +
+                      "corrige inconsistências usando loop LLM-Reasoner, e adiciona axiomas válidos à ontologia. " +
+                      "Retorna resposta natural do agente com status da ontologia.")
+  public RespostaAgenteDTO processarMensagem(@ToolParam(description = "Contexto da conversação com ontologia atual") ContextConversacaoDTO contexto,
+                                           @ToolParam(description = "Mensagem do usuário a ser processada") String mensagem) {
     log.info("Processando mensagem na sessão: sessionId={}", contexto.getSessionId());
 
-    // TODO: Implement tool-based axiom generation when OWLToolRegistry is available
-    // For now, return empty axioms
     List<AxiomaDTO> axiomasGerados = new ArrayList<>();
 
-    // Valida os axiomas
     List<AxiomaDTO> axiomasValidados = new ArrayList<>();
     boolean inconsistenciaCorrigida = false;
     String explicacaoCorrecao = null;
     int iteracoesUsadas = 0;
 
     for (AxiomaDTO axioma : axiomasGerados) {
-      ResultadoValidacao resultado = owlService.validarAxioma(axioma);
+      ResultadoValidacaoDTO resultado = owlService.validarAxioma(axioma);
       iteracoesUsadas += resultado.getIteracoesUsadas();
 
       if (resultado.isConsistente()) {
         axiomasValidados.add(axioma);
       } else {
-        // Tenta corrigir usando loop LLM-Reasoner
         var feedback = reasonerLoop.corrigirAxioma(contexto.getSessionId(),
             axioma, mensagem, resultado.getExplicacao());
 
         if (feedback.isAxiomaValido()) {
-          // Na implementação completa, aqui adicionariamos o axioma corrigido
           inconsistenciaCorrigida = true;
           explicacaoCorrecao = feedback.getExplicacao();
         }
       }
     }
 
-    // Adiciona axiomas válidos à ontologia
     if (!axiomasValidados.isEmpty()) {
       try {
-        // Create a HasAxiomas wrapper for the axioms
         var hasAxiomas = new com.ia.core.owl.service.model.axioma.HasAxiomas() {
           @Override
           public java.util.List<com.ia.core.owl.service.model.axioma.AxiomaDTO> getAxiomas() {
@@ -167,10 +139,7 @@ public class AgenteConversacionalOntologiaService {
           }
         };
 
-        // Add axioms using DTO
         owlService.addAxioms(contexto.getOntologia(), hasAxiomas);
-
-        // Update ontology content will be handled by the addAxioms method
       } catch (Exception e) {
         log.error("Erro ao adicionar axiomas à ontologia", e);
       }
@@ -180,21 +149,17 @@ public class AgenteConversacionalOntologiaService {
 
     contexto.setUltimaAtividade(LocalDateTime.now());
 
-    // Verifica consistência da ontologia
-    ResultadoValidacao validacaoOntologia = owlService.validarOntologiaAtual(contexto.getOntologia());
+    ResultadoValidacaoDTO validacaoOntologia = owlService.validarOntologiaAtual(contexto.getOntologia());
     contexto.setOntologiaConsistente(validacaoOntologia.isConsistente());
 
-    // Constrói resposta
     String respostaNatural = gerarRespostaNatural(mensagem, axiomasValidados);
-    RespostaAgente resposta = RespostaAgente.builder()
+    RespostaAgenteDTO resposta = RespostaAgenteDTO.builder()
         .agentResponse(respostaNatural)
         .extractedAxioms(axiomasValidados)
-        .ontologyStatus(RespostaAgente.OntologiaStatus.builder()
-            .iri(contexto.getOntologia().getIri())
-            .consistent(contexto.isOntologiaConsistente())
-            .classCount(contarClasses(contexto))
+        .ontologyStatus(EstatisticasOntologiaDTO.builder()
+            .classeCount(contarClasses(contexto))
             .axiomCount(contexto.getTotalAxiomasExtraidos())
-            .warningsCount(0)
+            .iterationsUsed(iteracoesUsadas)
             .build())
         .iteracoesUsadas(iteracoesUsadas)
         .inconsistenciaCorrigida(inconsistenciaCorrigida)
@@ -207,9 +172,6 @@ public class AgenteConversacionalOntologiaService {
     return resposta;
   }
 
-  /**
-   * Identifica o construtor OWL apropriado para a mensagem.
-   */
   private String identificarConstrutor(String mensagem) {
     String lower = mensagem.toLowerCase();
 
@@ -223,13 +185,9 @@ public class AgenteConversacionalOntologiaService {
       return "ObjectPropertyRange";
     }
 
-    // Padrão default
     return "SubClassOf";
   }
 
-  /**
-   * Gera uma resposta em linguagem natural.
-   */
   private String gerarRespostaNatural(String mensagem, List<AxiomaDTO> axiomas) {
     if (axiomas.isEmpty()) {
       return "Entendi sua mensagem, mas não consegui extrair axiomas OWL válidos. " +
@@ -247,23 +205,13 @@ public class AgenteConversacionalOntologiaService {
     return sb.toString();
   }
 
-  /**
-   * Conta classes na ontologia (simplificado).
-   */
   private int contarClasses(ContextConversacaoDTO contexto) {
-    // Na implementação completa, isso usaria o OWL API para contar classes
-    return contexto.getTotalAxiomasExtraidos() / 2; // Estimativa simplificada
+    return contexto.getTotalAxiomasExtraidos() / 2;
   }
 
-  /**
-   * Encerra uma sessão de conversação.
-   *
-   * @param sessionId ID da sessão
-   */
   @Tool(description = "Encerra uma sessão de conversação guiada por ontologia. " +
-                     "Libera recursos associados à sessão e finaliza a ontologia construída.")
+                      "Libera recursos associados à sessão e finaliza a ontologia construída.")
   public void encerrarSessao(@ToolParam(description = "ID da sessão a ser encerrada") String sessionId) {
     log.info("Sessão encerrada: sessionId={}", sessionId);
-    // ChatService gerencia a sessão automaticamente através de createClient
   }
 }

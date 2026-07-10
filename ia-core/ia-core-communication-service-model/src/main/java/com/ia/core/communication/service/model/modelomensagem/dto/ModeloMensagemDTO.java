@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import java.util.Set;
  * <p>
  * Representa os dados de transferência para modelos de mensagens,
  * incluindo nome, descrição, corpo do modelo com variáveis e tipo de canal.
+ * </p>
  *
  * @author Israel Araújo
  * @since 1.0.0
@@ -33,83 +35,127 @@ import java.util.Set;
 @AllArgsConstructor
 @Schema(description = "Dados de um modelo de mensagem")
 public class ModeloMensagemDTO extends AbstractBaseEntityDTO<ModeloMensagem> implements HasVariavel {
-  /** Serial UID */
-  private static final long serialVersionUID = 1L;
 
-  /**
-   * Request de pesquisa
-   *
-   * @return {@link SearchRequestDTO}
-   */
-  public static SearchRequestDTO getSearchRequest() {
-    return new ModeloMensagemSearchRequest();
-  }
+    /** Serial UID */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Filtros
-   *
-   * @return {@link Set} de filtros do DTO
-   */
-  public static Set<String> propertyFilters() {
-    return getSearchRequest().propertyFilters();
-  }
+    /**
+     * Retorna o request de pesquisa para este DTO.
+     *
+     * @return o {@link SearchRequestDTO} associado
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return new ModeloMensagemSearchRequestDTO();
+    }
 
-   @NotBlank(message = ModeloMensagemTranslator.VALIDATION.NOME_NOT_BLANK)
+    /**
+     * Retorna os filtros de propriedade disponíveis para pesquisa.
+     *
+     * @return conjunto de nomes de filtros
+     */
+    public static Set<String> propertyFilters() {
+        return getSearchRequest().propertyFilters();
+    }
+
+    /**
+     * Nome do modelo de mensagem.
+     * Campo obrigatório, máximo 100 caracteres.
+     */
+    @NotBlank(message = ModeloMensagemTranslator.VALIDATION.NOME_NOT_BLANK)
     @Size(max = 100, message = ModeloMensagemTranslator.VALIDATION.NOME_SIZE)
     @Schema(description = "Nome do modelo de mensagem", example = "Modelo de Boas Vindas", required = true)
     private String nome;
 
+    /**
+     * Descrição do modelo.
+     * Campo opcional, máximo 500 caracteres.
+     */
     @Size(max = 500, message = ModeloMensagemTranslator.VALIDATION.DESCRICAO_SIZE)
     @Schema(description = "Descrição do modelo", example = "Modelo para mensagem de boas vindas a novos usuários")
     private String descricao;
 
+    /**
+     * Corpo do modelo com variáveis.
+     * Campo obrigatório, pode conter placeholders no formato {{chave}}.
+     */
     @NotBlank(message = ModeloMensagemTranslator.VALIDATION.CORPO_MODELO_NOT_BLANK)
     @Schema(description = "Corpo do modelo com variáveis", example = "Olá {{nome}}, seja bem-vindo!", required = true)
     private String corpoModelo;
 
+    /**
+     * Tipo do canal de comunicação.
+     * Campo obrigatório (WHATSAPP, SMS, EMAIL, etc).
+     */
     @NotNull(message = ModeloMensagemTranslator.VALIDATION.TIPO_CANAL_NOT_NULL)
     @Schema(description = "Tipo do canal de comunicação", example = "WHATSAPP", required = true)
     private TipoCanal tipoCanal;
 
-   @Schema(description = "Indica se o modelo está ativo", example = "true")
-   private Boolean ativo;
+    /**
+     * Indica se o modelo está ativo para uso.
+     */
+    @Schema(description = "Indica se o modelo está ativo", example = "true")
+    private Boolean ativo;
 
-  @Override
-  public ModeloMensagemDTO cloneObject() {
-    return toBuilder().build();
-  }
-
-  @Override
-  public ModeloMensagemDTO copyObject() {
-    return toBuilder().id(null).version(null).build();
-  }
-
-  @Override
-  public Map<Variavel, Object> getContext() {
-    return Map.of(
-        VariavelTemplate.NOME_MODELO, nome,
-        VariavelTemplate.DESCRICAO_MODELO, descricao,
-        VariavelTemplate.CORPO_MODELO, corpoModelo,
-        VariavelTemplate.TIPO_CANAL, tipoCanal,
-        VariavelTemplate.ATIVO_MODELO, ativo
-    );
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s", nome);
-  }
-
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
-    public static final String NOME = "nome";
-    public static final String DESCRICAO = "descricao";
-    public static final String CORPO_MODELO = "corpoModelo";
-    public static final String TIPO_CANAL = "tipoCanal";
-    public static final String ATIVO = "ativo";
-
-    public static Set<String> values() {
-      return Set.of(ID, VERSION, NOME, DESCRICAO, CORPO_MODELO, TIPO_CANAL, ATIVO);
+    /**
+     * Cria uma cópia superficial (clone) deste objeto DTO.
+     */
+    @Override
+    public ModeloMensagemDTO cloneObject() {
+        return toBuilder().build();
     }
-  }
+
+    /**
+     * Cria uma cópia deste objeto DTO com id e version nulos.
+     */
+    @Override
+    public ModeloMensagemDTO copyObject() {
+        return toBuilder().id(null).version(null).build();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Variavel, Object> getContext() {
+        return Map.of(
+            VariavelTemplate.NOME_MODELO, nome,
+            VariavelTemplate.DESCRICAO_MODELO, descricao,
+            VariavelTemplate.CORPO_MODELO, corpoModelo,
+            VariavelTemplate.TIPO_CANAL, tipoCanal,
+            VariavelTemplate.ATIVO_MODELO, ativo
+        );
+    }
+
+    /**
+     * Retorna a representação em string do DTO.
+     */
+    @Override
+    public String toString() {
+        return String.format("ModeloMensagemDTO{nome=%s, tipoCanal=%s}", nome, tipoCanal);
+    }
+
+    /**
+     * Constantes para nomes dos campos deste DTO, conforme ADR-040.
+     */
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+
+        public static final String NOME = "nome";
+        public static final String DESCRICAO = "descricao";
+        public static final String CORPO_MODELO = "corpoModelo";
+        public static final String TIPO_CANAL = "tipoCanal";
+        public static final String ATIVO = "ativo";
+
+        /**
+         * Retorna todos os nomes de campos deste DTO incluindo os da superclasse.
+         */
+        public static Set<String> values() {
+            var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+            var currentValues = Set.of(NOME, DESCRICAO, CORPO_MODELO, TIPO_CANAL, ATIVO);
+            var allValues = new java.util.HashSet<String>();
+            allValues.addAll(baseValues);
+            allValues.addAll(currentValues);
+            return Collections.unmodifiableSet(allValues);
+        }
+    }
 }

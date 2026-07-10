@@ -8,12 +8,20 @@ package com.ia.core.flyway.service.model.flywayexecution.dto;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO
+ * @see FlywayExecutionDTO
  */
 public final class FlywayExecutionTranslator {
 
     private FlywayExecutionTranslator() {
         // Utility class
+    }
+
+    /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String VERSION_REQUIRED = "flyway.execution.validation.version.required";
+        public static final String SCRIPT_REQUIRED = "flyway.execution.validation.script.required";
     }
 
     /**
@@ -30,34 +38,6 @@ public final class FlywayExecutionTranslator {
         public static final String INSTALLED_ON = "flyway.execution.help.installed.on";
         public static final String EXECUTION_TIME = "flyway.execution.help.execution.time";
         public static final String SUCCESS = "flyway.execution.help.success";
-    }
-
-    /**
-     * DTO class canonical name
-     */
-    public static final String FLYWAY_EXECUTION_CLASS = FlywayExecutionDTO.class.getCanonicalName();
-
-    /**
-     * Field name constants
-     */
-    public static final String FLYWAY_EXECUTION = "flyway.execution";
-    public static final String VERSION = "flyway.execution.migration.version";
-    public static final String DESCRIPTION = "flyway.execution.description";
-    public static final String TYPE = "flyway.execution.type";
-    public static final String SCRIPT = "flyway.execution.script";
-    public static final String CHECKSUM = "flyway.execution.checksum";
-    public static final String INSTALLED_BY = "flyway.execution.installed_by";
-    public static final String INSTALLED_ON = "flyway.execution.installed_on";
-    public static final String EXECUTION_TIME = "flyway.execution.execution_time";
-    public static final String SUCCESS = "flyway.execution.success";
-    public static final String RANK = "flyway.execution.installed_rank";
-
-    /**
-     * Validation message keys
-     */
-    public static final class VALIDATION {
-        public static final String VERSION_REQUIRED = "validation.flyway.execution.version.required";
-        public static final String SCRIPT_REQUIRED = "validation.flyway.execution.script.required";
     }
 
     /**
@@ -90,4 +70,24 @@ public final class FlywayExecutionTranslator {
     public static final class EVENT {
         public static final String MIGRACAO_EXECUTADA = "flyway.execution.event.migracao.executada";
     }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String FLYWAY_EXECUTION_CLASS = FlywayExecutionDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String FLYWAY_EXECUTION = "flyway.execution";
+    public static final String VERSION = "flyway.execution.migration.version";
+    public static final String DESCRIPTION = "flyway.execution.description";
+    public static final String TYPE = "flyway.execution.type";
+    public static final String SCRIPT = "flyway.execution.script";
+    public static final String CHECKSUM = "flyway.execution.checksum";
+    public static final String INSTALLED_BY = "flyway.execution.installed_by";
+    public static final String INSTALLED_ON = "flyway.execution.installed_on";
+    public static final String EXECUTION_TIME = "flyway.execution.execution_time";
+    public static final String SUCCESS = "flyway.execution.success";
+    public static final String RANK = "flyway.execution.installed_rank";
 }

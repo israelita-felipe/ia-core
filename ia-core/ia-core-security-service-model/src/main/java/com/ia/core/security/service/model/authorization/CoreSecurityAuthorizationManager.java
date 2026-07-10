@@ -14,65 +14,75 @@ import lombok.NoArgsConstructor;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+
 /**
- * Interface que define o contrato para core security authorization.
+ * Interface que define o contrato para autorização de segurança central.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a CoreSecurityAuthorizationManager
- * dentro do sistema.
+ * Responsável por verificar se um usuário tem permissão para realizar
+ * operações específicas com base em funcionalidades, contextos e privilégios.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see HasFunctionality
+ * @see HasContext
+ * @since 1.0.0
  */
 public interface CoreSecurityAuthorizationManager {
 
-  public static interface HasRoles {
+  /**
+   * Interface para obtenção de papéis do usuário.
+   */
+  interface HasRoles {
     Collection<String> roles();
   }
 
-  public static interface HasContextDefinitions {
+  /**
+   * Interface para definições de contexto de autorização.
+   */
+  interface HasContextDefinitions {
     Context<PrivilegeContext> definitions();
 
+    /**
+     * Contexto de privilégio para autorização.
+     */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PrivilegeContext {
+    class PrivilegeContext {
       private PrivilegeDTO privilege;
       private Collection<PrivilegeOperationDTO> privilegeOperations;
     }
   }
 
+  /**
+   * Verifica se o usuário pode criar.
+   */
   default boolean canCreate(HasFunctionality root, Object object) {
-    if (isCreateEnabled()) {
-      return true;
-    }
-    return check(root, OperationEnum.CREATE, object);
-  }
-
-  default boolean canDelete(HasFunctionality root, Object object) {
-    if (isDeleteEnabled()) {
-      return true;
-    }
-    return check(root, OperationEnum.DELETE, object);
-  }
-
-  default boolean canRead(HasFunctionality root, Object object) {
-    if (isReadEnabled()) {
-      return true;
-    }
-    return check(root, OperationEnum.READ, object);
-  }
-
-  default boolean canUpdate(HasFunctionality root, Object object) {
-    if (isUpdateEnabled()) {
-      return true;
-    }
-    return check(root, OperationEnum.UPDATE, object);
+    return isCreateEnabled() || check(root, OperationEnum.CREATE, object);
   }
 
   /**
-   * @param root
-   * @param delete
-   * @return
+   * Verifica se o usuário pode deletar.
+   */
+  default boolean canDelete(HasFunctionality root, Object object) {
+    return isDeleteEnabled() || check(root, OperationEnum.DELETE, object);
+  }
+
+  /**
+   * Verifica se o usuário pode ler.
+   */
+  default boolean canRead(HasFunctionality root, Object object) {
+    return isReadEnabled() || check(root, OperationEnum.READ, object);
+  }
+
+  /**
+   * Verifica se o usuário pode atualizar.
+   */
+  default boolean canUpdate(HasFunctionality root, Object object) {
+    return isUpdateEnabled() || check(root, OperationEnum.UPDATE, object);
+  }
+
+  /**
+   * Verifica permissão baseado em funcionalidade.
    */
   default boolean check(HasFunctionality root, Operation operation,
                         Object object) {
@@ -81,9 +91,7 @@ public interface CoreSecurityAuthorizationManager {
     }
     final String name = root.getFunctionalityTypeName();
     boolean hasAuthority = getCurrentRoles().roles().stream()
-        .anyMatch(authority -> {
-          return Objects.equals(name, authority);
-        });
+        .anyMatch(authority -> Objects.equals(name, authority));
     if (HasContext.class.isInstance(root)) {
       return hasAuthority && check((HasContext) root, operation, object);
     }
@@ -91,7 +99,7 @@ public interface CoreSecurityAuthorizationManager {
   }
 
   /**
-   * Checks if the user has the required permission for the given object and operation.
+   * Verifica permissão baseado em contexto.
    * <p>
    * Security model:
    * <ul>
@@ -99,11 +107,6 @@ public interface CoreSecurityAuthorizationManager {
    *   <li>contexto vazio → No context restrictions → ALLOW</li>
    *   <li>contexto não vazio → Must match privilege contexts → ALLOW/DENY</li>
    * </ul>
-   *
-   * @param hasContext the context holder containing privilege information
-   * @param operation the operation being checked (CREATE, READ, UPDATE, DELETE)
-   * @param object the object being accessed for authorization
-   * @return true if user has permission, false otherwise
    */
   default boolean check(HasContext hasContext, Operation operation,
                         Object object) {
@@ -180,6 +183,9 @@ public interface CoreSecurityAuthorizationManager {
             }));
   }
 
+  /**
+   * Habilita todas as operações.
+   */
   default void enableAll(boolean enabled) {
     setReadEnabled(enabled);
     setUpdateEnabled(enabled);
@@ -199,6 +205,9 @@ public interface CoreSecurityAuthorizationManager {
 
   boolean isUpdateEnabled();
 
+  /**
+   * Verifica se todas as operações estão habilitadas.
+   */
   default boolean isEnabledAll() {
     return isUpdateEnabled() && isCreateEnabled() && isDeleteEnabled()
         && isReadEnabled();

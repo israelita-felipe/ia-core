@@ -6,38 +6,47 @@ import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Requisição de busca para Prompt.
+ * SearchRequest para Prompt.
  * <p>
- * Define filtros disponíveis para busca de prompts.
+ * Define os filtros disponíveis para busca de prompts, incluindo filtros por título e entrada.
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
-class PromptSearchRequest
-  extends SearchRequestDTO {
+class PromptSearchRequest extends SearchRequestDTO {
 
-  private static final Map<FilterProperty, Collection<FilterRequestDTO>> FILTER_MAP = new HashMap<>();
+    /**
+     * Mapa de filtros.
+     */
+    private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
 
-  static {
-    FILTER_MAP.put(
-        FilterProperty.builder().label("Título").property("titulo").build(),
-        Arrays.asList(
-            FilterRequestDTO.builder().key("titulo").fieldType(FieldType.STRING).operator(OperatorDTO.LIKE).build(),
-            FilterRequestDTO.builder().key("titulo").fieldType(FieldType.STRING).operator(OperatorDTO.EQUAL).build()));
-    FILTER_MAP.put(
-        FilterProperty.builder().label("Entrada").property("entrada").build(),
-        Arrays.asList(
-            FilterRequestDTO.builder().key("entrada").fieldType(FieldType.STRING).operator(OperatorDTO.LIKE).build()));
-  }
+    /**
+     * Construtor padrão.
+     */
+    protected PromptSearchRequest() {
+        createFilters(filterMap, PromptTranslator.TITULO,
+            PromptDTO.CAMPOS.TITULO,
+            FieldType.STRING, OperatorDTO.LIKE,
+            OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
 
-  @Override
-  public Map<FilterProperty, Collection<FilterRequestDTO>> getAvaliableFilters() {
-    return FILTER_MAP;
-  }
+        createFilters(filterMap, PromptTranslator.ENTRADA,
+            PromptDTO.CAMPOS.ENTRADA,
+            FieldType.STRING, OperatorDTO.LIKE,
+            OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
+    }
+
+    /**
+     * Retorna os filtros disponíveis para busca.
+     *
+     * @return mapa de filtros disponíveis
+     */
+    @Override
+    public Map<FilterProperty, Collection<FilterRequestDTO>> getAvaliableFilters() {
+        return filterMap;
+    }
 }

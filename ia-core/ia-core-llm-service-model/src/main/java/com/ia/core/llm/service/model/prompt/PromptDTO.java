@@ -3,7 +3,6 @@ package com.ia.core.llm.service.model.prompt;
 import com.ia.core.llm.model.prompt.FinalidadePromptEnum;
 import com.ia.core.llm.model.prompt.Prompt;
 import com.ia.core.llm.service.model.template.TemplateDTO;
-import com.ia.core.model.HasVersion;
 import com.ia.core.service.dto.entity.AbstractBaseEntityDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +11,8 @@ import lombok.*;
 import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -29,6 +30,9 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class PromptDTO
   extends AbstractBaseEntityDTO<Prompt> {
+
+  /** Serial UID */
+  private static final long serialVersionUID = -774920123456789123L;
 
   public static SearchRequestDTO getSearchRequest() {
     return new PromptSearchRequest();
@@ -52,13 +56,18 @@ public class PromptDTO
   private TemplateDTO template;
 
   @Override
-  public void setVersion(Long version) {
-    super.setVersion(version);
+  public PromptDTO cloneObject() {
+    return toBuilder().build();
   }
 
+  /**
+   * Retorna uma representação em string deste objeto.
+   *
+   * @return string contendo o título
+   */
   @Override
-  public PromptDTO cloneObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION).build();
+  public String toString() {
+    return String.format("PromptDTO{titulo=%s}", titulo);
   }
 
   /**
@@ -70,10 +79,14 @@ public class PromptDTO
     public static final String TITULO = "titulo";
     public static final String ENTRADA = "entrada";
     public static final String TEMPLATE = "template";
-    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
     public static Set<String> values() {
-      return Set.of(FINALIDADE, TITULO, ENTRADA, TEMPLATE, PROPERTY_CHANGE_SUPPORT);
+      var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+      var currentValues = Set.of(FINALIDADE, TITULO, ENTRADA, TEMPLATE);
+      var allValues = new HashSet<String>();
+      allValues.addAll(baseValues);
+      allValues.addAll(currentValues);
+      return Collections.unmodifiableSet(allValues);
     }
   }
 }

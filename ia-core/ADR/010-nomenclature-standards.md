@@ -20,11 +20,11 @@ Estabelecer padrões de nomenclatura para todas as camadas da aplicação.
 |------|--------|---------|
 | Entidade | PascalCase (singular) | `Evento`, `Pessoa`, `Familia` |
 | DTO | PascalCase + Sufixo DTO | `EventoDTO`, `PessoaDTO` |
+| SearchRequest | PascalCase + SearchRequestDTO | `EventoSearchRequestDTO` |
 | Repository | PascalCase + Repository | `EventoRepository`, `PessoaRepository` |
 | Service | PascalCase + Service | `EventoService`, `PessoaService` |
 | Mapper | PascalCase + Mapper | `EventoMapper`, `PessoaMapper` |
 | Translator | PascalCase + Translator | `EventoTranslator`, `PessoaTranslator` |
-| SearchRequest | PascalCase + SearchRequest | `EventoSearchRequest` |
 | View | PascalCase + View | `EventoView`, `EventoListView` |
 | ViewModel | PascalCase + ViewModel | `EventoViewModel`, `EventoPageViewModel` |
 | ViewModelConfig | PascalCase + ViewModelConfig | `EventoViewModelConfig` |

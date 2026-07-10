@@ -1,6 +1,6 @@
 package com.ia.core.llm.view.validacao.page;
 
-import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacaoDTO;
 import com.ia.core.llm.view.validacao.ValidacaoManager;
 import com.ia.core.view.components.IViewModel;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ValidacaoPageViewModel implements IViewModel {
 
   private final ValidacaoManager manager;
-  private ResultadoValidacao resultadoAtual;
+  private ResultadoValidacaoDTO resultadoAtual;
 
   public ValidacaoPageViewModel(ValidacaoManager manager) {
     this.manager = manager;
@@ -27,7 +27,7 @@ public class ValidacaoPageViewModel implements IViewModel {
     // Na implementação completa, chamaria o serviço de validação
   }
 
-  public ResultadoValidacao getResultadoAtual() {
+  public ResultadoValidacaoDTO getResultadoAtual() {
     return resultadoAtual;
   }
 

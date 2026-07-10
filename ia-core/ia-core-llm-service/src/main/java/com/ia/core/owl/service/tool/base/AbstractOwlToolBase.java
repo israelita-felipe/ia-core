@@ -62,7 +62,7 @@ public abstract class AbstractOwlToolBase implements OwlToolBase {
   public boolean validateOntology(OntologiaDTO ontologiaDTO) {
     try {
       DefaultOwlService owlService = new DefaultOwlService();
-      return owlService.checkInferrences(ontologiaDTO).consistente();
+      return owlService.checkInferrences(ontologiaDTO).isConsistente();
     } catch (Exception e) {
       log.error("Erro ao validar consistência da ontologia", e);
       return false;
@@ -79,8 +79,8 @@ public abstract class AbstractOwlToolBase implements OwlToolBase {
     try {
       DefaultOwlService owlService = new DefaultOwlService();
       var analise = owlService.checkInferrences(ontologiaDTO);
-      if (!analise.consistente()) {
-        return analise.inconsistencias();
+      if (!analise.isConsistente()) {
+        return analise.getInconsistencias();
       }
       return new java.util.ArrayList<>();
     } catch (Exception e) {

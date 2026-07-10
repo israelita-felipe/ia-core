@@ -7,22 +7,21 @@ import java.util.stream.Collectors;
 
 /**
  * Enum com todas as variáveis disponíveis para templates de mensagem.
+ * <p>
  * Cada constante representa uma variável que pode ser usada em templates
- * através da sintaxe {{chave}}.
+ * através da sintaxe {{chave}}. Esta abordagem permite que o sistema
+ * substitua as variáveis por valores reais durante o envio de mensagens.
+ * </p>
  *
- * <p>Exemplo de uso em template:</p>
- * <pre>
+ * <p>Exemplo de uso em template:
+ * <pre>{@code
  * Olá {{nome}}, seu agendamento para o evento {{evento.nome}}
  * será no dia {{evento.data}} às {{evento.hora}}.
- * </pre>
- *
- * <p>Esta abordagem permite que o sistema substitua as variáveis por
- * valores reais durante o envio de mensagens.</p>
+ * }</pre></p>
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
-
 public enum VariavelTemplate implements Variavel {
     // === CRIAÇÃO ===
     CRIADO_EM("criadoEm", "Data de criação", "data", "criacao", true),
@@ -71,6 +70,15 @@ public enum VariavelTemplate implements Variavel {
     private final String categoria;
     private final boolean obrigatoria;
 
+    /**
+     * Construtor das constantes do enum.
+     *
+     * @param chave chave única para identificação no template (não pode ser null)
+     * @param descricao descrição amigável para exibição ao usuário
+     * @param tipo tipo de dado (texto, data, hora, booleano)
+     * @param categoria categoria da variável para agrupamento
+     * @param obrigatoria indica se a variável é obrigatória em templates
+     */
     VariavelTemplate(String chave, String descricao, String tipo, String categoria, boolean obrigatoria) {
         this.chave = chave;
         this.descricao = descricao;
@@ -81,32 +89,46 @@ public enum VariavelTemplate implements Variavel {
 
     @Override
     public String getChave() {
-        return String.format("{{%s}}", this.chave);
+        return "{{" + chave + "}}";
     }
 
     @Override
     public String getDescricao() {
-        return this.descricao;
+        return descricao;
     }
 
+    /**
+     * Retorna o tipo de dado da variável.
+     *
+     * @return tipo da variável (texto, data, hora, ou booleano)
+     */
     public String getTipo() {
         return tipo;
     }
 
+    /**
+     * Retorna a categoria da variável.
+     *
+     * @return categoria (contato, mensagem, modelo, grupo, evento, sistema, igreja)
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     * Verifica se a variável é obrigatória em templates.
+     *
+     * @return {@code true} se obrigatória, {@code false} caso contrário
+     */
     public boolean isObrigatoria() {
         return obrigatoria;
     }
 
-    // === Métodos auxiliares ===
-
     /**
      * Busca uma variável pelo nome da chave.
+     *
      * @param chave a chave da variável (ex: "nome")
-     * @return opcional contendo a variável ou vazio se não encontrada
+     * @return optional contendo a variável ou vazio se não encontrada
      */
     public static Optional<VariavelTemplate> buscarPorChave(String chave) {
         return Arrays.stream(values())
@@ -116,11 +138,16 @@ public enum VariavelTemplate implements Variavel {
 
     /**
      * Lista todas as chaves das variáveis disponíveis.
-     * @return lista de chaves
+     * <p>
+     * As chaves são retornadas no formato {@code {{chave}} para exibição
+     * na interface de cadastro de templates.
+     * </p>
+     *
+     * @return lista de chaves no formato de placeholder
      */
     public static List<String> listarChaves() {
         return Arrays.stream(values())
-            .map(VariavelTemplate::getChave)
+            .map(v -> "{{" + v.chave + "}}")
             .collect(Collectors.toList());
     }
 }

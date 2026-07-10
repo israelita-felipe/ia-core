@@ -9,8 +9,9 @@ import com.ia.core.service.usecase.CrudUseCase;
  * definido no caso de uso Manter-Template.
  *
  * @author Israel Araújo
+ * @since 1.0.0
+ * @see TemplateDTO
  */
-public interface TemplateUseCase
-  extends CrudUseCase<TemplateDTO> {
+public interface TemplateUseCase extends CrudUseCase<TemplateDTO> {
 
 }

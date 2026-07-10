@@ -47,23 +47,17 @@ class QuartzTestCaseCriteriaCoverageTest {
       "### Referências ADR",
       "### Referências do projeto"
   );
-  private static final Set<String> DTO_AND_MODEL_CLASSES = Set.of(
-      "QuartzJobDTO",
-      "QuartzJobInstanceDTO",
-      "QuartzJobInstanceSearchRequest",
-      "QuartzJobSearchRequest",
-      "QuartzJobTriggerDTO",
-      "QuartzJobTriggerSearchRequest",
-      "IntervaloTemporalDTO",
-      "PeriodicidadeDTO",
-      "PeriodicidadeSearchRequest",
-      "ExclusaoRecorrenciaDTO",
-      "RecorrenciaDTO",
-      "SchedulerConfigDTO",
-      "SchedulerConfigSearchRequest",
-      "SchedulerConfigTriggerDTO",
-      "SchedulerConfigTriggerSearchRequest"
-  );
+private static final Set<String> DTO_AND_MODEL_CLASSES = Set.of(
+        "QuartzJobDTO",
+        "QuartzJobInstanceDTO",
+        "QuartzJobTriggerDTO",
+        "IntervaloTemporalDTO",
+        "PeriodicidadeDTO",
+        "ExclusaoRecorrenciaDTO",
+        "RecorrenciaDTO",
+        "SchedulerConfigDTO",
+        "SchedulerConfigTriggerDTO"
+    );
   private static final Set<String> BEAN_CLASSES = Set.of(
       "ExclusaoRecorrencia",
       "IntervaloTemporal",
@@ -176,16 +170,18 @@ class QuartzTestCaseCriteriaCoverageTest {
   }
 
   private static String contractTestSource() throws Exception {
-    return Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/QuartzDtoContractTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/job/dto/QuartzJobSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/job/dto/QuartzJobInstanceSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/job/dto/QuartzJobTriggerSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/periodicidade/dto/PeriodicidadeSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/scheduler/dto/SchedulerConfigSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/scheduler/dto/triggers/SchedulerConfigTriggerSearchRequestTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzBeanContractTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzValueObjectContractTest.java"))
-        + Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzInterfaceContractTest.java"));
+    var builder = new StringBuilder();
+    builder.append(Files.readString(Path.of("src/test/java/com/ia/core/quartz/service/model/QuartzDtoContractTest.java")));
+    for (String className : DTO_AND_MODEL_CLASSES) {
+      var path = Path.of("src/test/java/com/ia/core/quartz/service/model/" + className.toLowerCase() + "/" + className + "Test.java");
+      if (Files.isRegularFile(path)) {
+        builder.append(Files.readString(path));
+      }
+    }
+    builder.append(Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzBeanContractTest.java")));
+    builder.append(Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzValueObjectContractTest.java")));
+    builder.append(Files.readString(Path.of("src/test/java/com/ia/core/quartz/model/QuartzInterfaceContractTest.java")));
+    return builder.toString();
   }
 
   private static String className(Path testCase) {

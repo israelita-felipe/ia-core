@@ -2,7 +2,8 @@ package com.ia.core.llm.service.agente;
 
 import com.ia.core.llm.service.chat.ChatService;
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
+import com.ia.core.llm.service.model.ontologia.EstatisticasOntologiaDTO;
 import com.ia.core.llm.service.template.TemplateService;
 import com.ia.core.owl.service.DefaultOwlService;
 import com.ia.core.owl.service.tool.base.OwlConstructorTool;
@@ -38,13 +39,6 @@ public class ConversationalAgentService {
   private final TemplateService templateService;
   private final List<OwlConstructorTool> owlTools;
 
-  /**
-   * Cria uma nova sessão de conversação com ontologia de contexto.
-   *
-   * @param userId ID do usuário
-   * @param dominio Domínio da conversação (ex: biologia, biblioteca, medicina)
-   * @return ContextoConversacao criado
-   */
   public ContextConversacaoDTO createSession(String userId, String dominio) {
     String sessionId = java.util.UUID.randomUUID().toString();
     log.debug("Criando sessão conversacional: sessionId={}, userId={}, dominio={}",
@@ -53,17 +47,9 @@ public class ConversationalAgentService {
     return contextoConversacaoService.createContextOntology(sessionId, userId, dominio);
   }
 
-  /**
-   * Processa uma mensagem do usuário na conversação.
-   *
-   * @param sessionId ID da sessão de conversação
-   * @param mensagem Mensagem do usuário
-   * @return Resposta do agente
-   */
-  public RespostaAgente processMessage(String sessionId, String mensagem) {
+  public RespostaAgenteDTO processMessage(String sessionId, String mensagem) {
     log.debug("Processando mensagem: sessionId={}", sessionId);
 
-    // Recupera contexto da ontologia
     Optional<ContextConversacaoDTO> optionalContext = contextoConversacaoService.getContextOntology(sessionId);
     if (optionalContext.isEmpty()) {
       throw new IllegalArgumentException("Sessão não encontrada: " + sessionId);
@@ -71,43 +57,26 @@ public class ConversationalAgentService {
 
     ContextConversacaoDTO contexto = optionalContext.get();
 
-    // Constrói prompt enriquecido com contexto da ontologia
     String enrichedPrompt = buildEnrichedPrompt(contexto, mensagem);
 
-    // Usa ChatService com tools OWL para processar mensagem
-    // O LLM decide automaticamente quais tools usar e quais parâmetros passar
     String response = chatService.ask(
         enrichedPrompt,Map.of(),
         buildSystemPrompt(contexto.getDominio()),
         contexto.getSessionId(),owlTools.toArray()
     );
 
-    // Atualiza ontologia de contexto dinamicamente
-    // (O LLM já terá usado as tools OWL para adicionar axiomas via owlService)
-
-    // Atualiza contexto
     contexto.setUltimaAtividade(LocalDateTime.now());
 
-    // Constrói resposta
-    return RespostaAgente.builder()
+    return RespostaAgenteDTO.builder()
         .agentResponse(response)
-        .ontologyStatus(RespostaAgente.OntologiaStatus.builder()
-            .iri(contexto.getOntologia() != null ? contexto.getOntologia().getIri() : "")
-            .consistent(contexto.isOntologiaConsistente())
+        .ontologyStatus(EstatisticasOntologiaDTO.builder()
+            .classeCount(contexto.getTotalAxiomasExtraidos() / 2)
             .axiomCount(contexto.getTotalAxiomasExtraidos())
             .build())
         .build();
   }
 
-  /**
-   * Constrói prompt enriquecido com contexto da ontologia.
-   *
-   * @param contexto Contexto da conversação
-   * @param mensagem Mensagem do usuário
-   * @return Prompt enriquecido
-   */
   private String buildEnrichedPrompt(ContextConversacaoDTO contexto, String mensagem) {
-    // Tenta obter template do banco
     try {
       return templateService.loadById("conversational-context-enrichment")
           .map(template -> templateService.processTemplate(
@@ -125,13 +94,6 @@ public class ConversationalAgentService {
     }
   }
 
-  /**
-   * Constrói prompt enriquecido padrão caso template não esteja disponível.
-   *
-   * @param contexto Contexto da conversação
-   * @param mensagem Mensagem do usuário
-   * @return Prompt enriquecido padrão
-   */
   private String buildDefaultEnrichedPrompt(ContextConversacaoDTO contexto, String mensagem) {
     StringBuilder sb = new StringBuilder();
     sb.append("Contexto da ontologia atual:\n");
@@ -144,12 +106,6 @@ public class ConversationalAgentService {
     return sb.toString();
   }
 
-  /**
-   * Obtém conteúdo da ontologia em formato de texto.
-   *
-   * @param contexto Contexto da conversação
-   * @return Conteúdo da ontologia
-   */
   private String getOntologyContent(ContextConversacaoDTO contexto) {
     if (contexto.getOntologia() == null || contexto.getOntologia().getConteudo() == null) {
       return "Ontologia vazia.";
@@ -157,12 +113,6 @@ public class ConversationalAgentService {
     return contexto.getOntologia().getConteudo();
   }
 
-  /**
-   * Constrói prompt system específico para o domínio.
-   *
-   * @param dominio Domínio da conversação
-   * @return Prompt system
-   */
   private String buildSystemPrompt(String dominio) {
     try {
       return templateService.loadById("conversational-system")
@@ -200,11 +150,6 @@ public class ConversationalAgentService {
     }
   }
 
-  /**
-   * Encerra uma sessão de conversação.
-   *
-   * @param sessionId ID da sessão
-   */
   public void endSession(String sessionId) {
     log.debug("Encerrando sessão: sessionId={}", sessionId);
     contextoConversacaoService.deleteContextOntology(sessionId);

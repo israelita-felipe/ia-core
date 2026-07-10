@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,64 +32,63 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrivilegeOperationDTO
-  extends AbstractBaseEntityDTO<PrivilegeOperation> {
+    extends AbstractBaseEntityDTO<PrivilegeOperation> {
 
-  @NotNull
-  private OperationEnum operation;
+    /**
+     * Operação a ser realizada.
+     * <p>
+     * Deve ser não nula e representa a operação que pode ser realizada
+     * sobre o privilégio (criar, ler, atualizar, excluir).
+     */
+    @NotNull(message = PrivilegeOperationTranslator.VALIDATION.OPERATION_REQUIRED)
+    private OperationEnum operation;
 
-  @Default
-  private Set<PrivilegeOperationContextDTO> context = new HashSet<>();
+    @Default
+    private Set<PrivilegeOperationContextDTO> context = new HashSet<>();
 
-  /**
-   * Retorna uma visão imutável do conjunto de contextos.
-   *
-   * @return conjunto de contextos não modificável
-   * @bugfix SECURITY: Evita modificação externa não controlada do estado interno
-   */
-  public Set<PrivilegeOperationContextDTO> getContext() {
-    return Collections.unmodifiableSet(context);
-  }
+    /**
+     * @return
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return SearchRequestDTO.builder().build();
+    }
 
-  /**
-   * Define o conjunto de contextos (faz uma cópia defensiva).
-   *
-   * @param context novo conjunto de contextos (não pode ser null)
-   * @throws NullPointerException se context for null
-   * @bugfix SECURITY: Cópia defensiva para evitar retenção de referência mutável
-   */
-  public void setContext(Set<PrivilegeOperationContextDTO> context) {
-    this.context = new HashSet<>(context);
-  }
-
-  @Override
-  public PrivilegeOperationDTO cloneObject() {
-    return toBuilder().context(context != null ? new HashSet<>(getContext().stream()
-        .filter(java.util.Objects::nonNull)
-        .map(PrivilegeOperationContextDTO::cloneObject)
-        .collect(Collectors.toSet())) : new HashSet<>()).build();
-  }
-
-  @Override
-  public PrivilegeOperationDTO copyObject() {
-    return ((PrivilegeOperationDTO) super.copyObject()).toBuilder()
-        .context(context != null ? new HashSet<>(getContext().stream()
+    @Override
+    public PrivilegeOperationDTO cloneObject() {
+        return toBuilder().context(context != null ? new HashSet<>(getContext().stream()
             .filter(java.util.Objects::nonNull)
-            .map(PrivilegeOperationContextDTO::copyObject)
-            .collect(Collectors.toSet())) : new HashSet<>())
-        .build();
-  }
+            .map(PrivilegeOperationContextDTO::cloneObject)
+            .collect(Collectors.toSet())) : new HashSet<>()).build();
+    }
 
-  /**
-   * @return
-   */
-  public static SearchRequestDTO getSearchRequest() {
-    return SearchRequestDTO.builder().build();
-  }
+    @Override
+    public PrivilegeOperationDTO copyObject() {
+        return ((PrivilegeOperationDTO) super.copyObject()).toBuilder()
+            .context(context != null ? new HashSet<>(getContext().stream()
+                .filter(java.util.Objects::nonNull)
+                .map(PrivilegeOperationContextDTO::copyObject)
+                .collect(Collectors.toSet())) : new HashSet<>())
+            .build();
+    }
 
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String OPERATION = "operation";
-    public static final String CONTEXT = "context";
-  }
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS
+        extends AbstractBaseEntityDTO.CAMPOS {
+        public static final String OPERATION = "operation";
+        public static final String CONTEXT = "context";
+
+        /**
+         * Retorna todos os nomes de campos deste DTO incluindo os da superclasse.
+         *
+         * @return conjunto de strings com os nomes dos campos
+         */
+        public static Set<String> values() {
+            var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+            var currentValues = Set.of(OPERATION, CONTEXT);
+            var allValues = new java.util.HashSet<String>();
+            allValues.addAll(baseValues);
+            allValues.addAll(currentValues);
+            return java.util.Collections.unmodifiableSet(allValues);
+        }
+    }
 }

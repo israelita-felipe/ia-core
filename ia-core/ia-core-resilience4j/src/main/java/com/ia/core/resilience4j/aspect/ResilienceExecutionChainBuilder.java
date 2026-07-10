@@ -100,23 +100,30 @@ public class ResilienceExecutionChainBuilder {
         return buildMetricsSupplier(context, joinPoint, chainSupplier);
     }
 
-    /**
-     * Constrói o supplier base que executa o método original.
-     *
-     * @param joinPoint o join point do método
-     * @return supplier que executa o método original
-     */
-    private Supplier<Object> buildBaseSupplier(ProceedingJoinPoint joinPoint) {
-        return () -> {
-            try {
-                return joinPoint.proceed();
-            } catch (RuntimeException e) {
-                throw e;
-            } catch (Throwable e) {
-                throw new RuntimeException(e.getLocalizedMessage(), e);
-            }
-        };
-    }
+/**
+      * Constrói o supplier base que executa o método original.
+      *
+      * <p>Não envolve exceções - apenas delega para o joinPoint,
+      * permitindo que os handlers específicos tratem suas próprias exceções.</p>
+      *
+      * @param joinPoint o join point do método
+      * @return supplier que executa o método original
+      */
+     private Supplier<Object> buildBaseSupplier(ProceedingJoinPoint joinPoint) {
+         return () -> {
+             try {
+                 return joinPoint.proceed();
+             } catch (RuntimeException e) {
+                 // Rethrow RuntimeExceptions as-is to prevent message accumulation
+                 throw e;
+             } catch (Error e) {
+                 // Rethrow Errors as-is (JVM errors should not be wrapped)
+                 throw e;
+             } catch (Throwable e) {
+                 throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+             }
+         };
+     }
 
     /**
      * Envolve o supplier com propagação de contexto.

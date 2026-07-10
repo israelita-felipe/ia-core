@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 /**
@@ -35,17 +36,17 @@ import java.util.function.Supplier;
 public class TimeLimiterStrategyHandler extends AbstractResilienceStrategyHandler<TimeLimiter> {
 
     /**
-     * Creates or resolves a TimeLimiter instance for the given context.
-     *
-     * <p>Configures the TimeLimiter with:</p>
-     * <ul>
-     *   <li>Timeout duration from annotation or profile</li>
-     *   <li>Cancel running future on timeout</li>
-     * </ul>
-     *
-     * @param context the resilience context containing profile and annotation info
-     * @return configured TimeLimiter instance
-     */
+      * Creates or resolves a TimeLimiter instance for the given context.
+      *
+      * <p>Configures the TimeLimiter with:</p>
+      * <ul>
+      *   <li>Timeout duration from annotation or profile</li>
+      *   <li>Cancel running future on timeout</li>
+      * </ul>
+      *
+      * @param context the resilience context containing profile and annotation info
+      * @return configured TimeLimiter instance
+      */
     @Override
     public TimeLimiter resolve(ResilienceContext context) {
         ProfileAnnotation data = extractProfileAndAnnotation(context);
@@ -67,15 +68,21 @@ public class TimeLimiterStrategyHandler extends AbstractResilienceStrategyHandle
     }
 
     /**
-     * Executes the next step with the resolved TimeLimiter.
-     *
-     * <p>Retrieves the TimeLimiter from the context and applies it to the next supplier.
-     * The TimeLimiter is expected to be stored in the context during the resolve phase.</p>
-     *
-     * @param context o contexto de resiliência já resolvido
-     * @param next o próximo passo na cadeia de execução
-     * @return o resultado da execução
-     */
+      * Executes the next step with the resolved TimeLimiter.
+      *
+      * <p>Retrieves the TimeLimiter from the context and applies it to the next supplier.
+      * The TimeLimiter is expected to be stored in the context during the resolve phase.</p>
+      *
+      * <p>Tratamento de exceções:</p>
+      * <ul>
+      *   <li>TimeoutException: wrapped with TimeLimiter context message</li>
+      *   <li>Other exceptions: rethrown as-is to prevent message accumulation</li>
+      * </ul>
+      *
+      * @param context o contexto de resiliência já resolvido
+      * @param next o próximo passo na cadeia de execução
+      * @return o resultado da execução
+      */
     @Override
     @SuppressWarnings("unchecked")
     public Object execute(ResilienceContext context, Supplier<Object> next) {
@@ -84,8 +91,40 @@ public class TimeLimiterStrategyHandler extends AbstractResilienceStrategyHandle
             return timeLimiter.executeFutureSupplier(() ->
                     CompletableFuture.supplyAsync(next::get)
             );
+        } catch (TimeoutException e) {
+            // Only wrap TimeoutException - these are truly caused by TimeLimiter
+            throw new RuntimeException("TimeLimiter timed out after " + 
+                    timeLimiter.getTimeLimiterConfig().getTimeoutDuration().toMillis() + "ms", e);
         } catch (Exception e) {
-            throw new RuntimeException("TimeLimiter execution failed: " + e.getLocalizedMessage(), e);
+            // Unwrap CompletionException to check the actual cause
+            e = (Exception) unwrapCompletionException(e);
+            // For other exceptions, check if they're caused by TimeLimiter
+            // If not, rethrow as-is to prevent message accumulation
+            if (isCausedBy(e, TimeoutException.class)) {
+                throw new RuntimeException("TimeLimiter timed out after " + 
+                        timeLimiter.getTimeLimiterConfig().getTimeoutDuration().toMillis() + "ms", e);
+            }
+            // Rethrow without wrapping to prevent nested message accumulation
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+      * Unwraps CompletionException to get the actual cause.
+      *
+      * <p>This method safely unwraps CompletionException without causing issues
+      * if the cause is null.</p>
+      */
+    private Throwable unwrapCompletionException(Throwable t) {
+        if (t instanceof java.util.concurrent.CompletionException) {
+            Throwable cause = t.getCause();
+            if (cause != null) {
+                return cause;
+            }
+        }
+        return t;
     }
 }

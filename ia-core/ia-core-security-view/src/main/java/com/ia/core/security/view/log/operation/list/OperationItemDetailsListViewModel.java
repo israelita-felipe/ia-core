@@ -1,6 +1,6 @@
 package com.ia.core.security.view.log.operation.list;
 
-import com.ia.core.security.service.model.log.operation.OperationItemDetails;
+import com.ia.core.security.service.model.log.operation.OperationItemDetailsDTO;
 import com.ia.core.view.components.list.viewModel.ListViewModel;
 /**
  * Model de dados para a view de operation item details list.
@@ -12,7 +12,7 @@ import com.ia.core.view.components.list.viewModel.ListViewModel;
  * @since 1.0
  */
 public class OperationItemDetailsListViewModel
-  extends ListViewModel<OperationItemDetails> {
+  extends ListViewModel<OperationItemDetailsDTO> {
 
   /**
    * @param config
@@ -22,8 +22,8 @@ public class OperationItemDetailsListViewModel
   }
 
   @Override
-  public Class<OperationItemDetails> getType() {
-    return OperationItemDetails.class;
+  public Class<OperationItemDetailsDTO> getType() {
+    return OperationItemDetailsDTO.class;
   }
 
 }

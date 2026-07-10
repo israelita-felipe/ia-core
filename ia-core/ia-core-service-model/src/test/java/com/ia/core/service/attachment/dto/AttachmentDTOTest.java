@@ -134,14 +134,14 @@ class AttachmentDTOTest extends CoreDTOUnitTest<AttachmentDTO> {
   }
 
   @Test
-  @DisplayName("getSearchRequest deve retornar AttachmentSearchRequest")
+  @DisplayName("getSearchRequest deve retornar AttachmentSearchRequestDTO")
   void testGetSearchRequest() {
     // Act
     var searchRequest = AttachmentDTO.getSearchRequest();
 
     // Assert
     assertThat(searchRequest).isNotNull();
-    assertThat(searchRequest).isInstanceOf(AttachmentSearchRequest.class);
+    assertThat(searchRequest).isInstanceOf(AttachmentSearchRequestDTO.class);
   }
 
   @Test

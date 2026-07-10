@@ -29,6 +29,7 @@ public final class LogOperationTranslator {
         public static final String DATE_TIME = "log.operation.help.date.time";
         public static final String OPERATION = "log.operation.help.operation";
         public static final String PROPERTY = "log.operation.help.property";
+        public static final String VALUE_ID = "log.operation.help.valueId";
     }
 
     /**
@@ -48,14 +49,18 @@ public final class LogOperationTranslator {
     public static final String DATE_TIME = "log.operation.date.time";
     public static final String OPERATION = "log.operation.operation";
     public static final String PROPERTY = "log.operation.property";
+    public static final String VALUE_ID = "log.operation.valueId";
 
     /**
      * Validation message keys
      */
     public static final class VALIDATION {
-        public static final String USER_CODE_REQUIRED = "validation.log.operation.userCode.required";
-        public static final String TYPE_REQUIRED = "validation.log.operation.type.required";
-        public static final String OPERATION_REQUIRED = "validation.log.operation.operation.required";
+        public static final String USER_NAME_REQUIRED = "validation.logoperation.username.required";
+        public static final String USER_CODE_REQUIRED = "validation.logoperation.usercode.required";
+        public static final String TYPE_REQUIRED = "validation.logoperation.type.required";
+        public static final String VALUE_ID_REQUIRED = "validation.logoperation.valueid.required";
+        public static final String DATE_TIME_REQUIRED = "validation.logoperation.datetime.required";
+        public static final String OPERATION_REQUIRED = "validation.logoperation.operation.required";
     }
 
     /**

@@ -22,8 +22,8 @@ import java.util.Set;
  * Responsável por gerenciar as funcionalidades relacionadas a UserPrivilegeDTO
  * dentro do sistema.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 
 @Data
@@ -32,48 +32,48 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserPrivilegeDTO
-  extends AbstractBaseEntityDTO<UserPrivilege> {
+    extends AbstractBaseEntityDTO<UserPrivilege> {
 
-  @NotNull(message = "{validation.user.privilege.privilege.required}")
-  private PrivilegeDTO privilege;
+    @NotNull(message = UserPrivilegeTranslator.VALIDATION.PRIVILEGE_REQUIRED)
+    private PrivilegeDTO privilege;
 
-  @Default
-  private Set<PrivilegeOperationDTO> operations = new HashSet<>();
+    @Default
+    private Set<PrivilegeOperationDTO> operations = new HashSet<>();
 
-  @Override
-  public UserPrivilegeDTO cloneObject() {
-    return toBuilder()
-        .privilege(privilege != null ? privilege.cloneObject() : null)
-        .operations(operations != null ? new HashSet<>(getOperations().stream()
-            .filter(java.util.Objects::nonNull)
-            .map(PrivilegeOperationDTO::cloneObject).toList()) : new HashSet<>())
-        .build();
-  }
-
-  @Override
-  public UserPrivilegeDTO copyObject() {
-    return ((UserPrivilegeDTO) super.copyObject()).toBuilder()
-        .privilege(privilege != null ? privilege.copyObject() : null)
-        .operations(operations != null ? new HashSet<>(getOperations().stream()
-            .filter(java.util.Objects::nonNull)
-            .map(PrivilegeOperationDTO::copyObject).toList()) : new HashSet<>())
-        .build();
-  }
-
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String PRIVILEGE = "privilege";
-    public static final String OPERATIONS = "operations";
-
-    public static Set<String> values() {
-      return Set.of(PRIVILEGE, OPERATIONS);
+    /**
+     * @return
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return SearchRequestDTO.builder().build();
     }
-  }
 
-  /**
-   * @return
-   */
-  public static SearchRequestDTO getSearchRequest() {
-    return SearchRequestDTO.builder().build();
-  }
+    @Override
+    public UserPrivilegeDTO cloneObject() {
+        return toBuilder()
+            .privilege(privilege != null ? privilege.cloneObject() : null)
+            .operations(operations != null ? new HashSet<>(getOperations().stream()
+                .filter(java.util.Objects::nonNull)
+                .map(PrivilegeOperationDTO::cloneObject).toList()) : new HashSet<>())
+            .build();
+    }
+
+    @Override
+    public UserPrivilegeDTO copyObject() {
+        return ((UserPrivilegeDTO) super.copyObject()).toBuilder()
+            .privilege(privilege != null ? privilege.copyObject() : null)
+            .operations(operations != null ? new HashSet<>(getOperations().stream()
+                .filter(java.util.Objects::nonNull)
+                .map(PrivilegeOperationDTO::copyObject).toList()) : new HashSet<>())
+            .build();
+    }
+
+    public static class CAMPOS
+        extends AbstractBaseEntityDTO.CAMPOS {
+        public static final String PRIVILEGE = "privilege";
+        public static final String OPERATIONS = "operations";
+
+        public static Set<String> values() {
+            return Set.of(PRIVILEGE, OPERATIONS);
+        }
+    }
 }

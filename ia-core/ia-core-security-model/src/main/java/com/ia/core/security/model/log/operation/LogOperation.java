@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = LogOperation.TABLE_NAME, schema = LogOperation.SCHEMA_NAME,
-       indexes = {
-           @Index(name = "idx_log_operation_type_value_id_date_time_operation",
-                  columnList = "type ASC, value_id ASC, date_time_operation DESC") })
+    indexes = {
+        @Index(name = "idx_log_operation_type_value_id_date_time_operation",
+            columnList = "type ASC, value_id ASC, date_time_operation DESC")})
 /**
  * Classe que representa a entidade de domínio log operation.
  * <p>
@@ -34,85 +34,88 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogOperation
-  extends BaseEntity {
+    extends BaseEntity {
 
-  /** NOME DA TABELA */
-  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
-      + "LOG_OPERATION";
-  /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
+    /**
+     * NOME DA TABELA
+     */
+    public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+        + "LOG_OPERATION";
+    /**
+     * NOME DO SCHEMA
+     */
+    public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
 
-  @Column(name = "user_name", length = 500, nullable = false)
-  private String userName;
+    @Column(name = "user_name", length = 500, nullable = false)
+    private String userName;
 
-  @Column(name = "user_code", length = 500, nullable = false)
-  private String userCode;
+    @Column(name = "user_code", length = 500, nullable = false)
+    private String userCode;
 
-  @Column(name = "value_id")
-  private Long valueId;
+    @Column(name = "value_id")
+    private Long valueId;
 
-  @Column(name = "type", length = 500)
-  private String type;
+    @Column(name = "type", length = 500)
+    private String type;
 
-  @Lob
-  @Column(name = "old_value")
-  private String oldValue;
-  @Lob
-  @Column(name = "new_value")
-  private String newValue;
+    @Lob
+    @Column(name = "old_value")
+    private String oldValue;
+    @Lob
+    @Column(name = "new_value")
+    private String newValue;
 
-  @Default
-  @Column(name = "date_time_operation")
-  private LocalDateTime dateTimeOperation = LocalDateTime.now();
+    @Default
+    @Column(name = "date_time_operation")
+    private LocalDateTime dateTimeOperation = LocalDateTime.now();
 
-  @Column(name = "operataion")
-  private OperationEnum operation;
+    @Column(name = "operataion")
+    private OperationEnum operation;
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("LogOperation [");
-    if (userName != null) {
-      builder.append("userName=");
-      builder.append(userName);
-      builder.append(", ");
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("LogOperation [");
+        if (userName != null) {
+            builder.append("userName=");
+            builder.append(userName);
+            builder.append(", ");
+        }
+        if (userCode != null) {
+            builder.append("userCode=");
+            builder.append(userCode);
+            builder.append(", ");
+        }
+        if (valueId != null) {
+            builder.append("valueId=");
+            builder.append(valueId);
+            builder.append(", ");
+        }
+        if (type != null) {
+            builder.append("type=");
+            builder.append(type);
+            builder.append(", ");
+        }
+        if (oldValue != null) {
+            builder.append("oldValue=");
+            builder.append(oldValue);
+            builder.append(", ");
+        }
+        if (newValue != null) {
+            builder.append("newValue=");
+            builder.append(newValue);
+            builder.append(", ");
+        }
+        if (dateTimeOperation != null) {
+            builder.append("dateTimeOperation=");
+            builder.append(dateTimeOperation);
+            builder.append(", ");
+        }
+        if (operation != null) {
+            builder.append("operation=");
+            builder.append(operation);
+        }
+        builder.append("]");
+        return builder.toString();
     }
-    if (userCode != null) {
-      builder.append("userCode=");
-      builder.append(userCode);
-      builder.append(", ");
-    }
-    if (valueId != null) {
-      builder.append("valueId=");
-      builder.append(valueId);
-      builder.append(", ");
-    }
-    if (type != null) {
-      builder.append("type=");
-      builder.append(type);
-      builder.append(", ");
-    }
-    if (oldValue != null) {
-      builder.append("oldValue=");
-      builder.append(oldValue);
-      builder.append(", ");
-    }
-    if (newValue != null) {
-      builder.append("newValue=");
-      builder.append(newValue);
-      builder.append(", ");
-    }
-    if (dateTimeOperation != null) {
-      builder.append("dateTimeOperation=");
-      builder.append(dateTimeOperation);
-      builder.append(", ");
-    }
-    if (operation != null) {
-      builder.append("operation=");
-      builder.append(operation);
-    }
-    builder.append("]");
-    return builder.toString();
-  }
-
 }

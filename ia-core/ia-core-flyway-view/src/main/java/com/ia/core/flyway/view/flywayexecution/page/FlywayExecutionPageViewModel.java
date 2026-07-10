@@ -1,7 +1,7 @@
 package com.ia.core.flyway.view.flywayexecution.page;
 
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
-import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionSearchRequest;
+import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionSearchRequestDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 import com.ia.core.view.components.form.viewModel.IFormViewModel;
@@ -28,7 +28,7 @@ public class FlywayExecutionPageViewModel
 
   @Override
   protected SearchRequestDTO createSearchRequest() {
-    return new FlywayExecutionSearchRequest();
+    return new FlywayExecutionSearchRequestDTO();
   }
 
   @Override

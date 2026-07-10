@@ -17,16 +17,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Israel Araújo
- */
-/**
  * Classe que representa o objeto de transferência de dados para user role.
  * <p>
  * Responsável por gerenciar as funcionalidades relacionadas a UserRoleDTO
  * dentro do sistema.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -34,44 +31,46 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserRoleDTO
-  extends AbstractBaseEntityDTO<Role> {
-  public static Set<String> propertyFilters() {
-    return Set.of("name");
-  }
+    extends AbstractBaseEntityDTO<Role> {
+    /**
+     * Nome
+     */
+    @NotNull(message = UserRoleTranslator.VALIDATION.NAME_REQUIRED)
+    private String name;
 
-  /** Serial UID */
-  /** Nome */
-  @NotNull(message = "{validation.user.role.name.required}")
-  private String name;
+    /** Serial UID */
+    @Default
+    private Collection<RolePrivilegeDTO> privileges = new HashSet<>();
 
-  @Default
-  private Collection<RolePrivilegeDTO> privileges = new HashSet<>();
+    public static Set<String> propertyFilters() {
+        return Set.of(CAMPOS.NAME);
+    }
 
-  @Override
-  public UserRoleDTO cloneObject() {
-    return toBuilder().privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
-        .filter(java.util.Objects::nonNull)
-        .map(RolePrivilegeDTO::cloneObject).toList()) : new HashSet<>()).build();
-  }
-
-  @Override
-  public UserRoleDTO copyObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+    @Override
+    public UserRoleDTO cloneObject() {
+        return toBuilder().privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
             .filter(java.util.Objects::nonNull)
-            .map(RolePrivilegeDTO::copyObject).toList()) : new HashSet<>())
-        .build();
-  }
+            .map(RolePrivilegeDTO::cloneObject).toList()) : new HashSet<>()).build();
+    }
 
-  @Override
-  public String toString() {
-    return String.format("%s [%s]", name, privileges);
-  }
+    @Override
+    public UserRoleDTO copyObject() {
+        return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
+            .privileges(privileges != null ? new HashSet<>(getPrivileges().stream()
+                .filter(java.util.Objects::nonNull)
+                .map(RolePrivilegeDTO::copyObject).toList()) : new HashSet<>())
+            .build();
+    }
 
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS
-    extends AbstractBaseEntityDTO.CAMPOS {
-    public static final String NAME = "name";
-    public static final String PRIVILEGES = "privileges";
-  }
+    @Override
+    public String toString() {
+        return String.format("%s [%s]", name, privileges);
+    }
+
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS
+        extends AbstractBaseEntityDTO.CAMPOS {
+        public static final String NAME = "name";
+        public static final String PRIVILEGES = "privileges";
+    }
 }

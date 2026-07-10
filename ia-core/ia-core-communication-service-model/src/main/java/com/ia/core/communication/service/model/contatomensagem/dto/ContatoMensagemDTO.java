@@ -16,6 +16,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,68 +36,70 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContatoMensagemDTO extends AbstractBaseEntityDTO<ContatoMensagem> implements HasVariavel {
-  /** Serial UID */
-  private static final long serialVersionUID = 1L;
 
-  /**
-   * Request de pesquisa
-   *
-   * @return {@link SearchRequestDTO}
-   */
-  public static SearchRequestDTO getSearchRequest() {
-    return new ContatoMensagemSearchRequest();
-  }
+    /** Serial UID */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Filtros
-   *
-   * @return {@link Set} de filtros do DTO
-   */
-  public static Set<String> propertyFilters() {
-    return getSearchRequest().propertyFilters();
-  }
-
-   @NotNull(message = ContatoMensagemTranslator.VALIDATION.GRUPO_CONTATO_NOT_NULL)
-   private GrupoContatoDTO grupoContato;
-
-   @NotBlank(message = ContatoMensagemTranslator.VALIDATION.TELEFONE_NOT_BLANK)
-   @Size(max = 20, message = ContatoMensagemTranslator.VALIDATION.TELEFONE_SIZE)
-   private String telefone;
-
-   @Size(max = 100, message = ContatoMensagemTranslator.VALIDATION.NOME_SIZE)
-   private String nome;
-
-  @Override
-  public ContatoMensagemDTO cloneObject() {
-    return toBuilder().build();
-  }
-
-  @Override
-  public ContatoMensagemDTO copyObject() {
-    return toBuilder().id(null).version(null).build();
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s - %s", telefone, nome);
-  }
-
-  @Override
-  public Map<Variavel, Object> getContext() {
-    return Map.of(
-        VariavelTemplate.TELEFONE, telefone,
-        VariavelTemplate.NOME, nome
-    );
-  }
-
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
-    public static final String GRUPO_CONTATO = "grupoContato";
-    public static final String TELEFONE = "telefone";
-    public static final String NOME = "nome";
-
-    public static Set<String> values() {
-      return Set.of(ID, VERSION, GRUPO_CONTATO, TELEFONE, NOME);
+    /**
+     * Request de pesquisa
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return new ContatoMensagemSearchRequestDTO();
     }
-  }
+
+    /**
+     * Filtros
+     */
+    public static Set<String> propertyFilters() {
+        return getSearchRequest().propertyFilters();
+    }
+
+    @NotNull(message = ContatoMensagemTranslator.VALIDATION.GRUPO_CONTATO_NOT_NULL)
+    private GrupoContatoDTO grupoContato;
+
+    @NotBlank(message = ContatoMensagemTranslator.VALIDATION.TELEFONE_NOT_BLANK)
+    @Size(max = 20, message = ContatoMensagemTranslator.VALIDATION.TELEFONE_SIZE)
+    private String telefone;
+
+    @Size(max = 100, message = ContatoMensagemTranslator.VALIDATION.NOME_SIZE)
+    private String nome;
+
+    @Override
+    public ContatoMensagemDTO cloneObject() {
+        return toBuilder().build();
+    }
+
+    @Override
+    public ContatoMensagemDTO copyObject() {
+        return toBuilder().id(null).version(null).build();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ContatoMensagemDTO{telefone=%s, nome=%s}", telefone, nome);
+    }
+
+    @Override
+    public Map<Variavel, Object> getContext() {
+        return Map.of(
+            VariavelTemplate.TELEFONE, telefone,
+            VariavelTemplate.NOME, nome
+        );
+    }
+
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+        public static final String GRUPO_CONTATO = "grupoContato";
+        public static final String TELEFONE = "telefone";
+        public static final String NOME = "nome";
+
+        public static Set<String> values() {
+            var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+            var currentValues = Set.of(GRUPO_CONTATO, TELEFONE, NOME);
+            var allValues = new HashSet<String>();
+            allValues.addAll(baseValues);
+            allValues.addAll(currentValues);
+            return Collections.unmodifiableSet(allValues);
+        }
+    }
 }

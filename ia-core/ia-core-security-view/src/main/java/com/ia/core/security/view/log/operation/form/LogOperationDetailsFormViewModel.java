@@ -1,7 +1,7 @@
 package com.ia.core.security.view.log.operation.form;
 
-import com.ia.core.security.service.model.log.operation.LogOperationDetails;
-import com.ia.core.security.service.model.log.operation.OperationItemDetails;
+import com.ia.core.security.service.model.log.operation.LogOperationDetailsDTO;
+import com.ia.core.security.service.model.log.operation.OperationItemDetailsDTO;
 import com.ia.core.security.view.log.operation.list.OperationItemDetailsListViewModel;
 import com.ia.core.security.view.log.operation.list.OperationItemDetailsListViewModelConfig;
 import com.ia.core.view.components.form.viewModel.FormViewModel;
@@ -19,14 +19,14 @@ import java.util.Collection;
  * @since 1.0
  */
 public class LogOperationDetailsFormViewModel
-  extends FormViewModel<LogOperationDetails> {
+  extends FormViewModel<LogOperationDetailsDTO> {
   @Getter
   private OperationItemDetailsListViewModel logOperationItemDetailsListViewModel = null;
 
   /**
    * @param readOnly
    */
-  public LogOperationDetailsFormViewModel(FormViewModelConfig<LogOperationDetails> config) {
+  public LogOperationDetailsFormViewModel(FormViewModelConfig<LogOperationDetailsDTO> config) {
     super(config);
     this.logOperationItemDetailsListViewModel = createLogOperationItemDetailsListViewModel(config
         .isReadOnly());
@@ -43,7 +43,7 @@ public class LogOperationDetailsFormViewModel
   /**
    * @return
    */
-  public Collection<OperationItemDetails> getLogOperationItensDetails() {
+  public Collection<OperationItemDetailsDTO> getLogOperationItensDetails() {
     return getModel().getItens();
   }
 

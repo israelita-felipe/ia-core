@@ -10,24 +10,32 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
- *
- */
-/**
- * Gerenciador de context.
+ * Gerenciador de contextos para autorização.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a ContextManager
- * dentro do sistema.
+ * Singleton responsável por gerenciar contextos e definições de contexto
+ * no sistema de autorização. Fornece operações para armazenar, recuperar
+ * e remover contextos associados a chaves específicas.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see ContextDefinition
+ * @since 1.0.0
  */
 
 public class ContextManager {
-  /** Coleção de contexto */
+
+  /**
+   * Mapa de contextos armazenados.
+   */
   private Map<String, Set<String>> context = new HashMap<>();
-  /** Coleção de itens de definição de contexto */
+
+  /**
+   * Mapa de definições de contexto.
+   */
   private Map<String, Supplier<Collection<ContextDefinition>>> contextDefinition = new HashMap<>();
-  /** Instância singleton - inicialização thread-safe */
+
+  /**
+   * Instância singleton com inicialização thread-safe.
+   */
   private static final ContextManager INSTANCE = new ContextManager();
 
   private ContextManager() {
@@ -37,6 +45,13 @@ public class ContextManager {
     return INSTANCE;
   }
 
+  /**
+   * Adiciona um valor ao contexto para uma chave específica.
+   *
+   * @param key a chave do contexto (não pode ser null)
+   * @param value o valor a ser adicionado (não pode ser null)
+   * @throws NullPointerException se key ou value forem null
+   */
   public static void put(String key, String value) {
     Objects.requireNonNull(key, "Context key cannot be null");
     Objects.requireNonNull(value, "Context value cannot be null");
@@ -45,8 +60,11 @@ public class ContextManager {
   }
 
   /**
-   * @param key
-   * @return
+   * Recupera os valores de contexto para uma chave específica.
+   *
+   * @param key a chave do contexto (não pode ser null)
+   * @return conjunto de valores do contexto, nunca null
+   * @throws NullPointerException se key for null
    */
   public static Set<String> get(String key) {
     Objects.requireNonNull(key, "Context key cannot be null");
@@ -58,11 +76,24 @@ public class ContextManager {
     return current;
   }
 
+  /**
+   * Remove um contexto pelo nome da chave.
+   *
+   * @param key a chave do contexto (não pode ser null)
+   * @throws NullPointerException se key for null
+   */
   public static void delete(String key) {
     Objects.requireNonNull(key, "Context key cannot be null");
     get().context.remove(key);
   }
 
+  /**
+   * Adiciona uma definição de contexto.
+   *
+   * @param key a chave da definição (não pode ser null)
+   * @param value fornecedor de definições (não pode ser null)
+   * @throws NullPointerException se key ou value forem null
+   */
   public static void putDefinition(String key,
                                    Supplier<Collection<ContextDefinition>> value) {
     Objects.requireNonNull(key, "Context definition key cannot be null");
@@ -71,8 +102,11 @@ public class ContextManager {
   }
 
   /**
-   * @param key
-   * @return
+   * Recupera a definição de contexto para uma chave específica.
+   *
+   * @param key a chave da definição (não pode ser null)
+   * @return fornecedor de definições, nunca null
+   * @throws NullPointerException se key for null
    */
   public static Supplier<Collection<ContextDefinition>> getDefinition(String key) {
     Objects.requireNonNull(key, "Context definition key cannot be null");
@@ -85,11 +119,23 @@ public class ContextManager {
     return current;
   }
 
+  /**
+   * Remove uma definição de contexto.
+   *
+   * @param key a chave da definição (não pode ser null)
+   * @throws NullPointerException se key for null
+   */
   public static void deleteDefinition(String key) {
     Objects.requireNonNull(key, "Context definition key cannot be null");
     get().contextDefinition.remove(key);
   }
 
+  /**
+   * Definição de contexto.
+   *
+   * @param key chave do contexto
+   * @param label rótulo descritivo
+   */
   public static record ContextDefinition(String key, String label) {
 
     @Override

@@ -15,42 +15,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SecurityLayerTestCaseCoverageTest {
 
   private static final Path TEST_CASES = Path.of("src/test/resources/test-cases");
-  private static final List<String> DTO_AND_MODEL_CLASSES = List.of(
-      "AuthenticationResponse",
-      "Functionality",
-      "Operation",
-      "JwtAuthenticationResponseDTO",
-      "LogOperationDTO",
-      "LogOperationDetails",
-      "LogOperationSearchRequest",
-      "OperationItemDetails",
-      "PrivilegeDTO",
-      "PrivilegeOperationContextDTO",
-      "PrivilegeOperationDTO",
-      "PrivilegeSearchRequest",
-      "RoleDTO",
-      "RolePrivilegeDTO",
-      "RoleSearchRequest",
-      "UserDTO",
-      "UserPasswordChangeDTO",
-      "UserPasswordResetDTO",
-      "UserPrivilegeDTO",
-      "UserRoleDTO",
-      "UserSearchRequest",
-      "AuthenticationRequest",
-      "JwtToken",
-      "TokenValidationResult",
-      "OperationEnum",
-      "LogOperation",
-      "Privilege",
-      "PrivilegeOperation",
-      "PrivilegeOperationContext",
-      "PrivilegeType",
-      "Role",
-      "RolePrivilege",
-      "User",
-      "UserPrivilege"
-  );
+private static final List<String> DTO_AND_MODEL_CLASSES = List.of(
+       "AuthenticationResponse",
+       "Functionality",
+       "Operation",
+       "JwtAuthenticationResponseDTO",
+       "LogOperationDTO",
+       "LogOperationDetailsDTO",
+       "LogOperationSearchRequestDTO",
+       "OperationItemDetailsDTO",
+       "PrivilegeDTO",
+       "PrivilegeOperationContextDTO",
+       "PrivilegeOperationDTO",
+       "PrivilegeSearchRequestDTO",
+       "RoleDTO",
+       "RolePrivilegeDTO",
+       "RoleSearchRequestDTO",
+       "UserDTO",
+       "UserPasswordChangeDTO",
+       "UserPasswordResetDTO",
+       "UserPrivilegeDTO",
+       "UserRoleDTO",
+       "UserSearchRequestDTO",
+       "AuthenticationRequest",
+       "JwtToken",
+       "TokenValidationResult",
+       "OperationEnum",
+       "LogOperation",
+       "Privilege",
+       "PrivilegeOperation",
+       "PrivilegeOperationContext",
+       "PrivilegeType",
+       "Role",
+       "RolePrivilege",
+       "User",
+       "UserPrivilege"
+   );
   private static final List<String> STACK_LAYERS = List.of("Model", "Repository", "Mapper", "ServiceModel", "Service", "API", "View");
 
   @Test
@@ -82,7 +82,7 @@ class SecurityLayerTestCaseCoverageTest {
   }
 
   private static List<String> expectedLayers(String targetClass) {
-    if (targetClass.endsWith("DTO") || targetClass.endsWith("SearchRequest") || targetClass.endsWith("Details")) {
+    if (targetClass.endsWith("DTO") || targetClass.endsWith("SearchRequestDTO") || targetClass.endsWith("Details")) {
       return STACK_LAYERS;
     }
     return List.of("Model");

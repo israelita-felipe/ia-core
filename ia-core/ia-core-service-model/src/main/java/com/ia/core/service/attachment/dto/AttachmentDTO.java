@@ -53,7 +53,7 @@ public class AttachmentDTO<T extends Attachment>
    * @return {@link SearchRequestDTO} de busca
    */
   public static final SearchRequestDTO getSearchRequest() {
-    return new AttachmentSearchRequest();
+    return new AttachmentSearchRequestDTO();
   }
 
   /**

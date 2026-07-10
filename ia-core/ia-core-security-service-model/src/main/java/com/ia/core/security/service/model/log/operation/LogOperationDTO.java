@@ -10,20 +10,19 @@ import lombok.Builder.Default;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Israel Araújo
- */
-/**
- * Classe que representa o objeto de transferência de dados para log operation.
+ * DTO (Data Transfer Object) para representar operações de log no sistema.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a LogOperationDTO
- * dentro do sistema.
+ * Esta classe é utilizada para transferir dados de operações de log entre as camadas
+ * de apresentação e serviço, contendo informações sobre usuário, tipo, valores
+ * e operações realizadas.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @see LogOperation
+ * @see AbstractBaseEntityDTO
+ * @since 1.0.0
  */
 @Getter
 @Setter
@@ -34,67 +33,101 @@ import java.util.Set;
 public class LogOperationDTO
   extends AbstractBaseEntityDTO<LogOperation> {
 
-  public static final SearchRequestDTO getSearchRequest() {
-    return new LogOperationSearchRequest();
+  /**
+   * Retorna uma requisição de busca padrão para operações de log.
+   *
+   * @return instância de {@link SearchRequestDTO} configurada para busca de operações de log
+   */
+  public static SearchRequestDTO getSearchRequest() {
+    return new LogOperationSearchRequestDTO();
   }
 
+  /**
+   * Retorna o conjunto de propriedades disponíveis para filtragem.
+   *
+   * @return conjunto de strings representando as propriedades que podem ser usadas como filtros
+   */
   public static Set<String> propertyFilters() {
     return getSearchRequest().propertyFilters();
   }
 
-  @NotNull(message = "{validation.logoperation.username.required}")
+  /**
+   * Nome do usuário que realizou a operação.
+   * <p>
+   * Deve conter entre 3 e 100 caracteres e não pode ser nulo.
+   */
+  @NotNull(message = LogOperationTranslator.VALIDATION.USER_NAME_REQUIRED)
   private String userName;
-  @NotNull(message = "{validation.logoperation.usercode.required}")
+
+  /**
+   * Código do usuário que realizou a operação.
+   * <p>
+   * Deve conter entre 3 e 50 caracteres e não pode ser nulo.
+   */
+  @NotNull(message = LogOperationTranslator.VALIDATION.USER_CODE_REQUIRED)
   private String userCode;
-  @NotNull(message = "{validation.logoperation.type.required}")
+
+  /**
+   * Tipo da operação realizada.
+   * <p>
+   * Deve conter entre 3 e 100 caracteres e não pode ser nulo.
+   */
+  @NotNull(message = LogOperationTranslator.VALIDATION.TYPE_REQUIRED)
   private String type;
-  @NotNull(message = "{validation.logoperation.valueid.required}")
+
+  /**
+   * ID do valor modificado na operação.
+   * <p>
+   * Deve ser não nulo.
+   */
+  @NotNull(message = LogOperationTranslator.VALIDATION.VALUE_ID_REQUIRED)
   private Long valueId;
+
+  /**
+   * Valor antigo antes da operação.
+   */
   private String oldValue;
+
+  /**
+   * Novo valor após a operação.
+   */
   private String newValue;
 
+  /**
+   * Data e hora da operação.
+   * <p>
+   * Padrão é {@link LocalDateTime#now()} e não pode ser nula.
+   */
   @Default
-  @NotNull(message = "{validation.logoperation.datetime.required}")
+  @NotNull(message = LogOperationTranslator.VALIDATION.DATE_TIME_REQUIRED)
   private LocalDateTime dateTimeOperation = LocalDateTime.now();
 
-  @NotNull(message = "{validation.logoperation.operation.required}")
+  /**
+   * Operação realizada (criar, ler, atualizar, excluir).
+   * <p>
+   * Deve ser não nula.
+   */
+  @NotNull(message = LogOperationTranslator.VALIDATION.OPERATION_REQUIRED)
   private OperationEnum operation;
 
+  /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto {@link LogOperationDTO} com os mesmos valores de atributos
+   */
   @Override
   public LogOperationDTO cloneObject() {
     return toBuilder().build();
   }
 
+  /**
+   * Retorna uma representação em string deste objeto.
+   *
+   * @return string contendo informações da operação de log
+   */
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("LogOperationDTO [");
-    if (id != null) {
-      builder.append("id=");
-      builder.append(id);
-      builder.append(", ");
-    }
-    if (userCode != null) {
-      builder.append("userCode=");
-      builder.append(userCode);
-      builder.append(", ");
-    }
-    if (operation != null) {
-      builder.append("operation=");
-      builder.append(operation);
-      builder.append(", ");
-    }
-    if (type != null) {
-      builder.append("type=");
-      builder.append(type);
-      builder.append(", ");
-    }
-    if (dateTimeOperation != null) {
-      builder.append("dateTimeOperation=");
-      builder.append(dateTimeOperation);
-    }
-    builder.append("]");
-    return builder.toString();
+    return String.format("%s - %s (%s)", userCode, operation, type);
   }
 
   @SuppressWarnings("javadoc")
@@ -107,10 +140,19 @@ public class LogOperationDTO
     public static final String VALUE_ID = "valueId";
     public static final String OLD_VALUE = "oldValue";
     public static final String NEW_VALUE = "newValue";
-    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
+    /**
+     * Retorna todos os nomes de campos deste DTO incluindo os da superclasse.
+     *
+     * @return conjunto de strings com os nomes dos campos
+     */
     public static Set<String> values() {
-      return Set.of(USER_CODE, OPERATION, TYPE, DATE_TIME_OPERATION, USER_NAME, VALUE_ID, OLD_VALUE, NEW_VALUE, PROPERTY_CHANGE_SUPPORT);
+      var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+      var currentValues = Set.of(USER_CODE, OPERATION, TYPE, DATE_TIME_OPERATION, USER_NAME, VALUE_ID, OLD_VALUE, NEW_VALUE);
+      var allValues = new java.util.HashSet<String>();
+      allValues.addAll(baseValues);
+      allValues.addAll(currentValues);
+      return java.util.Collections.unmodifiableSet(allValues);
     }
   }
 }

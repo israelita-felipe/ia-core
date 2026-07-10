@@ -56,6 +56,7 @@ public final class PeriodicidadeTranslator {
         public static final String START_TIME_REQUIRED = "periodicidade.validation.intervaloBase.startTime.required";
         public static final String END_TIME_REQUIRED = "periodicidade.validation.intervaloBase.endTime.required";
         public static final String FREQUENCY_REQUIRED = "periodicidade.validation.regra.frequency.required";
+        public static final String COUNT_LIMIT = "periodicidade.validation.regra.countLimit.positive";
     }
 
     /**
@@ -93,71 +94,87 @@ public final class PeriodicidadeTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String PERIODICIDADE_CLASS = PeriodicidadeDTO.class.getCanonicalName();
+   * DTO class canonical name
+   */
+  public static final String PERIODICIDADE_CLASS = PeriodicidadeDTO.class.getCanonicalName();
 
-     /**
-      * Field name constants
-      */
-     public static final String PERIODICIDADE = "periodicidade";
-     public static final String ATIVO = "periodicidade.ativo";
-     public static final String DATA_INICIO = "periodicidade.dataInicio";
-     public static final String DATA_FIM = "periodicidade.dataFim";
-     public static final String HORA_INICIO = "periodicidade.horaInicio";
-     public static final String HORA_FIM = "periodicidade.horaFim";
-     public static final String INTERVALO_BASE = "periodicidade.intervaloBase";
-     public static final String REGRA = "periodicidade.regra";
-     public static final String ZONE_ID = "periodicidade.zoneId";
-     public static final String EXCEPTION_DATES = "periodicidade.exceptionDates";
-     public static final String INCLUDE_DATES = "periodicidade.includeDates";
+  /**
+   * Field name constants
+   */
+  public static final String PERIODICIDADE = "periodicidade";
+  public static final String ATIVO = "periodicidade.ativo";
+  public static final String DATA_INICIO = "periodicidade.dataInicio";
+  public static final String DATA_FIM = "periodicidade.dataFim";
+  public static final String HORA_INICIO = "periodicidade.horaInicio";
+  public static final String HORA_FIM = "periodicidade.horaFim";
+  public static final String INTERVALO_BASE = "periodicidade.intervaloBase";
+  public static final String REGRA = "periodicidade.regra";
+  public static final String ZONE_ID = "periodicidade.zoneId";
+  public static final String EXCEPTION_DATES = "periodicidade.exceptionDates";
+  public static final String INCLUDE_DATES = "periodicidade.includeDates";
 
-     // Recorrência
-     public static final String RECORRENCIA_FIELD = "periodicidade.recorrencia";
-     public static final class RECORRENCIA {
-         public static final String FREQUENCY = "frequencia";
-         public static final String INTERVAL_VALUE = "intervalValue";
-         public static final String BY_DAY = "byDay";
-         public static final String BY_MONTH_DAY = "byMonthDay";
-         public static final String BY_MONTH = "byMonth";
-         public static final String BY_SET_POSITION = "bySetPosition";
-         public static final String WEEK_START_DAY = "weekStartDay";
-         public static final String BY_YEAR_DAY = "byYearDay";
-         public static final String BY_WEEK_NO = "byWeekNo";
-         public static final String BY_HOUR = "byHour";
-         public static final String BY_MINUTE = "byMinute";
-         public static final String BY_SECOND = "bySecond";
-         public static final String UNTIL_DATE = "untilDate";
-         public static final String COUNT_LIMIT = "countLimit";
+  /**
+   * Nested path constants for search filters.
+   */
+  public static final String INTERVALO_BASE_START_TIME = "periodicidade.intervaloBase.startTime";
+  public static final String INTERVALO_BASE_END_TIME = "periodicidade.intervaloBase.endTime";
+  public static final String REGRA_FREQUENCY = "periodicidade.regra.frequency";
+  public static final String REGRA_INTERVAL_VALUE = "periodicidade.regra.intervalValue";
 
-         public static final class HELP {
-             public static final String FREQUENCY = "periodicidade.recorrencia.help.frequencia";
-             public static final String INTERVAL_VALUE = "periodicidade.recorrencia.help.intervalValue";
-             public static final String BY_DAY = "periodicidade.recorrencia.help.byDay";
-             public static final String BY_MONTH_DAY = "periodicidade.recorrencia.help.byMonthDay";
-             public static final String BY_MONTH = "periodicidade.recorrencia.help.byMonth";
-             public static final String BY_SET_POSITION = "periodicidade.recorrencia.help.bySetPosition";
-             public static final String WEEK_START_DAY = "periodicidade.recorrencia.help.weekStartDay";
-             public static final String BY_YEAR_DAY = "periodicidade.recorrencia.help.byYearDay";
-             public static final String BY_WEEK_NO = "periodicidade.recorrencia.help.byWeekNo";
-             public static final String BY_HOUR = "periodicidade.recorrencia.help.byHour";
-             public static final String BY_MINUTE = "periodicidade.recorrencia.help.byMinute";
-             public static final String BY_SECOND = "periodicidade.recorrencia.help.bySecond";
-             public static final String UNTIL_DATE = "periodicidade.recorrencia.help.untilDate";
-             public static final String COUNT_LIMIT = "periodicidade.recorrencia.help.countLimit";
-         }
+  /**
+   * Recorrência field constant.
+   */
+  public static final String RECORRENCIA_FIELD = "periodicidade.recorrencia";
 
-         public static final class TAB {
-             public static final String MONTHLY = "periodicidade.recorrencia.tab.mensal";
-             public static final String ADVANCED = "periodicidade.recorrencia.tab.avancado";
-             public static final String TIME = "periodicidade.recorrencia.tab.horario";
-             public static final String LIMITS = "periodicidade.recorrencia.tab.limites";
-         }
-     }
+  /**
+   * Recorrência nested constants.
+   */
+  public static final class RECORRENCIA {
+    public static final String FREQUENCY = "frequencia";
+    public static final String INTERVAL_VALUE = "intervalValue";
+    public static final String BY_DAY = "byDay";
+    public static final String BY_MONTH_DAY = "byMonthDay";
+    public static final String BY_MONTH = "byMonth";
+    public static final String BY_SET_POSITION = "bySetPosition";
+    public static final String WEEK_START_DAY = "weekStartDay";
+    public static final String BY_YEAR_DAY = "byYearDay";
+    public static final String BY_WEEK_NO = "byWeekNo";
+    public static final String BY_HOUR = "byHour";
+    public static final String BY_MINUTE = "byMinute";
+    public static final String BY_SECOND = "bySecond";
+    public static final String UNTIL_DATE = "untilDate";
+    public static final String COUNT_LIMIT = "countLimit";
 
-     // Abas
-     public static final String TAB_BASIC = "periodicidade.tab.basic";
-     public static final String TAB_INTERVAL = "periodicidade.tab.interval";
-     public static final String TAB_RECURRENCE = "periodicidade.tab.recurrence";
-     public static final String TAB_EXCEPTIONS = "periodicidade.tab.exceptions";
+    public static final class HELP {
+      public static final String FREQUENCY = "periodicidade.recorrencia.help.frequencia";
+      public static final String INTERVAL_VALUE = "periodicidade.recorrencia.help.intervalValue";
+      public static final String BY_DAY = "periodicidade.recorrencia.help.byDay";
+      public static final String BY_MONTH_DAY = "periodicidade.recorrencia.help.byMonthDay";
+      public static final String BY_MONTH = "periodicidade.recorrencia.help.byMonth";
+      public static final String BY_SET_POSITION = "periodicidade.recorrencia.help.bySetPosition";
+      public static final String WEEK_START_DAY = "periodicidade.recorrencia.help.weekStartDay";
+      public static final String BY_YEAR_DAY = "periodicidade.recorrencia.help.byYearDay";
+      public static final String BY_WEEK_NO = "periodicidade.recorrencia.help.byWeekNo";
+      public static final String BY_HOUR = "periodicidade.recorrencia.help.byHour";
+      public static final String BY_MINUTE = "periodicidade.recorrencia.help.byMinute";
+      public static final String BY_SECOND = "periodicidade.recorrencia.help.bySecond";
+      public static final String UNTIL_DATE = "periodicidade.recorrencia.help.untilDate";
+      public static final String COUNT_LIMIT = "periodicidade.recorrencia.help.countLimit";
+    }
+
+    public static final class TAB {
+      public static final String MONTHLY = "periodicidade.recorrencia.tab.mensal";
+      public static final String ADVANCED = "periodicidade.recorrencia.tab.avancado";
+      public static final String TIME = "periodicidade.recorrencia.tab.horario";
+      public static final String LIMITS = "periodicidade.recorrencia.tab.limites";
+    }
+  }
+
+  /**
+   * Tab constants for UI.
+   */
+  public static final String TAB_BASIC = "periodicidade.tab.basic";
+  public static final String TAB_INTERVAL = "periodicidade.tab.interval";
+  public static final String TAB_RECURRENCE = "periodicidade.tab.recurrence";
+  public static final String TAB_EXCEPTIONS = "periodicidade.tab.exceptions";
 }

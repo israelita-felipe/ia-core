@@ -8,24 +8,12 @@ package com.ia.core.communication.service.model.modelomensagem.dto;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.communication.service.model.modelomensagem.dto.ModeloMensagemDTO
+ * @see ModeloMensagemDTO
  */
 public final class ModeloMensagemTranslator {
 
     private ModeloMensagemTranslator() {
         // Utility class
-    }
-
-    /**
-     * Help text i18n keys
-     */
-    public static final class HELP {
-        public static final String MODELO_MENSAGEM = "modelo.mensagem.help";
-        public static final String NOME = "modelo.mensagem.help.nome";
-        public static final String DESCRICAO = "modelo.mensagem.help.descricao";
-        public static final String CORPO_MODELO = "modelo.mensagem.help.corpo.modelo";
-        public static final String TIPO_CANAL = "modelo.mensagem.help.tipo.canal";
-        public static final String ATIVO = "modelo.mensagem.help.ativo";
     }
 
     /**
@@ -40,14 +28,15 @@ public final class ModeloMensagemTranslator {
     }
 
     /**
-     * Business rule message keys
+     * Help text i18n keys
      */
-    public static final class RULE {
-        public static final String NOME_DUPLICADO = "modelo.mensagem.rule.nome.duplicado";
-        public static final String MODELO_INATIVO = "modelo.mensagem.rule.modelo.inativo";
-        public static final String VARIAVEIS_INVALIDAS = "modelo.mensagem.rule.variaveis.invalidas";
-        public static final String MODELO_NAO_ENCONTRADO = "modelo.mensagem.rule.modelo.nao.encontrado";
-        public static final String CONTATO_NAO_ENCONTRADO = "modelo.mensagem.rule.contato.nao.encontrado";
+    public static final class HELP {
+        public static final String MODELO_MENSAGEM = "modelo.mensagem.help";
+        public static final String NOME = "modelo.mensagem.help.nome";
+        public static final String DESCRICAO = "modelo.mensagem.help.descricao";
+        public static final String CORPO_MODELO = "modelo.mensagem.help.corpo.modelo";
+        public static final String TIPO_CANAL = "modelo.mensagem.help.tipo.canal";
+        public static final String ATIVO = "modelo.mensagem.help.ativo";
     }
 
     /**
@@ -68,17 +57,23 @@ public final class ModeloMensagemTranslator {
     }
 
     /**
+     * Business rule message keys
+     */
+    public static final class RULE {
+        public static final String NOME_DUPLICADO = "modelo.mensagem.rule.nome.duplicado";
+        public static final String MODELO_INATIVO = "modelo.mensagem.rule.modelo.inativo";
+        public static final String VARIAVEIS_INVALIDAS = "modelo.mensagem.rule.variaveis.invalidas";
+        public static final String MODELO_NAO_ENCONTRADO = "modelo.mensagem.rule.modelo.nao.encontrado";
+        public static final String CONTATO_NAO_ENCONTRADO = "modelo.mensagem.rule.contato.nao.encontrado";
+    }
+
+    /**
      * Domain event message keys
      */
     public static final class EVENT {
         public static final String MODELO_CRIADO = "modelo.mensagem.event.criado";
         public static final String MODELO_ATUALIZADO = "modelo.mensagem.event.atualizado";
     }
-
-    /**
-     * DTO class canonical name
-     */
-    public static final String MODELO_MENSAGEM_CLASS = ModeloMensagemDTO.class.getCanonicalName();
 
     /**
      * Field name constants
@@ -89,4 +84,5 @@ public final class ModeloMensagemTranslator {
     public static final String CORPO_MODELO = "modelo.mensagem.corpo.modelo";
     public static final String TIPO_CANAL = "modelo.mensagem.tipo.canal";
     public static final String ATIVO = "modelo.mensagem.ativo";
+    public static final String MODELO_MENSAGEM_CLASS = ModeloMensagemDTO.class.getCanonicalName();
 }

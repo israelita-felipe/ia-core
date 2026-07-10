@@ -6,58 +6,56 @@ import com.ia.core.service.dto.filter.FilterRequestDTO;
 import com.ia.core.service.dto.filter.OperatorDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
- * Entidade de domínio que representa template search request.
+ * SearchRequest para Template.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a TemplateSearchRequest
- * dentro do sistema.
+ * Define os filtros disponíveis para busca de templates, incluindo filtros por título, identificador, conteúdo e exigeContexto.
  *
- * @author IA
- * @since 1.0
+ * @author Israel Araújo
+ * @since 1.0.0
  */
-class TemplateSearchRequest
-  extends SearchRequestDTO {
+class TemplateSearchRequest extends SearchRequestDTO {
 
-  private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
+    /**
+     * Mapa de filtros.
+     */
+    private static final Map<FilterProperty, Collection<FilterRequestDTO>> filterMap = new HashMap<>();
 
-  /**
-   *
-   */
-  public TemplateSearchRequest() {
-    filterMap
-        .put(FilterProperty.builder().label("Título").property("titulo")
-            .build(),
-             Arrays.asList(
-                           FilterRequestDTO.builder().key("titulo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.LIKE).build(),
-                           FilterRequestDTO.builder().key("titulo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.EQUAL).build(),
-                           FilterRequestDTO.builder().key("titulo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.NOT_EQUAL).build()));
-    filterMap
-        .put(FilterProperty.builder().label("Conteudo").property("conteudo")
-            .build(),
-             Arrays.asList(
-                           FilterRequestDTO.builder().key("conteudo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.LIKE).build(),
-                           FilterRequestDTO.builder().key("conteudo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.EQUAL).build(),
-                           FilterRequestDTO.builder().key("conteudo")
-                               .fieldType(FieldType.STRING)
-                               .operator(OperatorDTO.NOT_EQUAL).build()));
-  }
+    /**
+     * Construtor padrão.
+     */
+    protected TemplateSearchRequest() {
+        createFilters(filterMap, TemplateTranslator.TITULO,
+            TemplateDTO.CAMPOS.TITULO,
+            FieldType.STRING, OperatorDTO.LIKE,
+            OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
 
-  @Override
-  public Map<FilterProperty, Collection<FilterRequestDTO>> getAvaliableFilters() {
-    return filterMap;
-  }
+        createFilters(filterMap, TemplateTranslator.IDENTIFICADOR,
+            TemplateDTO.CAMPOS.IDENTIFICADOR,
+            FieldType.STRING, OperatorDTO.LIKE,
+            OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
+
+        createFilters(filterMap, TemplateTranslator.CONTEUDO,
+            TemplateDTO.CAMPOS.CONTEUDO,
+            FieldType.STRING, OperatorDTO.LIKE,
+            OperatorDTO.EQUAL, OperatorDTO.NOT_EQUAL);
+
+        createFilters(filterMap, TemplateTranslator.EXIGE_CONTEXTO,
+            TemplateDTO.CAMPOS.EXIGE_CONTEXTO,
+            FieldType.BOOLEAN, OperatorDTO.EQUAL);
+    }
+
+    /**
+     * Retorna os filtros disponíveis para busca.
+     *
+     * @return mapa de filtros disponíveis
+     */
+    @Override
+    public Map<FilterProperty, Collection<FilterRequestDTO>> getAvaliableFilters() {
+        return filterMap;
+    }
 }

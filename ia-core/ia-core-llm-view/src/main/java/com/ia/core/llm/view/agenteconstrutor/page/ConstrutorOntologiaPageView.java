@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.agenteconstrutor.page;
 
-import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologia;
-import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologia;
+import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologiaDTO;
+import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologiaDTO;
 import com.ia.core.llm.view.agenteconstrutor.AgenteConstrutorManager;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -58,14 +58,14 @@ public class ConstrutorOntologiaPageView extends VerticalLayout {
       resultadoPre.setText("Preencha o domínio e o corpus");
       return;
     }
-    RequisicaoConstrucaoOntologia requisicao = RequisicaoConstrucaoOntologia.builder()
+    RequisicaoConstrucaoOntologiaDTO requisicao = RequisicaoConstrucaoOntologiaDTO.builder()
         .domain(dominio)
         .corpus(corpus)
         .targetIri(targetIriField.getValue())
         .targetName(targetNameField.getValue())
         .maxIterations(10)
         .build();
-    ResultadoConstrucaoOntologia resultado = ResultadoConstrucaoOntologia.builder()
+    ResultadoConstrucaoOntologiaDTO resultado = ResultadoConstrucaoOntologiaDTO.builder()
         .jobId("job-" + System.currentTimeMillis())
         .status("QUEUED")
         .build();

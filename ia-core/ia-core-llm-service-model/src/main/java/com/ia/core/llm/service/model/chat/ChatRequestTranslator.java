@@ -8,7 +8,7 @@ package com.ia.core.llm.service.model.chat;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.llm.service.model.chat.ChatRequestDTO
+ * @see ChatRequestDTO
  */
 public final class ChatRequestTranslator {
 
@@ -43,8 +43,8 @@ public final class ChatRequestTranslator {
      * Validation message keys
      */
     public static final class VALIDATION {
-        public static final String REQUEST_REQUIRED = "validation.chat.request.required";
-        public static final String REQUEST_SIZE = "validation.chat.request.size";
+        public static final String REQUEST_REQUIRED = "chat.validation.request.required";
+        public static final String REQUEST_SIZE = "chat.validation.request.size";
     }
 
     /**

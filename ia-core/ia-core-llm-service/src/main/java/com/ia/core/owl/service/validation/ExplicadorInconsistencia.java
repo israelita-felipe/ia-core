@@ -1,6 +1,6 @@
 package com.ia.core.owl.service.validation;
 
-import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistencia;
+import com.ia.core.llm.service.model.ontologia.ExplicacaoInconsistenciaDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class ExplicadorInconsistencia {
    * @param classesInsatisfativeis classes insatisfatíveis
    * @return explicação em linguagem natural
    */
-  public ExplicacaoInconsistencia explicar(String mensagemTecnica,
+  public ExplicacaoInconsistenciaDTO explicar(String mensagemTecnica,
                                           List<String> classesInsatisfativeis) {
     log.debug("Explicando inconsistência: {}, classes: {}", mensagemTecnica, classesInsatisfativeis);
 
@@ -37,7 +37,7 @@ public class ExplicadorInconsistencia {
     String explicacaoNatural = gerarExplicacao(tipoInconsistencia, classesInsatisfativeis);
     List<String> sugestoes = gerarSugestoes(tipoInconsistencia, classesInsatisfativeis);
 
-    return ExplicacaoInconsistencia.builder()
+    return ExplicacaoInconsistenciaDTO.builder()
         .mensagemTecnica(mensagemTecnica)
         .explicacaoNatural(explicacaoNatural)
         .axiomasCausadores(classesInsatisfativeis)

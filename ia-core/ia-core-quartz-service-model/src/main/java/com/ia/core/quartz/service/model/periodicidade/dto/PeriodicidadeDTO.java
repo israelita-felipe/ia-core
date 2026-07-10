@@ -1,7 +1,6 @@
 package com.ia.core.quartz.service.model.periodicidade.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ia.core.model.HasVersion;
 import com.ia.core.quartz.model.periodicidade.Periodicidade;
 import com.ia.core.quartz.service.model.recorrencia.dto.ExclusaoRecorrenciaDTO;
 import com.ia.core.quartz.service.model.recorrencia.dto.RecorrenciaDTO;
@@ -18,13 +17,28 @@ import lombok.experimental.SuperBuilder;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * DTO para representação de periodicidade de agendamento.
+ * <p>
+ * Representa a periodicidade de um job no sistema Quartz, incluindo:
+ * <ul>
+ * <li>Intervalo temporal base (data/hora início e fim)</li>
+ * <li>Regras de recorrência conforme RFC 5545 (RRULE)</li>
+ * <li>Regras de exclusão de recorrência (EXRULE)</li>
+ * <li>Datas de exceção (EXDATE)</li>
+ * <li>Datas de inclusão (RDATE)</li>
+ * </ul>
+ *
  * @author Israel Araújo
+ * @see Periodicidade
+ * @see PeriodicidadeTranslator
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -38,27 +52,33 @@ public class PeriodicidadeDTO
   private static final long serialVersionUID = 8959576762018688242L;
 
   /**
-   * Request de pesquisa
+   * Retorna o request de pesquisa para este DTO.
    *
-   * @return {@link SearchRequestDTO}
+   * @return request de pesquisa
    */
-  public static final SearchRequestDTO getSearchRequest() {
-    return new PeriodicidadeSearchRequest();
+  public static SearchRequestDTO getSearchRequest() {
+    return new PeriodicidadeSearchRequestDTO();
   }
 
   /**
-   * Filtros
+   * Retorna os filtros de propriedade para pesquisa.
    *
-   * @return {@link Set} de filtros do DTO
+   * @return conjunto de filtros
    */
   public static Set<String> propertyFilters() {
     return getSearchRequest().propertyFilters();
   }
 
+  /**
+   * Intervalo temporal base da periodicidade.
+   */
   @Default
-  @NotNull(message = "{validation.periodicidade.intervaloBase.required}")
+  @NotNull(message = PeriodicidadeTranslator.VALIDATION.INTERVALO_BASE_REQUIRED)
   private IntervaloTemporalDTO intervaloBase = new IntervaloTemporalDTO();
 
+  /**
+   * Regra de recorrência.
+   */
   @Default
   private RecorrenciaDTO regra = new RecorrenciaDTO();
 
@@ -70,40 +90,62 @@ public class PeriodicidadeDTO
   @Default
   private ExclusaoRecorrenciaDTO exclusaoRecorrencia = new ExclusaoRecorrenciaDTO();
 
+  /**
+   * Fuso horário da periodicidade.
+   */
   @Default
   private String zoneId = ZoneId.systemDefault().getId();
 
+  /**
+   * Datas de exceção da periodicidade.
+   */
   @Default
   private Set<LocalDate> exceptionDates = new HashSet<>();
 
+  /**
+   * Datas de inclusão da periodicidade.
+   */
   @Default
   private Set<LocalDate> includeDates = new HashSet<>();
 
+  /**
+   * Indica se a periodicidade está ativa.
+   */
   @Default
   private Boolean ativo = Boolean.TRUE;
 
+  /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto com os mesmos valores
+   */
   @Override
   public PeriodicidadeDTO cloneObject() {
     return toBuilder()
         .intervaloBase(intervaloBase != null ? intervaloBase.cloneObject()
-                                             : null)
+                                            : null)
         .regra(regra != null ? regra.cloneObject() : null)
         .exclusaoRecorrencia(exclusaoRecorrencia != null ? exclusaoRecorrencia
             .cloneObject() : null)
         .build();
   }
 
+  /**
+   * Cria uma cópia deste objeto DTO com id e version nulos.
+   *
+   * @return cópia do objeto
+   */
   @Override
   public PeriodicidadeDTO copyObject() {
-    return toBuilder().id(null).version(HasVersion.DEFAULT_VERSION)
-        .intervaloBase(intervaloBase != null ? intervaloBase.copyObject()
-                                             : null)
-        .regra(regra != null ? regra.copyObject() : null)
-        .exclusaoRecorrencia(exclusaoRecorrencia != null ? exclusaoRecorrencia
-            .copyObject() : null)
-        .build();
+    return (PeriodicidadeDTO) super.copyObject();
   }
 
+  /**
+   * Compara este objeto com outro para ordenação.
+   *
+   * @param o o objeto a ser comparado
+   * @return valor negativo, zero ou positivo se este objeto for menos, igual ou maior
+   */
   @Override
   public int compareTo(AbstractBaseEntityDTO<Periodicidade> o) {
     PeriodicidadeDTO p = (PeriodicidadeDTO) o;
@@ -151,12 +193,16 @@ public class PeriodicidadeDTO
     return super.compareTo(o);
   }
 
+  /**
+   * Calcula a duração da periodicidade.
+   *
+   * @return duração calculada
+   */
   public Duration duration() {
     if (intervaloBase == null) {
       return Duration.ZERO;
     }
 
-    // Calcula duração usando LocalDate e LocalTime
     java.time.LocalDateTime start;
     java.time.LocalDateTime end;
 
@@ -173,45 +219,91 @@ public class PeriodicidadeDTO
       end = java.time.LocalDateTime.of(intervaloBase.getEndDate(),
                                        intervaloBase.getEndTime());
     } else if (intervaloBase.getEndTime() != null) {
-      // Mesmo dia, diferente hora
       end = java.time.LocalDateTime.of(intervaloBase.getStartDate(),
                                        intervaloBase.getEndTime());
     } else {
-      // Assume duração de 1 hora
       end = start.plusHours(1);
     }
 
     return Duration.between(start, end);
   }
 
+  /**
+   * Verifica se há regra de recorrência definida.
+   *
+   * @return true se há recorrência, false caso contrário
+   */
   public boolean hasRecurrence() {
     if (regra == null) {
       return false;
     }
-    // Verifica se a frequência está definida
     return regra.getFrequency() != null;
   }
 
+  /**
+   * Retorna o ZoneId a partir do campo zoneId.
+   *
+   * @return ZoneId convertido
+   */
   @JsonIgnore
   public ZoneId getZoneIdValue() {
     return ZoneId.of(zoneId);
   }
 
-@SuppressWarnings("javadoc")
-    public static class CAMPOS
-      extends AbstractBaseEntityDTO.CAMPOS {
-      public static final String ATIVO = "ativo";
-      public static final String INTERVALO_BASE = "intervaloBase";
-      public static final String REGRA = "regra";
-      public static final String EXCLUSAO_RECORRENCIA = "exclusaoRecorrencia";
-      public static final String ZONE_ID = "zoneId";
-      public static final String EXCEPTION_DATES = "exceptionDates";
-      public static final String INCLUDE_DATES = "includeDates";
-      public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
+  /**
+   * Constantes para nomes dos campos deste DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS
+    extends AbstractBaseEntityDTO.CAMPOS {
 
-      public static Set<String> values() {
-          return Set.of(ID, VERSION, ATIVO, INTERVALO_BASE, REGRA, EXCLUSAO_RECORRENCIA, ZONE_ID, EXCEPTION_DATES, INCLUDE_DATES, PROPERTY_CHANGE_SUPPORT);
-      }
+    /** Intervalo temporal base */
+    public static final String INTERVALO_BASE = "intervaloBase";
+
+    /** Regra de recorrência */
+    public static final String REGRA = "regra";
+
+    /** Regra de exclusão */
+    public static final String EXCLUSAO_RECORRENCIA = "exclusaoRecorrencia";
+
+    /** Fuso horário */
+    public static final String ZONE_ID = "zoneId";
+
+    /** Datas de exceção */
+    public static final String EXCEPTION_DATES = "exceptionDates";
+
+    /** Datas de inclusão */
+    public static final String INCLUDE_DATES = "includeDates";
+
+    /** Status ativo */
+    public static final String ATIVO = "ativo";
+
+    // Nested path constants for search filters
+    /** Path para startTime do intervaloBase */
+    public static final String INTERVALO_BASE_START_TIME = "intervaloBase.startTime";
+
+    /** Path para endTime do intervaloBase */
+    public static final String INTERVALO_BASE_END_TIME = "intervaloBase.endTime";
+
+    /** Path para frequency da regra */
+    public static final String REGRA_FREQUENCY = "regra.frequency";
+
+    /** Path para intervalValue da regra */
+    public static final String REGRA_INTERVAL_VALUE = "regra.intervalValue";
+
+    /**
+     * Retorna todos os nomes de campos deste DTO incluindo os da superclasse.
+     *
+     * @return conjunto de strings com os nomes dos campos
+     */
+    public static Set<String> values() {
+      var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+      var currentValues = Set.of(ATIVO, INTERVALO_BASE, REGRA,
+          EXCLUSAO_RECORRENCIA, ZONE_ID, EXCEPTION_DATES, INCLUDE_DATES);
+      var allValues = new HashSet<String>();
+      allValues.addAll(baseValues);
+      allValues.addAll(currentValues);
+      return Collections.unmodifiableSet(allValues);
     }
-
+  }
 }

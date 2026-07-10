@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 /**
  * Classe que representa a entidade de domínio user.
  * <p>
@@ -29,103 +30,74 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User
-  extends BaseEntity {
+    extends BaseEntity {
 
-  /** NOME DA TABELA */
-  public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
-      + "USER";
-  /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
+    /**
+     * NOME DA TABELA
+     */
+    public static final String TABLE_NAME = SecurityModel.TABLE_PREFIX
+        + "USER";
+    /**
+     * NOME DO SCHEMA
+     */
+    public static final String SCHEMA_NAME = SecurityModel.SCHEMA;
+    @Column(name = "account_not_expired", length = 1, nullable = false)
+    @Builder.Default
+    protected boolean accountNotExpired = true;
+    @Column(name = "account_not_locked", length = 1, nullable = false)
+    @Builder.Default
+    protected boolean accountNotLocked = false;
+    @Column(name = "credentials_not_expired", length = 1, nullable = false)
+    @Builder.Default
+    protected boolean credentialsNotExpired = true;
+    @Column(name = "user_name", length = 500, nullable = false)
+    private String userName;
+    @Column(name = "user_code", length = 500, nullable = false)
+    private String userCode;
+    @Column(name = "password", length = 500, nullable = true)
+    private String password;
+    @Column(name = "enabled", length = 1, nullable = false)
+    private boolean enabled;
+    @Default
+    @ManyToMany
+    @JoinTable(name = SecurityModel.TABLE_PREFIX + "users_roles",
+        schema = SCHEMA_NAME,
+        joinColumns = @JoinColumn(name = "user_id",
+            referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id",
+            referencedColumnName = "id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {
+            "user_id", "role_id"}))
+    private Collection<Role> roles = new HashSet<>();
 
-  @Column(name = "user_name", length = 500, nullable = false)
-  private String userName;
-  @Column(name = "user_code", length = 500, nullable = false)
-  private String userCode;
-  @Column(name = "password", length = 500, nullable = true)
-  private String password;
-  @Column(name = "enabled", length = 1, nullable = false)
-  private boolean enabled;
-  @Column(name = "account_not_expired", length = 1, nullable = false)
-  @Builder.Default
-  protected boolean accountNotExpired = true;
-  @Column(name = "account_not_locked", length = 1, nullable = false)
-  @Builder.Default
-  protected boolean accountNotLocked = false;
-  @Column(name = "credentials_not_expired", length = 1, nullable = false)
-  @Builder.Default
-  protected boolean credentialsNotExpired = true;
+    @Default
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+        mappedBy = "user", orphanRemoval = true)
+    private Collection<UserPrivilege> privileges = new HashSet<>();
 
-  @Default
-  @ManyToMany
-  @JoinTable(name = SecurityModel.TABLE_PREFIX + "users_roles",
-             schema = SCHEMA_NAME,
-             joinColumns = @JoinColumn(name = "user_id",
-                                       referencedColumnName = "id"),
-             inverseJoinColumns = @JoinColumn(name = "role_id",
-                                              referencedColumnName = "id"),
-             uniqueConstraints = @UniqueConstraint(columnNames = {
-                 "user_id", "role_id" }))
-  private Collection<Role> roles = new HashSet<>();
-
-  /**
-   * Retorna as roles (funções) deste usuário.
-   * <p>
-   * <b>Security Critical:</b> As roles determinam o nível de acesso do usuário.
-   * Esta coleção é sensível e não deve ser modificada externamente sem auditoria.
-   * Retorna visão imutável para evitar elevação de privilégio via manipulação direta.
-   *
-   * @bugfix SECURITY: Retorna unmodifiableCollection (era Collection mutável exposta).
-   *
-   * @return coleção imutável de roles
-   */
-  public Collection<Role> getRoles() {
-    return java.util.Collections.unmodifiableCollection(roles);
-  }
-
-  @Default
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
-             mappedBy = "user", orphanRemoval = true)
-  private Collection<UserPrivilege> privileges = new HashSet<>();
-
-  /**
-   * Retorna os privilégios deste usuário.
-   * <p>
-   * <b>Security Critical:</b> Privilégios concedem permissões específicas.
-   * A coleção não deve ser modificada diretamente; use métodos de negócio
-   * que realizem validação e auditoria.
-   *
-   * @bugfix SECURITY: Retorna unmodifiableCollection (era Collection mutável exposta).
-   *
-   * @return coleção imutável de privilégios do usuário
-   */
-  public Collection<UserPrivilege> getPrivileges() {
-    return java.util.Collections.unmodifiableCollection(privileges);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("User [");
-    if (userName != null) {
-      builder.append("userName=");
-      builder.append(userName);
-      builder.append(", ");
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("User [");
+        if (userName != null) {
+            builder.append("userName=");
+            builder.append(userName);
+            builder.append(", ");
+        }
+        if (userCode != null) {
+            builder.append("userCode=");
+            builder.append(userCode);
+            builder.append(", ");
+        }
+        builder.append("enabled=");
+        builder.append(enabled);
+        builder.append(", accountNotExpired=");
+        builder.append(accountNotExpired);
+        builder.append(", accountNotLocked=");
+        builder.append(accountNotLocked);
+        builder.append(", credentialsNotExpired=");
+        builder.append(credentialsNotExpired);
+        builder.append("]");
+        return builder.toString();
     }
-    if (userCode != null) {
-      builder.append("userCode=");
-      builder.append(userCode);
-      builder.append(", ");
-    }
-    builder.append("enabled=");
-    builder.append(enabled);
-    builder.append(", accountNotExpired=");
-    builder.append(accountNotExpired);
-    builder.append(", accountNotLocked=");
-    builder.append(accountNotLocked);
-    builder.append(", credentialsNotExpired=");
-    builder.append(credentialsNotExpired);
-    builder.append("]");
-    return builder.toString();
-  }
-
 }

@@ -15,6 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,28 +36,25 @@ import java.util.Set;
 @AllArgsConstructor
 @Schema(description = "Dados de um grupo de contatos")
 public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> implements HasVariavel {
-  /** Serial UID */
-  private static final long serialVersionUID = 1L;
 
-  /**
-   * Request de pesquisa
-   *
-   * @return {@link SearchRequestDTO}
-   */
-  public static SearchRequestDTO getSearchRequest() {
-    return new GrupoContatoSearchRequest();
-  }
+    /** Serial UID */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Filtros
-   *
-   * @return {@link Set} de filtros do DTO
-   */
-  public static Set<String> propertyFilters() {
-    return getSearchRequest().propertyFilters();
-  }
+    /**
+     * Request de pesquisa
+     */
+    public static SearchRequestDTO getSearchRequest() {
+        return new GrupoContatoSearchRequestDTO();
+    }
 
-   @NotBlank(message = GrupoContatoTranslator.VALIDATION.NOME_NOT_BLANK)
+    /**
+     * Filtros
+     */
+    public static Set<String> propertyFilters() {
+        return getSearchRequest().propertyFilters();
+    }
+
+    @NotBlank(message = GrupoContatoTranslator.VALIDATION.NOME_NOT_BLANK)
     @Size(max = 100, message = GrupoContatoTranslator.VALIDATION.NOME_SIZE)
     @Schema(description = "Nome do grupo de contatos", example = "Clientes VIP", required = true)
     private String nome;
@@ -64,41 +63,46 @@ public class GrupoContatoDTO extends AbstractBaseEntityDTO<GrupoContato> impleme
     @Schema(description = "Descrição do grupo", example = "Grupo de clientes VIP com benefícios especiais")
     private String descricao;
 
-   @Schema(description = "Indica se o grupo está ativo", example = "true")
-   private Boolean ativo;
+    @Schema(description = "Indica se o grupo está ativo", example = "true")
+    private Boolean ativo;
 
-  @Override
-  public GrupoContatoDTO cloneObject() {
-    return toBuilder().build();
-  }
-
-  @Override
-  public GrupoContatoDTO copyObject() {
-    return toBuilder().id(null).version(null).build();
-  }
-
-  @Override
-  public Map<Variavel, Object> getContext() {
-    return Map.of(
-        VariavelTemplate.NOME, nome,
-        VariavelTemplate.DESCRICAO_GRUPO, descricao,
-        VariavelTemplate.ATIVO_GRUPO, ativo
-    );
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s", nome);
-  }
-
-  @SuppressWarnings("javadoc")
-  public static class CAMPOS extends com.ia.core.service.dto.entity.AbstractBaseEntityDTO.CAMPOS {
-    public static final String NOME = "nome";
-    public static final String DESCRICAO = "descricao";
-    public static final String ATIVO = "ativo";
-
-    public static Set<String> values() {
-      return Set.of(ID, VERSION, NOME, DESCRICAO, ATIVO);
+    @Override
+    public GrupoContatoDTO cloneObject() {
+        return toBuilder().build();
     }
-  }
+
+    @Override
+    public GrupoContatoDTO copyObject() {
+        return toBuilder().id(null).version(null).build();
+    }
+
+    @Override
+    public Map<Variavel, Object> getContext() {
+        return Map.of(
+            VariavelTemplate.NOME, nome,
+            VariavelTemplate.DESCRICAO_GRUPO, descricao,
+            VariavelTemplate.ATIVO_GRUPO, ativo
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format("GrupoContatoDTO{nome=%s, ativo=%s}", nome, ativo);
+    }
+
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS extends AbstractBaseEntityDTO.CAMPOS {
+        public static final String NOME = "nome";
+        public static final String DESCRICAO = "descricao";
+        public static final String ATIVO = "ativo";
+
+        public static Set<String> values() {
+            var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+            var currentValues = Set.of(NOME, DESCRICAO, ATIVO);
+            var allValues = new HashSet<String>();
+            allValues.addAll(baseValues);
+            allValues.addAll(currentValues);
+            return Collections.unmodifiableSet(allValues);
+        }
+    }
 }

@@ -7,10 +7,21 @@ package com.ia.core.security.service.model.user;
  * used throughout the UserRole DTO processing pipeline.
  *
  * @author Israel Araújo
- * @since 1.0.0
  * @see com.ia.core.security.service.model.user.UserRoleDTO
+ * @since 1.0.0
  */
 public final class UserRoleTranslator {
+ 
+    /**
+     * DTO class canonical name
+     */
+    public static final String USER_ROLE_CLASS = UserRoleDTO.class.getCanonicalName();
+    /**
+     * Field name constants
+     */
+    public static final String USER_ROLE = "user.role";
+    public static final String NAME = "user.role.name";
+    public static final String PRIVILEGES = "user.role.privileges";
 
     private UserRoleTranslator() {
         // Utility class
@@ -63,16 +74,4 @@ public final class UserRoleTranslator {
         public static final String PAPEL_ATRIBUIDO = "user.role.event.papel.atribuido";
         public static final String PAPEL_REMOVIDO = "user.role.event.papel.removido";
     }
-
-    /**
-     * DTO class canonical name
-     */
-    public static final String USER_ROLE_CLASS = UserRoleDTO.class.getCanonicalName();
-
-    /**
-     * Field name constants
-     */
-    public static final String USER_ROLE = "user.role";
-    public static final String NAME = "user.role.name";
-    public static final String PRIVILEGES = "user.role.privileges";
 }

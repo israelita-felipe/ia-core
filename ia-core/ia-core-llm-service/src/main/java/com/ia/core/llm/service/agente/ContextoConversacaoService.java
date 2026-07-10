@@ -157,7 +157,7 @@ public class ContextoConversacaoService extends CrudBaseService<ContextoConversa
     // Usa DefaultOwlService para verificar consistência
 
     var analise = owlService.checkInferrences(ontologiaDTO);
-    boolean isConsistent = analise.consistente();
+    boolean isConsistent = analise.isConsistente();
     ontologiaDTO.setConsistente(isConsistent);
 
     if (!isConsistent) {

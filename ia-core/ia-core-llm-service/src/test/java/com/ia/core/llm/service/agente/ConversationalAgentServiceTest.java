@@ -2,7 +2,7 @@ package com.ia.core.llm.service.agente;
 
 import com.ia.core.llm.service.chat.ChatService;
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.service.template.TemplateService;
 import com.ia.core.owl.service.DefaultOwlService;
@@ -115,15 +115,15 @@ class ConversationalAgentServiceTest {
       when(contextoConversacaoService.getContextOntology(sessionId)).thenReturn(Optional.of(contexto));
       when(chatService.ask(anyString(), anyMap(), anyString(), anyString(), any())).thenReturn(response);
 
-      // Quando
-      RespostaAgente result = service.processMessage(sessionId, mensagem);
+// Quando
+       RespostaAgenteDTO result = service.processMessage(sessionId, mensagem);
 
-      // Então
-      assertThat(result).isNotNull();
-      assertThat(result.getAgentResponse()).isEqualTo(response);
-      verify(contextoConversacaoService).getContextOntology(sessionId);
-      verify(chatService).ask(anyString(), anyMap(), anyString(), anyString(), any());
-    }
+       // Então
+       assertThat(result).isNotNull();
+       assertThat(result.getAgentResponse()).isEqualTo(response);
+       verify(contextoConversacaoService).getContextOntology(sessionId);
+       verify(chatService).ask(anyString(), anyMap(), anyString(), anyString(), any());
+     }
 
     @Test
     @DisplayName("Deve lançar exceção quando sessão não existe")
@@ -159,14 +159,14 @@ class ConversationalAgentServiceTest {
       when(contextoConversacaoService.getContextOntology(sessionId)).thenReturn(Optional.of(contexto));
       when(chatService.ask(anyString(), anyMap(), anyString(), anyString(), any())).thenReturn(response);
 
-      // Quando
-      RespostaAgente result = service.processMessage(sessionId, mensagem);
+// Quando
+       RespostaAgenteDTO result = service.processMessage(sessionId, mensagem);
 
-      // Então
-      assertThat(result).isNotNull();
-      assertThat(result.getAgentResponse()).isEqualTo(response);
-      verify(chatService).ask(anyString(), anyMap(), anyString(), anyString(), any());
-    }
+       // Então
+       assertThat(result).isNotNull();
+       assertThat(result.getAgentResponse()).isEqualTo(response);
+       verify(chatService).ask(anyString(), anyMap(), anyString(), anyString(), any());
+     }
   }
 
   @Nested

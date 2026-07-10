@@ -17,19 +17,26 @@ public final class ChatTranslator {
     }
 
     /**
+     * Validation message keys
+     */
+    public static final class VALIDATION {
+        public static final String SESSION_ID_REQUIRED = "chat.validation.sessionId.required";
+        public static final String SESSION_ID_SIZE = "chat.validation.sessionId.size";
+        public static final String REQUEST_REQUIRED = "chat.validation.request.required";
+        public static final String REQUEST_SIZE = "chat.validation.request.size";
+        public static final String TITULO_SIZE = "chat.validation.titulo.size";
+        public static final String USUARIO_ID_SIZE = "chat.validation.usuarioId.size";
+        public static final String AGENTE_REQUIRED = "chat.validation.agente.required";
+        public static final String DATA_INICIO_REQUIRED = "chat.validation.dataInicio.required";
+    }
+
+    /**
      * Help text i18n keys
      */
     public static final class HELP {
         public static final String CHAT = "chat.help";
         public static final String FREE_CHAT = "chat.help.free";
         public static final String TEMPLATE_CHAT = "chat.help.template";
-    }
-
-    /**
-     * Validation message keys
-     */
-    public static final class VALIDATION {
-        public static final String CHAT_NOT_BLANK = "chat.validation.chat.not.blank";
     }
 
     /**
@@ -75,4 +82,9 @@ public final class ChatTranslator {
     public static final String CHAT = "chat";
     public static final String FREE_CHAT = "chat.free";
     public static final String TEMPLATE_CHAT = "chat.template";
+    public static final String SESSION_ID = "chat.sessionId";
+    public static final String TITULO = "chat.titulo";
+    public static final String STATUS = "chat.status";
+    public static final String USUARIO_ID = "chat.usuarioId";
+    public static final String AGENTE = "chat.agente";
 }

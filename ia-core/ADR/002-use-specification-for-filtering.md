@@ -119,21 +119,25 @@ public class SearchSpecification<T> implements Specification<T> {
 ## Referências
 
 1. **Jakarta Persistence Specification**
-   - URL: https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html
-   - Especificação oficial do Jakarta Persistence com Criteria API
+    - URL: https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html
+    - Especificação oficial do Jakarta Persistence com Criteria API
 
 2. **Baeldung - JPA Specifications**
-   - URL: https://www.baeldung.com/spring-data-jpa-specification
-   - Guia completo sobre Specification pattern com Spring Data
+    - URL: https://www.baeldung.com/spring-data-jpa-specification
+    - Guia completo sobre Specification pattern com Spring Data
 
 3. **Vlad Mihalcea - JPA Criteria API**
-   - URL: https://vladmihalcea.com/jpa-criteria-api/
-   - Artigos avançados sobre Criteria API e performance
+    - URL: https://vladmihalcea.com/jpa-criteria-api/
+    - Artigos avançados sobre Criteria API e performance
 
 4. **Spring Data JPA Documentation**
-   - URL: https://spring.io/projects/spring-data-jpa
-   - Documentação oficial com examples de Specification
+    - URL: https://spring.io/projects/spring-data-jpa
+    - Documentação oficial com examples de Specification
 
 5. **QueryDSL Documentation**
-   - URL: http://www.querydsl.com/static/querydsl/latest/reference/html/html/
-   - Alternativa ao Criteria API com API fluente
+    - URL: http://www.querydsl.com/static/querydsl/latest/reference/html/html/
+    - Alternativa ao Criteria API com API fluente
+
+## Relacionado
+
+- **ADR-040**: SearchRequestDTOs devem seguir o padrão de nomenclatura `DTO` para classes que implementam a interface `DTO<T>` direta ou indiretamente.

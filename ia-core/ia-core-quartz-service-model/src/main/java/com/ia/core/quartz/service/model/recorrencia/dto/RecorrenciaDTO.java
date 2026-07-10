@@ -2,6 +2,7 @@ package com.ia.core.quartz.service.model.recorrencia.dto;
 
 import com.ia.core.quartz.model.periodicidade.Frequencia;
 import com.ia.core.quartz.model.periodicidade.Recorrencia;
+import com.ia.core.quartz.service.model.periodicidade.dto.PeriodicidadeTranslator;
 import com.ia.core.service.dto.DTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -44,8 +45,9 @@ import java.util.stream.Collectors;
  * </ul>
  *
  * @author Israel Araújo
- * @see com.ia.core.quartz.model.periodicidade.Recorrencia
+ * @see Recorrencia
  * @see Frequencia
+ * @since 1.0.0
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -57,48 +59,100 @@ public class RecorrenciaDTO
   /** Serial UID */
   private static final long serialVersionUID = 1L;
 
-  @NotNull(message = "{validation.periodicidade.regra.frequency.required}")
+  /**
+   * Frequência base da regra de recorrência.
+   * <p>
+   * Deve corresponder a um dos valores definidos em {@link Frequencia}.
+   */
+  @NotNull(message = PeriodicidadeTranslator.VALIDATION.FREQUENCY_REQUIRED)
   private Frequencia frequency;
 
-  @Positive(message = "{validation.periodicidade.regra.intervalValue.positive}")
+  /**
+   * Intervalo multiplicador da recorrência.
+   * <p>
+   * Valor padrão é 1. Deve ser positivo.
+   */
+  @Positive(message = PeriodicidadeTranslator.HELP.INTERVAL_VALUE)
   @Builder.Default
   private Integer intervalValue = 1;
 
+  /**
+   * Dias da semana para recorrência.
+   */
   @Default
   private Set<DayOfWeek> byDay = new HashSet<>();
 
+  /**
+   * Dias do mês para recorrência (1-31).
+   */
   @Default
   private Set<Integer> byMonthDay = new HashSet<>();
 
+  /**
+   * Meses para recorrência.
+   */
   @Default
   private Set<Month> byMonth = new HashSet<>();
 
+  /**
+   * Posições no conjunto para recorrência.
+   */
   @Default
   private Set<Integer> bySetPosition = new HashSet<>();
 
+  /**
+   * Data limite da recorrência.
+   */
   private LocalDate untilDate;
 
+  /**
+   * Limite máximo de ocorrências.
+   */
   @Min(value = 1,
-       message = "{validation.periodicidade.regra.countLimit.positive}")
+       message = PeriodicidadeTranslator.VALIDATION.COUNT_LIMIT)
   private Integer countLimit;
 
+  /**
+   * Dia de início da semana.
+   */
   private DayOfWeek weekStartDay;
 
+  /**
+   * Dias do ano para recorrência (1-366).
+   */
   @Default
   private Set<Integer> byYearDay = new HashSet<>();
 
+  /**
+   * Números da semana para recorrência.
+   */
   @Default
   private Set<Integer> byWeekNo = new HashSet<>();
 
+  /**
+   * Horas do dia para recorrência.
+   */
   @Default
   private Set<Integer> byHour = new HashSet<>();
 
+  /**
+   * Minutos da hora para recorrência.
+   */
   @Default
   private Set<Integer> byMinute = new HashSet<>();
 
+  /**
+   * Segundos do minuto para recorrência.
+   */
   @Default
   private Set<Integer> bySecond = new HashSet<>();
 
+  /**
+   * Compara este objeto com outro para ordenação.
+   *
+   * @param other o objeto a ser comparado
+   * @return valor negativo, zero ou positivo se este objeto for menos, igual ou maior
+   */
   public int compareTo(RecorrenciaDTO other) {
     int result = Objects
         .compare(frequency, other.frequency,
@@ -226,6 +280,11 @@ public class RecorrenciaDTO
     return 0;
   }
 
+  /**
+   * Cria uma cópia superficial (clone) deste objeto DTO.
+   *
+   * @return novo objeto com os mesmos valores
+   */
   @Override
   public RecorrenciaDTO cloneObject() {
     return toBuilder().byDay(new HashSet<>(byDay))
@@ -237,32 +296,64 @@ public class RecorrenciaDTO
         .bySetPosition(new HashSet<>(bySetPosition)).build();
   }
 
-/**
-    * Field name constants for Vaadin binding and filters.
-    * Note: RecorrenciaDTO does not extend AbstractBaseEntityDTO, so these are standalone.
-    */
-   @SuppressWarnings("javadoc")
-   public static class CAMPOS {
-     public static final String FREQUENCY = "frequency";
-     public static final String INTERVAL_VALUE = "intervalValue";
-     public static final String BY_DAY = "byDay";
-     public static final String BY_MONTH_DAY = "byMonthDay";
-     public static final String BY_MONTH = "byMonth";
-     public static final String BY_SET_POSITION = "bySetPosition";
-     public static final String UNTIL_DATE = "untilDate";
-     public static final String COUNT_LIMIT = "countLimit";
-     public static final String WEEK_START_DAY = "weekStartDay";
-     public static final String BY_YEAR_DAY = "byYearDay";
-     public static final String BY_WEEK_NO = "byWeekNo";
-     public static final String BY_HOUR = "byHour";
-     public static final String BY_MINUTE = "byMinute";
-     public static final String BY_SECOND = "bySecond";
+  /**
+   * Constantes para nomes dos campos deste DTO.
+   */
+  @SuppressWarnings("javadoc")
+  public static class CAMPOS {
 
-     public static Set<String> values() {
-         return Set.of(FREQUENCY, INTERVAL_VALUE, BY_DAY, BY_MONTH_DAY, BY_MONTH,
-                      BY_SET_POSITION, UNTIL_DATE, COUNT_LIMIT, WEEK_START_DAY,
-                      BY_YEAR_DAY, BY_WEEK_NO, BY_HOUR, BY_MINUTE, BY_SECOND);
-     }
-   }
+    /** Frequência */
+    public static final String FREQUENCY = "frequency";
+
+    /** Valor do intervalo */
+    public static final String INTERVAL_VALUE = "intervalValue";
+
+    /** Dias da semana */
+    public static final String BY_DAY = "byDay";
+
+    /** Dias do mês */
+    public static final String BY_MONTH_DAY = "byMonthDay";
+
+    /** Meses */
+    public static final String BY_MONTH = "byMonth";
+
+    /** Posição no conjunto */
+    public static final String BY_SET_POSITION = "bySetPosition";
+
+    /** Data limite */
+    public static final String UNTIL_DATE = "untilDate";
+
+    /** Limite de ocorrências */
+    public static final String COUNT_LIMIT = "countLimit";
+
+    /** Dia de início da semana */
+    public static final String WEEK_START_DAY = "weekStartDay";
+
+    /** Dias do ano */
+    public static final String BY_YEAR_DAY = "byYearDay";
+
+    /** Números da semana */
+    public static final String BY_WEEK_NO = "byWeekNo";
+
+    /** Horas */
+    public static final String BY_HOUR = "byHour";
+
+    /** Minutos */
+    public static final String BY_MINUTE = "byMinute";
+
+    /** Segundos */
+    public static final String BY_SECOND = "bySecond";
+
+    /**
+     * Retorna todos os nomes de campos deste DTO.
+     *
+     * @return conjunto de strings com os nomes dos campos
+     */
+    public static Set<String> values() {
+        return Set.of(FREQUENCY, INTERVAL_VALUE, BY_DAY, BY_MONTH_DAY, BY_MONTH,
+                     BY_SET_POSITION, UNTIL_DATE, COUNT_LIMIT, WEEK_START_DAY,
+                     BY_YEAR_DAY, BY_WEEK_NO, BY_HOUR, BY_MINUTE, BY_SECOND);
+    }
+  }
 
 }

@@ -15,8 +15,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +28,6 @@ import java.util.Set;
  * @author Israel Araújo
  * @since 1.0.0
  */
-@Slf4j
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
@@ -36,6 +35,9 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class AgenteDTO
   extends AbstractBaseEntityDTO<Agente> {
+
+  /** Serial UID */
+  private static final long serialVersionUID = -828374920123456789L;
 
   public static SearchRequestDTO getSearchRequest() {
     return new AgenteSearchRequest();
@@ -114,10 +116,7 @@ public class AgenteDTO
 
   @Override
   public AgenteDTO cloneObject() {
-    log.debug("Clonando AgenteDTO: identificador={}", identificador);
     return toBuilder()
-        .id(null)
-        .version(HasVersion.DEFAULT_VERSION)
         .ferramentas(new HashSet<>(ferramentas))
         .skills(new HashSet<>(skills))
         .build();
@@ -125,10 +124,20 @@ public class AgenteDTO
 
   @Override
   public AgenteDTO copyObject() {
-    return toBuilder()
-        .id(null)
-        .version(HasVersion.DEFAULT_VERSION)
-        .build();
+    AgenteDTO copy = (AgenteDTO) super.copyObject();
+    copy.setId(null);
+    copy.setVersion(HasVersion.DEFAULT_VERSION);
+    return copy;
+  }
+
+  /**
+   * Retorna uma representação em string deste objeto.
+   *
+   * @return string contendo o identificador e título do agente
+   */
+  @Override
+  public String toString() {
+    return String.format("AgenteDTO{identificador=%s, titulo=%s}", identificador, titulo);
   }
 
   /**
@@ -150,8 +159,13 @@ public class AgenteDTO
     public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
 
     public static Set<String> values() {
-      return Set.of(IDENTIFICADOR, TITULO, DESCRICAO, INSTRUCOES, MODELO, ATIVO,
-          MODULO_ORIGEM, TEMPERATURE, MAX_TOKENS, FERRAMENTAS, SKILLS, PROPERTY_CHANGE_SUPPORT);
+      var baseValues = AbstractBaseEntityDTO.CAMPOS.values();
+      var currentValues = Set.of(IDENTIFICADOR, TITULO, DESCRICAO, INSTRUCOES, MODELO, ATIVO,
+          MODULO_ORIGEM, TEMPERATURE, MAX_TOKENS, FERRAMENTAS, SKILLS);
+      var allValues = new HashSet<String>();
+      allValues.addAll(baseValues);
+      allValues.addAll(currentValues);
+      return Collections.unmodifiableSet(allValues);
     }
   }
 }

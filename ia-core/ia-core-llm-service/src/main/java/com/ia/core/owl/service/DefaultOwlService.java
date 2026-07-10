@@ -2,7 +2,7 @@ package com.ia.core.owl.service;
 
 import com.ia.core.llm.model.ontologia.OntologyFormat;
 import com.ia.core.llm.service.model.ontologia.OntologiaDTO;
-import com.ia.core.llm.service.model.ontologia.ResultadoValidacao;
+import com.ia.core.llm.service.model.ontologia.ResultadoValidacaoDTO;
 import com.ia.core.owl.service.exception.OWLParserException;
 import com.ia.core.owl.service.model.AnaliseInferenciaDTO;
 import com.ia.core.owl.service.model.axioma.AxiomaDTO;
@@ -508,7 +508,7 @@ public class DefaultOwlService
    * @param axiom axioma a validar
    * @return resultado da validação
    */
-  public ResultadoValidacao validarAxioma(AxiomaDTO axiom) {
+  public ResultadoValidacaoDTO validarAxioma(AxiomaDTO axiom) {
     long startTime = System.currentTimeMillis();
     log.debug("Validando axioma: {}", axiom);
 
@@ -529,13 +529,13 @@ public class DefaultOwlService
 
       // Use checkInferrences to check consistency
       var analise = checkInferrences(ontologiaDTO);
-      boolean consistente = analise.consistente();
+      boolean consistente = analise.isConsistente();
 
       long processingTime = System.currentTimeMillis() - startTime;
 
       if (consistente) {
         log.debug("Axioma consistente: {}", axiom);
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(true)
             .explicacao("Axioma é consistente com a ontologia atual")
             .iteracoesUsadas(1)
@@ -543,11 +543,11 @@ public class DefaultOwlService
             .build();
       } else {
         log.warn("Axioma inconsistente: {}, inconsistências: {}",
-                 axiom, analise.inconsistencias());
+                 axiom, analise.getInconsistencias());
 
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(false)
-            .classesInsatisfativeis(analise.inconsistencias())
+            .classesInsatisfativeis(analise.getInconsistencias())
             .explicacao("Axioma causa inconsistência na ontologia")
             .iteracoesUsadas(1)
             .tempoProcessamentoMs(processingTime)
@@ -557,7 +557,7 @@ public class DefaultOwlService
       long processingTime = System.currentTimeMillis() - startTime;
       log.error("Erro ao validar axioma: {}", axiom, e);
 
-      return ResultadoValidacao.builder()
+      return ResultadoValidacaoDTO.builder()
           .consistente(false)
           .explicacao("Erro na validação: " + e.getMessage())
           .iteracoesUsadas(1)
@@ -572,7 +572,7 @@ public class DefaultOwlService
    * @param axioms lista de axiomas a validar
    * @return resultado da validação
    */
-  public ResultadoValidacao validarAxiomas(List<AxiomaDTO> axioms) {
+  public ResultadoValidacaoDTO validarAxiomas(List<AxiomaDTO> axioms) {
     long startTime = System.currentTimeMillis();
     log.debug("Validando {} axiomas", axioms.size());
 
@@ -596,24 +596,24 @@ public class DefaultOwlService
 
       // Use checkInferrences to check consistency
       var analise = checkInferrences(ontologiaDTO);
-      boolean consistente = analise.consistente();
+      boolean consistente = analise.isConsistente();
 
       long processingTime = System.currentTimeMillis() - startTime;
 
       if (consistente) {
         log.debug("Axiomas consistentes: {}", axioms.size());
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(true)
             .explicacao("Todos os axiomas são consistentes com a ontologia atual")
             .iteracoesUsadas(1)
             .tempoProcessamentoMs(processingTime)
             .build();
       } else {
-        log.warn("Axiomas inconsistentes, inconsistências: {}", analise.inconsistencias());
+        log.warn("Axiomas inconsistentes, inconsistências: {}", analise.getInconsistencias());
 
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(false)
-            .classesInsatisfativeis(analise.inconsistencias())
+            .classesInsatisfativeis(analise.getInconsistencias())
             .explicacao("Axiomas causam inconsistência na ontologia")
             .iteracoesUsadas(1)
             .tempoProcessamentoMs(processingTime)
@@ -623,7 +623,7 @@ public class DefaultOwlService
       long processingTime = System.currentTimeMillis() - startTime;
       log.error("Erro ao validar axiomas", e);
 
-      return ResultadoValidacao.builder()
+      return ResultadoValidacaoDTO.builder()
           .consistente(false)
           .explicacao("Erro na validação: " + e.getMessage())
           .iteracoesUsadas(1)
@@ -639,29 +639,29 @@ public class DefaultOwlService
    * @param ontologiaDTO ontologia DTO a ser validada
    * @return resultado da validação
    */
-  public ResultadoValidacao validarOntologiaAtual(OntologiaDTO ontologiaDTO) {
+  public ResultadoValidacaoDTO validarOntologiaAtual(OntologiaDTO ontologiaDTO) {
     long startTime = System.currentTimeMillis();
     log.debug("Validando ontologia atual");
 
     try {
       var analise = checkInferrences(ontologiaDTO);
-      boolean consistente = analise.consistente();
+      boolean consistente = analise.isConsistente();
       long processingTime = System.currentTimeMillis() - startTime;
 
       if (consistente) {
         log.debug("Ontologia atual é consistente");
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(true)
             .explicacao("Ontologia é consistente")
             .iteracoesUsadas(1)
             .tempoProcessamentoMs(processingTime)
             .build();
       } else {
-        log.warn("Ontologia inconsistente, inconsistências: {}", analise.inconsistencias());
+        log.warn("Ontologia inconsistente, inconsistências: {}", analise.getInconsistencias());
 
-        return ResultadoValidacao.builder()
+        return ResultadoValidacaoDTO.builder()
             .consistente(false)
-            .classesInsatisfativeis(analise.inconsistencias())
+            .classesInsatisfativeis(analise.getInconsistencias())
             .explicacao("Ontologia contém inconsistências")
             .iteracoesUsadas(1)
             .tempoProcessamentoMs(processingTime)
@@ -671,7 +671,7 @@ public class DefaultOwlService
       long processingTime = System.currentTimeMillis() - startTime;
       log.error("Erro ao validar ontologia atual", e);
 
-      return ResultadoValidacao.builder()
+      return ResultadoValidacaoDTO.builder()
           .consistente(false)
           .explicacao("Erro na validação: " + e.getMessage())
           .iteracoesUsadas(1)

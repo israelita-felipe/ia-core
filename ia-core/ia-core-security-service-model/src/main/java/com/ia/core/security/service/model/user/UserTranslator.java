@@ -39,6 +39,10 @@ public final class UserTranslator {
         public static final String USER_CODE_REQUIRED = "validation.user.userCode.required";
         public static final String USER_CODE_SIZE = "validation.user.userCode.size";
         public static final String PASSWORD_SIZE = "validation.user.password.size";
+        public static final String PASSWORD_CHANGE_USER_CODE_REQUIRED = "validation.user.passwordchange.usercode.required";
+        public static final String PASSWORD_CHANGE_OLD_PASSWORD_REQUIRED = "validation.user.passwordchange.oldpassword.required";
+        public static final String PASSWORD_CHANGE_NEW_PASSWORD_REQUIRED = "validation.user.passwordchange.newpassword.required";
+        public static final String PASSWORD_RESET_USER_CODE_REQUIRED = "validation.user.passwordreset.usercode.required";
     }
 
     /**

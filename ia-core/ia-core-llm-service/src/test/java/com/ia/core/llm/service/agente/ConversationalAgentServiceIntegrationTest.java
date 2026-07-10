@@ -2,7 +2,7 @@ package com.ia.core.llm.service.agente;
 
 import com.ia.core.llm.service.chat.ChatService;
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
 import com.ia.core.llm.service.template.TemplateService;
 import com.ia.core.owl.service.DefaultOwlService;
 import com.ia.core.owl.service.tool.base.OwlConstructorTool;
@@ -112,10 +112,10 @@ class ConversationalAgentServiceIntegrationTest {
       // And: User sends message (Step 3)
       String mensagem = "O que é um cachorro?";
 
-      // When: Agent processes message (Steps 4-9)
-      RespostaAgente resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
+// When: Agent processes message (Steps 4-9)
+       RespostaAgenteDTO resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
 
-      // Then: Agent returns response to user (Step 9)
+       // Then: Agent returns response to user (Step 9)
       assertThat(resposta).isNotNull();
       assertThat(resposta.getAgentResponse()).isNotEmpty();
       assertThat(resposta.getOntologyStatus()).isNotNull();
@@ -145,19 +145,19 @@ class ConversationalAgentServiceIntegrationTest {
           .thenReturn("Primeira resposta")
           .thenReturn("Segunda resposta");
 
-      // When: User sends first message
-      RespostaAgente resposta1 = conversationalAgentService.processMessage(contexto.getSessionId(),
-          "O que é diabetes?");
+// When: User sends first message
+       RespostaAgenteDTO resposta1 = conversationalAgentService.processMessage(contexto.getSessionId(),
+           "O que é diabetes?");
 
-      // Then: Agent processes and responds
-      assertThat(resposta1.getAgentResponse()).isEqualTo("Primeira resposta");
+       // Then: Agent processes and responds
+       assertThat(resposta1.getAgentResponse()).isEqualTo("Primeira resposta");
 
-      // When: User sends second message in same session
-      RespostaAgente resposta2 = conversationalAgentService.processMessage(contexto.getSessionId(),
-          "Quais são os sintomas?");
+       // When: User sends second message in same session
+       RespostaAgenteDTO resposta2 = conversationalAgentService.processMessage(contexto.getSessionId(),
+           "Quais são os sintomas?");
 
-      // Then: Agent processes with accumulated context
-      assertThat(resposta2.getAgentResponse()).isEqualTo("Segunda resposta");
+       // Then: Agent processes with accumulated context
+       assertThat(resposta2.getAgentResponse()).isEqualTo("Segunda resposta");
     }
 
     @Test
@@ -213,12 +213,12 @@ class ConversationalAgentServiceIntegrationTest {
       when(chatService.ask(anyString(), any(), anyString(), anyString(), any()))
           .thenReturn("Cachorro é um mamífero. Mamíferos têm pelos.");
 
-      // When: User sends message with new concepts
-      String mensagem = "Cães são animais que têm pelos.";
-      RespostaAgente resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
+// When: User sends message with new concepts
+       String mensagem = "Cães são animais que têm pelos.";
+       RespostaAgenteDTO resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
 
-      // Then: Ontology status should reflect updates
-      assertThat(resposta.getOntologyStatus()).isNotNull();
+       // Then: Ontology status should reflect updates
+       assertThat(resposta.getOntologyStatus()).isNotNull();
       // The LLM would have used OWL tools to add concepts like "Cachorro", "Animal", "temPelos"
     }
 
@@ -245,12 +245,12 @@ class ConversationalAgentServiceIntegrationTest {
       when(chatService.ask(anyString(), any(), anyString(), anyString(), any()))
           .thenReturn("Resposta com contexto enriquecido");
 
-      // When: User sends message
-      String mensagem = "Explique a relação entre mamíferos e animais.";
-      RespostaAgente resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
+// When: User sends message
+       String mensagem = "Explique a relação entre mamíferos e animais.";
+       RespostaAgenteDTO resposta = conversationalAgentService.processMessage(contexto.getSessionId(), mensagem);
 
-      // Then: Response should be based on enriched context
-      assertThat(resposta.getAgentResponse()).isNotEmpty();
+       // Then: Response should be based on enriched context
+       assertThat(resposta.getAgentResponse()).isNotEmpty();
     }
   }
 }

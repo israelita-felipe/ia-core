@@ -21,7 +21,7 @@ public final class RoleTranslator {
      */
     public static final class HELP {
         public static final String ROLE = "role.help";
-        public static final String NOME = "role.help.name";
+        public static final String NAME = "role.help.name";
         public static final String USERS = "role.help.users";
         public static final String PRIVILEGES = "role.help.privileges";
     }

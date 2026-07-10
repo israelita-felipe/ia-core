@@ -1,5 +1,6 @@
 package com.ia.core.security.service.model.user;
 
+import com.ia.core.service.dto.DTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,23 +10,35 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 
 /**
+ * DTO para alteração de senha de usuário.
+ * <p>
+ * Responsável por transferir dados necessários para alteração de senha,
+ * incluindo código do usuário, senha antiga e nova senha.
+ *
  * @author Israel Araújo
+ * @since 1.0.0
+ * @see UserTranslator
  */
 @Data
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPasswordChangeDTO
-  implements Serializable {
+  implements DTO<Serializable> {
   /** Serial UID */
   private static final long serialVersionUID = -19560738760061623L;
 
-  @NotNull(message = "{validation.user.passwordchange.usercode.required}")
+  @NotNull(message = UserTranslator.VALIDATION.PASSWORD_CHANGE_USER_CODE_REQUIRED)
   private String userCode;
-  @NotNull(message = "{validation.user.passwordchange.oldpassword.required}")
+  @NotNull(message = UserTranslator.VALIDATION.PASSWORD_CHANGE_OLD_PASSWORD_REQUIRED)
   private String oldPassword;
-  @NotNull(message = "{validation.user.passwordchange.newpassword.required}")
+  @NotNull(message = UserTranslator.VALIDATION.PASSWORD_CHANGE_NEW_PASSWORD_REQUIRED)
   private String newPassword;
+
+  @Override
+  public UserPasswordChangeDTO cloneObject() {
+    return toBuilder().build();
+  }
 
   @Override
   public String toString() {

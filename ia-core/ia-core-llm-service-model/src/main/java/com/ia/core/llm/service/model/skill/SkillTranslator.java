@@ -8,7 +8,7 @@ package com.ia.core.llm.service.model.skill;
  *
  * @author Israel Araújo
  * @since 1.0.0
- * @see com.ia.core.llm.service.model.skill.SkillDTO
+ * @see SkillDTO
  */
 public final class SkillTranslator {
 
@@ -29,32 +29,16 @@ public final class SkillTranslator {
     }
 
     /**
-     * DTO class canonical name
-     */
-    public static final String SKILL_CLASS = SkillDTO.class.getCanonicalName();
-
-    /**
-     * Field name constants
-     */
-    public static final String SKILL = "skill";
-    public static final String IDENTIFICADOR = "skill.identificador";
-    public static final String TITULO = "skill.titulo";
-    public static final String DESCRICAO = "skill.descricao";
-    public static final String TIPO = "skill.tipo";
-    public static final String ATIVO = "skill.ativo";
-    public static final String MODULO_ORIGEM = "skill.modulo_origem";
-
-    /**
      * Validation message keys
      */
     public static final class VALIDATION {
-        public static final String IDENTIFICADOR_REQUIRED = "validation.skill.identificador.required";
-        public static final String IDENTIFICADOR_SIZE = "validation.skill.identificador.size";
-        public static final String TITULO_REQUIRED = "validation.skill.titulo.required";
-        public static final String TITULO_SIZE = "validation.skill.titulo.size";
-        public static final String DESCRICAO_SIZE = "validation.skill.descricao.size";
-        public static final String TIPO_REQUIRED = "validation.skill.tipo.required";
-        public static final String MODULO_ORIGEM_SIZE = "validation.skill.modulo_origem.size";
+        public static final String IDENTIFICADOR_REQUIRED = "skill.validation.identificador.required";
+        public static final String IDENTIFICADOR_SIZE = "skill.validation.identificador.size";
+        public static final String TITULO_REQUIRED = "skill.validation.titulo.required";
+        public static final String TITULO_SIZE = "skill.validation.titulo.size";
+        public static final String DESCRICAO_SIZE = "skill.validation.descricao.size";
+        public static final String TIPO_REQUIRED = "skill.validation.tipo.required";
+        public static final String MODULO_ORIGEM_SIZE = "skill.validation.modulo_origem.size";
     }
 
     /**
@@ -88,4 +72,20 @@ public final class SkillTranslator {
         public static final String SKILL_CRIADO = "skill.event.criado";
         public static final String SKILL_ATUALIZADO = "skill.event.atualizado";
     }
+
+    /**
+     * DTO class canonical name
+     */
+    public static final String SKILL_CLASS = SkillDTO.class.getCanonicalName();
+
+    /**
+     * Field name constants
+     */
+    public static final String SKILL = "skill";
+    public static final String IDENTIFICADOR = "skill.identificador";
+    public static final String TITULO = "skill.titulo";
+    public static final String DESCRICAO = "skill.descricao";
+    public static final String TIPO = "skill.tipo";
+    public static final String ATIVO = "skill.ativo";
+    public static final String MODULO_ORIGEM = "skill.modulo_origem";
 }

@@ -2,7 +2,7 @@ package com.ia.core.llm.rest.web;
 
 import com.ia.core.llm.service.agente.ConversationalAgentService;
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,7 @@ public class ConversationalAgentController {
 
   @PostMapping("/message")
   @Operation(summary = "Processar mensagem", description = "Processa uma mensagem do usuário na conversação")
-  public RespostaAgente processMessage(
+  public RespostaAgenteDTO processMessage(
       @Parameter(description = "ID da sessão de conversação")
       @RequestParam String sessionId,
       @Parameter(description = "Mensagem do usuário")

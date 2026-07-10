@@ -38,21 +38,28 @@ public class ExceptionViewFactory
         dialogo.open();
     }
 
-  /**
-   * Captura os erros de forma profunda
-   *
-   * @param erro {@link Throwable} do erro
-   * @return String contendo as mensagem de erro agrupadas por profundidade em
-   *         sua causa.
-   */
+/**
+    * Captura os erros de forma profunda
+    *
+    * <p>Corrige a duplicação de mensagens causada por CompletionException,
+    * que inclui a mensagem da causa em sua própria mensagem. Esta classe
+    * pula exceções de wrapper comuns para mostrar apenas a mensagem da causa raiz.</p>
+    *
+    * @param erro {@link Throwable} do erro
+    * @return String contendo as mensagem de erro agrupadas por profundidade em
+    *         sua causa.
+    */
   private static String getErrors(Throwable erro) {
     StringBuilder sb = new StringBuilder();
-    if (erro.getLocalizedMessage() != null) {
-      sb.append(erro.getLocalizedMessage());
+    Throwable current = unwrapCompletionException(erro);
+    if (current.getLocalizedMessage() != null) {
+      sb.append(current.getLocalizedMessage());
       sb.append("\n");
     }
-    Throwable current = erro.getCause();
+    current = current.getCause();
     while (current != null) {
+      // Skip CompletionException and other wrapper exceptions to avoid duplication
+      current = unwrapCompletionException(current);
       if (current.getLocalizedMessage() != null) {
         sb.append(current.getLocalizedMessage());
         sb.append("\n");
@@ -60,6 +67,22 @@ public class ExceptionViewFactory
       current = current.getCause();
     }
     return sb.toString();
+  }
+
+  /**
+    * Unwraps CompletionException to get the actual cause.
+    *
+    * <p>CompletionException.getLocalizedMessage() already includes the cause's message,
+    * so we need to skip it to prevent duplicate messages in error dialogs.</p>
+    */
+  private static Throwable unwrapCompletionException(Throwable throwable) {
+    if (throwable instanceof java.util.concurrent.CompletionException) {
+      Throwable cause = throwable.getCause();
+      if (cause != null) {
+        return cause;
+      }
+    }
+    return throwable;
   }
 
   /**

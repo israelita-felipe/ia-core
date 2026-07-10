@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.agenteconversacional.dialog;
 
 import com.ia.core.llm.service.model.agente.ContextConversacaoDTO;
-import com.ia.core.llm.service.model.agente.RespostaAgente;
+import com.ia.core.llm.service.model.agente.RespostaAgenteDTO;
 import com.ia.core.llm.view.agenteconversacional.AgenteConversacionalManager;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -74,7 +74,7 @@ public class ChatOntologiaDialog extends Dialog {
     log.info("Enviando mensagem: {}", mensagem);
 
     // Na implementação completa, chamaria o serviço REST
-    RespostaAgente resposta = RespostaAgente.builder()
+    RespostaAgenteDTO resposta = RespostaAgenteDTO.builder()
         .agentResponse("Resposta simulada")
         .build();
 

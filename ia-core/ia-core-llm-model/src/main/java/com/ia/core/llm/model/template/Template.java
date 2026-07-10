@@ -18,8 +18,8 @@ import java.util.List;
  *
  * @author Israel Araújo
  * @since 1.0.0
+ * @see TemplateParameter
  */
-
 @Entity
 @Table(name = Template.TABLE_NAME, schema = Template.SCHEMA_NAME)
 @Getter
@@ -28,48 +28,47 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Template
-  extends BaseEntity {
-  /** Serial UID */
-  private static final long serialVersionUID = 5644976387280082125L;
-  /** NOME DA TABELA */
-  public static final String TABLE_NAME = LLMModel.TABLE_PREFIX
-      + "TEMPLATE";
-  /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = LLMModel.SCHEMA;
+public class Template extends BaseEntity {
+    /** Serial UID */
+    private static final long serialVersionUID = 5644976387280082125L;
 
-  /**
-   * Título do template
-   */
-  @Column(name = "titulo", unique = true, nullable = false)
-  private String titulo;
+    /** NOME DA TABELA */
+    public static final String TABLE_NAME = LLMModel.TABLE_PREFIX + "TEMPLATE";
+    /** NOME DO SCHEMA */
+    public static final String SCHEMA_NAME = LLMModel.SCHEMA;
 
-  /**
-   * Identificador único do template
-   */
-  @Column(name = "identificador", unique = true, nullable = false, length = 255)
-  private String identificador;
+    /**
+     * Título do template.
+     */
+    @Column(name = "titulo", unique = true, nullable = false)
+    private String titulo;
 
-  /**
-   * Conteúdo do template
-   */
-  @Lob
-  @Column(name = "conteudo")
-  private String conteudo;
+    /**
+     * Identificador único do template.
+     */
+    @Column(name = "identificador", unique = true, nullable = false, length = 255)
+    private String identificador;
 
-  /**
-   * Flag indicativa de exigência de contexto
-   */
-  @Default
-  @Column(name = "flg_exige_contexto", nullable = false, length = 1)
-  private boolean exigeContexto = false;
+    /**
+     * Conteúdo do template.
+     */
+    @Lob
+    @Column(name = "conteudo")
+    private String conteudo;
 
-  /**
-   * Parâmetros do template
-   */
-  @Default
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
-             mappedBy = "template", fetch = FetchType.LAZY)
-  private List<TemplateParameter> parametros = new ArrayList<>();
+    /**
+     * Flag indicativa de exigência de contexto.
+     */
+    @Default
+    @Column(name = "flg_exige_contexto", nullable = false, length = 1)
+    private boolean exigeContexto = false;
+
+    /**
+     * Parâmetros do template.
+     */
+    @Default
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+               mappedBy = "template", fetch = FetchType.LAZY)
+    private List<TemplateParameter> parametros = new ArrayList<>();
 
 }

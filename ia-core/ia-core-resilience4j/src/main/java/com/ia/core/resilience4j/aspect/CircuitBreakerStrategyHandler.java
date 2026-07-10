@@ -3,6 +3,7 @@ package com.ia.core.resilience4j.aspect;
 import com.ia.core.resilience4j.annotation.Resilient;
 import com.ia.core.resilience4j.dto.ResilienceContext;
 import com.ia.core.resilience4j.profile.ResilienceProfile;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -80,15 +81,21 @@ public class CircuitBreakerStrategyHandler extends AbstractResilienceStrategyHan
     }
 
     /**
-     * Executes the next step with the resolved CircuitBreaker.
-     *
-     * <p>Retrieves the CircuitBreaker from the context and applies it to the next supplier.
-     * The CircuitBreaker is expected to be stored in the context during the resolve phase.</p>
-     *
-     * @param context o contexto de resiliência já resolvido
-     * @param next o próximo passo na cadeia de execução
-     * @return o resultado da execução
-     */
+      * Executes the next step with the resolved CircuitBreaker.
+      *
+      * <p>Retrieves the CircuitBreaker from the context and applies it to the next supplier.
+      * The CircuitBreaker is expected to be stored in the context during the resolve phase.</p>
+      *
+      * <p>Tratamento de exceções:</p>
+      * <ul>
+      *   <li>CallNotPermittedException: wrapped with CircuitBreaker context message</li>
+      *   <li>Other exceptions: rethrown as-is to prevent message accumulation</li>
+      * </ul>
+      *
+      * @param context o contexto de resiliência já resolvido
+      * @param next o próximo passo na cadeia de execução
+      * @return o resultado da execução
+      */
     @Override
     public Object execute(ResilienceContext context, Supplier<Object> next) {
         CircuitBreaker circuitBreaker = resolve(context);
@@ -96,8 +103,40 @@ public class CircuitBreakerStrategyHandler extends AbstractResilienceStrategyHan
             return circuitBreaker.executeSupplier(() ->
                 CompletableFuture.supplyAsync(next::get)
             ).join();
+        } catch (CallNotPermittedException e) {
+            // Only wrap CallNotPermittedException - these are truly caused by CircuitBreaker
+            throw new RuntimeException("CircuitBreaker '" + circuitBreaker.getName() + 
+                    "' is OPEN. Call not permitted.", e);
         } catch (Exception e) {
-            throw new RuntimeException("CircuitBreaker execution failed: " + e.getLocalizedMessage(), e);
+            // Unwrap CompletionException to check the actual cause
+            e = (Exception) unwrapCompletionException(e);
+            // For other exceptions, check if they're caused by CircuitBreaker
+            // If not, rethrow as-is to prevent message accumulation
+            if (isCausedBy(e, CallNotPermittedException.class)) {
+                throw new RuntimeException("CircuitBreaker '" + circuitBreaker.getName() + 
+                        "' is OPEN. Call not permitted.", e);
+            }
+            // Rethrow without wrapping to prevent nested message accumulation
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+      * Unwraps CompletionException to get the actual cause.
+      *
+      * <p>This method safely unwraps CompletionException without causing issues
+      * if the cause is null.</p>
+      */
+    private Throwable unwrapCompletionException(Throwable t) {
+        if (t instanceof java.util.concurrent.CompletionException) {
+            Throwable cause = t.getCause();
+            if (cause != null) {
+                return cause;
+            }
+        }
+        return t;
     }
 }

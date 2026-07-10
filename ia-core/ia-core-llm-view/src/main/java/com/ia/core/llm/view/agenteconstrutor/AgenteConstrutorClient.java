@@ -1,7 +1,7 @@
 package com.ia.core.llm.view.agenteconstrutor;
 
-import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologia;
-import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologia;
+import com.ia.core.llm.service.model.agente.RequisicaoConstrucaoOntologiaDTO;
+import com.ia.core.llm.service.model.agente.ResultadoConstrucaoOntologiaDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -14,7 +14,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @since 1.0.0
  */
 @FeignClient(name = AgenteConstrutorClient.NOME, url = AgenteConstrutorClient.URL)
-public interface AgenteConstrutorClient extends DefaultBaseClient<ResultadoConstrucaoOntologia> {
+public interface AgenteConstrutorClient extends DefaultBaseClient<ResultadoConstrucaoOntologiaDTO> {
 
   String NOME = "agente-construtor";
   String URL = "${feign.host}/api/${api.version}/${feign.url.agente-construtor}";

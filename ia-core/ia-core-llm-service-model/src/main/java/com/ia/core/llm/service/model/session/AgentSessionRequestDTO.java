@@ -1,6 +1,5 @@
 package com.ia.core.llm.service.model.session;
 
-import com.ia.core.llm.service.model.chat.ChatTranslator;
 import com.ia.core.service.dto.DTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -17,38 +17,74 @@ import java.util.Set;
  *
  * @author Israel Araújo
  * @since 1.0.0
+ * @see SessionTranslator
  */
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AgentSessionRequestDTO
-  implements DTO<String> {
+public class AgentSessionRequestDTO implements DTO<Serializable> {
 
-  @NotBlank(message = ChatTranslator.VALIDATION.CHAT_NOT_BLANK)
-  private String userMessage;
+    /** Serial UID */
+    private static final long serialVersionUID = 1L;
 
-  private Long ferramentaId;
+    /**
+     * Mensagem do usuário.
+     */
+    @NotBlank(message = SessionTranslator.VALIDATION.USER_MESSAGE_NOT_BLANK)
+    private String userMessage;
 
-  private String sessionId;
+    /**
+     * Identificador da ferramenta (opcional).
+     */
+    private Long ferramentaId;
 
-  @Override
-  public AgentSessionRequestDTO cloneObject() {
-    return AgentSessionRequestDTO.builder()
-        .userMessage(userMessage)
-        .ferramentaId(ferramentaId)
-        .sessionId(sessionId)
-        .build();
-  }
+    /**
+     * Identificador da sessão.
+     */
+    private String sessionId;
 
-  public static class CAMPOS {
-    public static final String USER_MESSAGE = "userMessage";
-    public static final String FERRAMENTA_ID = "ferramentaId";
-    public static final String SESSION_ID = "sessionId";
-    public static final String PROPERTY_CHANGE_SUPPORT = "propertyChangeSupport";
-
-    public static Set<String> values() {
-      return Set.of(USER_MESSAGE, FERRAMENTA_ID, SESSION_ID, PROPERTY_CHANGE_SUPPORT);
+    /**
+     * Cria uma cópia superficial (clone) deste DTO.
+     *
+     * @return nova instância com os mesmos valores
+     */
+    @Override
+    public AgentSessionRequestDTO cloneObject() {
+        return toBuilder().build();
     }
-  }
+
+    /**
+     * Retorna uma representação em string deste objeto.
+     *
+     * @return string contendo o sessionId e userMessage
+     */
+    @Override
+    public String toString() {
+        return String.format("SessionRequest[sessionId=%s, message=%s]", sessionId, userMessage);
+    }
+
+    /**
+     * Constantes para nomes dos campos deste DTO.
+     */
+    @SuppressWarnings("javadoc")
+    public static class CAMPOS {
+        /** Mensagem do usuário */
+        public static final String USER_MESSAGE = "userMessage";
+
+        /** Identificador da ferramenta */
+        public static final String FERRAMENTA_ID = "ferramentaId";
+
+        /** Identificador da sessão */
+        public static final String SESSION_ID = "sessionId";
+
+        /**
+         * Retorna todos os nomes de campos deste DTO.
+         *
+         * @return conjunto com os nomes dos campos
+         */
+        public static Set<String> values() {
+            return Set.of(USER_MESSAGE, FERRAMENTA_ID, SESSION_ID);
+        }
+    }
 }
