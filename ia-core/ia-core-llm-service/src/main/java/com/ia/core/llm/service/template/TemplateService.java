@@ -3,7 +3,10 @@ package com.ia.core.llm.service.template;
 import com.ia.core.llm.model.template.Template;
 import com.ia.core.llm.service.model.template.TemplateDTO;
 import com.ia.core.llm.service.model.template.TemplateUseCase;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -34,6 +37,8 @@ public class TemplateService
    * @param templateId identificador do template
    * @return DTO do template
    */
+  @TransactionalReadOnly
+  @Resilient(ResilienceProfile.DATABASE)
   public Optional<TemplateDTO> loadById(String templateId) {
     Objects.requireNonNull(templateId, "templateId não pode ser null");
     log.debug("Carregando template por ID: {}", templateId);

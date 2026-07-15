@@ -102,8 +102,8 @@ public class UserService
             .decrypt(change.getOldPassword(), change.getUserCode());
         if (getConfig().getPasswordEncoder().matches(decryptedOldPassword,
             user.getPassword())) {
-            user.setPassword(CryptUtils
-                .decrypt(change.getNewPassword(), change.getUserCode()));
+            user.setPassword(getConfig().getPasswordEncoder().encode(CryptUtils
+                .decrypt(change.getNewPassword(), change.getUserCode())));
             save(user);
         } else {
             throw new InvalidPasswordException(change.getUserCode());

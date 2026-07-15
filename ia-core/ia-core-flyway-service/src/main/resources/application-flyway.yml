@@ -23,7 +23,7 @@ spring:
   flyway:
     enabled: true
     locations:
-    - classpath:db/migrations/{vendor}
+      - classpath:db/migrations/{vendor}
     baseline-on-migrate: true
     create-schemas: true
     outOfOrder: true

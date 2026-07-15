@@ -6,12 +6,14 @@ import com.ia.core.llm.service.model.ferramenta.FerramentaActivationDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaMetadataDTO;
 import com.ia.core.llm.service.model.ferramenta.FerramentaUseCase;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.CrudBaseService;
+import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +87,8 @@ public class FerramentaService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
+  @Resilient(ResilienceProfile.DATABASE)
   public List<FerramentaMetadataDTO> listMetadata() {
     var repository = getRepository();
     if (repository == null) {
@@ -108,7 +111,8 @@ public class FerramentaService
   }
 
   @Override
-  @Transactional(readOnly = true)
+  @TransactionalReadOnly
+  @Resilient(ResilienceProfile.DATABASE)
   public FerramentaActivationDTO loadForActivation(Long id) {
     var repository = getRepository();
     if (repository == null) {

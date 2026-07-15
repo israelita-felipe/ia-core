@@ -84,7 +84,7 @@ public class MensagemService
     return super.getRepository();
   }
 
-  @Override
+@Override
   @Tool(description = "Envia uma mensagem através do canal especificado (Email, SMS, WhatsApp, Telegram). " +
              "Processa a mensagem através da estratégia de envio apropriada para o tipo de canal. " +
              "Salva a mensagem no banco de dados antes do envio e atualiza o status após o envio. " +
@@ -93,28 +93,41 @@ public class MensagemService
   @Resilient(ResilienceProfile.EXTERNAL_API)
   public MensagemDTO enviar(
           @ToolParam(description = "Dados da mensagem a ser enviada (MensagemDTO, obrigatório). " +
-                          "Inclui tipoCanal (EMAIL, SMS, WHATSAPP, TELEGRAM), telefoneDestinatario e corpoMensagem.", required = true) MensagemDTO dto) {
+                            "Inclui tipoCanal (EMAIL, SMS, WHATSAPP, TELEGRAM), telefoneDestinatario e corpoMensagem.", required = true) MensagemDTO dto) {
     log.info("Enviando mensagem via {} para {}", dto.getTipoCanal(),
              dto.getTelefoneDestinatario());
 
-    dto.setStatusMensagem(StatusMensagem.PENDENTE);
-    MensagemDTO saved = save(dto);
-    // Usa a factory de estratégias para enviar a mensagem
+    EstrategiaEnvio estrategia = null;
+    // Usa a factory de estratégias para validar e obter estratégia
     try {
       var factory = getConfig().getEstrategiaEnvioFactory();
       if (factory == null) {
         log.error("EstrategiaEnvioFactory não configurada");
-        saved.setStatusMensagem(StatusMensagem.FALHA);
-        saved.setMotivoFalha("EstrategiaEnvioFactory não configurada");
-        return save(saved);
+        dto.setStatusMensagem(StatusMensagem.FALHA);
+        dto.setMotivoFalha("EstrategiaEnvioFactory não configurada");
+        return save(dto);
       }
-      EstrategiaEnvio estrategia = factory.criarEstrategia(saved.getTipoCanal());
-      saved = estrategia.executar(dto);
-      saved = save(saved);
+      estrategia = factory.criarEstrategia(dto.getTipoCanal());
+      // Validação acontece durante a obtenção da estratégia
     } catch (IllegalArgumentException e) {
       log.error("Canal não suportado: {}", dto.getTipoCanal());
-      saved.setStatusMensagem(StatusMensagem.FALHA);
-      saved.setMotivoFalha(e.getMessage());
+      dto.setStatusMensagem(StatusMensagem.FALHA);
+      dto.setMotivoFalha(e.getMessage());
+      return save(dto);
+    } catch (Exception e) {
+      log.error("Erro ao preparar mensagem: {}", e.getMessage());
+      dto.setStatusMensagem(StatusMensagem.FALHA);
+      dto.setMotivoFalha(e.getMessage());
+      return save(dto);
+    }
+
+    // Marca como pendente antes de salvar
+    dto.setStatusMensagem(StatusMensagem.PENDENTE);
+    MensagemDTO saved = save(dto);
+
+    // Executa o envio usando a entidade persistida
+    try {
+      saved = estrategia.executar(saved);
       saved = save(saved);
     } catch (Exception e) {
       log.error("Erro ao enviar mensagem: {}", e.getMessage());

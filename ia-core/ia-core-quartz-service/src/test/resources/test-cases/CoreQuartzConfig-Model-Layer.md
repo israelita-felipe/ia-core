@@ -1,26 +1,32 @@
 # Caso de Teste: CoreQuartzConfig - Model
 
 ## Descrição
-Caso de teste para a camada model da classe `com.ia.core.quartz.CoreQuartzConfig`.
+
+Caso de teste para a camada model da classe `com.ia.core.quartz.config.CoreQuartzConfig`.
 
 ## Classe Testada
-`com.ia.core.quartz.CoreQuartzConfig`
+
+`com.ia.core.quartz.config.CoreQuartzConfig`
 
 ## Stack do Quartz
-| Camada | Componente | Status |
-|--------|------------|--------|
-| Model | [com.ia.core.quartz.CoreQuartzConfig](ia-core-quartz-service/src/main/java/com/ia/core/quartz/CoreQuartzConfig.java) | Implementado |
-| Repository | Repositório específico quando aplicável | Não implementado |
-| Mapper | Mapper/Translator específico quando aplicável | Não implementado |
-| ServiceModel | [com.ia.core.quartz.CoreQuartzConfig](ia-core-quartz-service/src/main/java/com/ia/core/quartz/CoreQuartzConfig.java) | Não implementado |
-| Service | Serviço específico quando aplicável | Não implementado |
-| API/REST | Não implementado no módulo ia-core-quartz-rest | Não implementado |
-| View/Client | Client/Manager/View específico quando aplicável | Não implementado |
+
+| Camada       | Componente                                                                                                                  | Status           |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------|------------------|
+| Model        | [com.ia.core.quartz.config.CoreQuartzConfig](ia-core-quartz-service/src/main/java/com/ia/core/quartz/CoreQuartzConfig.java) | Implementado     |
+| Repository   | Repositório específico quando aplicável                                                                                     | Não implementado |
+| Mapper       | Mapper/Translator específico quando aplicável                                                                               | Não implementado |
+| ServiceModel | [com.ia.core.quartz.config.CoreQuartzConfig](ia-core-quartz-service/src/main/java/com/ia/core/quartz/CoreQuartzConfig.java) | Não implementado |
+| Service      | Serviço específico quando aplicável                                                                                         | Não implementado |
+| API/REST     | Não implementado no módulo ia-core-quartz-rest                                                                              | Não implementado |
+| View/Client  | Client/Manager/View específico quando aplicável                                                                             | Não implementado |
 
 ## Objetivo
-Documentar e validar a camada model de `CoreQuartzConfig` dentro da stack de agendamento e recorrência do `ia-core-quartz-*`.
+
+Documentar e validar a camada model de `CoreQuartzConfig` dentro da stack de agendamento e recorrência do
+`ia-core-quartz-*`.
 
 ## Fluxo do Teste
+
 1. Dado o contexto de agendamento `Quartz` no domínio Quartz.
 2. Quando a camada model recebe, produz ou transforma dados compatíveis com `CoreQuartzConfig`.
 3. Então o comportamento deve preservar campos, contratos, valores padrão, regras de recorrência e exceções aplicáveis.
@@ -30,26 +36,32 @@ Documentar e validar a camada model de `CoreQuartzConfig` dentro da stack de age
 ## Cenários
 
 ### Cenário 1: Cenário feliz da camada model
+
 **Given**: Dados válidos para `CoreQuartzConfig` no contexto `Quartz`.
 **When**: A camada model processa o componente.
 **Then**: Deve preservar os campos obrigatórios, valores padrão e regras de validação aplicáveis.
 
 ### Cenário 2: Dados inválidos ou incompletos
+
 **Given**: Dados ausentes, nulos, vazios ou fora dos limites definidos.
 **When**: A camada model valida ou transforma `CoreQuartzConfig`.
 **Then**: Deve rejeitar a operação ou retornar erro estruturado quando aplicável.
 
 ### Cenário 3: Exceções e falhas esperadas
+
 **Given**: Dependência indisponível, dado inexistente ou violação de regra de negócio.
 **When**: A camada model executa o fluxo.
 **Then**: Deve propagar exceção esperada ou mapear para resposta segura conforme ADR-011.
 
 ### Cenário 4: Evidência de cobertura da stack
+
 **Given**: Caso de teste documentado para `CoreQuartzConfig`.
 **When**: A stack é comparada com os módulos `ia-core-quartz-*`.
-**Then**: Cada camada existente deve ter caso de teste correspondente; camadas não implementadas devem permanecer como lacuna explícita.
+**Then**: Cada camada existente deve ter caso de teste correspondente; camadas não implementadas devem permanecer como
+lacuna explícita.
 
 ## Dependências
+
 - JUnit 5
 - AssertJ
 - Mockito quando houver mocks/stubs
@@ -59,6 +71,7 @@ Documentar e validar a camada model de `CoreQuartzConfig` dentro da stack de age
 - Bibliotecas Quartz/lib-recur quando aplicável
 
 ## Referências
+
 - [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md)
 - ADR 010: Padrões de Nomenclatura
 - ADR 012: Padrões de Teste Automatizado
@@ -67,27 +80,28 @@ Documentar e validar a camada model de `CoreQuartzConfig` dentro da stack de age
 
 ## Aderência a ADRs
 
-Este caso de teste foi gerado como documento vivo de rastreabilidade entre teste, CDU, domínio e decisões arquiteturais do `ia-core`.
+Este caso de teste foi gerado como documento vivo de rastreabilidade entre teste, CDU, domínio e decisões arquiteturais
+do `ia-core`.
 
 ### Metadados de contexto
 
-| Campo | Valor |
-|-------|-------|
-| Componente | `CoreQuartzConfig - Model` |
-| Camada | Model |
-| Tipo de teste | Unitário/Integração por camada |
-| Domínio | Quartz |
-| CDU relacionada | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) |
-| Status da camada | Implementado |
+| Campo            | Valor                                                                       |
+|------------------|-----------------------------------------------------------------------------|
+| Componente       | `CoreQuartzConfig - Model`                                                  |
+| Camada           | Model                                                                       |
+| Tipo de teste    | Unitário/Integração por camada                                              |
+| Domínio          | Quartz                                                                      |
+| CDU relacionada  | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) |
+| Status da camada | Implementado                                                                |
 
 ### Matriz de conformidade
 
-| ADR | Tema | Aplicabilidade | Critério de conformidade |
-|-----|------|----------------|--------------------------|
-| ADR-010 | Padrões de Nomenclatura | Obrigatório | Nomes de arquivos, classes, métodos e campos seguem ADR-010. |
-| ADR-012 | Padrões de Teste Automatizado | Obrigatório | Cenário feliz, negativo, dependências, mocks e rastreabilidade documentados. |
-| ADR-050 | Diretrizes Gerais de Padronização | Obrigatório | Documento UTF-8, claro e alinhado à padronização do ia-core. |
-| ADR-052 | MADR e Linguagem Normativa | Obrigatório | Critérios objetivos e termos normativos sem ambiguidade. |
+| ADR     | Tema                              | Aplicabilidade | Critério de conformidade                                                     |
+|---------|-----------------------------------|----------------|------------------------------------------------------------------------------|
+| ADR-010 | Padrões de Nomenclatura           | Obrigatório    | Nomes de arquivos, classes, métodos e campos seguem ADR-010.                 |
+| ADR-012 | Padrões de Teste Automatizado     | Obrigatório    | Cenário feliz, negativo, dependências, mocks e rastreabilidade documentados. |
+| ADR-050 | Diretrizes Gerais de Padronização | Obrigatório    | Documento UTF-8, claro e alinhado à padronização do ia-core.                 |
+| ADR-052 | MADR e Linguagem Normativa        | Obrigatório    | Critérios objetivos e termos normativos sem ambiguidade.                     |
 
 ### Critérios de aceitação obrigatórios
 

@@ -4,6 +4,7 @@ import com.ia.core.model.exception.DomainException;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -92,7 +93,7 @@ public class ServiceException
 
   @Override
   public String getMessage() {
-    return getErrors().reduce(String::join).orElse(null);
+    return getErrors().collect(Collectors.joining("\n"));
   }
 
   /**

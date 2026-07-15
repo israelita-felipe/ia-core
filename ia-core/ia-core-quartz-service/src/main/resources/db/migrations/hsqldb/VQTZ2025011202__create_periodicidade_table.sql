@@ -7,12 +7,13 @@
 -- para suporte a RFC 5545 (iCalendar)
 CREATE TABLE IF NOT EXISTS QUARTZ.QRTZ_PERIODICIDADE (
     id BIGINT NOT NULL PRIMARY KEY,
-    version BIGINT NOT NULL DEFAULT 1,
+    version BIGINT DEFAULT 1 NOT NULL,
     start_date DATE,
     start_time TIME,
     end_date DATE,
     end_time TIME,
-    zone_id VARCHAR(255)
+    zone_id VARCHAR(255),
+    ativo BOOLEAN DEFAULT TRUE
 );
 
 -- Evento (EXCEPTION DATE) - datas específicas a serem excluídas

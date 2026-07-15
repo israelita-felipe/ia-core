@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS QUARTZ.QRTZ_SCHEDULER_CONFIG (
     id BIGINT NOT NULL,
-    version BIGINT NOT NULL DEFAULT 1,
+    version BIGINT DEFAULT 1 NOT NULL,
     job_class_name VARCHAR(250) NOT NULL,
     periodicidade BIGINT NOT NULL,
     CONSTRAINT pk_qrtz_scheduler_config PRIMARY KEY (id),

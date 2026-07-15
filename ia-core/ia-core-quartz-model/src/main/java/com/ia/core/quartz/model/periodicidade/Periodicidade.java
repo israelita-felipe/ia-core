@@ -145,16 +145,17 @@ public class Periodicidade
       + "PERIODICIDADE_INCLUDE_DATE", schema = SCHEMA_NAME)
   private Set<LocalDate> includeDates = new HashSet<>();
 
-  /**
-   * Indica se a periodicidade está ativa.
-   * <p>
-   * Uma periodicidade inativa não será considerada no cálculo de ocorrências.
-   * Este campo permite "desligar" uma periodicidade temporariamente sem
-   * excluí-la do banco de dados.
-   *
-   * @since 1.0.0
-   */
-  @Default
-  private Boolean ativo = Boolean.TRUE;
+/**
+     * Indica se a periodicidade está ativa.
+     * <p>
+     * Uma periodicidade inativa não será considerada no cálculo de ocorrências.
+     * Este campo permite "desligar" uma periodicidade temporariamente sem
+     * excluí-la do banco de dados.
+     *
+     * @since 1.0.0
+     */
+     @Default
+     @Column(name = "ativo", nullable = false)
+     private Boolean ativo = Boolean.TRUE;
 
 }

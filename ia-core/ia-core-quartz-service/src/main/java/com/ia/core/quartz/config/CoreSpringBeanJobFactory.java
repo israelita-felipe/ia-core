@@ -1,4 +1,4 @@
-package com.ia.core.quartz;
+package com.ia.core.quartz.config;
 
 import com.ia.core.quartz.service.AbstractJob;
 import lombok.Setter;
@@ -21,39 +21,39 @@ import java.util.function.Consumer;
  * via injeção automática.
  *
  * @author Israel Araújo
- * @since 1.0
  * @see SpringBeanJobFactory
  * @see ApplicationContextAware
+ * @since 1.0
  */
 @Slf4j
 @Component
 public class CoreSpringBeanJobFactory
-  extends SpringBeanJobFactory
-  implements ApplicationContextAware {
+    extends SpringBeanJobFactory
+    implements ApplicationContextAware {
 
-  /**
-   * Factory de beans do Spring para injeção de dependências.
-   */
-  private AutowireCapableBeanFactory beanFactory;
+    /**
+     * Factory de beans do Spring para injeção de dependências.
+     */
+    private AutowireCapableBeanFactory beanFactory;
 
-  /**
-   * Inicializador de contexto para jobs.
-   */
-  @Setter
-  private Consumer<JobExecutionContext> contextInitializer;
+    /**
+     * Inicializador de contexto para jobs.
+     */
+    @Setter
+    private Consumer<JobExecutionContext> contextInitializer;
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) {
-    this.beanFactory = applicationContext.getAutowireCapableBeanFactory();
-  }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.beanFactory = applicationContext.getAutowireCapableBeanFactory();
+    }
 
-  @Override
-  protected Object createJobInstance(TriggerFiredBundle bundle)
-    throws Exception {
-    AbstractJob job = (AbstractJob) super.createJobInstance(bundle);
-    beanFactory.autowireBean(job);
-    job.initContext(contextInitializer);
-    return job;
-  }
+    @Override
+    protected Object createJobInstance(TriggerFiredBundle bundle)
+        throws Exception {
+        AbstractJob job = (AbstractJob) super.createJobInstance(bundle);
+        beanFactory.autowireBean(job);
+        job.initContext(contextInitializer);
+        return job;
+    }
 
 }

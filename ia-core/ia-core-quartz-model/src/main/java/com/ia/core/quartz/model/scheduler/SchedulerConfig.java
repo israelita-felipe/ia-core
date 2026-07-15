@@ -16,24 +16,14 @@ import lombok.experimental.SuperBuilder;
  * utilizada para gerenciar jobs do Quartz de forma persistida.
  *
  * @author Israel Araújo
- * @since 1.0.0
  * @see Periodicidade
- * @see com.ia.core.quartz.service.SchedulerConfigService
+ * @since 1.0.0
  */
 @Entity
 @Table(name = SchedulerConfig.TABLE_NAME,
-       schema = SchedulerConfig.SCHEMA_NAME)
+    schema = SchedulerConfig.SCHEMA_NAME)
 @NamedEntityGraph(name = "SchedulerConfig.withPeriodicidade",
-                  attributeNodes = @NamedAttributeNode("periodicidade"))
-/**
- * Classe que representa as configurações para scheduler.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfig
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
+    attributeNodes = @NamedAttributeNode("periodicidade"))
 @Getter
 @Setter
 @SuperBuilder
@@ -41,41 +31,45 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchedulerConfig
-  extends BaseEntity {
+    extends BaseEntity {
 
-  /** Nome da tabela no banco de dados */
-  public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
-      + "SCHEDULER_CONFIG";
-  /** Nome do schema no banco de dados */
-  public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
+    /**
+     * Nome da tabela no banco de dados
+     */
+    public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
+        + "SCHEDULER_CONFIG";
+    /**
+     * Nome do schema no banco de dados
+     */
+    public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
-  /**
-   * Nome completo da classe do job a ser executado.
-   * <p>
-   * Este valor deve ser o nome completamente qualificado da classe que
-   * implementa a lógica do job. A classe deve implementar a interface
-   * {@code org.quartz.Job} do framework Quartz.
-   *
-   * @since 1.0.0
-   */
-  @Column(name = "JOB_CLASS_NAME", nullable = false, unique = false)
-  private String jobClassName;
+    /**
+     * Nome completo da classe do job a ser executado.
+     * <p>
+     * Este valor deve ser o nome completamente qualificado da classe que
+     * implementa a lógica do job. A classe deve implementar a interface
+     * {@code org.quartz.Job} do framework Quartz.
+     *
+     * @since 1.0.0
+     */
+    @Column(name = "JOB_CLASS_NAME", nullable = false, unique = false)
+    private String jobClassName;
 
-  /**
-   * Periodicidade associada ao job.
-   * <p>
-   * Define a frequência e padrão de recorrência para execução do job.
-   * A periodicidade segue a especificação RFC 5545 (iCalendar) e controla
-   * quando o job será disparado pelo scheduler.
-   *
-   * @since 1.0.0
-   * @see Periodicidade
-   */
-  @Default
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
-            optional = false, orphanRemoval = true,
-            targetEntity = Periodicidade.class)
-  @JoinColumn(name = "periodicidade", referencedColumnName = "id")
-  private Periodicidade periodicidade = new Periodicidade();
+    /**
+     * Periodicidade associada ao job.
+     * <p>
+     * Define a frequência e padrão de recorrência para execução do job.
+     * A periodicidade segue a especificação RFC 5545 (iCalendar) e controla
+     * quando o job será disparado pelo scheduler.
+     *
+     * @see Periodicidade
+     * @since 1.0.0
+     */
+    @Default
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+        optional = false, orphanRemoval = true,
+        targetEntity = Periodicidade.class)
+    @JoinColumn(name = "periodicidade", referencedColumnName = "id")
+    private Periodicidade periodicidade = new Periodicidade();
 
 }

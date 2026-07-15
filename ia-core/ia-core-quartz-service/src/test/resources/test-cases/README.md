@@ -110,7 +110,6 @@ Este diretório contém casos de teste documentados para classes, DTOs e modelos
 | SchedulerConfigTriggerListView | Agendamento | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 1/1 | Completo |
 | SchedulerConfigTriggerSearchRequest | ServiceModel | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 7/7 | Completo |
 | SchedulerConfigTriggerTranslator | ServiceModel | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 1/1 | Completo |
-| SchedulerRegistry | Agendamento | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 1/1 | Completo |
 | SchedulerUseCase | ServiceModel | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 1/1 | Completo |
 | TriggersListener | Quartz | [CDU/Manter-Quartz: Manter Quartz](../../../../CDU/Manter-Quartz/README.md) | 1/1 | Completo |
 

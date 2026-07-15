@@ -26,165 +26,160 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = SchedulerConfigTrigger.TABLE_NAME,
-       schema = SchedulerConfigTrigger.SCHEMA_NAME)
-/**
- * Classe que representa a entidade de domínio scheduler config trigger.
- * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a SchedulerConfigTrigger
- * dentro do sistema.
- *
- * @author IA
- * @since 1.0
- */
+    schema = SchedulerConfigTrigger.SCHEMA_NAME)
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchedulerConfigTrigger
-  implements Serializable, Comparable<SchedulerConfigTrigger> {
+    implements Serializable, Comparable<SchedulerConfigTrigger> {
 
-  /** NOME DA TABELA */
-  public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
-      + "TRIGGERS";
-  /** NOME DO SCHEMA */
-  public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
+    /**
+     * NOME DA TABELA
+     */
+    public static final String TABLE_NAME = QuartzModel.TABLE_PREFIX
+        + "TRIGGERS";
+    /**
+     * NOME DO SCHEMA
+     */
+    public static final String SCHEMA_NAME = QuartzModel.SCHEMA;
 
-  /**
-   * Id da classe de entidade.
-   */
-  /**
-   * Nome único do trigger.
-   */
-  @Id
-  @Column(name = "TRIGGER_NAME")
-  private UUID triggerName;
+    /**
+     * Id da classe de entidade.
+     */
+    /**
+     * Nome único do trigger.
+     */
+    @Id
+    @Column(name = "TRIGGER_NAME")
+    private UUID triggerName;
 
-  /**
-   * Nome do scheduler ao qual este trigger pertence.
-   */
-  @Column(name = "SCHED_NAME")
-  private String schedulerName;
+    /**
+     * Nome do scheduler ao qual este trigger pertence.
+     */
+    @Column(name = "SCHED_NAME")
+    private String schedulerName;
 
-  /**
-   * Grupo do trigger para organização.
-   */
-  @Column(name = "TRIGGER_GROUP")
-  private String triggerGroup;
+    /**
+     * Grupo do trigger para organização.
+     */
+    @Column(name = "TRIGGER_GROUP")
+    private String triggerGroup;
 
-  /**
-   * Nome do job associado a este trigger.
-   */
-  @Column(name = "JOB_NAME")
-  private String jobName;
+    /**
+     * Nome do job associado a este trigger.
+     */
+    @Column(name = "JOB_NAME")
+    private String jobName;
 
-  /**
-   * Grupo do job associado.
-   */
-  @Column(name = "JOB_GROUP")
-  private String jobGroup;
+    /**
+     * Grupo do job associado.
+     */
+    @Column(name = "JOB_GROUP")
+    private String jobGroup;
 
-  /**
-   * Descrição opcional do trigger.
-   */
-  @Column(name = "DESCRIPTION")
-  private String description;
+    /**
+     * Descrição opcional do trigger.
+     */
+    @Column(name = "DESCRIPTION")
+    private String description;
 
-  /**
-   * Próxima data/hora de execução em formato string.
-   */
-  @Column(name = "NEXT_FIRE_TIME")
-  private String nextFireTime;
+    /**
+     * Próxima data/hora de execução em formato string.
+     */
+    @Column(name = "NEXT_FIRE_TIME")
+    private String nextFireTime;
 
-  /**
-   * Data/hora da execução anterior em formato string.
-   */
-  @Column(name = "PREV_FIRE_TIME")
-  private String prevFireTime;
+    /**
+     * Data/hora da execução anterior em formato string.
+     */
+    @Column(name = "PREV_FIRE_TIME")
+    private String prevFireTime;
 
-  /**
-   * Prioridade do trigger.
-   */
-  @Column(name = "PRIORITY")
-  private String priority;
+    /**
+     * Prioridade do trigger.
+     */
+    @Column(name = "PRIORITY")
+    private String priority;
 
-  /**
-   * Estado atual do trigger (ex: PAUSED, NORMAL, COMPLETE).
-   */
-  @Column(name = "TRIGGER_STATE")
-  private String triggerState;
+    /**
+     * Estado atual do trigger (ex: PAUSED, NORMAL, COMPLETE).
+     */
+    @Column(name = "TRIGGER_STATE")
+    private String triggerState;
 
-  /**
-   * Tipo do trigger (ex: CRON, SIMPLE).
-   */
-  @Column(name = "TRIGGER_TYPE")
-  private String triggerType;
+    /**
+     * Tipo do trigger (ex: CRON, SIMPLE).
+     */
+    @Column(name = "TRIGGER_TYPE")
+    private String triggerType;
 
-  /**
-   * Data/hora de início do trigger.
-   */
-  @Column(name = "START_TIME")
-  private String triggerStartTime;
+    /**
+     * Data/hora de início do trigger.
+     */
+    @Column(name = "START_TIME")
+    private String triggerStartTime;
 
-  /**
-   * Data/hora de fim do trigger.
-   */
-  @Column(name = "END_TIME")
-  private String endTime;
+    /**
+     * Data/hora de fim do trigger.
+     */
+    @Column(name = "END_TIME")
+    private String endTime;
 
-  /**
-   * Nome do calendário associado ao trigger.
-   */
-  @Column(name = "CALENDAR_NAME")
-  private String calendarName;
+    /**
+     * Nome do calendário associado ao trigger.
+     */
+    @Column(name = "CALENDAR_NAME")
+    private String calendarName;
 
-  /**
-   * Instrução de tratamento de missed firings (misfire).
-   */
-  @Column(name = "MISFIRE_INSTR")
-  private String misFireInstr;
+    /**
+     * Instrução de tratamento de missed firings (misfire).
+     */
+    @Column(name = "MISFIRE_INSTR")
+    private String misFireInstr;
 
-  /**
-   * Dados serializados do job.
-   */
-  @Column(name = "JOB_DATA")
-  private String jobData;
+    /**
+     * Dados serializados do job.
+     */
+    @Column(name = "JOB_DATA")
+    private String jobData;
 
-  @Override
-  public int compareTo(SchedulerConfigTrigger o) {
-    if (this.triggerName == null) {
-      if (o.triggerName == null) {
-        return 0;
-      }
-      return -1;
+    @Override
+    public int compareTo(SchedulerConfigTrigger o) {
+        if (this.triggerName == null) {
+            if (o.triggerName == null) {
+                return 0;
+            }
+            return -1;
+        }
+        if (o.triggerName == null) {
+            return 1;
+        }
+        return this.triggerName.compareTo(o.triggerName);
     }
-    if (o.triggerName == null) {
-      return 1;
-    }
-    return this.triggerName.compareTo(o.triggerName);
-  }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (triggerName == null) {
+            return this == obj;
+        }
+        if (!(getClass().isInstance(obj))) {
+            return false;
+        }
+        SchedulerConfigTrigger other = (SchedulerConfigTrigger) obj;
+        return Objects.equals(triggerName, other.triggerName);
     }
-    if (triggerName == null) {
-      return this == obj;
-    }
-    if (!(getClass().isInstance(obj))) {
-      return false;
-    }
-    SchedulerConfigTrigger other = (SchedulerConfigTrigger) obj;
-    return Objects.equals(triggerName, other.triggerName);
-  }
 
-  @Override
-  public int hashCode() {
-    if (triggerName != null) {
-      return Objects.hash(triggerName);
+    @Override
+    public int hashCode() {
+        if (triggerName != null) {
+            return Objects.hash(triggerName);
+        }
+        return super.hashCode();
     }
-    return super.hashCode();
-  }
 
 }

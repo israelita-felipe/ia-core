@@ -63,34 +63,39 @@ public class LibRecurOccurrenceCalculator
     return nextOccurrence(p, after);
   }
 
-  @Override
-  public List<IntervaloTemporalDTO> generateOccurrences(PeriodicidadeDTO periodicidade,
-                                                        ZonedDateTime after,
-                                                        int maxCount) {
-    if (!periodicidade.getAtivo() || maxCount <= 0) {
-      return Collections.emptyList();
-    }
+@Override
+     public List<IntervaloTemporalDTO> generateOccurrences(PeriodicidadeDTO periodicidade,
+                                                          ZonedDateTime after,
+                                                          int maxCount) {
+      if (periodicidade == null || !Boolean.TRUE.equals(periodicidade.getAtivo()) || maxCount <= 0) {
+        return Collections.emptyList();
+      }
 
-    // Constrói o conjunto ordenado de todas as ocorrências (RRULE + RDATE) e
-    // aplica EXDATE
-    SortedSet<DateTime> allInstances = buildAllInstances(periodicidade);
+     // Constrói o conjunto ordenado de todas as ocorrências (RRULE + RDATE) e
+     // aplica EXDATE
+     SortedSet<DateTime> allInstances = buildAllInstances(periodicidade);
 
-    // Filtra após 'after' e limita
-    DateTime afterUtc = DateTimeAdapter.toUtcDateTime(after);
-    SortedSet<DateTime> filtered = allInstances.tailSet(afterUtc);
-
-    List<IntervaloTemporalDTO> results = new ArrayList<>();
-    Duration duration = periodicidade.duration();
-    ZoneId zone = periodicidade.getZoneIdValue();
-
-    for (DateTime dt : filtered) {
-      if (results.size() >= maxCount)
-        break;
-      results
-          .add(DateTimeAdapter.toIntervaloTemporalDTO(dt, duration, zone));
-    }
-    return results;
-  }
+     // Filtra após 'after' e limita
+     // Usa stream filter em vez de tailSet para garantir consistência com o comparator
+     List<IntervaloTemporalDTO> results = new ArrayList<>();
+     Duration duration = periodicidade.duration();
+     ZoneId zone = periodicidade.getZoneIdValue();
+     
+     Comparator<? super DateTime> comparator = createDateTimeComparator(periodicidade);
+     ZonedDateTime afterForComparison = after;
+     
+     for (DateTime dt : allInstances) {
+       ZonedDateTime dtTime = DateTimeAdapter.fromUtcDateTime(dt, zone);
+       if (dtTime.isBefore(afterForComparison)) {
+         continue;
+       }
+       if (results.size() >= maxCount) {
+         break;
+       }
+       results.add(DateTimeAdapter.toIntervaloTemporalDTO(dt, duration, zone));
+     }
+     return results;
+   }
 
   @Override
   public List<IntervaloTemporalDTO> generateOccurrences(PeriodicidadeDTO periodicidade,
@@ -101,32 +106,29 @@ public class LibRecurOccurrenceCalculator
     return generateOccurrences(periodicidade, start, maxCount);
   }
 
-  @Override
-  public List<IntervaloTemporalDTO> generateOccurrences(PeriodicidadeDTO periodicidade,
-                                                        ZonedDateTime start,
-                                                        ZonedDateTime end) {
-    if (!periodicidade.getAtivo() || start.isAfter(end)) {
-      return Collections.emptyList();
-    }
+@Override
+     public List<IntervaloTemporalDTO> generateOccurrences(PeriodicidadeDTO periodicidade,
+                                                          ZonedDateTime start,
+                                                          ZonedDateTime end) {
+      if (periodicidade == null || !Boolean.TRUE.equals(periodicidade.getAtivo()) || start.isAfter(end)) {
+        return Collections.emptyList();
+      }
 
-    SortedSet<DateTime> allInstances = buildAllInstances(periodicidade);
+     SortedSet<DateTime> allInstances = buildAllInstances(periodicidade);
 
-    DateTime startUtc = DateTimeAdapter.toUtcDateTime(start);
-    DateTime endUtc = DateTimeAdapter.toUtcDateTime(end);
+     List<IntervaloTemporalDTO> results = new ArrayList<>();
+     Duration duration = periodicidade.duration();
+     ZoneId zone = periodicidade.getZoneIdValue();
 
-    // Instâncias no intervalo [startUtc, endUtc]
-    SortedSet<DateTime> inRange = allInstances.subSet(startUtc, endUtc);
-
-    List<IntervaloTemporalDTO> results = new ArrayList<>();
-    Duration duration = periodicidade.duration();
-    ZoneId zone = periodicidade.getZoneIdValue();
-
-    for (DateTime dt : inRange) {
-      results
-          .add(DateTimeAdapter.toIntervaloTemporalDTO(dt, duration, zone));
-    }
-    return results;
-  }
+     for (DateTime dt : allInstances) {
+       ZonedDateTime dtTime = DateTimeAdapter.fromUtcDateTime(dt, zone);
+       if (!dtTime.isBefore(start) && !dtTime.isAfter(end)) {
+         results
+             .add(DateTimeAdapter.toIntervaloTemporalDTO(dt, duration, zone));
+       }
+     }
+     return results;
+   }
 
   @Override
   public boolean intersects(PeriodicidadeDTO a, PeriodicidadeDTO b,

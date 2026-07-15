@@ -105,9 +105,8 @@ class QuartzLayerTestCaseCoverageTest {
       "SchedulerConfigTriggerFormView",
       "SchedulerConfigTriggerListView",
       "SchedulerConfigTriggerSearchRequestDTO",
-      "SchedulerConfigTriggerTranslator",
-      "SchedulerRegistry",
-      "SchedulerUseCase",
+"SchedulerConfigTriggerTranslator",
+        "SchedulerUseCase",
       "TriggersListener"
   );
   private static final Set<String> SERVICE_MODEL_CLASSES = Set.of(

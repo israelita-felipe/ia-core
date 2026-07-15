@@ -15,20 +15,21 @@ import java.util.List;
  */
 public interface SchedulerUseCase extends CrudUseCase<SchedulerConfigDTO> {
 
-  /**
-   * Inicia todos os jobs ativos.
-   */
-  void iniciarJobs();
 
-  /**
-   * Busca jobs ativos.
-   *
-   * @return lista de jobs ativos
-   */
-  List<SchedulerConfigDTO> findAtivos();
+    /**
+     * Busca jobs ativos.
+     *
+     * @return lista de jobs ativos
+     */
+    List<SchedulerConfigDTO> findAtivos();
 
-  /**
-   * Verifica atualizações nos jobs.
-   */
-  void verificarAtualizacoes();
+    /**
+     * Verifica atualizações nos jobs.
+     */
+    void verificarAtualizacoes();
+
+    /**
+     * Inicia todos os jobs ativos no scheduler.
+     */
+    void iniciarJobs();
 }

@@ -1,6 +1,7 @@
 package com.ia.core.nlp.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -49,8 +50,10 @@ public class Node {
   /** Valor C (Citosina) do nó. */
   private final BigDecimal c;
 
-  /** Indica se o nó está negado. */
-  boolean negated = false;
+/** Indica se o nó está negado. */
+  @Getter
+  @Setter
+  private boolean negated = false;
 
   /**
    * Construtor privado para controle de criação via factory method.
@@ -103,7 +106,7 @@ public class Node {
     Node valueNotCompactOf = Node
         .valueNotCompactOf(this.g.add(node.g), this.a.add(node.a),
                            this.t.add(node.t), this.c.add(node.c));
-    valueNotCompactOf.negated = this.negated;
+    valueNotCompactOf.setNegated(this.negated);
     return valueNotCompactOf;
   }
 
@@ -129,7 +132,7 @@ public class Node {
     Node valueNotCompactOf = Node
         .valueNotCompactOf(cnodeResult.getX(), cnodeResult.getY(),
                            cnodeThree.getX(), cnodeThree.getY());
-    valueNotCompactOf.negated = this.negated;
+    valueNotCompactOf.setNegated(this.negated);
     return valueNotCompactOf;
   }
 
@@ -143,7 +146,7 @@ public class Node {
     Node valueNotCompactOf = Node
         .valueNotCompactOf(this.g.multiply(value), this.a.multiply(value),
                            this.t.multiply(value), this.c.multiply(value));
-    valueNotCompactOf.negated = this.negated;
+    valueNotCompactOf.setNegated(this.negated);
     return valueNotCompactOf;
   }
 
@@ -166,19 +169,19 @@ public class Node {
                            g.multiply(node.a).add(a.multiply(node.c)),
                            t.multiply(node.g).add(c.multiply(node.t)),
                            t.multiply(node.a).add(c.multiply(node.c)));
-    valueNotCompactOf.negated = this.negated;
+    valueNotCompactOf.setNegated(this.negated);
     return valueNotCompactOf;
 
   }
 
-  /**
-   * Nega este nó, multiplicando todos os valores por -1.
-   *
-   * @return novo {@link Node} com valores negados
-   */
+/**
+    * Nega este nó, multiplicando todos os valores por -1.
+    *
+    * @return novo {@link Node} com valores negados
+    */
   public Node negate() {
     Node multiply = multiply(BigDecimal.ONE.negate());
-    multiply.negated = true;
+    multiply.setNegated(true);
     return multiply;
   }
 
@@ -190,14 +193,14 @@ public class Node {
    * @return novo {@link Node} normalizado
    */
   public Node normalize() {
-    BigDecimal soma = this.g.pow(2).add(this.a.pow(2)).add(this.t.pow(2))
+BigDecimal soma = this.g.pow(2).add(this.a.pow(2)).add(this.t.pow(2))
         .add(this.c.pow(2)).sqrt(MathContext.DECIMAL128);
     Node valueOf = Node
         .valueNotCompactOf(this.g.divide(soma, MathContext.DECIMAL128),
                            this.a.divide(soma, MathContext.DECIMAL128),
                            this.t.divide(soma, MathContext.DECIMAL128),
                            this.c.divide(soma, MathContext.DECIMAL128));
-    valueOf.negated = this.negated;
+    valueOf.setNegated(this.negated);
     return valueOf;
   }
 

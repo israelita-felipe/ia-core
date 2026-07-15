@@ -1,5 +1,46 @@
 # --- Perfil lógico do módulo Quartz com MCP ---
 ia-core:
+  quartz:
+    scheduler:
+      instance-name: "CoreQuartzScheduler"
+      instance-id: "AUTO"
+      thread-name: "CoreQuartzSchedulerThread"
+      make-scheduler-thread-daemon: false
+      threads-inherit-context-class-loader: false
+      idle-wait-time: 30000ms
+      db-failure-retry-interval: 15000ms
+      skip-update-check: true
+      batch-trigger-acquisition-max-count: 1
+      batch-trigger-acquisition-fire-ahead-time-window: 0
+      auto-startup: true
+      overwrite-existing-jobs: true
+      wait-for-jobs-to-complete-on-shutdown: false
+
+    thread-pool:
+      thread-count: 1
+      thread-priority: 5
+      make-threads-daemons: false
+
+    job-store:
+      class: "org.quartz.impl.jdbcjobstore.JobStoreTX"
+      driver-delegate-class: "org.quartz.impl.jdbcjobstore.HSQLDBDelegate"
+      table-prefix: "QUARTZ.QRTZ_"
+      use-properties: false
+      misfire-threshold: 60000ms
+      is-clustered: false
+      cluster-checkin-interval: 2000ms
+      max-misfires-to-handle-at-a-time: 20
+      dont-set-auto-commit-false: false
+      acquire-triggers-within-lock: false
+      use-enhanced-statements: false
+
+    plugins:
+      listeners:
+        job:
+          class: "com.ia.core.quartz.service.JobsListener"
+        trigger:
+          class: "com.ia.core.quartz.service.TriggersListener"
+
   llm:
     enabled: true
     security:
@@ -18,13 +59,6 @@ ia-core:
         scan-packages:
           - com.ia.core.quartz.service
         refresh-on-startup: true
-
-spring:
-  quartz:
-    job-store-type: jdbc
-    jdbc:
-      initialize-schema: always # Use 'embedded' for H2 or 'never' in production
-    overwrite-existing-jobs: true
   ai:
     mcp:
       server:
@@ -36,7 +70,7 @@ spring:
         agent-card:
           enabled: true
           path: /.well-known/agent-card.json
-      tools:
-        usecase-scan:
-          enabled: true
-          base_package: com.ia.core.quartz.service
+        tools:
+          usecase-scan:
+            enabled: true
+            base_package: com.ia.core.quartz.service
