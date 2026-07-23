@@ -1,5 +1,6 @@
 package com.ia.core.flyway.service.model.flywayexecution;
 
+import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.usecase.ReadOnlyUseCase;
@@ -15,21 +16,20 @@ import org.springframework.data.domain.Page;
  * @author Israel Araújo
  * @since 1.0.0
  */
-public interface FlywayExecutionUseCase
-  extends ReadOnlyUseCase<FlywayExecutionDTO> {
+public interface FlywayExecutionUseCase<T extends FlywayExecution, D extends FlywayExecutionDTO<T>> extends ReadOnlyUseCase<D> {
 
   /**
    * Lista apenas as execuções bem-sucedidas.
    *
    * @return lista de execuções bem-sucedidas
    */
-  Page<FlywayExecutionDTO> listSuccessful(SearchRequestDTO request);
+  Page<D> listSuccessful(SearchRequestDTO request);
 
   /**
    * Lista apenas as execuções falhadas.
    *
    * @return lista de execuções falhadas
    */
-  Page<FlywayExecutionDTO> listFailed(SearchRequestDTO request);
+  Page<D> listFailed(SearchRequestDTO request);
 
 }

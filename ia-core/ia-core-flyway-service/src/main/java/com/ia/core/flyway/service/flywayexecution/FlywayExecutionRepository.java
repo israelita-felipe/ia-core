@@ -14,7 +14,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @since 1.0.0
  */
 @NoRepositoryBean
-public interface FlywayExecutionRepository
-  extends BaseEntityRepository<FlywayExecution> {
+public interface FlywayExecutionRepository<T extends FlywayExecution>
+    extends BaseEntityRepository<T> {
 
 }

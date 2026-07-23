@@ -6,10 +6,11 @@ import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
 /**
  *
  */
+
 /**
  * Classe de configuração para attachment form view model.
  * <p>
- * Responsável por gerenciar as funcionalidades relacionadas a AttachmentFormViewModelConfig
+ * Responsável por gerenciar as funcionalidades relacionadas a ConfigurationPageViewModelConfig
  * dentro do sistema.
  *
  * @author IA
@@ -17,13 +18,13 @@ import com.ia.core.view.components.form.viewModel.FormViewModelConfig;
  */
 
 public class AttachmentFormViewModelConfig<T extends AttachmentDTO<?>>
-  extends FormViewModelConfig<T> {
+    extends FormViewModelConfig<T> {
 
-  /**
-   * @param readOnly
-   */
-  public AttachmentFormViewModelConfig(boolean readOnly) {
-    super(readOnly);
-  }
+    /**
+     * @param readOnly
+     */
+    public AttachmentFormViewModelConfig(boolean readOnly) {
+        super(readOnly);
+    }
 
 }

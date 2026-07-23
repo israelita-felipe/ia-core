@@ -11,15 +11,23 @@ package com.ia.core.llm.model;
  */
 public final class LLMModel {
 
-  /** Construtor privado para evitar instanciação */
-  private LLMModel() {
-    throw new UnsupportedOperationException("Classe utilitária");
-  }
-
-  /** Prefixo das tabelas do quartz */
-  public static final String TABLE_PREFIX = "LLM_";
-
-  /** Schema do quartz */
-  public static final String SCHEMA = "LARGE_LANGUAGE_MODEL";
+    /**
+     * Prefixo das tabelas do quartz
+     */
+    public static final String TABLE_PREFIX = "LLM_";
+    /**
+     * Schema do quartz
+     */
+    public static final String SCHEMA = "LARGE_LANGUAGE_MODEL";
+    /**
+     * Nome do módulo
+     */
+    public static final String NAME = "LLM";
+    /**
+     * Construtor privado para evitar instanciação
+     */
+    private LLMModel() {
+        throw new UnsupportedOperationException("Classe utilitária");
+    }
 
 }

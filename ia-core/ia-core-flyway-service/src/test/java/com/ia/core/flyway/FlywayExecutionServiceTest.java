@@ -1,6 +1,7 @@
 package com.ia.core.flyway;
 
-import com.ia.core.flyway.service.flywayexecution.FlywayExecutionService;
+import com.ia.core.flyway.model.FlywayExecution;
+import com.ia.core.flyway.service.flywayexecution.AbstractFlywayExecutionService;
 import com.ia.core.flyway.service.flywayexecution.FlywayExecutionServiceConfig;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.model.filter.FieldType;
@@ -56,16 +57,16 @@ public class FlywayExecutionServiceTest {
     }
 
     private static class TestableFlywayExecutionService
-            extends FlywayExecutionService {
+        extends AbstractFlywayExecutionService<FlywayExecution, FlywayExecutionDTO<FlywayExecution>> {
 
         private SearchRequestDTO requestCaptured;
 
-        TestableFlywayExecutionService(FlywayExecutionServiceConfig config) {
+        TestableFlywayExecutionService(FlywayExecutionServiceConfig<FlywayExecution, FlywayExecutionDTO<FlywayExecution>> config) {
             super(config);
         }
 
         @Override
-        public Page<FlywayExecutionDTO> findAll(SearchRequestDTO requestDTO) {
+        public Page<FlywayExecutionDTO<FlywayExecution>> findAll(SearchRequestDTO requestDTO) {
             requestCaptured = requestDTO;
             return Page.empty();
         }

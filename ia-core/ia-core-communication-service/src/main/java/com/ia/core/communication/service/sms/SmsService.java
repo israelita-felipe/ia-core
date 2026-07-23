@@ -1,5 +1,6 @@
 package com.ia.core.communication.service.sms;
 
+import com.ia.core.communication.service.config.CommunicationConfigurationProvider;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
@@ -33,7 +34,7 @@ import org.springframework.stereotype.Component;
 public class SmsService
   implements MensagemProvider {
 
-  private final SmsConfig smsConfig;
+  private final CommunicationConfigurationProvider communicationConfigurationProvider;
 
   /**
    * Envia um SMS usando o provedor configurado.
@@ -53,7 +54,7 @@ public class SmsService
     log.info("Enviando SMS para {}", mensagem.getTelefoneDestinatario());
 
     try {
-      String provider = smsConfig.getProvider();
+      String provider = communicationConfigurationProvider.getCommunicationProperties().getSms().getProvider();
       if (provider == null || provider.isBlank()) {
         log.error("Provider SMS não configurado");
         return ResultadoEnvio.falha("Provider SMS não configurado");
@@ -74,8 +75,8 @@ public class SmsService
   private ResultadoEnvio enviarViaTwilio(MensagemDTO mensagem) {
     log.debug("Enviando via Twilio para {}",
               mensagem.getTelefoneDestinatario());
-    log.debug("AccountSID: {}, FromNumber: {}", smsConfig.getAccountSid(),
-              smsConfig.getFromNumber());
+    log.debug("AccountSID: {}, FromNumber: {}", communicationConfigurationProvider.getCommunicationProperties().getSms().getAccountSid(),
+              communicationConfigurationProvider.getCommunicationProperties().getSms().getFromNumber());
 
     String messageId = "TWILIO_" + System.currentTimeMillis();
     log.info("SMS enviado com sucesso via Twilio: {}", messageId);

@@ -66,6 +66,9 @@ Este diretório contém os **Architectural Decision Records** do projeto, docume
 | ADR-044 | [Usar HTTP/1.1 para Comunicação REST](044-use-http-1-1-for-rest-communication.md) | ✅ Aceito | Comunicação HTTP/1.1 alinhada a RFC 9110-9113 |
 | ADR-045 | [Usar iCalendar/iTIP para Agendamento](045-use-icalendar-itip-for-scheduling.md) | ✅ Aceito | Calendário e transporte independente |
 | ADR-047 | [Usar UTF-8, Tags de Idioma e Web Linking para NLP](047-use-utf-8-language-tags-web-linking-for-nlp.md) | ✅ Aceito | UTF-8, BCP 47 e RFC 8288 |
+| ADR-060 | [Configuração Extensível Modular](060-modular-extensible-configuration.md) | ✅ Implementado | Configuração centralizada por plugin |
+| ADR-061 | [Padronização de ConfigurationProvider / ConfigurationRegistry](061-configuration-provider-registry-pattern.md) | ✅ Implementado | Contratos para configuração modular |
+| ADR-062 | [Padronização de MóduloProperties e MóduloPropertiesConstants](062-module-properties-pattern.md) | ✅ Implementado | Alinhamento a namespaces Spring nativos |
 
 ### Qualidade e Metodologia (300-599)
 
@@ -177,4 +180,4 @@ Para revisar, crie um novo ADR referenciando o anterior.
 
 ---
 
-**Última Atualização:** 2026-06-11
+**Última Atualização:** 2026-07-22

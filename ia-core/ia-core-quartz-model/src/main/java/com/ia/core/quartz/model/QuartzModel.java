@@ -8,9 +8,16 @@ package com.ia.core.quartz.model;
  * @author Israel Araújo
  */
 public class QuartzModel {
-  /** Prefixo das tabelas do quartz */
-  public static final String TABLE_PREFIX = "QRTZ_";
-  /** Schema do quartz */
-  public static final String SCHEMA = "QUARTZ";
-
+    /**
+     * Prefixo das tabelas do quartz
+     */
+    public static final String TABLE_PREFIX = "QRTZ_";
+    /**
+     * Schema do quartz
+     */
+    public static final String SCHEMA = "QUARTZ";
+    /**
+     * Nome do módulo
+     */
+    public static final String NAME = "QUARTZ";
 }

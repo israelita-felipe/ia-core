@@ -24,6 +24,7 @@ public class LlmModuleProperties {
   private Agent agent = new Agent();
   private Ferramenta ferramenta = new Ferramenta();
   private Audit audit = new Audit();
+  private HttpConfig http = new HttpConfig();
 
   @Data
   public static class Security {
@@ -36,6 +37,39 @@ public class LlmModuleProperties {
     private List<String> toolScanPackages = new ArrayList<>(List.of("com.ia"));
     private boolean enabled = true;
     private int maxSubAgentTurns = 10;
+    private SubagentResolver subagentResolver = new SubagentResolver();
+    private BuiltInTools builtInTools = new BuiltInTools();
+    private A2A a2a = new A2A();
+    private MultiModel multiModel = new MultiModel();
+
+    @Data
+    public static class SubagentResolver {
+      private boolean enabled = true;
+      private String type = "database";
+    }
+
+    @Data
+    public static class BuiltInTools {
+      private WebSearch webSearch = new WebSearch();
+
+      @Data
+      public static class WebSearch {
+        private boolean enabled = true;
+      }
+    }
+
+    @Data
+    public static class A2A {
+      private boolean enabled = true;
+      private String serverUrl = "http://localhost:8080";
+      private String agentId = "ia-core-llm-agent";
+    }
+
+    @Data
+    public static class MultiModel {
+      private boolean enabled = true;
+      private String defaultModel = "llama3.2-vision";
+    }
   }
 
   @Data
@@ -55,5 +89,11 @@ public class LlmModuleProperties {
   public static class Audit {
     private boolean enabled = true;
     private String table = "LLM_AI_INTERACTION_LOG";
+  }
+
+  @Data
+  public static class HttpConfig {
+    private int readTimeout = 600000;
+    private int connectTimeout = 600000;
   }
 }

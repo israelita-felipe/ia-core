@@ -1,47 +1,49 @@
 package com.ia.core.service;
 
 import com.ia.core.model.BaseEntity;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.repository.BaseEntityRepository;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
+
+import java.io.Serializable;
 
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um
  * {@link BaseEntityRepository}
  *
- * @author Israel Araújo
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
-public interface FindBaseService<T extends BaseEntity, D extends DTO<?>>
-  extends BaseService<T, D> {
-  /**
-   * Verifica se o objeto de id passado como parâmetro pode ser buscado
-   *
-   * @param id {@link Long}
-   * @return <code>true</code> por padrão
-   */
-  default boolean canFind(Long id) {
-    return true;
-  }
-
-   /**
-    * Busca um {@link DTO} pelo seu {@link Long}.
-    *
-    * @param id {@link Long} da entidade <T>
-    * @return {@link DTO} da entidade <T>, ou <code>null</code> caso a mesma não
-    *         exista.
-    */
-   @TransactionalReadOnly
-   @Resilient(ResilienceProfile.DATABASE)
-   default D find(Long id) {
-    if (canFind(id)) {
-      return toDTO(getRepository().findById(id)
-          .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id)));
+public interface FindBaseService<T extends Serializable, D extends DTO<?>>
+    extends BaseService<T, D> {
+    /**
+     * Verifica se o objeto de id passado como parâmetro pode ser buscado
+     *
+     * @param id {@link Long}
+     * @return <code>true</code> por padrão
+     */
+    default boolean canFind(Long id) {
+        return true;
     }
-    return null;
-  }
+
+    /**
+     * Busca um {@link DTO} pelo seu {@link Long}.
+     *
+     * @param id {@link Long} da entidade <T>
+     * @return {@link DTO} da entidade <T>, ou <code>null</code> caso a mesma não
+     * exista.
+     */
+    @TransactionalReadOnly
+    @Resilient(ResilienceProfile.DATABASE)
+    default D find(Long id) {
+        if (canFind(id)) {
+            return toDTO(getRepository().findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Entity not found with id: " + id)));
+        }
+        return null;
+    }
 
 }

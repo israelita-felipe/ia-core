@@ -7,10 +7,6 @@ import com.ia.core.view.components.form.viewModel.IFormViewModel;
 import com.ia.core.view.components.list.IListView;
 import com.ia.core.view.components.list.viewModel.IListViewModel;
 import com.ia.core.view.components.page.PageView;
-import com.ia.core.view.components.page.viewModel.IPageViewModel.PageAction;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * PageView para exibir o histórico de execuções do Flyway.
@@ -21,36 +17,32 @@ import java.util.List;
  * @author Israel Araújo
  * @since 1.0.0
  */
-public class FlywayExecutionPageView
-  extends PageView<FlywayExecutionDTO> {
+public class FlywayExecutionPageView<T extends FlywayExecutionDTO<?>>
+    extends PageView<T> {
 
-  public static final String ROUTE = "flyway-execution";
+    public static final String ROUTE = "flyway-execution";
 
-  public FlywayExecutionPageView(FlywayExecutionPageViewModel viewModel) {
-    super(viewModel);
-  }
+    public FlywayExecutionPageView(FlywayExecutionPageViewModel<T> viewModel) {
+        super(viewModel);
+        viewModel.setReadOnly(true);
+        refreshButtons();
+    }
 
-  @Override
-  public IFormView<FlywayExecutionDTO> createFormView(IFormViewModel<FlywayExecutionDTO> formViewModel) {
-    // Não há formulário pois é apenas leitura
-    return null;
-  }
+    @Override
+    public IFormView<T> createFormView(IFormViewModel<T> formViewModel) {
+        // Não há formulário pois é apenas leitura
+        return null;
+    }
 
-  @Override
-  public IListView<FlywayExecutionDTO> createListView(IListViewModel<FlywayExecutionDTO> listViewModel) {
-    return new FlywayExecutionListView(listViewModel);
-  }
+    @Override
+    public IListView<T> createListView(IListViewModel<T> listViewModel) {
+        return new FlywayExecutionListView<>(listViewModel);
+    }
 
-  @Override
-  public Collection<PageAction<FlywayExecutionDTO>> createDefaultPageActions() {
-    List<PageAction<FlywayExecutionDTO>> actions = new java.util.ArrayList<>();
-    // Ações de visualização apenas - não há edição pois é tabela de sistema
-    return actions;
-  }
-
-  @Override
-  public FlywayExecutionPageViewModel getViewModel() {
-    return super.getViewModel().cast();
-  }
+    @Override
+    @SuppressWarnings("unchecked")
+    public FlywayExecutionPageViewModel<T> getViewModel() {
+        return super.getViewModel().cast();
+    }
 
 }

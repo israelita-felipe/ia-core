@@ -2,6 +2,8 @@ package com.ia.core.flyway.view.flywayexecution;
 
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.model.filter.SearchRequest;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.client.DefaultBaseClient;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,23 +18,23 @@ import org.springframework.web.bind.annotation.PostMapping;
  * do banco de dados.
  *
  * @author Israel Araújo
- * @since 1.0.0
  * @see DefaultBaseClient
+ * @since 1.0.0
  */
 @FeignClient(name = FlywayExecutionClient.NOME,
-             url = FlywayExecutionClient.URL)
-public interface FlywayExecutionClient
-  extends DefaultBaseClient<FlywayExecutionDTO> {
+    url = FlywayExecutionClient.URL)
+public interface FlywayExecutionClient<T extends FlywayExecutionDTO<?>>
+    extends DefaultBaseClient<T> {
 
-  /**
-   * Nome do cliente.
-   */
-  public static final String NOME = "flyway-execution";
+    /**
+     * Nome do cliente.
+     */
+    public static final String NOME = "flyway-execution";
 
-  /**
-   * URL do cliente.
-   */
-  public static final String URL = "${feign.host}/api/${api.version}/${feign.url.flyway-execution}";
+    /**
+     * URL do cliente.
+     */
+    public static final String URL = "${feign.host}/api/${api.version}/${feign.url.flyway-execution}";
 
     /**
      * Busca os elementos com paginação conforme critérios de busca.
@@ -41,7 +43,8 @@ public interface FlywayExecutionClient
      * @return {@link Page} com status OK (200) e dados paginados
      */
     @PostMapping("/all-successful")
-    public Page<FlywayExecutionDTO> findAllSuccessful(SearchRequestDTO request);
+    @Resilient(ResilienceProfile.INTERNAL_SERVICE)
+    public Page<T> findAllSuccessful(SearchRequestDTO request);
 
     /**
      * Busca os elementos com paginação conforme critérios de busca.
@@ -50,5 +53,6 @@ public interface FlywayExecutionClient
      * @return {@link Page} com status OK (200) e dados paginados
      */
     @PostMapping("/all-failed")
-    public Page<FlywayExecutionDTO> findAllFailed(SearchRequestDTO request);
+    @Resilient(ResilienceProfile.INTERNAL_SERVICE)
+    public Page<T> findAllFailed(SearchRequestDTO request);
 }

@@ -13,52 +13,53 @@ import com.ia.core.view.components.list.viewModel.IListViewModel;
  * @author Israel Araújo
  * @since 1.0.0
  */
-public class FlywayExecutionListView extends ListView<FlywayExecutionDTO> {
+public class FlywayExecutionListView<T extends FlywayExecutionDTO<?>>
+  extends ListView<T> {
 
-	public FlywayExecutionListView(IListViewModel<FlywayExecutionDTO> viewModel) {
-		super(viewModel);
-	}
+  public FlywayExecutionListView(IListViewModel<T> viewModel) {
+    super(viewModel);
+  }
 
-	@Override
-	protected void createColumns() {
-		addColumn(execution -> execution.getId())
-			.setHeader("Rank")
-			.setSortable(true)
-			.setWidth("80px");
+  @Override
+  protected void createColumns() {
+    addColumn((T execution) -> execution.getId())
+      .setHeader("Rank")
+      .setSortable(true)
+      .setWidth("80px");
 
-		addColumn(FlywayExecutionDTO::getMigrationVersion)
-			.setHeader("Versão")
-			.setSortable(true)
-			.setWidth("100px");
+    addColumn((T execution) -> execution.getMigrationVersion())
+      .setHeader("Versão")
+      .setSortable(true)
+      .setWidth("100px");
 
-		addColumn(FlywayExecutionDTO::getDescription)
-			.setHeader("Descrição")
-			.setSortable(true)
-			.setFlexGrow(1);
+    addColumn((T execution) -> execution.getDescription())
+      .setHeader("Descrição")
+      .setSortable(true)
+      .setFlexGrow(1);
 
-		addColumn(FlywayExecutionDTO::getType)
-			.setHeader("Tipo")
-			.setWidth("100px");
+    addColumn((T execution) -> execution.getType())
+      .setHeader("Tipo")
+      .setWidth("100px");
 
-		addColumn(FlywayExecutionDTO::getScript)
-			.setHeader("Script")
-			.setWidth("200px");
+    addColumn((T execution) -> execution.getScript())
+      .setHeader("Script")
+      .setWidth("200px");
 
-		addColumn(FlywayExecutionDTO::getInstalledBy)
-			.setHeader("Executado por")
-			.setWidth("120px");
+    addColumn((T execution) -> execution.getInstalledBy())
+      .setHeader("Executado por")
+      .setWidth("120px");
 
-		addColumn(FlywayExecutionDTO::getInstalledOn)
-			.setHeader("Data")
-			.setWidth("150px");
+    addColumn((T execution) -> execution.getInstalledOn())
+      .setHeader("Data")
+      .setWidth("150px");
 
-		addColumn(FlywayExecutionDTO::getExecutionTime)
-			.setHeader("Tempo (ms)")
-			.setWidth("100px");
+    addColumn((T execution) -> execution.getExecutionTime())
+      .setHeader("Tempo (ms)")
+      .setWidth("100px");
 
-		addColumn(execution -> execution.getSuccess() ? "✓ Sucesso" : "✗ Falha")
-			.setHeader("Status")
-			.setWidth("100px")
-			.setSortable(true);
-	}
+    addColumn((T execution) -> execution.getSuccess() ? "✓ Sucesso" : "✗ Falha")
+      .setHeader("Status")
+      .setWidth("100px")
+      .setSortable(true);
+  }
 }

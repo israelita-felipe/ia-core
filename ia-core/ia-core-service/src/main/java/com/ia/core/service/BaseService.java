@@ -10,72 +10,74 @@ import com.ia.core.service.mapper.SearchRequestMapper;
 import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.translator.Translator;
 
+import java.io.Serializable;
+
 /**
  * Interface base para criação de um serviço.
  *
- * @author Israel Araújo
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
-public interface BaseService<T extends BaseEntity, D extends DTO<?>> {
+public interface BaseService<T extends Serializable, D extends DTO<?>> {
 
-  /**
-   * {@link BaseEntityMapper}
-   *
-   * @param <M> Tipo do Mapper
-   * @return {@link BaseEntityMapper}
-   */
-  <M extends Mapper<T, D>> M getMapper();
+    /**
+     * {@link BaseEntityMapper}
+     *
+     * @param <M> Tipo do Mapper
+     * @return {@link BaseEntityMapper}
+     */
+    <M extends Mapper<T, D>> M getMapper();
 
-  /**
-   * {@link BaseEntityRepository}
-   *
-   * @param <R> Tipo do Repositório.
-   * @return {@link BaseEntityRepository}
-   */
-  <R extends BaseEntityRepository<T>> R getRepository();
+    /**
+     * {@link BaseEntityRepository}
+     *
+     * @param <R> Tipo do Repositório.
+     * @return {@link BaseEntityRepository}
+     */
+    <R extends BaseEntityRepository<T>> R getRepository();
 
-  /**
-   * @return {@link SearchRequestMapper}
-   */
-  SearchRequestMapper getSearchRequestMapper();
+    /**
+     * @return {@link SearchRequestMapper}
+     */
+    SearchRequestMapper getSearchRequestMapper();
 
-  /**
-   * @return {@link Translator} padrão
-   */
-  Translator getTranslator();
+    /**
+     * @return {@link Translator} padrão
+     */
+    Translator getTranslator();
 
-  /**
-   * Realiza o mapeamento para {@link DTO}
-   *
-   * @param model {@link BaseEntity}
-   * @return {@link DTO}
-   */
-  @TransactionalReadOnly
-  default D toDTO(T model) {
-    return getMapper().toDTO(model);
-  }
-
-  /**
-   * Realiza o mapeamento para o modelo
-   *
-   * @param dto {@link DTO}
-   * @return {@link BaseEntity}
-   */
-  default T toModel(D dto) {
-    return getMapper().toModel(dto);
-  }
-
-  /**
-   * Verifica se há erros na exceção e lança se existirem.
-   *
-   * @param ex Exceção a ser verificada
-   * @throws ServiceException se houver erros na exceção
-   */
-  default void throwIfHasErrors(ServiceException ex)
-    throws ServiceException {
-    if (ex.hasErros()) {
-      throw ex;
+    /**
+     * Realiza o mapeamento para {@link DTO}
+     *
+     * @param model {@link BaseEntity}
+     * @return {@link DTO}
+     */
+    @TransactionalReadOnly
+    default D toDTO(T model) {
+        return getMapper().toDTO(model);
     }
-  }
+
+    /**
+     * Realiza o mapeamento para o modelo
+     *
+     * @param dto {@link DTO}
+     * @return {@link BaseEntity}
+     */
+    default T toModel(D dto) {
+        return getMapper().toModel(dto);
+    }
+
+    /**
+     * Verifica se há erros na exceção e lança se existirem.
+     *
+     * @param ex Exceção a ser verificada
+     * @throws ServiceException se houver erros na exceção
+     */
+    default void throwIfHasErrors(ServiceException ex)
+        throws ServiceException {
+        if (ex.hasErros()) {
+            throw ex;
+        }
+    }
 }

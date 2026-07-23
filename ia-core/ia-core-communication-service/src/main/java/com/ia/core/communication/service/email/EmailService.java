@@ -2,6 +2,7 @@ package com.ia.core.communication.service.email;
 
 import com.ia.core.communication.model.mensagem.Mensagem;
 import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.service.config.CommunicationConfigurationProvider;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
@@ -43,7 +44,8 @@ import java.util.Objects;
 public class EmailService
   implements MensagemProvider {
 
-  private final EmailConfig emailConfig;
+  private final JavaMailSender mailSender;
+  private final CommunicationConfigurationProvider communicationConfigurationProvider;
 
   /**
    * Envia um e-mail simples.
@@ -69,11 +71,11 @@ public class EmailService
           .getNomeDestinatario() : "Mensagem");
       email.setText(mensagem.getCorpoMensagem());
 
-      if (emailConfig.getFromAddress() != null) {
-        email.setFrom(emailConfig.getFromAddress());
+      if (communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress() != null) {
+        email.setFrom(communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress());
       }
 
-      emailConfig.getMailSender().send(email);
+      mailSender.send(email);
 
       String messageId = "EMAIL_" + System.currentTimeMillis();
       log.info("E-mail enviado com sucesso: {}", messageId);
@@ -115,8 +117,8 @@ public class EmailService
       mimeMessage.setContent(mensagem.getCorpoMensagem(),
                              "text/html; charset=UTF-8");
 
-      if (emailConfig.getFromAddress() != null) {
-        mimeMessage.setFrom(emailConfig.getFromAddress());
+      if (communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress() != null) {
+        mimeMessage.setFrom(communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress());
       }
 
       getSender().send(mimeMessage);
@@ -153,8 +155,8 @@ public class EmailService
           .getNomeDestinatario() : "Mensagem");
       email.setText(mensagem.getCorpoMensagem());
 
-      if (emailConfig.getFromAddress() != null) {
-        email.setFrom(emailConfig.getFromAddress());
+      if (communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress() != null) {
+        email.setFrom(communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress());
       }
 
       getSender().send(email);
@@ -192,8 +194,8 @@ public class EmailService
       mimeMessage.setSubject(assunto);
       mimeMessage.setContent(htmlBody, "text/html; charset=UTF-8");
 
-      if (emailConfig.getFromAddress() != null) {
-        mimeMessage.setFrom(emailConfig.getFromAddress());
+      if (communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress() != null) {
+        mimeMessage.setFrom(communicationConfigurationProvider.getCommunicationProperties().getEmail().getFromAddress());
       }
 
       getSender().send(mimeMessage);
@@ -211,7 +213,7 @@ public class EmailService
    * @return
    */
   public JavaMailSender getSender() {
-    return emailConfig.getMailSender();
+    return mailSender;
   }
 
   @Override

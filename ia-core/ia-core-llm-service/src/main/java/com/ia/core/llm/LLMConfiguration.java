@@ -1,59 +1,122 @@
 package com.ia.core.llm;
 
-import com.ia.core.llm.service.config.LLMAutoConfiguration;
+import com.ia.core.llm.service.chat.ChatSessionService;
+import com.ia.core.llm.service.chat.ChatSessionServiceImpl;
+import com.ia.core.llm.service.config.LlmConfigurationProvider;
+import com.ia.core.llm.service.config.LlmModuleProperties;
+import com.ia.core.llm.service.config.SpringAiProperties;
+import com.ia.core.llm.service.template.PromptTemplateServiceImpl;
+import com.ia.core.llm.service.template.TemplateRepository;
+import com.ia.core.llm.service.vector.VectorStoreOperations;
+import com.ia.core.llm.service.vector.VectorStoreOperationsImpl;
+import com.ia.core.llm.service.vector.VectorStoreService;
+import com.ia.core.owl.service.DefaultOwlService;
+import com.ia.core.owl.service.LLMCommunicator;
+import com.ia.core.owl.service.validation.ExplicadorInconsistencia;
+import com.ia.core.owl.service.validation.LoopLLMRaciocinador;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.RestClient;
+
+import javax.sql.DataSource;
 
 /**
- * Classe de configuração para módulo LLM.
+ * Classe de configuração central para módulo LLM.
  * <p>
- * Configura beans para integração com modelos de linguagem, incluindo
- * RestClient, OllamaApi e VectorStore.
+ * Centraliza todos os beans de configuração do módulo Large Language Model,
+ * eliminando a dependência circular causada por {@code BibliaLLMConfiguration}
+ * estender esta classe em módulos downstream.
+ * <p>
+ * Beans que precisam de propriedades de configuração capturam de
+ * {@link LlmConfigurationProvider} ao invés de {@code @Value}.
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
-public class LLMConfiguration extends LLMAutoConfiguration {
+@Slf4j
+@RequiredArgsConstructor
+public class LLMConfiguration {
+    @Getter
+    private final LlmConfigurationProvider configurationProvider;
 
-  @Bean
-  static RestClient.Builder restClientBuilder() {
-    return RestClient.builder().requestFactory((uri, method) -> {
-      HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-      factory.setReadTimeout(3600000);
-      return factory.createRequest(uri, method);
-    });
-  }
+    @Bean
+    VectorStore vectorStore(EmbeddingModel embeddingModel) {
+        return SimpleVectorStore.builder(embeddingModel).build();
+    }
 
-  @Bean
-  static OllamaApi ollamaApi(RestClient.Builder builder) {
-    return OllamaApi.builder().restClientBuilder(builder).build();
-  }
+    /**
+     * Configura ChatMemory com persistência em banco de dados.
+     *
+     * @param dataSource DataSource para conexão com banco de dados
+     * @return ChatMemory configurado com JdbcChatMemoryRepository
+     */
+    @Bean
+    ChatMemoryRepository jdbcChatMemoryRepository(DataSource dataSource) {
+        return new InMemoryChatMemoryRepository();
+    }
 
-  @Bean
-  static VectorStore vectorStore(EmbeddingModel embeddingModel) {
-    return SimpleVectorStore.builder(embeddingModel).build();
-  }
+    /**
+     * Configura ChatMemory com MessageWindowChatMemory.
+     *
+     * @param chatMemoryRepository Repositório de chat memory
+     * @return ChatMemory configurado
+     */
+    @Bean
+    ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
+        return MessageWindowChatMemory.builder()
+            .chatMemoryRepository(chatMemoryRepository)
+            .maxMessages(50)
+            .build();
+    }
 
-  private final VectorStore vectorStore;
+    @Bean
+    VectorStoreOperations vectorStoreOperations(VectorStoreService vectorStoreService) {
+        return new VectorStoreOperationsImpl(vectorStoreService);
+    }
 
-  /**
-   * @param vectorStore
-   */
-  public LLMConfiguration(VectorStore vectorStore) {
-    super();
-    this.vectorStore = vectorStore;
-    configure(vectorStore);
-  }
+    @Bean
+    PromptTemplateServiceImpl promptTemplateService(TemplateRepository templateRepository) {
+        return new PromptTemplateServiceImpl(templateRepository);
+    }
 
-  /**
-   * @param vectorStore2
-   */
-  public void configure(VectorStore vectorStore2) {
+    @Bean
+    ChatSessionService chatSessionService() {
+        return new ChatSessionServiceImpl();
+    }
 
-  }
+    @Bean
+    public ExplicadorInconsistencia explicadorInconsistencia() {
+        log.info("Configurando ExplicadorInconsistencia");
+        return new ExplicadorInconsistencia();
+    }
+
+    @Bean
+    public LoopLLMRaciocinador loopLLMRaciocinador(
+        LLMCommunicator llmCommunicator,
+        DefaultOwlService owlService,
+        ExplicadorInconsistencia explicador) {
+        log.info("Configurando LoopLLMRaciocinador");
+        return new LoopLLMRaciocinador(llmCommunicator, owlService, explicador);
+    }
+
+    @Bean
+    public LLMCommunicator llmCommunicator(ChatModel chatModel,
+                                           ChatMemory chatMemory,
+                                           VectorStoreOperations vectorStoreOperations) {
+        SpringAiProperties springAiProperties = configurationProvider.getSpringAiProperties();
+        String ollamaBaseUrl = springAiProperties.getOllama().getBaseUrl();
+        String modelName = springAiProperties.getOllama().getChat().getModel();
+
+        return new LLMCommunicator(chatModel, chatMemory, vectorStoreOperations, ollamaBaseUrl, modelName);
+    }
+
 }

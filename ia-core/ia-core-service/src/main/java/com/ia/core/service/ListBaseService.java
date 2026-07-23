@@ -3,67 +3,68 @@ package com.ia.core.service;
 import com.ia.core.model.BaseEntity;
 import com.ia.core.model.filter.SearchRequest;
 import com.ia.core.model.specification.SearchSpecification;
+import com.ia.core.resilience4j.annotation.Resilient;
+import com.ia.core.resilience4j.profile.ResilienceProfile;
 import com.ia.core.service.annotations.TransactionalReadOnly;
 import com.ia.core.service.dto.DTO;
 import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.service.repository.BaseEntityRepository;
-import com.ia.core.resilience4j.annotation.Resilient;
-import com.ia.core.resilience4j.profile.ResilienceProfile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.Serializable;
 import java.util.stream.Collectors;
 
 /**
  * Interface que busca uma {@link BaseEntity} por meio de um
  * {@link BaseEntityRepository}
  *
- * @author Israel Araújo
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
-public interface ListBaseService<T extends BaseEntity, D extends DTO<?>>
-  extends BaseService<T, D> {
+public interface ListBaseService<T extends Serializable, D extends DTO<?>>
+    extends BaseService<T, D> {
 
-  /**
-   * Verifica se podem ser listados de acordo o {@link SearchRequestDTO}
-   *
-   * @param requestDTO {@link SearchRequestDTO}
-   * @return <code>true</code> por padrão
-   */
-  default boolean canList(SearchRequestDTO requestDTO) {
-    return true;
-  }
-
-   /**
-    * Busca elementos a partir de uma requisição de busca
-    *
-    * @param requestDTO {@link SearchRequest}
-    * @return {@link Page} de dados do tipo <T>
-    */
-   @TransactionalReadOnly
-   @Resilient(ResilienceProfile.DATABASE)
-   default Page<D> findAll(SearchRequestDTO requestDTO) {
-    if (canList(requestDTO)) {
-      SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
-      request.setFilters(
-          request.getFilters() != null
-              ? request.getFilters().stream()
-                  .filter(filter -> filter.getKey() != null
-                      && filter.getOperator() != null)
-                  .collect(Collectors.toList())
-              : null
-      );
-      // cria a especificação
-      SearchSpecification<T> specification = new SearchSpecification<>(request);
-      // cria a paginação
-      Pageable pageable = SearchSpecification
-          .getPageable(request.getPage(), request.getSize());
-      // realiza a busca convertendo para o dto.
-      return getRepository().findAll(specification, pageable)
-          .map(this::toDTO);
+    /**
+     * Verifica se podem ser listados de acordo o {@link SearchRequestDTO}
+     *
+     * @param requestDTO {@link SearchRequestDTO}
+     * @return <code>true</code> por padrão
+     */
+    default boolean canList(SearchRequestDTO requestDTO) {
+        return true;
     }
-    return Page.empty();
-  }
+
+    /**
+     * Busca elementos a partir de uma requisição de busca
+     *
+     * @param requestDTO {@link SearchRequest}
+     * @return {@link Page} de dados do tipo <T>
+     */
+    @TransactionalReadOnly
+    @Resilient(ResilienceProfile.DATABASE)
+    default Page<D> findAll(SearchRequestDTO requestDTO) {
+        if (canList(requestDTO)) {
+            SearchRequest request = getSearchRequestMapper().toModel(requestDTO);
+            request.setFilters(
+                request.getFilters() != null
+                    ? request.getFilters().stream()
+                    .filter(filter -> filter.getKey() != null
+                                      && filter.getOperator() != null)
+                    .collect(Collectors.toList())
+                    : null
+            );
+            // cria a especificação
+            SearchSpecification<T> specification = new SearchSpecification<>(request);
+            // cria a paginação
+            Pageable pageable = SearchSpecification
+                .getPageable(request.getPage(), request.getSize());
+            // realiza a busca convertendo para o dto.
+            return getRepository().findAll(specification, pageable)
+                .map(this::toDTO);
+        }
+        return Page.empty();
+    }
 
 }

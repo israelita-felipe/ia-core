@@ -22,9 +22,9 @@ import java.util.List;
  * @author Israel Araújo
  * @since 1.0.0
  */
-public class FlywayExecutionServiceConfig
+public class FlywayExecutionServiceConfig<T extends FlywayExecution, D extends FlywayExecutionDTO<T>>
   extends
-    CrudSecuredBaseServiceConfig<FlywayExecution, FlywayExecutionDTO> {
+    CrudSecuredBaseServiceConfig<T, D> {
 
   /**
    * @param repository             repositório da entidade
@@ -36,14 +36,14 @@ public class FlywayExecutionServiceConfig
    * @param logOperationService    serviço de operações de log
    * @param eventPublisher         publicador de eventos
    */
-  public FlywayExecutionServiceConfig(BaseEntityRepository<FlywayExecution> repository,
-                                      FlywayExecutionMapper mapper,
+  public FlywayExecutionServiceConfig(BaseEntityRepository<T> repository,
+                                      FlywayExecutionMapper<T, D> mapper,
                                       SearchRequestMapper searchRequestMapper,
                                       Translator translator,
                                       CoreSecurityAuthorizationManager authorizationManager,
                                       SecurityContextService securityContextService,
                                       LogOperationService logOperationService,
-                                      List<IServiceValidator<FlywayExecutionDTO>> validators,
+                                      List<IServiceValidator<D>> validators,
                                       ApplicationEventPublisher eventPublisher) {
     super(repository, mapper, searchRequestMapper, translator,
           authorizationManager, securityContextService, logOperationService,

@@ -1,5 +1,6 @@
 package com.ia.core.communication.service.telegram;
 
+import com.ia.core.communication.service.config.CommunicationConfigurationProvider;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -37,7 +39,8 @@ import java.util.Map;
 public class TelegramService implements MensagemProvider {
 
 
-  private final TelegramConfig telegramConfig;
+  private final TelegramClient telegramClient;
+  private final CommunicationConfigurationProvider communicationConfigurationProvider;
 
   @Override
   public ResultadoEnvio enviar(MensagemDTO mensagem) {
@@ -58,17 +61,17 @@ public class TelegramService implements MensagemProvider {
       // Telegram
       String chatId = mensagem.getTelefoneDestinatario() != null
           ? mensagem.getTelefoneDestinatario()
-          : telegramConfig.getChatId();
+          : communicationConfigurationProvider.getCommunicationProperties().getTelegram().getChatId();
 
       // Determina o parse_mode
-      String parseMode = telegramConfig.isEnableHtml() ? "HTML" : null;
+      String parseMode = communicationConfigurationProvider.getCommunicationProperties().getTelegram().isEnableHtml() ? "HTML" : null;
 
       // Cria o request
       TelegramMessageRequest request = new TelegramMessageRequest(
           chatId, mensagem.getCorpoMensagem() != null ? mensagem.getCorpoMensagem() : "", parseMode);
 
       // Envia via Feign Client
-      Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
+      Map<String, Object> response = telegramClient.sendMessage(request);
 
       if (response != null) {
         Boolean ok = (Boolean) response.get("ok");
@@ -108,12 +111,12 @@ public class TelegramService implements MensagemProvider {
     try {
       String chatId = mensagem.getTelefoneDestinatario() != null
           ? mensagem.getTelefoneDestinatario()
-          : telegramConfig.getChatId();
+          : communicationConfigurationProvider.getCommunicationProperties().getTelegram().getChatId();
 
       TelegramMessageRequest request = new TelegramMessageRequest(
           chatId, mensagem.getCorpoMensagem() != null ? mensagem.getCorpoMensagem() : "", "HTML");
 
-      Map<String, Object> response = telegramConfig.getTelegramClient().sendMessage(request);
+      Map<String, Object> response = telegramClient.sendMessage(request);
 
       if (response != null) {
         Boolean ok = (Boolean) response.get("ok");
@@ -143,7 +146,7 @@ public class TelegramService implements MensagemProvider {
     }
 
     try {
-      String secretToken = telegramConfig.getBotToken();
+      String secretToken = communicationConfigurationProvider.getCommunicationProperties().getTelegram().getBotToken();
       if (secretToken == null || secretToken.isBlank()) {
         log.error("Bot token não configurado para validação de webhook");
         return false;
@@ -184,7 +187,7 @@ public class TelegramService implements MensagemProvider {
   public ResultadoEnvio enviarParaChatDefault(
           @ToolParam(description = "Dados da mensagem Telegram a ser enviada (MensagemDTO, obrigatório). " +
                           "Inclui corpoMensagem (conteúdo da mensagem). O chat_id será o padrão configurado.", required = true) MensagemDTO mensagem) {
-    String defaultChatId = telegramConfig.getChatId();
+    String defaultChatId = communicationConfigurationProvider.getCommunicationProperties().getTelegram().getChatId();
     if (defaultChatId != null) {
       mensagem.setTelefoneDestinatario(defaultChatId);
     }

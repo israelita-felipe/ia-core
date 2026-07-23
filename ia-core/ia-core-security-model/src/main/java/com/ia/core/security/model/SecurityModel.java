@@ -3,6 +3,7 @@ package com.ia.core.security.model;
 /**
  *
  */
+
 /**
  * Model de dados para a view de security model.
  * <p>
@@ -14,9 +15,17 @@ package com.ia.core.security.model;
  */
 
 public class SecurityModel {
-  /** Prefixo das tabelas do quartz */
-  public static final String TABLE_PREFIX = "SEC_";
-  /** Schema do quartz */
-  public static final String SCHEMA = "SECURITY";
+    /**
+     * Prefixo das tabelas do quartz
+     */
+    public static final String TABLE_PREFIX = "SEC_";
+    /**
+     * Schema do quartz
+     */
+    public static final String SCHEMA = "SECURITY";
+    /**
+     * Nome do módulo
+     */
+    public static final String NAME = "SECURITY";
 
 }

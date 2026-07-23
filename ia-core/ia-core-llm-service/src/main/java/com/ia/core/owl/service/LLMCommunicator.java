@@ -12,33 +12,43 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 /**
  * Serviço de comunicação com modelos de linguagem (LLM).
  * <p>
  * Responsável por enviar prompts para o modelo de linguagem e processar as
  * respostas. Suporta diferentes estratégias de comunicação e validação de respostas.
+ * <p>
+ * Propriedades de configuração (ex.: URL do Ollama e nome do modelo) são
+ * injetadas via {@code LlmConfigurationProvider} no bean definido por
+ * {@link com.ia.core.llm.LLMConfiguration}.
  *
  * @author Israel Araújo
  * @since 1.0.0
  */
 
 @Slf4j
-@Component
-@RequiredArgsConstructor
 public class LLMCommunicator {
 
   private final ChatModel chatModel;
   private final ChatMemory chatMemory;
   private final VectorStoreOperations vectorStoreOperations;
+  private final String ollamaBaseUrl;
+  private final String modelName;
 
-  @Value("${spring.ai.ollama.base-url}")
-  private String ollamaBaseUrl;
-  @Value("${spring.ai.ollama.chat.options.model}")
-  private String modelName;
+  public LLMCommunicator(ChatModel chatModel,
+                         ChatMemory chatMemory,
+                         VectorStoreOperations vectorStoreOperations,
+                         String ollamaBaseUrl,
+                         String modelName) {
+    this.chatModel = chatModel;
+    this.chatMemory = chatMemory;
+    this.vectorStoreOperations = vectorStoreOperations;
+    this.ollamaBaseUrl = ollamaBaseUrl;
+    this.modelName = modelName;
+  }
 
   public ChatClient.CallResponseSpec sendPrompt(String prompt, String chatSessionId, Object...tools) {
     log.info("Enviando prompt para LLM");

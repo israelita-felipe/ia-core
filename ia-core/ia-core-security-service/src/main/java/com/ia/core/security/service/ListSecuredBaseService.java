@@ -15,6 +15,7 @@ import com.ia.core.service.repository.BaseEntityRepository;
 import com.ia.core.service.util.JsonUtil;
 import org.springframework.data.domain.Page;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -24,60 +25,60 @@ import java.util.Set;
  * Interface que busca uma {@link BaseEntity} por meio de um
  * {@link BaseEntityRepository}
  *
- * @author Israel Araújo
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
-public interface ListSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
-  extends BaseSecuredService<T, D>, ListBaseService<T, D> {
+public interface ListSecuredBaseService<T extends Serializable, D extends DTO<?>>
+    extends BaseSecuredService<T, D>, ListBaseService<T, D> {
 
-  /**
-   * @param requestDTO {@link SearchRequestDTO}
-   * @return se pode listar
-   */
-  @Override
-  default boolean canList(SearchRequestDTO requestDTO) {
-    return getAuthorizationManager().canRead(this, requestDTO);
-  }
-
-  @TransactionalReadOnly
-  @Override
-  default Page<D> findAll(SearchRequestDTO requestDTO) {
-    getAuthorizationManager().getCurrentContextDefinitions().definitions()
-        .getContext().stream()
-        .filter(up -> Objects.equals(up.getPrivilege().getName(),
-                                     getContextName()))
-        .flatMap(po -> po.getPrivilegeOperations().stream())
-        .filter(op -> Objects.equals(op.getOperation(), OperationEnum.READ))
-        .flatMap(op -> op.getContext().stream())
-        .forEach(contextDefinitionValue -> {
-          var key = contextDefinitionValue.getContextKey();
-          Collection<String> values = contextDefinitionValue.getValues();
-          // só adiciona filtro de houver valor
-          if (!values.isEmpty()) {
-            requestDTO.getContext()
-                .add(FilterRequestDTO.builder().key(key)
-                    .operator(OperatorDTO.IN).fieldType(FieldType.OBJECT)
-                    .value(getContextDefinitionValue(key, values)).build());
-          }
-        });
-    return ListBaseService.super.findAll(requestDTO);
-  }
-
-  @Override
-  default Map<String, String> getContextValue(Object object) {
-    Map<String, String> contextMap = BaseSecuredService.super.getContextValue(object);
-    if (SearchRequestDTO.class.isInstance(object)) {
-      ((SearchRequestDTO) object).getContext().forEach(filterContext -> {
-        contextMap.put(filterContext.getKey(),
-                       JsonUtil.toJson(filterContext.getValue()));
-      });
+    /**
+     * @param requestDTO {@link SearchRequestDTO}
+     * @return se pode listar
+     */
+    @Override
+    default boolean canList(SearchRequestDTO requestDTO) {
+        return getAuthorizationManager().canRead(this, requestDTO);
     }
-    return contextMap;
-  }
 
-  @Override
-  default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
-    return Set.of(functionalityManager.addFunctionality(this));
-  }
+    @TransactionalReadOnly
+    @Override
+    default Page<D> findAll(SearchRequestDTO requestDTO) {
+        getAuthorizationManager().getCurrentContextDefinitions().definitions()
+            .getContext().stream()
+            .filter(up -> Objects.equals(up.getPrivilege().getName(),
+                getContextName()))
+            .flatMap(po -> po.getPrivilegeOperations().stream())
+            .filter(op -> Objects.equals(op.getOperation(), OperationEnum.READ))
+            .flatMap(op -> op.getContext().stream())
+            .forEach(contextDefinitionValue -> {
+                var key = contextDefinitionValue.getContextKey();
+                Collection<String> values = contextDefinitionValue.getValues();
+                // só adiciona filtro de houver valor
+                if (!values.isEmpty()) {
+                    requestDTO.getContext()
+                        .add(FilterRequestDTO.builder().key(key)
+                            .operator(OperatorDTO.IN).fieldType(FieldType.OBJECT)
+                            .value(getContextDefinitionValue(key, values)).build());
+                }
+            });
+        return ListBaseService.super.findAll(requestDTO);
+    }
+
+    @Override
+    default Map<String, String> getContextValue(Object object) {
+        Map<String, String> contextMap = BaseSecuredService.super.getContextValue(object);
+        if (SearchRequestDTO.class.isInstance(object)) {
+            ((SearchRequestDTO) object).getContext().forEach(filterContext -> {
+                contextMap.put(filterContext.getKey(),
+                    JsonUtil.toJson(filterContext.getValue()));
+            });
+        }
+        return contextMap;
+    }
+
+    @Override
+    default Set<Functionality> registryFunctionalities(FunctionalityManager functionalityManager) {
+        return Set.of(functionalityManager.addFunctionality(this));
+    }
 }

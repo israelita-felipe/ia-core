@@ -1,5 +1,6 @@
 package com.ia.core.flyway.view.flywayexecution;
 
+import com.ia.core.flyway.model.FlywayExecution;
 import com.ia.core.flyway.service.model.flywayexecution.FlywayExecutionUseCase;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionDTO;
 import com.ia.core.flyway.service.model.flywayexecution.dto.FlywayExecutionTranslator;
@@ -11,7 +12,6 @@ import com.ia.core.service.dto.request.SearchRequestDTO;
 import com.ia.core.view.manager.DefaultBaseManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 /**
  * Manager para operações de FlywayExecution.
@@ -21,54 +21,53 @@ import org.springframework.stereotype.Service;
  * serviço, delegando chamadas ao cliente Feign.
  *
  * @author Israel Araújo
- * @since 1.0.0
  * @see FlywayExecutionUseCase
+ * @since 1.0.0
  */
 @Slf4j
-@Service
-public class FlywayExecutionManager
-  extends DefaultBaseManager<FlywayExecutionDTO>
-  implements CountSecuredViewBaseManager<FlywayExecutionDTO>,
-  FindSecuredViewBaseManager<FlywayExecutionDTO>,
-  ListSecuredViewBaseManager<FlywayExecutionDTO>, FlywayExecutionUseCase {
+public class FlywayExecutionManager<TModel extends FlywayExecution, T extends FlywayExecutionDTO<TModel>>
+    extends DefaultBaseManager<T>
+    implements CountSecuredViewBaseManager<T>,
+    FindSecuredViewBaseManager<T>,
+    ListSecuredViewBaseManager<T>, FlywayExecutionUseCase<TModel, T> {
 
-  public FlywayExecutionManager(FlywayExecutionManagerConfig config) {
-    super(config);
-  }
+    public FlywayExecutionManager(FlywayExecutionManagerConfig<TModel, T> config) {
+        super(config);
+    }
 
-  @Override
-  public FlywayExecutionManagerConfig getConfig() {
-    return (FlywayExecutionManagerConfig) super.getConfig();
-  }
+    @Override
+    public FlywayExecutionManagerConfig<TModel, T> getConfig() {
+        return (FlywayExecutionManagerConfig<TModel, T>) super.getConfig();
+    }
 
-  @Override
-  public FlywayExecutionClient getClient() {
-    return getConfig().getClient();
-  }
+    @Override
+    public FlywayExecutionClient<T> getClient() {
+        return getConfig().getClient();
+    }
 
-  @Override
-  public String getFunctionalityTypeName() {
-    return FlywayExecutionTranslator.FLYWAY_EXECUTION;
-  }
+    @Override
+    public String getFunctionalityTypeName() {
+        return FlywayExecutionTranslator.FLYWAY_EXECUTION;
+    }
 
-  @Override
-  public CoreSecurityAuthorizationManager getAuthorizationManager() {
-    return getConfig().getAuthorizationManager();
-  }
+    @Override
+    public CoreSecurityAuthorizationManager getAuthorizationManager() {
+        return getConfig().getAuthorizationManager();
+    }
 
-  @Override
-  public void createContext() {
+    @Override
+    public void createContext() {
 
-  }
+    }
 
-  @Override
-  public Page<FlywayExecutionDTO> listSuccessful(SearchRequestDTO request) {
-    return getClient().findAllSuccessful(request);
-  }
+    @Override
+    public Page<T> listSuccessful(SearchRequestDTO request) {
+        return getClient().findAllSuccessful(request);
+    }
 
-  @Override
-  public Page<FlywayExecutionDTO> listFailed(SearchRequestDTO request) {
-    return getClient().findAllFailed(request);
-  }
+    @Override
+    public Page<T> listFailed(SearchRequestDTO request) {
+        return getClient().findAllFailed(request);
+    }
 
 }

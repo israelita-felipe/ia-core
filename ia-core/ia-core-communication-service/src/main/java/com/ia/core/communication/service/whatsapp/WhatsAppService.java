@@ -1,6 +1,7 @@
 package com.ia.core.communication.service.whatsapp;
 
 import com.ia.core.communication.model.mensagem.StatusMensagem;
+import com.ia.core.communication.service.config.CommunicationConfigurationProvider;
 import com.ia.core.communication.service.mensagem.MensagemProvider;
 import com.ia.core.communication.service.mensagem.ResultadoEnvio;
 import com.ia.core.communication.service.model.mensagem.dto.MensagemDTO;
@@ -38,7 +39,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WhatsAppService implements MensagemProvider {
 
-  private final WhatsAppConfig whatsAppConfig;
+  private final WhatsAppClient whatsAppClient;
+  private final CommunicationConfigurationProvider communicationConfigurationProvider;
 
   @Override
   public ResultadoEnvio enviar(MensagemDTO mensagem) {
@@ -84,10 +86,9 @@ public class WhatsAppService implements MensagemProvider {
       );
 
       // Envia via Feign Client com token Bearer
-      String accessToken = whatsAppConfig.getAccessToken();
+      String accessToken = communicationConfigurationProvider.getCommunicationProperties().getWhatsapp().getApiKey();
       String bearerToken = "Bearer " + (accessToken != null ? accessToken : "");
-      Map<String, Object> response = whatsAppConfig.getWhatsAppClient()
-          .sendMessage(bearerToken, request);
+      Map<String, Object> response = whatsAppClient.sendMessage(bearerToken, request);
 
       if (response != null) {
         mensagem.setStatusMensagem(StatusMensagem.ENVIADA);

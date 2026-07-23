@@ -6,13 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -38,23 +36,11 @@ class LLMCommunicatorTest {
   @Mock
   private VectorStoreOperations vectorStoreOperations;
 
-  @Mock
-  private ChatClient chatClient;
-
-  @Mock
-  private ChatClient.CallResponseSpec callResponseSpec;
-
-  @Mock
-  private ChatClient.PromptUserSpec promptUserSpec;
-
   private LLMCommunicator llmCommunicator;
 
   @BeforeEach
   void setUp() {
-    llmCommunicator = new LLMCommunicator(chatModel, chatMemory, vectorStoreOperations);
-    ReflectionTestUtils.setField(llmCommunicator, "ollamaBaseUrl", "http://localhost:11434");
-    ReflectionTestUtils.setField(llmCommunicator, "modelName", "llama3");
-
+    llmCommunicator = new LLMCommunicator(chatModel, chatMemory, vectorStoreOperations, "http://localhost:11434", "llama3");
     // Mock the advisor to avoid null advisor errors
     QuestionAnswerAdvisor mockAdvisor = mock(QuestionAnswerAdvisor.class);
     when(vectorStoreOperations.getQuestionAnswerAdvisor()).thenReturn(mockAdvisor);

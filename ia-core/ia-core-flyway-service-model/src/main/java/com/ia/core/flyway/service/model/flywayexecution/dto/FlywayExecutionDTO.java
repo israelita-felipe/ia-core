@@ -28,10 +28,10 @@ import java.util.Set;
  */
 @Data
 @SuperBuilder(toBuilder = true)
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlywayExecutionDTO extends AbstractBaseEntityDTO<FlywayExecution> {
+@EqualsAndHashCode(callSuper = true)
+public class FlywayExecutionDTO<T extends FlywayExecution> extends AbstractBaseEntityDTO<T> {
 
     /** Serial UID */
     private static final long serialVersionUID = 1L;
@@ -85,8 +85,9 @@ public class FlywayExecutionDTO extends AbstractBaseEntityDTO<FlywayExecution> {
      * Cria uma cópia superficial (clone) deste DTO.
      */
     @Override
-    public FlywayExecutionDTO cloneObject() {
-        return toBuilder().build();
+    @SuppressWarnings("unchecked")
+    public FlywayExecutionDTO<T> cloneObject() {
+        return (FlywayExecutionDTO<T>) toBuilder().build();
     }
 
     /**

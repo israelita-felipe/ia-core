@@ -11,9 +11,17 @@ package com.ia.core.communication.model;
  * @since 1.0.0
  */
 public class CommunicationModel {
-  /** Prefixo para todas as tabelas do módulo Communication */
-  public static final String TABLE_PREFIX = "COM_";
-  /** Nome do schema de banco de dados para o módulo Communication */
-  public static final String SCHEMA = "COMMUNICATION";
+    /**
+     * Prefixo para todas as tabelas do módulo Communication
+     */
+    public static final String TABLE_PREFIX = "COM_";
+    /**
+     * Nome do schema de banco de dados para o módulo Communication
+     */
+    public static final String SCHEMA = "COMMUNICATION";
+    /**
+     * Nome do módulo
+     */
+    public static final String NAME = "COMMUNICATION";
 
 }

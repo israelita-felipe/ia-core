@@ -15,7 +15,7 @@ import com.ia.core.service.mapper.BaseEntityMapper;
  * @see FlywayExecution
  * @see FlywayExecutionDTO
  */
-public interface FlywayExecutionMapper
-  extends BaseEntityMapper<FlywayExecution, FlywayExecutionDTO> {
+public interface FlywayExecutionMapper<T extends FlywayExecution, D extends FlywayExecutionDTO<T>>
+  extends BaseEntityMapper<T, D> {
 
 }

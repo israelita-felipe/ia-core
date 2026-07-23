@@ -1,26 +1,27 @@
 package com.ia.core.rest.control;
 
-import com.ia.core.model.BaseEntity;
 import com.ia.core.service.BaseService;
 import com.ia.core.service.dto.DTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * Classe abstrata base para um controlador.
  *
- * @author Israel Araújo
  * @param <T> Tipo do modelo.
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
 @RequiredArgsConstructor
 @Getter
-public abstract class AbstractBaseController<T extends BaseEntity, D extends DTO<?>>
-  implements BaseController<T, D> {
+public abstract class AbstractBaseController<T extends Serializable, D extends DTO<?>>
+    implements BaseController<T, D> {
 
-  /**
-   * Serviço do controlador.
-   */
-  protected final BaseService<T, D> service;
+    /**
+     * Serviço do controlador.
+     */
+    protected final BaseService<T, D> service;
 
 }

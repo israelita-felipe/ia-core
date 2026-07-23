@@ -16,14 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Classe base de um serviço com todas as funcionalidades de um CRUD.
  *
- * @author Israel Araújo
  * @param <T> Tipo de dado {@link BaseEntity}
  * @param <D> Tipo de dado {@link DTO}
+ * @author Israel Araújo
  * @see AbstractSecuredBaseService
  * @see CountSecuredBaseService
  * @see DeleteSecuredBaseService
@@ -94,8 +95,7 @@ public abstract class CrudSecuredBaseService<T extends BaseEntity, D extends DTO
     }
 
 
-
-public static class CrudSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>
+    public static class CrudSecuredBaseServiceConfig<T extends Serializable, D extends DTO<?>>
         extends AbstractSecuredBaseServiceConfig<T, D> {
 
         @Getter
@@ -104,15 +104,15 @@ public static class CrudSecuredBaseServiceConfig<T extends BaseEntity, D extends
         /**
          * Construtor completo para configuração do serviço seguro.
          *
-         * @param repository repositório da entidade
-         * @param mapper mapeador entre entidade e DTO
-         * @param searchRequestMapper mapeador de requisição de busca
-         * @param translator tradutor para internacionalização
-         * @param authorizationManager gerenciador de autorização
+         * @param repository             repositório da entidade
+         * @param mapper                 mapeador entre entidade e DTO
+         * @param searchRequestMapper    mapeador de requisição de busca
+         * @param translator             tradutor para internacionalização
+         * @param authorizationManager   gerenciador de autorização
          * @param securityContextService serviço de contexto de segurança
-         * @param logOperationService serviço de operação de log
-         * @param validators lista de validadores
-         * @param eventPublisher publicador de eventos de aplicação
+         * @param logOperationService    serviço de operação de log
+         * @param validators             lista de validadores
+         * @param eventPublisher         publicador de eventos de aplicação
          */
         public CrudSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
                                             Mapper<T, D> mapper,

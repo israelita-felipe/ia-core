@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Getter
 @Component
-public class FlywayExecutionPageViewModelConfig
-  extends PageViewModelConfig<FlywayExecutionDTO> {
+public class FlywayExecutionPageViewModelConfig<T extends FlywayExecutionDTO<?>>
+  extends PageViewModelConfig<T> {
   /**
    * @param service
    */
-  public FlywayExecutionPageViewModelConfig(DefaultBaseManager<FlywayExecutionDTO> service) {
+  public FlywayExecutionPageViewModelConfig(DefaultBaseManager<T> service) {
     super(service);
   }
 

@@ -2,6 +2,7 @@ package com.ia.core.quartz;
 
 import com.ia.core.quartz.config.CoreQuartzConfig;
 import com.ia.core.quartz.config.CoreSpringBeanJobFactory;
+import com.ia.core.quartz.config.QuartzConfigurationProvider;
 import com.ia.core.quartz.config.QuartzProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,10 +37,11 @@ class CoreQuartzConfigTest {
         props.getScheduler().setBatchTriggerAcquisitionMaxCount(5);
 
         CoreSpringBeanJobFactory jobFactory = mock(CoreSpringBeanJobFactory.class);
-        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, props);
+        QuartzConfigurationProvider configurationProvider = new QuartzConfigurationProvider(props);
+        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, configurationProvider);
 
         // Act
-        Properties quartzProps = config.quartzProperties();
+        Properties quartzProps = config.getQuartzProperties().getProperties();
 
         // Assert
         assertThat(quartzProps.getProperty("org.quartz.scheduler.instanceName")).isEqualTo("TestScheduler");
@@ -58,10 +60,11 @@ class CoreQuartzConfigTest {
         props.getThreadPool().setMakeThreadsDaemons(true);
 
         CoreSpringBeanJobFactory jobFactory = mock(CoreSpringBeanJobFactory.class);
-        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, props);
+        QuartzConfigurationProvider configurationProvider = new QuartzConfigurationProvider(props);
+        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, configurationProvider);
 
         // Act
-        Properties quartzProps = config.quartzProperties();
+        Properties quartzProps = config.getQuartzProperties().getProperties();
 
         // Assert
         assertThat(quartzProps.getProperty("org.quartz.threadPool.threadCount")).isEqualTo("10");
@@ -81,10 +84,11 @@ class CoreQuartzConfigTest {
         props.getJobStore().setAcquireTriggersWithinLock(true);
 
         CoreSpringBeanJobFactory jobFactory = mock(CoreSpringBeanJobFactory.class);
-        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, props);
+        QuartzConfigurationProvider configurationProvider = new QuartzConfigurationProvider(props);
+        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, configurationProvider);
 
         // Act
-        Properties quartzProps = config.quartzProperties();
+        Properties quartzProps = config.getQuartzProperties().getProperties();
 
         // Assert
         assertThat(quartzProps.getProperty("org.quartz.jobStore.tablePrefix")).isEqualTo("TEST.QRTZ_");
@@ -101,10 +105,11 @@ class CoreQuartzConfigTest {
         QuartzProperties props = new QuartzProperties(); // Usa valores padrão
 
         CoreSpringBeanJobFactory jobFactory = mock(CoreSpringBeanJobFactory.class);
-        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, props);
+        QuartzConfigurationProvider configurationProvider = new QuartzConfigurationProvider(props);
+        TestableQuartzConfig config = new TestableQuartzConfig(jobFactory, configurationProvider);
 
         // Act
-        Properties quartzProps = config.quartzProperties();
+        Properties quartzProps = config.getQuartzProperties().getProperties();
 
         // Assert - Scheduler
         assertThat(quartzProps.getProperty("org.quartz.scheduler.instanceName")).isEqualTo("CoreQuartzScheduler");
@@ -123,56 +128,16 @@ class CoreQuartzConfigTest {
         assertThat(quartzProps.getProperty("org.quartz.jobStore.maxMisfiresToHandleAtATime")).isEqualTo("20");
     }
 
-    @Test
-    @DisplayName("Deve permitir sobrescrever quartzProperties em subclasses")
-    void devePermitirSobrescreverQuartzPropertiesEmSubclasses() {
-        // Arrange
-        QuartzProperties props = new QuartzProperties();
-        CoreSpringBeanJobFactory jobFactory = mock(CoreSpringBeanJobFactory.class);
-        CustomQuartzConfig config = new CustomQuartzConfig(jobFactory, props);
-
-        // Act
-        Properties quartzProps = config.quartzProperties();
-
-        // Assert
-        assertThat(quartzProps.getProperty("org.quartz.scheduler.customProperty")).isEqualTo("customValue");
-        assertThat(quartzProps.getProperty("org.quartz.scheduler.instanceName")).isEqualTo("CoreQuartzScheduler"); // Valor padrão
-    }
-
     /**
-     * Classe de teste que estende CoreQuartzConfig para expor o método quartzProperties().
+     * Classe de teste que expõe o QuartzConfigurationProvider de CoreQuartzConfig.
      */
     @Configuration
     @EnableConfigurationProperties(QuartzProperties.class)
     static class TestableQuartzConfig extends CoreQuartzConfig {
 
         public TestableQuartzConfig(CoreSpringBeanJobFactory springBeanJobFactory,
-                                    QuartzProperties quartzProperties) {
-            super(springBeanJobFactory, quartzProperties);
-        }
-
-        @Override
-        protected Properties quartzProperties() {
-            return super.quartzProperties();
-        }
-    }
-
-    /**
-     * Configuração personalizada para teste de sobrescrita.
-     */
-    @Configuration
-    static class CustomQuartzConfig extends CoreQuartzConfig {
-
-        public CustomQuartzConfig(CoreSpringBeanJobFactory springBeanJobFactory,
-                                  QuartzProperties quartzProperties) {
-            super(springBeanJobFactory, quartzProperties);
-        }
-
-        @Override
-        protected Properties quartzProperties() {
-            Properties props = super.quartzProperties();
-            props.setProperty("org.quartz.scheduler.customProperty", "customValue");
-            return props;
+                                    QuartzConfigurationProvider quartzConfigurationProvider) {
+            super(springBeanJobFactory, quartzConfigurationProvider);
         }
     }
 }

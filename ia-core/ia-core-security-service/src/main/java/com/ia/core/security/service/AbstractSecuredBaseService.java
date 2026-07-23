@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -26,169 +27,169 @@ import java.util.Objects;
  * Pattern: Adicionar responsabilidades de segurança - SRP: Cada
  * responsabilidade em um serviço específico
  *
- * @author Israel Araújo
  * @param <T> {@link BaseEntity}
  * @param <D> {@link DTO}
+ * @author Israel Araújo
  */
 @Slf4j
 public abstract class AbstractSecuredBaseService<T extends BaseEntity, D extends DTO<?>>
-  extends AbstractBaseService<T, D>
-  implements BaseSecuredService<T, D> {
+    extends AbstractBaseService<T, D>
+    implements BaseSecuredService<T, D> {
 
-  @Getter
-  private final AbstractSecuredBaseServiceConfig<T, D> config;
-
-  /**
-   * Obtém o gerenciador de autorização baseado em funcionalidades.
-   *
-   * @return {@link CoreSecurityAuthorizationManager}
-   */
-  @Override
-  public CoreSecurityAuthorizationManager getAuthorizationManager() {
-    return getConfig().getAuthorizationManager();
-  }
-
-  /**
-   * Obtém o serviço de log de operações.
-   *
-   * @return {@link LogOperationService}
-   */
-  @Override
-  public LogOperationService getLogOperationService() {
-    return getConfig().getLogOperationService();
-  }
-
-  /**
-   * Construtor que inicializa o serviço com configuração de segurança.
-   *
-   * @param config Configuração do serviço de segurança
-   */
-  public AbstractSecuredBaseService(AbstractSecuredBaseServiceConfig<T, D> config) {
-    super(config);
-    this.config = config;
-    createContext();
-  }
-
-  /**
-   * Cria os contextos de segurança padrão.
-   */
-  @Override
-  public void createContext() {
-    addContext(AbstractBaseEntityDTO.CAMPOS.ID);
-  }
-
-  /**
-   * Obtém os valores de contexto para uma chave específica. Delega para o
-   * serviço de contexto que usa estratégias.
-   *
-   * @param key    Chave do contexto
-   * @param values Valores iniciais
-   * @return Coleção de valores de contexto resolvidos
-   */
-  @Override
-  public Collection<Object> getContextDefinitionValue(String key,
-                                                      Collection<String> values) {
-    Objects.requireNonNull(key, "Context key não pode ser nula");
-    Objects.requireNonNull(values, "Values não pode ser nula");
-
-    log.debug("Resolvendo contexto '{}' para valores", key);
-    return getConfig().getSecurityContextService()
-        .resolveContextValues(key, values, getRepository());
-  }
-
-  /**
-   * Valida correspondência de contexto. Delega para o serviço de contexto que
-   * usa estratégias.
-   *
-   * @param contextKey          Chave do contexto
-   * @param serviceContextValue Valor do serviço
-   * @param userContextValue    Valor do usuário
-   * @return true se corresponde, false caso contrário
-   */
-  @Override
-  public boolean matches(String contextKey, String serviceContextValue,
-                         String userContextValue) {
-    Objects.requireNonNull(contextKey, "Context key não pode ser nula");
-    Objects.requireNonNull(serviceContextValue,
-                           "Service context value não pode ser nula");
-    Objects.requireNonNull(userContextValue,
-                           "User context value não pode ser nula");
-
-    log.debug("Validando correspondência de contexto '{}'", contextKey);
-    return getConfig().getSecurityContextService()
-        .matches(contextKey, serviceContextValue, userContextValue);
-  }
-
-  /**
-   * Classe de configuração do serviço de segurança. Estende
-   * {@link AbstractBaseServiceConfig} adicionando componentes de segurança: -
-   * Gerenciador de autorização - Serviço de log de operações
-   *
-   * @param <T> {@link BaseEntity}
-   * @param <D> {@link DTO}
-   */
-
-  public static class AbstractSecuredBaseServiceConfig<T extends BaseEntity, D extends DTO<?>>
-    extends AbstractBaseServiceConfig<T, D> {
-
-    /**
-     * Gerenciador de autorização baseado em funcionalidades.
-     */
     @Getter
-    private final CoreSecurityAuthorizationManager authorizationManager;
+    private final AbstractSecuredBaseServiceConfig<T, D> config;
 
     /**
-     * Serviço para registrar operações no sistema.
-     */
-    @Getter
-    private final LogOperationService logOperationService;
-
-    /**
-     * Serviço de contexto de segurança (segregado).
-     */
-    @Getter
-    private final SecurityContextService securityContextService;
-
-    /**
-     * Construtor da configuração de serviço de segurança.
+     * Construtor que inicializa o serviço com configuração de segurança.
      *
-     * @param repository             Repositório de entidades
-     * @param mapper                 Mapper entidade-DTO
-     * @param searchRequestMapper    Mapper de requisição de busca
-     * @param translator             Tradutor de mensagens
-     * @param authorizationManager   Gerenciador de autorização
-     * @param securityContextService Serviço de contexto de segurança
-     * @param logOperationService    Serviço de log de operações
-     * @param eventPublisher         Publicador de eventos (opcional)
+     * @param config Configuração do serviço de segurança
      */
-    public AbstractSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
-                                            Mapper<T, D> mapper,
-                                            SearchRequestMapper searchRequestMapper,
-                                            Translator translator,
-                                            CoreSecurityAuthorizationManager authorizationManager,
-                                            SecurityContextService securityContextService,
-                                            LogOperationService logOperationService,
-                                            ApplicationEventPublisher eventPublisher) {
-      super(repository, mapper, searchRequestMapper, translator,
-            eventPublisher);
-      this.authorizationManager = authorizationManager;
-      this.logOperationService = logOperationService;
-      this.securityContextService = securityContextService;
+    public AbstractSecuredBaseService(AbstractSecuredBaseServiceConfig<T, D> config) {
+        super(config);
+        this.config = config;
+        createContext();
     }
 
     /**
-     * Construtor simplificado sem eventPublisher.
+     * Obtém o gerenciador de autorização baseado em funcionalidades.
+     *
+     * @return {@link CoreSecurityAuthorizationManager}
      */
-    public AbstractSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
-                                            Mapper<T, D> mapper,
-                                            SearchRequestMapper searchRequestMapper,
-                                            Translator translator,
-                                            CoreSecurityAuthorizationManager authorizationManager,
-                                            SecurityContextService securityContextService,
-                                            LogOperationService logOperationService) {
-      this(repository, mapper, searchRequestMapper, translator,
-           authorizationManager, securityContextService,
-           logOperationService, null);
+    @Override
+    public CoreSecurityAuthorizationManager getAuthorizationManager() {
+        return getConfig().getAuthorizationManager();
     }
-  }
+
+    /**
+     * Obtém o serviço de log de operações.
+     *
+     * @return {@link LogOperationService}
+     */
+    @Override
+    public LogOperationService getLogOperationService() {
+        return getConfig().getLogOperationService();
+    }
+
+    /**
+     * Cria os contextos de segurança padrão.
+     */
+    @Override
+    public void createContext() {
+        addContext(AbstractBaseEntityDTO.CAMPOS.ID);
+    }
+
+    /**
+     * Obtém os valores de contexto para uma chave específica. Delega para o
+     * serviço de contexto que usa estratégias.
+     *
+     * @param key    Chave do contexto
+     * @param values Valores iniciais
+     * @return Coleção de valores de contexto resolvidos
+     */
+    @Override
+    public Collection<Object> getContextDefinitionValue(String key,
+                                                        Collection<String> values) {
+        Objects.requireNonNull(key, "Context key não pode ser nula");
+        Objects.requireNonNull(values, "Values não pode ser nula");
+
+        log.debug("Resolvendo contexto '{}' para valores", key);
+        return getConfig().getSecurityContextService()
+            .resolveContextValues(key, values, getRepository());
+    }
+
+    /**
+     * Valida correspondência de contexto. Delega para o serviço de contexto que
+     * usa estratégias.
+     *
+     * @param contextKey          Chave do contexto
+     * @param serviceContextValue Valor do serviço
+     * @param userContextValue    Valor do usuário
+     * @return true se corresponde, false caso contrário
+     */
+    @Override
+    public boolean matches(String contextKey, String serviceContextValue,
+                           String userContextValue) {
+        Objects.requireNonNull(contextKey, "Context key não pode ser nula");
+        Objects.requireNonNull(serviceContextValue,
+            "Service context value não pode ser nula");
+        Objects.requireNonNull(userContextValue,
+            "User context value não pode ser nula");
+
+        log.debug("Validando correspondência de contexto '{}'", contextKey);
+        return getConfig().getSecurityContextService()
+            .matches(contextKey, serviceContextValue, userContextValue);
+    }
+
+    /**
+     * Classe de configuração do serviço de segurança. Estende
+     * {@link AbstractBaseServiceConfig} adicionando componentes de segurança: -
+     * Gerenciador de autorização - Serviço de log de operações
+     *
+     * @param <T> {@link BaseEntity}
+     * @param <D> {@link DTO}
+     */
+
+    public static class AbstractSecuredBaseServiceConfig<T extends Serializable, D extends DTO<?>>
+        extends AbstractBaseServiceConfig<T, D> {
+
+        /**
+         * Gerenciador de autorização baseado em funcionalidades.
+         */
+        @Getter
+        private final CoreSecurityAuthorizationManager authorizationManager;
+
+        /**
+         * Serviço para registrar operações no sistema.
+         */
+        @Getter
+        private final LogOperationService logOperationService;
+
+        /**
+         * Serviço de contexto de segurança (segregado).
+         */
+        @Getter
+        private final SecurityContextService securityContextService;
+
+        /**
+         * Construtor da configuração de serviço de segurança.
+         *
+         * @param repository             Repositório de entidades
+         * @param mapper                 Mapper entidade-DTO
+         * @param searchRequestMapper    Mapper de requisição de busca
+         * @param translator             Tradutor de mensagens
+         * @param authorizationManager   Gerenciador de autorização
+         * @param securityContextService Serviço de contexto de segurança
+         * @param logOperationService    Serviço de log de operações
+         * @param eventPublisher         Publicador de eventos (opcional)
+         */
+        public AbstractSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
+                                                Mapper<T, D> mapper,
+                                                SearchRequestMapper searchRequestMapper,
+                                                Translator translator,
+                                                CoreSecurityAuthorizationManager authorizationManager,
+                                                SecurityContextService securityContextService,
+                                                LogOperationService logOperationService,
+                                                ApplicationEventPublisher eventPublisher) {
+            super(repository, mapper, searchRequestMapper, translator,
+                eventPublisher);
+            this.authorizationManager = authorizationManager;
+            this.logOperationService = logOperationService;
+            this.securityContextService = securityContextService;
+        }
+
+        /**
+         * Construtor simplificado sem eventPublisher.
+         */
+        public AbstractSecuredBaseServiceConfig(BaseEntityRepository<T> repository,
+                                                Mapper<T, D> mapper,
+                                                SearchRequestMapper searchRequestMapper,
+                                                Translator translator,
+                                                CoreSecurityAuthorizationManager authorizationManager,
+                                                SecurityContextService securityContextService,
+                                                LogOperationService logOperationService) {
+            this(repository, mapper, searchRequestMapper, translator,
+                authorizationManager, securityContextService,
+                logOperationService, null);
+        }
+    }
 }

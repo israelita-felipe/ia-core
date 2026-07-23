@@ -7,6 +7,8 @@ import com.ia.core.security.service.model.functionality.HasFunctionality;
 import com.ia.core.service.BaseService;
 import com.ia.core.service.dto.DTO;
 
+import java.io.Serializable;
+
 /**
  * Interface base para serviços seguros com controle de autorização e contexto.
  * <p>
@@ -26,19 +28,19 @@ import com.ia.core.service.dto.DTO;
  * @param <T> tipo da entidade que estende {@link BaseEntity}
  * @param <D> tipo do DTO que estende {@link DTO}
  * @author Israel Araújo
- * @since 1.0.0
  * @see BaseService
  * @see HasFunctionality
  * @see HasContext
  * @see HasLogOperation
  * @see HasAuthorizationManager
+ * @since 1.0.0
  */
-public interface BaseSecuredService<T extends BaseEntity, D extends DTO<?>>
-  extends BaseService<T, D>, HasFunctionality, HasContext, HasLogOperation,
-  HasAuthorizationManager {
+public interface BaseSecuredService<T extends Serializable, D extends DTO<?>>
+    extends BaseService<T, D>, HasFunctionality, HasContext, HasLogOperation,
+    HasAuthorizationManager {
 
-  @Override
-  default String getContextName() {
-    return getFunctionalityTypeName();
-  }
+    @Override
+    default String getContextName() {
+        return getFunctionalityTypeName();
+    }
 }

@@ -19,71 +19,34 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 @Slf4j
-public class FlywayExecutionPageViewModel
-  extends PageViewModel<FlywayExecutionDTO> {
+public abstract class FlywayExecutionPageViewModel<T extends FlywayExecutionDTO<?>>
+    extends PageViewModel<T> {
 
-  public FlywayExecutionPageViewModel(FlywayExecutionPageViewModelConfig config) {
-    super(config);
-  }
-
-  @Override
-  protected SearchRequestDTO createSearchRequest() {
-    return new FlywayExecutionSearchRequestDTO();
-  }
-
-  @Override
-  public IFormViewModel<FlywayExecutionDTO> createFormViewModel(FormViewModelConfig<FlywayExecutionDTO> config) {
-    // Tabela de histórico de migrations é apenas leitura - não há formulário
-    throw new UnsupportedOperationException("Operação não suportada: a tabela flyway_schema_history é gerenciada automaticamente pelo Flyway");
-  }
-
-  @Override
-  public Long getId(FlywayExecutionDTO object) {
-    return object != null ? object.getId() : null;
-  }
-
-  @Override
-  public FlywayExecutionDTO createNewObject() {
-    return new FlywayExecutionDTO();
-  }
-
-  @Override
-  public Class<FlywayExecutionDTO> getType() {
-    return FlywayExecutionDTO.class;
-  }
-
-  @Override
-  public FlywayExecutionPageViewModelConfig getConfig() {
-    return super.getConfig().cast();
-  }
-
-  @Override
-  public FlywayExecutionDTO cloneObject(FlywayExecutionDTO object) {
-    // Como não há métodos de clone no DTO, retorna uma cópia manual
-    if (object == null) {
-      return null;
+    public FlywayExecutionPageViewModel(FlywayExecutionPageViewModelConfig<T> config) {
+        super(config);
     }
-    FlywayExecutionDTO copy = new FlywayExecutionDTO();
-    copy.setId(object.getId());
-    copy.setVersion(object.getVersion());
-    copy.setDescription(object.getDescription());
-    copy.setType(object.getType());
-    copy.setScript(object.getScript());
-    copy.setChecksum(object.getChecksum());
-    copy.setInstalledBy(object.getInstalledBy());
-    copy.setInstalledOn(object.getInstalledOn());
-    copy.setExecutionTime(object.getExecutionTime());
-    copy.setSuccess(object.getSuccess());
-    return copy;
-  }
 
-  @Override
-  public FlywayExecutionDTO copyObject(FlywayExecutionDTO object) {
-    FlywayExecutionDTO copy = cloneObject(object);
-    if (copy != null) {
-      copy.setId(null);
+    @Override
+    protected SearchRequestDTO createSearchRequest() {
+        return new FlywayExecutionSearchRequestDTO();
     }
-    return copy;
-  }
+
+    @Override
+    public IFormViewModel<T> createFormViewModel(FormViewModelConfig<T> config) {
+        // Tabela de histórico de migrations é apenas leitura - não há formulário
+        throw new UnsupportedOperationException("Operação não suportada: a tabela flyway_schema_history é gerenciada automaticamente pelo Flyway");
+    }
+
+    @Override
+    public Long getId(T object) {
+        return object != null ? object.getId() : null;
+    }
+
+
+    @Override
+    public FlywayExecutionPageViewModelConfig<T> getConfig() {
+        return super.getConfig().cast();
+    }
+
 
 }
